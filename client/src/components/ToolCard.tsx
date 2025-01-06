@@ -11,6 +11,7 @@ import type { EducationalTool } from "@/lib/data";
 import type { LucideIcon } from 'lucide-react';
 import { generateShareUrls } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PreviewGenerator } from "@/components/PreviewGenerator";
 
 const categoryColors = {
   communication: "bg-blue-100 text-blue-800",
@@ -50,7 +51,7 @@ export function ToolCard({ tool }: ToolCardProps) {
 
   return (
     <TooltipProvider>
-      <Card 
+      <Card
         className="group hover:shadow-lg transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         onClick={() => setIsOpen(true)}
         tabIndex={0}
@@ -67,7 +68,7 @@ export function ToolCard({ tool }: ToolCardProps) {
           <div className="flex items-start justify-between mb-4">
             <Tooltip>
               <TooltipTrigger asChild>
-                <div 
+                <div
                   className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors"
                   role="img"
                   aria-label={`${tool.title} 圖標`}
@@ -82,8 +83,8 @@ export function ToolCard({ tool }: ToolCardProps) {
             <div className="flex gap-2">
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     size="icon"
                     className="h-8 w-8"
                     onClick={handleShare}
@@ -99,8 +100,8 @@ export function ToolCard({ tool }: ToolCardProps) {
               </Tooltip>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Badge 
-                    variant="secondary" 
+                  <Badge
+                    variant="secondary"
                     className={`${categoryColors[tool.category]} border-0`}
                   >
                     <span className="sr-only">工具類別：</span>
@@ -124,12 +125,9 @@ export function ToolCard({ tool }: ToolCardProps) {
 
           {tool.previewUrl && (
             <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg overflow-hidden mb-4">
-              <div 
-                className="w-full h-full bg-cover bg-center" 
-                style={{ backgroundImage: `url(${tool.previewUrl})` }}
-                role="img"
-                aria-label={`${tool.title} 工具預覽圖`}
-              />
+              <div className="w-full h-full">
+                <PreviewGenerator tool={tool} />
+              </div>
             </AspectRatio>
           )}
         </CardContent>
@@ -147,12 +145,9 @@ export function ToolCard({ tool }: ToolCardProps) {
 
           {tool.previewUrl && (
             <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg overflow-hidden my-4">
-              <div 
-                className="w-full h-full bg-cover bg-center" 
-                style={{ backgroundImage: `url(${tool.previewUrl})` }}
-                role="img"
-                aria-label={`${tool.title} 工具詳細預覽圖`}
-              />
+              <div className="w-full h-full">
+                <PreviewGenerator tool={tool} />
+              </div>
             </AspectRatio>
           )}
 
@@ -161,7 +156,7 @@ export function ToolCard({ tool }: ToolCardProps) {
               <Share2 className="w-4 h-4 mr-2" aria-hidden="true" />
               分享
             </Button>
-            <Button 
+            <Button
               onClick={() => window.open(tool.url, '_blank')}
               aria-label={`在新分頁中開啟 ${tool.title}`}
             >
@@ -210,8 +205,8 @@ export function ToolCard({ tool }: ToolCardProps) {
                   <label className="text-sm font-medium leading-none" id="collaborator-label">
                     協作者
                   </label>
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     className="justify-start"
                     aria-labelledby="collaborator-label"
                   >

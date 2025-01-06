@@ -1,26 +1,53 @@
 import { type EducationalTool } from "@/lib/data";
-import { MessageSquare, Files, Sparkles, BookOpen } from "lucide-react";
+import { 
+  MessageSquare, 
+  Files, 
+  Sparkles, 
+  BookOpen, 
+  MessageCircle,
+  Lightbulb,
+  Book,
+  QrCode,
+  Gamepad2
+} from "lucide-react";
 
 interface PreviewGeneratorProps {
   tool: EducationalTool;
 }
 
 export function PreviewGenerator({ tool }: PreviewGeneratorProps) {
-  const gradientId = `gradient-${tool.id}`;
-  const iconGradientId = `icon-gradient-${tool.id}`;
-
-  // 為不同工具設置不同的漸層色
+  // 为不同工具设置不同的渐变色
   const getGradientColors = () => {
-    switch (tool.id) {
-      case 7: // 點「石」成金
+    switch (tool.category) {
+      case 'communication':
         return {
-          start: "#4F46E5",
-          end: "#06B6D4"
+          start: "#3B82F6",
+          end: "#60A5FA"
         };
-      case 8: // 12年教案有14
+      case 'teaching':
         return {
-          start: "#059669",
-          end: "#10B981"
+          start: "#10B981",
+          end: "#34D399"
+        };
+      case 'language':
+        return {
+          start: "#8B5CF6",
+          end: "#A78BFA"
+        };
+      case 'reading':
+        return {
+          start: "#EAB308",
+          end: "#FCD34D"
+        };
+      case 'utilities':
+        return {
+          start: "#6B7280",
+          end: "#9CA3AF"
+        };
+      case 'games':
+        return {
+          start: "#EC4899",
+          end: "#F472B6"
         };
       default:
         return {
@@ -31,6 +58,25 @@ export function PreviewGenerator({ tool }: PreviewGeneratorProps) {
   };
 
   const { start, end } = getGradientColors();
+  const gradientId = `gradient-${tool.id}`;
+  const iconGradientId = `icon-gradient-${tool.id}`;
+
+  // 获取对应工具的图标组件
+  const getToolIcon = () => {
+    switch (tool.id) {
+      case 1: return MessageCircle;
+      case 2: return Lightbulb;
+      case 3: return Book;
+      case 4: return BookOpen;
+      case 5: return QrCode;
+      case 6: return Gamepad2;
+      case 7: return MessageSquare;
+      case 8: return Files;
+      default: return MessageCircle;
+    }
+  };
+
+  const Icon = getToolIcon();
 
   return (
     <svg
@@ -39,7 +85,7 @@ export function PreviewGenerator({ tool }: PreviewGeneratorProps) {
       viewBox="0 0 800 450"
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* 定義漸層 */}
+      {/* 定义渐变 */}
       <defs>
         <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor={start} stopOpacity="0.1" />
@@ -55,52 +101,27 @@ export function PreviewGenerator({ tool }: PreviewGeneratorProps) {
       <rect width="800" height="450" fill="#ffffff" />
       <rect width="800" height="450" fill={`url(#${gradientId})`} />
 
-      {/* 工具特定的圖示和裝飾 */}
-      {tool.id === 7 && (
-        <g transform="translate(350, 175)">
-          <circle cx="50" cy="50" r="40" fill={`url(#${iconGradientId})`} opacity="0.1" />
-          <MessageSquare 
-            x="30" 
-            y="30" 
-            width="40" 
-            height="40" 
-            stroke={`url(#${iconGradientId})`} 
-            strokeWidth="2"
-          />
-          <Sparkles 
-            x="60" 
-            y="20" 
-            width="30" 
-            height="30" 
-            stroke={`url(#${iconGradientId})`} 
-            strokeWidth="2"
-          />
+      {/* 主要图标区域 */}
+      <g transform="translate(350, 175)">
+        <circle cx="50" cy="50" r="40" fill={`url(#${iconGradientId})`} opacity="0.1" />
+        {/* 主图标 */}
+        <g transform="translate(30, 30)">
+          <Icon stroke={`url(#${iconGradientId})`} strokeWidth="2" width="40" height="40" />
         </g>
-      )}
+        {/* 辅助图标 */}
+        {tool.id === 7 && (
+          <g transform="translate(60, 20)">
+            <Sparkles stroke={`url(#${iconGradientId})`} strokeWidth="2" width="30" height="30" />
+          </g>
+        )}
+        {tool.id === 8 && (
+          <g transform="translate(60, 20)">
+            <BookOpen stroke={`url(#${iconGradientId})`} strokeWidth="2" width="30" height="30" />
+          </g>
+        )}
+      </g>
 
-      {tool.id === 8 && (
-        <g transform="translate(350, 175)">
-          <circle cx="50" cy="50" r="40" fill={`url(#${iconGradientId})`} opacity="0.1" />
-          <Files 
-            x="30" 
-            y="30" 
-            width="40" 
-            height="40" 
-            stroke={`url(#${iconGradientId})`} 
-            strokeWidth="2"
-          />
-          <BookOpen 
-            x="60" 
-            y="20" 
-            width="30" 
-            height="30" 
-            stroke={`url(#${iconGradientId})`} 
-            strokeWidth="2"
-          />
-        </g>
-      )}
-
-      {/* 工具名稱 */}
+      {/* 工具名称 */}
       <text
         x="400"
         y="300"
@@ -113,7 +134,7 @@ export function PreviewGenerator({ tool }: PreviewGeneratorProps) {
         {tool.title}
       </text>
 
-      {/* 裝飾性圖案 */}
+      {/* 装饰元素 */}
       <circle cx="200" cy="100" r="5" fill={start} opacity="0.5" />
       <circle cx="600" cy="350" r="5" fill={end} opacity="0.5" />
       <circle cx="150" cy="400" r="3" fill={start} opacity="0.3" />
