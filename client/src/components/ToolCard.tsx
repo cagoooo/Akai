@@ -51,14 +51,27 @@ export function ToolCard({ tool }: ToolCardProps) {
   return (
     <TooltipProvider>
       <Card 
-        className="group hover:shadow-lg transition-all duration-300 cursor-pointer"
+        className="group hover:shadow-lg transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         onClick={() => setIsOpen(true)}
+        tabIndex={0}
+        role="button"
+        aria-label={`開啟 ${tool.title} 工具詳細資訊`}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setIsOpen(true);
+          }
+        }}
       >
         <CardContent className="p-6">
           <div className="flex items-start justify-between mb-4">
             <Tooltip>
-              <TooltipTrigger>
-                <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
+              <TooltipTrigger asChild>
+                <div 
+                  className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors"
+                  role="img"
+                  aria-label={`${tool.title} 圖標`}
+                >
                   {Icon && <Icon className="w-6 h-6 text-primary" />}
                 </div>
               </TooltipTrigger>
@@ -75,6 +88,7 @@ export function ToolCard({ tool }: ToolCardProps) {
                     className="h-8 w-8"
                     onClick={handleShare}
                     data-tour="share-button"
+                    aria-label={`分享 ${tool.title}`}
                   >
                     <Share2 className="h-4 w-4" />
                   </Button>
@@ -89,6 +103,7 @@ export function ToolCard({ tool }: ToolCardProps) {
                     variant="secondary" 
                     className={`${categoryColors[tool.category]} border-0`}
                   >
+                    <span className="sr-only">工具類別：</span>
                     {tool.category}
                   </Badge>
                 </TooltipTrigger>
@@ -109,7 +124,12 @@ export function ToolCard({ tool }: ToolCardProps) {
 
           {tool.previewUrl && (
             <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg overflow-hidden mb-4">
-              <div className="w-full h-full bg-cover bg-center" style={{ backgroundImage: `url(${tool.previewUrl})` }} />
+              <div 
+                className="w-full h-full bg-cover bg-center" 
+                style={{ backgroundImage: `url(${tool.previewUrl})` }}
+                role="img"
+                aria-label={`${tool.title} 工具預覽圖`}
+              />
             </AspectRatio>
           )}
         </CardContent>
@@ -119,7 +139,7 @@ export function ToolCard({ tool }: ToolCardProps) {
         <DialogContent className="max-w-3xl">
           <DialogHeader>
             <div className="flex items-center gap-2 mb-2">
-              {Icon && <Icon className="w-6 h-6 text-primary" />}
+              {Icon && <Icon className="w-6 h-6 text-primary" aria-hidden="true" />}
               <DialogTitle>{tool.title}</DialogTitle>
             </div>
             <DialogDescription>{tool.description}</DialogDescription>
@@ -127,18 +147,26 @@ export function ToolCard({ tool }: ToolCardProps) {
 
           {tool.previewUrl && (
             <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg overflow-hidden my-4">
-              <div className="w-full h-full bg-cover bg-center" style={{ backgroundImage: `url(${tool.previewUrl})` }} />
+              <div 
+                className="w-full h-full bg-cover bg-center" 
+                style={{ backgroundImage: `url(${tool.previewUrl})` }}
+                role="img"
+                aria-label={`${tool.title} 工具詳細預覽圖`}
+              />
             </AspectRatio>
           )}
 
           <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={handleShare}>
-              <Share2 className="w-4 h-4 mr-2" />
+            <Button variant="outline" onClick={handleShare} aria-label={`分享 ${tool.title}`}>
+              <Share2 className="w-4 h-4 mr-2" aria-hidden="true" />
               分享
             </Button>
-            <Button onClick={() => window.open(tool.url, '_blank')}>
+            <Button 
+              onClick={() => window.open(tool.url, '_blank')}
+              aria-label={`在新分頁中開啟 ${tool.title}`}
+            >
               立即使用
-              <Icons.ArrowRight className="w-4 h-4 ml-2" />
+              <Icons.ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
             </Button>
           </div>
         </DialogContent>
@@ -154,21 +182,22 @@ export function ToolCard({ tool }: ToolCardProps) {
           </DialogHeader>
 
           <Tabs defaultValue="social" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-2" aria-label="分享選項">
               <TabsTrigger value="social">社群分享</TabsTrigger>
               <TabsTrigger value="collaborate">邀請協作</TabsTrigger>
             </TabsList>
 
             <TabsContent value="social" className="mt-4">
-              <div className="flex flex-wrap gap-4">
+              <div className="flex flex-wrap gap-4" role="group" aria-label="社群媒體分享按鈕">
                 {socialPlatforms.map((platform) => (
                   <Button
                     key={platform.name}
                     variant="outline"
                     className="flex-1 min-w-[120px]"
                     onClick={() => window.open(platform.url, '_blank')}
+                    aria-label={`分享到 ${platform.name}`}
                   >
-                    <platform.icon className={`w-4 h-4 mr-2 ${platform.color}`} />
+                    <platform.icon className={`w-4 h-4 mr-2 ${platform.color}`} aria-hidden="true" />
                     {platform.name}
                   </Button>
                 ))}
@@ -178,11 +207,15 @@ export function ToolCard({ tool }: ToolCardProps) {
             <TabsContent value="collaborate" className="mt-4">
               <div className="grid gap-4">
                 <div className="grid flex-1 gap-2">
-                  <label className="text-sm font-medium leading-none">
+                  <label className="text-sm font-medium leading-none" id="collaborator-label">
                     協作者
                   </label>
-                  <Button variant="outline" className="justify-start">
-                    <Users className="mr-2 h-4 w-4" />
+                  <Button 
+                    variant="outline" 
+                    className="justify-start"
+                    aria-labelledby="collaborator-label"
+                  >
+                    <Users className="mr-2 h-4 w-4" aria-hidden="true" />
                     <span>選擇協作者</span>
                   </Button>
                 </div>
