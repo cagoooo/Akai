@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from "react";
-import { TourProvider, useTour } from "@reactour/tour";
+import { TourProvider } from "@reactour/tour";
 
 interface HelpContextType {
   showHelp: boolean;
@@ -28,16 +28,25 @@ const steps = [
   },
 ];
 
-export function HelpProvider({ children }: { children: ReactNode }) {
+function HelpContent({ children }: { children: ReactNode }) {
   const [showHelp, setShowHelp] = useState(false);
-  const { setIsOpen } = useTour();
+  const [isOpen, setIsOpen] = useState(false);
 
   const toggleHelp = () => setShowHelp(!showHelp);
   const startTour = () => setIsOpen(true);
 
   return (
     <HelpContext.Provider value={{ showHelp, toggleHelp, startTour }}>
-      <TourProvider steps={steps} styles={{
+      {children}
+    </HelpContext.Provider>
+  );
+}
+
+export function HelpProvider({ children }: { children: ReactNode }) {
+  return (
+    <TourProvider 
+      steps={steps} 
+      styles={{
         popover: (base) => ({
           ...base,
           '--tw-bg-opacity': '1',
@@ -49,10 +58,10 @@ export function HelpProvider({ children }: { children: ReactNode }) {
           borderRadius: 'var(--radius)',
           boxShadow: 'var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
         }),
-      }}>
-        {children}
-      </TourProvider>
-    </HelpContext.Provider>
+      }}
+    >
+      <HelpContent>{children}</HelpContent>
+    </TourProvider>
   );
 }
 
