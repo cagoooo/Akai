@@ -19,6 +19,7 @@ import {
 } from "recharts";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
+import { LoadingScreen } from "./LoadingScreen";
 
 const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"];
 
@@ -97,13 +98,7 @@ export function ProgressDashboard() {
           <CardTitle>學習進度分析</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            <Skeleton className="h-[400px] w-full" />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Skeleton className="h-[200px]" />
-              <Skeleton className="h-[200px]" />
-            </div>
-          </div>
+          <LoadingScreen message="分析學習數據中..." />
         </CardContent>
       </Card>
     );

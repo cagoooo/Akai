@@ -11,6 +11,7 @@ import { useHelp } from "@/components/HelpProvider";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { BackgroundGradientCustomizer, type GradientSettings } from "@/components/BackgroundGradientCustomizer";
 import { ProgressDashboard } from "@/components/ProgressDashboard";
+import { LoadingScreen } from "@/components/LoadingScreen";
 
 export function Home() {
   const { startTour } = useHelp();
@@ -36,10 +37,8 @@ export function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 relative overflow-hidden">
-      {/* 自定義漸層背景 */}
       <div className="absolute inset-0 -z-20" style={gradientStyle} />
 
-      {/* 動態背景元素 */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-0 -left-4 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob" />
         <div className="absolute top-0 -right-4 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000" />
@@ -99,9 +98,9 @@ export function Home() {
               className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6"
             >
               {isLoading ? (
-                Array.from({ length: 4 }).map((_, index) => (
-                  <ToolCardSkeleton key={index} />
-                ))
+                <div className="col-span-full">
+                  <LoadingScreen message="正在準備教育工具..." />
+                </div>
               ) : (
                 toolsData?.map((tool) => (
                   <ToolCard key={tool.id} tool={tool} />
