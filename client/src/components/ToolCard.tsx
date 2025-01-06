@@ -15,6 +15,7 @@ import { PreviewGenerator } from "@/components/PreviewGenerator";
 import { IconCustomizer, type IconCustomization } from "@/components/IconCustomizer";
 import { CustomizationTutorialProvider } from "./CustomizationTutorial";
 import { motion, AnimatePresence } from "framer-motion";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Enhanced category colors with hover states
 const categoryColors = {
@@ -52,13 +53,15 @@ const categoryColors = {
 
 interface ToolCardProps {
   tool: EducationalTool;
+  isLoading?: boolean;
 }
 
-export function ToolCard({ tool }: ToolCardProps) {
+export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [isCustomizeOpen, setIsCustomizeOpen] = useState(false);
   const [customization, setCustomization] = useState<IconCustomization | undefined>();
+  const [isPreviewLoading, setIsPreviewLoading] = useState(true);
   const Icon = Icons[tool.icon as keyof typeof Icons] as LucideIcon;
 
   const handleShare = (e: React.MouseEvent) => {
@@ -80,12 +83,12 @@ export function ToolCard({ tool }: ToolCardProps) {
       >
         <Card
           className={`group hover:shadow-lg transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary overflow-hidden border-2 ${categoryColors[tool.category].border}`}
-          onClick={() => setIsOpen(true)}
-          tabIndex={0}
-          role="button"
-          aria-label={`開啟 ${tool.title} 工具詳細資訊`}
+          onClick={() => !isLoading && setIsOpen(true)}
+          tabIndex={isLoading ? -1 : 0}
+          role={isLoading ? "presentation" : "button"}
+          aria-label={isLoading ? undefined : `開啟 ${tool.title} 工具詳細資訊`}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
+            if (!isLoading && (e.key === 'Enter' || e.key === ' ')) {
               e.preventDefault();
               setIsOpen(true);
             }
@@ -105,91 +108,136 @@ export function ToolCard({ tool }: ToolCardProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <motion.div
-                    className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors"
-                    whileHover={{ rotate: [0, -10, 10, -5, 5, 0] }}
-                    transition={{ duration: 0.5 }}
-                    role="img"
-                    aria-label={`${tool.title} 圖標`}
-                  >
-                    {Icon && <Icon className="w-6 h-6 text-primary" />}
-                  </motion.div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{tool.title}</p>
-                </TooltipContent>
-              </Tooltip>
+              {isLoading ? (
+                <Skeleton className="w-10 h-10 rounded-lg" />
+              ) : (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <motion.div
+                      className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors"
+                      whileHover={{ rotate: [0, -10, 10, -5, 5, 0] }}
+                      transition={{ duration: 0.5 }}
+                      role="img"
+                      aria-label={`${tool.title} 圖標`}
+                    >
+                      {Icon && <Icon className="w-6 h-6 text-primary" />}
+                    </motion.div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{tool.title}</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
+
               <div className="flex gap-2">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={handleCustomize}
-                      data-customization="icon-settings"
-                      aria-label={`自定義 ${tool.title} 圖標`}
-                    >
-                      <Settings2 className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>自定義圖標</p>
-                  </TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={handleShare}
-                      data-tour="share-button"
-                      aria-label={`分享 ${tool.title}`}
-                    >
-                      <Share2 className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>分享並協作</p>
-                  </TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Badge
-                      variant="secondary"
-                      className={`${categoryColors[tool.category].badge} border-0`}
-                    >
-                      <span className="sr-only">工具類別：</span>
-                      {tool.category}
-                    </Badge>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>工具類別：{tool.category}</p>
-                  </TooltipContent>
-                </Tooltip>
+                {isLoading ? (
+                  <>
+                    <Skeleton className="w-8 h-8 rounded" />
+                    <Skeleton className="w-8 h-8 rounded" />
+                    <Skeleton className="w-20 h-8 rounded" />
+                  </>
+                ) : (
+                  <>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={handleCustomize}
+                          data-customization="icon-settings"
+                          aria-label={`自定義 ${tool.title} 圖標`}
+                        >
+                          <Settings2 className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>自定義圖標</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={handleShare}
+                          data-tour="share-button"
+                          aria-label={`分享 ${tool.title}`}
+                        >
+                          <Share2 className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>分享並協作</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Badge
+                          variant="secondary"
+                          className={`${categoryColors[tool.category].badge} border-0`}
+                        >
+                          <span className="sr-only">工具類別：</span>
+                          {tool.category}
+                        </Badge>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>工具類別：{tool.category}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </>
+                )}
               </div>
             </motion.div>
 
-            <CardTitle className="text-xl font-bold group-hover:text-primary transition-colors mb-2 relative">
-              {tool.title}
-            </CardTitle>
-
-            <CardDescription className="text-sm text-muted-foreground min-h-[3rem] mb-4 relative">
-              {tool.description}
-            </CardDescription>
+            {isLoading ? (
+              <>
+                <Skeleton className="w-3/4 h-7 mb-2" />
+                <Skeleton className="w-full h-4 mb-2" />
+                <Skeleton className="w-5/6 h-4 mb-4" />
+              </>
+            ) : (
+              <>
+                <CardTitle className="text-xl font-bold group-hover:text-primary transition-colors mb-2 relative">
+                  {tool.title}
+                </CardTitle>
+                <CardDescription className="text-sm text-muted-foreground min-h-[3rem] mb-4 relative">
+                  {tool.description}
+                </CardDescription>
+              </>
+            )}
 
             {tool.previewUrl && (
               <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg overflow-hidden mb-4">
-                <motion.div
-                  className="w-full h-full relative"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                >
-                  <PreviewGenerator tool={tool} customization={customization} />
-                </motion.div>
+                {isLoading ? (
+                  <Skeleton className="w-full h-full" />
+                ) : (
+                  <motion.div
+                    className="w-full h-full relative"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  >
+                    <AnimatePresence mode="wait">
+                      {isPreviewLoading && (
+                        <motion.div
+                          key="skeleton"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className="absolute inset-0"
+                        >
+                          <Skeleton className="w-full h-full" />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                    <PreviewGenerator
+                      tool={tool}
+                      customization={customization}
+                      onLoad={() => setIsPreviewLoading(false)}
+                    />
+                  </motion.div>
+                )}
               </AspectRatio>
             )}
           </CardContent>

@@ -60,12 +60,17 @@ export function Home() {
               className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6"
             >
               {isLoading ? (
-                <div className="col-span-full">
-                  <LoadingScreen message="正在準備教育工具..." />
-                </div>
+                // Show loading skeleton cards
+                Array.from({ length: 4 }).map((_, index) => (
+                  <ToolCard
+                    key={`loading-${index}`}
+                    tool={tools[0]} // Dummy tool data for skeleton
+                    isLoading={true}
+                  />
+                ))
               ) : (
                 toolsData?.map((tool) => (
-                  <ToolCard key={tool.id} tool={tool} />
+                  <ToolCard key={tool.id} tool={tool} isLoading={false} />
                 ))
               )}
             </section>
