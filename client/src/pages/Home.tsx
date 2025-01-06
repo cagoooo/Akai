@@ -10,6 +10,7 @@ import { useHelp } from "@/components/HelpProvider";
 import { ProgressDashboard } from "@/components/ProgressDashboard";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { AchievementsList } from "@/components/AchievementsList";
 
 export function Home() {
   const { startTour } = useHelp();
@@ -27,7 +28,7 @@ export function Home() {
       <main className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 md:py-12">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-8 mb-6 sm:mb-8">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-            教育科技創新發現
+            教育科技創新專區
           </h1>
           <div className="flex flex-wrap gap-2">
             <ThemeToggle />
@@ -60,11 +61,10 @@ export function Home() {
               className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6"
             >
               {isLoading ? (
-                // Show loading skeleton cards
                 Array.from({ length: 4 }).map((_, index) => (
                   <ToolCard
                     key={`loading-${index}`}
-                    tool={tools[0]} // Dummy tool data for skeleton
+                    tool={tools[0]}
                     isLoading={true}
                   />
                 ))
@@ -77,8 +77,15 @@ export function Home() {
           </div>
 
           <div className="space-y-4 sm:space-y-6">
-            <MoodTracker toolId={1} />
-            <ProgressDashboard />
+            <div data-tour="mood-tracker">
+              <MoodTracker toolId={1} />
+            </div>
+            <div data-tour="progress-dashboard">
+              <ProgressDashboard />
+            </div>
+            <div data-tour="achievements">
+              <AchievementsList />
+            </div>
           </div>
         </div>
 

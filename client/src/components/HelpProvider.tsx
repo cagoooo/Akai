@@ -35,7 +35,7 @@ export function HelpProvider({ children }: HelpProviderProps) {
           element: '[data-tour="teacher-intro"]',
           popover: {
             title: '認識阿凱老師',
-            description: '在這裡您可以了解阿凱老師的專業背景、教學理念和獲得的成就。點擊名字可以前往他的個人網頁了解更多。',
+            description: '在這裡您可以了解阿凱老師的專業背景、教學理念和獲得的成就。點擊個人簡介可以前往了解更多。',
             side: "bottom",
             align: 'start'
           }
@@ -50,28 +50,37 @@ export function HelpProvider({ children }: HelpProviderProps) {
           }
         },
         {
-          element: '[data-tour="customize-bg"]',
+          element: '[data-tour="mood-tracker"]',
           popover: {
-            title: '自定義背景',
-            description: '您可以根據個人喜好調整頁面背景的漸層效果，創造獨特的視覺體驗。',
+            title: '心情追蹤',
+            description: '記錄您使用工具時的心情和感受，幫助我們優化教學體驗。',
             side: "left",
             align: 'center'
           }
         },
         {
-          element: '[data-tour="share-button"]',
+          element: '[data-tour="progress-dashboard"]',
           popover: {
-            title: '分享與協作',
-            description: '輕鬆地與其他教師分享工具和資源，建立教育資源共享網絡。',
+            title: '學習進度分析',
+            description: '查看您的學習數據統計和成就進度，了解自己的學習軌跡。',
             side: "left",
+            align: 'start'
+          }
+        },
+        {
+          element: '[data-tour="achievements"]',
+          popover: {
+            title: '學習成就',
+            description: '完成各種學習任務來獲得成就徽章，追蹤您的學習里程碑。',
+            side: "right",
             align: 'start'
           }
         },
         {
           element: '[data-customization="icon-settings"]',
           popover: {
-            title: '工具自定義',
-            description: '您可以自定義每個工具的圖標樣式，包括顏色、大小和特效，打造專屬的視覺風格。',
+            title: '個人化設定',
+            description: '自定義工具圖標和介面風格，打造專屬的學習環境。',
             side: "right",
             align: 'start'
           }
