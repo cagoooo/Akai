@@ -29,22 +29,40 @@ export const collaborators = pgTable("collaborators", {
   addedAt: timestamp("added_at").defaultNow().notNull(),
 });
 
-// New table for mood tracking
 export const moodEntries = pgTable("mood_entries", {
   id: serial("id").primaryKey(),
   userId: integer("user_id").references(() => users.id),
   toolId: integer("tool_id").notNull(),
-  emoji: text("emoji").notNull(), // Store the emoji character
-  mood: text("mood").notNull(), // Store the mood name (e.g., "happy", "confused")
-  intensity: integer("intensity").notNull(), // 1-5 scale
+  emoji: text("emoji").notNull(), 
+  mood: text("mood").notNull(), 
+  intensity: integer("intensity").notNull(), 
   notes: text("notes"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const achievements = pgTable("achievements", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  icon: text("icon").notNull(), 
+  category: text("category").notNull(), 
+  requirements: jsonb("requirements").notNull(), 
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const userAchievements = pgTable("user_achievements", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  achievementId: integer("achievement_id").references(() => achievements.id).notNull(),
+  earnedAt: timestamp("earned_at").defaultNow().notNull(),
+  progress: jsonb("progress").notNull(), 
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
   createdResources: many(sharedResources),
   collaborations: many(collaborators),
   moodEntries: many(moodEntries),
+  earnedAchievements: many(userAchievements),
 }));
 
 export const sharedResourcesRelations = relations(sharedResources, ({ one, many }) => ({
@@ -73,7 +91,21 @@ export const moodEntriesRelations = relations(moodEntries, ({ one }) => ({
   }),
 }));
 
-// Schema types for all tables
+export const achievementsRelations = relations(achievements, ({ many }) => ({
+  userAchievements: many(userAchievements),
+}));
+
+export const userAchievementsRelations = relations(userAchievements, ({ one }) => ({
+  user: one(users, {
+    fields: [userAchievements.userId],
+    references: [users.id],
+  }),
+  achievement: one(achievements, {
+    fields: [userAchievements.achievementId],
+    references: [achievements.id],
+  }),
+}));
+
 export const insertUserSchema = createInsertSchema(users);
 export const selectUserSchema = createSelectSchema(users);
 export const insertSharedResourceSchema = createInsertSchema(sharedResources);
@@ -82,6 +114,10 @@ export const insertCollaboratorSchema = createInsertSchema(collaborators);
 export const selectCollaboratorSchema = createSelectSchema(collaborators);
 export const insertMoodEntrySchema = createInsertSchema(moodEntries);
 export const selectMoodEntrySchema = createSelectSchema(moodEntries);
+export const insertAchievementSchema = createInsertSchema(achievements);
+export const selectAchievementSchema = createSelectSchema(achievements);
+export const insertUserAchievementSchema = createInsertSchema(userAchievements);
+export const selectUserAchievementSchema = createSelectSchema(userAchievements);
 
 export type InsertUser = typeof users.$inferInsert;
 export type SelectUser = typeof users.$inferSelect;
@@ -91,3 +127,7 @@ export type InsertCollaborator = typeof collaborators.$inferInsert;
 export type SelectCollaborator = typeof collaborators.$inferSelect;
 export type InsertMoodEntry = typeof moodEntries.$inferInsert;
 export type SelectMoodEntry = typeof moodEntries.$inferSelect;
+export type InsertAchievement = typeof achievements.$inferInsert;
+export type SelectAchievement = typeof achievements.$inferSelect;
+export type InsertUserAchievement = typeof userAchievements.$inferInsert;
+export type SelectUserAchievement = typeof userAchievements.$inferSelect;

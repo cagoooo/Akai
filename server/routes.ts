@@ -1,7 +1,12 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { db } from "@db";
-import { sharedResources, collaborators, users, moodEntries, insertSharedResourceSchema, insertCollaboratorSchema, insertMoodEntrySchema } from "@db/schema";
+import { 
+  sharedResources, collaborators, users, moodEntries, 
+  achievements, userAchievements,
+  insertSharedResourceSchema, insertCollaboratorSchema, 
+  insertMoodEntrySchema, insertUserAchievementSchema 
+} from "@db/schema";
 import { eq, and } from "drizzle-orm";
 
 export function registerRoutes(app: Express): Server {
@@ -138,6 +143,91 @@ export function registerRoutes(app: Express): Server {
       res.json({ translatedText });
     } catch (error) {
       res.status(500).json({ message: "Translation failed" });
+    }
+  });
+
+  // Achievements endpoints
+  app.get("/api/achievements", async (req, res) => {
+    try {
+      const userId = req.user?.id;
+      const allAchievements = await db.query.achievements.findMany({
+        orderBy: (achievements, { asc }) => [asc(achievements.category)],
+      });
+
+      if (userId) {
+        // If user is logged in, fetch their progress
+        const userProgress = await db.query.userAchievements.findMany({
+          where: eq(userAchievements.userId, userId),
+        });
+
+        const achievementsWithProgress = allAchievements.map(achievement => {
+          const progress = userProgress.find(p => p.achievementId === achievement.id);
+          return {
+            ...achievement,
+            earned: !!progress,
+            progress: progress?.progress || 0,
+          };
+        });
+
+        return res.json(achievementsWithProgress);
+      }
+
+      // If no user, return achievements without progress
+      res.json(allAchievements.map(achievement => ({
+        ...achievement,
+        earned: false,
+        progress: 0,
+      })));
+    } catch (error) {
+      console.error("Error fetching achievements:", error);
+      res.status(500).json({ message: "獲取成就時發生錯誤" });
+    }
+  });
+
+  app.post("/api/achievements/:achievementId/progress", async (req, res) => {
+    try {
+      const { achievementId } = req.params;
+      const userId = req.user?.id;
+      const { progress } = req.body;
+
+      if (!userId) {
+        return res.status(401).json({ message: "請先登入" });
+      }
+
+      const achievement = await db.query.achievements.findFirst({
+        where: eq(achievements.id, parseInt(achievementId)),
+      });
+
+      if (!achievement) {
+        return res.status(404).json({ message: "找不到此成就" });
+      }
+
+      const existingProgress = await db.query.userAchievements.findFirst({
+        where: and(
+          eq(userAchievements.userId, userId),
+          eq(userAchievements.achievementId, parseInt(achievementId))
+        ),
+      });
+
+      if (existingProgress) {
+        // Update existing progress
+        await db
+          .update(userAchievements)
+          .set({ progress })
+          .where(eq(userAchievements.id, existingProgress.id));
+      } else {
+        // Create new progress entry
+        await db.insert(userAchievements).values({
+          userId,
+          achievementId: parseInt(achievementId),
+          progress,
+        });
+      }
+
+      res.json({ message: "成就進度已更新" });
+    } catch (error) {
+      console.error("Error updating achievement progress:", error);
+      res.status(500).json({ message: "更新成就進度時發生錯誤" });
     }
   });
 
