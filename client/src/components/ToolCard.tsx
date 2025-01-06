@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Share2, Users, HelpCircle, Twitter, Facebook, Linkedin, MessageCircle, Settings2 } from "lucide-react";
+import { Share2, Users, Settings2 } from "lucide-react";
 import { useState } from "react";
 import * as Icons from "lucide-react";
 import type { EducationalTool } from "@/lib/data";
@@ -16,13 +16,38 @@ import { IconCustomizer, type IconCustomization } from "@/components/IconCustomi
 import { CustomizationTutorialProvider } from "./CustomizationTutorial";
 import { motion, AnimatePresence } from "framer-motion";
 
+// Enhanced category colors with hover states
 const categoryColors = {
-  communication: "bg-blue-100 text-blue-800",
-  teaching: "bg-green-100 text-green-800",
-  language: "bg-purple-100 text-purple-800",
-  reading: "bg-yellow-100 text-yellow-800",
-  utilities: "bg-gray-100 text-gray-800",
-  games: "bg-pink-100 text-pink-800",
+  communication: {
+    badge: "bg-blue-100 text-blue-800",
+    hover: "from-blue-50/50 to-blue-100/50",
+    border: "group-hover:border-blue-200",
+  },
+  teaching: {
+    badge: "bg-green-100 text-green-800",
+    hover: "from-green-50/50 to-green-100/50",
+    border: "group-hover:border-green-200",
+  },
+  language: {
+    badge: "bg-purple-100 text-purple-800",
+    hover: "from-purple-50/50 to-purple-100/50",
+    border: "group-hover:border-purple-200",
+  },
+  reading: {
+    badge: "bg-yellow-100 text-yellow-800",
+    hover: "from-yellow-50/50 to-yellow-100/50",
+    border: "group-hover:border-yellow-200",
+  },
+  utilities: {
+    badge: "bg-gray-100 text-gray-800",
+    hover: "from-gray-50/50 to-gray-100/50",
+    border: "group-hover:border-gray-200",
+  },
+  games: {
+    badge: "bg-pink-100 text-pink-800",
+    hover: "from-pink-50/50 to-pink-100/50",
+    border: "group-hover:border-pink-200",
+  },
 } as const;
 
 interface ToolCardProps {
@@ -54,7 +79,7 @@ export function ToolCard({ tool }: ToolCardProps) {
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
       >
         <Card
-          className="group hover:shadow-lg transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className={`group hover:shadow-lg transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary overflow-hidden border-2 ${categoryColors[tool.category].border}`}
           onClick={() => setIsOpen(true)}
           tabIndex={0}
           role="button"
@@ -66,7 +91,14 @@ export function ToolCard({ tool }: ToolCardProps) {
             }
           }}
         >
-          <CardContent className="p-6">
+          <motion.div
+            className="absolute inset-0 transition-opacity duration-300 opacity-0 group-hover:opacity-100 bg-gradient-to-br pointer-events-none"
+            initial={false}
+            style={{
+              background: `linear-gradient(to bottom right, var(--${tool.category}-gradient))`,
+            }}
+          />
+          <CardContent className="p-6 relative">
             <motion.div
               className="flex items-start justify-between mb-4"
               initial={{ opacity: 0, y: 20 }}
@@ -128,7 +160,7 @@ export function ToolCard({ tool }: ToolCardProps) {
                   <TooltipTrigger asChild>
                     <Badge
                       variant="secondary"
-                      className={`${categoryColors[tool.category]} border-0`}
+                      className={`${categoryColors[tool.category].badge} border-0`}
                     >
                       <span className="sr-only">工具類別：</span>
                       {tool.category}
@@ -141,18 +173,18 @@ export function ToolCard({ tool }: ToolCardProps) {
               </div>
             </motion.div>
 
-            <CardTitle className="text-xl font-bold group-hover:text-primary transition-colors mb-2">
+            <CardTitle className="text-xl font-bold group-hover:text-primary transition-colors mb-2 relative">
               {tool.title}
             </CardTitle>
 
-            <CardDescription className="text-sm text-muted-foreground min-h-[3rem] mb-4">
+            <CardDescription className="text-sm text-muted-foreground min-h-[3rem] mb-4 relative">
               {tool.description}
             </CardDescription>
 
             {tool.previewUrl && (
               <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg overflow-hidden mb-4">
                 <motion.div 
-                  className="w-full h-full"
+                  className="w-full h-full relative"
                   whileHover={{ scale: 1.05 }}
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 >

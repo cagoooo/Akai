@@ -10,6 +10,25 @@
   body {
     @apply font-sans antialiased bg-background text-foreground;
   }
+
+  :root {
+    /* Category-specific gradients */
+    --communication-gradient: rgb(219 234 254 / 0.5), rgb(191 219 254 / 0.5);
+    --teaching-gradient: rgb(220 252 231 / 0.5), rgb(187 247 208 / 0.5);
+    --language-gradient: rgb(237 233 254 / 0.5), rgb(221 214 254 / 0.5);
+    --reading-gradient: rgb(254 249 195 / 0.5), rgb(253 224 71 / 0.5);
+    --utilities-gradient: rgb(243 244 246 / 0.5), rgb(229 231 235 / 0.5);
+    --games-gradient: rgb(252 231 243 / 0.5), rgb(249 168 212 / 0.5);
+  }
+
+  .dark {
+    --communication-gradient: rgb(29 78 216 / 0.2), rgb(37 99 235 / 0.2);
+    --teaching-gradient: rgb(21 128 61 / 0.2), rgb(22 163 74 / 0.2);
+    --language-gradient: rgb(109 40 217 / 0.2), rgb(124 58 237 / 0.2);
+    --reading-gradient: rgb(161 98 7 / 0.2), rgb(202 138 4 / 0.2);
+    --utilities-gradient: rgb(75 85 99 / 0.2), rgb(107 114 128 / 0.2);
+    --games-gradient: rgb(157 23 77 / 0.2), rgb(190 24 93 / 0.2);
+  }
 }
 
 @layer utilities {
