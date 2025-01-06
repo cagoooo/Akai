@@ -1,5 +1,5 @@
-import React from 'react';
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
+import React from 'react';
 
 export type Language = 'zh-TW' | 'en' | 'ja';
 
@@ -58,7 +58,7 @@ async function translateText(text: string, targetLang: Language): Promise<string
   }
 }
 
-export function TranslationProvider({ children }: TranslationProviderProps) {
+export function TranslationProvider({ children }: TranslationProviderProps): React.ReactElement {
   const [currentLanguage, setCurrentLanguage] = useState<Language>('zh-TW');
 
   const translate = useCallback(async (text: string) => {
