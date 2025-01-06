@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
 
 export type Language = 'zh-TW' | 'en' | 'ja';
 
@@ -14,11 +14,13 @@ type TranslationContextType = {
   translate: (text: string) => Promise<string>;
 };
 
-const TranslationContext = createContext<TranslationContextType>({
+const defaultContext: TranslationContextType = {
   currentLanguage: 'zh-TW',
   setLanguage: () => {},
   translate: async (text) => text,
-});
+};
+
+const TranslationContext = createContext<TranslationContextType>(defaultContext);
 
 export function useTranslation() {
   const context = useContext(TranslationContext);
@@ -73,9 +75,8 @@ export function TranslationProvider({ children }: TranslationProviderProps) {
     translate,
   };
 
-  return (
-    <TranslationContext.Provider value={value}>
-      {children}
-    </TranslationContext.Provider>
-  );
+  return React.createElement(TranslationContext.Provider, {
+    value,
+    children
+  });
 }
