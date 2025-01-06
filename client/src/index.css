@@ -20,3 +20,33 @@
     animation-delay: 4s;
   }
 }
+
+/* Custom driver.js styles */
+.driver-popover {
+  @apply rounded-lg shadow-lg border border-border !important;
+}
+
+.driver-popover-title {
+  @apply text-xl font-semibold mb-2 text-foreground !important;
+}
+
+.driver-popover-description {
+  @apply text-muted-foreground leading-relaxed !important;
+}
+
+.driver-popover-footer {
+  @apply mt-4 !important;
+}
+
+.driver-popover-prev-btn,
+.driver-popover-next-btn {
+  @apply px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors !important;
+}
+
+.driver-popover-close-btn {
+  @apply p-2 rounded-md hover:bg-accent !important;
+}
+
+.driver-popover-progress-text {
+  @apply text-muted-foreground !important;
+}

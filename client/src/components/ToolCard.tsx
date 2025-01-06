@@ -97,6 +97,7 @@ export function ToolCard({ tool }: ToolCardProps) {
                     size="icon"
                     className="h-8 w-8"
                     onClick={handleCustomize}
+                    data-customization="icon-settings"
                     aria-label={`自定義 ${tool.title} 圖標`}
                   >
                     <Settings2 className="h-4 w-4" />
