@@ -17,37 +17,49 @@ import { CustomizationTutorialProvider } from "./CustomizationTutorial";
 import { motion, AnimatePresence } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
 
-// Enhanced category colors with hover states
+// Enhanced category colors with hover states and transitions
 const categoryColors = {
   communication: {
     badge: "bg-blue-100 text-blue-800",
     hover: "from-blue-50/50 to-blue-100/50",
     border: "group-hover:border-blue-200",
+    icon: "group-hover:text-blue-600",
+    gradient: "var(--communication-gradient)",
   },
   teaching: {
     badge: "bg-green-100 text-green-800",
     hover: "from-green-50/50 to-green-100/50",
     border: "group-hover:border-green-200",
+    icon: "group-hover:text-green-600",
+    gradient: "var(--teaching-gradient)",
   },
   language: {
     badge: "bg-purple-100 text-purple-800",
     hover: "from-purple-50/50 to-purple-100/50",
     border: "group-hover:border-purple-200",
+    icon: "group-hover:text-purple-600",
+    gradient: "var(--language-gradient)",
   },
   reading: {
     badge: "bg-yellow-100 text-yellow-800",
     hover: "from-yellow-50/50 to-yellow-100/50",
     border: "group-hover:border-yellow-200",
+    icon: "group-hover:text-yellow-600",
+    gradient: "var(--reading-gradient)",
   },
   utilities: {
     badge: "bg-gray-100 text-gray-800",
     hover: "from-gray-50/50 to-gray-100/50",
     border: "group-hover:border-gray-200",
+    icon: "group-hover:text-gray-600",
+    gradient: "var(--utilities-gradient)",
   },
   games: {
     badge: "bg-pink-100 text-pink-800",
     hover: "from-pink-50/50 to-pink-100/50",
     border: "group-hover:border-pink-200",
+    icon: "group-hover:text-pink-600",
+    gradient: "var(--games-gradient)",
   },
 } as const;
 
@@ -82,7 +94,7 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
       >
         <Card
-          className={`group hover:shadow-lg transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary overflow-hidden border-2 ${categoryColors[tool.category].border}`}
+          className={`group hover:shadow-lg transition-all duration-500 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary overflow-hidden border-2 ${categoryColors[tool.category].border} hover:bg-gradient-to-br`}
           onClick={() => !isLoading && setIsOpen(true)}
           tabIndex={isLoading ? -1 : 0}
           role={isLoading ? "presentation" : "button"}
@@ -95,10 +107,10 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
           }}
         >
           <motion.div
-            className="absolute inset-0 transition-opacity duration-300 opacity-0 group-hover:opacity-100 bg-gradient-to-br pointer-events-none"
+            className="absolute inset-0 transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100 bg-gradient-to-br pointer-events-none"
             initial={false}
             style={{
-              background: `linear-gradient(to bottom right, var(--${tool.category}-gradient))`,
+              background: `linear-gradient(to bottom right, ${categoryColors[tool.category].gradient})`,
             }}
           />
           <CardContent className="p-6 relative">
@@ -114,13 +126,13 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <motion.div
-                      className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors"
+                      className={`p-2 rounded-lg bg-primary/10 transition-all duration-300 ${categoryColors[tool.category].icon}`}
                       whileHover={{ rotate: [0, -10, 10, -5, 5, 0] }}
                       transition={{ duration: 0.5 }}
                       role="img"
                       aria-label={`${tool.title} 圖標`}
                     >
-                      {Icon && <Icon className="w-6 h-6 text-primary" />}
+                      {Icon && <Icon className="w-6 h-6 transition-colors duration-300" />}
                     </motion.div>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -143,7 +155,7 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8"
+                          className={`h-8 w-8 transition-colors duration-300 ${categoryColors[tool.category].icon}`}
                           onClick={handleCustomize}
                           data-customization="icon-settings"
                           aria-label={`自定義 ${tool.title} 圖標`}
@@ -160,7 +172,7 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8"
+                          className={`h-8 w-8 transition-colors duration-300 ${categoryColors[tool.category].icon}`}
                           onClick={handleShare}
                           data-tour="share-button"
                           aria-label={`分享 ${tool.title}`}
@@ -176,7 +188,7 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
                       <TooltipTrigger asChild>
                         <Badge
                           variant="secondary"
-                          className={`${categoryColors[tool.category].badge} border-0`}
+                          className={`${categoryColors[tool.category].badge} border-0 transition-colors duration-300`}
                         >
                           <span className="sr-only">工具類別：</span>
                           {tool.category}
@@ -199,10 +211,10 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
               </>
             ) : (
               <>
-                <CardTitle className="text-xl font-bold group-hover:text-primary transition-colors mb-2 relative">
+                <CardTitle className={`text-xl font-bold transition-colors duration-300 ${categoryColors[tool.category].icon} mb-2 relative`}>
                   {tool.title}
                 </CardTitle>
-                <CardDescription className="text-sm text-muted-foreground min-h-[3rem] mb-4 relative">
+                <CardDescription className="text-sm text-muted-foreground min-h-[3rem] mb-4 relative transition-colors duration-300 group-hover:text-foreground/80">
                   {tool.description}
                 </CardDescription>
               </>
