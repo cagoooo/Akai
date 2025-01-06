@@ -5,17 +5,17 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Share2, Users, Settings2, Twitter as TwitterIcon, Facebook as FacebookIcon, Linkedin as LinkedinIcon, MessageCircle } from "lucide-react";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import * as Icons from "lucide-react";
 import type { EducationalTool } from "@/lib/data";
 import type { LucideIcon } from 'lucide-react';
-import { generateShareUrls } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PreviewGenerator } from "@/components/PreviewGenerator";
 import { IconCustomizer, type IconCustomization } from "@/components/IconCustomizer";
 import { CustomizationTutorialProvider } from "./CustomizationTutorial";
 import { motion, AnimatePresence } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SocialPreviewImage } from "./SocialPreviewImage";
 
 // Enhanced category colors with hover states and transitions
 const categoryColors = {
@@ -74,6 +74,7 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
   const [isCustomizeOpen, setIsCustomizeOpen] = useState(false);
   const [customization, setCustomization] = useState<IconCustomization | undefined>();
   const [isPreviewLoading, setIsPreviewLoading] = useState(true);
+  const [previewImage, setPreviewImage] = useState<string>();
   const Icon = Icons[tool.icon as keyof typeof Icons] as LucideIcon;
 
   const handleShare = (e: React.MouseEvent) => {
@@ -85,6 +86,26 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
     e.stopPropagation();
     setIsCustomizeOpen(true);
   };
+
+  const generateShareUrls = useCallback((previewUrl?: string) => {
+    const baseUrl = window.location.origin;
+    const url = `${baseUrl}${tool.url}`;
+    const text = `Check out ${tool.title} - ${tool.description}`;
+
+    const params = new URLSearchParams({
+      title: tool.title,
+      text: text,
+      url: url,
+      ...(previewUrl && { image: previewUrl })
+    });
+
+    return {
+      twitter: `https://twitter.com/intent/tweet?${params.toString()}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?${params.toString()}`,
+      linkedin: `https://www.linkedin.com/shareArticle?mini=true&${params.toString()}`,
+      line: `https://social-plugins.line.me/lineit/share?${params.toString()}`
+    };
+  }, [tool]);
 
   return (
     <TooltipProvider>
@@ -327,6 +348,11 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
               </TabsList>
 
               <TabsContent value="social" className="mt-4">
+                <SocialPreviewImage
+                  tool={tool}
+                  onGenerate={setPreviewImage}
+                />
+
                 <motion.div
                   className="flex flex-wrap gap-4"
                   initial={{ opacity: 0 }}
@@ -349,7 +375,7 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
                       <Button
                         variant="outline"
                         className="flex-1 min-w-[120px]"
-                        onClick={() => window.open(generateShareUrls({ url: tool.url, title: tool.title, description: tool.description })[platform.name.toLowerCase()], '_blank')}
+                        onClick={() => window.open(generateShareUrls(previewImage)[platform.name.toLowerCase()], '_blank')}
                         aria-label={`分享到 ${platform.name}`}
                       >
                         <platform.icon className={`w-4 h-4 mr-2 ${platform.color}`} aria-hidden="true" />
@@ -358,6 +384,17 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
                     </motion.div>
                   ))}
                 </motion.div>
+
+                {previewImage && (
+                  <div className="mt-4 p-4 border rounded-lg">
+                    <p className="text-sm text-muted-foreground mb-2">預覽圖片</p>
+                    <img
+                      src={previewImage}
+                      alt={`${tool.title} 分享預覽`}
+                      className="w-full h-auto rounded-md"
+                    />
+                  </div>
+                )}
               </TabsContent>
 
               <TabsContent value="collaborate" className="mt-4">
