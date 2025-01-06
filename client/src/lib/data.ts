@@ -62,6 +62,24 @@ export const tools: EducationalTool[] = [
     icon: "Gamepad2",
     category: "games",
     previewUrl: "/previews/bee-preview.svg"
+  },
+  {
+    id: 7,
+    title: "點「石」成金蜂",
+    description: "創新的LINE教學助手，協助教師提升教學效率和學習成效",
+    url: "https://line.me/R/ti/p/@733oiboa?oat_content=url&ts=05120012",
+    icon: "MessageSquare",
+    category: "teaching",
+    previewUrl: "/previews/stone-preview.svg"
+  },
+  {
+    id: 8,
+    title: "12年教案有14",
+    description: "豐富的教案資源分享平台，提供多元化的教學素材和靈感",
+    url: "https://lin.ee/pCqnVhT",
+    icon: "Files",
+    category: "teaching",
+    previewUrl: "/previews/teaching-preview.svg"
   }
 ];
 
