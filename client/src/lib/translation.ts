@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, type ReactNode, type FC } from 'react';
+import { useState, useCallback } from 'react';
 
 export type Language = 'zh-TW' | 'en' | 'ja';
 
@@ -8,76 +8,67 @@ export const languages: Record<Language, string> = {
   'ja': '日本語',
 };
 
-interface TranslationContextType {
-  currentLanguage: Language;
-  setLanguage: (lang: Language) => void;
-  translate: (text: string) => Promise<string>;
-}
-
-const defaultContext: TranslationContextType = {
-  currentLanguage: 'zh-TW',
-  setLanguage: () => {},
-  translate: async (text: string) => text,
+// Dictionary-based translations
+const translations: Record<Language, Record<string, string>> = {
+  'zh-TW': {
+    // Default language - keys match values
+    'welcome': '歡迎',
+    'start_tutorial': '開始教學',
+    'achievements': '成就',
+    'mood_tracker': '心情追蹤',
+    // Add more translations as needed
+  },
+  'en': {
+    'welcome': 'Welcome',
+    'start_tutorial': 'Start Tutorial',
+    'achievements': 'Achievements',
+    'mood_tracker': 'Mood Tracker',
+  },
+  'ja': {
+    'welcome': 'ようこそ',
+    'start_tutorial': 'チュートリアルを始める',
+    'achievements': '実績',
+    'mood_tracker': 'ムードトラッカー',
+  },
 };
 
-export const TranslationContext = createContext<TranslationContextType>(defaultContext);
+// Simple state management for current language
+let currentLanguage: Language = 'zh-TW';
 
+export function setLanguage(lang: Language) {
+  currentLanguage = lang;
+  // Trigger a page reload to update all translations
+  window.location.reload();
+}
+
+export function getCurrentLanguage(): Language {
+  return currentLanguage;
+}
+
+export function translate(key: string): string {
+  const translation = translations[currentLanguage]?.[key];
+  if (!translation) {
+    console.warn(`Translation missing for key: ${key} in language: ${currentLanguage}`);
+    return key;
+  }
+  return translation;
+}
+
+// React hook for translations
 export function useTranslation() {
-  const context = useContext(TranslationContext);
-  if (!context) {
-    throw new Error('useTranslation must be used within a TranslationProvider');
-  }
-  return context;
+  const [language, setLang] = useState<Language>(getCurrentLanguage());
+
+  const t = useCallback((key: string) => translate(key), [language]);
+
+  const changeLanguage = useCallback((newLang: Language) => {
+    setLanguage(newLang);
+    setLang(newLang);
+  }, []);
+
+  return {
+    t,
+    language,
+    setLanguage: changeLanguage,
+    languages,
+  };
 }
-
-interface TranslationProviderProps {
-  children: ReactNode;
-}
-
-async function translateText(text: string, targetLang: Language): Promise<string> {
-  try {
-    const response = await fetch('/api/translate', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        text,
-        targetLanguage: targetLang,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Translation failed');
-    }
-
-    const data = await response.json();
-    return data.translatedText;
-  } catch (error) {
-    console.error('Translation error:', error);
-    return text;
-  }
-}
-
-export const TranslationProvider: FC<TranslationProviderProps> = ({ children }) => {
-  const [currentLanguage, setCurrentLanguage] = useState<Language>('zh-TW');
-
-  const translate = useCallback(async (text: string) => {
-    if (currentLanguage === 'zh-TW') {
-      return text;
-    }
-    return translateText(text, currentLanguage);
-  }, [currentLanguage]);
-
-  return (
-    <TranslationContext.Provider 
-      value={{
-        currentLanguage,
-        setLanguage: setCurrentLanguage,
-        translate,
-      }}
-    >
-      {children}
-    </TranslationContext.Provider>
-  );
-};

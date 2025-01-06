@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ToolCard } from "@/components/ToolCard";
 import { TeacherIntro } from "@/components/TeacherIntro";
 import { ToolCardSkeleton } from "@/components/ToolCardSkeleton";
+import { MoodTracker } from "@/components/MoodTracker";
 import { tools } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Settings2, HelpCircle } from "lucide-react";
@@ -46,14 +47,7 @@ export function Home() {
         <div className="absolute -bottom-8 left-20 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000" />
       </div>
 
-      <a 
-        href="#main-content" 
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-primary-foreground px-4 py-2 rounded-md"
-      >
-        跳至主要內容
-      </a>
-
-      <main id="main-content" className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
             教育工具整合平台
@@ -96,28 +90,29 @@ export function Home() {
           <TeacherIntro isLoading={isLoading} />
         </section>
 
-        <section 
-          aria-label={isLoading ? "正在載入教育工具" : "教育工具列表"} 
-          data-tour="tools-grid"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8" role="list">
-            {isLoading ? (
-              // Show loading skeletons
-              Array.from({ length: 6 }).map((_, index) => (
-                <div key={index} role="listitem">
-                  <ToolCardSkeleton />
-                </div>
-              ))
-            ) : (
-              // Show actual tool cards
-              toolsData?.map((tool) => (
-                <div key={tool.id} role="listitem">
-                  <ToolCard tool={tool} />
-                </div>
-              ))
-            )}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+          <div className="lg:col-span-2">
+            <section 
+              aria-label={isLoading ? "正在載入教育工具" : "教育工具列表"} 
+              data-tour="tools-grid"
+              className="grid grid-cols-1 md:grid-cols-2 gap-8"
+            >
+              {isLoading ? (
+                Array.from({ length: 4 }).map((_, index) => (
+                  <ToolCardSkeleton key={index} />
+                ))
+              ) : (
+                toolsData?.map((tool) => (
+                  <ToolCard key={tool.id} tool={tool} />
+                ))
+              )}
+            </section>
           </div>
-        </section>
+
+          <div className="space-y-8">
+            <MoodTracker toolId={1} />
+          </div>
+        </div>
 
         <footer className="mt-16 text-center text-sm text-muted-foreground">
           <p>© {new Date().getFullYear()} 教育工具整合平台. All rights reserved.</p>
