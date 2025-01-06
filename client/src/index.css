@@ -12,6 +12,9 @@
   }
 
   :root {
+    /* Add transition to all theme color changes */
+    --theme-transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, fill 0.3s ease, stroke 0.3s ease;
+
     /* Category-specific gradients */
     --communication-gradient: rgb(219 234 254 / 0.5), rgb(191 219 254 / 0.5);
     --teaching-gradient: rgb(220 252 231 / 0.5), rgb(187 247 208 / 0.5);
@@ -19,6 +22,19 @@
     --reading-gradient: rgb(254 249 195 / 0.5), rgb(253 224 71 / 0.5);
     --utilities-gradient: rgb(243 244 246 / 0.5), rgb(229 231 235 / 0.5);
     --games-gradient: rgb(252 231 243 / 0.5), rgb(249 168 212 / 0.5);
+  }
+
+  /* Apply transitions to all elements */
+  *, *::before, *::after {
+    transition: var(--theme-transition);
+  }
+
+  /* Remove transitions from elements where it might cause issues */
+  .no-theme-transition, 
+  .no-theme-transition *,
+  .no-theme-transition *::before,
+  .no-theme-transition *::after {
+    transition: none !important;
   }
 
   .dark {
