@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Share2, Users, Settings2 } from "lucide-react";
+import { Share2, Users, Settings2, Twitter as TwitterIcon, Facebook as FacebookIcon, Linkedin as LinkedinIcon, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import * as Icons from "lucide-react";
 import type { EducationalTool } from "@/lib/data";
@@ -183,7 +183,7 @@ export function ToolCard({ tool }: ToolCardProps) {
 
             {tool.previewUrl && (
               <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg overflow-hidden mb-4">
-                <motion.div 
+                <motion.div
                   className="w-full h-full relative"
                   whileHover={{ scale: 1.05 }}
                   transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -216,7 +216,7 @@ export function ToolCard({ tool }: ToolCardProps) {
 
                 {tool.previewUrl && (
                   <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg overflow-hidden my-4">
-                    <motion.div 
+                    <motion.div
                       className="w-full h-full"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -267,7 +267,7 @@ export function ToolCard({ tool }: ToolCardProps) {
               </TabsList>
 
               <TabsContent value="social" className="mt-4">
-                <motion.div 
+                <motion.div
                   className="flex flex-wrap gap-4"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -276,9 +276,9 @@ export function ToolCard({ tool }: ToolCardProps) {
                   aria-label="社群媒體分享按鈕"
                 >
                   {[
-                    { name: 'Twitter', icon: Twitter, color: 'text-[#1DA1F2]' },
-                    { name: 'Facebook', icon: Facebook, color: 'text-[#4267B2]' },
-                    { name: 'LinkedIn', icon: Linkedin, color: 'text-[#0077B5]' },
+                    { name: 'Twitter', icon: TwitterIcon, color: 'text-[#1DA1F2]' },
+                    { name: 'Facebook', icon: FacebookIcon, color: 'text-[#4267B2]' },
+                    { name: 'LinkedIn', icon: LinkedinIcon, color: 'text-[#0077B5]' },
                     { name: 'LINE', icon: MessageCircle, color: 'text-[#00B900]' },
                   ].map((platform) => (
                     <motion.div
@@ -301,7 +301,7 @@ export function ToolCard({ tool }: ToolCardProps) {
               </TabsContent>
 
               <TabsContent value="collaborate" className="mt-4">
-                <motion.div 
+                <motion.div
                   className="grid gap-4"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
