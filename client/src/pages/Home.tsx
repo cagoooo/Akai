@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { ToolCard } from "@/components/ToolCard";
 import { TeacherIntro } from "@/components/TeacherIntro";
+import { ToolCardSkeleton } from "@/components/ToolCardSkeleton";
 import { tools } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Settings2, HelpCircle } from "lucide-react";
@@ -17,6 +19,16 @@ export function Home() {
     opacity: 0.1,
   });
   const [isCustomizing, setIsCustomizing] = useState(false);
+
+  // Simulate loading state with React Query
+  const { data: toolsData, isLoading } = useQuery({
+    queryKey: ['/api/tools'],
+    queryFn: async () => {
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      return tools;
+    },
+  });
 
   const gradientStyle = {
     backgroundImage: `linear-gradient(${gradient.direction.replace('to-', 'to ')}, ${gradient.startColor}, ${gradient.endColor})`,
@@ -81,16 +93,29 @@ export function Home() {
 
         <section aria-labelledby="teacher-info" className="mb-12" data-tour="teacher-intro">
           <h2 id="teacher-info" className="sr-only">教師介紹</h2>
-          <TeacherIntro />
+          <TeacherIntro isLoading={isLoading} />
         </section>
 
-        <section aria-label="教育工具列表" data-tour="tools-grid">
+        <section 
+          aria-label={isLoading ? "正在載入教育工具" : "教育工具列表"} 
+          data-tour="tools-grid"
+        >
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8" role="list">
-            {tools.map((tool) => (
-              <div key={tool.id} role="listitem">
-                <ToolCard tool={tool} />
-              </div>
-            ))}
+            {isLoading ? (
+              // Show loading skeletons
+              Array.from({ length: 6 }).map((_, index) => (
+                <div key={index} role="listitem">
+                  <ToolCardSkeleton />
+                </div>
+              ))
+            ) : (
+              // Show actual tool cards
+              toolsData?.map((tool) => (
+                <div key={tool.id} role="listitem">
+                  <ToolCard tool={tool} />
+                </div>
+              ))
+            )}
           </div>
         </section>
 

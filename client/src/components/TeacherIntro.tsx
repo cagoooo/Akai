@@ -5,8 +5,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { teacherInfo } from "@/lib/data";
 import { Newspaper, Settings2 } from "lucide-react";
 import { LinkCustomizer, type LinkStyle } from "./LinkCustomizer";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export function TeacherIntro() {
+interface TeacherIntroProps {
+  isLoading?: boolean;
+}
+
+export function TeacherIntro({ isLoading }: TeacherIntroProps) {
   const [isCustomizing, setIsCustomizing] = useState(false);
   const [linkStyle, setLinkStyle] = useState<LinkStyle>({
     color: "#3B82F6",
@@ -35,10 +40,33 @@ export function TeacherIntro() {
     "--hover-color": linkStyle.hoverColor,
   } as React.CSSProperties;
 
+  if (isLoading) {
+    return (
+      <Card className="bg-primary text-primary-foreground">
+        <CardContent className="pt-6">
+          <div className="flex items-center gap-4 mb-4">
+            <Skeleton className="h-14 w-14 rounded-full" />
+            <div className="flex-1">
+              <Skeleton className="h-8 w-48 mb-2" />
+              <Skeleton className="h-4 w-32" />
+            </div>
+          </div>
+          <Skeleton className="h-4 w-full mb-2" />
+          <Skeleton className="h-4 w-5/6 mb-4" />
+          <div className="flex flex-wrap gap-2">
+            {[1, 2, 3].map((i) => (
+              <Skeleton key={i} className="h-8 w-24 rounded-full" />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card className="bg-primary text-primary-foreground">
       <CardContent className="pt-6">
-        <div className="flex items-center gap-4 mb-4">
+        <div className="flex items-center gap-4">
           <div 
             className="p-3 rounded-full bg-primary-foreground/10"
             role="img"
