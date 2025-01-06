@@ -26,19 +26,19 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
   const [linkUrl, setLinkUrl] = useState("https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5");
 
   const linkClass = `
-    transition-all duration-200
-    ${linkStyle.isUnderlineVisible ? "underline" : ""}
-    ${!linkStyle.isUnderlineVisible && linkStyle.isHoverUnderline ? "hover:underline" : ""}
+    text-3xl font-bold
+    bg-clip-text text-transparent
+    bg-gradient-to-r from-white to-white/80
+    hover:from-white hover:to-primary-foreground/60
+    transition-all duration-300
+    hover:scale-105 transform
+    ${linkStyle.isUnderlineVisible ? "hover:after:w-full" : ""}
+    relative
+    after:absolute after:bottom-0 after:left-0 
+    after:h-0.5 after:bg-white
+    after:transition-all after:duration-300
+    after:w-0
   `.trim();
-
-  const linkStyles = {
-    color: linkStyle.color,
-    textDecorationLine: linkStyle.isUnderlineVisible ? "underline" : "none",
-    textDecorationStyle: linkStyle.underlineStyle,
-    textDecorationThickness: `${linkStyle.underlineThickness}px`,
-    textUnderlineOffset: `${linkStyle.underlineOffset}px`,
-    "--hover-color": linkStyle.hoverColor,
-  } as React.CSSProperties;
 
   if (isLoading) {
     return (
@@ -64,11 +64,11 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
   }
 
   return (
-    <Card className="bg-primary text-primary-foreground">
+    <Card className="bg-primary text-primary-foreground overflow-hidden">
       <CardContent className="pt-6">
         <div className="flex items-center gap-4">
           <div 
-            className="p-3 rounded-full bg-primary-foreground/10"
+            className="p-3 rounded-full bg-primary-foreground/10 animate-pulse"
             role="img"
             aria-label="教師資訊圖標"
           >
@@ -79,7 +79,6 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
               <a 
                 href={linkUrl}
                 className={linkClass}
-                style={linkStyles}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="造訪阿凱老師的個人網頁"
@@ -96,11 +95,11 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
                 <Settings2 className="h-4 w-4" />
               </Button>
             </div>
-            <p className="text-primary-foreground/80" role="doc-subtitle">{teacherInfo.title}</p>
+            <p className="text-primary-foreground/80 text-lg" role="doc-subtitle">{teacherInfo.title}</p>
           </div>
         </div>
 
-        <p className="text-primary-foreground/90 mb-4">
+        <p className="text-primary-foreground/90 mb-4 mt-4 text-lg leading-relaxed">
           {teacherInfo.description}
         </p>
 
@@ -112,7 +111,7 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
           {teacherInfo.achievements.map((achievement, index) => (
             <span 
               key={index}
-              className="px-3 py-1 rounded-full text-sm bg-primary-foreground/10"
+              className="px-3 py-1 rounded-full text-sm bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors duration-200"
               role="listitem"
             >
               {achievement}
