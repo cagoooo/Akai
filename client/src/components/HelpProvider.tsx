@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
-import { TourProvider, type TourProviderProps, type StepType } from "@reactour/tour";
-import { Button } from "@/components/ui/button";
+import { Tour, type Step } from "@reactour/tour";
 
 interface HelpContextType {
   showHelp: boolean;
@@ -14,7 +13,7 @@ const HelpContext = createContext<HelpContextType>({
   startTour: () => {},
 });
 
-const steps: StepType[] = [
+const steps: Step[] = [
   {
     selector: '[data-tour="teacher-intro"]',
     content: '認識阿凱老師，一位致力於教育創新的專業教師。',
@@ -29,25 +28,11 @@ const steps: StepType[] = [
   },
 ];
 
-const tourConfig: Partial<TourProviderProps> = {
-  steps,
-  padding: { mask: 8 },
-  styles: {
-    popover: (base) => ({
-      ...base,
-      '--tw-bg-opacity': '1',
-      backgroundColor: 'hsl(var(--background))',
-      '--tw-border-opacity': '1',
-      borderColor: 'hsl(var(--border))',
-      color: 'hsl(var(--foreground))',
-      padding: '1rem',
-      borderRadius: 'var(--radius)',
-      boxShadow: 'var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
-    }),
-  },
-};
+interface HelpProviderProps {
+  children: ReactNode;
+}
 
-export function HelpProvider({ children }: { children: ReactNode }) {
+export function HelpProvider({ children }: HelpProviderProps) {
   const [showHelp, setShowHelp] = useState(false);
   const [isTourOpen, setIsTourOpen] = useState(false);
 
@@ -55,11 +40,22 @@ export function HelpProvider({ children }: { children: ReactNode }) {
   const startTour = () => setIsTourOpen(true);
 
   return (
-    <TourProvider {...tourConfig} isOpen={isTourOpen} onClose={() => setIsTourOpen(false)}>
+    <>
+      <Tour
+        steps={steps}
+        isOpen={isTourOpen}
+        onRequestClose={() => setIsTourOpen(false)}
+        accentColor="hsl(var(--primary))"
+        rounded={8}
+        showNavigation={false}
+        showBadge={false}
+        showButtons={false}
+        className="shadow-lg border border-border bg-background text-foreground"
+      />
       <HelpContext.Provider value={{ showHelp, toggleHelp, startTour }}>
         {children}
       </HelpContext.Provider>
-    </TourProvider>
+    </>
   );
 }
 

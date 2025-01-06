@@ -30,7 +30,7 @@ export function useTranslation() {
 
 async function translateText(text: string, targetLang: Language): Promise<string> {
   try {
-    const response = await fetch(`/api/translate`, {
+    const response = await fetch('/api/translate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ async function translateText(text: string, targetLang: Language): Promise<string
     return data.translatedText;
   } catch (error) {
     console.error('Translation error:', error);
-    return text; // Fallback to original text
+    return text;
   }
 }
 
