@@ -13,6 +13,7 @@ import { generateShareUrls } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PreviewGenerator } from "@/components/PreviewGenerator";
 import { IconCustomizer, type IconCustomization } from "@/components/IconCustomizer";
+import { CustomizationTutorialProvider } from "./CustomizationTutorial";
 
 const categoryColors = {
   communication: "bg-blue-100 text-blue-800",
@@ -253,10 +254,12 @@ export function ToolCard({ tool }: ToolCardProps) {
             </DialogDescription>
           </DialogHeader>
 
-          <IconCustomizer
-            tool={tool}
-            onCustomizationChange={setCustomization}
-          />
+          <CustomizationTutorialProvider>
+            <IconCustomizer
+              tool={tool}
+              onCustomizationChange={setCustomization}
+            />
+          </CustomizationTutorialProvider>
         </DialogContent>
       </Dialog>
     </TooltipProvider>

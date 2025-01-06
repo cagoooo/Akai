@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { HelpCircle } from "lucide-react";
 import { type EducationalTool } from "@/lib/data";
 import { PreviewGenerator } from "@/components/PreviewGenerator";
+import { useCustomizationTutorial } from "./CustomizationTutorial";
 
 interface IconCustomizerProps {
   tool: EducationalTool;
@@ -27,6 +30,13 @@ const defaultCustomization: IconCustomization = {
 
 export function IconCustomizer({ tool, onCustomizationChange }: IconCustomizerProps) {
   const [customization, setCustomization] = useState<IconCustomization>(defaultCustomization);
+  const { startTutorial, hasSeenTutorial } = useCustomizationTutorial();
+
+  useEffect(() => {
+    if (!hasSeenTutorial) {
+      startTutorial();
+    }
+  }, [hasSeenTutorial, startTutorial]);
 
   const handleChange = (updates: Partial<IconCustomization>) => {
     const newCustomization = { ...customization, ...updates };
@@ -37,10 +47,23 @@ export function IconCustomizer({ tool, onCustomizationChange }: IconCustomizerPr
   return (
     <Card>
       <CardHeader>
-        <CardTitle>圖標自定義</CardTitle>
+        <div className="flex justify-between items-center">
+          <CardTitle>圖標自定義</CardTitle>
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={startTutorial}
+            aria-label="查看教學"
+          >
+            <HelpCircle className="h-5 w-5" />
+          </Button>
+        </div>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="aspect-video w-full bg-muted rounded-lg overflow-hidden mb-6">
+        <div 
+          className="aspect-video w-full bg-muted rounded-lg overflow-hidden mb-6"
+          data-customization="preview"
+        >
           <PreviewGenerator 
             tool={tool} 
             customization={customization}
@@ -48,7 +71,10 @@ export function IconCustomizer({ tool, onCustomizationChange }: IconCustomizerPr
         </div>
 
         <div className="space-y-4">
-          <div className="space-y-2">
+          <div 
+            className="space-y-2"
+            data-customization="size-control"
+          >
             <Label htmlFor="size">圖標大小</Label>
             <Slider
               id="size"
@@ -60,7 +86,10 @@ export function IconCustomizer({ tool, onCustomizationChange }: IconCustomizerPr
             />
           </div>
 
-          <div className="space-y-2">
+          <div 
+            className="space-y-2"
+            data-customization="primary-color"
+          >
             <Label htmlFor="primaryColor">主要顏色</Label>
             <div className="flex gap-2">
               <Input
@@ -80,7 +109,10 @@ export function IconCustomizer({ tool, onCustomizationChange }: IconCustomizerPr
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div 
+            className="space-y-2"
+            data-customization="secondary-color"
+          >
             <Label htmlFor="secondaryColor">次要顏色</Label>
             <div className="flex gap-2">
               <Input
@@ -100,7 +132,10 @@ export function IconCustomizer({ tool, onCustomizationChange }: IconCustomizerPr
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div 
+            className="space-y-2"
+            data-customization="opacity-control"
+          >
             <Label htmlFor="opacity">背景不透明度</Label>
             <Slider
               id="opacity"
