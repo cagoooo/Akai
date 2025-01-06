@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { db } from "@db";
-import { sharedResources, collaborators, users, insertSharedResourceSchema, insertCollaboratorSchema } from "@db/schema";
+import { sharedResources, collaborators, users, moodEntries, insertSharedResourceSchema, insertCollaboratorSchema, insertMoodEntrySchema } from "@db/schema";
 import { eq, and } from "drizzle-orm";
 
 export function registerRoutes(app: Express): Server {
@@ -101,6 +101,24 @@ export function registerRoutes(app: Express): Server {
       res.json(collaborator[0]);
     } catch (error) {
       res.status(400).json({ message: "新增協作者時發生錯誤" });
+    }
+  });
+
+  // New endpoint for mood entries
+  app.post("/api/mood-entries", async (req, res) => {
+    try {
+      const parsedBody = insertMoodEntrySchema.parse(req.body);
+      const userId = req.user?.id; // Optional for now
+
+      const moodEntry = await db.insert(moodEntries).values({
+        ...parsedBody,
+        userId: userId || null,
+      }).returning();
+
+      res.json(moodEntry[0]);
+    } catch (error) {
+      console.error("Mood entry error:", error);
+      res.status(400).json({ message: "無效的心情資料" });
     }
   });
 

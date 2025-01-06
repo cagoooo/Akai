@@ -29,9 +29,22 @@ export const collaborators = pgTable("collaborators", {
   addedAt: timestamp("added_at").defaultNow().notNull(),
 });
 
+// New table for mood tracking
+export const moodEntries = pgTable("mood_entries", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id),
+  toolId: integer("tool_id").notNull(),
+  emoji: text("emoji").notNull(), // Store the emoji character
+  mood: text("mood").notNull(), // Store the mood name (e.g., "happy", "confused")
+  intensity: integer("intensity").notNull(), // 1-5 scale
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 export const usersRelations = relations(users, ({ many }) => ({
   createdResources: many(sharedResources),
   collaborations: many(collaborators),
+  moodEntries: many(moodEntries),
 }));
 
 export const sharedResourcesRelations = relations(sharedResources, ({ one, many }) => ({
@@ -53,12 +66,22 @@ export const collaboratorsRelations = relations(collaborators, ({ one }) => ({
   }),
 }));
 
+export const moodEntriesRelations = relations(moodEntries, ({ one }) => ({
+  user: one(users, {
+    fields: [moodEntries.userId],
+    references: [users.id],
+  }),
+}));
+
+// Schema types for all tables
 export const insertUserSchema = createInsertSchema(users);
 export const selectUserSchema = createSelectSchema(users);
 export const insertSharedResourceSchema = createInsertSchema(sharedResources);
 export const selectSharedResourceSchema = createSelectSchema(sharedResources);
 export const insertCollaboratorSchema = createInsertSchema(collaborators);
 export const selectCollaboratorSchema = createSelectSchema(collaborators);
+export const insertMoodEntrySchema = createInsertSchema(moodEntries);
+export const selectMoodEntrySchema = createSelectSchema(moodEntries);
 
 export type InsertUser = typeof users.$inferInsert;
 export type SelectUser = typeof users.$inferSelect;
@@ -66,3 +89,5 @@ export type InsertSharedResource = typeof sharedResources.$inferInsert;
 export type SelectSharedResource = typeof sharedResources.$inferSelect;
 export type InsertCollaborator = typeof collaborators.$inferInsert;
 export type SelectCollaborator = typeof collaborators.$inferSelect;
+export type InsertMoodEntry = typeof moodEntries.$inferInsert;
+export type SelectMoodEntry = typeof moodEntries.$inferSelect;
