@@ -1,0 +1,36 @@
+<svg width="800" height="450" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#6B7280" stopOpacity="0.1"/>
+      <stop offset="100%" stopColor="#9CA3AF" stopOpacity="0.1"/>
+    </linearGradient>
+    <linearGradient id="icon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#6B7280"/>
+      <stop offset="100%" stopColor="#9CA3AF"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="800" height="450" fill="#ffffff"/>
+  <rect width="800" height="450" fill="url(#bg-gradient)"/>
+  
+  <!-- 主要圖示：QR碼方塊組合 -->
+  <g transform="translate(350, 175)">
+    <circle cx="50" cy="50" r="40" fill="url(#icon-gradient)" opacity="0.1"/>
+    <!-- QR碼圖案 -->
+    <rect x="30" y="30" width="15" height="15" fill="url(#icon-gradient)"/>
+    <rect x="50" y="30" width="15" height="15" fill="url(#icon-gradient)"/>
+    <rect x="70" y="30" width="15" height="15" fill="url(#icon-gradient)"/>
+    <rect x="30" y="50" width="15" height="15" fill="url(#icon-gradient)"/>
+    <rect x="70" y="50" width="15" height="15" fill="url(#icon-gradient)"/>
+    <rect x="30" y="70" width="15" height="15" fill="url(#icon-gradient)"/>
+    <rect x="50" y="70" width="15" height="15" fill="url(#icon-gradient)"/>
+    <rect x="70" y="70" width="15" height="15" fill="url(#icon-gradient)"/>
+  </g>
+  
+  <!-- 裝飾元素 -->
+  <circle cx="200" cy="100" r="5" fill="#6B7280" opacity="0.5"/>
+  <circle cx="600" cy="350" r="5" fill="#9CA3AF" opacity="0.5"/>
+  <circle cx="150" cy="400" r="3" fill="#6B7280" opacity="0.3"/>
+  <circle cx="650" cy="50" r="3" fill="#9CA3AF" opacity="0.3"/>
+</svg>
