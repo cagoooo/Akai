@@ -2,11 +2,11 @@ import { createContext, useContext, useState, useCallback, type ReactNode } from
 
 export type Language = 'zh-TW' | 'en' | 'ja';
 
-export const languages = {
+export const languages: Record<Language, string> = {
   'zh-TW': '繁體中文',
   'en': 'English',
   'ja': '日本語',
-} as const;
+};
 
 interface TranslationContextType {
   currentLanguage: Language;
@@ -14,11 +14,7 @@ interface TranslationContextType {
   translate: (text: string) => Promise<string>;
 }
 
-const TranslationContext = createContext<TranslationContextType>({
-  currentLanguage: 'zh-TW',
-  setLanguage: () => {},
-  translate: async (text: string) => text,
-});
+const TranslationContext = createContext<TranslationContextType | null>(null);
 
 export function useTranslation() {
   const context = useContext(TranslationContext);
@@ -26,6 +22,10 @@ export function useTranslation() {
     throw new Error('useTranslation must be used within a TranslationProvider');
   }
   return context;
+}
+
+interface TranslationProviderProps {
+  children: ReactNode;
 }
 
 async function translateText(text: string, targetLang: Language): Promise<string> {
@@ -53,22 +53,15 @@ async function translateText(text: string, targetLang: Language): Promise<string
   }
 }
 
-interface TranslationProviderProps {
-  children: ReactNode;
-}
-
 export function TranslationProvider({ children }: TranslationProviderProps) {
   const [currentLanguage, setCurrentLanguage] = useState<Language>('zh-TW');
 
-  const translate = useCallback(
-    async (text: string) => {
-      if (currentLanguage === 'zh-TW') {
-        return text;
-      }
-      return translateText(text, currentLanguage);
-    },
-    [currentLanguage]
-  );
+  const translate = useCallback(async (text: string) => {
+    if (currentLanguage === 'zh-TW') {
+      return text;
+    }
+    return translateText(text, currentLanguage);
+  }, [currentLanguage]);
 
   return (
     <TranslationContext.Provider 
