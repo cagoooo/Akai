@@ -10,6 +10,7 @@ import { Settings2, HelpCircle } from "lucide-react";
 import { useHelp } from "@/components/HelpProvider";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { BackgroundGradientCustomizer, type GradientSettings } from "@/components/BackgroundGradientCustomizer";
+import { ProgressDashboard } from "@/components/ProgressDashboard";
 
 export function Home() {
   const { startTour } = useHelp();
@@ -111,6 +112,7 @@ export function Home() {
 
           <div className="space-y-4 sm:space-y-6">
             <MoodTracker toolId={1} />
+            <ProgressDashboard />
           </div>
         </div>
 
