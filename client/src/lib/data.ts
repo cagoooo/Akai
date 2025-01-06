@@ -65,8 +65,8 @@ export const tools: EducationalTool[] = [
   },
   {
     id: 7,
-    title: "點「石」成金蜂",
-    description: "創新的LINE教學助手，協助教師提升教學效率和學習成效",
+    title: "點「石」成金🐝(評語優化)",
+    description: "創新的學生評語優化工具，協助教師撰寫更正向、積極且個人化的學生評語",
     url: "https://line.me/R/ti/p/@733oiboa?oat_content=url&ts=05120012",
     icon: "MessageSquare",
     category: "teaching",
