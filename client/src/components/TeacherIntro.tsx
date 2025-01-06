@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -26,7 +26,7 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
   const [linkUrl, setLinkUrl] = useState("https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5");
 
   const linkClass = `
-    text-3xl font-bold
+    text-4xl md:text-5xl lg:text-6xl font-extrabold
     bg-clip-text text-transparent
     bg-gradient-to-r from-white to-white/80
     hover:from-white hover:to-primary-foreground/60
@@ -38,6 +38,8 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
     after:h-0.5 after:bg-white
     after:transition-all after:duration-300
     after:w-0
+    tracking-wide
+    leading-tight
   `.trim();
 
   if (isLoading) {
@@ -66,7 +68,7 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
   return (
     <Card className="bg-primary text-primary-foreground overflow-hidden">
       <CardContent className="pt-6">
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
           <div 
             className="p-3 rounded-full bg-primary-foreground/10 animate-pulse"
             role="img"
@@ -95,11 +97,13 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
                 <Settings2 className="h-4 w-4" />
               </Button>
             </div>
-            <p className="text-primary-foreground/80 text-lg" role="doc-subtitle">{teacherInfo.title}</p>
+            <p className="text-xl md:text-2xl text-primary-foreground/80 mt-2" role="doc-subtitle">
+              {teacherInfo.title}
+            </p>
           </div>
         </div>
 
-        <p className="text-primary-foreground/90 mb-4 mt-4 text-lg leading-relaxed">
+        <p className="text-primary-foreground/90 mb-6 mt-6 text-lg md:text-xl leading-relaxed">
           {teacherInfo.description}
         </p>
 
@@ -111,7 +115,7 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
           {teacherInfo.achievements.map((achievement, index) => (
             <span 
               key={index}
-              className="px-3 py-1 rounded-full text-sm bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors duration-200"
+              className="px-3 py-1.5 rounded-full text-base md:text-lg bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors duration-200"
               role="listitem"
             >
               {achievement}
