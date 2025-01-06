@@ -3,9 +3,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { AchievementBadge } from "./AchievementBadge";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { Achievement } from "@/lib/types";
 
 export function AchievementsList() {
-  const { data: achievements, isLoading } = useQuery({
+  const { data: achievements, isLoading } = useQuery<Achievement[]>({
     queryKey: ['/api/achievements'],
     queryFn: async () => {
       const res = await fetch('/api/achievements');
