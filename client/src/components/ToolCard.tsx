@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Share2, Users, HelpCircle, Twitter, Facebook, Linkedin, MessageCircle } from "lucide-react";
+import { Share2, Users, HelpCircle, Twitter, Facebook, Linkedin, MessageCircle, Settings2 } from "lucide-react";
 import { useState } from "react";
 import * as Icons from "lucide-react";
 import type { EducationalTool } from "@/lib/data";
@@ -12,6 +12,7 @@ import type { LucideIcon } from 'lucide-react';
 import { generateShareUrls } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PreviewGenerator } from "@/components/PreviewGenerator";
+import { IconCustomizer, type IconCustomization } from "@/components/IconCustomizer";
 
 const categoryColors = {
   communication: "bg-blue-100 text-blue-800",
@@ -29,6 +30,8 @@ interface ToolCardProps {
 export function ToolCard({ tool }: ToolCardProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
+  const [isCustomizeOpen, setIsCustomizeOpen] = useState(false);
+  const [customization, setCustomization] = useState<IconCustomization | undefined>();
   const Icon = Icons[tool.icon as keyof typeof Icons] as LucideIcon;
 
   const handleShare = (e: React.MouseEvent) => {
@@ -48,6 +51,11 @@ export function ToolCard({ tool }: ToolCardProps) {
     { name: 'LinkedIn', icon: Linkedin, url: shareUrls.linkedin, color: 'text-[#0077B5]' },
     { name: 'LINE', icon: MessageCircle, url: shareUrls.line, color: 'text-[#00B900]' },
   ];
+
+  const handleCustomize = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsCustomizeOpen(true);
+  };
 
   return (
     <TooltipProvider>
@@ -81,6 +89,22 @@ export function ToolCard({ tool }: ToolCardProps) {
               </TooltipContent>
             </Tooltip>
             <div className="flex gap-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={handleCustomize}
+                    aria-label={`自定義 ${tool.title} 圖標`}
+                  >
+                    <Settings2 className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>自定義圖標</p>
+                </TooltipContent>
+              </Tooltip>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
@@ -126,7 +150,7 @@ export function ToolCard({ tool }: ToolCardProps) {
           {tool.previewUrl && (
             <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg overflow-hidden mb-4">
               <div className="w-full h-full">
-                <PreviewGenerator tool={tool} />
+                <PreviewGenerator tool={tool} customization={customization} />
               </div>
             </AspectRatio>
           )}
@@ -146,7 +170,7 @@ export function ToolCard({ tool }: ToolCardProps) {
           {tool.previewUrl && (
             <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg overflow-hidden my-4">
               <div className="w-full h-full">
-                <PreviewGenerator tool={tool} />
+                <PreviewGenerator tool={tool} customization={customization} />
               </div>
             </AspectRatio>
           )}
@@ -218,6 +242,21 @@ export function ToolCard({ tool }: ToolCardProps) {
               </div>
             </TabsContent>
           </Tabs>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={isCustomizeOpen} onOpenChange={setIsCustomizeOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>自定義圖標 - {tool.title}</DialogTitle>
+            <DialogDescription>
+              調整圖標的顏色、大小和樣式
+            </DialogDescription>
+          </DialogHeader>
+
+          <IconCustomizer
+            tool={tool}
+            onCustomizationChange={setCustomization}
+          />
         </DialogContent>
       </Dialog>
     </TooltipProvider>

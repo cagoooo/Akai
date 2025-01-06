@@ -10,14 +10,23 @@ import {
   QrCode,
   Gamepad2
 } from "lucide-react";
+import type { IconCustomization } from "./IconCustomizer";
 
 interface PreviewGeneratorProps {
   tool: EducationalTool;
+  customization?: IconCustomization;
 }
 
-export function PreviewGenerator({ tool }: PreviewGeneratorProps) {
-  // 为不同工具设置不同的渐变色
+export function PreviewGenerator({ tool, customization }: PreviewGeneratorProps) {
+  // 获取渐变色，优先使用自定义颜色
   const getGradientColors = () => {
+    if (customization?.primaryColor && customization?.secondaryColor) {
+      return {
+        start: customization.primaryColor,
+        end: customization.secondaryColor
+      };
+    }
+
     switch (tool.category) {
       case 'communication':
         return {
@@ -77,6 +86,8 @@ export function PreviewGenerator({ tool }: PreviewGeneratorProps) {
   };
 
   const Icon = getToolIcon();
+  const iconSize = customization?.size || 1;
+  const backgroundOpacity = customization?.opacity ?? 0.1;
 
   return (
     <svg
@@ -88,8 +99,8 @@ export function PreviewGenerator({ tool }: PreviewGeneratorProps) {
       {/* 定义渐变 */}
       <defs>
         <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor={start} stopOpacity="0.1" />
-          <stop offset="100%" stopColor={end} stopOpacity="0.1" />
+          <stop offset="0%" stopColor={start} stopOpacity={backgroundOpacity} />
+          <stop offset="100%" stopColor={end} stopOpacity={backgroundOpacity} />
         </linearGradient>
         <linearGradient id={iconGradientId} x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor={start} />
@@ -103,20 +114,41 @@ export function PreviewGenerator({ tool }: PreviewGeneratorProps) {
 
       {/* 主要图标区域 */}
       <g transform="translate(350, 175)">
-        <circle cx="50" cy="50" r="40" fill={`url(#${iconGradientId})`} opacity="0.1" />
+        <circle 
+          cx="50" 
+          cy="50" 
+          r={40 * iconSize} 
+          fill={`url(#${iconGradientId})`} 
+          opacity={backgroundOpacity}
+        />
         {/* 主图标 */}
-        <g transform="translate(30, 30)">
-          <Icon stroke={`url(#${iconGradientId})`} strokeWidth="2" width="40" height="40" />
+        <g transform={`translate(${30 * iconSize}, ${30 * iconSize})`}>
+          <Icon 
+            stroke={`url(#${iconGradientId})`} 
+            strokeWidth="2" 
+            width={40 * iconSize} 
+            height={40 * iconSize} 
+          />
         </g>
         {/* 辅助图标 */}
         {tool.id === 7 && (
-          <g transform="translate(60, 20)">
-            <Sparkles stroke={`url(#${iconGradientId})`} strokeWidth="2" width="30" height="30" />
+          <g transform={`translate(${60 * iconSize}, ${20 * iconSize})`}>
+            <Sparkles 
+              stroke={`url(#${iconGradientId})`} 
+              strokeWidth="2" 
+              width={30 * iconSize} 
+              height={30 * iconSize} 
+            />
           </g>
         )}
         {tool.id === 8 && (
-          <g transform="translate(60, 20)">
-            <BookOpen stroke={`url(#${iconGradientId})`} strokeWidth="2" width="30" height="30" />
+          <g transform={`translate(${60 * iconSize}, ${20 * iconSize})`}>
+            <BookOpen 
+              stroke={`url(#${iconGradientId})`} 
+              strokeWidth="2" 
+              width={30 * iconSize} 
+              height={30 * iconSize} 
+            />
           </g>
         )}
       </g>
@@ -126,7 +158,7 @@ export function PreviewGenerator({ tool }: PreviewGeneratorProps) {
         x="400"
         y="300"
         fontFamily="system-ui"
-        fontSize="24"
+        fontSize={24 * iconSize}
         fill="#1F2937"
         textAnchor="middle"
         dominantBaseline="middle"
@@ -135,10 +167,10 @@ export function PreviewGenerator({ tool }: PreviewGeneratorProps) {
       </text>
 
       {/* 装饰元素 */}
-      <circle cx="200" cy="100" r="5" fill={start} opacity="0.5" />
-      <circle cx="600" cy="350" r="5" fill={end} opacity="0.5" />
-      <circle cx="150" cy="400" r="3" fill={start} opacity="0.3" />
-      <circle cx="650" cy="50" r="3" fill={end} opacity="0.3" />
+      <circle cx="200" cy="100" r={5 * iconSize} fill={start} opacity="0.5" />
+      <circle cx="600" cy="350" r={5 * iconSize} fill={end} opacity="0.5" />
+      <circle cx="150" cy="400" r={3 * iconSize} fill={start} opacity="0.3" />
+      <circle cx="650" cy="50" r={3 * iconSize} fill={end} opacity="0.3" />
     </svg>
   );
 }
