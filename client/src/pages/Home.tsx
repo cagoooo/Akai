@@ -49,12 +49,12 @@ export function Home() {
       <main className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 md:py-12">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-8 mb-6 sm:mb-8">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-            教育科技創新專區
+            教育科技創新發現
           </h1>
           <div className="flex flex-wrap gap-2">
             <Dialog open={isCustomizing} onOpenChange={setIsCustomizing}>
               <DialogTrigger asChild>
-                <Button 
+                <Button
                   variant="outline"
                   className="text-sm sm:text-base"
                   aria-label="自定義背景"
@@ -70,8 +70,8 @@ export function Home() {
                 <BackgroundGradientCustomizer onChange={setGradient} />
               </DialogContent>
             </Dialog>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={startTour}
               className="text-sm sm:text-base"
               aria-label="開始導覽教學"
@@ -93,8 +93,8 @@ export function Home() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12">
           <div className="lg:col-span-2">
-            <section 
-              aria-label={isLoading ? "正在載入教育工具" : "教育工具列表"} 
+            <section
+              aria-label={isLoading ? "正在載入教育工具" : "教育工具列表"}
               data-tour="tools-grid"
               className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6"
             >
