@@ -231,6 +231,79 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
+  // Add new endpoint for progress statistics
+  app.get("/api/progress-stats", async (req, res) => {
+    try {
+      const userId = req.user?.id;
+
+      // Get tool usage statistics
+      const toolUsage = await db.query.moodEntries.findMany({
+        where: userId ? eq(moodEntries.userId, userId) : undefined,
+        columns: {
+          toolId: true,
+        },
+      });
+
+      // Get mood trends
+      const moodTrends = await db.query.moodEntries.findMany({
+        where: userId ? eq(moodEntries.userId, userId) : undefined,
+        orderBy: (moodEntries, { asc }) => [asc(moodEntries.createdAt)],
+      });
+
+      // Get achievement statistics
+      const achievementStats = await db.query.achievements.findMany({
+        with: {
+          userAchievements: true,
+        },
+      });
+
+      // Process and aggregate the data
+      const stats = {
+        toolUsage: Object.entries(
+          toolUsage.reduce((acc: Record<number, number>, curr) => {
+            acc[curr.toolId] = (acc[curr.toolId] || 0) + 1;
+            return acc;
+          }, {})
+        ).map(([id, count]) => ({
+          name: `Tool ${id}`,
+          count,
+        })),
+        moodTrends: moodTrends.reduce((acc: Record<string, any>, curr) => {
+          const date = curr.createdAt.toISOString().split('T')[0];
+          if (!acc[date]) {
+            acc[date] = {
+              date,
+              happy: 0,
+              confused: 0,
+              satisfied: 0,
+              challenged: 0,
+              tired: 0,
+            };
+          }
+          acc[date][curr.mood] += 1;
+          return acc;
+        }, {}),
+        achievements: achievementStats.reduce((acc: any[], achievement) => {
+          const completed = userId
+            ? achievement.userAchievements.filter(ua => ua.userId === userId).length
+            : achievement.userAchievements.length;
+
+          acc.push({
+            category: achievement.category,
+            completed,
+            total: 1, // Each achievement counts as 1
+          });
+          return acc;
+        }, []),
+      };
+
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching progress stats:", error);
+      res.status(500).json({ message: "獲取進度統計時發生錯誤" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
