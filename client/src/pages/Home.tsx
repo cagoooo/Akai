@@ -21,11 +21,9 @@ export function Home() {
   });
   const [isCustomizing, setIsCustomizing] = useState(false);
 
-  // Simulate loading state with React Query
   const { data: toolsData, isLoading } = useQuery({
     queryKey: ['/api/tools'],
     queryFn: async () => {
-      // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 1500));
       return tools;
     },
@@ -47,23 +45,24 @@ export function Home() {
         <div className="absolute -bottom-8 left-20 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000" />
       </div>
 
-      <main className="container mx-auto px-4 py-8">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+      <main className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 md:py-12">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-8 mb-6 sm:mb-8">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
             教育科技創新專區
           </h1>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <Dialog open={isCustomizing} onOpenChange={setIsCustomizing}>
               <DialogTrigger asChild>
                 <Button 
                   variant="outline"
+                  className="text-sm sm:text-base"
                   aria-label="自定義背景"
                 >
                   <Settings2 className="mr-2 h-4 w-4" />
                   自定義背景
                 </Button>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                   <DialogTitle>自定義背景設定</DialogTitle>
                 </DialogHeader>
@@ -73,6 +72,7 @@ export function Home() {
             <Button 
               variant="outline" 
               onClick={startTour}
+              className="text-sm sm:text-base"
               aria-label="開始導覽教學"
             >
               <HelpCircle className="mr-2 h-4 w-4" />
@@ -81,21 +81,21 @@ export function Home() {
           </div>
         </div>
 
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-12">
+        <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-8 sm:mb-12">
           探索阿凱老師開發的教育工具，為您的教學增添創新的可能
         </p>
 
-        <section aria-labelledby="teacher-info" className="mb-12" data-tour="teacher-intro">
+        <section aria-labelledby="teacher-info" className="mb-8 sm:mb-12" data-tour="teacher-intro">
           <h2 id="teacher-info" className="sr-only">教師介紹</h2>
           <TeacherIntro isLoading={isLoading} />
         </section>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12">
           <div className="lg:col-span-2">
             <section 
               aria-label={isLoading ? "正在載入教育工具" : "教育工具列表"} 
               data-tour="tools-grid"
-              className="grid grid-cols-1 md:grid-cols-2 gap-8"
+              className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6"
             >
               {isLoading ? (
                 Array.from({ length: 4 }).map((_, index) => (
@@ -109,13 +109,13 @@ export function Home() {
             </section>
           </div>
 
-          <div className="space-y-8">
+          <div className="space-y-4 sm:space-y-6">
             <MoodTracker toolId={1} />
           </div>
         </div>
 
-        <footer className="mt-16 text-center text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} 教育工具整合平台. All rights reserved.</p>
+        <footer className="mt-8 sm:mt-16 text-center text-sm sm:text-base text-muted-foreground">
+          <p>© {new Date().getFullYear()} 教育科技創新專區. All rights reserved.</p>
         </footer>
       </main>
     </div>
