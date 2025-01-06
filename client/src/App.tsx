@@ -1,11 +1,14 @@
 import { Switch, Route } from "wouter";
 import { Home } from "@/pages/Home";
+import { HelpProvider } from "@/components/HelpProvider";
 
 function App() {
   return (
-    <Switch>
-      <Route path="/" component={Home} />
-    </Switch>
+    <HelpProvider>
+      <Switch>
+        <Route path="/" component={Home} />
+      </Switch>
+    </HelpProvider>
   );
 }
 

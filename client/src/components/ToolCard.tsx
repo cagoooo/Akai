@@ -1,12 +1,14 @@
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
-import { Share2, Users } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Share2, Users, HelpCircle } from "lucide-react";
 import { useState } from "react";
 import * as Icons from "lucide-react";
 import type { EducationalTool } from "@/lib/data";
+import type { LucideIcon } from 'lucide-react';
 
 const categoryColors = {
   communication: "bg-blue-100 text-blue-800",
@@ -24,7 +26,7 @@ interface ToolCardProps {
 export function ToolCard({ tool }: ToolCardProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
-  const IconComponent = Icons[tool.icon as keyof typeof Icons];
+  const Icon = Icons[tool.icon as keyof typeof Icons] as LucideIcon;
 
   const handleShare = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -32,31 +34,53 @@ export function ToolCard({ tool }: ToolCardProps) {
   };
 
   return (
-    <>
+    <TooltipProvider>
       <Card 
         className="group hover:shadow-lg transition-all duration-300 cursor-pointer"
         onClick={() => setIsOpen(true)}
       >
         <CardContent className="p-6">
           <div className="flex items-start justify-between mb-4">
-            <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
-              {IconComponent && <IconComponent className="w-6 h-6 text-primary" />}
-            </div>
+            <Tooltip>
+              <TooltipTrigger>
+                <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                  {Icon && <Icon className="w-6 h-6 text-primary" />}
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{tool.title}</p>
+              </TooltipContent>
+            </Tooltip>
             <div className="flex gap-2">
-              <Button 
-                variant="ghost" 
-                size="icon"
-                className="h-8 w-8"
-                onClick={handleShare}
-              >
-                <Share2 className="h-4 w-4" />
-              </Button>
-              <Badge 
-                variant="secondary" 
-                className={`${categoryColors[tool.category]} border-0`}
-              >
-                {tool.category}
-              </Badge>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={handleShare}
+                    data-tour="share-button"
+                  >
+                    <Share2 className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>分享並協作</p>
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Badge 
+                    variant="secondary" 
+                    className={`${categoryColors[tool.category]} border-0`}
+                  >
+                    {tool.category}
+                  </Badge>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>工具類別：{tool.category}</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
           </div>
 
@@ -80,7 +104,7 @@ export function ToolCard({ tool }: ToolCardProps) {
         <DialogContent className="max-w-3xl">
           <DialogHeader>
             <div className="flex items-center gap-2 mb-2">
-              {IconComponent && <IconComponent className="w-6 h-6 text-primary" />}
+              {Icon && <Icon className="w-6 h-6 text-primary" />}
               <DialogTitle>{tool.title}</DialogTitle>
             </div>
             <DialogDescription>{tool.description}</DialogDescription>
@@ -105,7 +129,6 @@ export function ToolCard({ tool }: ToolCardProps) {
         </DialogContent>
       </Dialog>
 
-      {/* Share Dialog */}
       <Dialog open={isShareOpen} onOpenChange={setIsShareOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -132,6 +155,6 @@ export function ToolCard({ tool }: ToolCardProps) {
           </div>
         </DialogContent>
       </Dialog>
-    </>
+    </TooltipProvider>
   );
 }
