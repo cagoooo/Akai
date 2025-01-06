@@ -1,5 +1,6 @@
-import { createContext, useContext, useState, ReactNode } from "react";
-import { TourProvider } from "@reactour/tour";
+import { createContext, useContext, useState, type ReactNode } from "react";
+import { TourProvider, type TourProviderProps, type StepType } from "@reactour/tour";
+import { Button } from "@/components/ui/button";
 
 interface HelpContextType {
   showHelp: boolean;
@@ -13,7 +14,7 @@ const HelpContext = createContext<HelpContextType>({
   startTour: () => {},
 });
 
-const steps = [
+const steps: StepType[] = [
   {
     selector: '[data-tour="teacher-intro"]',
     content: '認識阿凱老師，一位致力於教育創新的專業教師。',
@@ -28,39 +29,36 @@ const steps = [
   },
 ];
 
-function HelpContent({ children }: { children: ReactNode }) {
-  const [showHelp, setShowHelp] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleHelp = () => setShowHelp(!showHelp);
-  const startTour = () => setIsOpen(true);
-
-  return (
-    <HelpContext.Provider value={{ showHelp, toggleHelp, startTour }}>
-      {children}
-    </HelpContext.Provider>
-  );
-}
+const tourConfig: Partial<TourProviderProps> = {
+  steps,
+  padding: { mask: 8 },
+  styles: {
+    popover: (base) => ({
+      ...base,
+      '--tw-bg-opacity': '1',
+      backgroundColor: 'hsl(var(--background))',
+      '--tw-border-opacity': '1',
+      borderColor: 'hsl(var(--border))',
+      color: 'hsl(var(--foreground))',
+      padding: '1rem',
+      borderRadius: 'var(--radius)',
+      boxShadow: 'var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+    }),
+  },
+};
 
 export function HelpProvider({ children }: { children: ReactNode }) {
+  const [showHelp, setShowHelp] = useState(false);
+  const [isTourOpen, setIsTourOpen] = useState(false);
+
+  const toggleHelp = () => setShowHelp(!showHelp);
+  const startTour = () => setIsTourOpen(true);
+
   return (
-    <TourProvider 
-      steps={steps} 
-      styles={{
-        popover: (base) => ({
-          ...base,
-          '--tw-bg-opacity': '1',
-          backgroundColor: 'hsl(var(--background))',
-          '--tw-border-opacity': '1',
-          borderColor: 'hsl(var(--border))',
-          color: 'hsl(var(--foreground))',
-          padding: '1rem',
-          borderRadius: 'var(--radius)',
-          boxShadow: 'var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
-        }),
-      }}
-    >
-      <HelpContent>{children}</HelpContent>
+    <TourProvider {...tourConfig} isOpen={isTourOpen} onClose={() => setIsTourOpen(false)}>
+      <HelpContext.Provider value={{ showHelp, toggleHelp, startTour }}>
+        {children}
+      </HelpContext.Provider>
     </TourProvider>
   );
 }

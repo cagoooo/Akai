@@ -3,14 +3,6 @@ import { createServer, type Server } from "http";
 import { db } from "@db";
 import { sharedResources, collaborators, users, insertSharedResourceSchema, insertCollaboratorSchema } from "@db/schema";
 import { eq, and } from "drizzle-orm";
-import type { User } from "express-session";
-
-declare module "express-session" {
-  interface User {
-    id: number;
-    username: string;
-  }
-}
 
 export function registerRoutes(app: Express): Server {
   // Shared Resources endpoints
@@ -109,6 +101,25 @@ export function registerRoutes(app: Express): Server {
       res.json(collaborator[0]);
     } catch (error) {
       res.status(400).json({ message: "新增協作者時發生錯誤" });
+    }
+  });
+
+  // Translation endpoint
+  app.post("/api/translate", async (req, res) => {
+    try {
+      const { text, targetLanguage } = req.body;
+
+      if (!text || !targetLanguage) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      // TODO: Implement actual translation using Azure Translator API
+      // For now, we'll return a mock translation
+      const translatedText = `[${targetLanguage}] ${text}`;
+
+      res.json({ translatedText });
+    } catch (error) {
+      res.status(500).json({ message: "Translation failed" });
     }
   });
 
