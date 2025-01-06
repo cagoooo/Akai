@@ -8,13 +8,17 @@ export const languages: Record<Language, string> = {
   'ja': '日本語',
 };
 
-interface TranslationContextType {
+type TranslationContextType = {
   currentLanguage: Language;
   setLanguage: (lang: Language) => void;
   translate: (text: string) => Promise<string>;
-}
+};
 
-const TranslationContext = createContext<TranslationContextType | null>(null);
+const TranslationContext = createContext<TranslationContextType>({
+  currentLanguage: 'zh-TW',
+  setLanguage: () => {},
+  translate: async (text) => text,
+});
 
 export function useTranslation() {
   const context = useContext(TranslationContext);
@@ -24,9 +28,9 @@ export function useTranslation() {
   return context;
 }
 
-interface TranslationProviderProps {
+type TranslationProviderProps = {
   children: ReactNode;
-}
+};
 
 async function translateText(text: string, targetLang: Language): Promise<string> {
   try {
@@ -63,14 +67,14 @@ export function TranslationProvider({ children }: TranslationProviderProps) {
     return translateText(text, currentLanguage);
   }, [currentLanguage]);
 
+  const value = {
+    currentLanguage,
+    setLanguage: setCurrentLanguage,
+    translate,
+  };
+
   return (
-    <TranslationContext.Provider 
-      value={{
-        currentLanguage,
-        setLanguage: setCurrentLanguage,
-        translate,
-      }}
-    >
+    <TranslationContext.Provider value={value}>
       {children}
     </TranslationContext.Provider>
   );
