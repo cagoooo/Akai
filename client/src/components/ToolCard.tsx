@@ -4,11 +4,13 @@ import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Share2, Users, HelpCircle } from "lucide-react";
+import { Share2, Users, HelpCircle, Twitter, Facebook, Linkedin, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import * as Icons from "lucide-react";
 import type { EducationalTool } from "@/lib/data";
 import type { LucideIcon } from 'lucide-react';
+import { generateShareUrls } from "@/lib/utils";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const categoryColors = {
   communication: "bg-blue-100 text-blue-800",
@@ -32,6 +34,19 @@ export function ToolCard({ tool }: ToolCardProps) {
     e.stopPropagation();
     setIsShareOpen(true);
   };
+
+  const shareUrls = generateShareUrls({
+    url: tool.url,
+    title: tool.title,
+    description: tool.description,
+  });
+
+  const socialPlatforms = [
+    { name: 'Twitter', icon: Twitter, url: shareUrls.twitter, color: 'text-[#1DA1F2]' },
+    { name: 'Facebook', icon: Facebook, url: shareUrls.facebook, color: 'text-[#4267B2]' },
+    { name: 'LinkedIn', icon: Linkedin, url: shareUrls.linkedin, color: 'text-[#0077B5]' },
+    { name: 'LINE', icon: MessageCircle, url: shareUrls.line, color: 'text-[#00B900]' },
+  ];
 
   return (
     <TooltipProvider>
@@ -134,25 +149,47 @@ export function ToolCard({ tool }: ToolCardProps) {
           <DialogHeader>
             <DialogTitle>分享 {tool.title}</DialogTitle>
             <DialogDescription>
-              邀請其他使用者一起協作
+              透過社群媒體分享或邀請協作者
             </DialogDescription>
           </DialogHeader>
-          <div className="flex items-center space-x-2">
-            <div className="grid flex-1 gap-2">
-              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                協作者
-              </label>
-              <Button variant="outline" className="justify-start">
-                <Users className="mr-2 h-4 w-4" />
-                <span>選擇協作者</span>
-              </Button>
-            </div>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Button className="flex-1" onClick={() => setIsShareOpen(false)}>
-              完成
-            </Button>
-          </div>
+
+          <Tabs defaultValue="social" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="social">社群分享</TabsTrigger>
+              <TabsTrigger value="collaborate">邀請協作</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="social" className="mt-4">
+              <div className="flex flex-wrap gap-4">
+                {socialPlatforms.map((platform) => (
+                  <Button
+                    key={platform.name}
+                    variant="outline"
+                    className="flex-1 min-w-[120px]"
+                    onClick={() => window.open(platform.url, '_blank')}
+                  >
+                    <platform.icon className={`w-4 h-4 mr-2 ${platform.color}`} />
+                    {platform.name}
+                  </Button>
+                ))}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="collaborate" className="mt-4">
+              <div className="grid gap-4">
+                <div className="grid flex-1 gap-2">
+                  <label className="text-sm font-medium leading-none">
+                    協作者
+                  </label>
+                  <Button variant="outline" className="justify-start">
+                    <Users className="mr-2 h-4 w-4" />
+                    <span>選擇協作者</span>
+                  </Button>
+                </div>
+                <Button className="w-full">邀請協作</Button>
+              </div>
+            </TabsContent>
+          </Tabs>
         </DialogContent>
       </Dialog>
     </TooltipProvider>
