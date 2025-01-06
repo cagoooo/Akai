@@ -15,7 +15,15 @@ export function TeacherIntro() {
             <Newspaper className="w-8 h-8" aria-hidden="true" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold">{teacherInfo.name}</h2>
+            <a 
+              href="https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group"
+              aria-label="造訪阿凱老師的個人網頁"
+            >
+              <h2 className="text-2xl font-bold group-hover:underline">{teacherInfo.name}</h2>
+            </a>
             <p className="text-primary-foreground/80" role="doc-subtitle">{teacherInfo.title}</p>
           </div>
         </div>
