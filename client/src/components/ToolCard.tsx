@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Share2, Users, Settings2, Twitter as TwitterIcon, Facebook as FacebookIcon, Linkedin as LinkedinIcon, MessageCircle, BarChart } from "lucide-react";
 import { useState, useCallback } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"; // Added useQueryClient
 import * as Icons from "lucide-react";
 import type { EducationalTool } from "@/lib/data";
 import type { LucideIcon } from 'lucide-react';
@@ -70,6 +70,7 @@ interface ToolCardProps {
 }
 
 export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
+  const queryClient = useQueryClient(); // Added useQueryClient hook
   const [isOpen, setIsOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [isCustomizeOpen, setIsCustomizeOpen] = useState(false);
@@ -95,6 +96,11 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
         throw new Error('Failed to track tool usage');
       }
       return response.json();
+    },
+    onSuccess: () => {
+      // 成功後立即刷新所有工具統計數據
+      queryClient.invalidateQueries({ queryKey: ['/api/tools/stats'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/tools/rankings'] });
     },
   });
 
@@ -148,20 +154,7 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
           tabIndex={isLoading ? -1 : 0}
           role={isLoading ? "presentation" : "button"}
           aria-label={isLoading ? undefined : `開啟 ${tool.title} 工具詳細資訊`}
-          onKeyDown={(e) => {
-            if (!isLoading && (e.key === 'Enter' || e.key === ' ')) {
-              e.preventDefault();
-              handleToolClick();
-            }
-          }}
         >
-          <motion.div
-            className="absolute inset-0 transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100 bg-gradient-to-br pointer-events-none"
-            initial={false}
-            style={{
-              background: `linear-gradient(to bottom right, ${categoryColors[tool.category].gradient})`,
-            }}
-          />
           <CardContent className="p-6 relative">
             <motion.div
               className="flex items-start justify-between mb-4"
@@ -172,24 +165,35 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
               {isLoading ? (
                 <Skeleton className="w-10 h-10 rounded-lg" />
               ) : (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <motion.div
-                      className={`p-2 rounded-lg bg-primary/10 transition-all duration-300 ${categoryColors[tool.category].icon}`}
-                      whileHover={{ rotate: [0, -10, 10, -5, 5, 0] }}
-                      transition={{ duration: 0.5 }}
-                      role="img"
-                      aria-label={`${tool.title} 圖標`}
+                <div className="flex items-center gap-2">
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <motion.div
+                        className={`p-2 rounded-lg bg-primary/10 transition-all duration-300 ${categoryColors[tool.category].icon}`}
+                        whileHover={{ rotate: [0, -10, 10, -5, 5, 0] }}
+                        transition={{ duration: 0.5 }}
+                        role="img"
+                        aria-label={`${tool.title} 圖標`}
+                      >
+                        {Icon && <Icon className="w-6 h-6 transition-colors duration-300" />}
+                      </motion.div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{tool.title}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                  {usageStats && (
+                    <Badge
+                      variant="secondary"
+                      className="flex items-center gap-1 px-2 py-1"
+                      title="使用次數"
                     >
-                      {Icon && <Icon className="w-6 h-6 transition-colors duration-300" />}
-                    </motion.div>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{tool.title}</p>
-                  </TooltipContent>
-                </Tooltip>
+                      <BarChart className="w-3 h-3" />
+                      <span>{usageStats.totalClicks} 次使用</span>
+                    </Badge>
+                  )}
+                </div>
               )}
-
               <div className="flex gap-2">
                 {isLoading ? (
                   <>
@@ -262,16 +266,6 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
               <>
                 <CardTitle className={`text-xl font-bold transition-colors duration-300 ${categoryColors[tool.category].icon} mb-2 relative`}>
                   {tool.title}
-                  {usageStats && (
-                    <Badge 
-                      variant="secondary"
-                      className="ml-2 text-sm"
-                      title="使用次數"
-                    >
-                      <BarChart className="w-3 h-3 mr-1 inline-block" />
-                      {usageStats.totalClicks}
-                    </Badge>
-                  )}
                 </CardTitle>
                 <CardDescription className="text-sm text-muted-foreground min-h-[3rem] mb-4 relative transition-colors duration-300 group-hover:text-foreground/80">
                   {tool.description}

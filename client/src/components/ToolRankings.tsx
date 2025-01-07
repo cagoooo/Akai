@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { BarChart, Trophy, Medal } from "lucide-react";
 import { tools } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
+import { motion } from "framer-motion";
 
 interface ToolRanking {
   toolId: number;
@@ -34,7 +35,10 @@ export function ToolRankings() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>工具使用排行榜</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <BarChart className="w-5 h-5" />
+            工具使用排行榜
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {Array.from({ length: 5 }).map((_, i) => (
@@ -65,9 +69,12 @@ export function ToolRankings() {
           if (!tool) return null;
 
           return (
-            <div 
+            <motion.div 
               key={ranking.toolId}
               className="flex items-center space-x-4 p-2 rounded-lg hover:bg-muted/50 transition-colors"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
             >
               <div className="flex-shrink-0">
                 <RankingIcon rank={index + 1} />
@@ -83,7 +90,7 @@ export function ToolRankings() {
               <Badge variant="secondary" className="flex-shrink-0">
                 {ranking.totalClicks} 次使用
               </Badge>
-            </div>
+            </motion.div>
           );
         })}
       </CardContent>
