@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Share2, Users, Settings2, Twitter as TwitterIcon, Facebook as FacebookIcon, Linkedin as LinkedinIcon, MessageCircle, BarChart } from "lucide-react";
+import { Share2, Users, Settings2, Facebook as FacebookIcon, Linkedin as LinkedinIcon, MessageCircle, BarChart, Copy } from "lucide-react";
 import { useState, useCallback } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as Icons from "lucide-react";
@@ -18,6 +18,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SocialPreviewImage } from "./SocialPreviewImage";
 import { generateShareUrls } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 // Enhanced category colors with hover states and transitions
 const categoryColors = {
@@ -79,6 +80,7 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
   const [isPreviewLoading, setIsPreviewLoading] = useState(true);
   const [previewImage, setPreviewImage] = useState<string>();
   const Icon = Icons[tool.icon as keyof typeof Icons] as LucideIcon;
+  const { toast } = useToast();
 
   // Get usage statistics for this tool
   const { data: usageStats } = useQuery({
@@ -120,6 +122,23 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
   const handleCustomize = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsCustomizeOpen(true);
+  };
+
+  const handleCopyLink = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      await navigator.clipboard.writeText(tool.url);
+      toast({
+        title: "複製成功",
+        description: "已將連結複製到剪貼簿",
+      });
+    } catch (error) {
+      toast({
+        title: "複製失敗",
+        description: "無法複製連結，請手動複製",
+        variant: "destructive",
+      });
+    }
   };
 
   const getShareUrls = useCallback((previewUrl?: string) => {
@@ -389,7 +408,7 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
                   aria-label="社群媒體分享按鈕"
                 >
                   {[
-                    { name: 'Twitter', icon: TwitterIcon, color: 'text-[#1DA1F2]' },
+                    { name: 'Copy', icon: Copy, color: 'text-gray-600', onClick: handleCopyLink },
                     { name: 'Facebook', icon: FacebookIcon, color: 'text-[#4267B2]' },
                     { name: 'LinkedIn', icon: LinkedinIcon, color: 'text-[#0077B5]' },
                     { name: 'LINE', icon: MessageCircle, color: 'text-[#00B900]' },
@@ -402,11 +421,17 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
                       <Button
                         variant="outline"
                         className="flex-1 min-w-[120px]"
-                        onClick={() => window.open(getShareUrls(previewImage)[platform.name.toLowerCase()], '_blank')}
-                        aria-label={`分享到 ${platform.name}`}
+                        onClick={(e) => {
+                          if (platform.onClick) {
+                            platform.onClick(e);
+                          } else {
+                            window.open(getShareUrls(previewImage)[platform.name.toLowerCase()], '_blank');
+                          }
+                        }}
+                        aria-label={platform.name === 'Copy' ? '複製連結' : `分享到 ${platform.name}`}
                       >
                         <platform.icon className={`w-4 h-4 mr-2 ${platform.color}`} aria-hidden="true" />
-                        {platform.name}
+                        {platform.name === 'Copy' ? '複製連結' : platform.name}
                       </Button>
                     </motion.div>
                   ))}
