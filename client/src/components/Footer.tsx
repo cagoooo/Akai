@@ -8,7 +8,7 @@ export function Footer() {
             href="https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-primary hover:underline transition-all duration-300"
+            className="text-muted-foreground hover:text-primary hover:underline transition-colors duration-300"
           >
             教育科技創新專區
           </a>
