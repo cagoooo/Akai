@@ -1,13 +1,14 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BarChart, Trophy, Medal, Crown, Star, Sparkles, Volume2, VolumeX } from "lucide-react";
 import { tools } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { soundManager } from "@/lib/soundManager";
 import { Button } from "@/components/ui/button";
+import { RankingTutorial } from "./RankingTutorial";
 
 // 擴充表情符號庫,增加更多有趣的動態表情
 const rankEmojis = [
@@ -197,9 +198,9 @@ export function ToolRankings() {
   const { data: rankings, isLoading } = useQuery<ToolRanking[]>({
     queryKey: ['/api/tools/rankings'],
     refetchInterval: 2000,
-    onSuccess: (data) => {
+    onSuccess: (newData) => {
       const newRankings: Record<number, number> = {};
-      data.forEach((ranking, index) => {
+      newData.forEach((ranking, index) => {
         const currentRank = index + 1;
         const previousRank = previousRankings[ranking.toolId];
 
@@ -243,18 +244,6 @@ export function ToolRankings() {
             </div>
           ))}
         </CardContent>
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
-          animate={{
-            x: ["0%", "100%"],
-            opacity: [0, 0.5, 0]
-          }}
-          transition={{
-            duration: 1.5,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
       </Card>
     );
   }
@@ -263,7 +252,7 @@ export function ToolRankings() {
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle id="rankings-title" className="flex items-center gap-2">
             <motion.div
               animate={{ 
                 scale: [1, 1.2, 1],
@@ -277,32 +266,29 @@ export function ToolRankings() {
             >
               <BarChart className="w-5 h-5" />
             </motion.div>
-            <motion.span
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent"
-            >
-              工具使用排行榜
-            </motion.span>
+            工具使用排行榜
           </CardTitle>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleMute}
-            className="h-8 w-8 p-0"
-            aria-label={isMuted ? "開啟音效" : "關閉音效"}
-          >
-            <motion.div
-              whileHover={{ scale: 1.2 }}
-              whileTap={{ scale: 0.9 }}
+          <div className="flex items-center gap-2">
+            <RankingTutorial />
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleMute}
+              className="h-8 w-8 p-0"
+              aria-label={isMuted ? "開啟音效" : "關閉音效"}
             >
-              {isMuted ? (
-                <VolumeX className="h-4 w-4" />
-              ) : (
-                <Volume2 className="h-4 w-4" />
-              )}
-            </motion.div>
-          </Button>
+              <motion.div
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                {isMuted ? (
+                  <VolumeX className="h-4 w-4" />
+                ) : (
+                  <Volume2 className="h-4 w-4" />
+                )}
+              </motion.div>
+            </Button>
+          </div>
         </div>
       </CardHeader>
       <CardContent>
@@ -329,11 +315,12 @@ export function ToolRankings() {
                 }}
                 custom={index}
                 whileHover="hover"
+                id={index === 0 ? "top-tool" : ""}
                 className={`
                   flex items-center space-x-4 p-3 rounded-lg 
                   transition-all duration-300
                   ${isTop ? 'bg-gradient-to-r from-primary/5 to-primary/10' : 'hover:bg-muted/50'}
-                  mb-2 relative overflow-hidden
+                  mb-2 relative overflow-hidden cursor-pointer
                   ${previousRank && previousRank > index + 1 ? 'border-l-4 border-green-400' : ''}
                   ${previousRank && previousRank < index + 1 ? 'border-l-4 border-orange-400' : ''}
                 `}
@@ -363,6 +350,7 @@ export function ToolRankings() {
                   layoutId={`content-${ranking.toolId}`}
                 >
                   <motion.div 
+                    id="ranking-changes"
                     className="text-sm font-medium text-foreground truncate flex items-center gap-2"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -375,7 +363,7 @@ export function ToolRankings() {
                         animate={{ scale: 1 }}
                         className="text-xs text-green-500"
                       >
-                        ↑ {previousRank - (index + 1)}
+                        🔥 +{previousRank - (index + 1)}
                       </motion.span>
                     )}
                     {previousRank && previousRank < index + 1 && (
@@ -384,11 +372,12 @@ export function ToolRankings() {
                         animate={{ scale: 1 }}
                         className="text-xs text-orange-500"
                       >
-                        ↓ {index + 1 - previousRank}
+                        📉 -{index + 1 - previousRank}
                       </motion.span>
                     )}
                   </motion.div>
                   <motion.p 
+                    id="usage-stats"
                     className="text-sm text-muted-foreground truncate"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -400,6 +389,7 @@ export function ToolRankings() {
                 <motion.div
                   layoutId={`badge-${ranking.toolId}`}
                   className="flex-shrink-0 z-10"
+                  id="interaction-area"
                 >
                   <Badge 
                     variant={isTop ? "secondary" : "outline"}
