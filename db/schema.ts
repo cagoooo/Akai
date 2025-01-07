@@ -131,3 +131,38 @@ export type InsertAchievement = typeof achievements.$inferInsert;
 export type SelectAchievement = typeof achievements.$inferSelect;
 export type InsertUserAchievement = typeof userAchievements.$inferInsert;
 export type SelectUserAchievement = typeof userAchievements.$inferSelect;
+
+export const errorLogs = pgTable("error_logs", {
+  id: serial("id").primaryKey(),
+  level: text("level").notNull(), 
+  message: text("message").notNull(),
+  stack: text("stack"),
+  metadata: jsonb("metadata"), 
+  userId: integer("user_id").references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const systemMetrics = pgTable("system_metrics", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(), 
+  value: text("value").notNull(),
+  unit: text("unit").notNull(), 
+  timestamp: timestamp("timestamp").defaultNow().notNull(),
+});
+
+export const errorLogsRelations = relations(errorLogs, ({ one }) => ({
+  user: one(users, {
+    fields: [errorLogs.userId],
+    references: [users.id],
+  }),
+}));
+
+export const insertErrorLogSchema = createInsertSchema(errorLogs);
+export const selectErrorLogSchema = createSelectSchema(errorLogs);
+export const insertSystemMetricSchema = createInsertSchema(systemMetrics);
+export const selectSystemMetricSchema = createSelectSchema(systemMetrics);
+
+export type InsertErrorLog = typeof errorLogs.$inferInsert;
+export type SelectErrorLog = typeof errorLogs.$inferSelect;
+export type InsertSystemMetric = typeof systemMetrics.$inferInsert;
+export type SelectSystemMetric = typeof systemMetrics.$inferSelect;
