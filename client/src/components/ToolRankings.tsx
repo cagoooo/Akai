@@ -16,9 +16,9 @@ interface ToolRanking {
 
 // 擴充表情符號庫,增加更多有趣的動態表情
 const rankEmojis = [
-  ["👑", "✨"], ["🏆", "💫"], ["🌟", "⭐"], 
-  ["✨", "💫"], ["🎯", "🌈"], ["🔥", "💎"],
-  ["💫", "⚡"], ["⭐", "🌙"]
+  ["👑", "✨", "🌟"], ["🏆", "💫", "⭐"], ["🌟", "⭐", "✨"], 
+  ["✨", "💫", "🌈"], ["🎯", "🌈", "💫"], ["🔥", "💎", "⚡"],
+  ["💫", "⚡", "🌙"], ["⭐", "🌙", "✨"]
 ];
 
 // 排名動畫變體
@@ -54,14 +54,16 @@ const rankAnimationVariants = {
     scale: [1, 1.2, 0.9, 1.1, 1],
     rotate: [0, 10, -10, 5, 0],
     transition: {
-      duration: 0.8
+      duration: 0.8,
+      ease: "easeInOut"
     }
   },
   rankDown: {
     scale: [1, 0.9, 1.1, 0.95, 1],
     rotate: [0, -5, 5, -3, 0],
     transition: {
-      duration: 0.8
+      duration: 0.8,
+      ease: "easeInOut"
     }
   }
 };
@@ -73,7 +75,7 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
     3: <Medal className="w-6 h-6 text-amber-600" />
   };
 
-  const [emoji1, emoji2] = rankEmojis[rank - 1] || ["🎯", "✨"];
+  const [emoji1, emoji2, emoji3] = rankEmojis[rank - 1] || ["🎯", "✨", "🌈"];
   const isTopRank = rank <= 3;
   const rankChanged = previousRank !== undefined && previousRank !== rank;
   const rankImproved = previousRank !== undefined && rank < previousRank;
@@ -117,12 +119,29 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
             >
               {emoji2}
             </motion.span>
+            <motion.span
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ 
+                opacity: [0.3, 0.8, 0.3],
+                scale: [0.6, 1, 0.6],
+                rotate: [0, -180, -360]
+              }}
+              transition={{
+                duration: 2.5,
+                repeat: Infinity,
+                repeatType: "reverse",
+                delay: 0.5
+              }}
+              className="absolute right-0 bottom-0 text-xs"
+            >
+              {emoji3}
+            </motion.span>
           </span>
         )}
       </motion.div>
       {rank === 1 && (
         <motion.div
-          className="absolute -inset-1 z-0"
+          className="absolute -inset-2 z-0"
           initial={{ opacity: 0 }}
           animate={{ 
             opacity: [0.2, 0.5, 0.2],
@@ -134,18 +153,22 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
             repeatType: "reverse"
           }}
           style={{
-            background: 'radial-gradient(circle, rgba(var(--primary-rgb), 0.15) 0%, transparent 70%)'
+            background: 'radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, transparent 70%)'
           }}
         />
       )}
       {rankImproved && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: [0, 1, 0], y: [-10, -20, -30] }}
+          animate={{ 
+            opacity: [0, 1, 0], 
+            y: [-10, -20, -30],
+            scale: [1, 1.2, 1]
+          }}
           transition={{ duration: 1 }}
           className="absolute -top-2 left-1/2 transform -translate-x-1/2 text-sm"
         >
-          ⬆️
+          {rank === 1 ? "🏅" : "⬆️"}
         </motion.div>
       )}
     </motion.div>
