@@ -24,11 +24,6 @@ export function generateShareUrls(options: ShareURLOptions) {
   if (options.description) params.append('description', options.description);
   if (options.image) params.append('image', options.image);
 
-  const twitterParams = new URLSearchParams();
-  twitterParams.append('url', options.url);
-  twitterParams.append('text', options.text || options.title);
-  if (options.image) twitterParams.append('image', options.image);
-
   const facebookParams = new URLSearchParams();
   facebookParams.append('u', options.url);
 
@@ -42,7 +37,6 @@ export function generateShareUrls(options: ShareURLOptions) {
   if (options.text) lineParams.append('text', options.text);
 
   return {
-    twitter: `https://twitter.com/intent/tweet?${twitterParams.toString()}`,
     facebook: `https://www.facebook.com/sharer/sharer.php?${facebookParams.toString()}`,
     linkedin: `https://www.linkedin.com/shareArticle?mini=true&${linkedinParams.toString()}`,
     line: `https://social-plugins.line.me/lineit/share?${lineParams.toString()}`,
