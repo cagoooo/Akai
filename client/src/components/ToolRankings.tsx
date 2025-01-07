@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { BarChart, Trophy, Medal } from "lucide-react";
 import { tools } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface ToolRanking {
   toolId: number;
@@ -29,6 +29,7 @@ const RankingIcon = ({ rank }: { rank: number }) => {
 export function ToolRankings() {
   const { data: rankings, isLoading } = useQuery<ToolRanking[]>({
     queryKey: ['/api/tools/rankings'],
+    refetchInterval: 2000, // Poll every 2 seconds for updates
   });
 
   if (isLoading) {
@@ -63,36 +64,61 @@ export function ToolRankings() {
           工具使用排行榜
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        {rankings?.map((ranking, index) => {
-          const tool = tools.find(t => t.id === ranking.toolId);
-          if (!tool) return null;
+      <CardContent>
+        <AnimatePresence mode="popLayout">
+          {rankings?.map((ranking, index) => {
+            const tool = tools.find(t => t.id === ranking.toolId);
+            if (!tool) return null;
 
-          return (
-            <motion.div 
-              key={ranking.toolId}
-              className="flex items-center space-x-4 p-2 rounded-lg hover:bg-muted/50 transition-colors"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <div className="flex-shrink-0">
-                <RankingIcon rank={index + 1} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground truncate">
-                  {tool.title}
-                </p>
-                <p className="text-sm text-muted-foreground truncate">
-                  最後使用：{new Date(ranking.lastUsedAt).toLocaleDateString()}
-                </p>
-              </div>
-              <Badge variant="secondary" className="flex-shrink-0">
-                {ranking.totalClicks} 次使用
-              </Badge>
-            </motion.div>
-          );
-        })}
+            return (
+              <motion.div 
+                key={ranking.toolId}
+                layout
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ 
+                  opacity: 1, 
+                  y: 0,
+                  transition: {
+                    type: "spring",
+                    stiffness: 500,
+                    damping: 30
+                  }
+                }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                className="flex items-center space-x-4 p-2 rounded-lg hover:bg-muted/50 transition-colors mb-2"
+              >
+                <motion.div 
+                  className="flex-shrink-0"
+                  layoutId={`rank-${ranking.toolId}`}
+                >
+                  <RankingIcon rank={index + 1} />
+                </motion.div>
+                <motion.div 
+                  className="flex-1 min-w-0"
+                  layoutId={`content-${ranking.toolId}`}
+                >
+                  <p className="text-sm font-medium text-foreground truncate">
+                    {tool.title}
+                  </p>
+                  <p className="text-sm text-muted-foreground truncate">
+                    最後使用：{new Date(ranking.lastUsedAt).toLocaleDateString()}
+                  </p>
+                </motion.div>
+                <motion.div
+                  layoutId={`badge-${ranking.toolId}`}
+                  className="flex-shrink-0"
+                >
+                  <Badge 
+                    variant="secondary" 
+                    className="animate-pulse"
+                  >
+                    {ranking.totalClicks} 次使用
+                  </Badge>
+                </motion.div>
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
       </CardContent>
     </Card>
   );
