@@ -251,6 +251,14 @@ export function registerRoutes(app: Express): Server {
         orderBy: (moodEntries, { asc }) => [asc(moodEntries.createdAt)],
       });
 
+      const moodMap: Record<string, string> = {
+        'happy': '開心',
+        'confused': '困惑',
+        'satisfied': '滿意',
+        'challenged': '挑戰',
+        'tired': '疲憊'
+      };
+
       // Process and aggregate the data
       const stats = {
         toolUsage: Object.entries(
@@ -262,40 +270,41 @@ export function registerRoutes(app: Express): Server {
           name: `Tool ${id}`,
           count,
         })),
-        moodTrends: moodTrends.reduce((acc: Record<string, any>, curr) => {
-          const date = curr.createdAt.toISOString().split('T')[0];
-          if (!acc[date]) {
-            acc[date] = {
-              date,
-              開心: 0,
-              困惑: 0,
-              滿意: 0,
-              挑戰: 0,
-              疲憊: 0,
-            };
-          }
-          const moodMap: Record<string, string> = {
-            'happy': '開心',
-            'confused': '困惑',
-            'satisfied': '滿意',
-            'challenged': '挑戰',
-            'tired': '疲憊'
-          };
-          acc[date][moodMap[curr.mood]] += 1;
-          return acc;
-        }, {}),
-        achievements: achievementStats.reduce((acc: any[], achievement) => {
-          const completed = userId
-            ? achievement.userAchievements.filter(ua => ua.userId === userId).length
-            : achievement.userAchievements.length;
+        moodTrends: Object.values(
+          moodTrends.reduce((acc: Record<string, any>, curr) => {
+            const date = curr.createdAt.toISOString().split('T')[0];
+            if (!acc[date]) {
+              acc[date] = {
+                date,
+                開心: 0,
+                困惑: 0,
+                滿意: 0,
+                挑戰: 0,
+                疲憊: 0,
+              };
+            }
+            acc[date][moodMap[curr.mood]] += 1;
+            return acc;
+          }, {})
+        ),
+        achievements: await db.query.achievements.findMany({
+          with: {
+            userAchievements: true,
+          },
+        }).then(achievements => 
+          achievements.reduce((acc: any[], achievement) => {
+            const completed = userId
+              ? achievement.userAchievements.filter(ua => ua.userId === userId).length
+              : achievement.userAchievements.length;
 
-          acc.push({
-            category: achievement.category,
-            completed,
-            total: 1,
-          });
-          return acc;
-        }, []),
+            acc.push({
+              category: achievement.category,
+              completed,
+              total: 1,
+            });
+            return acc;
+          }, [])
+        ),
       };
 
       res.json(stats);
