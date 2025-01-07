@@ -1,0 +1,43 @@
+Warning: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?
+
+Check the render method of `SlotClone`.
+    at Badge (https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/src/components/ui/badge.tsx:35:18)
+    at https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/@fs/home/runner/AkaiPortal/node_modules/.vite/deps/chunk-DKHUMOWT.js?v=89880344:52:11
+    at https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/@fs/home/runner/AkaiPortal/node_modules/.vite/deps/chunk-DKHUMOWT.js?v=89880344:33:11
+    at https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/@fs/home/runner/AkaiPortal/node_modules/.vite/deps/chunk-M7N4V4P4.js?v=89880344:41:13
+    at https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/@fs/home/runner/AkaiPortal/node_modules/.vite/deps/chunk-DKHUMOWT.js?v=89880344:52:11
+    at https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/@fs/home/runner/AkaiPortal/node_modules/.vite/deps/chunk-DKHUMOWT.js?v=89880344:33:11
+    at https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/@fs/home/runner/AkaiPortal/node_modules/.vite/deps/chunk-M7N4V4P4.js?v=89880344:41:13
+    at https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/@fs/home/runner/AkaiPortal/node_modules/.vite/deps/chunk-KNDL6GPW.js?v=89880344:1980:13
+    at https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/@fs/home/runner/AkaiPortal/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=89880344:187:13
+    at Provider (https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/@fs/home/runner/AkaiPortal/node_modules/.vite/deps/chunk-R2T6YHTW.js?v=89880344:43:15)
+    at Provider (https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/@fs/home/runner/AkaiPortal/node_modules/.vite/deps/chunk-KNDL6GPW.js?v=89880344:1915:15)
+    at Popper (https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/@fs/home/runner/AkaiPortal/node_modules/.vite/deps/chunk-KNDL6GPW.js?v=89880344:1972:11)
+    at Tooltip (https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/@fs/home/runner/AkaiPortal/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=89880344:105:5)
+    at div
+    at div
+    at MotionComponent (https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/@fs/home/runner/AkaiPortal/node_modules/.vite/deps/framer-motion.js?v=89880344:6536:40)
+    at div
+    at _c9 (https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/src/components/ui/card.tsx:106:12)
+    at div
+    at _c (https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/src/components/ui/card.tsx:20:11)
+    at div
+    at MotionComponent (https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/@fs/home/runner/AkaiPortal/node_modules/.vite/deps/framer-motion.js?v=89880344:6536:40)
+    at Provider (https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/@fs/home/runner/AkaiPortal/node_modules/.vite/deps/chunk-R2T6YHTW.js?v=89880344:43:15)
+    at TooltipProvider (https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/@fs/home/runner/AkaiPortal/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=89880344:61:5)
+    at ToolCard (https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/src/components/ToolCard.tsx:78:28)
+    at section
+    at div
+    at div
+    at main
+    at div
+    at Home (https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/src/pages/Home.tsx:32:25)
+    at Route (https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/@fs/home/runner/AkaiPortal/node_modules/.vite/deps/wouter.js?v=89880344:323:16)
+    at Switch (https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/@fs/home/runner/AkaiPortal/node_modules/.vite/deps/wouter.js?v=89880344:379:17)
+    at div
+    at MotionComponent (https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/@fs/home/runner/AkaiPortal/node_modules/.vite/deps/framer-motion.js?v=89880344:6536:40)
+    at PresenceChild (https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/@fs/home/runner/AkaiPortal/node_modules/.vite/deps/framer-motion.js?v=89880344:7742:24)
+    at AnimatePresence (https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/@fs/home/runner/AkaiPortal/node_modules/.vite/deps/framer-motion.js?v=89880344:7800:26)
+    at PageTransition (https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/src/components/PageTransition.tsx:20:34)
+    at HelpProvider (https://3ffbb362-7f42-446d-9993-60676029ba6a-00-gmb15e7k6jfx.pike.replit.dev/src/components/HelpProvider.tsx:28:32)
+    at QueryClientProvider…
