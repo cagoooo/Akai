@@ -1,7 +1,12 @@
 export function Footer() {
   return (
     <footer className="w-full py-4 px-6 mt-auto border-t border-border bg-background">
-      <div className="container mx-auto text-center text-sm text-muted-foreground">
+      <div className="container mx-auto flex items-center justify-center gap-3 text-sm text-muted-foreground">
+        <img 
+          src="/attached_assets/圈圈.png" 
+          alt="Shin Men Elementary School Logo" 
+          className="h-8 w-8 object-contain"
+        />
         <p>
           © {new Date().getFullYear()}{" "}
           <a 
