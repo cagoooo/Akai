@@ -12,7 +12,6 @@ export function RankingTutorial() {
       allowClose: true,
       stagePadding: 5,
       popoverClass: "ranking-tutorial-popover",
-      stageClass: "ranking-tutorial-stage",
       nextBtnText: "下一步",
       prevBtnText: "上一步",
       doneBtnText: "完成",
@@ -87,7 +86,7 @@ export function RankingTutorial() {
       id="ranking-tutorial-btn"
     >
       <Trophy className="w-4 h-4" />
-      開始排行榜教學
+      排行榜功能教學
     </Button>
   );
 }

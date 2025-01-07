@@ -21,7 +21,6 @@ export class TourGuide extends React.Component {
       overlayColor: "rgba(0, 0, 0, 0.7)",
       stagePadding: 5,
       popoverClass: "site-tour-popover",
-      stageClass: "site-tour-stage",
       onHighlightStarted: (element) => {
         if (element) {
           const rect = element.getBoundingClientRect();
