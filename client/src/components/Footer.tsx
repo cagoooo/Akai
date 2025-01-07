@@ -1,5 +1,3 @@
-import { Link } from "wouter";
-
 export function Footer() {
   return (
     <footer className="w-full py-4 px-6 mt-auto border-t border-border bg-background">
@@ -10,7 +8,7 @@ export function Footer() {
             href="https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-foreground transition-colors"
+            className="hover:text-primary hover:underline transition-all duration-300"
           >
             教育科技創新專區
           </a>

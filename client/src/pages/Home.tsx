@@ -115,10 +115,6 @@ export function Home() {
             </div>
           </div>
         </div>
-
-        <footer className="mt-8 sm:mt-16 text-center text-sm sm:text-base text-muted-foreground">
-          <p>© {new Date().getFullYear()} 教育科技創新專區. All rights reserved.</p>
-        </footer>
       </main>
     </div>
   );
