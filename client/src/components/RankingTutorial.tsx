@@ -1,4 +1,4 @@
-import driverjs from "driver.js";
+import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import { useEffect, useCallback } from "react";
 import { Button } from "./ui/button";
@@ -6,7 +6,7 @@ import { Trophy } from "lucide-react";
 
 export function RankingTutorial() {
   const createDriver = useCallback(() => {
-    return new driverjs({
+    return driver({
       showProgress: true,
       animate: true,
       steps: [
@@ -59,16 +59,16 @@ export function RankingTutorial() {
   }, []);
 
   useEffect(() => {
-    const driver = createDriver();
+    const driverObj = createDriver();
 
     return () => {
-      driver.reset();
+      driverObj.destroy();
     };
   }, [createDriver]);
 
   const startTutorial = useCallback(() => {
-    const driver = createDriver();
-    driver.drive();
+    const driverObj = createDriver();
+    driverObj.drive();
   }, [createDriver]);
 
   return (
