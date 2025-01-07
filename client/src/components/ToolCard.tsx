@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Share2, Users, Settings2, Twitter as TwitterIcon, Facebook as FacebookIcon, Linkedin as LinkedinIcon, MessageCircle } from "lucide-react";
+import { Share2, Users, Settings2, Twitter as TwitterIcon, Facebook as FacebookIcon, Linkedin as LinkedinIcon, MessageCircle, BarChart } from "lucide-react";
 import { useState, useCallback } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import * as Icons from "lucide-react";
 import type { EducationalTool } from "@/lib/data";
 import type { LucideIcon } from 'lucide-react';
@@ -77,6 +78,33 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
   const [previewImage, setPreviewImage] = useState<string>();
   const Icon = Icons[tool.icon as keyof typeof Icons] as LucideIcon;
 
+  // Get usage statistics for this tool
+  const { data: usageStats } = useQuery({
+    queryKey: ['/api/tools/stats'],
+    select: (data) => data.find((stat: any) => stat.toolId === tool.id),
+  });
+
+  // Track tool usage
+  const trackUsage = useMutation({
+    mutationFn: async () => {
+      const response = await fetch(`/api/tools/${tool.id}/track`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        throw new Error('Failed to track tool usage');
+      }
+      return response.json();
+    },
+  });
+
+  const handleToolClick = () => {
+    if (!isLoading) {
+      setIsOpen(true);
+      trackUsage.mutate();
+    }
+  };
+
   const handleShare = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsShareOpen(true);
@@ -116,14 +144,14 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
       >
         <Card
           className={`group hover:shadow-lg transition-all duration-500 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary overflow-hidden border-2 ${categoryColors[tool.category].border} hover:bg-gradient-to-br`}
-          onClick={() => !isLoading && setIsOpen(true)}
+          onClick={handleToolClick}
           tabIndex={isLoading ? -1 : 0}
           role={isLoading ? "presentation" : "button"}
           aria-label={isLoading ? undefined : `開啟 ${tool.title} 工具詳細資訊`}
           onKeyDown={(e) => {
             if (!isLoading && (e.key === 'Enter' || e.key === ' ')) {
               e.preventDefault();
-              setIsOpen(true);
+              handleToolClick();
             }
           }}
         >
@@ -234,6 +262,16 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
               <>
                 <CardTitle className={`text-xl font-bold transition-colors duration-300 ${categoryColors[tool.category].icon} mb-2 relative`}>
                   {tool.title}
+                  {usageStats && (
+                    <Badge 
+                      variant="secondary"
+                      className="ml-2 text-sm"
+                      title="使用次數"
+                    >
+                      <BarChart className="w-3 h-3 mr-1 inline-block" />
+                      {usageStats.totalClicks}
+                    </Badge>
+                  )}
                 </CardTitle>
                 <CardDescription className="text-sm text-muted-foreground min-h-[3rem] mb-4 relative transition-colors duration-300 group-hover:text-foreground/80">
                   {tool.description}

@@ -166,3 +166,24 @@ export type InsertErrorLog = typeof errorLogs.$inferInsert;
 export type SelectErrorLog = typeof errorLogs.$inferSelect;
 export type InsertSystemMetric = typeof systemMetrics.$inferInsert;
 export type SelectSystemMetric = typeof systemMetrics.$inferSelect;
+
+export const toolUsageStats = pgTable("tool_usage_stats", {
+  id: serial("id").primaryKey(),
+  toolId: integer("tool_id").notNull(),
+  totalClicks: integer("total_clicks").notNull().default(0),
+  lastUsedAt: timestamp("last_used_at").defaultNow().notNull(),
+  categoryClicks: jsonb("category_clicks").notNull().default({
+    communication: 0,
+    teaching: 0,
+    language: 0,
+    reading: 0,
+    utilities: 0,
+    games: 0
+  }),
+});
+
+export const insertToolUsageStatsSchema = createInsertSchema(toolUsageStats);
+export const selectToolUsageStatsSchema = createSelectSchema(toolUsageStats);
+
+export type InsertToolUsageStats = typeof toolUsageStats.$inferInsert;
+export type SelectToolUsageStats = typeof toolUsageStats.$inferSelect;

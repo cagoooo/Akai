@@ -4,9 +4,11 @@ import { db } from "@db";
 import { 
   sharedResources, collaborators, users, moodEntries, 
   achievements, userAchievements, errorLogs, systemMetrics,
+  toolUsageStats,
   insertSharedResourceSchema, insertCollaboratorSchema, 
   insertMoodEntrySchema, insertUserAchievementSchema,
-  insertErrorLogSchema, insertSystemMetricSchema
+  insertErrorLogSchema, insertSystemMetricSchema,
+  insertToolUsageStatsSchema
 } from "@db/schema";
 import { eq, and, desc } from "drizzle-orm";
 
@@ -16,16 +18,13 @@ export function registerRoutes(app: Express): Server {
     try {
       const parsedBody = insertSharedResourceSchema.parse(req.body);
       const userId = req.user?.id;
-
       if (!userId) {
         return res.status(401).json({ message: "請先登入" });
       }
-
       const resource = await db.insert(sharedResources).values({
         ...parsedBody,
         creatorId: userId,
       }).returning();
-
       res.json(resource[0]);
     } catch (error) {
       res.status(400).json({ message: "無效的資源資料" });
@@ -35,11 +34,9 @@ export function registerRoutes(app: Express): Server {
   app.get("/api/resources", async (req, res) => {
     try {
       const userId = req.user?.id;
-
       if (!userId) {
         return res.status(401).json({ message: "請先登入" });
       }
-
       const userResources = await db.query.sharedResources.findMany({
         where: eq(sharedResources.creatorId, userId),
         with: {
@@ -50,7 +47,6 @@ export function registerRoutes(app: Express): Server {
           }
         }
       });
-
       const collaborativeResources = await db.query.collaborators.findMany({
         where: eq(collaborators.userId, userId),
         with: {
@@ -66,7 +62,6 @@ export function registerRoutes(app: Express): Server {
           }
         }
       });
-
       res.json({
         owned: userResources,
         shared: collaborativeResources.map(c => c.resource)
@@ -81,29 +76,23 @@ export function registerRoutes(app: Express): Server {
     try {
       const { resourceId } = req.params;
       const userId = req.user?.id;
-
       if (!userId) {
         return res.status(401).json({ message: "請先登入" });
       }
-
       const resource = await db.query.sharedResources.findFirst({
         where: eq(sharedResources.id, parseInt(resourceId)),
       });
-
       if (!resource) {
         return res.status(404).json({ message: "找不到資源" });
       }
-
       if (resource.creatorId !== userId) {
         return res.status(403).json({ message: "沒有權限新增協作者" });
       }
-
       const parsedBody = insertCollaboratorSchema.parse(req.body);
       const collaborator = await db.insert(collaborators).values({
         ...parsedBody,
         resourceId: parseInt(resourceId),
       }).returning();
-
       res.json(collaborator[0]);
     } catch (error) {
       res.status(400).json({ message: "新增協作者時發生錯誤" });
@@ -114,13 +103,11 @@ export function registerRoutes(app: Express): Server {
   app.post("/api/mood-entries", async (req, res) => {
     try {
       const parsedBody = insertMoodEntrySchema.parse(req.body);
-      const userId = req.user?.id; // Optional for now
-
+      const userId = req.user?.id; 
       const moodEntry = await db.insert(moodEntries).values({
         ...parsedBody,
         userId: userId || null,
       }).returning();
-
       res.json(moodEntry[0]);
     } catch (error) {
       console.error("Mood entry error:", error);
@@ -132,15 +119,10 @@ export function registerRoutes(app: Express): Server {
   app.post("/api/translate", async (req, res) => {
     try {
       const { text, targetLanguage } = req.body;
-
       if (!text || !targetLanguage) {
         return res.status(400).json({ message: "缺少必要欄位" });
       }
-
-      // TODO: Implement actual translation using Azure Translator API
-      // For now, we'll return a mock translation
       const translatedText = `[${targetLanguage}] ${text}`;
-
       res.json({ translatedText });
     } catch (error) {
       res.status(500).json({ message: "翻譯失敗" });
@@ -154,13 +136,10 @@ export function registerRoutes(app: Express): Server {
       const allAchievements = await db.query.achievements.findMany({
         orderBy: (achievements, { asc }) => [asc(achievements.category)],
       });
-
       if (userId) {
-        // If user is logged in, fetch their progress
         const userProgress = await db.query.userAchievements.findMany({
           where: eq(userAchievements.userId, userId),
         });
-
         const achievementsWithProgress = allAchievements.map(achievement => {
           const progress = userProgress.find(p => p.achievementId === achievement.id);
           return {
@@ -169,11 +148,8 @@ export function registerRoutes(app: Express): Server {
             progress: progress?.progress || 0,
           };
         });
-
         return res.json(achievementsWithProgress);
       }
-
-      // If no user, return achievements without progress
       res.json(allAchievements.map(achievement => ({
         ...achievement,
         earned: false,
@@ -190,41 +166,33 @@ export function registerRoutes(app: Express): Server {
       const { achievementId } = req.params;
       const userId = req.user?.id;
       const { progress } = req.body;
-
       if (!userId) {
         return res.status(401).json({ message: "請先登入" });
       }
-
       const achievement = await db.query.achievements.findFirst({
         where: eq(achievements.id, parseInt(achievementId)),
       });
-
       if (!achievement) {
         return res.status(404).json({ message: "找不到此成就" });
       }
-
       const existingProgress = await db.query.userAchievements.findFirst({
         where: and(
           eq(userAchievements.userId, userId),
           eq(userAchievements.achievementId, parseInt(achievementId))
         ),
       });
-
       if (existingProgress) {
-        // Update existing progress
         await db
           .update(userAchievements)
           .set({ progress })
           .where(eq(userAchievements.id, existingProgress.id));
       } else {
-        // Create new progress entry
         await db.insert(userAchievements).values({
           userId,
           achievementId: parseInt(achievementId),
           progress,
         });
       }
-
       res.json({ message: "成就進度已更新" });
     } catch (error) {
       console.error("Error updating achievement progress:", error);
@@ -236,21 +204,16 @@ export function registerRoutes(app: Express): Server {
   app.get("/api/progress-stats", async (req, res) => {
     try {
       const userId = req.user?.id;
-
-      // Get tool usage statistics
       const toolUsage = await db.query.moodEntries.findMany({
         where: userId ? eq(moodEntries.userId, userId) : undefined,
         columns: {
           toolId: true,
         },
       });
-
-      // Get mood trends
       const moodTrends = await db.query.moodEntries.findMany({
         where: userId ? eq(moodEntries.userId, userId) : undefined,
         orderBy: (moodEntries, { asc }) => [asc(moodEntries.createdAt)],
       });
-
       const moodMap: Record<string, string> = {
         'happy': '開心',
         'confused': '困惑',
@@ -258,8 +221,6 @@ export function registerRoutes(app: Express): Server {
         'challenged': '挑戰',
         'tired': '疲憊'
       };
-
-      // Process and aggregate the data
       const stats = {
         toolUsage: Object.entries(
           toolUsage.reduce((acc: Record<number, number>, curr) => {
@@ -296,7 +257,6 @@ export function registerRoutes(app: Express): Server {
             const completed = userId
               ? achievement.userAchievements.filter(ua => ua.userId === userId).length
               : achievement.userAchievements.length;
-
             acc.push({
               category: achievement.category,
               completed,
@@ -306,7 +266,6 @@ export function registerRoutes(app: Express): Server {
           }, [])
         ),
       };
-
       res.json(stats);
     } catch (error) {
       console.error("Error fetching progress stats:", error);
@@ -363,6 +322,63 @@ export function registerRoutes(app: Express): Server {
     } catch (error) {
       console.error("Error recording metric:", error);
       res.status(500).json({ message: "無法記錄系統指標" });
+    }
+  });
+
+  // Tool usage tracking endpoints
+  app.post("/api/tools/:toolId/track", async (req, res) => {
+    try {
+      const { toolId } = req.params;
+      const parsedId = parseInt(toolId);
+
+      const existingStats = await db.query.toolUsageStats.findFirst({
+        where: eq(toolUsageStats.toolId, parsedId),
+      });
+
+      if (existingStats) {
+        await db
+          .update(toolUsageStats)
+          .set({ 
+            totalClicks: existingStats.totalClicks + 1,
+            lastUsedAt: new Date()
+          })
+          .where(eq(toolUsageStats.toolId, parsedId));
+      } else {
+        await db.insert(toolUsageStats).values({
+          toolId: parsedId,
+          totalClicks: 1,
+        });
+      }
+
+      res.json({ message: "使用統計已更新" });
+    } catch (error) {
+      console.error("Error tracking tool usage:", error);
+      res.status(500).json({ message: "更新使用統計時發生錯誤" });
+    }
+  });
+
+  app.get("/api/tools/stats", async (req, res) => {
+    try {
+      const stats = await db.query.toolUsageStats.findMany({
+        orderBy: desc(toolUsageStats.totalClicks),
+      });
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching tool stats:", error);
+      res.status(500).json({ message: "獲取使用統計時發生錯誤" });
+    }
+  });
+
+  app.get("/api/tools/rankings", async (req, res) => {
+    try {
+      const stats = await db.query.toolUsageStats.findMany({
+        orderBy: desc(toolUsageStats.totalClicks),
+        limit: 5,
+      });
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching rankings:", error);
+      res.status(500).json({ message: "獲取排行榜時發生錯誤" });
     }
   });
 

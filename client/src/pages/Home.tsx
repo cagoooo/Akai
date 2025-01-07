@@ -13,6 +13,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { AchievementsList } from "@/components/AchievementsList";
 import { DiagnosticsDashboard } from "@/components/DiagnosticsDashboard";
 import { EmojiStoryTelling } from "@/components/EmojiStoryTelling";
+import { ToolRankings } from "@/components/ToolRankings";
 
 export function Home() {
   const { startTour } = useHelp();
@@ -79,20 +80,25 @@ export function Home() {
           </div>
 
           <div className="space-y-4 sm:space-y-6">
-            <div data-tour="emoji-storytelling">
-              <EmojiStoryTelling />
-            </div>
-            <div data-tour="mood-tracker">
-              <MoodTracker toolId={1} />
-            </div>
-            <div data-tour="progress-dashboard">
-              <ProgressDashboard />
-            </div>
-            <div data-tour="achievements">
-              <AchievementsList />
-            </div>
-            <div data-tour="diagnostics">
-              <DiagnosticsDashboard />
+            <div className="sticky top-4">
+              <div data-tour="tool-rankings" className="mb-4">
+                <ToolRankings />
+              </div>
+              <div data-tour="emoji-storytelling">
+                <EmojiStoryTelling />
+              </div>
+              <div data-tour="mood-tracker">
+                <MoodTracker toolId={1} />
+              </div>
+              <div data-tour="progress-dashboard">
+                <ProgressDashboard />
+              </div>
+              <div data-tour="achievements">
+                <AchievementsList />
+              </div>
+              <div data-tour="diagnostics">
+                <DiagnosticsDashboard />
+              </div>
             </div>
           </div>
         </div>
