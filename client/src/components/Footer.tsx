@@ -10,7 +10,7 @@ export function Footer() {
           <img 
             src="/assets/圈圈.png" 
             alt="Shin Men Elementary School Logo" 
-            className="h-6 w-6 sm:h-8 sm:w-8 object-contain transition-all duration-300 hover:scale-110 hover:rotate-[5deg] dark:invert"
+            className="h-6 w-6 sm:h-8 sm:w-8 object-contain transition-all duration-300 hover:scale-110 hover:rotate-[5deg] dark:invert mb-2 sm:mb-0"
             loading="lazy"
           />
         </picture>
