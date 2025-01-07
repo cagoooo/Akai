@@ -25,8 +25,8 @@ export class TourGuide extends React.Component {
           });
         }
       },
-      onDestroyStarted: () => {
-        console.log("Tour guide destroyed");
+      onDestroyed: () => {
+        console.log("Tour guide completed");
       },
       steps: [
         {
@@ -34,7 +34,8 @@ export class TourGuide extends React.Component {
           popover: {
             title: "教師介紹 👨‍🏫",
             description: "這裡介紹阿凱老師的個人資訊和專業背景，您可以了解更多關於老師的教育理念和成就。",
-            showButtons: ['next'],
+            side: "bottom",
+            align: 'start',
           }
         },
         {
@@ -42,7 +43,8 @@ export class TourGuide extends React.Component {
           popover: {
             title: "教育工具集 🛠️",
             description: "這裡展示了各種創新的教育工具，每個工具都經過精心設計，點擊工具卡片即可開始使用！",
-            showButtons: ['next', 'previous'],
+            side: "left",
+            align: 'start',
           }
         },
         {
@@ -50,7 +52,8 @@ export class TourGuide extends React.Component {
           popover: {
             title: "工具排行榜 🏆",
             description: "即時顯示最受歡迎的教育工具排名，幫助您快速找到最適合的教學資源。",
-            showButtons: ['next', 'previous'],
+            side: "left",
+            align: 'start',
           }
         },
         {
@@ -58,7 +61,8 @@ export class TourGuide extends React.Component {
           popover: {
             title: "表情符號故事創作 📖",
             description: "使用生動有趣的表情符號來創作故事，激發學生的創造力和表達能力！",
-            showButtons: ['next', 'previous'],
+            side: "left",
+            align: 'start',
           }
         },
         {
@@ -66,7 +70,8 @@ export class TourGuide extends React.Component {
           popover: {
             title: "心情追蹤器 😊",
             description: "追蹤並分析使用各種工具時的心情變化，幫助優化學習體驗。",
-            showButtons: ['next', 'previous'],
+            side: "left",
+            align: 'start',
           }
         },
         {
@@ -74,7 +79,8 @@ export class TourGuide extends React.Component {
           popover: {
             title: "學習進度儀表板 📊",
             description: "視覺化呈現學習進度和成效，讓您清楚掌握每個階段的學習情況。",
-            showButtons: ['next', 'previous'],
+            side: "left",
+            align: 'start',
           }
         },
         {
@@ -82,7 +88,8 @@ export class TourGuide extends React.Component {
           popover: {
             title: "成就系統 🌟",
             description: "完成特定目標即可解鎖成就徽章，激勵持續學習的動力！",
-            showButtons: ['next', 'previous'],
+            side: "left",
+            align: 'start',
           }
         },
         {
@@ -90,7 +97,8 @@ export class TourGuide extends React.Component {
           popover: {
             title: "系統診斷面板 🔍",
             description: "監控系統運行狀態和使用數據，確保最佳的使用體驗。",
-            showButtons: ['next', 'previous'],
+            side: "left",
+            align: 'start',
           }
         },
         {
@@ -98,7 +106,8 @@ export class TourGuide extends React.Component {
           popover: {
             title: "主題切換 🎨",
             description: "可以切換淺色/深色主題，讓您在不同光線環境下都能舒適使用。",
-            showButtons: ['previous', 'done'],
+            side: "bottom",
+            align: 'start',
           }
         }
       ],
@@ -112,7 +121,6 @@ export class TourGuide extends React.Component {
   componentWillUnmount() {
     if (this.driverObj) {
       this.driverObj.destroy();
-      console.log("TourGuide destroyed");
     }
   }
 

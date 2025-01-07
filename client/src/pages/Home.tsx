@@ -40,9 +40,13 @@ export function Home() {
             </div>
             <Button
               variant="outline"
-              onClick={startTour}
+              onClick={() => {
+                console.log("Starting site tour");
+                startTour();
+              }}
               className="text-sm sm:text-base gap-2"
               aria-label="開始網站導覽"
+              data-tour="start-tour"
             >
               <HelpCircle className="h-4 w-4" />
               網站導覽
