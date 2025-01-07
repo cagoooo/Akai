@@ -3,11 +3,12 @@ import { createServer, type Server } from "http";
 import { db } from "@db";
 import { 
   sharedResources, collaborators, users, moodEntries, 
-  achievements, userAchievements,
+  achievements, userAchievements, errorLogs, systemMetrics,
   insertSharedResourceSchema, insertCollaboratorSchema, 
-  insertMoodEntrySchema, insertUserAchievementSchema 
+  insertMoodEntrySchema, insertUserAchievementSchema,
+  insertErrorLogSchema, insertSystemMetricSchema
 } from "@db/schema";
-import { eq, and } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 
 export function registerRoutes(app: Express): Server {
   // Shared Resources endpoints
@@ -301,6 +302,58 @@ export function registerRoutes(app: Express): Server {
     } catch (error) {
       console.error("Error fetching progress stats:", error);
       res.status(500).json({ message: "獲取進度統計時發生錯誤" });
+    }
+  });
+
+  // New diagnostics endpoints
+  app.get("/api/diagnostics/error-logs", async (req, res) => {
+    try {
+      const logs = await db.query.errorLogs.findMany({
+        orderBy: desc(errorLogs.createdAt),
+        limit: 100,
+        with: {
+          user: true,
+        },
+      });
+      res.json(logs);
+    } catch (error) {
+      console.error("Error fetching logs:", error);
+      res.status(500).json({ message: "無法取得錯誤日誌" });
+    }
+  });
+
+  app.get("/api/diagnostics/metrics", async (req, res) => {
+    try {
+      const metrics = await db.query.systemMetrics.findMany({
+        orderBy: desc(systemMetrics.timestamp),
+        limit: 100,
+      });
+      res.json(metrics);
+    } catch (error) {
+      console.error("Error fetching metrics:", error);
+      res.status(500).json({ message: "無法取得系統指標" });
+    }
+  });
+
+  app.post("/api/diagnostics/log-error", async (req, res) => {
+    try {
+      const parsedBody = insertErrorLogSchema.parse(req.body);
+      const log = await db.insert(errorLogs).values(parsedBody).returning();
+      res.json(log[0]);
+    } catch (error) {
+      console.error("Error logging error:", error);
+      res.status(500).json({ message: "無法記錄錯誤" });
+    }
+  });
+
+  app.post("/api/diagnostics/record-metric", async (req, res) => {
+    try {
+      const parsedBody = insertSystemMetricSchema.parse(req.body);
+      const metric = await db.insert(systemMetrics).values(parsedBody).returning();
+      res.json(metric[0]);
+    } catch (error) {
+      console.error("Error recording metric:", error);
+      res.status(500).json({ message: "無法記錄系統指標" });
     }
   });
 

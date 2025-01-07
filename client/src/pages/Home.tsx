@@ -11,6 +11,7 @@ import { ProgressDashboard } from "@/components/ProgressDashboard";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { AchievementsList } from "@/components/AchievementsList";
+import { DiagnosticsDashboard } from "@/components/DiagnosticsDashboard";
 
 export function Home() {
   const { startTour } = useHelp();
@@ -85,6 +86,9 @@ export function Home() {
             </div>
             <div data-tour="achievements">
               <AchievementsList />
+            </div>
+            <div data-tour="diagnostics">
+              <DiagnosticsDashboard />
             </div>
           </div>
         </div>
