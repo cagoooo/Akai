@@ -30,6 +30,7 @@ export function Home() {
   return (
     <div className="min-h-screen bg-background">
       <main className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 md:py-12">
+        {/* 頂部標題和按鈕區域 */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-8 mb-6 sm:mb-8">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
             教育科技創新專區
@@ -54,26 +55,38 @@ export function Home() {
           </div>
         </div>
 
-        {/* 添加訪問計數器到醒目位置 */}
-        <div className="mb-8">
-          <VisitorCounter />
-        </div>
+        {/* 主要內容區域 - 使用flex布局進行響應式排列 */}
+        <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
+          {/* 排行榜區域 - 在手機版時移到最上方 */}
+          <div className="w-full lg:w-1/3 lg:order-last">
+            <div className="sticky top-4 space-y-4">
+              <div data-tour="tool-rankings">
+                <ToolRankings />
+              </div>
+              <RankingTutorial />
+            </div>
+          </div>
 
-        <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-8 sm:mb-12">
-          探索阿凱老師開發的教育工具，為您的教學增添創新的可能
-        </p>
+          {/* 工具卡片和其他內容區域 */}
+          <div className="w-full lg:w-2/3">
+            {/* 訪問計數器 */}
+            <div className="mb-8">
+              <VisitorCounter />
+            </div>
 
-        <section aria-labelledby="teacher-info" className="mb-8 sm:mb-12" data-tour="teacher-intro">
-          <h2 id="teacher-info" className="sr-only">教師介紹</h2>
-          <TeacherIntro isLoading={isLoading} />
-        </section>
+            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mb-8 sm:mb-12">
+              探索阿凱老師開發的教育工具，為您的教學增添創新的可能
+            </p>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12">
-          <div className="lg:col-span-2">
+            <section aria-labelledby="teacher-info" className="mb-8 sm:mb-12" data-tour="teacher-intro">
+              <h2 id="teacher-info" className="sr-only">教師介紹</h2>
+              <TeacherIntro isLoading={isLoading} />
+            </section>
+
             <section
               aria-label={isLoading ? "正在載入教育工具" : "教育工具列表"}
               data-tour="tools-grid"
-              className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6"
+              className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-8"
             >
               {isLoading ? (
                 Array.from({ length: 4 }).map((_, index) => (
@@ -89,14 +102,9 @@ export function Home() {
                 ))
               )}
             </section>
-          </div>
 
-          <div className="space-y-4 sm:space-y-6">
-            <div className="sticky top-4">
-              <div data-tour="tool-rankings" className="flex flex-col gap-2">
-                <ToolRankings />
-                <RankingTutorial />
-              </div>
+            {/* 其他組件保持在底部 */}
+            <div className="space-y-4 sm:space-y-6">
               <div data-tour="emoji-storytelling">
                 <EmojiStoryTelling />
               </div>
