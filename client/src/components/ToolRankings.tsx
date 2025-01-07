@@ -60,7 +60,12 @@ export function ToolRankings() {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <BarChart className="w-5 h-5" />
+          <motion.div
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 5 }}
+          >
+            <BarChart className="w-5 h-5" />
+          </motion.div>
           工具使用排行榜
         </CardTitle>
       </CardHeader>
