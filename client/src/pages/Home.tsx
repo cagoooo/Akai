@@ -14,6 +14,7 @@ import { AchievementsList } from "@/components/AchievementsList";
 import { DiagnosticsDashboard } from "@/components/DiagnosticsDashboard";
 import { EmojiStoryTelling } from "@/components/EmojiStoryTelling";
 import { ToolRankings } from "@/components/ToolRankings";
+import { RankingTutorial } from "@/components/RankingTutorial";
 
 export function Home() {
   const { startTour } = useTour();
@@ -40,11 +41,11 @@ export function Home() {
             <Button
               variant="outline"
               onClick={startTour}
-              className="text-sm sm:text-base"
-              aria-label="開始導覽教學"
+              className="text-sm sm:text-base gap-2"
+              aria-label="開始網站導覽"
             >
-              <HelpCircle className="mr-2 h-4 w-4" />
-              導覽教學
+              <HelpCircle className="h-4 w-4" />
+              網站導覽
             </Button>
           </div>
         </div>
@@ -83,8 +84,9 @@ export function Home() {
 
           <div className="space-y-4 sm:space-y-6">
             <div className="sticky top-4">
-              <div data-tour="tool-rankings">
+              <div data-tour="tool-rankings" className="flex flex-col gap-2">
                 <ToolRankings />
+                <RankingTutorial />
               </div>
               <div data-tour="emoji-storytelling">
                 <EmojiStoryTelling />

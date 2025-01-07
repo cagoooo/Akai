@@ -13,7 +13,6 @@ export class TourGuide extends React.Component {
       showProgress: true,
       animate: true,
       allowClose: true,
-      stageBackground: "#ffffff",
       nextBtnText: "下一步",
       prevBtnText: "上一步",
       doneBtnText: "完成",
@@ -87,7 +86,9 @@ export class TourGuide extends React.Component {
   }
 
   startTour = () => {
-    this.driverObj.drive();
+    if (this.driverObj) {
+      this.driverObj.drive();
+    }
   };
 
   render() {
