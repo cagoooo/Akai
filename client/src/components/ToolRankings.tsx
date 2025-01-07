@@ -11,34 +11,42 @@ import { Button } from "@/components/ui/button";
 
 // 擴充表情符號庫,增加更多有趣的動態表情
 const rankEmojis = [
-  ["👑", "✨", "🌟"], ["🏆", "💫", "⭐"], ["🌟", "⭐", "✨"], 
-  ["✨", "💫", "🌈"], ["🎯", "🌈", "💫"], ["🔥", "💎", "⚡"],
-  ["💫", "⚡", "🌙"], ["⭐", "🌙", "✨"]
+  ["👑", "✨", "🌟", "💫", "⭐"], 
+  ["🏆", "💫", "⭐", "✨", "🌠"],
+  ["🥇", "🌟", "⭐", "✨", "💫"], 
+  ["🎯", "🌈", "💫", "✨", "⚡"],
+  ["🔥", "💎", "⚡", "💫", "🌙"],
+  ["⚡", "🌙", "✨", "💫", "⭐"],
+  ["💫", "⭐", "✨", "🌟", "🌠"],
+  ["🌟", "💫", "✨", "⭐", "🎯"]
 ];
 
-// 排名動畫變體
+// 改進排名動畫變體
 const rankAnimationVariants = {
   hidden: { 
     opacity: 0, 
     scale: 0.8, 
     y: 20,
-    rotate: -10
+    rotate: -10,
+    filter: "blur(4px)"
   },
   visible: (custom: number) => ({
     opacity: 1,
     scale: 1,
     y: 0,
     rotate: 0,
+    filter: "blur(0px)",
     transition: {
       type: "spring",
       stiffness: 500,
       damping: 25,
       delay: custom * 0.1,
-      duration: 0.6
+      duration: 0.8
     }
   }),
   hover: {
     scale: 1.05,
+    rotate: [0, -2, 2, -1, 1, 0],
     transition: {
       type: "spring",
       stiffness: 400,
@@ -46,16 +54,18 @@ const rankAnimationVariants = {
     }
   },
   rankUp: {
-    scale: [1, 1.2, 0.9, 1.1, 1],
-    rotate: [0, 10, -10, 5, 0],
+    scale: [1, 1.3, 0.9, 1.2, 1],
+    rotate: [0, 15, -15, 8, -8, 0],
+    filter: ["blur(0px)", "blur(2px)", "blur(0px)"],
     transition: {
-      duration: 0.8,
+      duration: 1,
       ease: "easeInOut"
     }
   },
   rankDown: {
-    scale: [1, 0.9, 1.1, 0.95, 1],
-    rotate: [0, -5, 5, -3, 0],
+    scale: [1, 0.8, 1.1, 0.9, 1],
+    rotate: [0, -8, 8, -4, 4, 0],
+    filter: ["blur(0px)", "blur(1px)", "blur(0px)"],
     transition: {
       duration: 0.8,
       ease: "easeInOut"
@@ -63,6 +73,7 @@ const rankAnimationVariants = {
   }
 };
 
+// 修改 RankingIcon 組件,增加動畫效果
 const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: number }) => {
   const icons = {
     1: <Trophy className="w-6 h-6 text-yellow-500" />,
@@ -70,14 +81,21 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
     3: <Medal className="w-6 h-6 text-amber-600" />
   };
 
-  const [emoji1, emoji2, emoji3] = rankEmojis[rank - 1] || ["🎯", "✨", "🌈"];
+  const emojis = rankEmojis[rank - 1] || ["🎯", "✨", "🌈", "💫", "⚡"];
   const isTopRank = rank <= 3;
   const rankChanged = previousRank !== undefined && previousRank !== rank;
   const rankImproved = previousRank !== undefined && rank < previousRank;
 
   return (
     <motion.div
-      whileHover={{ scale: 1.2, rotate: [0, -10, 10, -5, 5, 0] }}
+      whileHover={{ 
+        scale: 1.2, 
+        rotate: [0, -10, 10, -5, 5, 0],
+        transition: {
+          duration: 0.5,
+          ease: "easeInOut"
+        }
+      }}
       animate={rankChanged ? (rankImproved ? "rankUp" : "rankDown") : undefined}
       variants={rankAnimationVariants}
       className="relative"
@@ -92,45 +110,37 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
         transition={{ 
           duration: 1.5,
           repeat: Infinity,
-          repeatDelay: rank === 1 ? 1 : 2
+          repeatDelay: rank === 1 ? 0.5 : 1
         }}
       >
         {icons[rank as keyof typeof icons] || (
           <span className="w-6 h-6 inline-flex items-center justify-center font-bold text-muted-foreground">
-            {emoji1}
-            <motion.span
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ 
-                opacity: [0.5, 1, 0.5],
-                scale: [0.8, 1.2, 0.8],
-                rotate: [0, 180, 360]
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                repeatType: "reverse"
-              }}
-              className="absolute -right-1 -top-1 text-xs"
-            >
-              {emoji2}
-            </motion.span>
-            <motion.span
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ 
-                opacity: [0.3, 0.8, 0.3],
-                scale: [0.6, 1, 0.6],
-                rotate: [0, -180, -360]
-              }}
-              transition={{
-                duration: 2.5,
-                repeat: Infinity,
-                repeatType: "reverse",
-                delay: 0.5
-              }}
-              className="absolute right-0 bottom-0 text-xs"
-            >
-              {emoji3}
-            </motion.span>
+            {emojis[0]}
+            {emojis.slice(1).map((emoji, index) => (
+              <motion.span
+                key={index}
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ 
+                  opacity: [0.3, 1, 0.3],
+                  scale: [0.8, 1.2, 0.8],
+                  rotate: [0, 180 * (index % 2 ? -1 : 1), 0]
+                }}
+                transition={{
+                  duration: 2 + index * 0.5,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                  delay: index * 0.3
+                }}
+                className={`absolute text-xs
+                  ${index === 1 ? "-right-1 -top-1" : ""}
+                  ${index === 2 ? "right-0 bottom-0" : ""}
+                  ${index === 3 ? "-left-1 top-1" : ""}
+                  ${index === 4 ? "left-0 -bottom-1" : ""}
+                `}
+              >
+                {emoji}
+              </motion.span>
+            ))}
           </span>
         )}
       </motion.div>
@@ -139,16 +149,18 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
           className="absolute -inset-2 z-0"
           initial={{ opacity: 0 }}
           animate={{ 
-            opacity: [0.2, 0.5, 0.2],
+            opacity: [0.2, 0.6, 0.2],
             scale: [0.8, 1.2, 0.8],
+            background: [
+              'radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, transparent 70%)',
+              'radial-gradient(circle, rgba(255, 215, 0, 0.25) 0%, transparent 70%)',
+              'radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, transparent 70%)'
+            ]
           }}
           transition={{
             duration: 2,
             repeat: Infinity,
             repeatType: "reverse"
-          }}
-          style={{
-            background: 'radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, transparent 70%)'
           }}
         />
       )}
@@ -158,9 +170,10 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
           animate={{ 
             opacity: [0, 1, 0], 
             y: [-10, -20, -30],
-            scale: [1, 1.2, 1]
+            scale: [1, 1.3, 1],
+            rotate: [0, -10, 10, -5, 5, 0]
           }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 1.2 }}
           className="absolute -top-2 left-1/2 transform -translate-x-1/2 text-sm"
         >
           {rank === 1 ? "🏅" : "⬆️"}
