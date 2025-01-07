@@ -6,7 +6,7 @@ import { MoodTracker } from "@/components/MoodTracker";
 import { tools } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { HelpCircle } from "lucide-react";
-import { useHelp } from "@/components/HelpProvider";
+import { useTour } from "@/components/TourProvider";
 import { ProgressDashboard } from "@/components/ProgressDashboard";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -16,7 +16,7 @@ import { EmojiStoryTelling } from "@/components/EmojiStoryTelling";
 import { ToolRankings } from "@/components/ToolRankings";
 
 export function Home() {
-  const { startTour } = useHelp();
+  const { startTour } = useTour();
 
   const { data: toolsData, isLoading } = useQuery({
     queryKey: ['/api/tools'],
@@ -34,7 +34,9 @@ export function Home() {
             教育科技創新專區
           </h1>
           <div className="flex flex-wrap gap-2">
-            <ThemeToggle />
+            <div data-tour="theme-toggle">
+              <ThemeToggle />
+            </div>
             <Button
               variant="outline"
               onClick={startTour}
@@ -81,7 +83,7 @@ export function Home() {
 
           <div className="space-y-4 sm:space-y-6">
             <div className="sticky top-4">
-              <div data-tour="tool-rankings" className="mb-4">
+              <div data-tour="tool-rankings">
                 <ToolRankings />
               </div>
               <div data-tour="emoji-storytelling">

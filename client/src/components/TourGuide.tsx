@@ -9,82 +9,83 @@ export function TourGuide() {
     return driver({
       showProgress: true,
       animate: true,
+      allowClose: true,
+      doneBtnText: "完成",
+      closeBtnText: "關閉",
+      stageBackground: "#ffffff",
+      nextBtnText: "下一步",
+      prevBtnText: "上一步",
+      onHighlightStarted: (element) => {
+        window.scrollTo({
+          top: element.getBoundingClientRect().top + window.scrollY - 100,
+          behavior: 'smooth'
+        });
+      },
       steps: [
         {
           element: '[data-tour="teacher-intro"]',
           popover: {
-            title: "歡迎來到教育科技創新專區 👋",
-            description: "這裡是阿凱老師的教育科技創新天地！讓我們一起來探索這個充滿創意的空間吧！",
-            nextBtnText: "下一步",
+            title: "教師介紹 👨‍🏫",
+            description: "這裡介紹阿凱老師的個人資訊和專業背景，您可以了解更多關於老師的教育理念和成就。",
           }
         },
         {
           element: '[data-tour="tools-grid"]',
           popover: {
             title: "教育工具集 🛠️",
-            description: "這裡展示了各種創新的教育工具，每個工具都有其獨特的功能和特色。點擊工具卡片可以直接體驗！",
-            nextBtnText: "下一步",
-            prevBtnText: "上一步"
+            description: "這裡展示了各種創新的教育工具，每個工具都經過精心設計，點擊工具卡片即可開始使用！",
           }
         },
         {
           element: '[data-tour="tool-rankings"]',
           popover: {
             title: "工具排行榜 🏆",
-            description: "查看最受歡迎的教育工具排名，了解其他教育者正在使用的熱門工具！",
-            nextBtnText: "下一步",
-            prevBtnText: "上一步"
+            description: "即時顯示最受歡迎的教育工具排名，幫助您快速找到最適合的教學資源。",
           }
         },
         {
           element: '[data-tour="emoji-storytelling"]',
           popover: {
             title: "表情符號故事創作 📖",
-            description: "運用有趣的表情符號來創作故事，讓教學更生動有趣！",
-            nextBtnText: "下一步",
-            prevBtnText: "上一步"
+            description: "使用生動有趣的表情符號來創作故事，激發學生的創造力和表達能力！",
           }
         },
         {
           element: '[data-tour="mood-tracker"]',
           popover: {
             title: "心情追蹤器 😊",
-            description: "記錄和分析使用工具時的心情變化，協助優化學習體驗。",
-            nextBtnText: "下一步",
-            prevBtnText: "上一步"
+            description: "追蹤並分析使用各種工具時的心情變化，幫助優化學習體驗。",
           }
         },
         {
           element: '[data-tour="progress-dashboard"]',
           popover: {
             title: "學習進度儀表板 📊",
-            description: "追蹤您的學習進度和成就，一目了然地掌握學習歷程。",
-            nextBtnText: "下一步",
-            prevBtnText: "上一步"
+            description: "視覺化呈現學習進度和成效，讓您清楚掌握每個階段的學習情況。",
           }
         },
         {
           element: '[data-tour="achievements"]',
           popover: {
             title: "成就系統 🌟",
-            description: "解鎖各種學習成就，讓學習過程更有成就感和動力！",
-            nextBtnText: "下一步",
-            prevBtnText: "上一步"
+            description: "完成特定目標即可解鎖成就徽章，激勵持續學習的動力！",
           }
         },
         {
           element: '[data-tour="diagnostics"]',
           popover: {
             title: "系統診斷面板 🔍",
-            description: "查看系統運行狀況和使用統計，確保最佳使用體驗。",
-            nextBtnText: "完成",
-            prevBtnText: "上一步"
+            description: "監控系統運行狀態和使用數據，確保最佳的使用體驗。",
+          }
+        },
+        {
+          element: '[data-tour="theme-toggle"]',
+          popover: {
+            title: "主題切換 🎨",
+            description: "可以切換淺色/深色主題，讓您在不同光線環境下都能舒適使用。",
           }
         }
       ],
-      onReset: () => {
-        console.log("教學導覽完成！");
-      },
     });
   }, []);
 
