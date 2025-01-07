@@ -16,6 +16,7 @@ import { EmojiStoryTelling } from "@/components/EmojiStoryTelling";
 import { ToolRankings } from "@/components/ToolRankings";
 import { RankingTutorial } from "@/components/RankingTutorial";
 import { VisitorCounter } from "@/components/VisitorCounter";
+import { Footer } from "@/components/Footer";
 
 export function Home() {
   const { startTour } = useTour();
@@ -28,8 +29,8 @@ export function Home() {
   });
 
   return (
-    <div className="min-h-screen bg-background">
-      <main className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 md:py-12">
+    <div className="min-h-screen bg-background flex flex-col">
+      <main className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 md:py-12 flex-grow">
         {/* 頂部標題和按鈕區域 */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-8 mb-6 sm:mb-8">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
@@ -124,6 +125,7 @@ export function Home() {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }
