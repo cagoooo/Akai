@@ -1,18 +1,13 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BarChart, Trophy, Medal, Crown, Star, Sparkles } from "lucide-react";
+import { BarChart, Trophy, Medal, Crown, Star, Sparkles, Volume2, VolumeX } from "lucide-react";
 import { tools } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from 'react';
-
-interface ToolRanking {
-  toolId: number;
-  totalClicks: number;
-  lastUsedAt: string;
-  categoryClicks: Record<string, number>;
-}
+import { soundManager } from "@/lib/soundManager";
+import { Button } from "@/components/ui/button";
 
 // 擴充表情符號庫,增加更多有趣的動態表情
 const rankEmojis = [
@@ -175,20 +170,40 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
   );
 };
 
+interface ToolRanking {
+  toolId: number;
+  totalClicks: number;
+  lastUsedAt: string;
+  categoryClicks: Record<string, number>;
+}
+
 export function ToolRankings() {
   const [previousRankings, setPreviousRankings] = useState<Record<number, number>>({});
+  const [isMuted, setIsMuted] = useState(soundManager.isSoundMuted());
+
   const { data: rankings, isLoading } = useQuery<ToolRanking[]>({
     queryKey: ['/api/tools/rankings'],
     refetchInterval: 2000,
     onSuccess: (data) => {
-      // 更新先前排名
       const newRankings: Record<number, number> = {};
       data.forEach((ranking, index) => {
-        newRankings[ranking.toolId] = index + 1;
+        const currentRank = index + 1;
+        const previousRank = previousRankings[ranking.toolId];
+
+        if (previousRank && currentRank !== previousRank) {
+          soundManager.playSound(currentRank < previousRank ? 'rankUp' : 'rankDown');
+        }
+
+        newRankings[ranking.toolId] = currentRank;
       });
       setPreviousRankings(newRankings);
     }
   });
+
+  const toggleMute = () => {
+    const newMutedState = soundManager.toggleMute();
+    setIsMuted(newMutedState);
+  };
 
   if (isLoading) {
     return (
@@ -234,28 +249,48 @@ export function ToolRankings() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <motion.div
-            animate={{ 
-              scale: [1, 1.2, 1],
-              rotate: [0, -5, 5, -3, 3, 0]
-            }}
-            transition={{ 
-              duration: 1.5,
-              repeat: Infinity,
-              repeatDelay: 2
-            }}
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2">
+            <motion.div
+              animate={{ 
+                scale: [1, 1.2, 1],
+                rotate: [0, -5, 5, -3, 3, 0]
+              }}
+              transition={{ 
+                duration: 1.5,
+                repeat: Infinity,
+                repeatDelay: 2
+              }}
+            >
+              <BarChart className="w-5 h-5" />
+            </motion.div>
+            <motion.span
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent"
+            >
+              工具使用排行榜
+            </motion.span>
+          </CardTitle>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleMute}
+            className="h-8 w-8 p-0"
+            aria-label={isMuted ? "開啟音效" : "關閉音效"}
           >
-            <BarChart className="w-5 h-5" />
-          </motion.div>
-          <motion.span
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent"
-          >
-            工具使用排行榜
-          </motion.span>
-        </CardTitle>
+            <motion.div
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              {isMuted ? (
+                <VolumeX className="h-4 w-4" />
+              ) : (
+                <Volume2 className="h-4 w-4" />
+              )}
+            </motion.div>
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         <AnimatePresence mode="sync">
