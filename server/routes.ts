@@ -6,11 +6,11 @@ import { db } from "@db";
 import { 
   sharedResources, collaborators, users, moodEntries, 
   achievements, userAchievements, errorLogs, systemMetrics,
-  toolUsageStats,
+  toolUsageStats, visitorStats,
   insertSharedResourceSchema, insertCollaboratorSchema, 
   insertMoodEntrySchema, insertUserAchievementSchema,
   insertErrorLogSchema, insertSystemMetricSchema,
-  insertToolUsageStatsSchema
+  insertToolUsageStatsSchema, insertVisitorStatsSchema
 } from "@db/schema";
 import { eq, and, desc } from "drizzle-orm";
 
@@ -20,6 +20,68 @@ export function registerRoutes(app: Express): Server {
     index: false,
     extensions: ["html", "ico"]
   }));
+
+  // 訪問計數器相關路由
+  app.get("/api/stats/visitors", async (_req, res) => {
+    try {
+      const stats = await db.query.visitorStats.findFirst({
+        orderBy: desc(visitorStats.id),
+      });
+
+      if (!stats) {
+        // 如果沒有記錄，創建初始記錄
+        const [newStats] = await db.insert(visitorStats).values({
+          totalVisits: 0,
+          dailyVisits: {},
+        }).returning();
+        return res.json(newStats);
+      }
+
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching visitor stats:", error);
+      res.status(500).json({ message: "獲取訪問統計時發生錯誤" });
+    }
+  });
+
+  app.post("/api/stats/visitors/increment", async (_req, res) => {
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      const stats = await db.query.visitorStats.findFirst({
+        orderBy: desc(visitorStats.id),
+      });
+
+      if (stats) {
+        const dailyVisits = stats.dailyVisits as Record<string, number>;
+        dailyVisits[today] = (dailyVisits[today] || 0) + 1;
+
+        await db
+          .update(visitorStats)
+          .set({
+            totalVisits: stats.totalVisits + 1,
+            lastVisitAt: new Date(),
+            dailyVisits
+          })
+          .where(eq(visitorStats.id, stats.id));
+
+        return res.json({
+          totalVisits: stats.totalVisits + 1,
+          dailyVisits,
+          lastVisitAt: new Date()
+        });
+      } else {
+        // 如果沒有記錄，創建初始記錄
+        const [newStats] = await db.insert(visitorStats).values({
+          totalVisits: 1,
+          dailyVisits: { [today]: 1 },
+        }).returning();
+        return res.json(newStats);
+      }
+    } catch (error) {
+      console.error("Error updating visitor stats:", error);
+      res.status(500).json({ message: "更新訪問統計時發生錯誤" });
+    }
+  });
 
   // Shared Resources endpoints
   app.post("/api/resources", async (req, res) => {

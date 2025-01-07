@@ -15,10 +15,10 @@ import { DiagnosticsDashboard } from "@/components/DiagnosticsDashboard";
 import { EmojiStoryTelling } from "@/components/EmojiStoryTelling";
 import { ToolRankings } from "@/components/ToolRankings";
 import { RankingTutorial } from "@/components/RankingTutorial";
+import { VisitorCounter } from "@/components/VisitorCounter";
 
 export function Home() {
   const { startTour } = useTour();
-
   const { data: toolsData, isLoading } = useQuery({
     queryKey: ['/api/tools'],
     queryFn: async () => {
@@ -52,6 +52,11 @@ export function Home() {
               網站導覽
             </Button>
           </div>
+        </div>
+
+        {/* 添加訪問計數器到醒目位置 */}
+        <div className="mb-8">
+          <VisitorCounter />
         </div>
 
         <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-8 sm:mb-12">
