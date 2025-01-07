@@ -1,10 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BarChart, Trophy, Medal, Crown, Star, Sparkles } from "lucide-react";
 import { tools } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from 'react';
 
 interface ToolRanking {
   toolId: number;
@@ -14,21 +15,31 @@ interface ToolRanking {
 }
 
 // 擴充表情符號庫,增加更多有趣的動態表情
-const rankEmojis = ["👑✨", "🏆💫", "🌟⭐", "✨💫", "🎯🌈", "🔥💎", "💫⚡", "⭐🌙"];
+const rankEmojis = [
+  ["👑", "✨"], ["🏆", "💫"], ["🌟", "⭐"], 
+  ["✨", "💫"], ["🎯", "🌈"], ["🔥", "💎"],
+  ["💫", "⚡"], ["⭐", "🌙"]
+];
 
 // 排名動畫變體
 const rankAnimationVariants = {
-  hidden: { opacity: 0, scale: 0.8, y: 20 },
+  hidden: { 
+    opacity: 0, 
+    scale: 0.8, 
+    y: 20,
+    rotate: -10
+  },
   visible: (custom: number) => ({
     opacity: 1,
     scale: 1,
     y: 0,
+    rotate: 0,
     transition: {
       type: "spring",
       stiffness: 500,
-      damping: 30,
+      damping: 25,
       delay: custom * 0.1,
-      duration: 0.5
+      duration: 0.6
     }
   }),
   hover: {
@@ -38,23 +49,40 @@ const rankAnimationVariants = {
       stiffness: 400,
       damping: 10
     }
+  },
+  rankUp: {
+    scale: [1, 1.2, 0.9, 1.1, 1],
+    rotate: [0, 10, -10, 5, 0],
+    transition: {
+      duration: 0.8
+    }
+  },
+  rankDown: {
+    scale: [1, 0.9, 1.1, 0.95, 1],
+    rotate: [0, -5, 5, -3, 0],
+    transition: {
+      duration: 0.8
+    }
   }
 };
 
-const RankingIcon = ({ rank }: { rank: number }) => {
+const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: number }) => {
   const icons = {
     1: <Trophy className="w-6 h-6 text-yellow-500" />,
     2: <Medal className="w-6 h-6 text-gray-400" />,
     3: <Medal className="w-6 h-6 text-amber-600" />
   };
 
-  const emoji = rankEmojis[rank - 1] || "🎯✨";
+  const [emoji1, emoji2] = rankEmojis[rank - 1] || ["🎯", "✨"];
   const isTopRank = rank <= 3;
+  const rankChanged = previousRank !== undefined && previousRank !== rank;
+  const rankImproved = previousRank !== undefined && rank < previousRank;
 
   return (
     <motion.div
       whileHover={{ scale: 1.2, rotate: [0, -10, 10, -5, 5, 0] }}
-      transition={{ duration: 0.5 }}
+      animate={rankChanged ? (rankImproved ? "rankUp" : "rankDown") : undefined}
+      variants={rankAnimationVariants}
       className="relative"
     >
       <motion.div
@@ -72,7 +100,7 @@ const RankingIcon = ({ rank }: { rank: number }) => {
       >
         {icons[rank as keyof typeof icons] || (
           <span className="w-6 h-6 inline-flex items-center justify-center font-bold text-muted-foreground">
-            {emoji.split('')[0]}
+            {emoji1}
             <motion.span
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ 
@@ -87,62 +115,69 @@ const RankingIcon = ({ rank }: { rank: number }) => {
               }}
               className="absolute -right-1 -top-1 text-xs"
             >
-              {emoji.split('')[1]}
+              {emoji2}
             </motion.span>
           </span>
         )}
       </motion.div>
       {rank === 1 && (
-        <>
-          <motion.div
-            className="absolute -top-1 -right-1"
-            animate={{
-              scale: [1, 1.5, 1],
-              opacity: [0.5, 1, 0.5],
-              rotate: [0, 180, 360]
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              repeatType: "reverse"
-            }}
-          >
-            <Sparkles className="w-3 h-3 text-yellow-400" />
-          </motion.div>
-          <motion.div
-            className="absolute -bottom-1 -left-1"
-            animate={{
-              scale: [1, 1.3, 1],
-              opacity: [0.3, 0.8, 0.3],
-              rotate: [360, 180, 0]
-            }}
-            transition={{
-              duration: 2,
-              delay: 0.5,
-              repeat: Infinity,
-              repeatType: "reverse"
-            }}
-          >
-            <Star className="w-2 h-2 text-yellow-300" />
-          </motion.div>
-        </>
+        <motion.div
+          className="absolute -inset-1 z-0"
+          initial={{ opacity: 0 }}
+          animate={{ 
+            opacity: [0.2, 0.5, 0.2],
+            scale: [0.8, 1.2, 0.8],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            repeatType: "reverse"
+          }}
+          style={{
+            background: 'radial-gradient(circle, rgba(var(--primary-rgb), 0.15) 0%, transparent 70%)'
+          }}
+        />
+      )}
+      {rankImproved && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: [0, 1, 0], y: [-10, -20, -30] }}
+          transition={{ duration: 1 }}
+          className="absolute -top-2 left-1/2 transform -translate-x-1/2 text-sm"
+        >
+          ⬆️
+        </motion.div>
       )}
     </motion.div>
   );
 };
 
 export function ToolRankings() {
+  const [previousRankings, setPreviousRankings] = useState<Record<number, number>>({});
   const { data: rankings, isLoading } = useQuery<ToolRanking[]>({
     queryKey: ['/api/tools/rankings'],
     refetchInterval: 2000,
+    onSuccess: (data) => {
+      // 更新先前排名
+      const newRankings: Record<number, number> = {};
+      data.forEach((ranking, index) => {
+        newRankings[ranking.toolId] = index + 1;
+      });
+      setPreviousRankings(newRankings);
+    }
   });
 
   if (isLoading) {
     return (
-      <Card>
+      <Card className="relative overflow-hidden">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <BarChart className="w-5 h-5" />
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            >
+              <BarChart className="w-5 h-5" />
+            </motion.div>
             工具使用排行榜
           </CardTitle>
         </CardHeader>
@@ -157,6 +192,18 @@ export function ToolRankings() {
             </div>
           ))}
         </CardContent>
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+          animate={{
+            x: ["0%", "100%"],
+            opacity: [0, 0.5, 0]
+          }}
+          transition={{
+            duration: 1.5,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
       </Card>
     );
   }
@@ -181,7 +228,6 @@ export function ToolRankings() {
           <motion.span
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
             className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent"
           >
             工具使用排行榜
@@ -189,12 +235,13 @@ export function ToolRankings() {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence mode="sync">
           {rankings?.map((ranking, index) => {
             const tool = tools.find(t => t.id === ranking.toolId);
             if (!tool) return null;
 
             const isTop = index < 3;
+            const previousRank = previousRankings[ranking.toolId];
 
             return (
               <motion.div 
@@ -206,15 +253,18 @@ export function ToolRankings() {
                 exit={{ 
                   opacity: 0, 
                   scale: 0.8,
+                  y: 20,
                   transition: { duration: 0.3 }
                 }}
                 custom={index}
                 whileHover="hover"
                 className={`
                   flex items-center space-x-4 p-3 rounded-lg 
-                  transition-colors duration-300
+                  transition-all duration-300
                   ${isTop ? 'bg-gradient-to-r from-primary/5 to-primary/10' : 'hover:bg-muted/50'}
                   mb-2 relative overflow-hidden
+                  ${previousRank && previousRank > index + 1 ? 'border-l-4 border-green-400' : ''}
+                  ${previousRank && previousRank < index + 1 ? 'border-l-4 border-orange-400' : ''}
                 `}
               >
                 {isTop && (
@@ -235,20 +285,38 @@ export function ToolRankings() {
                   className="flex-shrink-0 z-10"
                   layoutId={`rank-${ranking.toolId}`}
                 >
-                  <RankingIcon rank={index + 1} />
+                  <RankingIcon rank={index + 1} previousRank={previousRank} />
                 </motion.div>
                 <motion.div 
                   className="flex-1 min-w-0 z-10"
                   layoutId={`content-${ranking.toolId}`}
                 >
-                  <motion.p 
-                    className="text-sm font-medium text-foreground truncate"
+                  <motion.div 
+                    className="text-sm font-medium text-foreground truncate flex items-center gap-2"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: index * 0.1 }}
                   >
                     {tool.title}
-                  </motion.p>
+                    {previousRank && previousRank > index + 1 && (
+                      <motion.span
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        className="text-xs text-green-500"
+                      >
+                        ↑ {previousRank - (index + 1)}
+                      </motion.span>
+                    )}
+                    {previousRank && previousRank < index + 1 && (
+                      <motion.span
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        className="text-xs text-orange-500"
+                      >
+                        ↓ {index + 1 - previousRank}
+                      </motion.span>
+                    )}
+                  </motion.div>
                   <motion.p 
                     className="text-sm text-muted-foreground truncate"
                     initial={{ opacity: 0 }}
@@ -281,7 +349,7 @@ export function ToolRankings() {
                         repeatDelay: isTop ? 1 : 3
                       }}
                     >
-                      {rankEmojis[index]?.split('')[0] || "🎯"}
+                      {rankEmojis[index][0]}
                     </motion.span>
                     <motion.span
                       initial={{ opacity: 0 }}
@@ -302,7 +370,7 @@ export function ToolRankings() {
                           repeatDelay: 1
                         }}
                       >
-                        {rankEmojis[index]?.split('')[1] || "✨"}
+                        {rankEmojis[index][1]}
                       </motion.span>
                     )}
                   </Badge>
