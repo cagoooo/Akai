@@ -123,8 +123,8 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
   };
 
   const getShareUrls = useCallback((previewUrl?: string) => {
-    const baseUrl = window.location.origin;
-    const url = `${baseUrl}${tool.url}`;
+    // 直接使用 tool.url，不需要添加 baseUrl
+    const url = tool.url;
     const text = `Check out ${tool.title} - ${tool.description}`;
 
     return generateShareUrls({
