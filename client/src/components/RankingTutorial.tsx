@@ -9,13 +9,20 @@ export function RankingTutorial() {
     return driver({
       showProgress: true,
       animate: true,
+      allowClose: true,
+      stagePadding: 5,
+      popoverClass: "ranking-tutorial-popover",
+      stageClass: "ranking-tutorial-stage",
+      nextBtnText: "下一步",
+      prevBtnText: "上一步",
+      doneBtnText: "完成",
       steps: [
         {
           element: "#rankings-title",
           popover: {
             title: "歡迎來到工具排行榜 🏆",
             description: "這裡展示了最受歡迎的教育工具！讓我們一起來看看有哪些特色功能吧！✨",
-            showButtons: ['next'],
+            nextBtnText: "下一步",
           }
         },
         {
@@ -23,7 +30,8 @@ export function RankingTutorial() {
           popover: {
             title: "冠軍工具 👑",
             description: "第一名的工具會有特殊的金色光暈效果和動態表情符號，代表它是最受歡迎的教學利器！🌟",
-            showButtons: ['next', 'previous'],
+            nextBtnText: "下一步",
+            prevBtnText: "上一步",
           }
         },
         {
@@ -31,7 +39,8 @@ export function RankingTutorial() {
           popover: {
             title: "排名變化提示 📈",
             description: "即時觀察工具的使用趨勢！上升時會顯示 🔥，下降時會顯示 📉，讓排名變化一目了然！",
-            showButtons: ['next', 'previous'],
+            nextBtnText: "下一步",
+            prevBtnText: "上一步",
           }
         },
         {
@@ -39,7 +48,8 @@ export function RankingTutorial() {
           popover: {
             title: "使用統計資訊 📊",
             description: "這裡顯示了工具的使用次數和最近使用時間 ⏰，幫助您了解各工具的受歡迎程度！",
-            showButtons: ['next', 'previous'],
+            nextBtnText: "下一步",
+            prevBtnText: "上一步",
           }
         },
         {
@@ -47,25 +57,23 @@ export function RankingTutorial() {
           popover: {
             title: "互動區域 🎯",
             description: "點擊工具卡片可以直接前往使用！每次使用都會影響排名，努力讓您的最愛登上榜首吧！ ⭐",
-            showButtons: ['previous', 'done'],
+            prevBtnText: "上一步",
+            doneBtnText: "完成",
           }
         }
       ],
-      onReset: () => {
-        // 教學結束後的處理邏輯
-        console.log("Ranking tutorial completed! 🎉");
-      },
     });
   }, []);
 
   useEffect(() => {
-    const driverObj = createDriver();
     return () => {
+      const driverObj = createDriver();
       driverObj.destroy();
     };
   }, [createDriver]);
 
   const startTutorial = useCallback(() => {
+    console.log("Starting ranking tutorial");
     const driverObj = createDriver();
     driverObj.drive();
   }, [createDriver]);

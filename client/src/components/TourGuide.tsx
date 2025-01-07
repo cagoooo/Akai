@@ -3,10 +3,14 @@ import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 
 export class TourGuide extends React.Component {
-  private driverObj: any;
+  private driverObj: any = null;
 
   constructor(props: any) {
     super(props);
+    this.initializeDriver();
+  }
+
+  private initializeDriver() {
     this.driverObj = driver({
       showProgress: true,
       animate: true,
@@ -15,7 +19,9 @@ export class TourGuide extends React.Component {
       prevBtnText: "上一步",
       doneBtnText: "完成",
       overlayColor: "rgba(0, 0, 0, 0.7)",
-      className: "site-tour-driver",
+      stagePadding: 5,
+      popoverClass: "site-tour-popover",
+      stageClass: "site-tour-stage",
       onHighlightStarted: (element) => {
         if (element) {
           const rect = element.getBoundingClientRect();
@@ -122,17 +128,17 @@ export class TourGuide extends React.Component {
   componentWillUnmount() {
     if (this.driverObj) {
       this.driverObj.destroy();
+      this.driverObj = null;
     }
   }
 
   startTour = () => {
     try {
       console.log("Starting site tour");
-      if (this.driverObj) {
-        this.driverObj.drive();
-      } else {
-        console.error("Driver object not initialized");
+      if (!this.driverObj) {
+        this.initializeDriver();
       }
+      this.driverObj.drive();
     } catch (error) {
       console.error("Error starting tour:", error);
     }
