@@ -22,8 +22,13 @@ export function TourProvider({ children }: TourProviderProps) {
   const tourGuideRef = useRef<TourGuide>(null);
 
   const startTour = () => {
+    console.log("Starting tour from provider");
     setIsActive(true);
-    tourGuideRef.current?.startTour();
+    if (tourGuideRef.current) {
+      tourGuideRef.current.startTour();
+    } else {
+      console.error("Tour guide reference not found");
+    }
   };
 
   return (
