@@ -83,13 +83,29 @@ export const tools: EducationalTool[] = [
   }
 ];
 
+// 教師表情動態系統
+interface TeacherMood {
+  emoji: string;
+  description: string;
+}
+
+const teacherMoods: TeacherMood[] = [
+  { emoji: '👨‍🏫', description: '認真教學中' },
+  { emoji: '🧑‍🏫', description: '專注備課中' },
+  { emoji: '👨‍🎓', description: '持續學習中' },
+  { emoji: '💡', description: '靈感迸發中' },
+  { emoji: '📚', description: '研究教材中' },
+  { emoji: '✏️', description: '編寫教案中' }
+];
+
 export const teacherInfo = {
   name: "阿凱老師",
-  title: "👨‍🏫 教育科技創新者",
+  title: `${teacherMoods[0].emoji} 教育科技創新者`,  // 使用第一個表情符號作為默認值
   description: "致力於開發實用的教育工具，結合科技與教育，為師生創造更好的教學與學習體驗。",
   achievements: [
     "開發多項教育輔助工具",
     "推動教育科技創新",
     "致力於改善教學品質"
-  ]
+  ],
+  moods: teacherMoods  // 加入所有表情符號供動態使用
 };
