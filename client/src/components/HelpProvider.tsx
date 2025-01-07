@@ -45,7 +45,7 @@ export function HelpProvider({ children }: HelpProviderProps) {
             element: '[data-tour="tools-grid"]',
             popover: {
               title: '探索教育工具',
-              description: '這裡展示了所有可用的教育工具。每個工具卡片都包含詳細信息，點擊卡片可以查看更多內容並開始使用工具。',
+              description: '這裡展示了所有可用的教育工具。每個工具卡片都包含詳細訊息，點擊卡片可以查看更多內容並開始使用工具。',
               side: "bottom",
               align: 'start'
             }

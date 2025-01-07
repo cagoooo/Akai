@@ -134,7 +134,7 @@ export function registerRoutes(app: Express): Server {
       const { text, targetLanguage } = req.body;
 
       if (!text || !targetLanguage) {
-        return res.status(400).json({ message: "Missing required fields" });
+        return res.status(400).json({ message: "缺少必要欄位" });
       }
 
       // TODO: Implement actual translation using Azure Translator API
@@ -143,7 +143,7 @@ export function registerRoutes(app: Express): Server {
 
       res.json({ translatedText });
     } catch (error) {
-      res.status(500).json({ message: "Translation failed" });
+      res.status(500).json({ message: "翻譯失敗" });
     }
   });
 

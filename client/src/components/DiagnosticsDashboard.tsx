@@ -19,8 +19,6 @@ import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { LoadingScreen } from "./LoadingScreen";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
 
 interface ErrorLog {
   id: number;
@@ -57,19 +55,17 @@ export function DiagnosticsDashboard() {
   });
 
   if (isLoadingLogs || isLoadingMetrics) {
-    return <LoadingScreen message="載入診斷資訊中..." />;
+    return <LoadingScreen message="載入診斷訊息中..." />;
   }
 
-  const getLogLevelColor = (level: string) => {
+  const getLogLevelVariant = (level: string): "destructive" | "secondary" | "outline" => {
     switch (level.toLowerCase()) {
       case "error":
         return "destructive";
       case "warn":
-        return "warning";
-      case "info":
-        return "info";
-      default:
         return "secondary";
+      default:
+        return "outline";
     }
   };
 
@@ -103,7 +99,7 @@ export function DiagnosticsDashboard() {
                         {format(new Date(log.createdAt), "yyyy-MM-dd HH:mm:ss")}
                       </TableCell>
                       <TableCell>
-                        <Badge variant={getLogLevelColor(log.level)}>
+                        <Badge variant={getLogLevelVariant(log.level)}>
                           {log.level}
                         </Badge>
                       </TableCell>
