@@ -85,7 +85,7 @@ export const tools: EducationalTool[] = [
 
 export const teacherInfo = {
   name: "阿凱老師",
-  title: "教育科技創新者",
+  title: "👨‍🏫 教育科技創新者",
   description: "致力於開發實用的教育工具，結合科技與教育，為師生創造更好的教學與學習體驗。",
   achievements: [
     "開發多項教育輔助工具",
