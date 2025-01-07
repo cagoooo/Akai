@@ -12,6 +12,7 @@ import { LoadingScreen } from "@/components/LoadingScreen";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { AchievementsList } from "@/components/AchievementsList";
 import { DiagnosticsDashboard } from "@/components/DiagnosticsDashboard";
+import { EmojiStoryTelling } from "@/components/EmojiStoryTelling";
 
 export function Home() {
   const { startTour } = useHelp();
@@ -78,6 +79,9 @@ export function Home() {
           </div>
 
           <div className="space-y-4 sm:space-y-6">
+            <div data-tour="emoji-storytelling">
+              <EmojiStoryTelling />
+            </div>
             <div data-tour="mood-tracker">
               <MoodTracker toolId={1} />
             </div>
