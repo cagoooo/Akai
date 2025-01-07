@@ -232,7 +232,7 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
-  // Add new endpoint for progress statistics
+  // Get progress statistics
   app.get("/api/progress-stats", async (req, res) => {
     try {
       const userId = req.user?.id;
@@ -251,13 +251,6 @@ export function registerRoutes(app: Express): Server {
         orderBy: (moodEntries, { asc }) => [asc(moodEntries.createdAt)],
       });
 
-      // Get achievement statistics
-      const achievementStats = await db.query.achievements.findMany({
-        with: {
-          userAchievements: true,
-        },
-      });
-
       // Process and aggregate the data
       const stats = {
         toolUsage: Object.entries(
@@ -274,14 +267,21 @@ export function registerRoutes(app: Express): Server {
           if (!acc[date]) {
             acc[date] = {
               date,
-              happy: 0,
-              confused: 0,
-              satisfied: 0,
-              challenged: 0,
-              tired: 0,
+              開心: 0,
+              困惑: 0,
+              滿意: 0,
+              挑戰: 0,
+              疲憊: 0,
             };
           }
-          acc[date][curr.mood] += 1;
+          const moodMap: Record<string, string> = {
+            'happy': '開心',
+            'confused': '困惑',
+            'satisfied': '滿意',
+            'challenged': '挑戰',
+            'tired': '疲憊'
+          };
+          acc[date][moodMap[curr.mood]] += 1;
           return acc;
         }, {}),
         achievements: achievementStats.reduce((acc: any[], achievement) => {
@@ -292,7 +292,7 @@ export function registerRoutes(app: Express): Server {
           acc.push({
             category: achievement.category,
             completed,
-            total: 1, // Each achievement counts as 1
+            total: 1,
           });
           return acc;
         }, []),
