@@ -3,9 +3,6 @@ import { useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { UserCheck } from "lucide-react";
 
-const SESSION_KEY = 'visitor_session';
-const SESSION_DURATION = 30 * 60 * 1000; // 30 minutes in milliseconds
-
 export function VisitorCounter() {
   const { data: stats, refetch } = useQuery({
     queryKey: ["/api/stats/visitors"],
@@ -13,22 +10,10 @@ export function VisitorCounter() {
   });
 
   useEffect(() => {
-    const checkAndUpdateVisit = async () => {
-      const lastVisit = localStorage.getItem(SESSION_KEY);
-      const currentTime = Date.now();
-
-      if (!lastVisit || currentTime - parseInt(lastVisit) > SESSION_DURATION) {
-        try {
-          await fetch("/api/stats/visitors/increment", { method: "POST" });
-          localStorage.setItem(SESSION_KEY, currentTime.toString());
-          refetch();
-        } catch (error) {
-          console.error("Failed to increment visitor count:", error);
-        }
-      }
-    };
-
-    checkAndUpdateVisit();
+    // 在組件載入時增加訪問計數
+    fetch("/api/stats/visitors/increment", { method: "POST" })
+      .then(() => refetch())
+      .catch(console.error);
   }, [refetch]);
 
   return (
