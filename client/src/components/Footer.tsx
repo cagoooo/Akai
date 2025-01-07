@@ -5,7 +5,7 @@ export function Footer() {
         <img 
           src="/assets/圈圈.png" 
           alt="Shin Men Elementary School Logo" 
-          className="h-8 w-8 object-contain"
+          className="h-8 w-8 object-contain transition-all duration-300 hover:scale-110 hover:rotate-[5deg]"
         />
         <p>
           © {new Date().getFullYear()}{" "}
