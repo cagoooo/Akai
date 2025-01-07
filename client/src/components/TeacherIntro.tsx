@@ -6,6 +6,7 @@ import { teacherInfo } from "@/lib/data";
 import { Newspaper, Settings2 } from "lucide-react";
 import { LinkCustomizer, type LinkStyle } from "./LinkCustomizer";
 import { Skeleton } from "@/components/ui/skeleton";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface TeacherIntroProps {
   isLoading?: boolean;
@@ -13,6 +14,7 @@ interface TeacherIntroProps {
 
 export function TeacherIntro({ isLoading }: TeacherIntroProps) {
   const [isCustomizing, setIsCustomizing] = useState(false);
+  const [currentMoodIndex, setCurrentMoodIndex] = useState(0);
   const [linkStyle, setLinkStyle] = useState<LinkStyle>({
     color: "#3B82F6",
     hoverColor: "#2563EB",
@@ -24,6 +26,17 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
   });
   const [linkText, setLinkText] = useState(teacherInfo.name);
   const [linkUrl, setLinkUrl] = useState("https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5");
+
+  // Cycle through teacher moods
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentMoodIndex((prevIndex) => (prevIndex + 1) % teacherInfo.moods.length);
+    }, 5000); // Change mood every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const currentMood = teacherInfo.moods[currentMoodIndex];
 
   const linkClass = `
     text-4xl md:text-5xl lg:text-6xl font-extrabold
@@ -97,9 +110,21 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
                 <Settings2 className="h-4 w-4" />
               </Button>
             </div>
-            <p className="text-xl md:text-2xl text-primary-foreground/80 mt-2" role="doc-subtitle">
-              {teacherInfo.title}
-            </p>
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={currentMoodIndex}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="text-xl md:text-2xl text-primary-foreground/80 mt-2"
+                role="doc-subtitle"
+              >
+                {currentMood.emoji} 教育科技創新者
+                <span className="text-lg ml-2 opacity-75">
+                  ({currentMood.description})
+                </span>
+              </motion.p>
+            </AnimatePresence>
           </div>
         </div>
 
@@ -113,13 +138,16 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
           aria-label="教師成就"
         >
           {teacherInfo.achievements.map((achievement, index) => (
-            <span 
+            <motion.span 
               key={index}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: index * 0.1 }}
               className="px-3 py-1.5 rounded-full text-base md:text-lg bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-colors duration-200"
               role="listitem"
             >
               {achievement}
-            </span>
+            </motion.span>
           ))}
         </div>
 
