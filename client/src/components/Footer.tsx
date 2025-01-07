@@ -5,11 +5,11 @@ export function Footer() {
         <div className="flex justify-center w-full sm:w-auto mb-2 sm:mb-0">
           <picture>
             <source 
-              srcSet="./assets/logo-dark.svg" 
+              srcSet="/assets/圈圈-dark.png" 
               media="(prefers-color-scheme: dark)" 
             />
             <img 
-              src="./assets/logo.svg" 
+              src="/assets/圈圈.png" 
               alt="Shin Men Elementary School Logo" 
               className="h-8 w-8 sm:h-10 sm:w-10 object-contain transition-all duration-300 hover:scale-110 hover:rotate-[5deg] dark:invert"
               loading="lazy"
