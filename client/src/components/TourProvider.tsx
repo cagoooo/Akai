@@ -1,4 +1,4 @@
-import { createContext, useContext, ReactNode, useState, useCallback } from 'react';
+import { createContext, useContext, ReactNode, useState, useRef } from 'react';
 import { TourGuide } from './TourGuide';
 
 interface TourContextType {
@@ -19,14 +19,17 @@ interface TourProviderProps {
 
 export function TourProvider({ children }: TourProviderProps) {
   const [isActive, setIsActive] = useState(false);
+  const tourGuideRef = useRef<TourGuide>(null);
 
-  const startTour = useCallback(() => {
+  const startTour = () => {
     setIsActive(true);
-  }, []);
+    tourGuideRef.current?.startTour();
+  };
 
   return (
     <TourContext.Provider value={{ startTour, isActive }}>
       {children}
+      <TourGuide ref={tourGuideRef} />
     </TourContext.Provider>
   );
 }

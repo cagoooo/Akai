@@ -1,26 +1,23 @@
+import React from 'react';
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
-import { useEffect, useCallback } from "react";
 import { Button } from "./ui/button";
 import { HelpCircle } from "lucide-react";
 
-export function TourGuide() {
-  const createDriver = useCallback(() => {
-    return driver({
+export class TourGuide extends React.Component {
+  private driverObj: any;
+
+  constructor(props: any) {
+    super(props);
+    this.driverObj = driver({
       showProgress: true,
       animate: true,
       allowClose: true,
-      doneBtnText: "完成",
-      closeBtnText: "關閉",
       stageBackground: "#ffffff",
       nextBtnText: "下一步",
       prevBtnText: "上一步",
-      onHighlightStarted: (element) => {
-        window.scrollTo({
-          top: element.getBoundingClientRect().top + window.scrollY - 100,
-          behavior: 'smooth'
-        });
-      },
+      doneBtnText: "完成",
+      overlayColor: "rgba(0, 0, 0, 0.7)",
       steps: [
         {
           element: '[data-tour="teacher-intro"]',
@@ -87,22 +84,13 @@ export function TourGuide() {
         }
       ],
     });
-  }, []);
+  }
 
-  const startTour = useCallback(() => {
-    const driverObj = createDriver();
-    driverObj.drive();
-  }, [createDriver]);
+  startTour = () => {
+    this.driverObj.drive();
+  };
 
-  return (
-    <Button 
-      onClick={startTour}
-      variant="outline"
-      className="gap-2"
-      aria-label="開始網站導覽"
-    >
-      <HelpCircle className="h-4 w-4" />
-      導覽教學
-    </Button>
-  );
+  render() {
+    return null;
+  }
 }
