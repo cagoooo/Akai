@@ -15,6 +15,7 @@ export class TourGuide extends React.Component {
       prevBtnText: "上一步",
       doneBtnText: "完成",
       overlayColor: "rgba(0, 0, 0, 0.7)",
+      className: "site-tour-driver",
       onHighlightStarted: (element) => {
         if (element) {
           const rect = element.getBoundingClientRect();
@@ -26,7 +27,7 @@ export class TourGuide extends React.Component {
         }
       },
       onDestroyed: () => {
-        console.log("Tour guide completed");
+        console.log("Site tour completed");
       },
       steps: [
         {
@@ -126,7 +127,7 @@ export class TourGuide extends React.Component {
 
   startTour = () => {
     try {
-      console.log("Starting tour guide");
+      console.log("Starting site tour");
       if (this.driverObj) {
         this.driverObj.drive();
       } else {

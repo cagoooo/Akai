@@ -53,14 +53,13 @@ export function RankingTutorial() {
       ],
       onReset: () => {
         // 教學結束後的處理邏輯
-        console.log("Tutorial completed! 🎉");
+        console.log("Ranking tutorial completed! 🎉");
       },
     });
   }, []);
 
   useEffect(() => {
     const driverObj = createDriver();
-
     return () => {
       driverObj.destroy();
     };
@@ -76,7 +75,8 @@ export function RankingTutorial() {
       onClick={startTutorial}
       variant="outline"
       size="sm"
-      className="gap-2"
+      className="gap-2 w-full"
+      id="ranking-tutorial-btn"
     >
       <Trophy className="w-4 h-4" />
       開始排行榜教學
