@@ -9,19 +9,43 @@ export function cn(...inputs: ClassValue[]) {
 interface ShareURLOptions {
   url: string;
   title: string;
+  text?: string;
   description?: string;
+  image?: string;
 }
 
 export function generateShareUrls(options: ShareURLOptions) {
-  const encodedUrl = encodeURIComponent(options.url);
-  const encodedTitle = encodeURIComponent(options.title);
-  const encodedDescription = options.description ? encodeURIComponent(options.description) : '';
+  const params = new URLSearchParams();
+
+  // 為每個平台添加必要的參數
+  if (options.url) params.append('url', options.url);
+  if (options.title) params.append('title', options.title);
+  if (options.text) params.append('text', options.text);
+  if (options.description) params.append('description', options.description);
+  if (options.image) params.append('image', options.image);
+
+  const twitterParams = new URLSearchParams();
+  twitterParams.append('url', options.url);
+  twitterParams.append('text', options.text || options.title);
+  if (options.image) twitterParams.append('image', options.image);
+
+  const facebookParams = new URLSearchParams();
+  facebookParams.append('u', options.url);
+
+  const linkedinParams = new URLSearchParams();
+  linkedinParams.append('url', options.url);
+  linkedinParams.append('title', options.title);
+  if (options.description) linkedinParams.append('summary', options.description);
+
+  const lineParams = new URLSearchParams();
+  lineParams.append('url', options.url);
+  if (options.text) lineParams.append('text', options.text);
 
   return {
-    twitter: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`,
-    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
-    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
-    line: `https://social-plugins.line.me/lineit/share?url=${encodedUrl}`,
+    twitter: `https://twitter.com/intent/tweet?${twitterParams.toString()}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?${facebookParams.toString()}`,
+    linkedin: `https://www.linkedin.com/shareArticle?mini=true&${linkedinParams.toString()}`,
+    line: `https://social-plugins.line.me/lineit/share?${lineParams.toString()}`,
   };
 }
 

@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Share2, Users, Settings2, Twitter as TwitterIcon, Facebook as FacebookIcon, Linkedin as LinkedinIcon, MessageCircle, BarChart } from "lucide-react";
 import { useState, useCallback } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"; // Added useQueryClient
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as Icons from "lucide-react";
 import type { EducationalTool } from "@/lib/data";
 import type { LucideIcon } from 'lucide-react';
@@ -17,6 +17,7 @@ import { CustomizationTutorialProvider } from "./CustomizationTutorial";
 import { motion, AnimatePresence } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SocialPreviewImage } from "./SocialPreviewImage";
+import { generateShareUrls } from "@/lib/utils";
 
 // Enhanced category colors with hover states and transitions
 const categoryColors = {
@@ -70,7 +71,7 @@ interface ToolCardProps {
 }
 
 export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
-  const queryClient = useQueryClient(); // Added useQueryClient hook
+  const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [isCustomizeOpen, setIsCustomizeOpen] = useState(false);
@@ -126,19 +127,13 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
     const url = `${baseUrl}${tool.url}`;
     const text = `Check out ${tool.title} - ${tool.description}`;
 
-    const params = new URLSearchParams({
+    return generateShareUrls({
+      url,
       title: tool.title,
-      text: text,
-      url: url,
-      ...(previewUrl && { image: previewUrl })
+      text,
+      description: tool.description,
+      image: previewUrl
     });
-
-    return {
-      twitter: `https://twitter.com/intent/tweet?${params.toString()}`,
-      facebook: `https://www.facebook.com/sharer/sharer.php?${params.toString()}`,
-      linkedin: `https://www.linkedin.com/shareArticle?mini=true&${params.toString()}`,
-      line: `https://social-plugins.line.me/lineit/share?${params.toString()}`
-    };
   }, [tool]);
 
   return (
