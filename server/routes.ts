@@ -390,6 +390,70 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
+  // New endpoint for tour completion reward
+  app.post("/api/tour/complete", async (req, res) => {
+    try {
+      const userId = req.user?.id;
+
+      // Create tour completion achievement if it doesn't exist
+      const tourAchievement = await db.query.achievements.findFirst({
+        where: eq(achievements.name, "網站導覽達人")
+      });
+
+      if (!tourAchievement) {
+        const [achievement] = await db.insert(achievements).values({
+          name: "網站導覽達人",
+          description: "完成網站全部功能的導覽教學",
+          icon: "🎯",
+          category: "tutorial",
+          requirements: {
+            type: "tour_completion",
+            required: true
+          }
+        }).returning();
+
+        if (userId) {
+          await db.insert(userAchievements).values({
+            userId,
+            achievementId: achievement.id,
+            progress: { completed: true }
+          });
+        }
+
+        return res.json({
+          message: "恭喜獲得「網站導覽達人」成就！",
+          achievement: achievement
+        });
+      }
+
+      // If achievement exists and user is logged in, assign it
+      if (userId && tourAchievement) {
+        const existingUserAchievement = await db.query.userAchievements.findFirst({
+          where: and(
+            eq(userAchievements.userId, userId),
+            eq(userAchievements.achievementId, tourAchievement.id)
+          )
+        });
+
+        if (!existingUserAchievement) {
+          await db.insert(userAchievements).values({
+            userId,
+            achievementId: tourAchievement.id,
+            progress: { completed: true }
+          });
+        }
+      }
+
+      res.json({
+        message: "恭喜完成網站導覽！",
+        achievement: tourAchievement
+      });
+    } catch (error) {
+      console.error("Error handling tour completion:", error);
+      res.status(500).json({ message: "處理導覽完成獎勵時發生錯誤" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

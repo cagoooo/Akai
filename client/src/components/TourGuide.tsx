@@ -1,9 +1,13 @@
 import React from 'react';
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
+import { useToast } from "@/hooks/use-toast";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { Trophy } from "lucide-react";
 
 export class TourGuide extends React.Component {
   private driverObj: any = null;
+  private toast: any;
 
   constructor(props: any) {
     super(props);
@@ -31,8 +35,28 @@ export class TourGuide extends React.Component {
           });
         }
       },
-      onDestroyed: () => {
+      onDestroyed: async () => {
         console.log("Site tour completed");
+        try {
+          const response = await fetch('/api/tour/complete', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          const data = await response.json();
+
+          // Show achievement notification
+          if (window.toast) {
+            window.toast({
+              title: "🎉 導覽完成！",
+              description: data.message,
+              duration: 5000,
+            });
+          }
+        } catch (error) {
+          console.error("Error recording tour completion:", error);
+        }
       },
       steps: [
         {
@@ -145,5 +169,12 @@ export class TourGuide extends React.Component {
 
   render() {
     return null;
+  }
+}
+
+// Add toast to window for access in onDestroyed callback
+declare global {
+  interface Window {
+    toast?: (props: { title: string; description: string; duration?: number }) => void;
   }
 }
