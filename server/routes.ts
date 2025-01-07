@@ -1,5 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import express from "express";
+import path from "path";
 import { db } from "@db";
 import { 
   sharedResources, collaborators, users, moodEntries, 
@@ -13,6 +15,12 @@ import {
 import { eq, and, desc } from "drizzle-orm";
 
 export function registerRoutes(app: Express): Server {
+  // Serve static files from the public directory
+  app.use(express.static(path.join(process.cwd(), "client/public"), {
+    index: false,
+    extensions: ["html", "ico"]
+  }));
+
   // Shared Resources endpoints
   app.post("/api/resources", async (req, res) => {
     try {
