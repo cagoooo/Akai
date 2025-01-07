@@ -1,6 +1,6 @@
 import { Switch, Route } from "wouter";
 import { Home } from "@/pages/Home";
-import { HelpProvider } from "@/components/HelpProvider";
+import { TourProvider } from "@/components/TourProvider";
 import { Toaster } from "@/components/ui/toaster";
 import { BreakpointIndicator } from "@/components/BreakpointIndicator";
 import { PageTransition } from "@/components/PageTransition";
@@ -10,7 +10,7 @@ import { queryClient } from "./lib/queryClient";
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <HelpProvider>
+      <TourProvider>
         <PageTransition>
           <Switch>
             <Route path="/" component={Home} />
@@ -18,7 +18,7 @@ function App() {
         </PageTransition>
         <Toaster />
         <BreakpointIndicator />
-      </HelpProvider>
+      </TourProvider>
     </QueryClientProvider>
   );
 }
