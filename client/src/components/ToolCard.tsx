@@ -122,7 +122,7 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
     setIsCustomizeOpen(true);
   };
 
-  const generateShareUrls = useCallback((previewUrl?: string) => {
+  const getShareUrls = useCallback((previewUrl?: string) => {
     const baseUrl = window.location.origin;
     const url = `${baseUrl}${tool.url}`;
     const text = `Check out ${tool.title} - ${tool.description}`;
@@ -402,7 +402,7 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
                       <Button
                         variant="outline"
                         className="flex-1 min-w-[120px]"
-                        onClick={() => window.open(generateShareUrls(previewImage)[platform.name.toLowerCase()], '_blank')}
+                        onClick={() => window.open(getShareUrls(previewImage)[platform.name.toLowerCase()], '_blank')}
                         aria-label={`分享到 ${platform.name}`}
                       >
                         <platform.icon className={`w-4 h-4 mr-2 ${platform.color}`} aria-hidden="true" />
