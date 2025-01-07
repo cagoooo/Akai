@@ -2,11 +2,18 @@ export function Footer() {
   return (
     <footer className="w-full py-4 px-6 mt-auto border-t border-border bg-background">
       <div className="container mx-auto flex items-center justify-center gap-3 text-sm text-muted-foreground">
-        <img 
-          src="/assets/圈圈.png" 
-          alt="Shin Men Elementary School Logo" 
-          className="h-8 w-8 object-contain transition-all duration-300 hover:scale-110 hover:rotate-[5deg]"
-        />
+        <picture>
+          <source 
+            srcSet="/assets/圈圈-dark.png" 
+            media="(prefers-color-scheme: dark)" 
+          />
+          <img 
+            src="/assets/圈圈.png" 
+            alt="Shin Men Elementary School Logo" 
+            className="h-8 w-8 object-contain transition-all duration-300 hover:scale-110 hover:rotate-[5deg] dark:invert"
+            loading="lazy"
+          />
+        </picture>
         <p>
           © {new Date().getFullYear()}{" "}
           <a 
