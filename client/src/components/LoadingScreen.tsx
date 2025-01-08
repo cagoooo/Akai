@@ -33,9 +33,11 @@ export function LoadingScreen({ message = "載入中" }: LoadingScreenProps) {
   const [currentTriviaIndex, setCurrentTriviaIndex] = useState(0);
 
   useEffect(() => {
+    // 延長間隔時間到 15 秒
     const interval = setInterval(() => {
       setCurrentTriviaIndex((prev) => (prev + 1) % trivia.length);
-    }, 8000); // 增加到 8 秒
+      console.log('Trivia changed at:', new Date().toISOString()); // 追蹤 interval 執行
+    }, 15000);
 
     return () => clearInterval(interval);
   }, []);
@@ -59,14 +61,14 @@ export function LoadingScreen({ message = "載入中" }: LoadingScreenProps) {
               {trivia[currentTriviaIndex].icon}
             </motion.div>
 
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={currentTriviaIndex}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ 
-                  duration: 0.6,  // 增加動畫時間
+                  duration: 1,  // 增加動畫時間到 1 秒
                   ease: "easeInOut"
                 }}
                 className="space-y-2"
@@ -79,41 +81,21 @@ export function LoadingScreen({ message = "載入中" }: LoadingScreenProps) {
             </AnimatePresence>
 
             <div className="flex items-center gap-2 mt-4">
-              <motion.div
-                animate={{
-                  scale: [1, 0.8, 1],
-                  opacity: [1, 0.5, 1],
-                }}
-                transition={{
-                  duration: 1.5, // 增加動畫時間
-                  repeat: Infinity,
-                }}
-                className="w-2 h-2 rounded-full bg-primary"
-              />
-              <motion.div
-                animate={{
-                  scale: [1, 0.8, 1],
-                  opacity: [1, 0.5, 1],
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  delay: 0.3,
-                }}
-                className="w-2 h-2 rounded-full bg-primary"
-              />
-              <motion.div
-                animate={{
-                  scale: [1, 0.8, 1],
-                  opacity: [1, 0.5, 1],
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  delay: 0.6,
-                }}
-                className="w-2 h-2 rounded-full bg-primary"
-              />
+              {[0, 1, 2].map((i) => (
+                <motion.div
+                  key={i}
+                  animate={{
+                    scale: [1, 0.8, 1],
+                    opacity: [1, 0.5, 1],
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    delay: i * 0.3,
+                  }}
+                  className="w-2 h-2 rounded-full bg-primary"
+                />
+              ))}
             </div>
 
             <p className="text-sm text-muted-foreground">{message}</p>
