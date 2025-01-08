@@ -15,9 +15,10 @@ import type { IconCustomization } from "./IconCustomizer";
 interface PreviewGeneratorProps {
   tool: EducationalTool;
   customization?: IconCustomization;
+  onLoad?: () => void;
 }
 
-export function PreviewGenerator({ tool, customization }: PreviewGeneratorProps) {
+export function PreviewGenerator({ tool, customization, onLoad }: PreviewGeneratorProps) {
   // 获取渐变色，优先使用自定义颜色
   const getGradientColors = () => {
     if (customization?.primaryColor && customization?.secondaryColor) {
@@ -89,12 +90,25 @@ export function PreviewGenerator({ tool, customization }: PreviewGeneratorProps)
   const iconSize = customization?.size || 1;
   const backgroundOpacity = customization?.opacity ?? 0.1;
 
+  // Call onLoad callback when SVG is loaded
+  const handleLoad = () => {
+    onLoad?.();
+  };
+
   return (
     <svg
       width="100%"
       height="100%"
       viewBox="0 0 800 450"
       xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label={`${tool.title} 預覽圖`}
+      onLoad={handleLoad}
+      style={{
+        width: '100%',
+        height: 'auto',
+        aspectRatio: '16/9',
+      }}
     >
       {/* 定义渐变 */}
       <defs>
@@ -113,7 +127,10 @@ export function PreviewGenerator({ tool, customization }: PreviewGeneratorProps)
       <rect width="800" height="450" fill={`url(#${gradientId})`} />
 
       {/* 主要图标区域 */}
-      <g transform="translate(350, 175)">
+      <g 
+        transform="translate(350, 175)"
+        role="presentation"
+      >
         <circle 
           cx="50" 
           cy="50" 
@@ -162,15 +179,19 @@ export function PreviewGenerator({ tool, customization }: PreviewGeneratorProps)
         fill="#1F2937"
         textAnchor="middle"
         dominantBaseline="middle"
+        role="heading"
+        aria-level="2"
       >
         {tool.title}
       </text>
 
       {/* 装饰元素 */}
-      <circle cx="200" cy="100" r={5 * iconSize} fill={start} opacity="0.5" />
-      <circle cx="600" cy="350" r={5 * iconSize} fill={end} opacity="0.5" />
-      <circle cx="150" cy="400" r={3 * iconSize} fill={start} opacity="0.3" />
-      <circle cx="650" cy="50" r={3 * iconSize} fill={end} opacity="0.3" />
+      <g role="presentation">
+        <circle cx="200" cy="100" r={5 * iconSize} fill={start} opacity="0.5" />
+        <circle cx="600" cy="350" r={5 * iconSize} fill={end} opacity="0.5" />
+        <circle cx="150" cy="400" r={3 * iconSize} fill={start} opacity="0.3" />
+        <circle cx="650" cy="50" r={3 * iconSize} fill={end} opacity="0.3" />
+      </g>
     </svg>
   );
 }
