@@ -43,85 +43,95 @@ export function LoadingScreen({ message = "載入中" }: LoadingScreenProps) {
   };
 
   return (
-    <div className="min-h-[300px] flex items-center justify-center p-4">
+    <>
+      {/* 知識小提示覆蓋層 */}
       <AnimatePresence>
         {!isDismissed && (
           <motion.div
-            key={currentTriviaIndex}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ 
-              duration: 1,
-              ease: "easeInOut"
-            }}
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-xl mx-auto z-[100] bg-background rounded-lg shadow-2xl border p-6"
-            role="dialog"
-            aria-label="學習小提示"
+            key="trivia-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[100]"
           >
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute right-4 top-4"
-              onClick={handleDismiss}
-              aria-label="關閉提示"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-
             <motion.div
-              animate={{
-                scale: [1, 1.2, 1],
+              key={currentTriviaIndex}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ 
+                duration: 0.5,
+                ease: "easeOut"
               }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="text-4xl"
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-xl mx-auto bg-background rounded-lg shadow-2xl border p-6 z-[101]"
+              role="dialog"
+              aria-label="學習小提示"
             >
-              {trivia[currentTriviaIndex].icon}
-            </motion.div>
-
-            <div className="space-y-2">
-              <p className="text-lg font-medium text-primary">你知道嗎？</p>
-              <p className="text-muted-foreground text-base leading-relaxed">
-                {trivia[currentTriviaIndex].fact}
-              </p>
-            </div>
-
-            <div className="flex items-center justify-between mt-4">
-              <div className="flex gap-2">
-                {[0, 1, 2].map((i) => (
-                  <motion.div
-                    key={i}
-                    animate={{
-                      scale: [1, 0.8, 1],
-                      opacity: [1, 0.5, 1],
-                    }}
-                    transition={{
-                      duration: 1.5,
-                      repeat: Infinity,
-                      delay: i * 0.3,
-                    }}
-                    className="w-2 h-2 rounded-full bg-primary"
-                  />
-                ))}
-              </div>
               <Button
                 variant="ghost"
-                size="sm"
-                onClick={handleNext}
-                className="text-sm"
+                size="icon"
+                className="absolute right-4 top-4"
+                onClick={handleDismiss}
+                aria-label="關閉提示"
               >
-                下一個提示
+                <X className="h-4 w-4" />
               </Button>
-            </div>
+
+              <motion.div
+                animate={{
+                  scale: [1, 1.2, 1],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="text-4xl text-center mb-4"
+              >
+                {trivia[currentTriviaIndex].icon}
+              </motion.div>
+
+              <div className="space-y-4 text-center">
+                <h3 className="text-lg font-medium text-primary">你知道嗎？</h3>
+                <p className="text-muted-foreground text-base leading-relaxed">
+                  {trivia[currentTriviaIndex].fact}
+                </p>
+              </div>
+
+              <div className="flex items-center justify-between mt-6">
+                <div className="flex gap-2">
+                  {trivia.map((_, i) => (
+                    <motion.div
+                      key={i}
+                      animate={{
+                        scale: i === currentTriviaIndex ? [1, 0.8, 1] : 1,
+                        opacity: i === currentTriviaIndex ? 1 : 0.3,
+                      }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: i === currentTriviaIndex ? Infinity : 0,
+                      }}
+                      className="w-2 h-2 rounded-full bg-primary"
+                    />
+                  ))}
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleNext}
+                  className="text-sm"
+                >
+                  下一個提示
+                </Button>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <p className="text-sm text-muted-foreground">{message}</p>
-    </div>
+      {/* 載入訊息 */}
+      <div className="min-h-[300px] flex items-center justify-center p-4">
+        <p className="text-sm text-muted-foreground">{message}</p>
+      </div>
+    </>
   );
 }
