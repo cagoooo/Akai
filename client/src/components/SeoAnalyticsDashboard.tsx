@@ -35,7 +35,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
-import { ChevronUpIcon, ChevronDownIcon, RefreshCw } from "lucide-react";
+import { ChevronUpIcon, ChevronDownIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface SeoReport {
@@ -65,31 +65,42 @@ interface KeywordRanking {
   difficulty?: number;
 }
 
+interface TrendDataPoint {
+  timestamp: string;
+  '整體分數': number;
+  '行動裝置': number;
+  'SEO': number;
+  '最佳實踐': number;
+  '無障礙性': number;
+}
+
 export function SeoAnalyticsDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [isOpen, setIsOpen] = useState(true);
   const { toast } = useToast();
 
-  const { data: reports, isLoading: isLoadingReports, error: reportsError } = useQuery<SeoReport[]>({
+  const { data: reports = [], isLoading: isLoadingReports, error: reportsError } = useQuery<SeoReport[]>({
     queryKey: ["/api/seo/reports"],
     refetchInterval: 30000, // Refresh every 30 seconds
-    onError: (error: Error) => {
+    retry: 3,
+    onError: () => {
       toast({
         variant: "destructive",
         title: "載入失敗",
-        description: `無法載入 SEO 報告：${error.message}`,
+        description: "無法載入 SEO 報告，請稍後再試",
       });
     },
   });
 
-  const { data: keywords, isLoading: isLoadingKeywords, error: keywordsError } = useQuery<KeywordRanking[]>({
+  const { data: keywords = [], isLoading: isLoadingKeywords, error: keywordsError } = useQuery<KeywordRanking[]>({
     queryKey: ["/api/seo/keywords"],
     refetchInterval: 30000, // Refresh every 30 seconds
-    onError: (error: Error) => {
+    retry: 3,
+    onError: () => {
       toast({
         variant: "destructive",
         title: "載入失敗",
-        description: `無法載入關鍵字排名：${error.message}`,
+        description: "無法載入關鍵字排名，請稍後再試",
       });
     },
   });
@@ -113,16 +124,16 @@ export function SeoAnalyticsDashboard() {
     );
   }
 
-  const latestReport = reports?.[0];
+  const latestReport = reports[0];
 
   // 準備趨勢數據
-  const trendData = reports?.map(report => ({
+  const trendData: TrendDataPoint[] = reports.map(report => ({
     timestamp: format(new Date(report.timestamp), "MM/dd"),
-    整體分數: report.overallScore,
-    行動裝置: report.mobileScore,
-    SEO: report.seoScore,
-    最佳實踐: report.bestPracticesScore,
-    無障礙性: report.accessibilityScore,
+    '整體分數': report.overallScore,
+    '行動裝置': report.mobileScore,
+    'SEO': report.seoScore,
+    '最佳實踐': report.bestPracticesScore,
+    '無障礙性': report.accessibilityScore,
   })).reverse();
 
   return (
@@ -222,7 +233,7 @@ export function SeoAnalyticsDashboard() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {keywords?.map((keyword) => (
+                      {keywords.map((keyword) => (
                         <TableRow key={keyword.id}>
                           <TableCell>{keyword.keyword}</TableCell>
                           <TableCell>{keyword.position}</TableCell>
