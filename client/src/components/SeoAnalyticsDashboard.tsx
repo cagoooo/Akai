@@ -117,50 +117,56 @@ export function SeoAnalyticsDashboard() {
               </TabsList>
 
               <TabsContent value="overview" className="space-y-4">
-                {latestReport && (
-                  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    <Card>
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium">整體分數</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="text-2xl font-bold">{latestReport.overallScore}</div>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium">載入時間</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="text-2xl font-bold">{latestReport.pageLoadTime}ms</div>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-sm font-medium">行動裝置分數</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="text-2xl font-bold">{latestReport.mobileScore}</div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                )}
+                {latestReport ? (
+                  <>
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-sm font-medium">整體分數</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-2xl font-bold">{latestReport.overallScore}</div>
+                        </CardContent>
+                      </Card>
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-sm font-medium">載入時間</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-2xl font-bold">{latestReport.pageLoadTime}ms</div>
+                        </CardContent>
+                      </Card>
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-sm font-medium">行動裝置分數</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-2xl font-bold">{latestReport.mobileScore}</div>
+                        </CardContent>
+                      </Card>
+                    </div>
 
-                {latestReport?.details.issues.length > 0 && (
-                  <Card className="mt-4">
-                    <CardHeader>
-                      <CardTitle className="text-sm font-medium">待改進項目</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <ul className="list-disc pl-4 space-y-2">
-                        {latestReport.details.issues.map((issue, index) => (
-                          <li key={index} className="text-sm text-muted-foreground">
-                            {issue}
-                          </li>
-                        ))}
-                      </ul>
-                    </CardContent>
-                  </Card>
+                    {latestReport.details.issues.length > 0 && (
+                      <Card className="mt-4">
+                        <CardHeader>
+                          <CardTitle className="text-sm font-medium">待改進項目</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <ul className="list-disc pl-4 space-y-2">
+                            {latestReport.details.issues.map((issue, index) => (
+                              <li key={index} className="text-sm text-muted-foreground">
+                                {issue}
+                              </li>
+                            ))}
+                          </ul>
+                        </CardContent>
+                      </Card>
+                    )}
+                  </>
+                ) : (
+                  <div className="text-center text-muted-foreground">
+                    尚無 SEO 分析報告
+                  </div>
                 )}
               </TabsContent>
 
