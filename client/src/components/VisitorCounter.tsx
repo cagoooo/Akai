@@ -1,15 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { UserCheck } from "lucide-react";
+import { UserCheck, Award } from "lucide-react";
 import { motion, animate, useMotionValue, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 interface StatsResponse {
   totalVisits: number;
   dailyVisits: Record<string, number>;
   lastVisitAt?: string;
 }
+
+const MILESTONES = [100, 500, 1000, 5000, 10000];
 
 function AnimatedNumber({ value }: { value: number }) {
   const count = useMotionValue(0);
@@ -42,6 +45,9 @@ function AnimatedNumber({ value }: { value: number }) {
 }
 
 export function VisitorCounter() {
+  const { toast } = useToast();
+  const lastMilestoneRef = useRef<number>(0);
+
   const { data: stats, refetch } = useQuery<StatsResponse>({
     queryKey: ["/api/stats/visitors"],
     refetchInterval: 60000,
@@ -53,16 +59,56 @@ export function VisitorCounter() {
       .catch(console.error);
   }, [refetch]);
 
+  useEffect(() => {
+    if (!stats?.totalVisits) return;
+
+    // 檢查是否達到新的里程碑
+    const milestone = MILESTONES.find(m => 
+      stats.totalVisits >= m && m > lastMilestoneRef.current
+    );
+
+    if (milestone) {
+      lastMilestoneRef.current = milestone;
+
+      // 顯示里程碑達成通知
+      toast({
+        title: (
+          <div className="flex items-center gap-2">
+            <Award className="h-5 w-5 text-yellow-400" />
+            <span>里程碑達成！</span>
+          </div>
+        ),
+        description: `恭喜！網站訪問次數已突破 ${milestone} 次！`,
+        duration: 5000,
+      });
+
+      // 播放成就解鎖動畫
+      const card = document.querySelector('.visitor-counter-card');
+      if (card) {
+        card.animate([
+          { transform: 'scale(1)', boxShadow: '0 0 0 rgba(59, 130, 246, 0)' },
+          { transform: 'scale(1.05)', boxShadow: '0 0 30px rgba(59, 130, 246, 0.5)' },
+          { transform: 'scale(1)', boxShadow: '0 0 0 rgba(59, 130, 246, 0)' }
+        ], {
+          duration: 1000,
+          easing: 'ease-in-out'
+        });
+      }
+    }
+  }, [stats?.totalVisits, toast]);
+
   const totalVisits = stats?.totalVisits || 0;
   const todayVisits = stats?.dailyVisits?.[
     new Date().toISOString().split("T")[0]
   ] || 0;
 
   return (
-    <Card className={cn(
-      "bg-primary text-primary-foreground",
-      "transform transition-all duration-300 hover:scale-105"
-    )}>
+    <Card 
+      className={cn(
+        "bg-primary text-primary-foreground visitor-counter-card",
+        "transform transition-all duration-300 hover:scale-105"
+      )}
+    >
       <CardContent className="pt-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
