@@ -4,9 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 export function AmpHome() {
   return (
     <div className="min-h-screen bg-background">
-      <main className="container mx-auto px-4 sm:px-6 py-6">
-        {/* AMP-compliant header */}
-        <div className="flex flex-col gap-4 mb-6">
+      <main className="container">
+        {/* Header */}
+        <div className="space-y-4">
           <h1 className="text-3xl font-bold">
             教育科技創新專區
           </h1>
@@ -42,8 +42,8 @@ export function AmpHome() {
           </div>
         </amp-carousel>
 
-        {/* Static content for AMP version */}
-        <div className="grid gap-4 mt-6">
+        {/* Feature Grid */}
+        <div className="grid">
           <Card>
             <CardHeader>
               <CardTitle>最新教育工具</CardTitle>

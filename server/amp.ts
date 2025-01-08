@@ -35,33 +35,78 @@ ampRouter.get('/', (_req, res) => {
 
         <style amp-custom>
           /* AMP-compliant styles */
+          body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #374151;
+          }
           .container { 
             max-width: 1200px; 
             margin: 0 auto; 
-            padding: 0 1rem; 
+            padding: 1rem;
           }
-          .bg-background { background-color: #ffffff; }
-          .space-y-6 > * + * { margin-top: 1.5rem; }
-          .grid { display: grid; gap: 1rem; }
-          .font-bold { font-weight: bold; }
-          .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+          .bg-background { 
+            background-color: #ffffff; 
+          }
+          .space-y-6 > * + * { 
+            margin-top: 1.5rem; 
+          }
+          .grid { 
+            display: grid; 
+            gap: 2rem;
+            margin: 2rem 0;
+          }
+          .font-bold { 
+            font-weight: bold; 
+          }
+          .text-3xl { 
+            font-size: 1.875rem; 
+            line-height: 2.25rem;
+            margin-bottom: 1rem;
+          }
+          .text-lg {
+            font-size: 1.125rem;
+            line-height: 1.75rem;
+          }
+          .text-muted-foreground {
+            color: #6b7280;
+          }
           .card {
             border: 1px solid #e5e7eb;
             border-radius: 0.5rem;
-            padding: 1rem;
+            padding: 1.5rem;
             background: #fff;
+            margin-bottom: 1.5rem;
           }
           .card-title {
             font-size: 1.25rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            color: #111827;
           }
           .card-content {
             color: #374151;
+            line-height: 1.6;
           }
           .feature-list {
             list-style-type: disc;
             padding-left: 1.5rem;
+            margin: 1rem 0;
+          }
+          .feature-list li {
+            margin-bottom: 0.5rem;
+          }
+          .social-share {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            padding: 1rem;
+            justify-content: center;
+            background: #f3f4f6;
+            border-radius: 0.5rem;
+          }
+          amp-carousel {
+            margin: 2rem 0;
           }
         </style>
       </head>
@@ -86,11 +131,24 @@ ampRouter.get('/', (_req, res) => {
         ${content}
 
         <!-- Social Share Buttons -->
-        <div class="container" style="margin-top: 2rem;">
-          <amp-social-share type="twitter" width="45" height="33"></amp-social-share>
-          <amp-social-share type="facebook" width="45" height="33"></amp-social-share>
-          <amp-social-share type="linkedin" width="45" height="33"></amp-social-share>
-          <amp-social-share type="email" width="45" height="33"></amp-social-share>
+        <div class="social-share">
+          <amp-social-share type="twitter" 
+                           width="45" 
+                           height="33" 
+                           data-param-text="探索教育科技創新專區！"
+                           data-param-url="https://smes.tyc.edu.tw"></amp-social-share>
+          <amp-social-share type="facebook" 
+                           width="45" 
+                           height="33"
+                           data-param-app_id="FACEBOOK_APP_ID"></amp-social-share>
+          <amp-social-share type="linkedin" 
+                           width="45" 
+                           height="33"></amp-social-share>
+          <amp-social-share type="email" 
+                           width="45" 
+                           height="33"
+                           data-param-subject="探索教育科技創新專區"
+                           data-param-body="來看看這個有趣的教育科技平台！"></amp-social-share>
         </div>
       </body>
     </html>
