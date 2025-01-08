@@ -33,27 +33,19 @@ interface LoadingScreenProps {
 export function LoadingScreen({ message = "載入中" }: LoadingScreenProps) {
   const [currentTriviaIndex, setCurrentTriviaIndex] = useState(0);
   const [isDismissed, setIsDismissed] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
 
   const handleDismiss = () => {
-    setIsVisible(false);
-    setTimeout(() => {
-      setIsDismissed(true);
-    }, 500);
+    setIsDismissed(true);
   };
 
   const handleNext = () => {
-    setIsVisible(false);
-    setTimeout(() => {
-      setCurrentTriviaIndex((prev) => (prev + 1) % trivia.length);
-      setIsVisible(true);
-    }, 500);
+    setCurrentTriviaIndex((prev) => (prev + 1) % trivia.length);
   };
 
   return (
     <div className="min-h-[300px] flex items-center justify-center p-4">
-      <AnimatePresence mode="wait">
-        {!isDismissed && isVisible && (
+      <AnimatePresence>
+        {!isDismissed && (
           <motion.div
             key={currentTriviaIndex}
             initial={{ opacity: 0, y: 20 }}
@@ -63,7 +55,7 @@ export function LoadingScreen({ message = "載入中" }: LoadingScreenProps) {
               duration: 1,
               ease: "easeInOut"
             }}
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-xl mx-auto z-50 bg-background rounded-lg shadow-2xl border p-6"
+            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-xl mx-auto z-[100] bg-background rounded-lg shadow-2xl border p-6"
             role="dialog"
             aria-label="學習小提示"
           >
