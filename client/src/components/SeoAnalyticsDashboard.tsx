@@ -35,7 +35,8 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
-import { ChevronUpIcon, ChevronDownIcon } from "lucide-react";
+import { ChevronUpIcon, ChevronDownIcon, RefreshCw } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface SeoReport {
   id: number;
@@ -67,17 +68,49 @@ interface KeywordRanking {
 export function SeoAnalyticsDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [isOpen, setIsOpen] = useState(true);
+  const { toast } = useToast();
 
-  const { data: reports, isLoading: isLoadingReports } = useQuery<SeoReport[]>({
+  const { data: reports, isLoading: isLoadingReports, error: reportsError } = useQuery<SeoReport[]>({
     queryKey: ["/api/seo/reports"],
+    refetchInterval: 30000, // Refresh every 30 seconds
+    onError: (error: Error) => {
+      toast({
+        variant: "destructive",
+        title: "載入失敗",
+        description: `無法載入 SEO 報告：${error.message}`,
+      });
+    },
   });
 
-  const { data: keywords, isLoading: isLoadingKeywords } = useQuery<KeywordRanking[]>({
+  const { data: keywords, isLoading: isLoadingKeywords, error: keywordsError } = useQuery<KeywordRanking[]>({
     queryKey: ["/api/seo/keywords"],
+    refetchInterval: 30000, // Refresh every 30 seconds
+    onError: (error: Error) => {
+      toast({
+        variant: "destructive",
+        title: "載入失敗",
+        description: `無法載入關鍵字排名：${error.message}`,
+      });
+    },
   });
 
   if (isLoadingReports || isLoadingKeywords) {
     return <LoadingScreen message="載入 SEO 分析報告中..." />;
+  }
+
+  if (reportsError || keywordsError) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>SEO 分析報告</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center text-destructive">
+            資料載入失敗，請稍後再試
+          </div>
+        </CardContent>
+      </Card>
+    );
   }
 
   const latestReport = reports?.[0];
@@ -96,7 +129,12 @@ export function SeoAnalyticsDashboard() {
     <Card>
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <div className="flex items-center justify-between px-6 pt-6">
-          <CardTitle>SEO 分析報告</CardTitle>
+          <div className="flex items-center gap-2">
+            <CardTitle>SEO 分析報告</CardTitle>
+            <span className="text-xs text-muted-foreground">
+              (每30秒自動更新)
+            </span>
+          </div>
           <CollapsibleTrigger asChild>
             <Button variant="ghost" size="sm">
               {isOpen ? (
