@@ -326,6 +326,13 @@ export function ToolRankings() {
                 custom={index}
                 whileHover="hover"
                 onClick={() => handleItemClick(tool)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleItemClick(tool);
+                  }
+                }}
+                tabIndex={0}
                 id={index === 0 ? "top-tool" : ""}
                 className={`
                   flex items-center space-x-4 p-3 rounded-lg 
@@ -335,6 +342,7 @@ export function ToolRankings() {
                   ${previousRank && previousRank > index + 1 ? 'border-l-4 border-green-400' : ''}
                   ${previousRank && previousRank < index + 1 ? 'border-l-4 border-orange-400' : ''}
                   hover:shadow-md hover:translate-x-1
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary
                 `}
                 role="link"
                 aria-label={`前往 ${tool.title} 網站`}
