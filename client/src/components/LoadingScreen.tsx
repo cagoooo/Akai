@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,22 +35,6 @@ export function LoadingScreen({ message = "載入中" }: LoadingScreenProps) {
   const [currentTriviaIndex, setCurrentTriviaIndex] = useState(0);
   const [isDismissed, setIsDismissed] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
-
-  useEffect(() => {
-    // 延長間隔時間到 15 秒
-    const interval = setInterval(() => {
-      if (!isDismissed) {
-        setIsVisible(false);
-        // 添加短暫延遲以確保退出動畫完成
-        setTimeout(() => {
-          setCurrentTriviaIndex((prev) => (prev + 1) % trivia.length);
-          setIsVisible(true);
-        }, 500);
-      }
-    }, 15000);
-
-    return () => clearInterval(interval);
-  }, [isDismissed]);
 
   const handleDismiss = () => {
     setIsVisible(false);
