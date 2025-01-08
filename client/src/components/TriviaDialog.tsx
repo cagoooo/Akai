@@ -26,40 +26,33 @@ const trivia = [
   }
 ];
 
-interface LoadingScreenProps {
-  message?: string;
-}
-
-export function LoadingScreen({ message = "載入中" }: LoadingScreenProps) {
-  return (
-    <>
-      <TriviaDialog />
-      <div className="min-h-[300px] flex items-center justify-center p-4">
-        <p className="text-sm text-muted-foreground">{message}</p>
-      </div>
-    </>
-  );
-}
-
-interface TriviaDialogProps {}
-
 export function TriviaDialog() {
-    const [currentTriviaIndex, setCurrentTriviaIndex] = useState(0);
-    const [isDismissed, setIsDismissed] = useState(false);
+  const [currentTriviaIndex, setCurrentTriviaIndex] = useState(0);
+  const [isDismissed, setIsDismissed] = useState(false);
 
-    const handleDismiss = () => {
-      setIsDismissed(true);
-    };
+  const handleDismiss = () => {
+    setIsDismissed(true);
+  };
 
-    const handleNext = () => {
-      setCurrentTriviaIndex((prev) => (prev + 1) % trivia.length);
-    };
+  const handleNext = () => {
+    setCurrentTriviaIndex((prev) => (prev + 1) % trivia.length);
+  };
 
-    return (
-      <AnimatePresence mode="wait">
-        {!isDismissed && (
+  return (
+    <AnimatePresence mode="wait">
+      {!isDismissed && (
+        <>
+          {/* 固定的背景遮罩層 */}
           <motion.div
-            key="trivia-dialog"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-md z-[99999]"
+            style={{ pointerEvents: "all" }}
+          />
+
+          {/* 提示對話框 */}
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
@@ -130,7 +123,8 @@ export function TriviaDialog() {
               </Button>
             </div>
           </motion.div>
-        )}
-      </AnimatePresence>
-    );
+        </>
+      )}
+    </AnimatePresence>
+  );
 }
