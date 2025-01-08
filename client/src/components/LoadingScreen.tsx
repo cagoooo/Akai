@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
@@ -34,17 +34,8 @@ export function LoadingScreen({ message = "載入中" }: LoadingScreenProps) {
   const [currentTriviaIndex, setCurrentTriviaIndex] = useState(0);
   const [isDismissed, setIsDismissed] = useState(false);
 
-  // 使用 useEffect 確保組件初始化時提示框顯示
-  useEffect(() => {
-    const initialDismissState = localStorage.getItem('triviaDismissed');
-    if (initialDismissState) {
-      setIsDismissed(true);
-    }
-  }, []);
-
   const handleDismiss = () => {
     setIsDismissed(true);
-    localStorage.setItem('triviaDismissed', 'true');
   };
 
   const handleNext = () => {
