@@ -157,11 +157,18 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
 
   return (
     <TooltipProvider>
-      <motion.div
+      <motion.article
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        itemScope
+        itemType="https://schema.org/EducationalApplication"
       >
+        <meta itemProp="name" content={tool.title} />
+        <meta itemProp="description" content={tool.description} />
+        <meta itemProp="applicationCategory" content={tool.category} />
+        <meta itemProp="url" content={tool.url} />
+
         <Card
           className={`group hover:shadow-lg transition-all duration-500 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary overflow-hidden border-2 ${categoryColors[tool.category].border} hover:bg-gradient-to-br`}
           onClick={handleToolClick}
@@ -170,12 +177,7 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
           aria-label={isLoading ? undefined : `開啟 ${tool.title} 工具詳細資訊`}
         >
           <CardContent className="p-6 relative">
-            <motion.div
-              className="flex items-start justify-between mb-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
+            <header className="flex items-start justify-between mb-4">
               {isLoading ? (
                 <Skeleton className="w-10 h-10 rounded-lg" />
               ) : (
@@ -189,7 +191,7 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
                         role="img"
                         aria-label={`${tool.title} 圖標`}
                       >
-                        {Icon && <Icon className="w-6 h-6 transition-colors duration-300" />}
+                        {Icon && <Icon className="w-6 h-6 transition-colors duration-300" aria-hidden="true" />}
                       </motion.div>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -202,7 +204,7 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
                       className="flex items-center gap-1 px-2 py-1"
                       title="使用次數"
                     >
-                      <BarChart className="w-3 h-3" />
+                      <BarChart className="w-3 h-3" aria-hidden="true" />
                       <span>{usageStats.totalClicks} 次使用</span>
                     </Badge>
                   )}
@@ -268,60 +270,52 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
                   </>
                 )}
               </div>
-            </motion.div>
+            </header>
 
-            {isLoading ? (
-              <>
-                <Skeleton className="w-3/4 h-7 mb-2" />
-                <Skeleton className="w-full h-4 mb-2" />
-                <Skeleton className="w-5/6 h-4 mb-4" />
-              </>
-            ) : (
-              <>
-                <CardTitle className={`text-xl font-bold transition-colors duration-300 ${categoryColors[tool.category].icon} mb-2 relative`}>
-                  {tool.title}
-                </CardTitle>
-                <CardDescription className="text-sm text-muted-foreground min-h-[3rem] mb-4 relative transition-colors duration-300 group-hover:text-foreground/80">
-                  {tool.description}
-                </CardDescription>
-              </>
-            )}
+            <main>
+              {isLoading ? (
+                <>
+                  <Skeleton className="w-3/4 h-7 mb-2" />
+                  <Skeleton className="w-full h-4 mb-2" />
+                  <Skeleton className="w-5/6 h-4 mb-4" />
+                </>
+              ) : (
+                <>
+                  <CardTitle className={`text-xl font-bold transition-colors duration-300 ${categoryColors[tool.category].icon} mb-2 relative`} itemProp="name">
+                    {tool.title}
+                  </CardTitle>
+                  <CardDescription className="text-sm text-muted-foreground min-h-[3rem] mb-4 relative transition-colors duration-300 group-hover:text-foreground/80" itemProp="description">
+                    {tool.description}
+                  </CardDescription>
+                </>
+              )}
 
-            {tool.previewUrl && (
-              <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg overflow-hidden mb-4">
-                {isLoading ? (
-                  <Skeleton className="w-full h-full" />
-                ) : (
-                  <motion.div
-                    className="w-full h-full relative"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  >
-                    <AnimatePresence mode="wait">
-                      {isPreviewLoading && (
-                        <motion.div
-                          key="skeleton"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          className="absolute inset-0"
-                        >
-                          <Skeleton className="w-full h-full" />
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                    <PreviewGenerator
-                      tool={tool}
-                      customization={customization}
-                      onLoad={() => setIsPreviewLoading(false)}
-                    />
-                  </motion.div>
-                )}
-              </AspectRatio>
-            )}
+              {tool.previewUrl && (
+                <figure className="mb-4">
+                  <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg overflow-hidden">
+                    {isLoading ? (
+                      <Skeleton className="w-full h-full" />
+                    ) : (
+                      <motion.div
+                        className="w-full h-full relative"
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                      >
+                        <PreviewGenerator
+                          tool={tool}
+                          customization={customization}
+                          onLoad={() => setIsPreviewLoading(false)}
+                        />
+                      </motion.div>
+                    )}
+                  </AspectRatio>
+                  <figcaption className="sr-only">{tool.title} 預覽圖</figcaption>
+                </figure>
+              )}
+            </main>
           </CardContent>
         </Card>
-      </motion.div>
+      </motion.article>
 
       <AnimatePresence>
         {isOpen && (
