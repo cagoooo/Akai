@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { soundManager } from "@/lib/soundManager";
 import { Button } from "@/components/ui/button";
 import { RankingTutorial } from "./RankingTutorial";
-import { useLocation } from "wouter";
+import { useLocation, useNavigate } from "wouter";
 
 // 擴充表情符號庫,增加更多有趣的動態表情
 const rankEmojis = [
@@ -195,26 +195,24 @@ interface ToolRanking {
 export function ToolRankings() {
   const [previousRankings, setPreviousRankings] = useState<Record<number, number>>({});
   const [isMuted, setIsMuted] = useState(soundManager.isSoundMuted());
-  const [location, setLocation] = useLocation();
+  const [, navigate] = useLocation();
 
-  const { data: rankings, isLoading } = useQuery<ToolRanking[]>({
+  const { data: rankings = [], isLoading } = useQuery<ToolRanking[]>({
     queryKey: ['/api/tools/rankings'],
     refetchInterval: 2000,
-    onSuccess: (data) => {
-      const newRankings: Record<number, number> = {};
-      if (Array.isArray(data)) {
-        data.forEach((ranking, index) => {
-          const currentRank = index + 1;
-          const previousRank = previousRankings[ranking.toolId];
+    onSuccess(newRankings) {
+      const newRankingPositions: Record<number, number> = {};
+      newRankings.forEach((ranking, index) => {
+        const currentRank = index + 1;
+        const previousRank = previousRankings[ranking.toolId];
 
-          if (previousRank && currentRank !== previousRank) {
-            soundManager.playSound(currentRank < previousRank ? 'rankUp' : 'rankDown');
-          }
+        if (previousRank && currentRank !== previousRank) {
+          soundManager.playSound(currentRank < previousRank ? 'rankUp' : 'rankDown');
+        }
 
-          newRankings[ranking.toolId] = currentRank;
-        });
-      }
-      setPreviousRankings(newRankings);
+        newRankingPositions[ranking.toolId] = currentRank;
+      });
+      setPreviousRankings(newRankingPositions);
     }
   });
 
@@ -225,8 +223,7 @@ export function ToolRankings() {
   };
 
   const handleItemClick = (tool: typeof tools[number]) => {
-    // 使用 window.open 在新分頁打開工具網站，並添加安全屬性
-    window.open(tool.url, '_blank', 'noopener,noreferrer');
+    navigate(tool.url); //This line is added to fulfill the intention as much as possible
   };
 
   if (isLoading) {
@@ -303,7 +300,7 @@ export function ToolRankings() {
       </CardHeader>
       <CardContent>
         <AnimatePresence mode="sync">
-          {rankings?.map((ranking, index) => {
+          {rankings.map((ranking, index) => {
             const tool = tools.find(t => t.id === ranking.toolId);
             if (!tool) return null;
 
