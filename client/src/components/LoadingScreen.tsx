@@ -35,7 +35,7 @@ export function LoadingScreen({ message = "載入中" }: LoadingScreenProps) {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTriviaIndex((prev) => (prev + 1) % trivia.length);
-    }, 5000);
+    }, 8000); // 增加到 8 秒
 
     return () => clearInterval(interval);
   }, []);
@@ -65,10 +65,14 @@ export function LoadingScreen({ message = "載入中" }: LoadingScreenProps) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
+                transition={{ 
+                  duration: 0.6,  // 增加動畫時間
+                  ease: "easeInOut"
+                }}
                 className="space-y-2"
               >
-                <p className="text-lg font-medium">你知道嗎？</p>
-                <p className="text-muted-foreground">
+                <p className="text-lg font-medium text-primary">你知道嗎？</p>
+                <p className="text-muted-foreground text-base leading-relaxed">
                   {trivia[currentTriviaIndex].fact}
                 </p>
               </motion.div>
@@ -81,7 +85,7 @@ export function LoadingScreen({ message = "載入中" }: LoadingScreenProps) {
                   opacity: [1, 0.5, 1],
                 }}
                 transition={{
-                  duration: 1,
+                  duration: 1.5, // 增加動畫時間
                   repeat: Infinity,
                 }}
                 className="w-2 h-2 rounded-full bg-primary"
@@ -92,9 +96,9 @@ export function LoadingScreen({ message = "載入中" }: LoadingScreenProps) {
                   opacity: [1, 0.5, 1],
                 }}
                 transition={{
-                  duration: 1,
+                  duration: 1.5,
                   repeat: Infinity,
-                  delay: 0.2,
+                  delay: 0.3,
                 }}
                 className="w-2 h-2 rounded-full bg-primary"
               />
@@ -104,9 +108,9 @@ export function LoadingScreen({ message = "載入中" }: LoadingScreenProps) {
                   opacity: [1, 0.5, 1],
                 }}
                 transition={{
-                  duration: 1,
+                  duration: 1.5,
                   repeat: Infinity,
-                  delay: 0.4,
+                  delay: 0.6,
                 }}
                 className="w-2 h-2 rounded-full bg-primary"
               />
