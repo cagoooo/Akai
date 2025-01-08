@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Progress } from "@/components/ui/progress";
 
 const trivia = [
   {
@@ -80,7 +81,7 @@ export function TriviaDialog() {
           >
             {/* 關閉按鈕 */}
             <Button
-              variant="ghost"
+              variant="outline"
               size="icon"
               className="absolute right-4 top-4 h-8 w-8 rounded-full hover:bg-muted transition-colors"
               onClick={handleDismiss}
@@ -91,6 +92,15 @@ export function TriviaDialog() {
 
             {/* 內容區域 */}
             <div className="pt-2">
+              {/* 進度條 */}
+              <div className="mb-4">
+                <Progress 
+                  value={((currentTriviaIndex + 1) / trivia.length) * 100} 
+                  className="h-2"
+                  aria-label={`提示進度：${currentTriviaIndex + 1}/${trivia.length}`}
+                />
+              </div>
+
               {/* 圖示動畫 */}
               <motion.div
                 key={currentTriviaIndex}
@@ -110,8 +120,8 @@ export function TriviaDialog() {
               <div className="space-y-4 text-center">
                 <div className="flex items-center justify-center gap-2">
                   <h3 className="text-lg font-medium text-primary">你知道嗎？</h3>
-                  <span className="text-sm text-muted-foreground">
-                    ({currentTriviaIndex + 1} / {trivia.length})
+                  <span className="text-sm font-medium bg-primary/10 text-primary px-2 py-1 rounded-full">
+                    {currentTriviaIndex + 1} / {trivia.length}
                   </span>
                 </div>
                 <motion.p
@@ -143,7 +153,7 @@ export function TriviaDialog() {
                             duration: 1.5,
                             repeat: i === currentTriviaIndex ? Infinity : 0,
                           }}
-                          className={`w-3 h-3 rounded-full transition-all duration-200 hover:scale-125 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                          className={`w-3 h-3 rounded-full transition-colors duration-200 hover:scale-125 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
                             i === currentTriviaIndex
                               ? "bg-primary"
                               : "bg-primary/30 hover:bg-primary/50"
@@ -163,7 +173,7 @@ export function TriviaDialog() {
                   variant="ghost"
                   size="icon"
                   onClick={handlePrevious}
-                  className="h-8 w-8"
+                  className="h-8 w-8 hover:bg-primary/10"
                   aria-label="上一個提示"
                 >
                   <ChevronLeft className="h-4 w-4" />
@@ -172,7 +182,7 @@ export function TriviaDialog() {
                   variant="ghost"
                   size="icon"
                   onClick={handleNext}
-                  className="h-8 w-8"
+                  className="h-8 w-8 hover:bg-primary/10"
                   aria-label="下一個提示"
                 >
                   <ChevronRight className="h-4 w-4" />
