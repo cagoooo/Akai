@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BarChart, Trophy, Medal, Crown, Star, Sparkles, Volume2, VolumeX } from "lucide-react";
@@ -196,6 +196,7 @@ export function ToolRankings() {
   const [previousRankings, setPreviousRankings] = useState<Record<number, number>>({});
   const [isMuted, setIsMuted] = useState(soundManager.isSoundMuted());
   const [location] = useLocation();
+  const queryClient = useQueryClient();
 
   const { data: rankings = [], isLoading } = useQuery<ToolRanking[]>({
     queryKey: ['/api/tools/rankings'],
@@ -222,8 +223,25 @@ export function ToolRankings() {
     setIsMuted(newMutedState);
   };
 
-  const handleItemClick = (tool: typeof tools[number]) => {
-    window.open(tool.url, '_blank', 'noopener,noreferrer');
+  const handleItemClick = async (tool: typeof tools[number]) => {
+    try {
+      // 開啟工具網站
+      window.open(tool.url, '_blank', 'noopener,noreferrer');
+
+      // 更新使用次數
+      await fetch(`/api/tools/${tool.id}/track`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      // 立即重新獲取排行榜數據
+      await queryClient.invalidateQueries(['/api/tools/rankings']);
+
+    } catch (error) {
+      console.error('Failed to track tool usage:', error);
+    }
   };
 
   if (isLoading) {
