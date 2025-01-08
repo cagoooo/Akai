@@ -9,26 +9,34 @@ ampRouter.get('/', (_req, res) => {
   const content = ReactDOMServer.renderToString(React.createElement(AmpHome));
   const html = `
     <!doctype html>
-    <html ⚡>
+    <html ⚡ lang="zh-TW">
       <head>
         <meta charset="utf-8">
         <title>教育科技創新專區 - AMP Version</title>
         <link rel="canonical" href="https://smes.tyc.edu.tw">
         <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
-        <script async src="https://cdn.ampproject.org/v0.js"></script>
-
-        <!-- AMP Analytics -->
-        <script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
-
-        <!-- AMP Social Share -->
-        <script async custom-element="amp-social-share" src="https://cdn.ampproject.org/v0/amp-social-share-0.1.js"></script>
-
-        <!-- AMP Carousel -->
-        <script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"></script>
-
-        <!-- SEO Meta Tags -->
         <meta name="description" content="探索教育科技創新，體驗AI驅動的個人化學習體驗。提供跨平台相容性、即時數據分析和豐富的教學資源。">
         <meta name="keywords" content="教育科技,AI學習,個人化教育,教學資源">
+
+        <!-- Open Graph Tags -->
+        <meta property="og:title" content="教育科技創新專區">
+        <meta property="og:description" content="探索AI驅動的個人化學習體驗">
+        <meta property="og:image" content="https://smes.tyc.edu.tw/social-preview.png">
+        <meta property="og:url" content="https://smes.tyc.edu.tw">
+
+        <!-- Twitter Card Tags -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="教育科技創新專區">
+        <meta name="twitter:description" content="探索AI驅動的個人化學習體驗">
+        <meta name="twitter:image" content="https://smes.tyc.edu.tw/social-preview.png">
+
+        <script async src="https://cdn.ampproject.org/v0.js"></script>
+
+        <!-- AMP Components -->
+        <script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
+        <script async custom-element="amp-social-share" src="https://cdn.ampproject.org/v0/amp-social-share-0.1.js"></script>
+        <script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"></script>
+        <script async custom-element="amp-install-serviceworker" src="https://cdn.ampproject.org/v0/amp-install-serviceworker-0.1.js"></script>
 
         <style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style>
         <noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
@@ -116,11 +124,11 @@ ampRouter.get('/', (_req, res) => {
       </head>
       <body>
         <!-- AMP Analytics configuration -->
-        <amp-analytics type="googleanalytics">
+        <amp-analytics type="googleanalytics" id="analytics1">
           <script type="application/json">
             {
               "vars": {
-                "account": "UA-XXXXXXXX-X"
+                "account": "UA-XXXXX-Y"
               },
               "triggers": {
                 "trackPageview": {
@@ -131,6 +139,13 @@ ampRouter.get('/', (_req, res) => {
             }
           </script>
         </amp-analytics>
+
+        <!-- Service Worker Installation -->
+        <amp-install-serviceworker
+          src="/service-worker.js"
+          data-iframe-src="/install-service-worker.html"
+          layout="nodisplay">
+        </amp-install-serviceworker>
 
         ${content}
 
@@ -160,6 +175,8 @@ ampRouter.get('/', (_req, res) => {
     </html>
   `;
 
+  // Set Cache-Control headers for better performance
+  res.setHeader('Cache-Control', 'public, max-age=600, stale-while-revalidate=86400');
   res.setHeader('Content-Type', 'text/html');
   res.send(html);
 });

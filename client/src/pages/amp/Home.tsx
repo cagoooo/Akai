@@ -84,7 +84,26 @@ export function AmpHome() {
             "sameAs": [
               "https://www.facebook.com/smestyc",
               "https://twitter.com/smestyc"
-            ]
+            ],
+            "address": {
+              "@type": "PostalAddress",
+              "addressCountry": "TW",
+              "addressRegion": "Taoyuan"
+            },
+            "offers": {
+              "@type": "Offer",
+              "category": "教育科技",
+              "availability": "http://schema.org/InStock"
+            },
+            "audience": {
+              "@type": "EducationalAudience",
+              "educationalRole": "teacher"
+            },
+            "hasCourseInstance": {
+              "@type": "CourseInstance",
+              "courseMode": "online",
+              "inLanguage": "zh-TW"
+            }
           })
         }} />
       </main>
