@@ -153,6 +153,53 @@ export const visitorStats = pgTable("visitor_stats", {
   dailyVisits: jsonb("daily_visits").notNull().default({}),
 });
 
+export const seoAnalysisReports = pgTable("seo_analysis_reports", {
+  id: serial("id").primaryKey(),
+  timestamp: timestamp("timestamp").defaultNow().notNull(),
+  overallScore: integer("overall_score").notNull(),
+  pageLoadTime: integer("page_load_time").notNull(), // in milliseconds
+  mobileScore: integer("mobile_score").notNull(),
+  seoScore: integer("seo_score").notNull(),
+  bestPracticesScore: integer("best_practices_score").notNull(),
+  accessibilityScore: integer("accessibility_score").notNull(),
+  details: jsonb("details").notNull(),
+});
+
+export const seoMetrics = pgTable("seo_metrics", {
+  id: serial("id").primaryKey(),
+  reportId: integer("report_id").notNull().references(() => seoAnalysisReports.id),
+  metricName: text("metric_name").notNull(),
+  metricValue: text("metric_value").notNull(),
+  category: text("category").notNull(),
+  importance: text("importance").notNull(),
+  suggestions: jsonb("suggestions"),
+  timestamp: timestamp("timestamp").defaultNow().notNull(),
+});
+
+export const keywordRankings = pgTable("keyword_rankings", {
+  id: serial("id").primaryKey(),
+  keyword: text("keyword").notNull(),
+  position: integer("position"),
+  previousPosition: integer("previous_position"),
+  url: text("url").notNull(),
+  lastChecked: timestamp("last_checked").defaultNow().notNull(),
+  searchVolume: integer("search_volume"),
+  difficulty: integer("difficulty"),
+});
+
+// Add relations
+export const seoAnalysisReportsRelations = relations(seoAnalysisReports, ({ many }) => ({
+  metrics: many(seoMetrics),
+}));
+
+export const seoMetricsRelations = relations(seoMetrics, ({ one }) => ({
+  report: one(seoAnalysisReports, {
+    fields: [seoMetrics.reportId],
+    references: [seoAnalysisReports.id],
+  }),
+}));
+
+// Add new schemas
 export const insertUserSchema = createInsertSchema(users);
 export const selectUserSchema = createSelectSchema(users);
 export const insertSharedResourceSchema = createInsertSchema(sharedResources);
@@ -173,7 +220,14 @@ export const insertToolUsageStatsSchema = createInsertSchema(toolUsageStats);
 export const selectToolUsageStatsSchema = createSelectSchema(toolUsageStats);
 export const insertVisitorStatsSchema = createInsertSchema(visitorStats);
 export const selectVisitorStatsSchema = createSelectSchema(visitorStats);
+export const insertSeoAnalysisReportSchema = createInsertSchema(seoAnalysisReports);
+export const selectSeoAnalysisReportSchema = createSelectSchema(seoAnalysisReports);
+export const insertSeoMetricsSchema = createInsertSchema(seoMetrics);
+export const selectSeoMetricsSchema = createSelectSchema(seoMetrics);
+export const insertKeywordRankingSchema = createInsertSchema(keywordRankings);
+export const selectKeywordRankingSchema = createSelectSchema(keywordRankings);
 
+// Add new types
 export type InsertUser = typeof users.$inferInsert;
 export type SelectUser = typeof users.$inferSelect;
 export type InsertSharedResource = typeof sharedResources.$inferInsert;
@@ -194,3 +248,9 @@ export type InsertToolUsageStats = typeof toolUsageStats.$inferInsert;
 export type SelectToolUsageStats = typeof toolUsageStats.$inferSelect;
 export type InsertVisitorStats = typeof visitorStats.$inferInsert;
 export type SelectVisitorStats = typeof visitorStats.$inferSelect;
+export type InsertSeoAnalysisReport = typeof seoAnalysisReports.$inferInsert;
+export type SelectSeoAnalysisReport = typeof seoAnalysisReports.$inferSelect;
+export type InsertSeoMetric = typeof seoMetrics.$inferInsert;
+export type SelectSeoMetric = typeof seoMetrics.$inferSelect;
+export type InsertKeywordRanking = typeof keywordRankings.$inferInsert;
+export type SelectKeywordRanking = typeof keywordRankings.$inferSelect;

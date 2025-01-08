@@ -6,11 +6,14 @@ import { db } from "@db";
 import { 
   sharedResources, collaborators, users, moodEntries, 
   achievements, userAchievements, errorLogs, systemMetrics,
-  toolUsageStats, visitorStats,
+  toolUsageStats, visitorStats, seoAnalysisReports,
+  seoMetrics, keywordRankings,
   insertSharedResourceSchema, insertCollaboratorSchema, 
   insertMoodEntrySchema, insertUserAchievementSchema,
   insertErrorLogSchema, insertSystemMetricSchema,
-  insertToolUsageStatsSchema, insertVisitorStatsSchema
+  insertToolUsageStatsSchema, insertVisitorStatsSchema,
+  insertSeoAnalysisReportSchema, insertSeoMetricsSchema,
+  insertKeywordRankingSchema
 } from "@db/schema";
 import { eq, and, desc } from "drizzle-orm";
 
@@ -513,6 +516,144 @@ export function registerRoutes(app: Express): Server {
     } catch (error) {
       console.error("Error handling tour completion:", error);
       res.status(500).json({ message: "處理導覽完成獎勵時發生錯誤" });
+    }
+  });
+
+  // SEO Analysis Reports endpoints
+  app.post("/api/seo/reports", async (req, res) => {
+    try {
+      const parsedBody = insertSeoAnalysisReportSchema.parse(req.body);
+      const [report] = await db.insert(seoAnalysisReports).values(parsedBody).returning();
+
+      // 如果有相關的指標數據，一併保存
+      if (req.body.metrics && Array.isArray(req.body.metrics)) {
+        const metricsData = req.body.metrics.map(metric => ({
+          ...metric,
+          reportId: report.id
+        }));
+        await db.insert(seoMetrics).values(metricsData);
+      }
+
+      res.json(report);
+    } catch (error) {
+      console.error("Error creating SEO report:", error);
+      res.status(400).json({ message: "創建 SEO 報告時發生錯誤" });
+    }
+  });
+
+  app.get("/api/seo/reports", async (_req, res) => {
+    try {
+      const reports = await db.query.seoAnalysisReports.findMany({
+        orderBy: desc(seoAnalysisReports.timestamp),
+        with: {
+          metrics: true
+        }
+      });
+      res.json(reports);
+    } catch (error) {
+      console.error("Error fetching SEO reports:", error);
+      res.status(500).json({ message: "獲取 SEO 報告時發生錯誤" });
+    }
+  });
+
+  app.get("/api/seo/reports/:reportId", async (req, res) => {
+    try {
+      const report = await db.query.seoAnalysisReports.findFirst({
+        where: eq(seoAnalysisReports.id, parseInt(req.params.reportId)),
+        with: {
+          metrics: true
+        }
+      });
+
+      if (!report) {
+        return res.status(404).json({ message: "找不到指定的 SEO 報告" });
+      }
+
+      res.json(report);
+    } catch (error) {
+      console.error("Error fetching SEO report:", error);
+      res.status(500).json({ message: "獲取 SEO 報告時發生錯誤" });
+    }
+  });
+
+  // Keyword Rankings endpoints
+  app.post("/api/seo/keywords", async (req, res) => {
+    try {
+      const parsedBody = insertKeywordRankingSchema.parse(req.body);
+      const [keyword] = await db.insert(keywordRankings).values(parsedBody).returning();
+      res.json(keyword);
+    } catch (error) {
+      console.error("Error creating keyword ranking:", error);
+      res.status(400).json({ message: "創建關鍵字排名時發生錯誤" });
+    }
+  });
+
+  app.get("/api/seo/keywords", async (_req, res) => {
+    try {
+      const rankings = await db.query.keywordRankings.findMany({
+        orderBy: desc(keywordRankings.lastChecked)
+      });
+      res.json(rankings);
+    } catch (error) {
+      console.error("Error fetching keyword rankings:", error);
+      res.status(500).json({ message: "獲取關鍵字排名時發生錯誤" });
+    }
+  });
+
+  app.put("/api/seo/keywords/:keywordId", async (req, res) => {
+    try {
+      const { keywordId } = req.params;
+      const keywordData = req.body;
+
+      const existingKeyword = await db.query.keywordRankings.findFirst({
+        where: eq(keywordRankings.id, parseInt(keywordId))
+      });
+
+      if (!existingKeyword) {
+        return res.status(404).json({ message: "找不到指定的關鍵字排名" });
+      }
+
+      // 保存當前排名作為歷史排名
+      const updatedData = {
+        ...keywordData,
+        previousPosition: existingKeyword.position,
+        lastChecked: new Date()
+      };
+
+      const [updated] = await db
+        .update(keywordRankings)
+        .set(updatedData)
+        .where(eq(keywordRankings.id, parseInt(keywordId)))
+        .returning();
+
+      res.json(updated);
+    } catch (error) {
+      console.error("Error updating keyword ranking:", error);
+      res.status(500).json({ message: "更新關鍵字排名時發生錯誤" });
+    }
+  });
+
+  // SEO Metrics endpoints
+  app.post("/api/seo/metrics", async (req, res) => {
+    try {
+      const parsedBody = insertSeoMetricsSchema.parse(req.body);
+      const [metric] = await db.insert(seoMetrics).values(parsedBody).returning();
+      res.json(metric);
+    } catch (error) {
+      console.error("Error creating SEO metric:", error);
+      res.status(400).json({ message: "創建 SEO 指標時發生錯誤" });
+    }
+  });
+
+  app.get("/api/seo/metrics", async (_req, res) => {
+    try {
+      const metrics = await db.query.seoMetrics.findMany({
+        orderBy: desc(seoMetrics.timestamp)
+      });
+      res.json(metrics);
+    } catch (error) {
+      console.error("Error fetching SEO metrics:", error);
+      res.status(500).json({ message: "獲取 SEO 指標時發生錯誤" });
     }
   });
 
