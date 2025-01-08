@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { soundManager } from "@/lib/soundManager";
 import { Button } from "@/components/ui/button";
 import { RankingTutorial } from "./RankingTutorial";
-import { useLocation, useNavigate } from "wouter";
+import { useLocation } from "wouter";
 
 // 擴充表情符號庫,增加更多有趣的動態表情
 const rankEmojis = [
@@ -195,7 +195,7 @@ interface ToolRanking {
 export function ToolRankings() {
   const [previousRankings, setPreviousRankings] = useState<Record<number, number>>({});
   const [isMuted, setIsMuted] = useState(soundManager.isSoundMuted());
-  const [, navigate] = useLocation();
+  const [location] = useLocation();
 
   const { data: rankings = [], isLoading } = useQuery<ToolRanking[]>({
     queryKey: ['/api/tools/rankings'],
@@ -223,7 +223,7 @@ export function ToolRankings() {
   };
 
   const handleItemClick = (tool: typeof tools[number]) => {
-    navigate(tool.url); //This line is added to fulfill the intention as much as possible
+    window.open(tool.url, '_blank', 'noopener,noreferrer');
   };
 
   if (isLoading) {
