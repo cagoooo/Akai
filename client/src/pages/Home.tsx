@@ -16,6 +16,7 @@ import { EmojiStoryTelling } from "@/components/EmojiStoryTelling";
 import { ToolRankings } from "@/components/ToolRankings";
 import { RankingTutorial } from "@/components/RankingTutorial";
 import { VisitorCounter } from "@/components/VisitorCounter";
+import { SeoAnalyticsDashboard } from "@/components/SeoAnalyticsDashboard";
 
 export function Home() {
   const { startTour } = useTour();
@@ -72,6 +73,11 @@ export function Home() {
             {/* 訪問計數器 */}
             <div className="mb-8">
               <VisitorCounter />
+            </div>
+
+            {/* SEO 分析報告 */}
+            <div className="mb-8" data-tour="seo-analytics">
+              <SeoAnalyticsDashboard />
             </div>
 
             <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mb-8 sm:mb-12">
