@@ -225,7 +225,7 @@ export function ToolRankings() {
   };
 
   const handleItemClick = (tool: typeof tools[number]) => {
-    // 使用 window.open 在新分頁打開工具網站
+    // 使用 window.open 在新分頁打開工具網站，並添加安全屬性
     window.open(tool.url, '_blank', 'noopener,noreferrer');
   };
 
