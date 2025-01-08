@@ -44,13 +44,16 @@ export function LoadingScreen({ message = "載入中" }: LoadingScreenProps) {
 
   return (
     <>
-      {/* 固定的背景遮罩層 */}
+      {/* 固定的背景遮罩層，使用最高的 z-index */}
       {!isDismissed && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999]" />
+        <div 
+          className="fixed inset-0 bg-black/80 backdrop-blur-md z-[99999]" 
+          style={{ pointerEvents: "all" }}
+        />
       )}
 
-      {/* 知識小提示 */}
-      <AnimatePresence>
+      {/* 知識小提示，使用更高的 z-index */}
+      <AnimatePresence mode="wait">
         {!isDismissed && (
           <motion.div
             key="trivia-dialog"
@@ -61,9 +64,10 @@ export function LoadingScreen({ message = "載入中" }: LoadingScreenProps) {
               duration: 0.2,
               ease: "easeOut"
             }}
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-xl mx-auto bg-background rounded-lg shadow-2xl border p-6 z-[10000]"
+            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-xl mx-auto bg-background rounded-lg shadow-2xl border p-6 z-[100000]"
             role="dialog"
             aria-label="學習小提示"
+            style={{ pointerEvents: "all" }}
           >
             <Button
               variant="ghost"
