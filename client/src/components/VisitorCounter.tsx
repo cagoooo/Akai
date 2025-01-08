@@ -1,9 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { UserCheck } from "lucide-react";
 import { motion, animate, useMotionValue, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
+
+interface StatsResponse {
+  totalVisits: number;
+  dailyVisits: Record<string, number>;
+  lastVisitAt?: string;
+}
 
 function AnimatedNumber({ value }: { value: number }) {
   const count = useMotionValue(0);
@@ -36,7 +42,7 @@ function AnimatedNumber({ value }: { value: number }) {
 }
 
 export function VisitorCounter() {
-  const { data: stats, refetch } = useQuery({
+  const { data: stats, refetch } = useQuery<StatsResponse>({
     queryKey: ["/api/stats/visitors"],
     refetchInterval: 60000,
   });
@@ -48,7 +54,7 @@ export function VisitorCounter() {
   }, [refetch]);
 
   const totalVisits = stats?.totalVisits || 0;
-  const todayVisits = (stats?.dailyVisits as Record<string, number>)?.[
+  const todayVisits = stats?.dailyVisits?.[
     new Date().toISOString().split("T")[0]
   ] || 0;
 
