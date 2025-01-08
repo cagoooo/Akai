@@ -108,6 +108,10 @@ ampRouter.get('/', (_req, res) => {
           amp-carousel {
             margin: 2rem 0;
           }
+          amp-social-share {
+            margin: 0 4px;
+            border-radius: 4px;
+          }
         </style>
       </head>
       <body>
@@ -137,6 +141,12 @@ ampRouter.get('/', (_req, res) => {
                            height="33" 
                            data-param-text="探索教育科技創新專區！"
                            data-param-url="https://smes.tyc.edu.tw"></amp-social-share>
+          <amp-social-share type="facebook"
+                           width="45"
+                           height="33"
+                           data-share-endpoint="https://www.facebook.com/sharer/sharer.php"
+                           data-param-href="https://smes.tyc.edu.tw"
+                           data-param-quote="探索教育科技創新專區！"></amp-social-share>
           <amp-social-share type="linkedin" 
                            width="45" 
                            height="33"></amp-social-share>
