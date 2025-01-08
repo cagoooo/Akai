@@ -68,6 +68,19 @@ export function LoadingScreen({ message = "載入中" }: LoadingScreenProps) {
                     ease: "easeInOut"
                   }}
                   className="relative w-full space-y-4"
+                  style={{
+                    position: 'fixed',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    zIndex: 50,
+                    maxWidth: '32rem',
+                    width: '90%',
+                    backgroundColor: 'var(--background)',
+                    borderRadius: 'var(--radius)',
+                    boxShadow: 'var(--shadow-lg)',
+                    padding: '1.5rem'
+                  }}
                 >
                   <Button
                     variant="ghost"
