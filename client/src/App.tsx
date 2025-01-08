@@ -7,6 +7,7 @@ import { PageTransition } from "@/components/PageTransition";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/queryClient";
 import { Footer } from "@/components/Footer";
+import { TriviaDialog } from "@/components/TriviaDialog";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           </PageTransition>
           <Footer />
         </div>
+        <TriviaDialog />
         <Toaster />
         <BreakpointIndicator />
       </TourProvider>
