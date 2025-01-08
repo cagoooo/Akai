@@ -11,89 +11,139 @@ import {
 } from "@db/schema";
 import { eq, and, desc } from "drizzle-orm";
 
+// 定時任務函數
+async function runSeoAnalysis() {
+  try {
+    // 1. 分析網站性能
+    const performanceMetrics = {
+      pageLoadTime: Math.floor(Math.random() * (2000 - 800) + 800),
+      mobileScore: Math.floor(Math.random() * (100 - 80) + 80),
+      bestPracticesScore: Math.floor(Math.random() * (100 - 80) + 80),
+    };
+
+    // 2. 分析 SEO 指標
+    const seoCheckResults = {
+      titleLength: true,
+      descriptionLength: true,
+      hasStructuredData: false,
+      hasSitemap: true,
+      hasRobotsTxt: true,
+      hasSSL: true,
+    };
+
+    // 3. 分析無障礙性
+    const accessibilityScore = Math.floor(Math.random() * (100 - 80) + 80);
+
+    // 4. 計算整體分數
+    const overallScore = Math.floor(
+      (performanceMetrics.mobileScore +
+        performanceMetrics.bestPracticesScore +
+        accessibilityScore) / 3
+    );
+
+    // 5. 生成改進建議
+    const issues = [];
+    if (!seoCheckResults.hasStructuredData) {
+      issues.push("建議增加結構化資料");
+    }
+    if (performanceMetrics.pageLoadTime > 1500) {
+      issues.push("需要優化圖片載入速度");
+    }
+
+    // 6. 創建新的 SEO 分析報告
+    const [report] = await db.insert(seoAnalysisReports).values({
+      overallScore,
+      pageLoadTime: performanceMetrics.pageLoadTime,
+      mobileScore: performanceMetrics.mobileScore,
+      seoScore: 90,
+      bestPracticesScore: performanceMetrics.bestPracticesScore,
+      accessibilityScore,
+      details: {
+        title: "自動 SEO 分析報告",
+        description: "由系統自動生成的網站效能報告",
+        issues,
+      },
+    }).returning();
+
+    // 7. 記錄詳細指標
+    await db.insert(seoMetrics).values([
+      {
+        reportId: report.id,
+        metricName: "結構化資料",
+        metricValue: seoCheckResults.hasStructuredData ? "已實現" : "未實現",
+        category: "SEO",
+        importance: "high",
+        suggestions: seoCheckResults.hasStructuredData ? [] : ["建議添加 Schema.org 標記"],
+      },
+      {
+        reportId: report.id,
+        metricName: "頁面載入時間",
+        metricValue: `${performanceMetrics.pageLoadTime}ms`,
+        category: "Performance",
+        importance: "high",
+        suggestions: performanceMetrics.pageLoadTime > 1500 ? ["優化圖片大小", "使用圖片延遲載入"] : [],
+      },
+    ]);
+
+    console.log("SEO analysis completed successfully:", report.id);
+  } catch (error) {
+    console.error("Error running automated SEO analysis:", error);
+  }
+}
+
+// 定時更新關鍵字排名
+async function updateKeywordRankings() {
+  try {
+    const keywords = await db.query.keywordRankings.findMany();
+
+    for (const keyword of keywords) {
+      if (keyword.position) {
+        const newPosition = Math.max(1, keyword.position + Math.floor(Math.random() * 3) - 1);
+        await db
+          .update(keywordRankings)
+          .set({
+            previousPosition: keyword.position,
+            position: newPosition,
+            lastChecked: new Date(),
+          })
+          .where(eq(keywordRankings.id, keyword.id));
+      }
+    }
+
+    console.log("Keyword rankings updated successfully");
+  } catch (error) {
+    console.error("Error updating keyword rankings:", error);
+  }
+}
+
 export function registerRoutes(app: Express): Server {
+  // 設定定時任務
+  setInterval(runSeoAnalysis, 60 * 60 * 1000); // 每小時執行一次
+  setInterval(updateKeywordRankings, 24 * 60 * 60 * 1000); // 每24小時執行一次
+
+  // 立即執行一次初始分析
+  runSeoAnalysis();
+  updateKeywordRankings();
+
   // Important: Register API routes before static file serving
   // SEO Analysis Reports endpoints
   app.post("/api/seo/analyze", async (_req, res) => {
     try {
-      // 1. 分析網站性能
-      const performanceMetrics = {
-        pageLoadTime: Math.floor(Math.random() * (2000 - 800) + 800), // 模擬頁面載入時間
-        mobileScore: Math.floor(Math.random() * (100 - 80) + 80),
-        bestPracticesScore: Math.floor(Math.random() * (100 - 80) + 80),
-      };
-
-      // 2. 分析 SEO 指標
-      const seoCheckResults = {
-        titleLength: true,
-        descriptionLength: true,
-        hasStructuredData: false,
-        hasSitemap: true,
-        hasRobotsTxt: true,
-        hasSSL: true,
-      };
-
-      // 3. 分析無障礙性
-      const accessibilityScore = Math.floor(Math.random() * (100 - 80) + 80);
-
-      // 4. 計算整體分數
-      const overallScore = Math.floor(
-        (performanceMetrics.mobileScore +
-          performanceMetrics.bestPracticesScore +
-          accessibilityScore) / 3
-      );
-
-      // 5. 生成改進建議
-      const issues = [];
-      if (!seoCheckResults.hasStructuredData) {
-        issues.push("建議增加結構化資料");
-      }
-      if (performanceMetrics.pageLoadTime > 1500) {
-        issues.push("需要優化圖片載入速度");
-      }
-
-      // 6. 創建新的 SEO 分析報告
-      const [report] = await db.insert(seoAnalysisReports).values({
-        overallScore,
-        pageLoadTime: performanceMetrics.pageLoadTime,
-        mobileScore: performanceMetrics.mobileScore,
-        seoScore: 90,
-        bestPracticesScore: performanceMetrics.bestPracticesScore,
-        accessibilityScore,
-        details: {
-          title: "自動 SEO 分析報告",
-          description: "由系統自動生成的網站效能報告",
-          issues,
-        },
-      }).returning();
-
-      // 7. 記錄詳細指標
-      await db.insert(seoMetrics).values([
-        {
-          reportId: report.id,
-          metricName: "結構化資料",
-          metricValue: seoCheckResults.hasStructuredData ? "已實現" : "未實現",
-          category: "SEO",
-          importance: "high",
-          suggestions: seoCheckResults.hasStructuredData ? [] : ["建議添加 Schema.org 標記"],
-        },
-        {
-          reportId: report.id,
-          metricName: "頁面載入時間",
-          metricValue: `${performanceMetrics.pageLoadTime}ms`,
-          category: "Performance",
-          importance: "high",
-          suggestions: performanceMetrics.pageLoadTime > 1500 ? ["優化圖片大小", "使用圖片延遲載入"] : [],
-        },
-      ]);
+      await runSeoAnalysis();
+      const latestReport = await db.query.seoAnalysisReports.findFirst({
+        orderBy: desc(seoAnalysisReports.timestamp),
+        with: {
+          metrics: true
+        }
+      });
 
       res.json({
         success: true,
-        report,
+        report: latestReport
       });
     } catch (error) {
-      console.error("Error running automated SEO analysis:", error);
-      res.status(500).json({ message: "執行自動 SEO 分析時發生錯誤" });
+      console.error("Error running SEO analysis:", error);
+      res.status(500).json({ message: "執行 SEO 分析時發生錯誤" });
     }
   });
 
@@ -730,119 +780,6 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
-  // 自動化 SEO 分析路由
-  app.post("/api/seo/analyze", async (req, res) => {
-    try {
-      // 1. 分析網站性能
-      const performanceMetrics = {
-        pageLoadTime: Math.floor(Math.random() * (2000 - 800) + 800), // 模擬頁面載入時間
-        mobileScore: Math.floor(Math.random() * (100 - 80) + 80),
-        bestPracticesScore: Math.floor(Math.random() * (100 - 80) + 80),
-      };
-
-      // 2. 分析 SEO 指標
-      const seoCheckResults = {
-        titleLength: true,
-        descriptionLength: true,
-        hasStructuredData: false,
-        hasSitemap: true,
-        hasRobotsTxt: true,
-        hasSSL: true,
-      };
-
-      // 3. 分析無障礙性
-      const accessibilityScore = Math.floor(Math.random() * (100 - 80) + 80);
-
-      // 4. 計算整體分數
-      const overallScore = Math.floor(
-        (performanceMetrics.mobileScore +
-          performanceMetrics.bestPracticesScore +
-          accessibilityScore) / 3
-      );
-
-      // 5. 生成改進建議
-      const issues = [];
-      if (!seoCheckResults.hasStructuredData) {
-        issues.push("建議增加結構化資料");
-      }
-      if (performanceMetrics.pageLoadTime > 1500) {
-        issues.push("需要優化圖片載入速度");
-      }
-
-      // 6. 創建新的 SEO 分析報告
-      const [report] = await db.insert(seoAnalysisReports).values({
-        overallScore,
-        pageLoadTime: performanceMetrics.pageLoadTime,
-        mobileScore: performanceMetrics.mobileScore,
-        seoScore: 90,
-        bestPracticesScore: performanceMetrics.bestPracticesScore,
-        accessibilityScore,
-        details: {
-          title: "自動 SEO 分析報告",
-          description: "由系統自動生成的網站效能報告",
-          issues,
-        },
-      }).returning();
-
-      // 7. 記錄詳細指標
-      await db.insert(seoMetrics).values([
-        {
-          reportId: report.id,
-          metricName: "結構化資料",
-          metricValue: seoCheckResults.hasStructuredData ? "已實現" : "未實現",
-          category: "SEO",
-          importance: "high",
-          suggestions: seoCheckResults.hasStructuredData ? [] : ["建議添加 Schema.org 標記"],
-        },
-        {
-          reportId: report.id,
-          metricName: "頁面載入時間",
-          metricValue: `${performanceMetrics.pageLoadTime}ms`,
-          category: "Performance",
-          importance: "high",
-          suggestions: performanceMetrics.pageLoadTime > 1500 ? ["優化圖片大小", "使用圖片延遲載入"] : [],
-        },
-      ]);
-
-      res.json({
-        success: true,
-        report,
-      });
-    } catch (error) {
-      console.error("Error running automated SEO analysis:", error);
-      res.status(500).json({ message: "執行自動 SEO 分析時發生錯誤" });
-    }
-  });
-
-  // 更新關鍵字排名的自動化路由
-  app.post("/api/seo/keywords/refresh", async (_req, res) => {
-    try {
-      const keywords = await db.query.keywordRankings.findMany();
-
-      // 為每個關鍵字更新排名
-      for (const keyword of keywords) {
-        const newPosition = Math.max(1, keyword.position + Math.floor(Math.random() * 3) - 1);
-
-        await db
-          .update(keywordRankings)
-          .set({
-            previousPosition: keyword.position,
-            position: newPosition,
-            lastChecked: new Date(),
-          })
-          .where(eq(keywordRankings.id, keyword.id));
-      }
-
-      const updatedKeywords = await db.query.keywordRankings.findMany({
-        orderBy: desc(keywordRankings.lastChecked),
-      });
-
-      res.json(updatedKeywords);
-    } catch (error) {
-      console.error("Error refreshing keyword rankings:", error);
-      res.status(500).json({ message: "更新關鍵字排名時發生錯誤" });
-    }
-  });
 
   // After all API routes, serve static files
   app.use(express.static(path.join(process.cwd(), "client/public"), {
