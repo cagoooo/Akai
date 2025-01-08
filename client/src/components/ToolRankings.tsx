@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { soundManager } from "@/lib/soundManager";
 import { Button } from "@/components/ui/button";
 import { RankingTutorial } from "./RankingTutorial";
+import { useLocation } from "wouter";
 
 // 擴充表情符號庫,增加更多有趣的動態表情
 const rankEmojis = [
@@ -194,29 +195,38 @@ interface ToolRanking {
 export function ToolRankings() {
   const [previousRankings, setPreviousRankings] = useState<Record<number, number>>({});
   const [isMuted, setIsMuted] = useState(soundManager.isSoundMuted());
+  const [location, setLocation] = useLocation();
 
   const { data: rankings, isLoading } = useQuery<ToolRanking[]>({
     queryKey: ['/api/tools/rankings'],
     refetchInterval: 2000,
-    onSuccess: (newData) => {
+    onSuccess: (data) => {
       const newRankings: Record<number, number> = {};
-      newData.forEach((ranking, index) => {
-        const currentRank = index + 1;
-        const previousRank = previousRankings[ranking.toolId];
+      if (Array.isArray(data)) {
+        data.forEach((ranking, index) => {
+          const currentRank = index + 1;
+          const previousRank = previousRankings[ranking.toolId];
 
-        if (previousRank && currentRank !== previousRank) {
-          soundManager.playSound(currentRank < previousRank ? 'rankUp' : 'rankDown');
-        }
+          if (previousRank && currentRank !== previousRank) {
+            soundManager.playSound(currentRank < previousRank ? 'rankUp' : 'rankDown');
+          }
 
-        newRankings[ranking.toolId] = currentRank;
-      });
+          newRankings[ranking.toolId] = currentRank;
+        });
+      }
       setPreviousRankings(newRankings);
     }
   });
 
   const toggleMute = () => {
-    const newMutedState = soundManager.toggleMute();
+    const newMutedState = !isMuted;
+    soundManager.setMuted(newMutedState);
     setIsMuted(newMutedState);
+  };
+
+  const handleItemClick = (tool: typeof tools[number]) => {
+    // 使用 window.open 在新分頁打開工具網站
+    window.open(tool.url, '_blank', 'noopener,noreferrer');
   };
 
   if (isLoading) {
@@ -315,6 +325,7 @@ export function ToolRankings() {
                 }}
                 custom={index}
                 whileHover="hover"
+                onClick={() => handleItemClick(tool)}
                 id={index === 0 ? "top-tool" : ""}
                 className={`
                   flex items-center space-x-4 p-3 rounded-lg 
@@ -323,7 +334,10 @@ export function ToolRankings() {
                   mb-2 relative overflow-hidden cursor-pointer
                   ${previousRank && previousRank > index + 1 ? 'border-l-4 border-green-400' : ''}
                   ${previousRank && previousRank < index + 1 ? 'border-l-4 border-orange-400' : ''}
+                  hover:shadow-md hover:translate-x-1
                 `}
+                role="link"
+                aria-label={`前往 ${tool.title} 網站`}
               >
                 {isTop && (
                   <motion.div
