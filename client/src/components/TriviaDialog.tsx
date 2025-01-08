@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 const trivia = [
   {
@@ -34,8 +34,16 @@ export function TriviaDialog() {
     setIsDismissed(true);
   };
 
+  const handlePrevious = () => {
+    setCurrentTriviaIndex((prev) => 
+      prev === 0 ? trivia.length - 1 : prev - 1
+    );
+  };
+
   const handleNext = () => {
-    setCurrentTriviaIndex((prev) => (prev + 1) % trivia.length);
+    setCurrentTriviaIndex((prev) => 
+      (prev + 1) % trivia.length
+    );
   };
 
   return (
@@ -69,37 +77,46 @@ export function TriviaDialog() {
             <Button
               variant="ghost"
               size="icon"
-              className="absolute -right-2 -top-2 h-10 w-10 rounded-full border shadow-md bg-background hover:bg-muted transition-colors"
+              className="absolute right-4 top-4 h-8 w-8 rounded-full hover:bg-muted transition-colors"
               onClick={handleDismiss}
               aria-label="關閉提示"
             >
               <X className="h-4 w-4" />
             </Button>
 
-            {/* 圖示動畫 */}
-            <motion.div
-              animate={{
-                scale: [1, 1.2, 1],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="text-4xl text-center mb-4"
-            >
-              {trivia[currentTriviaIndex].icon}
-            </motion.div>
-
             {/* 內容區域 */}
-            <div className="space-y-4 text-center">
-              <h3 className="text-lg font-medium text-primary">你知道嗎？</h3>
-              <p className="text-muted-foreground text-base leading-relaxed">
-                {trivia[currentTriviaIndex].fact}
-              </p>
+            <div className="pt-2">
+              {/* 圖示動畫 */}
+              <motion.div
+                key={currentTriviaIndex}
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.5, opacity: 0 }}
+                transition={{
+                  duration: 0.3,
+                  ease: "easeOut",
+                }}
+                className="text-4xl text-center mb-4"
+              >
+                {trivia[currentTriviaIndex].icon}
+              </motion.div>
+
+              {/* 文字內容 */}
+              <div className="space-y-4 text-center">
+                <h3 className="text-lg font-medium text-primary">你知道嗎？</h3>
+                <motion.p
+                  key={currentTriviaIndex}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  className="text-muted-foreground text-base leading-relaxed"
+                >
+                  {trivia[currentTriviaIndex].fact}
+                </motion.p>
+              </div>
             </div>
 
-            {/* 底部控制區 */}
+            {/* 導航按鈕 */}
             <div className="flex items-center justify-between mt-6">
               <div className="flex gap-2">
                 {trivia.map((_, i) => (
@@ -117,14 +134,26 @@ export function TriviaDialog() {
                   />
                 ))}
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleNext}
-                className="text-sm"
-              >
-                下一個提示
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handlePrevious}
+                  className="h-8 w-8"
+                  aria-label="上一個提示"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleNext}
+                  className="h-8 w-8"
+                  aria-label="下一個提示"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           </motion.div>
         </div>
