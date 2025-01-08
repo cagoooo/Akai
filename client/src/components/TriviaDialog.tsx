@@ -68,7 +68,7 @@ export function TriviaDialog() {
             <Button
               variant="ghost"
               size="icon"
-              className="absolute right-4 top-4"
+              className="absolute -right-2 -top-2 h-10 w-10 rounded-full border shadow-md bg-background hover:bg-muted transition-colors"
               onClick={handleDismiss}
               aria-label="關閉提示"
             >
