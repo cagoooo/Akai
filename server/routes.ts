@@ -10,6 +10,7 @@ import {
   seoMetrics, keywordRankings
 } from "@db/schema";
 import { eq, and, desc } from "drizzle-orm";
+import { ampRouter } from './amp';
 
 // 定時任務函數
 async function runSeoAnalysis() {
@@ -124,6 +125,9 @@ export function registerRoutes(app: Express): Server {
   // 立即執行一次初始分析
   runSeoAnalysis();
   updateKeywordRankings();
+
+  // Add AMP routes
+  app.use('/amp', ampRouter);
 
   // Important: Register API routes before static file serving
   // SEO Analysis Reports endpoints
