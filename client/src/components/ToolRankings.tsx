@@ -229,15 +229,22 @@ export function ToolRankings() {
       window.open(tool.url, '_blank', 'noopener,noreferrer');
 
       // 更新使用次數
-      await fetch(`/api/tools/${tool.id}/track`, {
+      const response = await fetch(`/api/tools/${tool.id}/track`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         }
       });
 
+      if (!response.ok) {
+        throw new Error('Failed to update tool usage count');
+      }
+
       // 立即重新獲取排行榜數據
-      await queryClient.invalidateQueries(['/api/tools/rankings']);
+      queryClient.invalidateQueries({ queryKey: ['/api/tools/rankings'] });
+
+      // 播放點擊音效
+      soundManager.playSound('click');
 
     } catch (error) {
       console.error('Failed to track tool usage:', error);
