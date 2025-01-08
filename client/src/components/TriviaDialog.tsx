@@ -41,30 +41,31 @@ export function TriviaDialog() {
   return (
     <AnimatePresence mode="wait">
       {!isDismissed && (
-        <>
-          {/* 固定的背景遮罩層 */}
+        <div className="fixed inset-0 z-[999] flex items-center justify-center">
+          {/* 背景遮罩 */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/80 backdrop-blur-md z-[99999]"
-            style={{ pointerEvents: "all" }}
+            className="absolute inset-0 bg-black/80 backdrop-blur-md"
+            onClick={handleDismiss}
           />
 
-          {/* 提示對話框 */}
+          {/* 對話框 */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
             transition={{
-              duration: 0.2,
-              ease: "easeOut"
+              type: "spring",
+              stiffness: 300,
+              damping: 30
             }}
-            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-xl mx-auto bg-background rounded-lg shadow-2xl border p-6 z-[100000]"
+            className="relative w-full max-w-lg mx-4 bg-background rounded-lg shadow-2xl border p-6"
             role="dialog"
             aria-label="學習小提示"
-            style={{ pointerEvents: "all" }}
           >
+            {/* 關閉按鈕 */}
             <Button
               variant="ghost"
               size="icon"
@@ -75,6 +76,7 @@ export function TriviaDialog() {
               <X className="h-4 w-4" />
             </Button>
 
+            {/* 圖示動畫 */}
             <motion.div
               animate={{
                 scale: [1, 1.2, 1],
@@ -89,6 +91,7 @@ export function TriviaDialog() {
               {trivia[currentTriviaIndex].icon}
             </motion.div>
 
+            {/* 內容區域 */}
             <div className="space-y-4 text-center">
               <h3 className="text-lg font-medium text-primary">你知道嗎？</h3>
               <p className="text-muted-foreground text-base leading-relaxed">
@@ -96,6 +99,7 @@ export function TriviaDialog() {
               </p>
             </div>
 
+            {/* 底部控制區 */}
             <div className="flex items-center justify-between mt-6">
               <div className="flex gap-2">
                 {trivia.map((_, i) => (
@@ -123,7 +127,7 @@ export function TriviaDialog() {
               </Button>
             </div>
           </motion.div>
-        </>
+        </div>
       )}
     </AnimatePresence>
   );
