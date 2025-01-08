@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const trivia = [
   {
@@ -44,6 +45,10 @@ export function TriviaDialog() {
     setCurrentTriviaIndex((prev) => 
       (prev + 1) % trivia.length
     );
+  };
+
+  const handleJumpTo = (index: number) => {
+    setCurrentTriviaIndex(index);
   };
 
   return (
@@ -103,7 +108,12 @@ export function TriviaDialog() {
 
               {/* 文字內容 */}
               <div className="space-y-4 text-center">
-                <h3 className="text-lg font-medium text-primary">你知道嗎？</h3>
+                <div className="flex items-center justify-center gap-2">
+                  <h3 className="text-lg font-medium text-primary">你知道嗎？</h3>
+                  <span className="text-sm text-muted-foreground">
+                    ({currentTriviaIndex + 1} / {trivia.length})
+                  </span>
+                </div>
                 <motion.p
                   key={currentTriviaIndex}
                   initial={{ opacity: 0, x: 20 }}
@@ -116,24 +126,38 @@ export function TriviaDialog() {
               </div>
             </div>
 
-            {/* 導航按鈕 */}
+            {/* 導航按鈕和進度指示器 */}
             <div className="flex items-center justify-between mt-6">
-              <div className="flex gap-2">
-                {trivia.map((_, i) => (
-                  <motion.div
-                    key={i}
-                    animate={{
-                      scale: i === currentTriviaIndex ? [1, 0.8, 1] : 1,
-                      opacity: i === currentTriviaIndex ? 1 : 0.3,
-                    }}
-                    transition={{
-                      duration: 1.5,
-                      repeat: i === currentTriviaIndex ? Infinity : 0,
-                    }}
-                    className="w-2 h-2 rounded-full bg-primary"
-                  />
-                ))}
-              </div>
+              <TooltipProvider>
+                <div className="flex gap-3">
+                  {trivia.map((_, i) => (
+                    <Tooltip key={i}>
+                      <TooltipTrigger asChild>
+                        <motion.button
+                          onClick={() => handleJumpTo(i)}
+                          animate={{
+                            scale: i === currentTriviaIndex ? [1, 0.8, 1] : 1,
+                            opacity: i === currentTriviaIndex ? 1 : 0.5,
+                          }}
+                          transition={{
+                            duration: 1.5,
+                            repeat: i === currentTriviaIndex ? Infinity : 0,
+                          }}
+                          className={`w-3 h-3 rounded-full transition-all duration-200 hover:scale-125 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                            i === currentTriviaIndex
+                              ? "bg-primary"
+                              : "bg-primary/30 hover:bg-primary/50"
+                          }`}
+                          aria-label={`跳轉至第 ${i + 1} 則提示`}
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>第 {i + 1} 則提示</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  ))}
+                </div>
+              </TooltipProvider>
               <div className="flex items-center gap-2">
                 <Button
                   variant="ghost"
