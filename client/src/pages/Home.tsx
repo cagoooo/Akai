@@ -75,11 +75,6 @@ export function Home() {
               <VisitorCounter />
             </div>
 
-            {/* SEO 分析報告 */}
-            <div className="mb-8" data-tour="seo-analytics">
-              <SeoAnalyticsDashboard />
-            </div>
-
             <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mb-8 sm:mb-12">
               探索阿凱老師開發的教育工具，為您的教學增添創新的可能
             </p>
@@ -109,8 +104,8 @@ export function Home() {
               )}
             </section>
 
-            {/* 其他組件保持在底部 */}
-            <div className="space-y-4 sm:space-y-6">
+            {/* 其他組件保持在中間部分 */}
+            <div className="space-y-4 sm:space-y-6 mb-8">
               <div data-tour="emoji-storytelling">
                 <EmojiStoryTelling />
               </div>
@@ -126,6 +121,11 @@ export function Home() {
               <div data-tour="diagnostics">
                 <DiagnosticsDashboard />
               </div>
+            </div>
+
+            {/* SEO 分析報告移到最下方 */}
+            <div className="mt-8" data-tour="seo-analytics">
+              <SeoAnalyticsDashboard />
             </div>
           </div>
         </div>
