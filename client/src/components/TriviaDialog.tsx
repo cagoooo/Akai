@@ -37,13 +37,13 @@ export function TriviaDialog() {
   };
 
   const handlePrevious = () => {
-    setCurrentTriviaIndex((prev) => 
+    setCurrentTriviaIndex((prev) =>
       prev === 0 ? trivia.length - 1 : prev - 1
     );
   };
 
   const handleNext = () => {
-    setCurrentTriviaIndex((prev) => 
+    setCurrentTriviaIndex((prev) =>
       (prev + 1) % trivia.length
     );
   };
@@ -79,21 +79,23 @@ export function TriviaDialog() {
             role="dialog"
             aria-label="學習小提示"
           >
-            {/* 關閉按鈕 */}
-            <Button
-              variant="outline"
-              size="icon"
-              className="absolute right-4 top-4 h-8 w-8 rounded-full hover:bg-muted transition-colors"
-              onClick={handleDismiss}
-              aria-label="關閉提示"
-            >
-              <X className="h-4 w-4" />
-            </Button>
+            {/* 關閉按鈕 - 移到外層並增加間距 */}
+            <div className="absolute right-2 top-2">
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8 rounded-full hover:bg-muted transition-colors"
+                onClick={handleDismiss}
+                aria-label="關閉提示"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
 
-            {/* 內容區域 */}
+            {/* 內容區域 - 為進度條添加左側 margin 避開關閉按鈕 */}
             <div className="pt-2">
               {/* 進度條 */}
-              <div className="mb-4">
+              <div className="mb-4 mr-12"> {/* 添加右側 margin 避開關閉按鈕 */}
                 <Progress 
                   value={((currentTriviaIndex + 1) / trivia.length) * 100} 
                   className="h-2"
