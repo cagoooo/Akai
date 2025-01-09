@@ -79,17 +79,26 @@ export function TriviaDialog() {
             role="dialog"
             aria-label="學習小提示"
           >
-            {/* 關閉按鈕 - 移到外層並增加間距 */}
+            {/* 關閉按鈕 - 添加懸停提示 */}
             <div className="absolute right-2 top-2">
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-8 w-8 rounded-full hover:bg-muted transition-colors"
-                onClick={handleDismiss}
-                aria-label="關閉提示"
-              >
-                <X className="h-4 w-4" />
-              </Button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-8 w-8 rounded-full hover:bg-muted hover:scale-105 transition-all"
+                      onClick={handleDismiss}
+                      aria-label="關閉提示"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>關閉知識小提示</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
 
             {/* 內容區域 - 為進度條添加左側 margin 避開關閉按鈕 */}
