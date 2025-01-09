@@ -103,11 +103,12 @@ export function TriviaDialog() {
 
             {/* 內容區域 - 為進度條添加左側 margin 避開關閉按鈕 */}
             <div className="pt-2">
-              {/* 進度條 - 優化對比度 */}
+              {/* 進度條 - 優化對比度和視覺呈現 */}
               <div className="mb-4 mr-12">
                 <Progress 
                   value={((currentTriviaIndex + 1) / trivia.length) * 100} 
-                  className="h-2 bg-primary/10" 
+                  className="h-2.5 bg-muted" 
+                  indicatorClassName="bg-primary/70 transition-all duration-500 ease-in-out"
                   aria-label={`提示進度：${currentTriviaIndex + 1}/${trivia.length}`}
                 />
               </div>
