@@ -79,7 +79,7 @@ export function TriviaDialog() {
             role="dialog"
             aria-label="學習小提示"
           >
-            {/* 關閉按鈕 - 添加懸停提示 */}
+            {/* 關閉按鈕 - 添加懸停提示和陰影效果 */}
             <div className="absolute right-2 top-2">
               <TooltipProvider>
                 <Tooltip>
@@ -87,7 +87,7 @@ export function TriviaDialog() {
                     <Button
                       variant="outline"
                       size="icon"
-                      className="h-8 w-8 rounded-full hover:bg-muted hover:scale-105 transition-all"
+                      className="h-8 w-8 rounded-full hover:bg-muted hover:scale-105 transition-all shadow-sm hover:shadow-md bg-background"
                       onClick={handleDismiss}
                       aria-label="關閉提示"
                     >
@@ -103,11 +103,11 @@ export function TriviaDialog() {
 
             {/* 內容區域 - 為進度條添加左側 margin 避開關閉按鈕 */}
             <div className="pt-2">
-              {/* 進度條 */}
-              <div className="mb-4 mr-12"> {/* 添加右側 margin 避開關閉按鈕 */}
+              {/* 進度條 - 優化對比度 */}
+              <div className="mb-4 mr-12">
                 <Progress 
                   value={((currentTriviaIndex + 1) / trivia.length) * 100} 
-                  className="h-2"
+                  className="h-2 bg-primary/10" 
                   aria-label={`提示進度：${currentTriviaIndex + 1}/${trivia.length}`}
                 />
               </div>
