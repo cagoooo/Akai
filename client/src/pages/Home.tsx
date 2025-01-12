@@ -32,7 +32,7 @@ export function Home() {
     <div className="min-h-screen bg-background">
       <main className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 md:py-12">
         {/* 頂部標題和按鈕區域 */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-8 mb-6 sm:mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-8 mb-6 sm:mb-8 p-4 rounded-lg bg-blue-50">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
             教育科技創新專區
           </h1>
@@ -60,7 +60,7 @@ export function Home() {
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
           {/* 排行榜區域 - 在手機版時移到最上方 */}
           <div className="w-full lg:w-1/3 lg:order-last">
-            <div className="sticky top-4 space-y-4">
+            <div className="sticky top-4 space-y-4 p-4 rounded-lg bg-purple-50">
               <div data-tour="tool-rankings">
                 <ToolRankings />
               </div>
@@ -71,15 +71,15 @@ export function Home() {
           {/* 工具卡片和其他內容區域 */}
           <div className="w-full lg:w-2/3">
             {/* 訪問計數器 */}
-            <div className="mb-8">
+            <div className="mb-8 p-4 rounded-lg bg-green-50">
               <VisitorCounter />
             </div>
 
-            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mb-8 sm:mb-12">
+            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mb-8 sm:mb-12 p-4 rounded-lg bg-gray-50">
               探索阿凱老師開發的教育工具，為您的教學增添創新的可能
             </p>
 
-            <section aria-labelledby="teacher-info" className="mb-8 sm:mb-12" data-tour="teacher-intro">
+            <section aria-labelledby="teacher-info" className="mb-8 sm:mb-12 p-4 rounded-lg bg-yellow-50" data-tour="teacher-intro">
               <h2 id="teacher-info" className="sr-only">教師介紹</h2>
               <TeacherIntro isLoading={isLoading} />
             </section>
@@ -87,7 +87,7 @@ export function Home() {
             <section
               aria-label={isLoading ? "正在載入教育工具" : "教育工具列表"}
               data-tour="tools-grid"
-              className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-8"
+              className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-8 p-4 rounded-lg bg-indigo-50"
             >
               {isLoading ? (
                 Array.from({ length: 4 }).map((_, index) => (
@@ -106,25 +106,25 @@ export function Home() {
 
             {/* 其他組件保持在中間部分 */}
             <div className="space-y-4 sm:space-y-6 mb-8">
-              <div data-tour="emoji-storytelling">
+              <div data-tour="emoji-storytelling" className="p-4 rounded-lg bg-pink-50">
                 <EmojiStoryTelling />
               </div>
-              <div data-tour="mood-tracker">
+              <div data-tour="mood-tracker" className="p-4 rounded-lg bg-orange-50">
                 <MoodTracker toolId={1} />
               </div>
-              <div data-tour="progress-dashboard">
+              <div data-tour="progress-dashboard" className="p-4 rounded-lg bg-teal-50">
                 <ProgressDashboard />
               </div>
-              <div data-tour="achievements">
+              <div data-tour="achievements" className="p-4 rounded-lg bg-amber-50">
                 <AchievementsList />
               </div>
-              <div data-tour="diagnostics">
+              <div data-tour="diagnostics" className="p-4 rounded-lg bg-cyan-50">
                 <DiagnosticsDashboard />
               </div>
             </div>
 
             {/* SEO 分析報告移到最下方 */}
-            <div className="mt-8" data-tour="seo-analytics">
+            <div className="mt-8 p-4 rounded-lg bg-red-50" data-tour="seo-analytics">
               <SeoAnalyticsDashboard />
             </div>
           </div>
