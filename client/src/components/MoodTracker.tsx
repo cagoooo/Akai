@@ -6,7 +6,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
-import { ToastAction } from "@/components/ui/toast";
 
 interface Mood {
   emoji: string;
@@ -73,14 +72,13 @@ export function MoodTracker({ toolId }: MoodTrackerProps) {
         title: "提交失敗",
         description: error.message,
         variant: "destructive",
-        action: retryCount < 3 ? (
-          <ToastAction altText="重試" onClick={() => {
+        action: retryCount < 3 ? {
+          label: "重試",
+          onClick: () => {
             setRetryCount(prev => prev + 1);
             handleSubmit();
-          }}>
-            重試
-          </ToastAction>
-        ) : undefined,
+          }
+        } : undefined
       });
     },
   });

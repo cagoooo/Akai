@@ -371,7 +371,6 @@ export function registerRoutes(app: Express): Server {
       }
 
       const parsedBody = validationResult.data;
-      const userId = req.user?.id;
 
       // Add additional validation
       if (!parsedBody.toolId || !parsedBody.mood || !parsedBody.emoji) {
@@ -392,16 +391,24 @@ export function registerRoutes(app: Express): Server {
         });
       }
 
-      // Create mood entry
-      const moodEntry = await db.insert(moodEntries).values({
-        ...parsedBody,
-        userId: userId || null,
-      }).returning();
+      try {
+        // Create mood entry with transaction
+        const moodEntry = await db.transaction(async (tx) => {
+          const [entry] = await tx.insert(moodEntries).values({
+            ...parsedBody,
+            userId: req.user?.id || null,
+          }).returning();
+          return entry;
+        });
 
-      // Log success for debugging
-      console.log("Mood entry created successfully:", moodEntry[0].id);
+        // Log success for debugging
+        console.log("Mood entry created successfully:", moodEntry.id);
 
-      res.json(moodEntry[0]);
+        return res.json(moodEntry);
+      } catch (dbError) {
+        console.error("Database error:", dbError);
+        throw new Error("資料儲存失敗，請稍後再試");
+      }
     } catch (error) {
       console.error("Mood entry error:", error);
 
@@ -418,7 +425,7 @@ export function registerRoutes(app: Express): Server {
       });
 
       res.status(500).json({ 
-        message: "提交心情時發生錯誤，請稍後再試",
+        message: error instanceof Error ? error.message : "提交心情時發生錯誤，請稍後再試",
         errorId: new Date().getTime()
       });
     }
