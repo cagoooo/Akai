@@ -104,7 +104,7 @@ function MilestoneProgress({ currentVisits }: { currentVisits: number }) {
       <div className="flex justify-between text-sm font-medium">
         <span className="text-primary-foreground/90">目前：{currentVisits}</span>
         <div className="flex items-center gap-1 text-primary-foreground/90">
-          <NextIcon className="h-4 w-4 text-yellow-400" />
+          <NextIcon className="h-4 w-4 text-yellow-400 milestone-icon" />
           <span>下一個里程碑：</span>
           <span className="font-bold">{nextMilestone.value.toLocaleString()}</span>
         </div>
