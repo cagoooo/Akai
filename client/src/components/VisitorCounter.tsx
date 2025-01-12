@@ -111,7 +111,7 @@ function MilestoneProgress({ currentVisits }: { currentVisits: number }) {
       </div>
       <Progress 
         value={progress} 
-        className="h-2 bg-primary-foreground/20" 
+        className="h-2 bg-gradient-to-r from-yellow-200/20 to-yellow-600/30 [&>div]:bg-gradient-to-r [&>div]:from-yellow-300 [&>div]:via-yellow-500 [&>div]:to-yellow-600" 
       />
     </div>
   );
