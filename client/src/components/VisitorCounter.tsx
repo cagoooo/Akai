@@ -15,7 +15,7 @@ interface StatsResponse {
 
 interface Milestone {
   value: number;
-  icon: typeof Award; // Changed back to typeof Award
+  icon: typeof Award;
   title: string;
   description: string;
 }
@@ -101,14 +101,18 @@ function MilestoneProgress({ currentVisits }: { currentVisits: number }) {
 
   return (
     <div className="mt-4 space-y-2">
-      <div className="flex justify-between text-xs text-muted-foreground">
-        <span>目前：{currentVisits}</span>
-        <div className="flex items-center gap-1">
-          <NextIcon className="h-4 w-4" />
-          <span>下一個里程碑：{nextMilestone.value}</span>
+      <div className="flex justify-between text-sm font-medium">
+        <span className="text-primary-foreground/90">目前：{currentVisits}</span>
+        <div className="flex items-center gap-1 text-primary-foreground/90">
+          <NextIcon className="h-4 w-4 text-yellow-400" />
+          <span>下一個里程碑：</span>
+          <span className="font-bold">{nextMilestone.value.toLocaleString()}</span>
         </div>
       </div>
-      <Progress value={progress} className="h-2" />
+      <Progress 
+        value={progress} 
+        className="h-2 bg-primary-foreground/20" 
+      />
     </div>
   );
 }
