@@ -5,6 +5,7 @@ import { UserCheck, Award, Star, Trophy, Crown, Diamond, Rocket, Sparkles } from
 import { motion, animate, useMotionValue, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { Progress } from "@/components/ui/progress";
 
 interface StatsResponse {
   totalVisits: number;
@@ -14,7 +15,7 @@ interface StatsResponse {
 
 interface Milestone {
   value: number;
-  icon: typeof Award;
+  icon: typeof Award; // Changed back to typeof Award
   title: string;
   description: string;
 }
@@ -88,6 +89,30 @@ function AnimatedNumber({ value }: { value: number }) {
   );
 }
 
+function MilestoneProgress({ currentVisits }: { currentVisits: number }) {
+  // 找到下一個里程碑
+  const nextMilestone = MILESTONES.find(m => m.value > currentVisits) || MILESTONES[MILESTONES.length - 1];
+  const prevMilestone = MILESTONES.find(m => m.value <= currentVisits) || MILESTONES[0];
+
+  // 計算進度
+  const progress = ((currentVisits - prevMilestone.value) / (nextMilestone.value - prevMilestone.value)) * 100;
+
+  const NextIcon = nextMilestone.icon;
+
+  return (
+    <div className="mt-4 space-y-2">
+      <div className="flex justify-between text-xs text-muted-foreground">
+        <span>目前：{currentVisits}</span>
+        <div className="flex items-center gap-1">
+          <NextIcon className="h-4 w-4" />
+          <span>下一個里程碑：{nextMilestone.value}</span>
+        </div>
+      </div>
+      <Progress value={progress} className="h-2" />
+    </div>
+  );
+}
+
 export function VisitorCounter() {
   const { toast } = useToast();
   const lastMilestoneRef = useRef<number>(0);
@@ -120,7 +145,7 @@ export function VisitorCounter() {
       toast({
         title: (
           <div className="flex items-center gap-2">
-            <Icon className="h-5 w-5 text-yellow-400" />
+            <Icon className="h-4 w-4 text-yellow-400" />
             <span>{milestone.title}</span>
           </div>
         ),
@@ -174,6 +199,9 @@ export function VisitorCounter() {
           <span>今日訪問：</span>
           <AnimatedNumber value={todayVisits} />
         </div>
+
+        {/* 新增里程碑進度條 */}
+        <MilestoneProgress currentVisits={totalVisits} />
       </CardContent>
     </Card>
   );
