@@ -21,14 +21,14 @@ ampRouter.get('/', (_req, res) => {
         <!-- Open Graph Tags -->
         <meta property="og:title" content="教育科技創新專區">
         <meta property="og:description" content="探索AI驅動的個人化學習體驗">
-        <meta property="og:image" content="https://smes.tyc.edu.tw/social-preview.png">
+        <meta property="og:image" content="https://smes.tyc.edu.tw/Akai.png">
         <meta property="og:url" content="https://smes.tyc.edu.tw">
 
         <!-- Twitter Card Tags -->
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:title" content="教育科技創新專區">
         <meta name="twitter:description" content="探索AI驅動的個人化學習體驗">
-        <meta name="twitter:image" content="https://smes.tyc.edu.tw/social-preview.png">
+        <meta name="twitter:image" content="https://smes.tyc.edu.tw/Akai.png">
 
         <script async src="https://cdn.ampproject.org/v0.js"></script>
 
