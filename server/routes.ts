@@ -1,4 +1,4 @@
-import type { Express } from "express";
+import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import express from "express";
 import path from "path";
@@ -7,10 +7,30 @@ import {
   sharedResources, collaborators, users, moodEntries, 
   achievements, userAchievements, errorLogs, systemMetrics,
   toolUsageStats, visitorStats, seoAnalysisReports,
-  seoMetrics, keywordRankings
+  seoMetrics, keywordRankings,
+  insertSharedResourceSchema,
+  insertCollaboratorSchema,
+  insertMoodEntrySchema,
+  insertErrorLogSchema,
+  insertSystemMetricSchema,
+  insertSeoAnalysisReportSchema,
+  insertKeywordRankingSchema,
+  insertSeoMetricsSchema
 } from "@db/schema";
 import { eq, and, desc } from "drizzle-orm";
 import { ampRouter } from './amp';
+
+// 擴展 Express Request 類型以包含用戶信息
+declare global {
+  namespace Express {
+    interface Request {
+      user?: {
+        id: number;
+        username: string;
+      };
+    }
+  }
+}
 
 // 定時任務函數
 async function runSeoAnalysis() {
@@ -334,19 +354,73 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
-  // New endpoint for mood entries
+  // New endpoint for mood entries with improved error handling
   app.post("/api/mood-entries", async (req, res) => {
     try {
-      const parsedBody = insertMoodEntrySchema.parse(req.body);
-      const userId = req.user?.id; 
+      const validationResult = insertMoodEntrySchema.safeParse(req.body);
+
+      if (!validationResult.success) {
+        console.error("Mood entry validation failed:", validationResult.error);
+        return res.status(400).json({ 
+          message: "無效的心情資料",
+          details: validationResult.error.errors.map(err => ({
+            field: err.path.join('.'),
+            message: err.message
+          }))
+        });
+      }
+
+      const parsedBody = validationResult.data;
+      const userId = req.user?.id;
+
+      // Add additional validation
+      if (!parsedBody.toolId || !parsedBody.mood || !parsedBody.emoji) {
+        return res.status(400).json({
+          message: "缺少必要欄位",
+          details: {
+            toolId: !parsedBody.toolId ? "工具ID為必填" : null,
+            mood: !parsedBody.mood ? "心情狀態為必填" : null,
+            emoji: !parsedBody.emoji ? "表情符號為必填" : null
+          }
+        });
+      }
+
+      // Check if intensity is within valid range
+      if (parsedBody.intensity < 1 || parsedBody.intensity > 5) {
+        return res.status(400).json({
+          message: "心情強度必須在1到5之間"
+        });
+      }
+
+      // Create mood entry
       const moodEntry = await db.insert(moodEntries).values({
         ...parsedBody,
         userId: userId || null,
       }).returning();
+
+      // Log success for debugging
+      console.log("Mood entry created successfully:", moodEntry[0].id);
+
       res.json(moodEntry[0]);
     } catch (error) {
       console.error("Mood entry error:", error);
-      res.status(400).json({ message: "無效的心情資料" });
+
+      // Log the error
+      await db.insert(errorLogs).values({
+        level: "error",
+        message: "Failed to create mood entry",
+        stack: error instanceof Error ? error.stack : undefined,
+        metadata: {
+          payload: req.body,
+          errorMessage: error instanceof Error ? error.message : "Unknown error"
+        },
+        userId: req.user?.id || null
+      });
+
+      res.status(500).json({ 
+        message: "提交心情時發生錯誤，請稍後再試",
+        errorId: new Date().getTime()
+      });
     }
   });
 

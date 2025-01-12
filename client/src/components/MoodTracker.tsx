@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
+import { ToastAction } from "@/components/ui/toast";
 
 interface Mood {
   emoji: string;
@@ -30,6 +31,7 @@ export function MoodTracker({ toolId }: MoodTrackerProps) {
   const [intensity, setIntensity] = useState<number>(3);
   const [notes, setNotes] = useState("");
   const { toast } = useToast();
+  const [retryCount, setRetryCount] = useState(0);
 
   const submitMutation = useMutation({
     mutationFn: async (data: {
@@ -48,7 +50,8 @@ export function MoodTracker({ toolId }: MoodTrackerProps) {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to submit mood");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "提交失敗");
       }
 
       return response.json();
@@ -61,18 +64,36 @@ export function MoodTracker({ toolId }: MoodTrackerProps) {
       setSelectedMood(null);
       setIntensity(3);
       setNotes("");
+      setRetryCount(0);
     },
-    onError: () => {
+    onError: (error: Error) => {
+      console.error("Mood submission error:", error);
+
       toast({
         title: "提交失敗",
-        description: "請稍後再試",
+        description: error.message,
         variant: "destructive",
+        action: retryCount < 3 ? (
+          <ToastAction altText="重試" onClick={() => {
+            setRetryCount(prev => prev + 1);
+            handleSubmit();
+          }}>
+            重試
+          </ToastAction>
+        ) : undefined,
       });
     },
   });
 
   const handleSubmit = () => {
-    if (!selectedMood) return;
+    if (!selectedMood) {
+      toast({
+        title: "請選擇心情",
+        description: "請先選擇一個表情符號來表達您的心情",
+        variant: "destructive"
+      });
+      return;
+    }
 
     submitMutation.mutate({
       toolId,
@@ -98,8 +119,11 @@ export function MoodTracker({ toolId }: MoodTrackerProps) {
             >
               <Button
                 variant={selectedMood?.name === mood.name ? "default" : "outline"}
-                className="w-full h-full aspect-square text-2xl"
+                className={`w-full h-full aspect-square text-2xl ${
+                  submitMutation.isPending ? "opacity-50 cursor-not-allowed" : ""
+                }`}
                 onClick={() => setSelectedMood(mood)}
+                disabled={submitMutation.isPending}
                 aria-label={mood.description}
               >
                 {mood.emoji}
@@ -126,6 +150,7 @@ export function MoodTracker({ toolId }: MoodTrackerProps) {
                 onValueChange={([value]) => setIntensity(value)}
                 className="w-full"
                 aria-label="選擇強度"
+                disabled={submitMutation.isPending}
               />
               <div className="flex justify-between text-sm text-muted-foreground">
                 <span>較弱</span>
@@ -142,15 +167,27 @@ export function MoodTracker({ toolId }: MoodTrackerProps) {
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="分享你的想法..."
                 className="resize-none"
+                disabled={submitMutation.isPending}
               />
             </div>
 
             <Button
               onClick={handleSubmit}
               disabled={submitMutation.isPending}
-              className="w-full"
+              className="w-full relative"
             >
-              {submitMutation.isPending ? "記錄中..." : "記錄心情"}
+              {submitMutation.isPending ? (
+                <>
+                  <motion.div
+                    className="absolute inset-0 bg-primary/10"
+                    animate={{ opacity: [0.5, 1] }}
+                    transition={{ duration: 1, repeat: Infinity }}
+                  />
+                  記錄中...
+                </>
+              ) : (
+                "記錄心情"
+              )}
             </Button>
           </motion.div>
         )}
