@@ -192,6 +192,13 @@ interface ToolRanking {
   categoryClicks: Record<string, number>;
 }
 
+const rankColors = {
+  0: "from-yellow-50/80 via-yellow-100/50 to-yellow-200/30 dark:from-yellow-500/20 dark:to-yellow-600/20 border-yellow-200/50",
+  1: "from-gray-50/80 via-gray-100/50 to-gray-200/30 dark:from-gray-500/20 dark:to-gray-600/20 border-gray-200/50",
+  2: "from-amber-50/80 via-amber-100/50 to-amber-200/30 dark:from-amber-500/20 dark:to-amber-600/20 border-amber-200/50",
+  default: "from-slate-50/50 via-white to-slate-50/50 hover:from-slate-100/50 hover:to-slate-100/50"
+};
+
 export function ToolRankings() {
   const [previousRankings, setPreviousRankings] = useState<Record<number, number>>({});
   const [isMuted, setIsMuted] = useState(soundManager.isSoundMuted());
@@ -324,12 +331,7 @@ export function ToolRankings() {
 
             const isTop = index < 3;
             const previousRank = previousRankings[ranking.toolId];
-            const rankColors = {
-              0: "from-yellow-50/80 to-yellow-100/80 dark:from-yellow-500/20 dark:to-yellow-600/20 border-yellow-200/50",
-              1: "from-gray-50/80 to-gray-100/80 dark:from-gray-500/20 dark:to-gray-600/20 border-gray-200/50",
-              2: "from-amber-50/80 to-amber-100/80 dark:from-amber-500/20 dark:to-amber-600/20 border-amber-200/50",
-              default: "hover:bg-muted/50"
-            };
+            
 
             const rankColor = isTop ? rankColors[index] : rankColors.default;
 
@@ -357,13 +359,14 @@ export function ToolRankings() {
                 }}
                 tabIndex={0}
                 className={`
-                  flex items-center space-x-4 p-3 rounded-lg 
+                  flex items-center space-x-4 p-4 rounded-lg 
                   transition-all duration-300 cursor-pointer
-                  ${isTop ? `bg-gradient-to-r ${rankColor} shadow-sm` : 'hover:bg-muted/50'}
+                  bg-gradient-to-r shadow-sm
+                  ${isTop ? rankColor : rankColor.default}
                   ${previousRank && previousRank > index + 1 ? 'border-l-4 border-green-400' : ''}
                   ${previousRank && previousRank < index + 1 ? 'border-l-4 border-orange-400' : ''}
-                  mb-2 relative overflow-hidden
-                  hover:shadow-md hover:translate-x-1
+                  mb-3 relative overflow-hidden
+                  hover:shadow-lg hover:translate-x-1
                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary
                 `}
                 role="link"
