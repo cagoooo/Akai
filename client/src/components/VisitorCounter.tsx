@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { UserCheck, Award } from "lucide-react";
+import { UserCheck, Award, Star, Trophy, Crown, Diamond, Rocket, Sparkles } from "lucide-react";
 import { motion, animate, useMotionValue, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
@@ -12,7 +12,51 @@ interface StatsResponse {
   lastVisitAt?: string;
 }
 
-const MILESTONES = [100, 500, 1000, 5000, 10000];
+interface Milestone {
+  value: number;
+  icon: typeof Award;
+  title: string;
+  description: string;
+}
+
+const MILESTONES: Milestone[] = [
+  {
+    value: 100,
+    icon: Star,
+    title: "新星誕生！",
+    description: "網站訪問突破 100 次，您的教育旅程正要開始！"
+  },
+  {
+    value: 500,
+    icon: Trophy,
+    title: "教育先鋒！",
+    description: "500 次訪問達成，您正在影響更多的學習者！"
+  },
+  {
+    value: 1000,
+    icon: Crown,
+    title: "知識之王！",
+    description: "突破 1,000 次訪問，您的影響力正在成長！"
+  },
+  {
+    value: 2000,
+    icon: Diamond,
+    title: "教育瑰寶！",
+    description: "2,000 次訪問里程碑，您的貢獻閃耀非凡！"
+  },
+  {
+    value: 5000,
+    icon: Rocket,
+    title: "教育火箭！",
+    description: "驚人的 5,000 次訪問，您的影響力正在飛速提升！"
+  },
+  {
+    value: 10000,
+    icon: Sparkles,
+    title: "教育傳奇！",
+    description: "難以置信！10,000 次訪問，您已成為教育界的傳奇！"
+  }
+];
 
 function AnimatedNumber({ value }: { value: number }) {
   const count = useMotionValue(0);
@@ -29,8 +73,8 @@ function AnimatedNumber({ value }: { value: number }) {
   // 根據數值大小改變顏色
   const textColor = useTransform(
     count,
-    [0, 100, 500, 1000],
-    ["#60A5FA", "#34D399", "#FBBF24", "#F87171"]
+    [0, 100, 500, 1000, 2000, 5000, 10000],
+    ["#60A5FA", "#34D399", "#FBBF24", "#F87171", "#8B5CF6", "#EC4899", "#14B8A6"]
   );
 
   return (
@@ -64,21 +108,23 @@ export function VisitorCounter() {
 
     // 檢查是否達到新的里程碑
     const milestone = MILESTONES.find(m => 
-      stats.totalVisits >= m && m > lastMilestoneRef.current
+      stats.totalVisits >= m.value && m.value > lastMilestoneRef.current
     );
 
     if (milestone) {
-      lastMilestoneRef.current = milestone;
+      lastMilestoneRef.current = milestone.value;
+
+      const Icon = milestone.icon;
 
       // 顯示里程碑達成通知
       toast({
         title: (
           <div className="flex items-center gap-2">
-            <Award className="h-5 w-5 text-yellow-400" />
-            <span>里程碑達成！</span>
+            <Icon className="h-5 w-5 text-yellow-400" />
+            <span>{milestone.title}</span>
           </div>
         ),
-        description: `恭喜！網站訪問次數已突破 ${milestone} 次！`,
+        description: milestone.description,
         duration: 5000,
       });
 
