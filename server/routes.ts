@@ -362,32 +362,46 @@ export function registerRoutes(app: Express): Server {
       if (!validationResult.success) {
         console.error("Mood entry validation failed:", validationResult.error);
         return res.status(400).json({ 
-          message: "無效的心情資料",
+          message: "心情資料格式不正確",
           details: validationResult.error.errors.map(err => ({
             field: err.path.join('.'),
-            message: err.message
+            message: err.message === "Required" ? "此欄位為必填" : err.message
           }))
         });
       }
 
       const parsedBody = validationResult.data;
 
-      // Add additional validation
-      if (!parsedBody.toolId || !parsedBody.mood || !parsedBody.emoji) {
+      // Add additional validation with specific messages
+      const validationErrors = [];
+
+      if (!parsedBody.toolId) {
+        validationErrors.push({ field: "toolId", message: "請選擇使用的工具" });
+      }
+
+      if (!parsedBody.mood) {
+        validationErrors.push({ field: "mood", message: "請選擇您的心情狀態" });
+      }
+
+      if (!parsedBody.emoji) {
+        validationErrors.push({ field: "emoji", message: "請選擇表情符號" });
+      }
+
+      if (validationErrors.length > 0) {
         return res.status(400).json({
-          message: "缺少必要欄位",
-          details: {
-            toolId: !parsedBody.toolId ? "工具ID為必填" : null,
-            mood: !parsedBody.mood ? "心情狀態為必填" : null,
-            emoji: !parsedBody.emoji ? "表情符號為必填" : null
-          }
+          message: "請填寫所有必要欄位",
+          details: validationErrors
         });
       }
 
       // Check if intensity is within valid range
       if (parsedBody.intensity < 1 || parsedBody.intensity > 5) {
         return res.status(400).json({
-          message: "心情強度必須在1到5之間"
+          message: "心情強度超出範圍",
+          details: [{
+            field: "intensity",
+            message: "心情強度必須在1到5之間"
+          }]
         });
       }
 
@@ -401,32 +415,39 @@ export function registerRoutes(app: Express): Server {
           return entry;
         });
 
-        // Log success for debugging
-        console.log("Mood entry created successfully:", moodEntry.id);
+        console.log("心情記錄建立成功:", moodEntry.id);
 
-        return res.json(moodEntry);
+        return res.json({
+          message: "心情記錄已成功儲存",
+          data: moodEntry
+        });
       } catch (dbError) {
-        console.error("Database error:", dbError);
-        throw new Error("資料儲存失敗，請稍後再試");
+        console.error("資料庫錯誤:", dbError);
+        throw new Error("無法儲存心情記錄，請稍後再試");
       }
     } catch (error) {
-      console.error("Mood entry error:", error);
+      console.error("心情記錄錯誤:", error);
 
-      // Log the error
+      // Log the error with details
       await db.insert(errorLogs).values({
         level: "error",
-        message: "Failed to create mood entry",
+        message: "建立心情記錄失敗",
         stack: error instanceof Error ? error.stack : undefined,
         metadata: {
           payload: req.body,
-          errorMessage: error instanceof Error ? error.message : "Unknown error"
+          errorMessage: error instanceof Error ? error.message : "未知錯誤",
+          timestamp: new Date().toISOString()
         },
         userId: req.user?.id || null
       });
 
       res.status(500).json({ 
-        message: error instanceof Error ? error.message : "提交心情時發生錯誤，請稍後再試",
-        errorId: new Date().getTime()
+        message: error instanceof Error ? error.message : "系統發生錯誤，請稍後再試",
+        errorId: new Date().getTime(),
+        details: [{
+          field: "general",
+          message: "如果問題持續發生，請聯繫客服支援"
+        }]
       });
     }
   });
