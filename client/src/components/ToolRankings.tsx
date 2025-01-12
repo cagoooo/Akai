@@ -309,15 +309,8 @@ export function ToolRankings() {
               className="h-8 w-8 p-0"
               aria-label={isMuted ? "開啟音效" : "關閉音效"}
             >
-              <motion.div
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                {isMuted ? (
-                  <VolumeX className="h-4 w-4" />
-                ) : (
-                  <Volume2 className="h-4 w-4" />
-                )}
+              <motion.div whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.9 }}>
+                {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
               </motion.div>
             </Button>
           </div>
@@ -331,6 +324,14 @@ export function ToolRankings() {
 
             const isTop = index < 3;
             const previousRank = previousRankings[ranking.toolId];
+            const rankColors = {
+              0: "from-yellow-50/80 to-yellow-100/80 dark:from-yellow-500/20 dark:to-yellow-600/20 border-yellow-200/50",
+              1: "from-gray-50/80 to-gray-100/80 dark:from-gray-500/20 dark:to-gray-600/20 border-gray-200/50",
+              2: "from-amber-50/80 to-amber-100/80 dark:from-amber-500/20 dark:to-amber-600/20 border-amber-200/50",
+              default: "hover:bg-muted/50"
+            };
+
+            const rankColor = isTop ? rankColors[index] : rankColors.default;
 
             return (
               <motion.div 
@@ -355,14 +356,13 @@ export function ToolRankings() {
                   }
                 }}
                 tabIndex={0}
-                id={index === 0 ? "top-tool" : ""}
                 className={`
                   flex items-center space-x-4 p-3 rounded-lg 
-                  transition-all duration-300
-                  ${isTop ? 'bg-gradient-to-r from-primary/5 to-primary/10' : 'hover:bg-muted/50'}
-                  mb-2 relative overflow-hidden cursor-pointer
+                  transition-all duration-300 cursor-pointer
+                  ${isTop ? `bg-gradient-to-r ${rankColor} shadow-sm` : 'hover:bg-muted/50'}
                   ${previousRank && previousRank > index + 1 ? 'border-l-4 border-green-400' : ''}
                   ${previousRank && previousRank < index + 1 ? 'border-l-4 border-orange-400' : ''}
+                  mb-2 relative overflow-hidden
                   hover:shadow-md hover:translate-x-1
                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary
                 `}
