@@ -50,7 +50,7 @@ export function MoodTracker({ toolId }: MoodTrackerProps) {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "提交失敗");
+        throw new Error(errorData.message || "提交失敗，請稍後再試");
       }
 
       return response.json();
@@ -72,13 +72,18 @@ export function MoodTracker({ toolId }: MoodTrackerProps) {
         title: "提交失敗",
         description: error.message,
         variant: "destructive",
-        action: retryCount < 3 ? {
-          label: "重試",
-          onClick: () => {
-            setRetryCount(prev => prev + 1);
-            handleSubmit();
-          }
-        } : undefined
+        action: retryCount < 3 ? (
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => {
+              setRetryCount(prev => prev + 1);
+              handleSubmit();
+            }}
+          >
+            重試
+          </Button>
+        ) : undefined
       });
     },
   });
