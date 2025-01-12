@@ -60,11 +60,6 @@ export function Home() {
           </div>
         </header>
 
-        {/* 色彩對比度檢測區域 */}
-        <div className="mb-8">
-          <ColorContrastIndicator />
-        </div>
-
         {/* 主要內容區域 */}
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
           {/* 排行榜區域 - 紫色系背景 */}
@@ -147,6 +142,11 @@ export function Home() {
             {/* SEO 分析報告區域 - 紅色系背景 */}
             <section className="mt-8 p-4 rounded-lg bg-red-50 dark:bg-red-950/50" data-tour="seo-analytics">
               <SeoAnalyticsDashboard />
+            </section>
+
+            {/* 色彩對比度檢測區域 - 移動到最下方 */}
+            <section className="mt-8 p-4 rounded-lg bg-slate-50 dark:bg-slate-950/50" data-tour="color-contrast">
+              <ColorContrastIndicator />
             </section>
           </div>
         </div>
