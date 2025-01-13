@@ -40,6 +40,23 @@ interface ChartData {
     挑戰: number;
     疲憊: number;
   }[];
+  weeklyStats: {
+    week: string;
+    count: number;
+  }[];
+  weeklyMoods: {
+    week: string;
+    開心: number;
+    困惑: number;
+    滿意: number;
+    挑戰: number;
+    疲憊: number;
+  }[];
+  learningEfficiency: {
+    week: string;
+    count: number;
+    efficiency: number;
+  }[];
   achievements: {
     category: string;
     completed: number;
@@ -176,7 +193,7 @@ export function ProgressDashboard() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-3 bg-muted/50">
+          <TabsList className="grid w-full grid-cols-4 bg-muted/50">
             <TabsTrigger 
               value="tools"
               className={cn(
@@ -194,6 +211,15 @@ export function ProgressDashboard() {
               )}
             >
               學習心情
+            </TabsTrigger>
+            <TabsTrigger 
+              value="weekly"
+              className={cn(
+                "transition-all duration-300",
+                activeTab === "weekly" && "bg-primary text-primary-foreground"
+              )}
+            >
+              週度分析
             </TabsTrigger>
             <TabsTrigger 
               value="achievements"
@@ -300,6 +326,74 @@ export function ProgressDashboard() {
                         ))}
                     </LineChart>
                   </ResponsiveContainer>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="weekly">
+                <div className="space-y-4">
+                  <div className="aspect-[2/1] mt-4">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={chartData.weeklyStats}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#888" opacity={0.2} />
+                        <XAxis
+                          dataKey="week"
+                          tickFormatter={(week) => format(new Date(week), "MM/dd")}
+                          stroke="#888"
+                        />
+                        <YAxis stroke="#888" />
+                        <Tooltip
+                          labelFormatter={(week) => `週開始: ${format(new Date(week), "yyyy/MM/dd")}`}
+                          contentStyle={{ 
+                            backgroundColor: "hsl(var(--card))",
+                            border: "1px solid hsl(var(--border))",
+                            borderRadius: "var(--radius)",
+                          }}
+                        />
+                        <Legend />
+                        <Line
+                          type="monotone"
+                          dataKey="count"
+                          name="使用次數"
+                          stroke={COLORS[0]}
+                          strokeWidth={2}
+                          dot={{ strokeWidth: 2 }}
+                          activeDot={{ r: 8, className: "animate-pulse" }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+
+                  <div className="aspect-[2/1]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={chartData.learningEfficiency}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#888" opacity={0.2} />
+                        <XAxis
+                          dataKey="week"
+                          tickFormatter={(week) => format(new Date(week), "MM/dd")}
+                          stroke="#888"
+                        />
+                        <YAxis stroke="#888" />
+                        <Tooltip
+                          labelFormatter={(week) => `週開始: ${format(new Date(week), "yyyy/MM/dd")}`}
+                          contentStyle={{ 
+                            backgroundColor: "hsl(var(--card))",
+                            border: "1px solid hsl(var(--border))",
+                            borderRadius: "var(--radius)",
+                          }}
+                        />
+                        <Legend />
+                        <Line
+                          type="monotone"
+                          dataKey="efficiency"
+                          name="學習效率"
+                          stroke={COLORS[2]}
+                          strokeWidth={2}
+                          dot={{ strokeWidth: 2 }}
+                          activeDot={{ r: 8, className: "animate-pulse" }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
                 </div>
               </TabsContent>
 

@@ -545,19 +545,65 @@ export function registerRoutes(app: Express): Server {
         where: userId ? eq(moodEntries.userId, userId) : undefined,
         columns: {
           toolId: true,
+          createdAt: true,
         },
       });
+
+      // 計算週度使用趨勢
+      const weeklyStats = toolUsage.reduce((acc: Record<string, number>, curr) => {
+        const weekStart = new Date(curr.createdAt);
+        weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+        const weekKey = weekStart.toISOString().split('T')[0];
+        acc[weekKey] = (acc[weekKey] || 0) + 1;
+        return acc;
+      }, {});
+
       const moodTrends = await db.query.moodEntries.findMany({
         where: userId ? eq(moodEntries.userId, userId) : undefined,
         orderBy: (moodEntries, { asc }) => [asc(moodEntries.createdAt)],
       });
-      const moodMap: Record<string, string> = {
-        'happy': '開心',
-        'confused': '困惑',
-        'satisfied': '滿意',
-        'challenged': '挑戰',
-        'tired': '疲憊'
-      };
+
+      // 計算週度心情趨勢
+      const weeklyMoods = moodTrends.reduce((acc: Record<string, Record<string, number>>, curr) => {
+        const weekStart = new Date(curr.createdAt);
+        weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+        const weekKey = weekStart.toISOString().split('T')[0];
+
+        if (!acc[weekKey]) {
+          acc[weekKey] = {
+            開心: 0,
+            困惑: 0,
+            滿意: 0,
+            挑戰: 0,
+            疲憊: 0,
+          };
+        }
+
+        const moodMap: Record<string, string> = {
+          'happy': '開心',
+          'confused': '困惑',
+          'satisfied': '滿意',
+          'challenged': '挑戰',
+          'tired': '疲憊'
+        };
+
+        acc[weekKey][moodMap[curr.mood]] += 1;
+        return acc;
+      }, {});
+
+      const achievements = await db.query.achievements.findMany({
+        with: {
+          userAchievements: true,
+        },
+      });
+
+      // 計算學習效率指標
+      const learningEfficiency = Object.entries(weeklyStats).map(([week, count]) => ({
+        week,
+        count,
+        efficiency: count / Object.values(weeklyMoods[week] || {}).reduce((sum, val) => sum + val, 1) * 100
+      }));
+
       const stats = {
         toolUsage: Object.entries(
           toolUsage.reduce((acc: Record<number, number>, curr) => {
@@ -585,23 +631,26 @@ export function registerRoutes(app: Express): Server {
             return acc;
           }, {})
         ),
-        achievements: await db.query.achievements.findMany({
-          with: {
-            userAchievements: true,
-          },
-        }).then(achievements => 
-          achievements.reduce((acc: any[], achievement) => {
-            const completed = userId
-              ? achievement.userAchievements.filter(ua => ua.userId === userId).length
-              : achievement.userAchievements.length;
-            acc.push({
-              category: achievement.category,
-              completed,
-              total: 1,
-            });
-            return acc;
-          }, [])
-        ),
+        weeklyStats: Object.entries(weeklyStats).map(([week, count]) => ({
+          week,
+          count,
+        })),
+        weeklyMoods: Object.entries(weeklyMoods).map(([week, moods]) => ({
+          week,
+          ...moods,
+        })),
+        learningEfficiency,
+        achievements: achievements.reduce((acc: any[], achievement) => {
+          const completed = userId
+            ? achievement.userAchievements.filter(ua => ua.userId === userId).length
+            : achievement.userAchievements.length;
+          acc.push({
+            category: achievement.category,
+            completed,
+            total: 1,
+          });
+          return acc;
+        }, []),
       };
       res.json(stats);
     } catch (error) {
