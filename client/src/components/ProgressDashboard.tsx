@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQuery } from "@tanstack/react-query";
@@ -54,6 +54,7 @@ const chartVariants = {
 
 export function ProgressDashboard() {
   const { toast } = useToast();
+  const lastMilestoneRef = useRef<number>(0);
   const [activeTab, setActiveTab] = useState("tools");
   const [hoveredBar, setHoveredBar] = useState<string | null>(null);
   const [achievementProgress, setAchievementProgress] = useState(0);
@@ -72,19 +73,22 @@ export function ProgressDashboard() {
       if (progress !== achievementProgress) {
         setAchievementProgress(progress);
 
-        if (progress >= 50 && achievementProgress < 50) {
+        if (progress >= 50 && lastMilestoneRef.current < 50) {
+          lastMilestoneRef.current = 50;
           toast({
             title: "🎉 達成里程碑！",
             description: "您已完成一半的成就！繼續保持！",
             duration: 5000,
           });
-        } else if (progress >= 75 && achievementProgress < 75) {
+        } else if (progress >= 75 && lastMilestoneRef.current < 75) {
+          lastMilestoneRef.current = 75;
           toast({
             title: "🌟 即將完成！",
             description: "只剩下最後一些成就了！",
             duration: 5000,
           });
-        } else if (progress === 100 && achievementProgress < 100) {
+        } else if (progress === 100 && lastMilestoneRef.current < 100) {
+          lastMilestoneRef.current = 100;
           toast({
             title: "🏆 恭喜完成！",
             description: "您已解鎖所有成就！太厲害了！",
