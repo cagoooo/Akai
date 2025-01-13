@@ -117,7 +117,7 @@ export function ProgressDashboard() {
               variants={chartVariants}
               transition={{ duration: 0.5 }}
             >
-              <TabsContent value="tools">
+              <TabsContent value="tools" className="relative">
                 <div className="aspect-[2/1] mt-4">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart 
@@ -157,6 +157,13 @@ export function ProgressDashboard() {
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="absolute bottom-0 left-0 w-full p-2 text-xs text-muted-foreground text-center"
+                >
+                  點擊工具名稱可查看詳細使用情況
+                </motion.div>
               </TabsContent>
 
               <TabsContent value="moods">
@@ -213,7 +220,6 @@ export function ProgressDashboard() {
                           `${name}: ${value} (${(percent * 100).toFixed(0)}%)`
                         }
                         labelLine={{ strokeWidth: 2 }}
-                        animate
                       >
                         {chartData.achievements.map((_, index) => (
                           <Cell
@@ -230,7 +236,11 @@ export function ProgressDashboard() {
                           borderRadius: "var(--radius)",
                         }}
                       />
-                      <Legend />
+                      <Legend 
+                        formatter={(value) => (
+                          <span className="text-sm font-medium">{value}</span>
+                        )}
+                      />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
