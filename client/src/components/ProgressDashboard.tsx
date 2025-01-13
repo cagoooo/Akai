@@ -17,7 +17,6 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
 import { LoadingScreen } from "./LoadingScreen";
 
@@ -30,20 +29,16 @@ interface ChartData {
   }[];
   moodTrends: {
     date: string;
-    happy: number;
-    confused: number;
-    satisfied: number;
-    challenged: number;
-    tired: number;
+    開心: number;
+    困惑: number;
+    滿意: number;
+    挑戰: number;
+    疲憊: number;
   }[];
   achievements: {
     category: string;
     completed: number;
     total: number;
-  }[];
-  learningProgress: {
-    date: string;
-    progress: number;
   }[];
 }
 
@@ -52,46 +47,10 @@ export function ProgressDashboard() {
 
   const { data: chartData, isLoading } = useQuery<ChartData>({
     queryKey: ["/api/progress-stats"],
-    queryFn: async () => {
-      // Simulate API delay for now
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      return {
-        toolUsage: [
-          { name: "翻譯工具", count: 45 },
-          { name: "課程編輯器", count: 32 },
-          { name: "討論區", count: 28 },
-          { name: "任務追蹤", count: 20 },
-          { name: "學習筆記", count: 15 },
-        ],
-        moodTrends: [
-          {
-            date: "2024-01-01",
-            happy: 5,
-            confused: 2,
-            satisfied: 4,
-            challenged: 3,
-            tired: 1,
-          },
-          // Add more dates...
-        ],
-        achievements: [
-          { category: "工具使用", completed: 8, total: 10 },
-          { category: "學習進度", completed: 5, total: 8 },
-          { category: "社群參與", completed: 3, total: 5 },
-          { category: "創新應用", completed: 2, total: 4 },
-        ],
-        learningProgress: [
-          { date: "2024-01-01", progress: 10 },
-          { date: "2024-01-02", progress: 25 },
-          { date: "2024-01-03", progress: 45 },
-          { date: "2024-01-04", progress: 60 },
-          { date: "2024-01-05", progress: 85 },
-        ],
-      };
-    },
+    refetchInterval: 30000, // 每30秒更新一次數據
   });
 
-  if (isLoading) {
+  if (isLoading || !chartData) {
     return (
       <Card>
         <CardHeader>
@@ -111,43 +70,16 @@ export function ProgressDashboard() {
       </CardHeader>
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview">總覽</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="tools">工具使用</TabsTrigger>
             <TabsTrigger value="moods">學習心情</TabsTrigger>
             <TabsTrigger value="achievements">成就完成</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="overview" className="space-y-4">
-            <div className="aspect-[2/1] mt-4">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={chartData?.learningProgress}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis
-                    dataKey="date"
-                    tickFormatter={(date) => format(new Date(date), "MM/dd")}
-                  />
-                  <YAxis />
-                  <Tooltip
-                    labelFormatter={(date) => format(new Date(date), "yyyy/MM/dd")}
-                  />
-                  <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="progress"
-                    name="學習進度"
-                    stroke="#3b82f6"
-                    strokeWidth={2}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </TabsContent>
-
           <TabsContent value="tools">
             <div className="aspect-[2/1] mt-4">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData?.toolUsage}>
+                <BarChart data={chartData.toolUsage}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
                   <YAxis />
@@ -167,7 +99,7 @@ export function ProgressDashboard() {
           <TabsContent value="moods">
             <div className="aspect-[2/1] mt-4">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={chartData?.moodTrends}>
+                <LineChart data={chartData.moodTrends}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis
                     dataKey="date"
@@ -178,13 +110,14 @@ export function ProgressDashboard() {
                     labelFormatter={(date) => format(new Date(date), "yyyy/MM/dd")}
                   />
                   <Legend />
-                  {Object.keys(chartData?.moodTrends[0] || {})
+                  {Object.keys(chartData.moodTrends[0] || {})
                     .filter((key) => key !== "date")
                     .map((mood, index) => (
                       <Line
                         key={mood}
                         type="monotone"
                         dataKey={mood}
+                        name={mood}
                         stroke={COLORS[index % COLORS.length]}
                         strokeWidth={2}
                       />
@@ -199,17 +132,17 @@ export function ProgressDashboard() {
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
-                    data={chartData?.achievements}
+                    data={chartData.achievements}
                     dataKey="completed"
                     nameKey="category"
                     cx="50%"
                     cy="50%"
                     outerRadius={80}
-                    label={({ name, percent }) =>
-                      `${name} ${(percent * 100).toFixed(0)}%`
+                    label={({ name, value, percent }) =>
+                      `${name}: ${value} (${(percent * 100).toFixed(0)}%)`
                     }
                   >
-                    {chartData?.achievements.map((_, index) => (
+                    {chartData.achievements.map((_, index) => (
                       <Cell
                         key={`cell-${index}`}
                         fill={COLORS[index % COLORS.length]}
