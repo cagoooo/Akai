@@ -668,26 +668,60 @@ export function registerRoutes(app: Express): Server {
       const { toolId } = req.params;
       const parsedId = parseInt(toolId);
 
-      const existingStats = await db.query.toolUsageStats.findFirst({
-        where: eq(toolUsageStats.toolId, parsedId),
+      // Start a transaction to ensure data consistency
+      await db.transaction(async (tx) => {
+        // Update tool usage stats
+        const existingStats = await tx.query.toolUsageStats.findFirst({
+          where: eq(toolUsageStats.toolId, parsedId),
+        });
+
+        if (existingStats) {
+          await tx
+            .update(toolUsageStats)
+            .set({ 
+              totalClicks: existingStats.totalClicks + 1,
+              lastUsedAt: new Date()
+            })
+            .where(eq(toolUsageStats.toolId, parsedId));
+        } else {
+          await tx.insert(toolUsageStats).values({
+            toolId: parsedId,
+            totalClicks: 1,
+          });
+        }
+
+        // Check and update achievements if user is logged in
+        const userId = req.user?.id;
+        if (userId) {
+          // Find tool mastery achievement
+          const toolMasteryAchievement = await tx.query.achievements.findFirst({
+            where: eq(achievements.name, "工具精通"),
+          });
+
+          if (toolMasteryAchievement) {
+            const userAchievement = await tx.query.userAchievements.findFirst({
+              where: and(
+                eq(userAchievements.userId, userId),
+                eq(userAchievements.achievementId, toolMasteryAchievement.id)
+              ),
+            });
+
+            if (!userAchievement && existingStats && existingStats.totalClicks >= 49) {
+              // Award achievement at 50 uses
+              await tx.insert(userAchievements).values({
+                userId,
+                achievementId: toolMasteryAchievement.id,
+                progress: 100,
+              });
+            }
+          }
+        }
       });
 
-      if (existingStats) {
-        await db
-          .update(toolUsageStats)
-          .set({ 
-            totalClicks: existingStats.totalClicks + 1,
-            lastUsedAt: new Date()
-          })
-          .where(eq(toolUsageStats.toolId, parsedId));
-      } else {
-        await db.insert(toolUsageStats).values({
-          toolId: parsedId,
-          totalClicks: 1,
-        });
-      }
-
-      res.json({ message: "使用統計已更新" });
+      res.json({ 
+        message: "使用統計已更新",
+        achievement: "工具精通"
+      });
     } catch (error) {
       console.error("Error tracking tool usage:", error);
       res.status(500).json({ message: "更新使用統計時發生錯誤" });
