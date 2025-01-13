@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQuery } from "@tanstack/react-query";
@@ -21,6 +21,8 @@ import { format } from "date-fns";
 import { LoadingScreen } from "./LoadingScreen";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
+import { Progress } from "@/components/ui/progress";
 
 const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"];
 
@@ -50,13 +52,48 @@ const chartVariants = {
 };
 
 export function ProgressDashboard() {
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("tools");
   const [hoveredBar, setHoveredBar] = useState<string | null>(null);
+  const [achievementProgress, setAchievementProgress] = useState(0);
 
   const { data: chartData, isLoading } = useQuery<ChartData>({
     queryKey: ["/api/progress-stats"],
     refetchInterval: 30000, // 每30秒更新一次數據
   });
+
+  useEffect(() => {
+    if (chartData) {
+      const totalAchievements = chartData.achievements.reduce((acc, curr) => acc + curr.total, 0);
+      const completedAchievements = chartData.achievements.reduce((acc, curr) => acc + curr.completed, 0);
+      const progress = Math.round((completedAchievements / totalAchievements) * 100);
+
+      if (progress !== achievementProgress) {
+        setAchievementProgress(progress);
+
+        // 成就達成提示
+        if (progress >= 50 && achievementProgress < 50) {
+          toast({
+            title: "🎉 達成里程碑！",
+            description: "您已完成一半的成就！繼續保持！",
+            duration: 5000,
+          });
+        } else if (progress >= 75 && achievementProgress < 75) {
+          toast({
+            title: "🌟 即將完成！",
+            description: "只剩下最後一些成就了！",
+            duration: 5000,
+          });
+        } else if (progress === 100 && achievementProgress < 100) {
+          toast({
+            title: "🏆 恭喜完成！",
+            description: "您已解鎖所有成就！太厲害了！",
+            duration: 5000,
+          });
+        }
+      }
+    }
+  }, [chartData, achievementProgress, toast]);
 
   if (isLoading || !chartData) {
     return (
@@ -77,6 +114,18 @@ export function ProgressDashboard() {
         <CardTitle className="text-xl font-bold text-primary">學習進度分析</CardTitle>
       </CardHeader>
       <CardContent>
+        <div className="mb-6">
+          <div className="flex justify-between text-sm text-muted-foreground mb-2">
+            <span>總體成就進度</span>
+            <span>{achievementProgress}%</span>
+          </div>
+          <Progress 
+            value={achievementProgress} 
+            className="h-2 bg-primary/20"
+            indicatorClassName="bg-gradient-to-r from-primary via-primary/80 to-primary"
+          />
+        </div>
+
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-3 bg-muted/50">
             <TabsTrigger 
