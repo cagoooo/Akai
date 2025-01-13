@@ -108,22 +108,49 @@ export function ProgressDashboard() {
     );
   }
 
+  // 計算工具使用趨勢
+  const totalToolUses = chartData.toolUsage.reduce((acc, curr) => acc + curr.count, 0);
+  const mostUsedTool = chartData.toolUsage.reduce((acc, curr) => curr.count > acc.count ? curr : acc);
+
+  // 計算心情趨勢
+  const latestMood = chartData.moodTrends[chartData.moodTrends.length - 1];
+  const dominantMood = Object.entries(latestMood || {})
+    .filter(([key]) => key !== 'date')
+    .reduce((acc, curr) => curr[1] > (acc?.[1] || 0) ? curr : acc)?.[0];
+
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg">
       <CardHeader className="bg-gradient-to-r from-primary/5 to-primary/10">
         <CardTitle className="text-xl font-bold text-primary">學習進度分析</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="mb-6">
-          <div className="flex justify-between text-sm text-muted-foreground mb-2">
-            <span>總體成就進度</span>
-            <span>{achievementProgress}%</span>
+        <div className="mb-6 space-y-4">
+          <div>
+            <div className="flex justify-between text-sm text-muted-foreground mb-2">
+              <span>總體成就進度</span>
+              <span>{achievementProgress}%</span>
+            </div>
+            <Progress 
+              value={achievementProgress} 
+              className="h-2 bg-primary/20"
+              indicatorClassName="bg-gradient-to-r from-primary via-primary/80 to-primary"
+            />
           </div>
-          <Progress 
-            value={achievementProgress} 
-            className="h-2 bg-primary/20"
-            indicatorClassName="bg-gradient-to-r from-primary via-primary/80 to-primary"
-          />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-muted/20 rounded-lg">
+            <div className="space-y-1">
+              <p className="text-sm font-medium">工具使用總次數</p>
+              <p className="text-2xl font-bold text-primary">{totalToolUses}</p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-sm font-medium">最常使用的工具</p>
+              <p className="text-2xl font-bold text-primary">{mostUsedTool.name}</p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-sm font-medium">當前主要心情</p>
+              <p className="text-2xl font-bold text-primary">{dominantMood || '尚無數據'}</p>
+            </div>
+          </div>
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
