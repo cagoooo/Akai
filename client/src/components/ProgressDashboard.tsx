@@ -23,6 +23,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { Progress } from "@/components/ui/progress";
+import { Clock, Award, Zap, Target } from "lucide-react";
 
 const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"];
 
@@ -71,7 +72,6 @@ export function ProgressDashboard() {
       if (progress !== achievementProgress) {
         setAchievementProgress(progress);
 
-        // 成就達成提示
         if (progress >= 50 && achievementProgress < 50) {
           toast({
             title: "🎉 達成里程碑！",
@@ -118,6 +118,12 @@ export function ProgressDashboard() {
     .filter(([key]) => key !== 'date')
     .reduce((acc, curr) => curr[1] > (acc?.[1] || 0) ? curr : acc)?.[0];
 
+  // 預測完成時間
+  const completedAchievements = chartData.achievements.reduce((acc, curr) => acc + curr.completed, 0);
+  const totalAchievements = chartData.achievements.reduce((acc, curr) => acc + curr.total, 0);
+  const completionRate = completedAchievements / totalAchievements;
+  const estimatedDaysToComplete = Math.ceil((1 - completionRate) * 30); // 基於當前進度預測剩餘天數
+
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg">
       <CardHeader className="bg-gradient-to-r from-primary/5 to-primary/10">
@@ -137,17 +143,33 @@ export function ProgressDashboard() {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-muted/20 rounded-lg">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-muted/20 rounded-lg">
             <div className="space-y-1">
-              <p className="text-sm font-medium">工具使用總次數</p>
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4 text-primary" />
+                <p className="text-sm font-medium">預計完成時間</p>
+              </div>
+              <p className="text-2xl font-bold text-primary">{estimatedDaysToComplete} 天</p>
+            </div>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <Award className="h-4 w-4 text-primary" />
+                <p className="text-sm font-medium">工具使用總次數</p>
+              </div>
               <p className="text-2xl font-bold text-primary">{totalToolUses}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm font-medium">最常使用的工具</p>
+              <div className="flex items-center gap-2">
+                <Zap className="h-4 w-4 text-primary" />
+                <p className="text-sm font-medium">最常使用的工具</p>
+              </div>
               <p className="text-2xl font-bold text-primary">{mostUsedTool.name}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm font-medium">當前主要心情</p>
+              <div className="flex items-center gap-2">
+                <Target className="h-4 w-4 text-primary" />
+                <p className="text-sm font-medium">當前主要心情</p>
+              </div>
               <p className="text-2xl font-bold text-primary">{dominantMood || '尚無數據'}</p>
             </div>
           </div>
