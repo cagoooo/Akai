@@ -18,6 +18,7 @@ import { RankingTutorial } from "@/components/RankingTutorial";
 import { VisitorCounter } from "@/components/VisitorCounter";
 import { SeoAnalyticsDashboard } from "@/components/SeoAnalyticsDashboard";
 import { ColorContrastIndicator } from "@/components/ColorContrastIndicator";
+import { TriviaDialog } from "@/components/TriviaDialog";
 
 export function Home() {
   const { startTour } = useTour();
@@ -31,6 +32,7 @@ export function Home() {
 
   return (
     <div className="min-h-screen bg-background">
+      <TriviaDialog />
       <main className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 md:py-12">
         {/* 頂部標題和按鈕區域 - 藍色系背景 */}
         <header 
