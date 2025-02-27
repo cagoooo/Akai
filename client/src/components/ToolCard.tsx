@@ -64,6 +64,13 @@ const categoryColors = {
     icon: "group-hover:text-pink-600",
     gradient: "var(--games-gradient)",
   },
+  interactive: {
+    badge: "bg-cyan-100 text-cyan-800",
+    hover: "from-cyan-50/50 to-cyan-100/50",
+    border: "group-hover:border-cyan-200",
+    icon: "group-hover:text-cyan-600",
+    gradient: "var(--interactive-gradient)",
+  },
 } as const;
 
 interface ToolCardProps {

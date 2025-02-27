@@ -85,3 +85,4 @@
 .driver-popover-progress-text {
   @apply text-muted-foreground !important;
 }
+  --interactive-gradient: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(34, 211, 238, 0.1));

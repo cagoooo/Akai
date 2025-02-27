@@ -160,6 +160,7 @@ function getDefaultPrimaryColor(tool: EducationalTool) {
     case 'reading': return "#EAB308";
     case 'utilities': return "#6B7280";
     case 'games': return "#EC4899";
+    case 'interactive': return "#06B6D4";
     default: return "#6366F1";
   }
 }
@@ -171,6 +172,7 @@ function getDefaultSecondaryColor(tool: EducationalTool) {
     case 'language': return "#A78BFA";
     case 'reading': return "#FCD34D";
     case 'utilities': return "#9CA3AF";
+    case 'interactive': return "#22D3EE";
     case 'games': return "#F472B6";
     default: return "#8B5CF6";
   }
