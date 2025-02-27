@@ -1,3 +1,38 @@
+
+import { Router } from "express";
+import { db } from "../db";
+
+const router = Router();
+
+// Visitor stats table (if it doesn't exist in your schema, you'll need to add it)
+// This is just a placeholder, adjust according to your actual schema
+let visitorStats = {
+  totalVisits: 0,
+  dailyVisits: {} as Record<string, number>
+};
+
+// Get visitor stats
+router.get("/api/visitors", (req, res) => {
+  res.json(visitorStats);
+});
+
+// Increment visitor count
+router.post("/api/visitors/increment", (req, res) => {
+  // Increment total count
+  visitorStats.totalVisits += 1;
+  
+  // Increment daily count
+  const today = new Date().toISOString().split("T")[0];
+  if (!visitorStats.dailyVisits[today]) {
+    visitorStats.dailyVisits[today] = 0;
+  }
+  visitorStats.dailyVisits[today] += 1;
+  
+  res.status(200).json({ success: true });
+});
+
+export default router;
+
 import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import express from "express";
