@@ -19,6 +19,7 @@ import {
 } from "@db/schema";
 import { eq, and, desc } from "drizzle-orm";
 import { ampRouter } from './amp';
+import { log } from './vite';
 
 // 擴展 Express Request 類型以包含用戶信息
 declare global {
