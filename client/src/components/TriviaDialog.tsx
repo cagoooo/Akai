@@ -30,7 +30,7 @@ const trivia = [
 
 export function TriviaDialog() {
   const [currentTriviaIndex, setCurrentTriviaIndex] = useState(0);
-  const [isDismissed, setIsDismissed] = useState(false);
+  const [isDismissed, setIsDismissed] = useState(true); // 預設為已關閉
 
   const handleDismiss = () => {
     setIsDismissed(true);
