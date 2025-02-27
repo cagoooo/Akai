@@ -110,3 +110,87 @@ export function VisitorCounter() {
     </Card>
   );
 }
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ChartBarIcon } from "lucide-react";
+
+// 檢查是否是新工作階段的函數
+const isNewSession = () => {
+  const lastVisit = sessionStorage.getItem('lastVisitTimestamp');
+  const currentTime = new Date().getTime();
+  
+  // 如果沒有上次訪問記錄，或者距離上次訪問超過30分鐘，視為新工作階段
+  if (!lastVisit || (currentTime - parseInt(lastVisit)) > 30 * 60 * 1000) {
+    sessionStorage.setItem('lastVisitTimestamp', currentTime.toString());
+    return true;
+  }
+  
+  // 更新上次訪問時間
+  sessionStorage.setItem('lastVisitTimestamp', currentTime.toString());
+  return false;
+};
+
+export function VisitorCounter() {
+  const queryClient = useQueryClient();
+  const [hasIncremented, setHasIncremented] = useState(false);
+
+  // 獲取訪客統計數據
+  const { data, isLoading } = useQuery({
+    queryKey: ['visitorStats'],
+    queryFn: async () => {
+      const res = await fetch('/api/stats/visitors');
+      if (!res.ok) throw new Error('獲取訪客統計失敗');
+      return res.json();
+    },
+    refetchInterval: 60000 // 每分鐘刷新一次
+  });
+
+  // 增加訪客計數的mutation
+  const incrementMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch('/api/stats/visitors/increment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      if (!res.ok) throw new Error('無法更新訪客計數');
+      return res.json();
+    },
+    onSuccess: (data) => {
+      // 成功後更新快取的數據
+      queryClient.setQueryData(['visitorStats'], data);
+    }
+  });
+
+  // 在組件掛載時檢查是否需要增加計數
+  useEffect(() => {
+    // 防止重複計數：僅當還未計數且是新工作階段時才計數
+    if (!hasIncremented && isNewSession()) {
+      incrementMutation.mutate();
+      setHasIncremented(true);
+    }
+  }, [hasIncremented, incrementMutation]);
+
+  return (
+    <Card>
+      <CardHeader className="pb-2">
+        <CardTitle className="text-sm font-medium flex items-center gap-2">
+          <ChartBarIcon className="h-4 w-4" />
+          網站訪問統計
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        {isLoading ? (
+          <Skeleton className="h-6 w-full" />
+        ) : (
+          <div className="text-2xl font-bold">
+            {data?.totalVisits || 0} 次訪問
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
