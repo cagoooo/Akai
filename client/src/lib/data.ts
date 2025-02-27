@@ -29,11 +29,11 @@ export const tools: EducationalTool[] = [
   },
   {
     id: 3,
-    title: "漢語閱讀新解",
-    description: "創新的中文閱讀學習平台，幫助學生更好地理解和掌握漢語文字",
-    url: "https://words.smes.tyc.edu.tw/",
-    icon: "BookOpen",
-    category: "language",
+    title: "學生即時投票系統",
+    description: "即時收集學生意見的投票平台，提升課堂互動性與參與度",
+    url: "https://vote.smes.tyc.edu.tw/",
+    icon: "Vote",
+    category: "interactive",
     previewUrl: "/previews/reading-preview.svg"
   },
   {
