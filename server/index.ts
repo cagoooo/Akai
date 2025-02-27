@@ -47,15 +47,15 @@ app.use(express.urlencoded({ extended: false }));
           process.exit(1); // 如果无法启动服务器，退出进程
         }
       });
-
+      
       server.listen(currentPort, "0.0.0.0", () => {
         log(`Server running at http://0.0.0.0:${currentPort}`);
       });
     };
-
+    
     attemptListen(port, maxRetries);
   };
-
+  
   // 获取环境变量中的端口，如果没有则使用5000
   const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;
   tryListenOnPort(port);

@@ -1,82 +1,176 @@
-import { useState, useEffect, useRef } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { UserCheck } from "lucide-react";
-import { motion } from "framer-motion";
+import { UserCheck, Award, Star, Trophy, Crown, Diamond, Rocket, Sparkles } from "lucide-react";
+import { motion, animate, useMotionValue, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { Progress } from "@/components/ui/progress";
 
-interface VisitorStats {
+interface StatsResponse {
   totalVisits: number;
   dailyVisits: Record<string, number>;
+  lastVisitAt?: string;
+}
+
+interface Milestone {
+  value: number;
+  icon: typeof Award;
+  title: string;
+  description: string;
+}
+
+const MILESTONES: Milestone[] = [
+  {
+    value: 100,
+    icon: Star,
+    title: "新星誕生！",
+    description: "網站訪問突破 100 次，您的教育旅程正要開始！"
+  },
+  {
+    value: 500,
+    icon: Trophy,
+    title: "教育先鋒！",
+    description: "500 次訪問達成，您正在影響更多的學習者！"
+  },
+  {
+    value: 1000,
+    icon: Crown,
+    title: "知識之王！",
+    description: "突破 1,000 次訪問，您的影響力正在成長！"
+  },
+  {
+    value: 2000,
+    icon: Diamond,
+    title: "教育瑰寶！",
+    description: "2,000 次訪問里程碑，您的貢獻閃耀非凡！"
+  },
+  {
+    value: 5000,
+    icon: Rocket,
+    title: "教育火箭！",
+    description: "驚人的 5,000 次訪問，您的影響力正在飛速提升！"
+  },
+  {
+    value: 10000,
+    icon: Sparkles,
+    title: "教育傳奇！",
+    description: "難以置信！10,000 次訪問，您已成為教育界的傳奇！"
+  }
+];
+
+function AnimatedNumber({ value }: { value: number }) {
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, Math.round);
+
+  useEffect(() => {
+    const animation = animate(count, value, {
+      duration: 1.5,
+      ease: "easeOut"
+    });
+    return animation.stop;
+  }, [value]);
+
+  // 根據數值大小改變顏色
+  const textColor = useTransform(
+    count,
+    [0, 100, 500, 1000, 2000, 5000, 10000],
+    ["#60A5FA", "#34D399", "#FBBF24", "#F87171", "#8B5CF6", "#EC4899", "#14B8A6"]
+  );
+
+  return (
+    <motion.span
+      style={{ color: textColor }}
+      whileHover={{ scale: 1.1 }}
+      className="font-bold"
+    >
+      {rounded}
+    </motion.span>
+  );
+}
+
+function MilestoneProgress({ currentVisits }: { currentVisits: number }) {
+  // 找到下一個里程碑
+  const nextMilestone = MILESTONES.find(m => m.value > currentVisits) || MILESTONES[MILESTONES.length - 1];
+  const prevMilestone = MILESTONES.find(m => m.value <= currentVisits) || MILESTONES[0];
+
+  // 計算進度
+  const progress = ((currentVisits - prevMilestone.value) / (nextMilestone.value - prevMilestone.value)) * 100;
+
+  const NextIcon = nextMilestone.icon;
+
+  return (
+    <div className="mt-4 space-y-2">
+      <div className="flex justify-between text-sm font-medium">
+        <span className="text-primary-foreground/90">目前：{currentVisits}</span>
+        <div className="flex items-center gap-1 text-primary-foreground/90">
+          <NextIcon className="h-4 w-4 text-yellow-400" />
+          <span>下一個里程碑：</span>
+          <span className="font-bold">{nextMilestone.value.toLocaleString()}</span>
+        </div>
+      </div>
+      <Progress 
+        value={progress} 
+        className="h-2 bg-gradient-to-r from-yellow-200/20 to-yellow-600/30 [&>div]:bg-gradient-to-r [&>div]:from-yellow-300 [&>div]:via-yellow-500 [&>div]:to-yellow-600" 
+      />
+    </div>
+  );
 }
 
 export function VisitorCounter() {
   const { toast } = useToast();
-  const counterRef = useRef<HTMLDivElement>(null);
-  const previousTotalRef = useRef<number | null>(null);
-  const [stats, setStats] = useState<VisitorStats | null>(null);
-  const hasIncrementedRef = useRef<boolean>(false);
+  const lastMilestoneRef = useRef<number>(0);
+
+  const { data: stats, refetch } = useQuery<StatsResponse>({
+    queryKey: ["/api/stats/visitors"],
+    refetchInterval: 60000,
+  });
 
   useEffect(() => {
-    // Function to fetch visitor stats
-    const fetchStats = async () => {
-      try {
-        const response = await fetch('/api/visitors');
-        const data = await response.json();
-        setStats(data);
+    fetch("/api/stats/visitors/increment", { method: "POST" })
+      .then(() => refetch())
+      .catch(console.error);
+  }, [refetch]);
 
-        // Animation effect when counter changes
-        if (previousTotalRef.current !== null && 
-            data.totalVisits > previousTotalRef.current && 
-            counterRef.current) {
-          counterRef.current.animate([
-            { transform: 'scale(1.2)', boxShadow: '0 0 30px rgba(59, 130, 246, 0.5)' },
-            { transform: 'scale(1)', boxShadow: '0 0 0 rgba(59, 130, 246, 0)' }
-          ], {
-            duration: 1000,
-            easing: 'ease-in-out'
-          });
-        }
+  useEffect(() => {
+    if (!stats?.totalVisits) return;
 
-        previousTotalRef.current = data.totalVisits;
-      } catch (error) {
-        console.error("Failed to fetch visitor stats:", error);
-        toast({
-          title: "錯誤",
-          description: "無法獲取訪問統計數據",
-          variant: "destructive"
+    // 檢查是否達到新的里程碑
+    const milestone = MILESTONES.find(m => 
+      stats.totalVisits >= m.value && m.value > lastMilestoneRef.current
+    );
+
+    if (milestone) {
+      lastMilestoneRef.current = milestone.value;
+
+      const Icon = milestone.icon;
+
+      // 顯示里程碑達成通知
+      toast({
+        title: (
+          <div className="flex items-center gap-2">
+            <Icon className="h-4 w-4 text-yellow-400" />
+            <span>{milestone.title}</span>
+          </div>
+        ),
+        description: milestone.description,
+        duration: 5000,
+      });
+
+      // 播放成就解鎖動畫
+      const card = document.querySelector('.visitor-counter-card');
+      if (card) {
+        card.animate([
+          { transform: 'scale(1)', boxShadow: '0 0 0 rgba(59, 130, 246, 0)' },
+          { transform: 'scale(1.05)', boxShadow: '0 0 30px rgba(59, 130, 246, 0.5)' },
+          { transform: 'scale(1)', boxShadow: '0 0 0 rgba(59, 130, 246, 0)' }
+        ], {
+          duration: 1000,
+          easing: 'ease-in-out'
         });
       }
-    };
-
-    // Increment visitor count on initial page load (only once per session)
-    const incrementVisitor = async () => {
-      if (hasIncrementedRef.current) return;
-
-      try {
-        const response = await fetch('/api/visitors/increment', {
-          method: 'POST',
-        });
-
-        if (response.ok) {
-          hasIncrementedRef.current = true;
-          // After incrementing, fetch the updated stats
-          fetchStats();
-        }
-      } catch (error) {
-        console.error("Failed to increment visitor count:", error);
-      }
-    };
-
-    // Initial fetch and increment
-    fetchStats();
-    incrementVisitor();
-
-    // Set up periodic refetch of stats (every 30 seconds)
-    const intervalId = setInterval(fetchStats, 30000);
-
-    return () => clearInterval(intervalId);
-  }, [toast]);
+    }
+  }, [stats?.totalVisits, toast]);
 
   const totalVisits = stats?.totalVisits || 0;
   const todayVisits = stats?.dailyVisits?.[
@@ -101,95 +195,17 @@ export function VisitorCounter() {
             </motion.div>
             <h3 className="text-lg font-semibold">網站訪問次數</h3>
           </div>
-          <div ref={counterRef} className="text-2xl font-bold">{totalVisits}</div>
-        </div>
-        <div className="mt-2 text-sm opacity-90">
-          今日訪問：{todayVisits}
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Skeleton } from "@/components/ui/skeleton";
-import { ChartBarIcon } from "lucide-react";
-
-// 檢查是否是新工作階段的函數
-const isNewSession = () => {
-  const lastVisit = sessionStorage.getItem('lastVisitTimestamp');
-  const currentTime = new Date().getTime();
-  
-  // 如果沒有上次訪問記錄，或者距離上次訪問超過30分鐘，視為新工作階段
-  if (!lastVisit || (currentTime - parseInt(lastVisit)) > 30 * 60 * 1000) {
-    sessionStorage.setItem('lastVisitTimestamp', currentTime.toString());
-    return true;
-  }
-  
-  // 更新上次訪問時間
-  sessionStorage.setItem('lastVisitTimestamp', currentTime.toString());
-  return false;
-};
-
-export function VisitorCounter() {
-  const queryClient = useQueryClient();
-  const [hasIncremented, setHasIncremented] = useState(false);
-
-  // 獲取訪客統計數據
-  const { data, isLoading } = useQuery({
-    queryKey: ['visitorStats'],
-    queryFn: async () => {
-      const res = await fetch('/api/stats/visitors');
-      if (!res.ok) throw new Error('獲取訪客統計失敗');
-      return res.json();
-    },
-    refetchInterval: 60000 // 每分鐘刷新一次
-  });
-
-  // 增加訪客計數的mutation
-  const incrementMutation = useMutation({
-    mutationFn: async () => {
-      const res = await fetch('/api/stats/visitors/increment', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      if (!res.ok) throw new Error('無法更新訪客計數');
-      return res.json();
-    },
-    onSuccess: (data) => {
-      // 成功後更新快取的數據
-      queryClient.setQueryData(['visitorStats'], data);
-    }
-  });
-
-  // 在組件掛載時檢查是否需要增加計數
-  useEffect(() => {
-    // 防止重複計數：僅當還未計數且是新工作階段時才計數
-    if (!hasIncremented && isNewSession()) {
-      incrementMutation.mutate();
-      setHasIncremented(true);
-    }
-  }, [hasIncremented, incrementMutation]);
-
-  return (
-    <Card>
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-medium flex items-center gap-2">
-          <ChartBarIcon className="h-4 w-4" />
-          網站訪問統計
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        {isLoading ? (
-          <Skeleton className="h-6 w-full" />
-        ) : (
-          <div className="text-2xl font-bold">
-            {data?.totalVisits || 0} 次訪問
+          <div className="text-2xl">
+            <AnimatedNumber value={totalVisits} />
           </div>
-        )}
+        </div>
+        <div className="mt-2 text-sm opacity-90 flex items-center justify-between">
+          <span>今日訪問：</span>
+          <AnimatedNumber value={todayVisits} />
+        </div>
+
+        {/* 新增里程碑進度條 */}
+        <MilestoneProgress currentVisits={totalVisits} />
       </CardContent>
     </Card>
   );
