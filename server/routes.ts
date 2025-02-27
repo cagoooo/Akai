@@ -174,13 +174,21 @@ async function updateKeywordRankings() {
 }
 
 export function registerRoutes(app: Express): Server {
-  // 設定定時任務
-  setInterval(runSeoAnalysis, 60 * 60 * 1000); // 每小時執行一次
-  setInterval(updateKeywordRankings, 24 * 60 * 60 * 1000); // 每24小時執行一次
+  // 設定定時任務，避免在測試/開發環境中頻繁執行
+  const isProduction = process.env.NODE_ENV === 'production';
 
-  // 立即執行一次初始分析
-  runSeoAnalysis();
-  updateKeywordRankings();
+  if (isProduction) {
+    setInterval(runSeoAnalysis, 60 * 60 * 1000); // 每小時執行一次
+    setInterval(updateKeywordRankings, 24 * 60 * 60 * 1000); // 每24小時執行一次
+
+    // 延遲啟動初始分析，給伺服器啟動留出時間
+    setTimeout(() => {
+      runSeoAnalysis();
+      updateKeywordRankings();
+    }, 5000);
+  } else {
+    console.log('開發環境：SEO分析和關鍵字排名自動更新已禁用');
+  }
 
   // Add AMP routes
   app.use('/amp', ampRouter);

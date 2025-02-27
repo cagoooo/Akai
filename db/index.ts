@@ -12,4 +12,5 @@ export const db = drizzle({
   connection: process.env.DATABASE_URL,
   schema,
   ws: ws,
+  poolSize: 5, // 添加连接池配置，提高并发性能
 });
