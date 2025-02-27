@@ -1,11 +1,25 @@
-import express from 'express';
+import express from "express";
+import compression from "compression";
 import * as ReactDOMServer from 'react-dom/server';
 import * as React from 'react';
 import { AmpHome } from '../client/src/pages/amp/Home';
 
 export const ampRouter = express.Router();
 
-ampRouter.get('/', (_req, res) => {
+// 為 AMP 頁面啟用壓縮
+ampRouter.use(compression({
+  level: 6, // 壓縮級別
+  threshold: 0 // 對所有大小的響應進行壓縮
+}));
+
+// 設置 AMP 特定的 Cache-Control
+ampRouter.use((req, res, next) => {
+  // AMP 頁面可以快取更長時間，因為內容較簡單
+  res.setHeader("Cache-Control", "public, max-age=3600");
+  next();
+});
+
+ampRouter.get("/", (_req, res) => {
   const content = ReactDOMServer.renderToString(React.createElement(AmpHome));
   const html = `
     <!doctype html>
@@ -29,6 +43,21 @@ ampRouter.get('/', (_req, res) => {
         <meta name="twitter:title" content="教育科技創新專區">
         <meta name="twitter:description" content="探索AI驅動的個人化學習體驗">
         <meta name="twitter:image" content="https://smes.tyc.edu.tw/Akai.png">
+
+        <script type="application/ld+json">
+        {
+          "@context": "http://schema.org",
+          "@type": "WebSite",
+          "name": "教育科技創新專區",
+          "url": "https://smes.tyc.edu.tw",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://smes.tyc.edu.tw?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }
+        </script>
+
 
         <script async src="https://cdn.ampproject.org/v0.js"></script>
 

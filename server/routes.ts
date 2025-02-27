@@ -186,6 +186,55 @@ export function registerRoutes(app: Express): Server {
 
   // Important: Register API routes before static file serving
   // SEO Analysis Reports endpoints
+  app.use((req, res, next) => {
+    const start = Date.now();
+    const path = req.path;
+    let capturedJsonResponse: Record<string, any> | undefined = undefined;
+
+    const originalResJson = res.json;
+    res.json = function (bodyJson, ...args) {
+      capturedJsonResponse = bodyJson;
+      return originalResJson.apply(res, [bodyJson, ...args]);
+    };
+
+    // 為不同類型的 API 設置合適的快取策略
+    if (path.startsWith("/api")) {
+      if (req.method === "GET") {
+        if (path.includes("/stats/") || path.includes("/progress-stats") || path.includes("/rankings")) {
+          // 高頻變更的統計數據 - 短時間快取
+          res.setHeader("Cache-Control", "public, max-age=30");
+        } else if (path.includes("/seo/") || path.includes("/diagnostics/")) {
+          // 低頻變更的報告數據 - 中等時間快取
+          res.setHeader("Cache-Control", "public, max-age=300");
+        } else {
+          // 其他 GET 請求 - 短時間快取，確保頻繁更新
+          res.setHeader("Cache-Control", "public, max-age=60");
+        }
+      } else {
+        // 寫入操作不應該被快取
+        res.setHeader("Cache-Control", "no-store");
+      }
+    }
+
+    res.on("finish", () => {
+      const duration = Date.now() - start;
+      if (path.startsWith("/api")) {
+        let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
+        if (capturedJsonResponse) {
+          logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
+        }
+
+        if (logLine.length > 80) {
+          logLine = logLine.slice(0, 79) + "…";
+        }
+
+        log(logLine);
+      }
+    });
+
+    next();
+  });
+
   app.post("/api/seo/analyze", async (_req, res) => {
     try {
       await runSeoAnalysis();
