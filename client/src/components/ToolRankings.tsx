@@ -239,7 +239,8 @@ export function ToolRankings() {
 
   const { data: rankings = [], isLoading, refetch } = useQuery<ToolRanking[]>({
     queryKey: ['/api/tools/rankings'],
-    refetchInterval: 2000,
+    // 移除自動刷新，避免定時覆蓋本地修改
+    refetchOnWindowFocus: false,
     onSuccess(newRankings) {
       const newRankingPositions: Record<number, number> = {};
       newRankings.forEach((ranking, index) => {
@@ -281,15 +282,18 @@ export function ToolRankings() {
         return ranking;
       });
 
-      // 先更新本地數據
+      // 只更新本地數據，不主動從服務器刷新
+      // 這樣可以避免出現數字先加後減的抖動問題
       queryClient.setQueryData(['/api/tools/rankings'], updatedRankings);
-
-      // 然後才從服務器獲取最新數據，並合併本地更改
-      const latestData = await refetch();
-
-      // 確保本地的增量更新不會被服務器數據覆蓋
-      if (latestData && latestData.data) {
-        const mergedData = latestData.data.map(serverRanking => {
+      
+      // 為了確保數據最終與服務器同步，我們在後台靜默更新
+      // 但不會用返回的數據覆蓋本地狀態
+      trackToolUsage(tool.id).then(() => {
+        // 成功後不做任何操作，保持用戶界面穩定
+        console.log('工具使用記錄已更新');
+      }).catch(error => {
+        console.error('記錄工具使用時發生錯誤:', error);
+      });nking => {
           const localRanking = updatedRankings.find(r => r.toolId === serverRanking.toolId);
           // 如果本地點擊次數更高，保留本地數據
           if (localRanking && localRanking.totalClicks > serverRanking.totalClicks) {
