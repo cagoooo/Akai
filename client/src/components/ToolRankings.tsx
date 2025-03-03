@@ -79,9 +79,9 @@ const rankAnimationVariants = {
 // 修改 RankingIcon 組件,增加動畫效果
 const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: number }) => {
   const icons = {
-    1: <Trophy className="w-6 h-6 text-yellow-500" />,
-    2: <Medal className="w-6 h-6 text-gray-400" />,
-    3: <Medal className="w-6 h-6 text-amber-600" />
+    1: <Trophy className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-500" />,
+    2: <Medal className="w-5 h-5 sm:w-6 sm:h-6 text-gray-400" />,
+    3: <Crown className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400" />,
   };
 
   const emojis = rankEmojis[rank - 1] || ["🎯", "✨", "🌈", "💫", "⚡"];
@@ -269,13 +269,13 @@ export function ToolRankings() {
 
       // 使用 useToolTracking 鉤子來更新使用次數
       await trackToolUsage(tool.id);
-      
+
       // 播放點擊音效
       soundManager.playSound('click');
-      
+
       // 立即刷新排行榜數據並等待完成
       await refetch();
-      
+
       // 將當前工具點擊次數+1（直接更新本地狀態，提高使用者體驗）
       const updatedRankings = rankings.map(ranking => {
         if (ranking.toolId === tool.id) {
@@ -283,7 +283,7 @@ export function ToolRankings() {
         }
         return ranking;
       });
-      
+
       // 強制重新排序，確保立即反映到UI上
       queryClient.setQueryData(['/api/tools/rankings'], updatedRankings);
 
@@ -294,25 +294,17 @@ export function ToolRankings() {
 
   if (isLoading) {
     return (
-      <Card className="relative overflow-hidden">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-            >
-              <BarChart className="w-5 h-5" />
-            </motion.div>
-            工具使用排行榜
-          </CardTitle>
+      <Card className="w-full">
+        <CardHeader className="px-2 sm:px-6">
+          <Skeleton className="h-5 sm:h-6 w-32 sm:w-48" />
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="p-2 sm:p-6 space-y-2 sm:space-y-4">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="flex items-center space-x-4">
-              <Skeleton className="w-8 h-8 rounded-full" />
-              <div className="flex-1 space-y-2">
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-3 w-1/2" />
+            <div key={i} className="flex items-center space-x-2 sm:space-x-4">
+              <Skeleton className="w-6 h-6 sm:w-8 sm:h-8 rounded-full" />
+              <div className="flex-1 space-y-1 sm:space-y-2">
+                <Skeleton className="h-3 sm:h-4 w-3/4" />
+                <Skeleton className="h-2 sm:h-3 w-1/2" />
               </div>
             </div>
           ))}
@@ -393,13 +385,13 @@ export function ToolRankings() {
                 }}
                 tabIndex={0}
                 className={`
-                  flex items-center space-x-4 p-4 rounded-lg 
+                  flex items-center space-x-2 sm:space-x-4 p-2 sm:p-4 rounded-lg 
                   transition-all duration-300 cursor-pointer
                   bg-gradient-to-r shadow-sm
                   ${isTop ? rankColor : rankColor.default}
                   ${previousRank && previousRank > index + 1 ? 'border-l-4 border-green-400' : ''}
                   ${previousRank && previousRank < index + 1 ? 'border-l-4 border-orange-400' : ''}
-                  mb-3 relative overflow-hidden
+                  mb-2 sm:mb-3 relative overflow-hidden
                   hover:shadow-lg hover:translate-x-1
                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary
                 `}
@@ -432,7 +424,7 @@ export function ToolRankings() {
                 >
                   <motion.div 
                     id="ranking-changes"
-                    className="text-sm font-medium text-foreground truncate flex items-center gap-2"
+                    className="text-xs sm:text-sm font-medium text-foreground truncate flex items-center gap-1 sm:gap-2"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: index * 0.1 }}
@@ -442,7 +434,7 @@ export function ToolRankings() {
                       <motion.span
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        className="text-xs text-green-500"
+                        className="text-xs hidden sm:inline-block text-green-500"
                       >
                         🔥 +{previousRank - (index + 1)}
                       </motion.span>
@@ -451,7 +443,7 @@ export function ToolRankings() {
                       <motion.span
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        className="text-xs text-orange-500"
+                        className="text-xs hidden sm:inline-block text-orange-500"
                       >
                         📉 -{index + 1 - previousRank}
                       </motion.span>
@@ -459,7 +451,7 @@ export function ToolRankings() {
                   </motion.div>
                   <motion.p 
                     id="usage-stats"
-                    className="text-sm text-muted-foreground truncate"
+                    className="text-xs sm:text-sm text-muted-foreground truncate"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: index * 0.1 + 0.1 }}
