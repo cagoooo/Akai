@@ -273,9 +273,6 @@ export function ToolRankings() {
       // 播放點擊音效
       soundManager.playSound('click');
 
-      // 立即刷新排行榜數據並等待完成
-      await refetch();
-
       // 將當前工具點擊次數+1（直接更新本地狀態，提高使用者體驗）
       const updatedRankings = rankings.map(ranking => {
         if (ranking.toolId === tool.id) {
@@ -284,8 +281,24 @@ export function ToolRankings() {
         return ranking;
       });
 
-      // 強制重新排序，確保立即反映到UI上
+      // 先更新本地數據
       queryClient.setQueryData(['/api/tools/rankings'], updatedRankings);
+
+      // 然後才從服務器獲取最新數據，並合併本地更改
+      const latestData = await refetch();
+
+      // 確保本地的增量更新不會被服務器數據覆蓋
+      if (latestData && latestData.data) {
+        const mergedData = latestData.data.map(serverRanking => {
+          const localRanking = updatedRankings.find(r => r.toolId === serverRanking.toolId);
+          // 如果本地點擊次數更高，保留本地數據
+          if (localRanking && localRanking.totalClicks > serverRanking.totalClicks) {
+            return localRanking;
+          }
+          return serverRanking;
+        });
+        queryClient.setQueryData(['/api/tools/rankings'], mergedData);
+      }
 
     } catch (error) {
       console.error('開啟工具時發生錯誤:', error);
