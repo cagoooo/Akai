@@ -80,7 +80,6 @@ interface ToolCardProps {
 
 export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
   const queryClient = useQueryClient();
-  const [isOpen, setIsOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [isCustomizeOpen, setIsCustomizeOpen] = useState(false);
   const [customization, setCustomization] = useState<IconCustomization | undefined>();
@@ -113,13 +112,6 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
       queryClient.invalidateQueries({ queryKey: ['/api/tools/rankings'] });
     },
   });
-
-  const handleToolClick = () => {
-    if (!isLoading) {
-      setIsOpen(true);
-      trackUsage.mutate();
-    }
-  };
 
   const handleShare = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -178,7 +170,7 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
 
         <Card
           className={`group hover:shadow-lg transition-all duration-500 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary overflow-hidden border-2 ${categoryColors[tool.category].border} hover:bg-gradient-to-br`}
-          onClick={handleToolClick}
+          onClick={() => window.open(tool.url, '_blank', 'noopener,noreferrer')}
           tabIndex={isLoading ? -1 : 0}
           role={isLoading ? "presentation" : "button"}
           aria-label={isLoading ? undefined : `開啟 ${tool.title} 工具詳細資訊`}
@@ -325,53 +317,7 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
       </motion.article>
 
       <AnimatePresence>
-        {isOpen && (
-          <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogContent className="max-w-3xl">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              >
-                <DialogHeader>
-                  <div className="flex items-center gap-2 mb-2">
-                    {Icon && <Icon className="w-6 h-6 text-primary" aria-hidden="true" />}
-                    <DialogTitle>{tool.title}</DialogTitle>
-                  </div>
-                  <DialogDescription>{tool.description}</DialogDescription>
-                </DialogHeader>
-
-                {tool.previewUrl && (
-                  <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg overflow-hidden my-4">
-                    <motion.div
-                      className="w-full h-full"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2 }}
-                    >
-                      <PreviewGenerator tool={tool} customization={customization} />
-                    </motion.div>
-                  </AspectRatio>
-                )}
-
-                <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={handleShare} aria-label={`分享 ${tool.title}`}>
-                    <Share2 className="w-4 h-4 mr-2" aria-hidden="true" />
-                    分享
-                  </Button>
-                  <Button
-                    onClick={() => window.open(tool.url, '_blank')}
-                    aria-label={`在新分頁中開啟 ${tool.title}`}
-                  >
-                    立即使用
-                    <Icons.ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
-                  </Button>
-                </div>
-              </motion.div>
-            </DialogContent>
-          </Dialog>
-        )}
+        {/* Dialog removed */}
       </AnimatePresence>
 
       <Dialog open={isShareOpen} onOpenChange={setIsShareOpen}>
