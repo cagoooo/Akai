@@ -182,7 +182,15 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
           {rank === 1 ? "🏅" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : ""}
         </motion.div>
       )}
-      <div className="flex flex-col items-center p-2">
+      <div 
+        className="flex flex-col items-center p-2" 
+        onClick={async () => {
+          if (useToolTracking) {
+            const { trackToolUsage } = useToolTracking();
+            await trackToolUsage(tool.toolId);
+          }
+        }}
+      >
         {/* Removed Button */}
       </div>
     </motion.div>

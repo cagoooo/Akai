@@ -20,12 +20,9 @@ export function ToolCard({ id, name, description, icon, onClick }: ToolCardProps
   const { trackToolUsage } = useToolTracking();
 
   const handleClick = async () => {
+    // 使用全局工具追蹤功能，已經會更新緩存
     await trackToolUsage(id);
-
-    // 手動更新 React Query 緩存以確保即時反映在 UI 上
-    queryClient.invalidateQueries({ queryKey: ['/api/tools/rankings'] });
-    queryClient.invalidateQueries({ queryKey: ['/api/tools/stats'] });
-
+    
     // 執行原有的點擊事件
     if (onClick) {
       onClick();
