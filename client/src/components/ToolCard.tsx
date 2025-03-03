@@ -178,7 +178,7 @@ export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps
         <meta itemProp="url" content={tool.url} />
 
         <Card
-          className={`group hover:shadow-lg transition-all duration-500 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary overflow-hidden border-2 ${categoryColors[tool.category].border} hover:bg-gradient-to-br`}
+          className={`group hover:shadow-lg transition-all duration-500 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary overflow-hidden border-2 ${tool.category && categoryColors[tool.category] ? categoryColors[tool.category].border : 'border-gray-200'} hover:bg-gradient-to-br`}
           onClick={() => {
             // 立即開啟工具連結
             window.open(tool.url, '_blank', 'noopener,noreferrer');
