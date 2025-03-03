@@ -214,7 +214,7 @@ export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <motion.div
-                        className={`p-2 rounded-lg bg-primary/10 transition-all duration-300 ${categoryColors[tool.category].icon}`}
+                        className={`p-2 rounded-lg bg-primary/10 transition-all duration-300 ${tool.category && categoryColors[tool.category] ? categoryColors[tool.category].icon : 'text-gray-600'}`}
                         whileHover={{ rotate: [0, -10, 10, -5, 5, 0] }}
                         transition={{ duration: 0.5 }}
                         role="img"
@@ -253,7 +253,7 @@ export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps
                         <Button
                           variant="ghost"
                           size="icon"
-                          className={`h-8 w-8 transition-colors duration-300 ${categoryColors[tool.category].icon}`}
+                          className={`h-8 w-8 transition-colors duration-300 ${tool.category && categoryColors[tool.category] ? categoryColors[tool.category].icon : 'text-gray-600'}`}
                           onClick={handleCustomize}
                           data-customization="icon-settings"
                           aria-label={`自定義 ${tool.title} 圖標`}
@@ -270,7 +270,7 @@ export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps
                         <Button
                           variant="ghost"
                           size="icon"
-                          className={`h-8 w-8 transition-colors duration-300 ${categoryColors[tool.category].icon}`}
+                          className={`h-8 w-8 transition-colors duration-300 ${tool.category && categoryColors[tool.category] ? categoryColors[tool.category].icon : 'text-gray-600'}`}
                           onClick={handleShare}
                           data-tour="share-button"
                           aria-label={`分享 ${tool.title}`}
@@ -286,7 +286,7 @@ export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps
                       <TooltipTrigger asChild>
                         <Badge
                           variant="secondary"
-                          className={`${categoryColors[tool.category].badge} border-0 transition-colors duration-300`}
+                          className={`${tool.category && categoryColors[tool.category] ? categoryColors[tool.category].badge : 'bg-gray-100 text-gray-800'} border-0 transition-colors duration-300`}
                         >
                           <span className="sr-only">工具類別：</span>
                           {tool.category}
@@ -310,7 +310,7 @@ export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps
                 </>
               ) : (
                 <>
-                  <CardTitle className={`text-xl font-bold transition-colors duration-300 ${categoryColors[tool.category].icon} mb-2 relative`} itemProp="name">
+                  <CardTitle className={`text-xl font-bold transition-colors duration-300 ${tool.category && categoryColors[tool.category] ? categoryColors[tool.category].icon : 'text-gray-600'} mb-2 relative`} itemProp="name">
                     {tool.title}
                   </CardTitle>
                   <CardDescription className="text-sm text-muted-foreground min-h-[3rem] mb-4 relative transition-colors duration-300 group-hover:text-foreground/80" itemProp="description">
