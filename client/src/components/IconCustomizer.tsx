@@ -2,13 +2,11 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { HelpCircle } from "lucide-react";
 import { type EducationalTool } from "@/lib/data";
 import { PreviewGenerator } from "@/components/PreviewGenerator";
 import { useCustomizationTutorial } from "./CustomizationTutorial";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { motion } from "framer-motion";
 
 interface IconCustomizerProps {
@@ -30,31 +28,6 @@ const defaultCustomization: IconCustomization = {
   opacity: 0.1,
 };
 
-// 根據工具類別獲取默認主要顏色
-function getDefaultPrimaryColor(tool: EducationalTool): string {
-  const categoryColors: Record<string, string> = {
-    communication: "#3B82F6", // 藍色
-    teaching: "#10B981",      // 綠色
-    language: "#8B5CF6",      // 紫色
-    reading: "#F59E0B",       // 黃色
-    utilities: "#6B7280",     // 灰色
-    games: "#EC4899",         // 粉色
-  };
-  return categoryColors[tool.category] || "#3B82F6";
-}
-
-// 根據工具類別獲取默認次要顏色
-function getDefaultSecondaryColor(tool: EducationalTool): string {
-  const categoryColors: Record<string, string> = {
-    communication: "#93C5FD", // 淺藍色
-    teaching: "#86EFAC",      // 淺綠色
-    language: "#C4B5FD",      // 淺紫色
-    reading: "#FCD34D",       // 淺黃色
-    utilities: "#D1D5DB",     // 淺灰色
-    games: "#FBCFE8",         // 淺粉色
-  };
-  return categoryColors[tool.category] || "#93C5FD";
-}
 
 export function IconCustomizer({ tool, onCustomizationChange }: IconCustomizerProps) {
   const [customization, setCustomization] = useState<IconCustomization>(defaultCustomization);
@@ -98,7 +71,7 @@ export function IconCustomizer({ tool, onCustomizationChange }: IconCustomizerPr
             tool={tool} 
             customization={customization}
           />
-        </div>
+        </motion.div>
 
         <div className="space-y-4">
           <div 
@@ -112,53 +85,59 @@ export function IconCustomizer({ tool, onCustomizationChange }: IconCustomizerPr
               max={2}
               step={0.1}
               value={[customization.size]}
-              onValueChange={([size]) => handleChange({ size })}
+              onValueChange={(value) => handleChange({ size: value[0] })}
             />
           </div>
 
           <div 
             className="space-y-2"
-            data-customization="primary-color"
+            data-customization="color-control"
           >
-            <Label htmlFor="primaryColor">主要顏色</Label>
-            <div className="flex gap-2">
-              <Input
-                id="primaryColor"
-                type="color"
-                value={customization.primaryColor || getDefaultPrimaryColor(tool)}
-                onChange={(e) => handleChange({ primaryColor: e.target.value })}
-                className="w-12 p-1 h-9"
-              />
-              <Input
-                type="text"
-                value={customization.primaryColor || getDefaultPrimaryColor(tool)}
-                onChange={(e) => handleChange({ primaryColor: e.target.value })}
-                placeholder="#000000"
-                className="flex-1"
-              />
+            <Label htmlFor="primary-color">主要顏色</Label>
+            <div className="grid grid-cols-6 gap-2">
+              {[
+                "#3B82F6", // 藍色
+                "#10B981", // 綠色
+                "#8B5CF6", // 紫色
+                "#F59E0B", // 黃色
+                "#6B7280", // 灰色
+                "#EC4899", // 粉色
+              ].map((color) => (
+                <button
+                  key={color}
+                  type="button"
+                  className={`h-8 rounded-full border-2 ${customization.primaryColor === color ? 'border-black dark:border-white' : 'border-transparent'}`}
+                  style={{ backgroundColor: color }}
+                  onClick={() => handleChange({ primaryColor: color })}
+                  aria-label={`選擇顏色 ${color}`}
+                />
+              ))}
             </div>
           </div>
 
           <div 
             className="space-y-2"
-            data-customization="secondary-color"
+            data-customization="secondary-color-control"
           >
-            <Label htmlFor="secondaryColor">次要顏色</Label>
-            <div className="flex gap-2">
-              <Input
-                id="secondaryColor"
-                type="color"
-                value={customization.secondaryColor || getDefaultSecondaryColor(tool)}
-                onChange={(e) => handleChange({ secondaryColor: e.target.value })}
-                className="w-12 p-1 h-9"
-              />
-              <Input
-                type="text"
-                value={customization.secondaryColor || getDefaultSecondaryColor(tool)}
-                onChange={(e) => handleChange({ secondaryColor: e.target.value })}
-                placeholder="#000000"
-                className="flex-1"
-              />
+            <Label htmlFor="secondary-color">次要顏色</Label>
+            <div className="grid grid-cols-6 gap-2">
+              {[
+                "#93C5FD", // 淺藍色
+                "#86EFAC", // 淺綠色
+                "#C4B5FD", // 淺紫色
+                "#FCD34D", // 淺黃色
+                "#D1D5DB", // 淺灰色
+                "#FBCFE8", // 淺粉色
+              ].map((color) => (
+                <button
+                  key={color}
+                  type="button"
+                  className={`h-8 rounded-full border-2 ${customization.secondaryColor === color ? 'border-black dark:border-white' : 'border-transparent'}`}
+                  style={{ backgroundColor: color }}
+                  onClick={() => handleChange({ secondaryColor: color })}
+                  aria-label={`選擇次要顏色 ${color}`}
+                />
+              ))}
             </div>
           </div>
 
@@ -173,65 +152,11 @@ export function IconCustomizer({ tool, onCustomizationChange }: IconCustomizerPr
               max={1}
               step={0.05}
               value={[customization.opacity]}
-              onValueChange={([opacity]) => handleChange({ opacity })}
+              onValueChange={(value) => handleChange({ opacity: value[0] })}
             />
-          </div>
-
-          <div className="space-y-2 mt-4">
-            <Label>快速主題</Label>
-            <div className="flex flex-wrap gap-2">
-              {[
-                { name: "深藍主題", primary: "#1E40AF", secondary: "#93C5FD" },
-                { name: "活力橙", primary: "#EA580C", secondary: "#FDBA74" },
-                { name: "綠色生態", primary: "#15803D", secondary: "#86EFAC" },
-                { name: "紫色靈感", primary: "#7E22CE", secondary: "#D8B4FE" },
-                { name: "經典黑白", primary: "#18181B", secondary: "#E4E4E7" }
-              ].map((theme) => (
-                <Tooltip key={theme.name}>
-                  <TooltipTrigger asChild>
-                    <Button 
-                      variant="outline" 
-                      className="w-8 h-8 p-0 rounded-full overflow-hidden"
-                      onClick={() => handleChange({ primaryColor: theme.primary, secondaryColor: theme.secondary })}
-                    >
-                      <div className="w-full h-full" style={{ 
-                        background: `linear-gradient(135deg, ${theme.primary} 50%, ${theme.secondary} 50%)` 
-                      }} />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>{theme.name}</TooltipContent>
-                </Tooltip>
-              ))}
-            </div>
           </div>
         </div>
       </CardContent>
     </Card>
   );
-}
-
-function getDefaultPrimaryColor(tool: EducationalTool) {
-  switch (tool.category) {
-    case 'communication': return "#3B82F6";
-    case 'teaching': return "#10B981";
-    case 'language': return "#8B5CF6";
-    case 'reading': return "#EAB308";
-    case 'utilities': return "#6B7280";
-    case 'games': return "#EC4899";
-    case 'interactive': return "#06B6D4";
-    default: return "#6366F1";
-  }
-}
-
-function getDefaultSecondaryColor(tool: EducationalTool) {
-  switch (tool.category) {
-    case 'communication': return "#60A5FA";
-    case 'teaching': return "#34D399";
-    case 'language': return "#A78BFA";
-    case 'reading': return "#FCD34D";
-    case 'utilities': return "#9CA3AF";
-    case 'interactive': return "#22D3EE";
-    case 'games': return "#F472B6";
-    default: return "#8B5CF6";
-  }
 }
