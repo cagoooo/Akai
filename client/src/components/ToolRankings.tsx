@@ -183,34 +183,7 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
         </motion.div>
       )}
       <div className="flex flex-col items-center p-2">
-        <Button 
-          variant="outline" 
-          size="sm" 
-          className="mt-2"
-          onClick={() => {
-            // 記錄工具使用
-            fetch(`/api/tools/${tool.toolId}/track`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              }
-            })
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('無法記錄工具使用');
-              }
-              return response.json();
-            })
-            .then(data => {
-              console.log('工具使用已記錄', data);
-            })
-            .catch(error => {
-              console.error('記錄工具使用時發生錯誤:', error);
-            });
-          }}
-        >
-          使用工具
-        </Button>
+        {/* Removed Button */}
       </div>
     </motion.div>
   );
