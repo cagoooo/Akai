@@ -79,13 +79,14 @@ interface ToolCardProps {
   isLoading?: boolean;
 }
 
-export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
+export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps) {
   const queryClient = useQueryClient();
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [isCustomizeOpen, setIsCustomizeOpen] = useState(false);
   const [customization, setCustomization] = useState<IconCustomization | undefined>();
   const [isPreviewLoading, setIsPreviewLoading] = useState(true);
   const [previewImage, setPreviewImage] = useState<string>();
+  const [tool, setTool] = useState(initialTool);
   const Icon = Icons[tool.icon as keyof typeof Icons] as LucideIcon;
   const { toast } = useToast();
 
@@ -184,9 +185,10 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
 
             // 使用工具追蹤功能，並在成功後立即更新本地數據
             trackToolUsage(tool.id)
-              .then(() => {
+              .then((updatedTool) => {
                 console.log('工具使用已記錄');
-                
+                setTool(updatedTool); // Update local state with updated data
+
                 // 立即強制更新工具統計和排名數據
                 queryClient.invalidateQueries({ 
                   queryKey: ['/api/tools/stats'],
@@ -232,7 +234,7 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
                       title="使用次數"
                     >
                       <BarChart className="w-3 h-3" aria-hidden="true" />
-                      <span>{usageStats.totalClicks} 次使用</span>
+                      <span>{tool.totalClicks || usageStats.totalClicks} 次使用</span> {/* Use local state if available */}
                     </Badge>
                   )}
                 </div>
