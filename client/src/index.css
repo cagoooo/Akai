@@ -36,6 +36,62 @@
   .no-theme-transition *::after {
     transition: none !important;
   }
+  
+  /* 無障礙設置樣式 */
+  .high-contrast {
+    --foreground: #ffffff;
+    --background: #000000;
+    --border: #ffffff;
+    --primary: #ffff00;
+    --primary-foreground: #000000;
+    --secondary: #ffffff;
+    --secondary-foreground: #000000;
+    --muted: #333333;
+    --muted-foreground: #ffffff;
+    --accent: #ffff00;
+    --accent-foreground: #000000;
+    --destructive: #ff0000;
+    --destructive-foreground: #ffffff;
+    --card: #000000;
+    --card-foreground: #ffffff;
+    --popover: #000000;
+    --popover-foreground: #ffffff;
+    --ring: #ffff00;
+  }
+  
+  .reduced-motion * {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .dyslexic-font {
+    font-family: 'OpenDyslexic', sans-serif;
+    letter-spacing: 0.05em;
+    word-spacing: 0.1em;
+    line-height: 1.5;
+  }
+  
+  /* 色盲模式濾鏡 */
+  .protanopia {
+    filter: url('#protanopia-filter');
+  }
+  
+  .deuteranopia {
+    filter: url('#deuteranopia-filter');
+  }
+  
+  .tritanopia {
+    filter: url('#tritanopia-filter');
+  }
+
+  /* 根據用戶預設主題自動切換 */
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light):not(.dark) {
+      --background: hsl(240 10% 3.9%);
+      --foreground: hsl(0 0% 98%);
+      /* 其他深色主題變量 */
+    }
+  }
 
   .dark {
     --communication-gradient: rgb(29 78 216 / 0.2), rgb(37 99 235 / 0.2);
