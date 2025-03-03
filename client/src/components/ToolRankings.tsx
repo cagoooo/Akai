@@ -241,20 +241,11 @@ export function ToolRankings() {
       // 開啟工具網站
       window.open(tool.url, '_blank', 'noopener,noreferrer');
 
-      // 獲取當前排行榜數據
-      const currentRankings = queryClient.getQueryData<ToolRanking[]>(['/api/tools/rankings']) || [];
-
-      // 更新本地排行榜數據
-      const updatedRankings = currentRankings.map(ranking => {
-        if (ranking.toolId === tool.id) {
-          return { ...ranking, totalClicks: ranking.totalClicks + 1 };
-        }
-        return ranking;
-      });
-
-      // 只更新本地數據，不主動從服務器刷新
-      // 這樣可以避免出現數字先加後減的抖動問題
-      queryClient.setQueryData(['/api/tools/rankings'], updatedRankings);
+      // 使用共用的 trackToolUsage 函數來同步更新所有計數器
+      await trackToolUsage(tool.id);
+      
+      // 不需要手動更新本地狀態，因為 trackToolUsage 已經處理了
+      // 這確保了所有使用同一數據源的組件保持同步.setQueryData(['/api/tools/rankings'], updatedRankings);
 
       // 為了確保數據最終與服務器同步，我們在後台靜默更新
       // 但不會用返回的數據覆蓋本地狀態

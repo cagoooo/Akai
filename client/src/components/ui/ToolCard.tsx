@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -22,7 +21,7 @@ export function ToolCard({ id, name, description, icon, onClick }: ToolCardProps
 
   const handleClick = () => {
     // 使用 React Query 的 queryClient 更新工具使用統計
-    
+
     // 記錄工具使用
     fetch(`/api/tools/${id}/track`, {
       method: 'POST',
@@ -38,12 +37,12 @@ export function ToolCard({ id, name, description, icon, onClick }: ToolCardProps
     })
     .then(data => {
       console.log('工具使用已記錄', data);
-      
+
       // 立即更新工具統計和排行榜數據
       // 1. 獲取當前統計數據
       const currentStats = queryClient.getQueryData<any[]>(['/api/tools/stats']) || [];
       const currentRankings = queryClient.getQueryData<any[]>(['/api/tools/rankings']) || [];
-      
+
       // 2. 更新統計數據
       const updatedStats = currentStats.map(stat => {
         if (stat.toolId === id) {
@@ -51,7 +50,7 @@ export function ToolCard({ id, name, description, icon, onClick }: ToolCardProps
         }
         return stat;
       });
-      
+
       // 3. 更新排行榜數據
       const updatedRankings = currentRankings.map(ranking => {
         if (ranking.toolId === id) {
@@ -59,19 +58,13 @@ export function ToolCard({ id, name, description, icon, onClick }: ToolCardProps
         }
         return ranking;
       });
-      
+
       // 4. 設置更新後的數據
       queryClient.setQueryData(['/api/tools/stats'], updatedStats);
       queryClient.setQueryData(['/api/tools/rankings'], updatedRankings);
-      
-      // 如果伺服器回傳了成就訊息
-      if (data.achievement) {
-        toast({
-          title: "新成就獲得！",
-          description: `恭喜獲得「${data.achievement}」成就！`,
-          duration: 5000,
-        });
-      }
+
+
+      // trackToolUsage 已經處理了成就訊息的提示，這裡不需要重複處理
     })
     .catch(error => {
       console.error('記錄工具使用時發生錯誤:', error);
