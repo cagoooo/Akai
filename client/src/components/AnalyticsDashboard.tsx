@@ -365,9 +365,13 @@ export function AnalyticsDashboard() {
 
                             await trackToolUsage(toolId);
 
-                            // 立即強制更新統計數據
+                            // 立即強制更新統計數據，使用正確的查詢鍵
                             queryClient.invalidateQueries({ 
-                              queryKey: ['toolStats'],
+                              queryKey: ['/api/tools/stats'],
+                              refetchType: 'all'
+                            });
+                            queryClient.invalidateQueries({ 
+                              queryKey: ['/api/tools/rankings'],
                               refetchType: 'all'
                             });
 
