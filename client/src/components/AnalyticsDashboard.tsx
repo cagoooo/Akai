@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -8,13 +7,14 @@ import {
   Calendar, Download, Activity, Users, TrendingUp, 
   MousePointer, Eye, Clock, BarChart2, PieChart as PieChartIcon
 } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { VisitorStats, ToolUsageStat } from "@/types/analytics";
 
 export function AnalyticsDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const heatmapRef = useRef<HTMLDivElement>(null);
-  
+  const queryClient = useQueryClient();
+
   // 獲取訪問統計
   const { data: visitorStats } = useQuery<VisitorStats>({
     queryKey: ['visitorStats'],
@@ -25,7 +25,7 @@ export function AnalyticsDashboard() {
     },
     refetchInterval: 30000, // 每30秒刷新一次
   });
-  
+
   // 獲取工具使用統計
   const { data: toolStats } = useQuery<ToolUsageStat[]>({
     queryKey: ['toolStats'],
@@ -36,7 +36,7 @@ export function AnalyticsDashboard() {
     },
     refetchInterval: 60000, // 每分鐘刷新一次
   });
-  
+
   // 渲染熱力圖
   useEffect(() => {
     if (heatmapRef.current && visitorStats && activeTab === "heatmap") {
@@ -46,7 +46,7 @@ export function AnalyticsDashboard() {
           radius: 50,
           maxOpacity: 0.6,
         });
-        
+
         // 模擬數據
         const points = [];
         for (let i = 0; i < 200; i++) {
@@ -56,7 +56,7 @@ export function AnalyticsDashboard() {
             value: Math.random()
           });
         }
-        
+
         heatmapInstance.setData({
           max: 1,
           data: points
@@ -64,14 +64,14 @@ export function AnalyticsDashboard() {
       }).catch(console.error);
     }
   }, [heatmapRef, activeTab, visitorStats]);
-  
+
   // 準備圖表數據
   const prepareVisitorChartData = () => {
     if (!visitorStats?.dailyVisits) return { labels: [], datasets: [] };
-    
+
     const dailyVisits = visitorStats.dailyVisits as Record<string, number>;
     const sortedDates = Object.keys(dailyVisits).sort();
-    
+
     return {
       labels: sortedDates.slice(-30), // 取最近30天
       datasets: [
@@ -85,10 +85,10 @@ export function AnalyticsDashboard() {
       ]
     };
   };
-  
+
   const prepareToolChartData = () => {
     if (!toolStats) return { labels: [], datasets: [] };
-    
+
     return {
       labels: toolStats.slice(0, 10).map(stat => `工具 ${stat.toolId}`),
       datasets: [
@@ -111,10 +111,10 @@ export function AnalyticsDashboard() {
       ]
     };
   };
-  
+
   const visitorChartData = prepareVisitorChartData();
   const toolChartData = prepareToolChartData();
-  
+
   return (
     <div className="container mx-auto p-4 space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -127,7 +127,7 @@ export function AnalyticsDashboard() {
           下載報告
         </Button>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-4 flex items-center justify-between">
@@ -139,7 +139,7 @@ export function AnalyticsDashboard() {
             <Users className="h-10 w-10 text-blue-500 bg-blue-100 p-2 rounded-full" />
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4 flex items-center justify-between">
             <div>
@@ -150,7 +150,7 @@ export function AnalyticsDashboard() {
             <TrendingUp className="h-10 w-10 text-orange-500 bg-orange-100 p-2 rounded-full" />
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4 flex items-center justify-between">
             <div>
@@ -161,7 +161,7 @@ export function AnalyticsDashboard() {
             <Clock className="h-10 w-10 text-green-500 bg-green-100 p-2 rounded-full" />
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardContent className="p-4 flex items-center justify-between">
             <div>
@@ -173,7 +173,7 @@ export function AnalyticsDashboard() {
           </CardContent>
         </Card>
       </div>
-      
+
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid grid-cols-3 sm:grid-cols-5 mb-4">
           <TabsTrigger value="overview">
@@ -197,7 +197,7 @@ export function AnalyticsDashboard() {
             日曆視圖
           </TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="overview" className="space-y-4">
           <Card>
             <CardHeader>
@@ -223,7 +223,7 @@ export function AnalyticsDashboard() {
               )}
             </CardContent>
           </Card>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Card>
               <CardHeader>
@@ -245,7 +245,7 @@ export function AnalyticsDashboard() {
                 )}
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader>
                 <CardTitle>訪問來源</CardTitle>
@@ -279,7 +279,7 @@ export function AnalyticsDashboard() {
             </Card>
           </div>
         </TabsContent>
-        
+
         <TabsContent value="visitors">
           <Card>
             <CardHeader>
@@ -294,7 +294,7 @@ export function AnalyticsDashboard() {
                     互動式地理分布地圖
                   </div>
                 </div>
-                
+
                 <div>
                   <h3 className="text-lg font-medium mb-2">設備分析</h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -331,7 +331,7 @@ export function AnalyticsDashboard() {
             </CardContent>
           </Card>
         </TabsContent>
-        
+
         <TabsContent value="tools">
           <Card>
             <CardHeader>
@@ -353,18 +353,28 @@ export function AnalyticsDashboard() {
                   }}
                   height={400}
                   options={{
-                    onClick: (event, elements) => {
+                    onClick: async (event, elements) => {
                       if (elements && elements.length > 0) {
                         const index = elements[0].index;
                         const toolId = toolStats?.[index]?.toolId;
                         if (toolId) {
-                          // 使用工具追踪鉤子記錄工具使用
-                          const trackingModule = await import('@/hooks/useToolTracking');
-                          const trackingHook = trackingModule.useToolTracking();
-                          await trackingHook.trackToolUsage(toolId);
-                          })
-                          .then(data => console.log('圖表點擊已記錄', data))
-                          .catch(error => console.error('記錄圖表點擊時發生錯誤:', error));
+                          try {
+                            const trackingModule = await import('@/hooks/useToolTracking');
+                            const { useToolTracking } = trackingModule;
+                            const { trackToolUsage } = useToolTracking();
+
+                            await trackToolUsage(toolId);
+
+                            // 立即強制更新統計數據
+                            queryClient.invalidateQueries({ 
+                              queryKey: ['toolStats'],
+                              refetchType: 'all'
+                            });
+
+                            console.log('工具使用已追蹤並更新統計:', toolId);
+                          } catch (error) {
+                            console.error('工具使用追蹤失敗:', error);
+                          }
                         }
                       }
                     },
@@ -397,7 +407,7 @@ export function AnalyticsDashboard() {
             </CardContent>
           </Card>
         </TabsContent>
-        
+
         <TabsContent value="heatmap">
           <Card>
             <CardHeader>
@@ -423,7 +433,7 @@ export function AnalyticsDashboard() {
             </CardContent>
           </Card>
         </TabsContent>
-        
+
         <TabsContent value="calendar">
           <Card>
             <CardHeader>
