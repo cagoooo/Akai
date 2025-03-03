@@ -268,14 +268,11 @@ export function ToolRankings() {
       // 開啟工具網站
       window.open(tool.url, '_blank', 'noopener,noreferrer');
 
-      // 使用 useToolTracking 鉤子來更新使用次數
-      await trackToolUsage(tool.id);
+      // 獲取當前排行榜數據
+      const currentRankings = queryClient.getQueryData<ToolRanking[]>(['/api/tools/rankings']) || [];
 
-      // 播放點擊音效
-      soundManager.playSound('click');
-
-      // 將當前工具點擊次數+1（直接更新本地狀態，提高使用者體驗）
-      const updatedRankings = rankings.map(ranking => {
+      // 更新本地排行榜數據
+      const updatedRankings = currentRankings.map(ranking => {
         if (ranking.toolId === tool.id) {
           return { ...ranking, totalClicks: ranking.totalClicks + 1 };
         }
@@ -285,24 +282,16 @@ export function ToolRankings() {
       // 只更新本地數據，不主動從服務器刷新
       // 這樣可以避免出現數字先加後減的抖動問題
       queryClient.setQueryData(['/api/tools/rankings'], updatedRankings);
-      
+
       // 為了確保數據最終與服務器同步，我們在後台靜默更新
       // 但不會用返回的數據覆蓋本地狀態
       trackToolUsage(tool.id).then(() => {
-        // 成功後不做任何操作，保持用戶界面穩定
         console.log('工具使用記錄已更新');
       }).catch(error => {
         console.error('記錄工具使用時發生錯誤:', error);
       });
-            return localRanking;
-          }
-          return serverRanking;
-        });
-        queryClient.setQueryData(['/api/tools/rankings'], mergedData);
-      }
-
     } catch (error) {
-      console.error('開啟工具時發生錯誤:', error);
+      console.error('處理工具點擊時發生錯誤:', error);
     }
   };
 
