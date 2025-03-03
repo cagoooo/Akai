@@ -182,9 +182,21 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
             // 立即開啟工具連結
             window.open(tool.url, '_blank', 'noopener,noreferrer');
 
-            // 使用工具追蹤功能，不使用樂觀更新
+            // 使用工具追蹤功能，並在成功後立即更新本地數據
             trackToolUsage(tool.id)
-              .then(() => console.log('工具使用已記錄'))
+              .then(() => {
+                console.log('工具使用已記錄');
+                
+                // 立即強制更新工具統計和排名數據
+                queryClient.invalidateQueries({ 
+                  queryKey: ['/api/tools/stats'],
+                  refetchType: 'all'  // 確保完整重新獲取
+                });
+                queryClient.invalidateQueries({ 
+                  queryKey: ['/api/tools/rankings'],
+                  refetchType: 'all'  // 確保完整重新獲取
+                });
+              })
               .catch(err => console.error('工具使用記錄失敗:', err));
           }}
           tabIndex={isLoading ? -1 : 0}
