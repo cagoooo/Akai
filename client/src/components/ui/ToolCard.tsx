@@ -19,12 +19,14 @@ export function ToolCard({ id, name, description, icon, onClick }: ToolCardProps
   const queryClient = useQueryClient();
   const { trackToolUsage } = useToolTracking();
 
-  const handleClick = async () => {
-    // 使用全局工具追蹤功能，已經會更新緩存
-    // 不需要等待追蹤完成，允許連續點擊
-    trackToolUsage(id).catch(err => {
-      console.error("工具使用追蹤失敗:", err);
-    });
+  const handleClick = () => {
+    console.log('工具卡片點擊 ID:', id);
+    
+    // 使用全局工具追蹤功能，但不等待完成
+    // 這樣可以確保連續點擊時UI不會被阻塞
+    trackToolUsage(id)
+      .then(data => console.log('工具使用已追蹤:', id, data))
+      .catch(err => console.error("工具使用追蹤失敗:", err));
     
     // 執行原有的點擊事件
     if (onClick) {

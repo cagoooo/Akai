@@ -8,17 +8,19 @@ export function useToolTracking() {
 
   const trackToolUsage = async (toolId: number) => {
     try {
-      // 獲取最新的工具統計數據，使用緩存中的數據但強制標記為過期
-      const fetchLatestData = async () => {
-        // 先獲取當前數據用於立即更新UI
+      // 立即更新UI: 先更新本地緩存數據
+      const updateLocalCache = () => {
+        // 獲取當前統計數據
         const currentStats = queryClient.getQueryData<any[]>(['/api/tools/stats']) || [];
         const currentRankings = queryClient.getQueryData<any[]>(['/api/tools/rankings']) || [];
 
-        // 更新統計數據 - 注意這裡要防止同一工具多次點擊時可能只增加一次的問題
+        // 更新統計數據
         const updatedStats = currentStats.map(stat => {
           if (stat.toolId === toolId) {
-            // 使用函數更新，確保每次都基於最新狀態
-            return { ...stat, totalClicks: stat.totalClicks + 1 };
+            return { 
+              ...stat, 
+              totalClicks: (stat.totalClicks || 0) + 1 
+            };
           }
           return stat;
         });
@@ -26,18 +28,21 @@ export function useToolTracking() {
         // 更新排行榜數據
         const updatedRankings = currentRankings.map(ranking => {
           if (ranking.toolId === toolId) {
-            return { ...ranking, totalClicks: ranking.totalClicks + 1 };
+            return { 
+              ...ranking, 
+              totalClicks: (ranking.totalClicks || 0) + 1 
+            };
           }
           return ranking;
         });
 
-        // 設置更新後的數據 - 在API請求前先更新UI
+        // 立即更新本地緩存數據，不等待API響應
         queryClient.setQueryData(['/api/tools/stats'], updatedStats);
         queryClient.setQueryData(['/api/tools/rankings'], updatedRankings);
       };
 
-      // 執行立即更新
-      await fetchLatestData();
+      // 先更新本地數據
+      updateLocalCache();
 
       // 發送API請求
       const response = await fetch(`/api/tools/${toolId}/track`, {
@@ -52,29 +57,38 @@ export function useToolTracking() {
       }
 
       const data = await response.json();
+      console.log('工具使用已記錄:', toolId, data);
 
-      // API請求成功後，再次確保數據是最新的
-      // 強制刷新查詢，但保留我們剛剛設置的數據，使用獲取新數據的方式更新
-      queryClient.invalidateQueries({ queryKey: ['/api/tools/stats'] });
-      queryClient.invalidateQueries({ queryKey: ['/api/tools/rankings'] });
+      // 成功後，確保從服務器獲取最新數據，但不立即刷新UI
+      // 使用 { refetchInterval: false } 避免過度重新獲取數據
+      queryClient.invalidateQueries({ 
+        queryKey: ['/api/tools/stats'],
+        refetchType: 'active'
+      });
+      
+      queryClient.invalidateQueries({ 
+        queryKey: ['/api/tools/rankings'],
+        refetchType: 'active'
+      });
 
       // 如果回傳成就訊息，顯示通知
       if (data.achievement) {
         toast({
-          title: "恭喜解鎖成就！",
-          description: `獲得「${data.achievement}」成就`,
-          variant: "default",
+          title: "新成就獲得！",
+          description: `恭喜獲得「${data.achievement}」成就！`,
+          duration: 5000,
         });
       }
 
       return data;
     } catch (error) {
-      console.error('工具使用記錄失敗:', error);
+      console.error('記錄工具使用時發生錯誤:', error);
       toast({
         title: "錯誤",
         description: "記錄工具使用時發生錯誤",
         variant: "destructive",
       });
+      throw error;
     }
   };
 

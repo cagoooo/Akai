@@ -101,13 +101,24 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
   // 使用 mutation 作為後備機制
   const trackUsage = useMutation({
     mutationFn: async () => {
+      console.log('工具卡片點擊:', tool.id);
       return await trackToolUsage(tool.id);
     },
-    onSuccess: () => {
-      // 成功後再次確保所有工具統計數據都被刷新
-      queryClient.invalidateQueries({ queryKey: ['/api/tools/stats'] });
-      queryClient.invalidateQueries({ queryKey: ['/api/tools/rankings'] });
+    onSuccess: (data) => {
+      console.log('工具卡片點擊成功:', tool.id, data);
+      // 成功後確保數據被刷新，但使用 active 模式避免過多請求
+      queryClient.invalidateQueries({ 
+        queryKey: ['/api/tools/stats'],
+        refetchType: 'active'
+      });
+      queryClient.invalidateQueries({ 
+        queryKey: ['/api/tools/rankings'],
+        refetchType: 'active'
+      });
     },
+    onError: (error) => {
+      console.error('工具卡片點擊錯誤:', tool.id, error);
+    }
   });
 
   const handleShare = (e: React.MouseEvent) => {
