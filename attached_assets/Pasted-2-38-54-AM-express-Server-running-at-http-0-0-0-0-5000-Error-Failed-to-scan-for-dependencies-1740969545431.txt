@@ -1,0 +1,67 @@
+2:38:54 AM [express] Server running at http://0.0.0.0:5000
+Error:   Failed to scan for dependencies from entries:
+  /home/runner/workspace/client/index.html
+/home/runner/workspace/client/public/install-service-worker.html
+
+  ✘ [ERROR] Unexpected closing "div" tag does not match opening "motion.div" tag
+
+    client/src/components/IconCustomizer.tsx:101:10:
+      101 │         </div>
+          │           ~~~
+          ╵           motion.div
+
+  The opening "motion.div" tag is here:
+
+    client/src/components/IconCustomizer.tsx:91:9:
+      91 │         <motion.div 
+         ╵          ~~~~~~~~~~
+
+
+✘ [ERROR] The symbol "getDefaultPrimaryColor" has already been declared
+
+    client/src/components/IconCustomizer.tsx:213:9:
+      213 │ function getDefaultPrimaryColor(tool: EducationalTool) {
+          ╵          ~~~~~~~~~~~~~~~~~~~~~~
+
+  The symbol "getDefaultPrimaryColor" was originally declared here:
+
+    client/src/components/IconCustomizer.tsx:34:9:
+      34 │ function getDefaultPrimaryColor(tool: EducationalTool): string {
+         ╵          ~~~~~~~~~~~~~~~~~~~~~~
+
+  Duplicate top-level function declarations are not allowed in an ECMAScript module. This file is considered to be an ECMAScript module because of the "export" keyword here:
+
+    client/src/components/IconCustomizer.tsx:59:0:
+      59 │ export function IconCustomizer({ tool, onCustomizationChange }: Ic...
+         ╵ ~~~~~~
+
+
+✘ [ERROR] The symbol "getDefaultSecondaryColor" has already been declared
+
+    client/src/components/IconCustomizer.tsx:226:9:
+      226 │ function getDefaultSecondaryColor(tool: EducationalTool) {
+          ╵          ~~~~~~~~~~~~~~~~~~~~~~~~
+
+  The symbol "getDefaultSecondaryColor" was originally declared here:
+
+    client/src/components/IconCustomizer.tsx:47:9:
+      47 │ function getDefaultSecondaryColor(tool: EducationalTool): string {
+         ╵          ~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Duplicate top-level function declarations are not allowed in an ECMAScript module. This file is considered to be an ECMAScript module because of the "export" keyword here:
+
+    client/src/components/IconCustomizer.tsx:59:0:
+      59 │ export function IconCustomizer({ tool, onCustomizationChange }: Ic...
+         ╵ ~~~~~~
+
+
+    at failureErrorWithLog (/home/runner/workspace/node_modules/vite/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/workspace/node_modules/vite/node_modules/esbuild/lib/main.js:945:25
+    at runOnEndCallbacks (/home/runner/workspace/node_modules/vite/node_modules/esbuild/lib/main.js:1315:45)
+    at buildResponseToResult (/home/runner/workspace/node_modules/vite/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/workspace/node_modules/vite/node_modules/esbuild/lib/main.js:955:9
+    at new Promise (<anonymous>)
+    at requestCallbacks.on-end (/home/runner/workspace/node_modules/vite/node_modules/esbuild/lib/main.js:954:54)
+    at handleRequest (/home/runner/workspace/node_modules/vite/node_modules/esbuild/lib/main.js:647:17)
+    at handleIncomingPacket (/home/runner/workspace/node_modules/vite/node_modules/esbuild/lib/main.js:672:7)
+    at Socket.readFromStdout (/home/runner/workspace/node_modules/vite/node_modules/esbuild/lib/main.js:600:7)
