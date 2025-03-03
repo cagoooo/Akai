@@ -232,7 +232,7 @@ export function ToolRankings() {
 
   const toggleMute = () => {
     const newMutedState = !isMuted;
-    soundManager.setMuted(newMutedState);
+    soundManager.setMute(newMutedState);
     setIsMuted(newMutedState);
   };
 
