@@ -293,10 +293,7 @@ export function ToolRankings() {
         console.log('工具使用記錄已更新');
       }).catch(error => {
         console.error('記錄工具使用時發生錯誤:', error);
-      });nking => {
-          const localRanking = updatedRankings.find(r => r.toolId === serverRanking.toolId);
-          // 如果本地點擊次數更高，保留本地數據
-          if (localRanking && localRanking.totalClicks > serverRanking.totalClicks) {
+      });
             return localRanking;
           }
           return serverRanking;
