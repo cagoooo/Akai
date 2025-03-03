@@ -76,7 +76,7 @@ const rankAnimationVariants = {
 };
 
 // 修改 RankingIcon 組件,增加動畫效果
-const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: number }) => {
+const RankingIcon = ({ rank, previousRank, tool }: { rank: number; previousRank?: number; tool: any }) => { // Added tool prop
   const icons = {
     1: <Trophy className="w-6 h-6 text-yellow-500" />,
     2: <Medal className="w-6 h-6 text-gray-400" />,
@@ -182,8 +182,8 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
         </motion.div>
       )}
       <div className="flex flex-col items-center p-2">
-        <span className="font-semibold text-lg">工具 {tool.toolId}</span>
-        <span className="text-sm text-muted-foreground">{tool.totalClicks} 次使用</span>
+        <span className="font-semibold text-lg">工具 {tool.toolId}</span> {/* tool.toolId is now accessible */}
+        <span className="text-sm text-muted-foreground">{tool.totalClicks} 次使用</span> {/* tool.totalClicks is now accessible */}
         <Button 
           variant="outline" 
           size="sm" 
@@ -363,7 +363,7 @@ export function ToolRankings() {
 
             const isTop = index < 3;
             const previousRank = previousRankings[ranking.toolId];
-            
+
 
             const rankColor = isTop ? rankColors[index] : rankColors.default;
 
@@ -422,7 +422,7 @@ export function ToolRankings() {
                   className="flex-shrink-0 z-10"
                   layoutId={`rank-${ranking.toolId}`}
                 >
-                  <RankingIcon rank={index + 1} previousRank={previousRank} />
+                  <RankingIcon rank={index + 1} previousRank={previousRank} tool={tool} /> {/* Pass tool prop */}
                 </motion.div>
                 <motion.div 
                   className="flex-1 min-w-0 z-10"
