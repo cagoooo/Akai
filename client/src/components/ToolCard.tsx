@@ -170,7 +170,15 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
 
         <Card
           className={`group hover:shadow-lg transition-all duration-500 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary overflow-hidden border-2 ${categoryColors[tool.category].border} hover:bg-gradient-to-br`}
-          onClick={() => window.open(tool.url, '_blank', 'noopener,noreferrer')}
+          onClick={() => {
+            // 先記錄工具使用
+            trackUsage.mutate(undefined, {
+              onSuccess: () => {
+                // 成功後打開工具連結
+                window.open(tool.url, '_blank', 'noopener,noreferrer');
+              }
+            });
+          }}
           tabIndex={isLoading ? -1 : 0}
           role={isLoading ? "presentation" : "button"}
           aria-label={isLoading ? undefined : `開啟 ${tool.title} 工具詳細資訊`}
