@@ -244,8 +244,9 @@ export function ToolRankings() {
       // 使用共用的 trackToolUsage 函數來同步更新所有計數器
       await trackToolUsage(tool.id);
       
-      // 不需要手動更新本地狀態，因為 trackToolUsage 已經處理了
-      // 這確保了所有使用同一數據源的組件保持同步.setQueryData(['/api/tools/rankings'], updatedRankings);
+      // 手動更新 React Query 緩存以確保即時反映在 UI 上
+      queryClient.invalidateQueries({ queryKey: ['/api/tools/rankings'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/tools/stats'] });同步.setQueryData(['/api/tools/rankings'], updatedRankings);
 
       // 為了確保數據最終與服務器同步，我們在後台靜默更新
       // 但不會用返回的數據覆蓋本地狀態

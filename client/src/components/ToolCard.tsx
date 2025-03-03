@@ -94,20 +94,16 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
     select: (data) => data.find((stat: any) => stat.toolId === tool.id),
   });
 
-  // Track tool usage
+  // 使用共用的工具追蹤鉤子
+  const { trackToolUsage } = useToolTracking();
+  
+  // 使用 mutation 作為後備機制
   const trackUsage = useMutation({
     mutationFn: async () => {
-      const response = await fetch(`/api/tools/${tool.id}/track`, {
-        method: 'POST',
-        credentials: 'include',
-      });
-      if (!response.ok) {
-        throw new Error('Failed to track tool usage');
-      }
-      return response.json();
+      return await trackToolUsage(tool.id);
     },
     onSuccess: () => {
-      // 成功後立即刷新所有工具統計數據
+      // 成功後再次確保所有工具統計數據都被刷新
       queryClient.invalidateQueries({ queryKey: ['/api/tools/stats'] });
       queryClient.invalidateQueries({ queryKey: ['/api/tools/rankings'] });
     },
