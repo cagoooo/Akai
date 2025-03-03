@@ -171,11 +171,13 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
         <Card
           className={`group hover:shadow-lg transition-all duration-500 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary overflow-hidden border-2 ${categoryColors[tool.category].border} hover:bg-gradient-to-br`}
           onClick={() => {
-            // 先記錄工具使用
+            // 立即開啟工具連結
+            window.open(tool.url, '_blank', 'noopener,noreferrer');
+            
+            // 同時在後台記錄工具使用
             trackUsage.mutate(undefined, {
               onSuccess: () => {
-                // 成功後打開工具連結
-                window.open(tool.url, '_blank', 'noopener,noreferrer');
+                console.log('工具使用已記錄');
               }
             });
           }}
