@@ -7,26 +7,6 @@ export function useToolTracking() {
 
   const trackToolUsage = async (toolId: number) => {
     try {
-      // 立即更新UI: 強制使用函數式更新確保每次都是基於最新狀態
-      const updateCachedData = (queryKey: string, toolId: number) => {
-        return queryClient.setQueryData<any[]>([queryKey], (oldData) => {
-          if (!oldData) return oldData;
-
-          return oldData.map(item => {
-            if (item.toolId === toolId) {
-              return { ...item, totalClicks: (item.totalClicks || 0) + 1 };
-            }
-            return item;
-          });
-        });
-      };
-
-      // 同時更新兩個查詢的數據
-      updateCachedData('/api/tools/stats', toolId);
-      updateCachedData('/api/tools/rankings', toolId);
-
-      console.log(`工具使用前端已更新，ID: ${toolId}`);
-
       // 發送API請求
       const response = await fetch(`/api/tools/${toolId}/track`, {
         method: "POST",
@@ -42,12 +22,13 @@ export function useToolTracking() {
       const data = await response.json();
       console.log('工具使用API已記錄:', toolId, data);
 
-      // 成功後，使用最小延遲刷新查詢確保數據一致性
-      setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ['/api/tools/stats'] });
-        queryClient.invalidateQueries({ queryKey: ['/api/tools/rankings'] });
-        console.log('工具使用統計查詢已刷新');
-      }, 100);
+      // 請求成功後，直接從服務器刷新數據
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['/api/tools/stats'] }),
+        queryClient.invalidateQueries({ queryKey: ['/api/tools/rankings'] })
+      ]);
+
+      console.log('工具使用統計查詢已刷新');
 
       // 如果回傳成就訊息，顯示通知
       if (data.achievement) {
@@ -65,6 +46,7 @@ export function useToolTracking() {
         title: "錯誤",
         description: "記錄工具使用時發生錯誤",
         variant: "destructive",
+        duration: 3000,
       });
       throw error;
     }
