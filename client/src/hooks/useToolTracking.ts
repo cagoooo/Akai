@@ -1,4 +1,3 @@
-
 import { useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -8,41 +7,25 @@ export function useToolTracking() {
 
   const trackToolUsage = async (toolId: number) => {
     try {
-      // 立即更新UI: 先更新本地緩存數據
-      const updateLocalCache = () => {
-        // 獲取當前統計數據
-        const currentStats = queryClient.getQueryData<any[]>(['/api/tools/stats']) || [];
-        const currentRankings = queryClient.getQueryData<any[]>(['/api/tools/rankings']) || [];
+      // 立即更新UI: 強制使用函數式更新確保每次都是基於最新狀態
+      const updateCachedData = (queryKey: string, toolId: number) => {
+        return queryClient.setQueryData<any[]>([queryKey], (oldData) => {
+          if (!oldData) return oldData;
 
-        // 更新統計數據
-        const updatedStats = currentStats.map(stat => {
-          if (stat.toolId === toolId) {
-            return { 
-              ...stat, 
-              totalClicks: (stat.totalClicks || 0) + 1 
-            };
-          }
-          return stat;
+          return oldData.map(item => {
+            if (item.toolId === toolId) {
+              return { ...item, totalClicks: (item.totalClicks || 0) + 1 };
+            }
+            return item;
+          });
         });
-
-        // 更新排行榜數據
-        const updatedRankings = currentRankings.map(ranking => {
-          if (ranking.toolId === toolId) {
-            return { 
-              ...ranking, 
-              totalClicks: (ranking.totalClicks || 0) + 1 
-            };
-          }
-          return ranking;
-        });
-
-        // 立即更新本地緩存數據，不等待API響應
-        queryClient.setQueryData(['/api/tools/stats'], updatedStats);
-        queryClient.setQueryData(['/api/tools/rankings'], updatedRankings);
       };
 
-      // 先更新本地數據
-      updateLocalCache();
+      // 同時更新兩個查詢的數據
+      updateCachedData('/api/tools/stats', toolId);
+      updateCachedData('/api/tools/rankings', toolId);
+
+      console.log(`工具使用前端已更新，ID: ${toolId}`);
 
       // 發送API請求
       const response = await fetch(`/api/tools/${toolId}/track`, {
@@ -57,19 +40,14 @@ export function useToolTracking() {
       }
 
       const data = await response.json();
-      console.log('工具使用已記錄:', toolId, data);
+      console.log('工具使用API已記錄:', toolId, data);
 
-      // 成功後，確保從服務器獲取最新數據，但不立即刷新UI
-      // 使用 { refetchInterval: false } 避免過度重新獲取數據
-      queryClient.invalidateQueries({ 
-        queryKey: ['/api/tools/stats'],
-        refetchType: 'active'
-      });
-      
-      queryClient.invalidateQueries({ 
-        queryKey: ['/api/tools/rankings'],
-        refetchType: 'active'
-      });
+      // 成功後，使用最小延遲刷新查詢確保數據一致性
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ['/api/tools/stats'] });
+        queryClient.invalidateQueries({ queryKey: ['/api/tools/rankings'] });
+        console.log('工具使用統計查詢已刷新');
+      }, 100);
 
       // 如果回傳成就訊息，顯示通知
       if (data.achievement) {

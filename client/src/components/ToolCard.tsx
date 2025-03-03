@@ -182,12 +182,10 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
             // 立即開啟工具連結
             window.open(tool.url, '_blank', 'noopener,noreferrer');
 
-            // 同時在後台記錄工具使用
-            trackUsage.mutate(undefined, {
-              onSuccess: () => {
-                console.log('工具使用已記錄');
-              }
-            });
+            // 使用我們優化的工具追蹤功能，確保數據一致性
+            trackToolUsage(tool.id)
+              .then(() => console.log('工具使用已記錄'))
+              .catch(err => console.error('工具使用記錄失敗:', err));
           }}
           tabIndex={isLoading ? -1 : 0}
           role={isLoading ? "presentation" : "button"}
