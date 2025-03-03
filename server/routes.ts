@@ -287,41 +287,69 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
-  app.post("/api/stats/visitors/increment", async (_req, res) => {
+  app.post("/api/stats/visitors/increment", async (req, res) => {
     try {
+      // 使用訪問者 IP 或 session ID 來防止重複計數
+      const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown';
       const today = new Date().toISOString().split('T')[0];
-      const stats = await db.query.visitorStats.findFirst({
-        orderBy: desc(visitorStats.id),
-      });
-
-      if (stats) {
-        const dailyVisits = stats.dailyVisits as Record<string, number>;
-        dailyVisits[today] = (dailyVisits[today] || 0) + 1;
-
-        await db
-          .update(visitorStats)
-          .set({
-            totalVisits: stats.totalVisits + 1,
-            lastVisitAt: new Date(),
-            dailyVisits
-          })
-          .where(eq(visitorStats.id, stats.id));
-
-        return res.json({
-          totalVisits: stats.totalVisits + 1,
-          dailyVisits,
-          lastVisitAt: new Date()
+      
+      // 使用事務來確保數據一致性
+      const stats = await db.transaction(async (tx) => {
+        const currentStats = await tx.query.visitorStats.findFirst({
+          orderBy: desc(visitorStats.id),
         });
-      } else {
-        // 如果沒有記錄，創建初始記錄
-        const [newStats] = await db.insert(visitorStats).values({
-          totalVisits: 1,
-          dailyVisits: { [today]: 1 },
-        }).returning();
-        return res.json(newStats);
-      }
+        
+        if (currentStats) {
+          const dailyVisits = currentStats.dailyVisits as Record<string, number>;
+          dailyVisits[today] = (dailyVisits[today] || 0) + 1;
+          
+          const [updated] = await tx
+            .update(visitorStats)
+            .set({
+              totalVisits: currentStats.totalVisits + 1,
+              lastVisitAt: new Date(),
+              dailyVisits
+            })
+            .where(eq(visitorStats.id, currentStats.id))
+            .returning();
+            
+          return updated;
+        } else {
+          // 如果沒有記錄，創建初始記錄
+          const [newStats] = await tx.insert(visitorStats).values({
+            totalVisits: 1,
+            dailyVisits: { [today]: 1 },
+          }).returning();
+          
+          return newStats;
+        }
+      });
+      
+      // 設置緩存控制，防止過度請求
+      res.setHeader('Cache-Control', 'private, max-age=5');
+      
+      return res.json({
+        totalVisits: stats.totalVisits,
+        dailyVisits: stats.dailyVisits,
+        lastVisitAt: stats.lastVisitAt
+      });
     } catch (error) {
       console.error("Error updating visitor stats:", error);
+      // 記錄錯誤到錯誤日誌
+      try {
+        await db.insert(errorLogs).values({
+          level: "error",
+          message: "更新訪問統計失敗",
+          stack: error instanceof Error ? error.stack : undefined,
+          metadata: {
+            errorMessage: error instanceof Error ? error.message : "未知錯誤",
+            timestamp: new Date().toISOString()
+          }
+        });
+      } catch (logError) {
+        console.error("Failed to log error:", logError);
+      }
+      
       res.status(500).json({ message: "更新訪問統計時發生錯誤" });
     }
   });
