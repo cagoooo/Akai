@@ -10,6 +10,7 @@ import { soundManager } from "@/lib/soundManager";
 import { Button } from "@/components/ui/button";
 import { RankingTutorial } from "./RankingTutorial";
 import { useLocation } from "wouter";
+import { useToolTracking } from "@/hooks/useToolTracking"; // Added import
 
 // 擴充表情符號庫,增加更多有趣的動態表情
 const rankEmojis = [
@@ -236,6 +237,7 @@ export function ToolRankings() {
   const [isMuted, setIsMuted] = useState(soundManager.isSoundMuted());
   const [location] = useLocation();
   const queryClient = useQueryClient();
+  const { trackToolUsage } = useToolTracking(); // Added useToolTracking hook
 
   const { data: rankings = [], isLoading } = useQuery<ToolRanking[]>({
     queryKey: ['/api/tools/rankings'],
@@ -267,26 +269,17 @@ export function ToolRankings() {
       // 開啟工具網站
       window.open(tool.url, '_blank', 'noopener,noreferrer');
 
-      // 更新使用次數
-      const response = await fetch(`/api/tools/${tool.id}/track`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
+      // 使用 useToolTracking 鉤子來更新使用次數
+      await trackToolUsage(tool.id);
 
-      if (!response.ok) {
-        throw new Error('Failed to update tool usage count');
-      }
-
-      // 立即重新獲取排行榜數據
-      queryClient.invalidateQueries({ queryKey: ['/api/tools/rankings'] });
+      // 刷新排行榜數據
+      queryClient.invalidateQueries({ queryKey: ['/api/tools/rankings'] }); //Simplified refresh
 
       // 播放點擊音效
       soundManager.playSound('click');
 
     } catch (error) {
-      console.error('Failed to track tool usage:', error);
+      console.error('開啟工具時發生錯誤:', error);
     }
   };
 
