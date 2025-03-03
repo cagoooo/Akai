@@ -59,8 +59,8 @@ export function useToolTracking() {
     } catch (error) {
       console.error('工具使用記錄失敗:', error);
       toast({
-        title: "工具使用記錄失敗",
-        description: error instanceof Error ? error.message : "未知錯誤",
+        title: "錯誤",
+        description: "記錄工具使用時發生錯誤",
         variant: "destructive",
       });
       throw error;

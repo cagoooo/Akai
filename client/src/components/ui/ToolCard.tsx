@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
+import { useQueryClient } from "@tanstack/react-query";
+import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { motion } from "framer-motion";
-
-import { useQueryClient } from '@tanstack/react-query';
+import { useToast } from "@/components/ui/use-toast";
+import { useToolTracking } from "@/hooks/useToolTracking";
 
 interface ToolCardProps {
   id: number;
@@ -18,57 +17,10 @@ export function ToolCard({ id, name, description, icon, onClick }: ToolCardProps
   const { toast } = useToast();
   const [isHovered, setIsHovered] = useState(false);
   const queryClient = useQueryClient();
+  const { trackToolUsage } = useToolTracking();
 
   const handleClick = () => {
-    // 使用 React Query 的 queryClient 更新工具使用統計
-
-    // 記錄工具使用
-    fetch(`/api/tools/${id}/track`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('無法記錄工具使用');
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log('工具使用已記錄', data);
-
-      // 立即更新工具統計和排行榜數據
-      // 1. 獲取當前統計數據
-      const currentStats = queryClient.getQueryData<any[]>(['/api/tools/stats']) || [];
-      const currentRankings = queryClient.getQueryData<any[]>(['/api/tools/rankings']) || [];
-
-      // 2. 更新統計數據
-      const updatedStats = currentStats.map(stat => {
-        if (stat.toolId === id) {
-          return { ...stat, totalClicks: stat.totalClicks + 1 };
-        }
-        return stat;
-      });
-
-      // 3. 更新排行榜數據
-      const updatedRankings = currentRankings.map(ranking => {
-        if (ranking.toolId === id) {
-          return { ...ranking, totalClicks: ranking.totalClicks + 1 };
-        }
-        return ranking;
-      });
-
-      // 4. 設置更新後的數據
-      queryClient.setQueryData(['/api/tools/stats'], updatedStats);
-      queryClient.setQueryData(['/api/tools/rankings'], updatedRankings);
-
-
-      // trackToolUsage 已經處理了成就訊息的提示，這裡不需要重複處理
-    })
-    .catch(error => {
-      console.error('記錄工具使用時發生錯誤:', error);
-    });
+    trackToolUsage(id);
 
     // 執行原有的點擊事件
     if (onClick) {

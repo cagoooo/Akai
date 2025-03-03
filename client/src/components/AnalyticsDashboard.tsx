@@ -358,11 +358,10 @@ export function AnalyticsDashboard() {
                         const index = elements[0].index;
                         const toolId = toolStats?.[index]?.toolId;
                         if (toolId) {
-                          // 使用共用的 trackToolUsage 函數記錄工具使用
-                          import('@/hooks/useToolTracking').then(module => {
-                            const { useToolTracking } = module;
-                            const { trackToolUsage } = useToolTracking();
-                            trackToolUsage(toolId);
+                          // 使用工具追踪鉤子記錄工具使用
+                          const trackingModule = await import('@/hooks/useToolTracking');
+                          const trackingHook = trackingModule.useToolTracking();
+                          await trackingHook.trackToolUsage(toolId);
                           })
                           .then(data => console.log('圖表點擊已記錄', data))
                           .catch(error => console.error('記錄圖表點擊時發生錯誤:', error));
