@@ -19,6 +19,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { SocialPreviewImage } from "./SocialPreviewImage";
 import { generateShareUrls } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { useToolTracking } from "@/hooks/useToolTracking";
 
 // Enhanced category colors with hover states and transitions
 const categoryColors = {
@@ -96,7 +97,7 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
 
   // 使用共用的工具追蹤鉤子
   const { trackToolUsage } = useToolTracking();
-  
+
   // 使用 mutation 作為後備機制
   const trackUsage = useMutation({
     mutationFn: async () => {
