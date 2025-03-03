@@ -178,7 +178,41 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
           transition={{ duration: 1.2 }}
           className="absolute -top-2 left-1/2 transform -translate-x-1/2 text-sm"
         >
-          {rank === 1 ? "🏅" : "⬆️"}
+          {rank === 1 ? "🏅" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : ""}
+        </motion.div>
+        <div className="flex flex-col items-center p-2">
+          <span className="font-semibold text-lg">工具 {tool.toolId}</span>
+          <span className="text-sm text-muted-foreground">{tool.totalClicks} 次使用</span>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="mt-2"
+            onClick={() => {
+              // 記錄工具使用
+              fetch(`/api/tools/${tool.toolId}/track`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              })
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error('無法記錄工具使用');
+                }
+                return response.json();
+              })
+              .then(data => {
+                console.log('工具使用已記錄', data);
+              })
+              .catch(error => {
+                console.error('記錄工具使用時發生錯誤:', error);
+              });
+            }}
+          >
+            使用工具
+          </Button>
+        </div>
+      </motion.div>⬆️"}
         </motion.div>
       )}
     </motion.div>

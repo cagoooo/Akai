@@ -353,6 +353,24 @@ export function AnalyticsDashboard() {
                   }}
                   height={400}
                   options={{
+                    onClick: (event, elements) => {
+                      if (elements && elements.length > 0) {
+                        const index = elements[0].index;
+                        const toolId = toolStats?.[index]?.toolId;
+                        if (toolId) {
+                          // 記錄工具使用
+                          fetch(`/api/tools/${toolId}/track`, {
+                            method: 'POST',
+                            headers: {
+                              'Content-Type': 'application/json'
+                            }
+                          })
+                          .then(response => response.json())
+                          .then(data => console.log('圖表點擊已記錄', data))
+                          .catch(error => console.error('記錄圖表點擊時發生錯誤:', error));
+                        }
+                      }
+                    },
                     responsive: true,
                     plugins: {
                       legend: { display: false }
