@@ -237,7 +237,7 @@ export function ToolRankings() {
   const queryClient = useQueryClient();
   const { trackToolUsage } = useToolTracking(); // Added useToolTracking hook
 
-  const { data: rankings = [], isLoading } = useQuery<ToolRanking[]>({
+  const { data: rankings = [], isLoading, refetch } = useQuery<ToolRanking[]>({
     queryKey: ['/api/tools/rankings'],
     refetchInterval: 2000,
     onSuccess(newRankings) {
@@ -269,12 +269,23 @@ export function ToolRankings() {
 
       // 使用 useToolTracking 鉤子來更新使用次數
       await trackToolUsage(tool.id);
-
-      // 刷新排行榜數據
-      queryClient.invalidateQueries({ queryKey: ['/api/tools/rankings'] }); //Simplified refresh
-
+      
       // 播放點擊音效
       soundManager.playSound('click');
+      
+      // 立即刷新排行榜數據並等待完成
+      await refetch();
+      
+      // 將當前工具點擊次數+1（直接更新本地狀態，提高使用者體驗）
+      const updatedRankings = rankings.map(ranking => {
+        if (ranking.toolId === tool.id) {
+          return { ...ranking, totalClicks: ranking.totalClicks + 1 };
+        }
+        return ranking;
+      });
+      
+      // 強制重新排序，確保立即反映到UI上
+      queryClient.setQueryData(['/api/tools/rankings'], updatedRankings);
 
     } catch (error) {
       console.error('開啟工具時發生錯誤:', error);
