@@ -54,8 +54,10 @@ function AnimatedCounter({ value }: { value: number }) {
 
 function MilestoneProgress({ currentVisits }: { currentVisits: number }) {
   // 找到下一個里程碑
-  const nextMilestone = MILESTONES.find(m => m.value > currentVisits) || MILESTONES[MILESTONES.length - 1];
-  const prevMilestone = MILESTONES.findLast(m => m.value <= currentVisits) || MILESTONES[0];
+  const sortedMilestones = [...MILESTONES].sort((a, b) => a.value - b.value);
+  const nextMilestone = sortedMilestones.find(m => m.value > currentVisits) || sortedMilestones[sortedMilestones.length - 1];
+  const prevMilestoneIndex = sortedMilestones.findIndex(m => m.value > currentVisits) - 1;
+  const prevMilestone = prevMilestoneIndex >= 0 ? sortedMilestones[prevMilestoneIndex] : sortedMilestones[0];
 
   // 計算進度
   const progress = ((currentVisits - prevMilestone.value) / (nextMilestone.value - prevMilestone.value)) * 100;
@@ -82,7 +84,10 @@ function MilestoneProgress({ currentVisits }: { currentVisits: number }) {
 
 export function VisitorCounter() {
   const { toast } = useToast();
-  const lastMilestoneRef = useRef<number>(0);
+  // 使用 localStorage 記錄最高里程碑，確保重新載入頁面不會重複通知
+  const lastMilestoneRef = useRef<number>(
+    parseInt(localStorage.getItem('lastAchievedMilestone') || '0')
+  );
 
   const { data: stats, refetch } = useQuery<StatsResponse>({
     queryKey: ["/api/stats/visitors"],
@@ -112,13 +117,16 @@ export function VisitorCounter() {
   useEffect(() => {
     if (!stats?.totalVisits) return;
 
-    // 檢查是否達到新的里程碑
-    const milestone = MILESTONES.find(m => 
+    // 檢查是否達到新的里程碑 (從大到小檢查，確保顯示最大的里程碑)
+    const sortedMilestones = [...MILESTONES].sort((a, b) => b.value - a.value);
+    const milestone = sortedMilestones.find(m => 
       stats.totalVisits >= m.value && m.value > lastMilestoneRef.current
     );
 
     if (milestone) {
       lastMilestoneRef.current = milestone.value;
+      // 保存到 localStorage 以確保頁面重新載入後不會重複顯示
+      localStorage.setItem('lastAchievedMilestone', milestone.value.toString());
 
       const Icon = milestone.icon;
 
