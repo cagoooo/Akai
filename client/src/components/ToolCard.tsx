@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Share2, Users, Settings2, Facebook as FacebookIcon, Linkedin as LinkedinIcon, MessageCircle, BarChart, Copy } from "lucide-react";
 import { useState, useCallback } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as Icons from "lucide-react";
 import type { EducationalTool } from "@/lib/data";
 import type { LucideIcon } from 'lucide-react';
@@ -173,7 +173,7 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
           onClick={() => {
             // 立即開啟工具連結
             window.open(tool.url, '_blank', 'noopener,noreferrer');
-            
+
             // 同時在後台記錄工具使用
             trackUsage.mutate(undefined, {
               onSuccess: () => {
