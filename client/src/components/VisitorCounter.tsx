@@ -1,4 +1,3 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -29,17 +28,17 @@ const MILESTONES = [
 function AnimatedCounter({ value }: { value: number }) {
   const count = useMotionValue(0);
   const rounded = useTransform(count, latest => Math.round(latest).toLocaleString());
-  
+
   useEffect(() => {
     const animation = animate(count, value, { duration: 1, bounce: 0.3 });
     return animation.stop;
   }, [count, value]);
-  
+
   // Change color based on value thresholds
   const textColor = useTransform(
     count,
     [0, 500, 1000, 2000, 5000, 10000],
-    ["#60A5FA", "#34D399", "#FBBF24", "#F87171", "#8B5CF6", "#EC4899", "#14B8A6"]
+    ["#4caf50", "#8bc34a", "#cddc39", "#ffc107", "#ff9800", "#ff5722"]
   );
 
   return (
@@ -105,7 +104,7 @@ export function VisitorCounter() {
         console.error("Failed to increment visitor count:", error);
       }
     };
-    
+
     incrementVisitor();
   }, [refetch]);
 
@@ -178,14 +177,14 @@ export function VisitorCounter() {
             <p className="text-2xl font-bold">{todayVisits}</p>
           </div>
         </div>
-        
+
         <div className="mt-6 text-center">
           <p className="text-sm opacity-90">總訪問次數</p>
           <p className="text-4xl font-bold">
             <AnimatedCounter value={totalVisits} />
           </p>
         </div>
-        
+
         <MilestoneProgress currentVisits={totalVisits} />
       </CardContent>
     </Card>
