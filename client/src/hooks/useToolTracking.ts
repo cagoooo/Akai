@@ -58,7 +58,7 @@ export function useToolTracking() {
         });
       }
 
-      return data;urn data;
+      return data;
     } catch (error) {
       console.error('記錄工具使用時發生錯誤:', error);
       toast({
