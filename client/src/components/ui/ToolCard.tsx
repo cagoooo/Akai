@@ -21,7 +21,10 @@ export function ToolCard({ id, name, description, icon, onClick }: ToolCardProps
 
   const handleClick = async () => {
     // 使用全局工具追蹤功能，已經會更新緩存
-    await trackToolUsage(id);
+    // 不需要等待追蹤完成，允許連續點擊
+    trackToolUsage(id).catch(err => {
+      console.error("工具使用追蹤失敗:", err);
+    });
     
     // 執行原有的點擊事件
     if (onClick) {
