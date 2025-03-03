@@ -189,7 +189,7 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
             // 需要創建鉤子的實例，而不是在事件處理程序中調用鉤子
             // 先從外部獲取trackToolUsage實例
             const trackingHook = useToolTracking();
-            trackingHook.trackToolUsage(tool.toolId).catch(err => {
+            trackingHook.trackToolUsage(tool.toolId)l.toolId).catch(err => {
               console.error("工具使用追蹤失敗:", err);
             });
           } catch (error) {
