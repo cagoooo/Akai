@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
 
+import { useQueryClient } from '@tanstack/react-query';
+
 interface ToolCardProps {
   id: number;
   name: string;
@@ -16,8 +18,11 @@ interface ToolCardProps {
 export function ToolCard({ id, name, description, icon, onClick }: ToolCardProps) {
   const { toast } = useToast();
   const [isHovered, setIsHovered] = useState(false);
+  const queryClient = useQueryClient();
 
   const handleClick = () => {
+    // 使用 React Query 的 queryClient 更新工具使用統計
+    
     // 記錄工具使用
     fetch(`/api/tools/${id}/track`, {
       method: 'POST',
@@ -33,6 +38,32 @@ export function ToolCard({ id, name, description, icon, onClick }: ToolCardProps
     })
     .then(data => {
       console.log('工具使用已記錄', data);
+      
+      // 立即更新工具統計和排行榜數據
+      // 1. 獲取當前統計數據
+      const currentStats = queryClient.getQueryData<any[]>(['/api/tools/stats']) || [];
+      const currentRankings = queryClient.getQueryData<any[]>(['/api/tools/rankings']) || [];
+      
+      // 2. 更新統計數據
+      const updatedStats = currentStats.map(stat => {
+        if (stat.toolId === id) {
+          return { ...stat, totalClicks: stat.totalClicks + 1 };
+        }
+        return stat;
+      });
+      
+      // 3. 更新排行榜數據
+      const updatedRankings = currentRankings.map(ranking => {
+        if (ranking.toolId === id) {
+          return { ...ranking, totalClicks: ranking.totalClicks + 1 };
+        }
+        return ranking;
+      });
+      
+      // 4. 設置更新後的數據
+      queryClient.setQueryData(['/api/tools/stats'], updatedStats);
+      queryClient.setQueryData(['/api/tools/rankings'], updatedRankings);
+      
       // 如果伺服器回傳了成就訊息
       if (data.achievement) {
         toast({
