@@ -190,7 +190,24 @@ export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps
             trackingPromise
               .then((updatedStats) => {
                 console.log('工具使用已追蹤:', tool.id, updatedStats);
-                // 不需要手動更新本地數據，因為useToolTracking會刷新所有相關查詢具使用已記錄', updatedStats);
+                
+                // 強制立即重新獲取所有工具相關數據
+                queryClient.invalidateQueries({ 
+                  queryKey: ['/api/tools/stats'],
+                  refetchType: 'all'
+                });
+                queryClient.invalidateQueries({ 
+                  queryKey: ['/api/tools/rankings'],
+                  refetchType: 'all'
+                });
+                
+                // 確保刷新所有工具相關查詢
+                queryClient.refetchQueries({
+                  predicate: (query) => 
+                    query.queryKey[0] === '/api/tools' || 
+                    String(query.queryKey[0]).includes('tools'),
+                  type: 'all'
+                });更新本地數據，因為useToolTracking會刷新所有相關查詢具使用已記錄', updatedStats);
                 
                 // 只更新工具的計數相關屬性，保留其他屬性
                 if (updatedStats) {

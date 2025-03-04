@@ -191,8 +191,23 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
               .then((result) => {
                 console.log('工具使用排行榜點擊已追蹤:', toolId, result);
                 // 確保立即刷新所有相關查詢
-                queryClient.invalidateQueries({ queryKey: ['/api/tools/rankings'] });
-                queryClient.invalidateQueries({ queryKey: ['/api/tools/stats'] });
+                queryClient.invalidateQueries({ 
+                  queryKey: ['/api/tools/rankings'],
+                  refetchType: 'all'
+                });
+                queryClient.invalidateQueries({ 
+                  queryKey: ['/api/tools/stats'],
+                  refetchType: 'all'
+                });
+                
+                // 強制立即重新獲取所有數據
+                queryClient.refetchQueries({
+                  predicate: (query) => 
+                    query.queryKey[0] === '/api/tools' || 
+                    String(query.queryKey[0]).includes('tools'),
+                  type: 'all'
+                });
+                
                 // 即使已經刷新查詢，還是手動強制刷新組件以確保立即反映
                 setTimeout(() => refetch(), 100);
               })

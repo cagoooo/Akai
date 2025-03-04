@@ -31,6 +31,19 @@ export function useToolTracking() {
         refetchType: 'all'
       });
       
+      // 強制立即重新獲取數據以確保 UI 立即更新
+      await queryClient.refetchQueries({
+        queryKey: ['/api/tools/stats'],
+        type: 'all',
+        exact: false
+      });
+      
+      await queryClient.refetchQueries({
+        queryKey: ['/api/tools/rankings'],
+        type: 'all',
+        exact: false
+      });
+      
       // 如果伺服器回傳了成就訊息
       if (data.achievement) {
         toast({
