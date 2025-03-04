@@ -374,6 +374,14 @@ export function AnalyticsDashboard() {
                               queryKey: ['/api/tools/rankings'],
                               refetchType: 'all'
                             });
+                            
+                            // 確保所有相關查詢都會刷新
+                            queryClient.refetchQueries({
+                              predicate: (query) => 
+                                query.queryKey[0] === '/api/tools' || 
+                                String(query.queryKey[0]).includes('tools'),
+                              type: 'all'
+                            });
 
                             console.log('工具使用已追蹤並更新統計:', toolId);
                           } catch (error) {

@@ -22,10 +22,21 @@ export function ToolCard({ id, name, description, icon, onClick }: ToolCardProps
   const handleClick = () => {
     console.log('工具卡片點擊 ID:', id);
     
-    // 使用全局工具追蹤功能，但不等待完成
-    // 這樣可以確保連續點擊時UI不會被阻塞
+    // 使用全局工具追蹤功能，並確保數據同步
     trackToolUsage(id)
-      .then(data => console.log('工具使用已追蹤:', id, data))
+      .then(data => {
+        console.log('工具使用已追蹤:', id, data);
+        
+        // 立即更新排行榜和工具統計數據
+        queryClient.invalidateQueries({ 
+          queryKey: ['/api/tools/rankings'],
+          refetchType: 'all'
+        });
+        queryClient.invalidateQueries({ 
+          queryKey: ['/api/tools/stats'],
+          refetchType: 'all'
+        });
+      })
       .catch(err => console.error('工具追蹤失敗:', err));
     
     // 執行原有的點擊事件

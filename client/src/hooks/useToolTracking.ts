@@ -26,13 +26,21 @@ export function useToolTracking() {
       await Promise.all([
         queryClient.invalidateQueries({ 
           queryKey: ['/api/tools/stats'],
-          refetchType: 'all'  // 強制重新獲取所有查詢
+          refetchType: 'all',  // 強制重新獲取所有查詢
         }),
         queryClient.invalidateQueries({ 
           queryKey: ['/api/tools/rankings'],
-          refetchType: 'all'  // 強制重新獲取所有查詢
+          refetchType: 'all',  // 強制重新獲取所有查詢
         })
       ]);
+
+      // 確保所有相關查詢都會刷新，包括可能的單個工具查詢
+      queryClient.refetchQueries({
+        predicate: (query) => 
+          query.queryKey[0] === '/api/tools' || 
+          String(query.queryKey[0]).includes('tools'),
+        type: 'all'
+      });
 
       console.log('工具使用統計查詢已刷新');
 
