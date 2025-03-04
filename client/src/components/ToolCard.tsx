@@ -185,9 +185,13 @@ export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps
 
             // 使用工具追蹤功能，並在成功後立即更新本地數據
             trackToolUsage(tool.id)
-              .then((updatedTool) => {
+              .then((updatedStats) => {
                 console.log('工具使用已記錄');
-                setTool(updatedTool); // Update local state with updated data
+                // 只更新工具的計數相關屬性，保留其他屬性
+                setTool(prevTool => ({
+                  ...prevTool,
+                  totalClicks: updatedStats.totalClicks || prevTool.totalClicks
+                }));
 
                 // 立即強制更新工具統計和排名數據
                 queryClient.invalidateQueries({ 
