@@ -43,7 +43,11 @@ export function useToolTracking() {
         });
       }
       
-      return data;
+      return {
+        totalClicks: data.totalClicks || 1, // 確保回傳點擊數
+        message: data.message,
+        achievement: data.achievement
+      };
     } catch (error) {
       console.error('記錄工具使用時發生錯誤:', error);
       toast({

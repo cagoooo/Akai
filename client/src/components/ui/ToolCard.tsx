@@ -27,12 +27,17 @@ export function ToolCard({ id, name, description, icon, onClick }: ToolCardProps
       .then(data => {
         console.log('工具使用已追蹤:', id, data);
         
-        // 立即更新排行榜和工具統計數據 (已經在 useToolTracking 中處理)
+        // 檢查是否有點擊數據，確保計數正確
+        if (data && !data.error && data.totalClicks) {
+          console.log(`工具 ${id} 累計點擊數: ${data.totalClicks}`);
+        }
+        
+        // 執行原有的點擊事件
         if (onClick) {
           onClick();
         }
       })
-      .catch(err => console.error('工具使用追蹤錯誤:', err));ror('工具追蹤失敗:', err));
+      .catch(err => console.error('工具使用追蹤失敗:', err));使用追蹤錯誤:', err));ror('工具追蹤失敗:', err));
     
     // 執行原有的點擊事件
     if (onClick) {

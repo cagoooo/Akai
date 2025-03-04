@@ -201,7 +201,7 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
               console.error("工具使用追蹤失敗:", err);
             });
           } catch (error) {
-            console.error("排行榜點擊處理錯誤:", error);
+            console.error("工具使用追蹤異常:", error);e.error("排行榜點擊處理錯誤:", error);
           }
         }}
       >
