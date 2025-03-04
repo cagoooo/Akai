@@ -1,8 +1,10 @@
 
 import { useToast } from "@/components/ui/use-toast";
+import { useQueryClient } from '@tanstack/react-query';
 
 export function useToolTracking() {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   const trackToolUsage = async (toolId: number) => {
     try {
@@ -19,6 +21,18 @@ export function useToolTracking() {
       
       const data = await response.json();
       console.log('工具使用已記錄', data);
+      
+      // 立即刷新相關查詢
+      await Promise.all([
+        queryClient.invalidateQueries({ 
+          queryKey: ['/api/tools/stats'],
+          refetchType: 'all'
+        }),
+        queryClient.invalidateQueries({ 
+          queryKey: ['/api/tools/rankings'],
+          refetchType: 'all'
+        })
+      ]);
       
       // 如果伺服器回傳了成就訊息
       if (data.achievement) {
@@ -38,7 +52,7 @@ export function useToolTracking() {
         variant: "destructive",
         duration: 3000,
       });
-      return null;
+      return { error: true };
     }
   };
 

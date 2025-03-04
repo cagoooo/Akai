@@ -804,9 +804,15 @@ export function registerRoutes(app: Express): Server {
         }
       });
 
+      // 獲取更新後的統計資料
+      const updatedStats = await db.query.toolUsageStats.findFirst({
+        where: eq(toolUsageStats.toolId, parsedId),
+      });
+      
       res.json({ 
         message: "使用統計已更新",
-        achievement: "工具精通"
+        achievement: "工具精通",
+        totalClicks: updatedStats?.totalClicks || 1
       });
     } catch (error) {
       console.error("Error tracking tool usage:", error);
