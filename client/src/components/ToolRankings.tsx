@@ -10,7 +10,8 @@ import { soundManager } from "@/lib/soundManager";
 import { Button } from "@/components/ui/button";
 import { RankingTutorial } from "./RankingTutorial";
 import { useLocation } from "wouter";
-import { useToolTracking } from "@/hooks/useToolTracking"; // Added import
+import { useToolTracking } from "@/hooks/useToolTracking";
+import { useToast } from "@/hooks/use-toast"; // Fixed import
 
 // 擴充表情符號庫,增加更多有趣的動態表情
 const rankEmojis = [
@@ -184,9 +185,8 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
       )}
       <div 
         className="flex flex-col items-center p-2" 
-        onClick={(e) => e.stopPropagation()} // 防止事件冒泡
+        onClick={(e) => e.stopPropagation()} 
       >
-        {/* Removed Button */}
       </div>
     </motion.div>
   );
@@ -211,11 +211,11 @@ export function ToolRankings() {
   const [isMuted, setIsMuted] = useState(soundManager.isSoundMuted());
   const [location] = useLocation();
   const queryClient = useQueryClient();
-  const { trackToolUsage } = useToolTracking(); // Added useToolTracking hook
+  const { trackToolUsage } = useToolTracking();
+  const { toast } = useToast(); // Added useToast hook
 
   const { data: rankings = [], isLoading, refetch } = useQuery<ToolRanking[]>({
     queryKey: ['/api/tools/rankings'],
-    // 保留手動刷新能力，但不自動刷新
     refetchOnWindowFocus: false,
     staleTime: 0,
     onSuccess(newRankings) {
@@ -247,13 +247,30 @@ export function ToolRankings() {
       const result = await trackToolUsage(tool.id);
       console.log('排行榜工具使用已追蹤:', tool.id, result);
 
+      if (result.totalClicks) {
+        // 更新本地排行榜數據
+        const updatedRankings = rankings.map(ranking => 
+          ranking.toolId === tool.id 
+            ? { ...ranking, totalClicks: result.totalClicks }
+            : ranking
+        );
+
+        // 手動更新排行榜查詢緩存
+        queryClient.setQueryData(['/api/tools/rankings'], updatedRankings);
+      }
+
       // 開啟工具網站
       window.open(tool.url, '_blank', 'noopener,noreferrer');
 
-      // 立即重新獲取排行榜數據
+      // 重新獲取最新排行榜數據
       await refetch();
     } catch (error) {
       console.error('處理工具點擊時發生錯誤:', error);
+      toast({
+        title: "錯誤",
+        description: "無法更新工具使用統計",
+        variant: "destructive",
+      });
     }
   };
 
@@ -322,7 +339,6 @@ export function ToolRankings() {
 
             const isTop = index < 3;
             const previousRank = previousRankings[ranking.toolId];
-
 
             const rankColor = isTop ? rankColors[index] : rankColors.default;
 
