@@ -199,8 +199,6 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
               });
             }).catch(err => {
               console.error("工具使用追蹤失敗:", err);
-            });l.toolId).catch(err => {
-              console.error("工具使用追蹤失敗:", err);
             });
           } catch (error) {
             console.error("排行榜點擊處理錯誤:", error);
