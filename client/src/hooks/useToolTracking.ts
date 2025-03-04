@@ -22,10 +22,16 @@ export function useToolTracking() {
       const data = await response.json();
       console.log('工具使用API已記錄:', toolId, data);
 
-      // 請求成功後，直接從服務器刷新數據
+      // 請求成功後，立即強制從服務器刷新數據
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ['/api/tools/stats'] }),
-        queryClient.invalidateQueries({ queryKey: ['/api/tools/rankings'] })
+        queryClient.invalidateQueries({ 
+          queryKey: ['/api/tools/stats'],
+          refetchType: 'all'  // 強制重新獲取所有查詢
+        }),
+        queryClient.invalidateQueries({ 
+          queryKey: ['/api/tools/rankings'],
+          refetchType: 'all'  // 強制重新獲取所有查詢
+        })
       ]);
 
       console.log('工具使用統計查詢已刷新');
@@ -39,7 +45,10 @@ export function useToolTracking() {
         });
       }
 
-      return data;
+      return {
+        ...data,
+        totalClicks: data.totalClicks || 1  // 確保回傳點擊數
+      };
     } catch (error) {
       console.error('記錄工具使用時發生錯誤:', error);
       toast({
