@@ -21,27 +21,25 @@ export function useToolTracking() {
       const data = await response.json();
       console.log('工具使用已記錄', data);
 
-      // 立即刷新所有工具相關查詢
+      // 立即更新查詢數據
       await Promise.all([
         queryClient.invalidateQueries({ 
-          queryKey: ['/api/tools/stats'],
-          refetchType: 'all'
+          queryKey: ['/api/tools/stats']
         }),
         queryClient.invalidateQueries({ 
-          queryKey: ['/api/tools/rankings'],
-          refetchType: 'all'
+          queryKey: ['/api/tools/rankings']
         })
       ]);
 
-      // 強制立即重新獲取所有工具相關數據
+      // 確保立即重新獲取最新數據
       await Promise.all([
         queryClient.refetchQueries({
           queryKey: ['/api/tools/stats'],
-          type: 'all'
+          exact: true
         }),
         queryClient.refetchQueries({
           queryKey: ['/api/tools/rankings'],
-          type: 'all'
+          exact: true
         })
       ]);
 
@@ -54,13 +52,7 @@ export function useToolTracking() {
         });
       }
 
-      return {
-        success: true,
-        toolId,
-        totalClicks: data.totalClicks || 1,
-        message: data.message,
-        achievement: data.achievement
-      };
+      return data;
     } catch (error) {
       console.error('記錄工具使用時發生錯誤:', error);
       toast({

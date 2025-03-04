@@ -240,13 +240,18 @@ export function ToolRankings() {
     setIsMuted(newMutedState);
   };
 
+  // 修改點擊處理部分
   const handleItemClick = async (tool: typeof tools[number]) => {
     try {
       // 先執行工具使用追蹤
-      await trackToolUsage(tool.id);
+      const result = await trackToolUsage(tool.id);
+      console.log('排行榜工具使用已追蹤:', tool.id, result);
 
       // 開啟工具網站
       window.open(tool.url, '_blank', 'noopener,noreferrer');
+
+      // 立即重新獲取排行榜數據
+      await refetch();
     } catch (error) {
       console.error('處理工具點擊時發生錯誤:', error);
     }

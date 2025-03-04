@@ -108,11 +108,11 @@ export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps
     onSuccess: (data) => {
       console.log('工具卡片點擊成功:', tool.id, data);
       // 成功後確保數據被刷新，但使用 active 模式避免過多請求
-      queryClient.invalidateQueries({ 
+      queryClient.invalidateQueries({
         queryKey: ['/api/tools/stats'],
         refetchType: 'active'
       });
-      queryClient.invalidateQueries({ 
+      queryClient.invalidateQueries({
         queryKey: ['/api/tools/rankings'],
         refetchType: 'active'
       });
@@ -163,6 +163,29 @@ export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps
     });
   }, [tool]);
 
+  // 修改點擊處理部分
+  const handleClick = async () => {
+    try {
+      // 先觸發工具使用追蹤
+      const result = await trackToolUsage(tool.id);
+      console.log('工具使用已追蹤:', tool.id, result);
+
+      // 更新本地狀態
+      if (result.totalClicks) {
+        setTool(prevTool => ({
+          ...prevTool,
+          totalClicks: result.totalClicks
+        }));
+      }
+
+      // 開啟工具網站
+      window.open(tool.url, '_blank', 'noopener,noreferrer');
+    } catch (error) {
+      console.error('工具使用追蹤失敗:', error);
+    }
+  };
+
+
   return (
     <TooltipProvider>
       <motion.article
@@ -179,57 +202,7 @@ export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps
 
         <Card
           className={`group hover:shadow-lg transition-all duration-500 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary overflow-hidden border-2 ${tool.category && categoryColors[tool.category] ? categoryColors[tool.category].border : 'border-gray-200'} hover:bg-gradient-to-br`}
-          onClick={() => {
-            // 先執行工具使用統計追蹤，確保 API 調用已啟動
-            const trackingPromise = trackToolUsage(tool.id);
-            
-            // 立即開啟工具連結
-            window.open(tool.url, '_blank', 'noopener,noreferrer');
-
-            // 使用工具追蹤功能，並在成功後立即更新所有相關組件的數據
-            trackingPromise
-              .then((updatedStats) => {
-                console.log('工具使用已追蹤:', tool.id, updatedStats);
-                
-                // 強制立即重新獲取所有工具相關數據
-                queryClient.invalidateQueries({ 
-                  queryKey: ['/api/tools/stats'],
-                  refetchType: 'all'
-                });
-                queryClient.invalidateQueries({ 
-                  queryKey: ['/api/tools/rankings'],
-                  refetchType: 'all'
-                });
-                
-                // 確保刷新所有工具相關查詢
-                queryClient.refetchQueries({
-                  predicate: (query) => 
-                    query.queryKey[0] === '/api/tools' || 
-                    String(query.queryKey[0]).includes('tools'),
-                  type: 'all'
-                });
-                console.log('更新本地數據, 因為useToolTracking會刷新所有相關查詢具使用已記錄', updatedStats);
-                
-                // 只更新工具的計數相關屬性，保留其他屬性
-                if (updatedStats) {
-                  setTool(prevTool => ({
-                    ...prevTool,
-                    totalClicks: (prevTool.totalClicks || 0) + 1 // 立即更新本地計數
-                  }));
-                }
-
-                // 立即強制更新工具統計和排名數據
-                queryClient.invalidateQueries({ 
-                  queryKey: ['/api/tools/stats'],
-                  refetchType: 'all'  // 確保完整重新獲取
-                });
-                queryClient.invalidateQueries({ 
-                  queryKey: ['/api/tools/rankings'],
-                  refetchType: 'all'  // 確保完整重新獲取
-                });
-              })
-              .catch(err => console.error('工具使用記錄失敗:', err));
-          }}
+          onClick={handleClick}
           tabIndex={isLoading ? -1 : 0}
           role={isLoading ? "presentation" : "button"}
           aria-label={isLoading ? undefined : `開啟 ${tool.title} 工具詳細資訊`}
