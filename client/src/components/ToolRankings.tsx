@@ -184,40 +184,7 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
       )}
       <div 
         className="flex flex-col items-center p-2" 
-        onClick={() => {
-          try {
-            // 使用從組件頂層獲取的 trackToolUsage，它已經會自動刷新所有相關查詢
-            trackToolUsage(toolId)
-              .then((result) => {
-                console.log('工具使用排行榜點擊已追蹤:', toolId, result);
-                // 確保立即刷新所有相關查詢
-                queryClient.invalidateQueries({ 
-                  queryKey: ['/api/tools/rankings'],
-                  refetchType: 'all'
-                });
-                queryClient.invalidateQueries({ 
-                  queryKey: ['/api/tools/stats'],
-                  refetchType: 'all'
-                });
-                
-                // 強制立即重新獲取所有數據
-                queryClient.refetchQueries({
-                  predicate: (query) => 
-                    query.queryKey[0] === '/api/tools' || 
-                    String(query.queryKey[0]).includes('tools'),
-                  type: 'all'
-                });
-                
-                // 即使已經刷新查詢，還是手動強制刷新組件以確保立即反映
-                setTimeout(() => refetch(), 100);
-              })
-              .catch(err => {
-                console.error("工具使用追蹤失敗:", err);
-              });
-          } catch (error) {
-            console.error("工具使用追蹤異常:", error);
-          }
-        }}
+        onClick={(e) => e.stopPropagation()} // 防止事件冒泡
       >
         {/* Removed Button */}
       </div>
@@ -275,23 +242,11 @@ export function ToolRankings() {
 
   const handleItemClick = async (tool: typeof tools[number]) => {
     try {
+      // 先執行工具使用追蹤
+      await trackToolUsage(tool.id);
+
       // 開啟工具網站
       window.open(tool.url, '_blank', 'noopener,noreferrer');
-
-      // 使用共用的 trackToolUsage 函數來同步更新所有計數器
-      await trackToolUsage(tool.id);
-      
-      // 手動更新 React Query 緩存以確保即時反映在 UI 上
-      queryClient.invalidateQueries({ queryKey: ['/api/tools/rankings'] });
-      queryClient.invalidateQueries({ queryKey: ['/api/tools/stats'] });同步.setQueryData(['/api/tools/rankings'], updatedRankings);
-
-      // 為了確保數據最終與服務器同步，我們在後台靜默更新
-      // 但不會用返回的數據覆蓋本地狀態
-      trackToolUsage(tool.id).then(() => {
-        console.log('工具使用記錄已更新');
-      }).catch(error => {
-        console.error('記錄工具使用時發生錯誤:', error);
-      });
     } catch (error) {
       console.error('處理工具點擊時發生錯誤:', error);
     }

@@ -1,4 +1,3 @@
-
 import { useToast } from "@/components/ui/use-toast";
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -18,32 +17,34 @@ export function useToolTracking() {
       if (!response.ok) {
         throw new Error('無法記錄工具使用');
       }
-      
+
       const data = await response.json();
       console.log('工具使用已記錄', data);
-      
-      // 確保刷新所有工具相關查詢，不僅僅是單個查詢
-      await queryClient.invalidateQueries({ 
-        predicate: (query) => 
-          query.queryKey[0] === '/api/tools/stats' || 
-          query.queryKey[0] === '/api/tools/rankings' ||
-          String(query.queryKey[0]).includes('tools'),
-        refetchType: 'all'
-      });
-      
-      // 強制立即重新獲取數據以確保 UI 立即更新
-      await queryClient.refetchQueries({
-        queryKey: ['/api/tools/stats'],
-        type: 'all',
-        exact: false
-      });
-      
-      await queryClient.refetchQueries({
-        queryKey: ['/api/tools/rankings'],
-        type: 'all',
-        exact: false
-      });
-      
+
+      // 立即刷新所有工具相關查詢
+      await Promise.all([
+        queryClient.invalidateQueries({ 
+          queryKey: ['/api/tools/stats'],
+          refetchType: 'all'
+        }),
+        queryClient.invalidateQueries({ 
+          queryKey: ['/api/tools/rankings'],
+          refetchType: 'all'
+        })
+      ]);
+
+      // 強制立即重新獲取所有工具相關數據
+      await Promise.all([
+        queryClient.refetchQueries({
+          queryKey: ['/api/tools/stats'],
+          type: 'all'
+        }),
+        queryClient.refetchQueries({
+          queryKey: ['/api/tools/rankings'],
+          type: 'all'
+        })
+      ]);
+
       // 如果伺服器回傳了成就訊息
       if (data.achievement) {
         toast({
@@ -52,9 +53,11 @@ export function useToolTracking() {
           duration: 5000,
         });
       }
-      
+
       return {
-        totalClicks: data.totalClicks || 1, // 確保回傳點擊數
+        success: true,
+        toolId,
+        totalClicks: data.totalClicks || 1,
         message: data.message,
         achievement: data.achievement
       };
