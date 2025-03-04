@@ -207,7 +207,8 @@ export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps
                     query.queryKey[0] === '/api/tools' || 
                     String(query.queryKey[0]).includes('tools'),
                   type: 'all'
-                });更新本地數據，因為useToolTracking會刷新所有相關查詢具使用已記錄', updatedStats);
+                });
+                console.log('更新本地數據, 因為useToolTracking會刷新所有相關查詢具使用已記錄', updatedStats);
                 
                 // 只更新工具的計數相關屬性，保留其他屬性
                 if (updatedStats) {
