@@ -190,13 +190,14 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
             trackToolUsage(toolId)
               .then((result) => {
                 console.log('工具使用排行榜點擊已追蹤:', toolId, result);
-                // useToolTracking 已經處理了查詢刷新，不需要在這裡手動刷新
+                // 手動強制刷新，確保UI立即更新
+                setTimeout(() => refetch(), 100);
               })
               .catch(err => {
                 console.error("工具使用追蹤失敗:", err);
-            });
+              });
           } catch (error) {
-            console.error("工具使用追蹤異常:", error);e.error("排行榜點擊處理錯誤:", error);
+            console.error("工具使用追蹤異常:", error);
           }
         }}
       >
@@ -229,8 +230,9 @@ export function ToolRankings() {
 
   const { data: rankings = [], isLoading, refetch } = useQuery<ToolRanking[]>({
     queryKey: ['/api/tools/rankings'],
-    // 移除自動刷新，避免定時覆蓋本地修改
+    // 保留手動刷新能力，但不自動刷新
     refetchOnWindowFocus: false,
+    staleTime: 0,
     onSuccess(newRankings) {
       const newRankingPositions: Record<number, number> = {};
       newRankings.forEach((ranking, index) => {
