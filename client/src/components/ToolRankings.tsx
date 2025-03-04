@@ -190,7 +190,10 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
             trackToolUsage(toolId)
               .then((result) => {
                 console.log('工具使用排行榜點擊已追蹤:', toolId, result);
-                // 手動強制刷新，確保UI立即更新
+                // 確保立即刷新所有相關查詢
+                queryClient.invalidateQueries({ queryKey: ['/api/tools/rankings'] });
+                queryClient.invalidateQueries({ queryKey: ['/api/tools/stats'] });
+                // 即使已經刷新查詢，還是手動強制刷新組件以確保立即反映
                 setTimeout(() => refetch(), 100);
               })
               .catch(err => {
