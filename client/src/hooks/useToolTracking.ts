@@ -57,6 +57,10 @@ export function useToolTracking() {
         ...data,
         totalClicks: data.totalClicks || 1  // 保留伺服器回傳的點擊數，而非重置為1
       };
+    } catch (error) {
+      console.error('記錄工具使用時發生錯誤:', error);
+      throw error;
+      };
     } catchh (error) {
       console.error('記錄工具使用時發生錯誤:', error);
       toast({
