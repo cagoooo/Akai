@@ -356,6 +356,16 @@ export function AnalyticsDashboard() {
                     onClick: async (event, elements) => {
                       if (elements && elements.length > 0) {
                         const index = elements[0].index;
+                        const toolId = toolStats[index].toolId;
+                        
+                        try {
+                          const result = await trackToolUsage(toolId);
+                          console.log('儀表板圖表工具點擊已追蹤:', toolId, result);
+                        } catch (error) {
+                          console.error('工具使用追蹤失敗:', error);
+                        }
+                      }ments && elements.length > 0) {
+                        const index = elements[0].index;
                         const toolId = toolStats?.[index]?.toolId;
                         if (toolId) {
                           try {

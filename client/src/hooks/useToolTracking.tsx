@@ -22,17 +22,14 @@ export function useToolTracking() {
       const data = await response.json();
       console.log('工具使用已記錄', data);
       
-      // 立即刷新相關查詢
-      await Promise.all([
-        queryClient.invalidateQueries({ 
-          queryKey: ['/api/tools/stats'],
-          refetchType: 'all'
-        }),
-        queryClient.invalidateQueries({ 
-          queryKey: ['/api/tools/rankings'],
-          refetchType: 'all'
-        })
-      ]);
+      // 確保刷新所有工具相關查詢，不僅僅是單個查詢
+      await queryClient.invalidateQueries({ 
+        predicate: (query) => 
+          query.queryKey[0] === '/api/tools/stats' || 
+          query.queryKey[0] === '/api/tools/rankings' ||
+          String(query.queryKey[0]).includes('tools'),
+        refetchType: 'all'
+      });
       
       // 如果伺服器回傳了成就訊息
       if (data.achievement) {
@@ -52,11 +49,10 @@ export function useToolTracking() {
       console.error('記錄工具使用時發生錯誤:', error);
       toast({
         title: "錯誤",
-        description: "記錄工具使用時發生錯誤",
+        description: "無法記錄工具使用統計",
         variant: "destructive",
-        duration: 3000,
       });
-      return { error: true };
+      throw error;
     }
   };
 

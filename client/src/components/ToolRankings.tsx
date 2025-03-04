@@ -186,19 +186,14 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
         className="flex flex-col items-center p-2" 
         onClick={() => {
           try {
-            // 使用從組件頂層獲取的 trackToolUsage
-            trackToolUsage(toolId).then(() => {
-              // 立即更新排行榜和工具統計數據
-              queryClient.invalidateQueries({ 
-                queryKey: ['/api/tools/rankings'],
-                refetchType: 'all'
-              });
-              queryClient.invalidateQueries({ 
-                queryKey: ['/api/tools/stats'],
-                refetchType: 'all'
-              });
-            }).catch(err => {
-              console.error("工具使用追蹤失敗:", err);
+            // 使用從組件頂層獲取的 trackToolUsage，它已經會自動刷新所有相關查詢
+            trackToolUsage(toolId)
+              .then((result) => {
+                console.log('工具使用排行榜點擊已追蹤:', toolId, result);
+                // useToolTracking 已經處理了查詢刷新，不需要在這裡手動刷新
+              })
+              .catch(err => {
+                console.error("工具使用追蹤失敗:", err);
             });
           } catch (error) {
             console.error("工具使用追蹤異常:", error);e.error("排行榜點擊處理錯誤:", error);

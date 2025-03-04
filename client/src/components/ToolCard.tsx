@@ -186,10 +186,11 @@ export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps
             // 立即開啟工具連結
             window.open(tool.url, '_blank', 'noopener,noreferrer');
 
-            // 使用工具追蹤功能，並在成功後立即更新本地數據
+            // 使用工具追蹤功能，並在成功後立即更新所有相關組件的數據
             trackingPromise
               .then((updatedStats) => {
-                console.log('工具使用已記錄', updatedStats);
+                console.log('工具使用已追蹤:', tool.id, updatedStats);
+                // 不需要手動更新本地數據，因為useToolTracking會刷新所有相關查詢具使用已記錄', updatedStats);
                 
                 // 只更新工具的計數相關屬性，保留其他屬性
                 if (updatedStats) {
