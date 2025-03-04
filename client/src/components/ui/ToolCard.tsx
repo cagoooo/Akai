@@ -27,9 +27,20 @@ export function ToolCard({ id, name, description, icon, onClick }: ToolCardProps
       .then(data => {
         console.log('工具使用已追蹤:', id, data);
         
-        // 檢查是否有點擊數據，確保計數正確
+        // 檢查是否有點擊數據，確保正確顯示伺服器回傳的累計點擊數
         if (data && !data.error && data.totalClicks) {
           console.log(`工具 ${id} 累計點擊數: ${data.totalClicks}`);
+          
+          // 立即更新所有相關查詢以確保 UI 顯示正確的累計點擊數
+          queryClient.invalidateQueries({ 
+            queryKey: ['/api/tools/stats'],
+            refetchType: 'all'
+          });
+          
+          queryClient.invalidateQueries({ 
+            queryKey: ['/api/tools/rankings'],
+            refetchType: 'all'
+          });
         }
         
         // 執行原有的點擊事件

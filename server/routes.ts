@@ -812,7 +812,8 @@ export function registerRoutes(app: Express): Server {
       res.json({ 
         message: "使用統計已更新",
         achievement: "工具精通",
-        totalClicks: updatedStats?.totalClicks || 1
+        totalClicks: updatedStats?.totalClicks || 1,
+        toolId: parsedId // 添加工具ID以確保追蹤正確的工具
       });
     } catch (error) {
       console.error("Error tracking tool usage:", error);
