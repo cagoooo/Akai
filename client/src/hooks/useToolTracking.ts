@@ -59,10 +59,6 @@ export function useToolTracking() {
       };
     } catch (error) {
       console.error('記錄工具使用時發生錯誤:', error);
-      throw error;
-      };
-    } catchh (error) {
-      console.error('記錄工具使用時發生錯誤:', error);
       toast({
         title: "錯誤",
         description: "記錄工具使用時發生錯誤",
