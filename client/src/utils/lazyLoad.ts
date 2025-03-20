@@ -1,5 +1,5 @@
-
 import { useEffect, useState } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 
 /**
  * 通用延迟加载钩子，用于减少初始页面加载时间
@@ -39,6 +39,27 @@ export function useLazyLoad<T>(importFunc: () => Promise<{ default: T }>) {
   return { component, isLoading, error };
 }
 
+interface LoadingProps {
+  message?: string;
+}
+
+interface ErrorProps {
+  error: Error;
+  message?: string;
+}
+
+const DefaultLoading = ({ message = 'Loading...' }: LoadingProps) => (
+  <div className="flex items-center justify-center p-4">
+    <span className="text-muted-foreground">{message}</span>
+  </div>
+);
+
+const DefaultError = ({ error, message = 'Error: ' }: ErrorProps) => (
+  <div className="flex items-center justify-center p-4 text-destructive">
+    <span>{message}{error.message}</span>
+  </div>
+);
+
 /**
  * 创建一个延迟加载的视图
  * @param importFunc 动态导入函数
@@ -47,11 +68,11 @@ export function useLazyLoad<T>(importFunc: () => Promise<{ default: T }>) {
  * @returns 延迟加载的视图组件
  */
 export function createLazyView<P = {}>(
-  importFunc: () => Promise<{ default: React.ComponentType<P> }>,
-  LoadingComponent: React.ComponentType = () => <div>Loading...</div>,
-  ErrorComponent: React.ComponentType<{ error: Error }> = ({ error }) => <div>Error: {error.message}</div>
-) {
-  return function LazyView(props: P) {
+  importFunc: () => Promise<{ default: ComponentType<P> }>,
+  LoadingComponent: ComponentType<LoadingProps> = DefaultLoading,
+  ErrorComponent: ComponentType<ErrorProps> = DefaultError
+): ComponentType<P> {
+  return function LazyView(props: P): ReactNode {
     const { component: Component, isLoading, error } = useLazyLoad(importFunc);
 
     if (isLoading) {
@@ -63,7 +84,7 @@ export function createLazyView<P = {}>(
     }
 
     if (!Component) {
-      return <div>组件未能加载</div>;
+      return <div className="text-muted-foreground">组件未能加载</div>;
     }
 
     return <Component {...props} />;
