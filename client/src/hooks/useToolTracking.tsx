@@ -50,15 +50,6 @@ export function useToolTracking() {
         })
       ]);
 
-      // 如果伺服器回傳了成就訊息
-      if (data.achievement) {
-        toast({
-          title: "新成就獲得！",
-          description: `恭喜獲得「${data.achievement}」成就！`,
-          duration: 5000,
-        });
-      }
-
       return {
         toolId,
         totalClicks: data.totalClicks || 1,

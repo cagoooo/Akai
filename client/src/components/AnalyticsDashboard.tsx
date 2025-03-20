@@ -10,7 +10,6 @@ import {
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { VisitorStats, ToolUsageStat } from "@/types/analytics";
 import { useToast } from "@/hooks/use-toast"; 
-// Fixed import path
 
 export function AnalyticsDashboard() {
   const [activeTab, setActiveTab] = useState("overview");

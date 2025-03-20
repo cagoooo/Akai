@@ -1,17 +1,15 @@
+import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { BarChart, Trophy, Medal, Crown, Star, Sparkles, Volume2, VolumeX } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { soundManager } from "@/lib/soundManager";
+import { useToolTracking } from "@/hooks/useToolTracking";
+import { useToast } from "@/hooks/use-toast"; // 修正導入路徑
 import { tools } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
-import { motion, AnimatePresence } from "framer-motion";
-import { useState } from 'react';
-import { soundManager } from "@/lib/soundManager";
-import { Button } from "@/components/ui/button";
-import { RankingTutorial } from "./RankingTutorial";
-import { useLocation } from "wouter";
-import { useToolTracking } from "@/hooks/useToolTracking";
-import { useToast } from "@/hooks/use-toast";
 
 // 擴充表情符號庫,增加更多有趣的動態表情
 const rankEmojis = [
