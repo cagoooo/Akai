@@ -19,6 +19,7 @@ interface PreviewGeneratorProps {
 }
 
 export function PreviewGenerator({ tool, customization, onLoad }: PreviewGeneratorProps) {
+  // 获取渐变色，优先使用自定义颜色
   const getGradientColors = () => {
     if (customization?.primaryColor && customization?.secondaryColor) {
       return {
@@ -70,6 +71,7 @@ export function PreviewGenerator({ tool, customization, onLoad }: PreviewGenerat
   const gradientId = `gradient-${tool.id}`;
   const iconGradientId = `icon-gradient-${tool.id}`;
 
+  // 获取对应工具的图标组件
   const getToolIcon = () => {
     switch (tool.id) {
       case 1: return MessageCircle;
@@ -88,6 +90,7 @@ export function PreviewGenerator({ tool, customization, onLoad }: PreviewGenerat
   const iconSize = customization?.size || 1;
   const backgroundOpacity = customization?.opacity ?? 0.1;
 
+  // Call onLoad callback when SVG is loaded
   const handleLoad = () => {
     onLoad?.();
   };
@@ -107,6 +110,7 @@ export function PreviewGenerator({ tool, customization, onLoad }: PreviewGenerat
         aspectRatio: '16/9',
       }}
     >
+      {/* 定义渐变 */}
       <defs>
         <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor={start} stopOpacity={backgroundOpacity} />
@@ -118,9 +122,11 @@ export function PreviewGenerator({ tool, customization, onLoad }: PreviewGenerat
         </linearGradient>
       </defs>
 
+      {/* 背景 */}
       <rect width="800" height="450" fill="#ffffff" />
       <rect width="800" height="450" fill={`url(#${gradientId})`} />
 
+      {/* 主要图标区域 */}
       <g 
         transform="translate(350, 175)"
         role="presentation"
@@ -132,6 +138,7 @@ export function PreviewGenerator({ tool, customization, onLoad }: PreviewGenerat
           fill={`url(#${iconGradientId})`} 
           opacity={backgroundOpacity}
         />
+        {/* 主图标 */}
         <g transform={`translate(${30 * iconSize}, ${30 * iconSize})`}>
           <Icon 
             stroke={`url(#${iconGradientId})`} 
@@ -140,6 +147,7 @@ export function PreviewGenerator({ tool, customization, onLoad }: PreviewGenerat
             height={40 * iconSize} 
           />
         </g>
+        {/* 辅助图标 */}
         {tool.id === 7 && (
           <g transform={`translate(${60 * iconSize}, ${20 * iconSize})`}>
             <Sparkles 
@@ -162,6 +170,7 @@ export function PreviewGenerator({ tool, customization, onLoad }: PreviewGenerat
         )}
       </g>
 
+      {/* 工具名称 */}
       <text
         x="400"
         y="300"
@@ -171,11 +180,12 @@ export function PreviewGenerator({ tool, customization, onLoad }: PreviewGenerat
         textAnchor="middle"
         dominantBaseline="middle"
         role="heading"
-        aria-level={2}
+        aria-level="2"
       >
         {tool.title}
       </text>
 
+      {/* 装饰元素 */}
       <g role="presentation">
         <circle cx="200" cy="100" r={5 * iconSize} fill={start} opacity="0.5" />
         <circle cx="600" cy="350" r={5 * iconSize} fill={end} opacity="0.5" />

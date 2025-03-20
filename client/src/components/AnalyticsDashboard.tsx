@@ -3,109 +3,112 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BarChart, LineChart, PieChart } from "@/components/ui/charts";
 import { Button } from "@/components/ui/button";
-import {
-  Calendar, Download, Activity, Users, TrendingUp,
+import { 
+  Calendar, Download, Activity, Users, TrendingUp, 
   MousePointer, Eye, Clock, BarChart2, PieChart as PieChartIcon
 } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { VisitorStats, ToolUsageStat } from "@/types/analytics";
-import { useToast } from "@/hooks/use-toast";
-
-// 模擬數據用於服務器錯誤時顯示
-const fallbackData = {
-  totalVisits: 1000,
-  dailyVisits: {
-    "2025-03-19": 150,
-    "2025-03-20": 180,
-  }
-};
-
-const fallbackToolStats = [
-  { toolId: 1, totalClicks: 100, lastUsedAt: new Date().toISOString() },
-  { toolId: 2, totalClicks: 80, lastUsedAt: new Date().toISOString() },
-];
 
 export function AnalyticsDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const heatmapRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
-  const { toast } = useToast();
 
   // 獲取訪問統計
-  const { data: visitorStats, error: visitorError } = useQuery<VisitorStats>({
+  const { data: visitorStats } = useQuery<VisitorStats>({
     queryKey: ['visitorStats'],
     queryFn: async () => {
-      try {
-        const res = await fetch('/api/stats/visitors');
-        if (!res.ok) return fallbackData;
-        return res.json();
-      } catch (error) {
-        console.error('訪問統計獲取失敗:', error);
-        return fallbackData;
-      }
+      const res = await fetch('/api/stats/visitors');
+      if (!res.ok) throw new Error('Failed to fetch visitor stats');
+      return res.json();
     },
-    retry: false,
-    refetchOnWindowFocus: false
+    refetchInterval: 30000, // 每30秒刷新一次
   });
 
   // 獲取工具使用統計
-  const { data: toolStats, error: toolError } = useQuery<ToolUsageStat[]>({
+  const { data: toolStats } = useQuery<ToolUsageStat[]>({
     queryKey: ['toolStats'],
     queryFn: async () => {
-      try {
-        const res = await fetch('/api/tools/stats');
-        if (!res.ok) return fallbackToolStats;
-        return res.json();
-      } catch (error) {
-        console.error('工具統計獲取失敗:', error);
-        return fallbackToolStats;
-      }
+      const res = await fetch('/api/tools/stats');
+      if (!res.ok) throw new Error('Failed to fetch tool stats');
+      return res.json();
     },
-    retry: false,
-    refetchOnWindowFocus: false
+    refetchInterval: 60000, // 每分鐘刷新一次
   });
 
-  // 如果有錯誤，使用離線數據但不中斷應用
+  // 渲染熱力圖
   useEffect(() => {
-    if (visitorError || toolError) {
-      toast({
-        title: "提示",
-        description: "當前顯示離線數據，部分功能可能受限",
-        variant: "default",
-      });
+    if (heatmapRef.current && visitorStats && activeTab === "heatmap") {
+      import('heatmap.js').then((heatmapjs) => {
+        const heatmapInstance = heatmapjs.default.create({
+          container: heatmapRef.current!,
+          radius: 50,
+          maxOpacity: 0.6,
+        });
+
+        // 模擬數據
+        const points = [];
+        for (let i = 0; i < 200; i++) {
+          points.push({
+            x: Math.floor(Math.random() * heatmapRef.current!.offsetWidth),
+            y: Math.floor(Math.random() * heatmapRef.current!.offsetHeight),
+            value: Math.random()
+          });
+        }
+
+        heatmapInstance.setData({
+          max: 1,
+          data: points
+        });
+      }).catch(console.error);
     }
-  }, [visitorError, toolError, toast]);
+  }, [heatmapRef, activeTab, visitorStats]);
 
   // 準備圖表數據
   const prepareVisitorChartData = () => {
-    const data = visitorStats || fallbackData;
-    const dates = Object.keys(data.dailyVisits);
-    const visits = dates.map(date => data.dailyVisits[date]);
+    if (!visitorStats?.dailyVisits) return { labels: [], datasets: [] };
+
+    const dailyVisits = visitorStats.dailyVisits as Record<string, number>;
+    const sortedDates = Object.keys(dailyVisits).sort();
 
     return {
-      labels: dates,
-      datasets: [{
-        label: '每日訪問量',
-        data: visits,
-        borderColor: 'rgb(99, 102, 241)',
-        backgroundColor: 'rgba(99, 102, 241, 0.5)',
-        tension: 0.3
-      }]
+      labels: sortedDates.slice(-30), // 取最近30天
+      datasets: [
+        {
+          label: '每日訪問量',
+          data: sortedDates.slice(-30).map(date => dailyVisits[date] || 0),
+          borderColor: 'rgb(99, 102, 241)',
+          backgroundColor: 'rgba(99, 102, 241, 0.5)',
+          tension: 0.3
+        }
+      ]
     };
   };
 
   const prepareToolChartData = () => {
-    const data = toolStats || fallbackToolStats;
+    if (!toolStats) return { labels: [], datasets: [] };
+
     return {
-      labels: data.map(stat => `工具 ${stat.toolId}`),
-      datasets: [{
-        label: '使用次數',
-        data: data.map(stat => stat.totalClicks),
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.7)',
-          'rgba(54, 162, 235, 0.7)',
-        ]
-      }]
+      labels: toolStats.slice(0, 10).map(stat => `工具 ${stat.toolId}`),
+      datasets: [
+        {
+          label: '使用次數',
+          data: toolStats.slice(0, 10).map(stat => stat.totalClicks),
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.7)',
+            'rgba(54, 162, 235, 0.7)',
+            'rgba(255, 206, 86, 0.7)',
+            'rgba(75, 192, 192, 0.7)',
+            'rgba(153, 102, 255, 0.7)',
+            'rgba(255, 159, 64, 0.7)',
+            'rgba(199, 199, 199, 0.7)',
+            'rgba(83, 102, 255, 0.7)',
+            'rgba(255, 99, 255, 0.7)',
+            'rgba(255, 23, 68, 0.7)',
+          ]
+        }
+      ]
     };
   };
 
@@ -117,9 +120,7 @@ export function AnalyticsDashboard() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold">網站分析儀表板</h1>
-          <p className="text-muted-foreground">
-            {visitorError || toolError ? '離線模式 - 顯示本地數據' : '即時監控網站流量和用戶活動'}
-          </p>
+          <p className="text-muted-foreground">監控網站流量和用戶活動的視覺化儀表板</p>
         </div>
         <Button className="shrink-0">
           <Download className="mr-2 h-4 w-4" />
@@ -132,11 +133,13 @@ export function AnalyticsDashboard() {
           <CardContent className="p-4 flex items-center justify-between">
             <div>
               <p className="text-muted-foreground text-sm">總訪問量</p>
-              <h3 className="text-2xl font-bold">{visitorStats?.totalVisits || fallbackData.totalVisits}</h3>
+              <h3 className="text-2xl font-bold">{visitorStats?.totalVisits || 0}</h3>
+              <p className="text-sm text-green-600">+5.2% 比上週</p>
             </div>
             <Users className="h-10 w-10 text-blue-500 bg-blue-100 p-2 rounded-full" />
           </CardContent>
         </Card>
+
         <Card>
           <CardContent className="p-4 flex items-center justify-between">
             <div>
@@ -147,6 +150,7 @@ export function AnalyticsDashboard() {
             <TrendingUp className="h-10 w-10 text-orange-500 bg-orange-100 p-2 rounded-full" />
           </CardContent>
         </Card>
+
         <Card>
           <CardContent className="p-4 flex items-center justify-between">
             <div>
@@ -157,6 +161,7 @@ export function AnalyticsDashboard() {
             <Clock className="h-10 w-10 text-green-500 bg-green-100 p-2 rounded-full" />
           </CardContent>
         </Card>
+
         <Card>
           <CardContent className="p-4 flex items-center justify-between">
             <div>
@@ -170,35 +175,52 @@ export function AnalyticsDashboard() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4">
-          <TabsTrigger value="overview">總覽</TabsTrigger>
-          <TabsTrigger value="visitors">訪問者</TabsTrigger>
-          <TabsTrigger value="tools">工具使用</TabsTrigger>
-          <TabsTrigger value="trends">趨勢</TabsTrigger>
+        <TabsList className="grid grid-cols-3 sm:grid-cols-5 mb-4">
+          <TabsTrigger value="overview">
+            <Activity className="h-4 w-4 mr-2" />
+            總覽
+          </TabsTrigger>
+          <TabsTrigger value="visitors">
+            <Eye className="h-4 w-4 mr-2" />
+            訪問者
+          </TabsTrigger>
+          <TabsTrigger value="tools">
+            <BarChart2 className="h-4 w-4 mr-2" />
+            工具使用
+          </TabsTrigger>
+          <TabsTrigger value="heatmap">
+            <PieChartIcon className="h-4 w-4 mr-2" />
+            熱力圖
+          </TabsTrigger>
+          <TabsTrigger value="calendar">
+            <Calendar className="h-4 w-4 mr-2" />
+            日曆視圖
+          </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview">
+        <TabsContent value="overview" className="space-y-4">
           <Card>
             <CardHeader>
               <CardTitle>訪問者趨勢</CardTitle>
-              <CardDescription>
-                {visitorError ? '顯示離線數據' : '過去30天的每日訪問量'}
-              </CardDescription>
+              <CardDescription>過去30天的每日訪問量</CardDescription>
             </CardHeader>
             <CardContent>
-              <LineChart
-                data={visitorChartData}
-                height={300}
-                options={{
-                  responsive: true,
-                  plugins: {
-                    legend: { position: 'top' },
-                  },
-                  scales: {
-                    y: { beginAtZero: true }
-                  }
-                }}
-              />
+              {visitorChartData.labels.length > 0 && (
+                <LineChart 
+                  data={visitorChartData}
+                  height={300}
+                  options={{
+                    responsive: true,
+                    plugins: {
+                      legend: { position: 'top' },
+                      tooltip: { mode: 'index' }
+                    },
+                    scales: {
+                      y: { beginAtZero: true }
+                    }
+                  }}
+                />
+              )}
             </CardContent>
           </Card>
 
@@ -210,7 +232,7 @@ export function AnalyticsDashboard() {
               </CardHeader>
               <CardContent>
                 {toolChartData.labels.length > 0 && (
-                  <PieChart
+                  <PieChart 
                     data={toolChartData}
                     height={250}
                     options={{
@@ -230,7 +252,7 @@ export function AnalyticsDashboard() {
                 <CardDescription>用戶來源渠道分析</CardDescription>
               </CardHeader>
               <CardContent>
-                <BarChart
+                <BarChart 
                   data={{
                     labels: ['直接訪問', '搜索引擎', '社交媒體', '郵件推廣', '外部連結'],
                     datasets: [{
@@ -257,6 +279,7 @@ export function AnalyticsDashboard() {
             </Card>
           </div>
         </TabsContent>
+
         <TabsContent value="visitors">
           <Card>
             <CardHeader>
@@ -308,6 +331,7 @@ export function AnalyticsDashboard() {
             </CardContent>
           </Card>
         </TabsContent>
+
         <TabsContent value="tools">
           <Card>
             <CardHeader>
@@ -316,7 +340,7 @@ export function AnalyticsDashboard() {
             </CardHeader>
             <CardContent>
               {toolStats && toolStats.length > 0 ? (
-                <BarChart
+                <BarChart 
                   data={{
                     labels: toolStats.map(stat => `工具 ${stat.toolId}`),
                     datasets: [{
@@ -333,35 +357,46 @@ export function AnalyticsDashboard() {
                       if (elements && elements.length > 0) {
                         const index = elements[0].index;
                         const toolId = toolStats[index].toolId;
-
+                        
                         try {
-                          const trackingModule = await import('@/hooks/useToolTracking');
-                          const { useToolTracking } = trackingModule;
-                          const { trackToolUsage } = useToolTracking();
-
-                          await trackToolUsage(toolId);
-
-                          // 立即強制更新統計數據，使用正確的查詢鍵
-                          queryClient.invalidateQueries({
-                            queryKey: ['/api/tools/stats'],
-                            refetchType: 'all'
-                          });
-                          queryClient.invalidateQueries({
-                            queryKey: ['/api/tools/rankings'],
-                            refetchType: 'all'
-                          });
-
-                          // 確保所有相關查詢都會刷新
-                          queryClient.refetchQueries({
-                            predicate: (query) =>
-                              query.queryKey[0] === '/api/tools' ||
-                              String(query.queryKey[0]).includes('tools'),
-                            type: 'all'
-                          });
-
-                          console.log('工具使用已追蹤並更新統計:', toolId);
+                          const result = await trackToolUsage(toolId);
+                          console.log('儀表板圖表工具點擊已追蹤:', toolId, result);
                         } catch (error) {
                           console.error('工具使用追蹤失敗:', error);
+                        }
+                      }ments && elements.length > 0) {
+                        const index = elements[0].index;
+                        const toolId = toolStats?.[index]?.toolId;
+                        if (toolId) {
+                          try {
+                            const trackingModule = await import('@/hooks/useToolTracking');
+                            const { useToolTracking } = trackingModule;
+                            const { trackToolUsage } = useToolTracking();
+
+                            await trackToolUsage(toolId);
+
+                            // 立即強制更新統計數據，使用正確的查詢鍵
+                            queryClient.invalidateQueries({ 
+                              queryKey: ['/api/tools/stats'],
+                              refetchType: 'all'
+                            });
+                            queryClient.invalidateQueries({ 
+                              queryKey: ['/api/tools/rankings'],
+                              refetchType: 'all'
+                            });
+                            
+                            // 確保所有相關查詢都會刷新
+                            queryClient.refetchQueries({
+                              predicate: (query) => 
+                                query.queryKey[0] === '/api/tools' || 
+                                String(query.queryKey[0]).includes('tools'),
+                              type: 'all'
+                            });
+
+                            console.log('工具使用已追蹤並更新統計:', toolId);
+                          } catch (error) {
+                            console.error('工具使用追蹤失敗:', error);
+                          }
                         }
                       }
                     },
@@ -394,6 +429,7 @@ export function AnalyticsDashboard() {
             </CardContent>
           </Card>
         </TabsContent>
+
         <TabsContent value="heatmap">
           <Card>
             <CardHeader>
@@ -401,11 +437,11 @@ export function AnalyticsDashboard() {
               <CardDescription>顯示用戶在頁面上的點擊與互動熱點</CardDescription>
             </CardHeader>
             <CardContent>
-              <div
-                ref={heatmapRef}
+              <div 
+                ref={heatmapRef} 
                 className="h-[500px] bg-muted rounded-md relative overflow-hidden"
               >
-                <div className="absolute inset-0 opacity-20 bg-repeat" style={{
+                <div className="absolute inset-0 opacity-20 bg-repeat" style={{ 
                   backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%239C92AC\' fill-opacity=\'0.4\'%3E%3Cpath d=\'M0 0h10v10H0zm10 10h10v10H10z\'/%3E%3C/g%3E%3C/svg%3E")',
                   backgroundSize: '20px 20px'
                 }}></div>
@@ -419,6 +455,7 @@ export function AnalyticsDashboard() {
             </CardContent>
           </Card>
         </TabsContent>
+
         <TabsContent value="calendar">
           <Card>
             <CardHeader>
@@ -428,14 +465,14 @@ export function AnalyticsDashboard() {
             <CardContent>
               <div className="grid grid-cols-7 gap-1">
                 {Array.from({ length: 31 }, (_, i) => (
-                  <div
-                    key={i}
+                  <div 
+                    key={i} 
                     className="aspect-square border rounded-md flex flex-col items-center justify-center hover:bg-accent transition-colors cursor-pointer relative overflow-hidden"
                   >
                     <span className="text-sm font-medium">{i + 1}</span>
-                    <div
-                      className="absolute bottom-0 left-0 right-0 bg-blue-500"
-                      style={{
+                    <div 
+                      className="absolute bottom-0 left-0 right-0 bg-blue-500" 
+                      style={{ 
                         height: `${Math.floor(Math.random() * 100)}%`,
                         opacity: 0.3
                       }}

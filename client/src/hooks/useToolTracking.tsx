@@ -1,12 +1,11 @@
 import { useToast } from "@/components/ui/use-toast";
 import { useQueryClient } from '@tanstack/react-query';
-import type { ToolTrackingResponse } from "@/types/analytics";
 
 export function useToolTracking() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const trackToolUsage = async (toolId: number): Promise<ToolTrackingResponse> => {
+  const trackToolUsage = async (toolId: number) => {
     try {
       const response = await fetch(`/api/tools/${toolId}/track`, {
         method: 'POST',
@@ -16,56 +15,52 @@ export function useToolTracking() {
       });
 
       if (!response.ok) {
-        toast({
-          title: "提示",
-          description: "已在本地記錄工具使用",
-          variant: "default",
-        });
-
-        return {
-          toolId,
-          totalClicks: 1,
-          achievement: null,
-          message: "本地更新"
-        };
+        throw new Error('無法記錄工具使用');
       }
 
       const data = await response.json();
       console.log('工具使用已記錄', data);
 
-      // 只在成功時嘗試更新查詢
-      try {
-        await queryClient.invalidateQueries({ 
+      // 立即更新查詢數據
+      await Promise.all([
+        queryClient.invalidateQueries({ 
           queryKey: ['/api/tools/stats']
-        });
-        await queryClient.invalidateQueries({ 
+        }),
+        queryClient.invalidateQueries({ 
           queryKey: ['/api/tools/rankings']
+        })
+      ]);
+
+      // 確保立即重新獲取最新數據
+      await Promise.all([
+        queryClient.refetchQueries({
+          queryKey: ['/api/tools/stats'],
+          exact: true
+        }),
+        queryClient.refetchQueries({
+          queryKey: ['/api/tools/rankings'],
+          exact: true
+        })
+      ]);
+
+      // 如果伺服器回傳了成就訊息
+      if (data.achievement) {
+        toast({
+          title: "新成就獲得！",
+          description: `恭喜獲得「${data.achievement}」成就！`,
+          duration: 5000,
         });
-      } catch (error) {
-        console.error('查詢更新失敗，但不影響功能:', error);
       }
 
-      return {
-        toolId,
-        totalClicks: data.totalClicks || 1,
-        achievement: data.achievement,
-        message: data.message
-      };
-
+      return data;
     } catch (error) {
       console.error('記錄工具使用時發生錯誤:', error);
       toast({
-        title: "提示",
-        description: "已在本地記錄工具使用",
-        variant: "default",
+        title: "錯誤",
+        description: "無法記錄工具使用統計",
+        variant: "destructive",
       });
-
-      return {
-        toolId,
-        totalClicks: 1,
-        achievement: null,
-        message: "本地更新"
-      };
+      throw error;
     }
   };
 

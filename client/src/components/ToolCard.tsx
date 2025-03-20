@@ -1,5 +1,3 @@
-import { useState, useCallback } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -7,7 +5,8 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Share2, Users, Settings2, Facebook as FacebookIcon, Linkedin as LinkedinIcon, MessageCircle, BarChart, Copy } from "lucide-react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useState, useCallback } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as Icons from "lucide-react";
 import type { EducationalTool } from "@/lib/data";
 import type { LucideIcon } from 'lucide-react';
@@ -80,37 +79,48 @@ interface ToolCardProps {
   isLoading?: boolean;
 }
 
-export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
+export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps) {
   const queryClient = useQueryClient();
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [isCustomizeOpen, setIsCustomizeOpen] = useState(false);
   const [customization, setCustomization] = useState<IconCustomization | undefined>();
   const [isPreviewLoading, setIsPreviewLoading] = useState(true);
   const [previewImage, setPreviewImage] = useState<string>();
+  const [tool, setTool] = useState(initialTool);
   const Icon = Icons[tool.icon as keyof typeof Icons] as LucideIcon;
   const { toast } = useToast();
+
+  // Get usage statistics for this tool
+  const { data: usageStats } = useQuery({
+    queryKey: ['/api/tools/stats'],
+    select: (data) => data.find((stat: any) => stat.toolId === tool.id),
+  });
+
+  // 使用共用的工具追蹤鉤子
   const { trackToolUsage } = useToolTracking();
-  const [clicks, setClicks] = useState(tool.totalClicks || 0);
 
-
-  const handleClick = async () => {
-    try {
-      const result = await trackToolUsage(tool.id);
-      if (result.totalClicks) {
-        setClicks(result.totalClicks);
-        queryClient.invalidateQueries({ queryKey: ['/api/tools/stats'], refetchType: 'active' });
-        queryClient.invalidateQueries({ queryKey: ['/api/tools/rankings'], refetchType: 'active' });
-      }
-      window.open(tool.url, '_blank', 'noopener,noreferrer');
-    } catch (error) {
-      console.error('工具使用追蹤失敗:', error);
-      toast({
-        title: "錯誤",
-        description: "無法更新工具使用統計",
-        variant: "destructive",
+  // 使用 mutation 作為後備機制
+  const trackUsage = useMutation({
+    mutationFn: async () => {
+      console.log('工具卡片點擊:', tool.id);
+      return await trackToolUsage(tool.id);
+    },
+    onSuccess: (data) => {
+      console.log('工具卡片點擊成功:', tool.id, data);
+      // 成功後確保數據被刷新，但使用 active 模式避免過多請求
+      queryClient.invalidateQueries({
+        queryKey: ['/api/tools/stats'],
+        refetchType: 'active'
       });
+      queryClient.invalidateQueries({
+        queryKey: ['/api/tools/rankings'],
+        refetchType: 'active'
+      });
+    },
+    onError: (error) => {
+      console.error('工具卡片點擊錯誤:', tool.id, error);
     }
-  };
+  });
 
   const handleShare = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -140,6 +150,7 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
   };
 
   const getShareUrls = useCallback((previewUrl?: string) => {
+    // 直接使用 tool.url，不需要添加 baseUrl
     const url = tool.url;
     const text = `Check out ${tool.title} - ${tool.description}`;
 
@@ -151,6 +162,28 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
       image: previewUrl
     });
   }, [tool]);
+
+  // 修改點擊處理部分
+  const handleClick = async () => {
+    try {
+      // 先觸發工具使用追蹤
+      const result = await trackToolUsage(tool.id);
+      console.log('工具使用已追蹤:', tool.id, result);
+
+      // 更新本地狀態
+      if (result.totalClicks) {
+        setTool(prevTool => ({
+          ...prevTool,
+          totalClicks: result.totalClicks
+        }));
+      }
+
+      // 開啟工具網站
+      window.open(tool.url, '_blank', 'noopener,noreferrer');
+    } catch (error) {
+      console.error('工具使用追蹤失敗:', error);
+    }
+  };
 
 
   return (
@@ -196,14 +229,16 @@ export function ToolCard({ tool, isLoading = false }: ToolCardProps) {
                       <p>{tool.title}</p>
                     </TooltipContent>
                   </Tooltip>
-                  <Badge
-                    variant="secondary"
-                    className="flex items-center gap-1 px-2 py-1"
-                    title="使用次數"
-                  >
-                    <BarChart className="w-3 h-3" aria-hidden="true" />
-                    <span>{clicks} 次使用</span>
-                  </Badge>
+                  {usageStats && (
+                    <Badge
+                      variant="secondary"
+                      className="flex items-center gap-1 px-2 py-1"
+                      title="使用次數"
+                    >
+                      <BarChart className="w-3 h-3" aria-hidden="true" />
+                      <span>{tool.totalClicks || usageStats.totalClicks} 次使用</span> {/* Use local state if available */}
+                    </Badge>
+                  )}
                 </div>
               )}
               <div className="flex gap-2">
