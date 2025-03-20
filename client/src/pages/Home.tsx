@@ -10,9 +10,7 @@ import { useTour } from "@/components/TourProvider";
 import { ProgressDashboard } from "@/components/ProgressDashboard";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { AchievementsList } from "@/components/AchievementsList";
 import { DiagnosticsDashboard } from "@/components/DiagnosticsDashboard";
-import { EmojiStoryTelling } from "@/components/EmojiStoryTelling";
 import { ToolRankings } from "@/components/ToolRankings";
 import { RankingTutorial } from "@/components/RankingTutorial";
 import { VisitorCounter } from "@/components/VisitorCounter";
@@ -117,10 +115,6 @@ export function Home() {
 
             {/* 其他功能區域 */}
             <div className="space-y-4 sm:space-y-6 mb-8">
-              {/* 表情故事區域 - 粉色系背景 */}
-              <section data-tour="emoji-storytelling" className="p-4 rounded-lg bg-pink-50 dark:bg-pink-950/50">
-                <EmojiStoryTelling />
-              </section>
               {/* 心情追蹤區域 - 橙色系背景 */}
               <section data-tour="mood-tracker" className="p-4 rounded-lg bg-orange-50 dark:bg-orange-950/50">
                 <MoodTracker toolId={1} />
@@ -128,10 +122,6 @@ export function Home() {
               {/* 進度面板區域 - 青色系背景 */}
               <section data-tour="progress-dashboard" className="p-4 rounded-lg bg-teal-50 dark:bg-teal-950/50">
                 <ProgressDashboard />
-              </section>
-              {/* 成就列表區域 - 琥珀色系背景 */}
-              <section data-tour="achievements" className="p-4 rounded-lg bg-amber-50 dark:bg-amber-950/50">
-                <AchievementsList />
               </section>
               {/* 診斷面板區域 - 青藍色系背景 */}
               <section data-tour="diagnostics" className="p-4 rounded-lg bg-cyan-50 dark:bg-cyan-950/50">
