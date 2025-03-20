@@ -1,0 +1,550 @@
+TourGuide component mounted
+index-vrhkOSyn.js:7929 Element not found for zone: 表情故事區
+(匿名) @ index-vrhkOSyn.js:7929瞭解這則警告AI
+index-vrhkOSyn.js:7929 Element not found for zone: 心情追蹤區
+(匿名) @ index-vrhkOSyn.js:7929瞭解這則警告AI
+index-vrhkOSyn.js:7929 Element not found for zone: 進度面板區
+(匿名) @ index-vrhkOSyn.js:7929瞭解這則警告AI
+index-vrhkOSyn.js:7929 Element not found for zone: 成就列表區
+(匿名) @ index-vrhkOSyn.js:7929瞭解這則警告AI
+index-vrhkOSyn.js:7929 Element not found for zone: 診斷面板區
+(匿名) @ index-vrhkOSyn.js:7929瞭解這則警告AI
+index-vrhkOSyn.js:7929 Element not found for zone: SEO分析區
+(匿名) @ index-vrhkOSyn.js:7929瞭解這則警告AI
+index-vrhkOSyn.js:7929 Element not found for zone: 表情故事區
+(匿名) @ index-vrhkOSyn.js:7929瞭解這則警告AI
+index-vrhkOSyn.js:7929 Element not found for zone: 心情追蹤區
+(匿名) @ index-vrhkOSyn.js:7929瞭解這則警告AI
+index-vrhkOSyn.js:7929 Element not found for zone: 進度面板區
+(匿名) @ index-vrhkOSyn.js:7929瞭解這則警告AI
+index-vrhkOSyn.js:7929 Element not found for zone: 成就列表區
+(匿名) @ index-vrhkOSyn.js:7929瞭解這則警告AI
+index-vrhkOSyn.js:7929 Element not found for zone: 診斷面板區
+(匿名) @ index-vrhkOSyn.js:7929瞭解這則警告AI
+index-vrhkOSyn.js:7929 Element not found for zone: SEO分析區
+(匿名) @ index-vrhkOSyn.js:7929瞭解這則警告AI
+4sw.js:57 Uncaught (in promise) TypeError: Failed to execute 'put' on 'Cache': Partial response (status code 206) is unsupported
+    at sw.js:57:17瞭解這個錯誤AI
+content.js:1 Content script loaded
+content.js:131 Content script finished loading
+/api/seo/reports:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()瞭解這個錯誤AI
+/api/diagnostics/error-logs:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()瞭解這個錯誤AI
+/api/stats/visitors/increment:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()瞭解這個錯誤AI
+/api/tools/stats:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()瞭解這個錯誤AI
+/api/diagnostics/metrics:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()瞭解這個錯誤AI
+/api/achievements:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()瞭解這個錯誤AI
+/api/progress-stats:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()瞭解這個錯誤AI
+/api/seo/keywords:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()瞭解這個錯誤AI
+/api/tools/rankings:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()瞭解這個錯誤AI
+/api/stats/visitors:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()瞭解這個錯誤AI
+index-vrhkOSyn.js:7929 ServiceWorker 註冊成功: https://akai.smes.tyc.edu.tw/
+/favicon.ico:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()瞭解這個錯誤AI
+/manifest.json:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()瞭解這個錯誤AI
+/manifest.json:1 Manifest: Line: 1, column: 1, Syntax error.瞭解這個錯誤AI
+akai.smes.tyc.edu.tw/:1 <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes">瞭解這則警告AI
+/favicon-32x32.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()瞭解這個錯誤AI
+/favicon-16x16.png:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()瞭解這個錯誤AI
+/api/seo/keywords:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()瞭解這個錯誤AI
+/api/seo/reports:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()瞭解這個錯誤AI
+/api/tools/stats:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()瞭解這個錯誤AI
+/api/seo/reports:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()瞭解這個錯誤AI
+/api/seo/keywords:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()瞭解這個錯誤AI
+/api/diagnostics/error-logs:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()瞭解這個錯誤AI
+/api/diagnostics/metrics:1 
+            
+            
+           Failed to load resource: the server responded with a status of 502 ()瞭解這個錯誤AI
+/api/seo/reports:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 ()瞭解這個錯誤AI
+/api/seo/keywords:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 ()瞭解這個錯誤AI
+/api/diagnostics/error-logs:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 ()瞭解這個錯誤AI
+/api/diagnostics/metrics:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 ()瞭解這個錯誤AI
+/api/diagnostics/error-logs:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 ()瞭解這個錯誤AI
+/api/diagnostics/metrics:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 ()瞭解這個錯誤AI
+/api/diagnostics/error-logs:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 ()瞭解這個錯誤AI
+/api/diagnostics/metrics:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 ()瞭解這個錯誤AI
+/api/diagnostics/error-logs:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 ()瞭解這個錯誤AI
+/api/diagnostics/metrics:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 ()瞭解這個錯誤AI
+/api/progress-stats:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 ()瞭解這個錯誤AI
+/api/diagnostics/error-logs:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 ()瞭解這個錯誤AI
+/api/diagnostics/metrics:1 
+            
+            
+           Failed to load resource: the server responded with a status of 500 ()瞭解這個錯誤AI
+index-vrhkOSyn.js:7929 
+            
+            
+           GET https://akai.smes.tyc.edu.tw/api/diagnostics/error-logs 500 (Internal Server Error)
+queryFn @ index-vrhkOSyn.js:7929
+i @ index-vrhkOSyn.js:7748
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748瞭解這個錯誤AI
+index-vrhkOSyn.js:7929 
+            
+            
+           GET https://akai.smes.tyc.edu.tw/api/diagnostics/metrics 500 (Internal Server Error)
+queryFn @ index-vrhkOSyn.js:7929
+i @ index-vrhkOSyn.js:7748
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748瞭解這個錯誤AI
+index-vrhkOSyn.js:7929 
+            
+            
+           GET https://akai.smes.tyc.edu.tw/api/seo/reports 500 (Internal Server Error)
+queryFn @ index-vrhkOSyn.js:7929
+i @ index-vrhkOSyn.js:7748
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748瞭解這個錯誤AI
+index-vrhkOSyn.js:7929 
+            
+            
+           GET https://akai.smes.tyc.edu.tw/api/seo/keywords 500 (Internal Server Error)
+queryFn @ index-vrhkOSyn.js:7929
+i @ index-vrhkOSyn.js:7748
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748瞭解這個錯誤AI
+index-vrhkOSyn.js:7929 
+            
+            
+           GET https://akai.smes.tyc.edu.tw/api/seo/reports 500 (Internal Server Error)
+queryFn @ index-vrhkOSyn.js:7929
+i @ index-vrhkOSyn.js:7748
+v @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.then
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.catch
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748瞭解這個錯誤AI
+index-vrhkOSyn.js:7929 
+            
+            
+           GET https://akai.smes.tyc.edu.tw/api/seo/keywords 500 (Internal Server Error)
+queryFn @ index-vrhkOSyn.js:7929
+i @ index-vrhkOSyn.js:7748
+v @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.then
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.catch
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748瞭解這個錯誤AI
+index-vrhkOSyn.js:7929 
+            
+            
+           GET https://akai.smes.tyc.edu.tw/api/diagnostics/error-logs 500 (Internal Server Error)
+queryFn @ index-vrhkOSyn.js:7929
+i @ index-vrhkOSyn.js:7748
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+setInterval
+H$ @ index-vrhkOSyn.js:7748
+V$ @ index-vrhkOSyn.js:7748
+onQueryUpdate @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+batch @ index-vrhkOSyn.js:7748
+da @ index-vrhkOSyn.js:7748
+s @ index-vrhkOSyn.js:7748
+p @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.catch
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748瞭解這個錯誤AI
+index-vrhkOSyn.js:7929 
+            
+            
+           GET https://akai.smes.tyc.edu.tw/api/diagnostics/metrics 500 (Internal Server Error)
+queryFn @ index-vrhkOSyn.js:7929
+i @ index-vrhkOSyn.js:7748
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+setInterval
+H$ @ index-vrhkOSyn.js:7748
+V$ @ index-vrhkOSyn.js:7748
+onQueryUpdate @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+batch @ index-vrhkOSyn.js:7748
+da @ index-vrhkOSyn.js:7748
+s @ index-vrhkOSyn.js:7748
+p @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.catch
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748瞭解這個錯誤AI
+index-vrhkOSyn.js:7929 
+            
+            
+           GET https://akai.smes.tyc.edu.tw/api/seo/reports 500 (Internal Server Error)
+queryFn @ index-vrhkOSyn.js:7929
+i @ index-vrhkOSyn.js:7748
+v @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.then
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.catch
+v @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.then
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.catch
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748瞭解這個錯誤AI
+index-vrhkOSyn.js:7929 
+            
+            
+           GET https://akai.smes.tyc.edu.tw/api/seo/keywords 500 (Internal Server Error)
+queryFn @ index-vrhkOSyn.js:7929
+i @ index-vrhkOSyn.js:7748
+v @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.then
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.catch
+v @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.then
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.catch
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748瞭解這個錯誤AI
+index-vrhkOSyn.js:7929 
+            
+            
+           GET https://akai.smes.tyc.edu.tw/api/seo/reports 500 (Internal Server Error)
+queryFn @ index-vrhkOSyn.js:7929
+i @ index-vrhkOSyn.js:7748
+v @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.then
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.catch
+v @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.then
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.catch
+v @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.then
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.catch
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748瞭解這個錯誤AI
+index-vrhkOSyn.js:7929 
+            
+            
+           GET https://akai.smes.tyc.edu.tw/api/seo/keywords 500 (Internal Server Error)
+queryFn @ index-vrhkOSyn.js:7929
+i @ index-vrhkOSyn.js:7748
+v @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.then
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.catch
+v @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.then
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.catch
+v @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.then
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.catch
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748瞭解這個錯誤AI
+index-vrhkOSyn.js:7929 
+            
+            
+           GET https://akai.smes.tyc.edu.tw/api/diagnostics/error-logs 500 (Internal Server Error)
+queryFn @ index-vrhkOSyn.js:7929
+i @ index-vrhkOSyn.js:7748
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+setInterval
+H$ @ index-vrhkOSyn.js:7748
+V$ @ index-vrhkOSyn.js:7748
+onQueryUpdate @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+batch @ index-vrhkOSyn.js:7748
+da @ index-vrhkOSyn.js:7748
+s @ index-vrhkOSyn.js:7748
+p @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.catch
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+setInterval
+H$ @ index-vrhkOSyn.js:7748
+V$ @ index-vrhkOSyn.js:7748
+onQueryUpdate @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+batch @ index-vrhkOSyn.js:7748
+da @ index-vrhkOSyn.js:7748
+s @ index-vrhkOSyn.js:7748
+p @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.catch
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748瞭解這個錯誤AI
+index-vrhkOSyn.js:7929 
+            
+            
+           GET https://akai.smes.tyc.edu.tw/api/diagnostics/metrics 500 (Internal Server Error)
+queryFn @ index-vrhkOSyn.js:7929
+i @ index-vrhkOSyn.js:7748
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+setInterval
+H$ @ index-vrhkOSyn.js:7748
+V$ @ index-vrhkOSyn.js:7748
+onQueryUpdate @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+batch @ index-vrhkOSyn.js:7748
+da @ index-vrhkOSyn.js:7748
+s @ index-vrhkOSyn.js:7748
+p @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.catch
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+setInterval
+H$ @ index-vrhkOSyn.js:7748
+V$ @ index-vrhkOSyn.js:7748
+onQueryUpdate @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+batch @ index-vrhkOSyn.js:7748
+da @ index-vrhkOSyn.js:7748
+s @ index-vrhkOSyn.js:7748
+p @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.catch
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748瞭解這個錯誤AI
+index-vrhkOSyn.js:7929 
+            
+            
+           GET https://akai.smes.tyc.edu.tw/api/diagnostics/error-logs 500 (Internal Server Error)
+queryFn @ index-vrhkOSyn.js:7929
+i @ index-vrhkOSyn.js:7748
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+setInterval
+H$ @ index-vrhkOSyn.js:7748
+V$ @ index-vrhkOSyn.js:7748
+onQueryUpdate @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+batch @ index-vrhkOSyn.js:7748
+da @ index-vrhkOSyn.js:7748
+s @ index-vrhkOSyn.js:7748
+p @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.catch
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+setInterval
+H$ @ index-vrhkOSyn.js:7748
+V$ @ index-vrhkOSyn.js:7748
+onQueryUpdate @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+batch @ index-vrhkOSyn.js:7748
+da @ index-vrhkOSyn.js:7748
+s @ index-vrhkOSyn.js:7748
+p @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.catch
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+setInterval
+H$ @ index-vrhkOSyn.js:7748
+V$ @ index-vrhkOSyn.js:7748
+onQueryUpdate @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+batch @ index-vrhkOSyn.js:7748
+da @ index-vrhkOSyn.js:7748
+s @ index-vrhkOSyn.js:7748
+p @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748
+Promise.catch
+v @ index-vrhkOSyn.js:7748
+start @ index-vrhkOSyn.js:7748
+fetch @ index-vrhkOSyn.js:7748
+Hh @ index-vrhkOSyn.js:7748
+(匿名) @ index-vrhkOSyn.js:7748瞭解這個錯誤AI
+index-vrhkOSyn.js:7929 
+            
+            
+           GET https://akai.smes.tyc.edu.tw/api/diagnostics/metrics 500 (Internal Server Error)
