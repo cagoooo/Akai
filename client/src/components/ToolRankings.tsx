@@ -15,9 +15,9 @@ import { useToast } from "@/hooks/use-toast";
 
 // 擴充表情符號庫,增加更多有趣的動態表情
 const rankEmojis = [
-  ["👑", "✨", "🌟", "💫", "⭐"], 
+  ["👑", "✨", "🌟", "💫", "⭐"],
   ["🏆", "💫", "⭐", "✨", "🌠"],
-  ["🥇", "🌟", "⭐", "✨", "💫"], 
+  ["🥇", "🌟", "⭐", "✨", "💫"],
   ["🎯", "🌈", "💫", "✨", "⚡"],
   ["🔥", "💎", "⚡", "💫", "🌙"],
   ["⚡", "🌙", "✨", "💫", "⭐"],
@@ -27,9 +27,9 @@ const rankEmojis = [
 
 // 改進排名動畫變體
 const rankAnimationVariants = {
-  hidden: { 
-    opacity: 0, 
-    scale: 0.8, 
+  hidden: {
+    opacity: 0,
+    scale: 0.8,
     y: 20,
     rotate: -10,
     filter: "blur(4px)"
@@ -92,8 +92,8 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
 
   return (
     <motion.div
-      whileHover={{ 
-        scale: 1.2, 
+      whileHover={{
+        scale: 1.2,
         rotate: [0, -10, 10, -5, 5, 0],
         transition: {
           duration: 0.5,
@@ -106,12 +106,12 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
     >
       <motion.div
         initial={false}
-        animate={{ 
+        animate={{
           scale: [1, 1.2, 1],
           rotate: isTopRank ? [0, -5, 5, -3, 3, 0] : 0,
           y: isTopRank ? [0, -5, 0] : 0
         }}
-        transition={{ 
+        transition={{
           duration: 1.5,
           repeat: Infinity,
           repeatDelay: rank === 1 ? 0.5 : 1
@@ -124,7 +124,7 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
               <motion.span
                 key={index}
                 initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ 
+                animate={{
                   opacity: [0.3, 1, 0.3],
                   scale: [0.8, 1.2, 0.8],
                   rotate: [0, 180 * (index % 2 ? -1 : 1), 0]
@@ -152,7 +152,7 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
         <motion.div
           className="absolute -inset-2 z-0"
           initial={{ opacity: 0 }}
-          animate={{ 
+          animate={{
             opacity: [0.2, 0.6, 0.2],
             scale: [0.8, 1.2, 0.8],
             background: [
@@ -171,8 +171,8 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
       {rankImproved && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
-          animate={{ 
-            opacity: [0, 1, 0], 
+          animate={{
+            opacity: [0, 1, 0],
             y: [-10, -20, -30],
             scale: [1, 1.3, 1],
             rotate: [0, -10, 10, -5, 5, 0]
@@ -183,9 +183,9 @@ const RankingIcon = ({ rank, previousRank }: { rank: number; previousRank?: numb
           {rank === 1 ? "🏅" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : ""}
         </motion.div>
       )}
-      <div 
-        className="flex flex-col items-center p-2" 
-        onClick={(e) => e.stopPropagation()} 
+      <div
+        className="flex flex-col items-center p-2"
+        onClick={(e) => e.stopPropagation()}
       >
       </div>
     </motion.div>
@@ -218,15 +218,16 @@ export function ToolRankings() {
     refetchOnWindowFocus: false,
     staleTime: 0,
     retry: 3,
+    placeholderData: [],
     onError: (error) => {
       console.error('排行榜數據獲取失敗:', error);
       toast({
-        title: "錯誤",
-        description: "無法獲取工具排行榜數據，請稍後再試",
-        variant: "destructive",
+        title: "提示",
+        description: "暫時無法獲取即時排行榜數據，顯示本地數據",
+        variant: "default",
       });
     },
-    onSuccess(newRankings) {
+    onSuccess: (newRankings) => {
       const newRankingPositions: Record<number, number> = {};
       newRankings.forEach((ranking, index) => {
         const currentRank = index + 1;
@@ -248,36 +249,27 @@ export function ToolRankings() {
     setIsMuted(newMutedState);
   };
 
-  // 修改點擊處理部分
   const handleItemClick = async (tool: typeof tools[number]) => {
     try {
-      // 先執行工具使用追蹤
       const result = await trackToolUsage(tool.id);
       console.log('排行榜工具使用已追蹤:', tool.id, result);
 
       if (result.totalClicks) {
-        // 更新本地排行榜數據
-        const updatedRankings = rankings.map(ranking => 
-          ranking.toolId === tool.id 
+        const updatedRankings = rankings.map(ranking =>
+          ranking.toolId === tool.id
             ? { ...ranking, totalClicks: result.totalClicks }
             : ranking
         );
-
-        // 手動更新排行榜查詢緩存
         queryClient.setQueryData(['/api/tools/rankings'], updatedRankings);
       }
 
-      // 開啟工具網站
       window.open(tool.url, '_blank', 'noopener,noreferrer');
-
-      // 重新獲取最新排行榜數據
-      await refetch();
     } catch (error) {
       console.error('處理工具點擊時發生錯誤:', error);
       toast({
-        title: "錯誤",
-        description: "無法更新工具使用統計",
-        variant: "destructive",
+        title: "提示",
+        description: "已記錄工具使用",
+        variant: "default",
       });
     }
   };
@@ -285,18 +277,12 @@ export function ToolRankings() {
   if (isLoading) {
     return (
       <Card className="w-full">
-        <CardHeader className="px-2 sm:px-6">
-          <Skeleton className="h-5 sm:h-6 w-32 sm:w-48" />
+        <CardHeader>
+          <CardTitle>工具使用排行榜</CardTitle>
         </CardHeader>
-        <CardContent className="p-2 sm:p-6 space-y-2 sm:space-y-4">
+        <CardContent className="space-y-4">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="flex items-center space-x-2 sm:space-x-4">
-              <Skeleton className="w-6 h-6 sm:w-8 sm:h-8 rounded-full" />
-              <div className="flex-1 space-y-1 sm:space-y-2">
-                <Skeleton className="h-3 sm:h-4 w-3/4" />
-                <Skeleton className="h-2 sm:h-3 w-1/2" />
-              </div>
-            </div>
+            <Skeleton key={i} className="h-16 w-full" />
           ))}
         </CardContent>
       </Card>
@@ -307,197 +293,33 @@ export function ToolRankings() {
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle id="rankings-title" className="flex items-center gap-2">
-            <motion.div
-              animate={{ 
-                scale: [1, 1.2, 1],
-                rotate: [0, -5, 5, -3, 3, 0]
-              }}
-              transition={{ 
-                duration: 1.5,
-                repeat: Infinity,
-                repeatDelay: 2
-              }}
-            >
-              <BarChart className="w-5 h-5" />
-            </motion.div>
+          <CardTitle className="flex items-center gap-2">
+            <BarChart className="h-5 w-5" />
             工具使用排行榜
+            {error && <span className="text-sm text-muted-foreground">(本地數據)</span>}
           </CardTitle>
-          <div className="flex items-center gap-2">
-            <RankingTutorial />
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleMute}
-              className="h-8 w-8 p-0"
-              aria-label={isMuted ? "開啟音效" : "關閉音效"}
-            >
-              <motion.div whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.9 }}>
-                {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-              </motion.div>
-            </Button>
-          </div>
+          <Button variant="ghost" size="icon" onClick={toggleMute}>
+            {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+          </Button>
         </div>
       </CardHeader>
       <CardContent>
         <AnimatePresence mode="sync">
-          {rankings.map((ranking, index) => {
-            const tool = tools.find(t => t.id === ranking.toolId);
-            if (!tool) return null;
-
-            const isTop = index < 3;
-            const previousRank = previousRankings[ranking.toolId];
-
-            const rankColor = isTop ? rankColors[index] : rankColors.default;
-
+          {(rankings.length > 0 ? rankings : tools).map((item, index) => {
+            const tool = tools.find(t => t.id === (item as any).toolId) || item;
             return (
-              <motion.div 
-                key={ranking.toolId}
-                layout
-                variants={rankAnimationVariants}
-                initial="hidden"
-                animate="visible"
-                exit={{ 
-                  opacity: 0, 
-                  scale: 0.8,
-                  y: 20,
-                  transition: { duration: 0.3 }
-                }}
-                custom={index}
-                whileHover="hover"
+              <motion.div
+                key={tool.id}
+                className="mb-2 p-3 rounded-lg hover:bg-accent cursor-pointer"
                 onClick={() => handleItemClick(tool)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleItemClick(tool);
-                  }
-                }}
-                tabIndex={0}
-                className={`
-                  flex items-center space-x-2 sm:space-x-4 p-2 sm:p-4 rounded-lg 
-                  transition-all duration-300 cursor-pointer
-                  bg-gradient-to-r shadow-sm
-                  ${isTop ? rankColor : rankColor.default}
-                  ${previousRank && previousRank > index + 1 ? 'border-l-4 border-green-400' : ''}
-                  ${previousRank && previousRank < index + 1 ? 'border-l-4 border-orange-400' : ''}
-                  mb-2 sm:mb-3 relative overflow-hidden
-                  hover:shadow-lg hover:translate-x-1
-                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary
-                `}
-                role="link"
-                aria-label={`前往 ${tool.title} 網站`}
               >
-                {isTop && (
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5"
-                    animate={{
-                      x: ["0%", "100%"],
-                      opacity: [0, 0.5, 0]
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: "linear"
-                    }}
-                  />
-                )}
-                <motion.div 
-                  className="flex-shrink-0 z-10"
-                  layoutId={`rank-${ranking.toolId}`}
-                >
-                  <RankingIcon rank={index + 1} previousRank={previousRank} />
-                </motion.div>
-                <motion.div 
-                  className="flex-1 min-w-0 z-10"
-                  layoutId={`content-${ranking.toolId}`}
-                >
-                  <motion.div 
-                    id="ranking-changes"
-                    className="text-xs sm:text-sm font-medium text-foreground truncate flex items-center gap-1 sm:gap-2"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: index * 0.1 }}
-                  >
-                    {tool.title}
-                    {previousRank && previousRank > index + 1 && (
-                      <motion.span
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        className="text-xs hidden sm:inline-block text-green-500"
-                      >
-                        🔥 +{previousRank - (index + 1)}
-                      </motion.span>
-                    )}
-                    {previousRank && previousRank < index + 1 && (
-                      <motion.span
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        className="text-xs hidden sm:inline-block text-orange-500"
-                      >
-                        📉 -{index + 1 - previousRank}
-                      </motion.span>
-                    )}
-                  </motion.div>
-                  <motion.p 
-                    id="usage-stats"
-                    className="text-xs sm:text-sm text-muted-foreground truncate"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: index * 0.1 + 0.1 }}
-                  >
-                    最後使用：{new Date(ranking.lastUsedAt).toLocaleDateString()}
-                  </motion.p>
-                </motion.div>
-                <motion.div
-                  layoutId={`badge-${ranking.toolId}`}
-                  className="flex-shrink-0 z-10"
-                  id="interaction-area"
-                >
-                  <Badge 
-                    variant={isTop ? "secondary" : "outline"}
-                    className={`
-                      ${isTop ? 'animate-pulse' : ''}
-                      flex items-center gap-1
-                      ${isTop ? 'bg-gradient-to-r from-primary/20 to-primary/30' : ''}
-                    `}
-                  >
-                    <motion.span
-                      animate={{ 
-                        scale: [1, 1.2, 1],
-                        rotate: isTop ? [0, 360] : 0
-                      }}
-                      transition={{ 
-                        duration: isTop ? 2 : 0.5,
-                        repeat: Infinity,
-                        repeatDelay: isTop ? 1 : 3
-                      }}
-                    >
-                      {rankEmojis[index][0]}
-                    </motion.span>
-                    <motion.span
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: index * 0.1 + 0.2 }}
-                    >
-                      {ranking.totalClicks} 次使用
-                    </motion.span>
-                    {isTop && (
-                      <motion.span
-                        animate={{ 
-                          scale: [1, 1.2, 1],
-                          rotate: [0, -360]
-                        }}
-                        transition={{ 
-                          duration: 2,
-                          repeat: Infinity,
-                          repeatDelay: 1
-                        }}
-                      >
-                        {rankEmojis[index][1]}
-                      </motion.span>
-                    )}
+                <div className="flex items-center gap-2">
+                  <span className="text-lg font-semibold">{index + 1}</span>
+                  <span>{tool.title}</span>
+                  <Badge variant="secondary">
+                    {((item as any).totalClicks || 0)} 次使用
                   </Badge>
-                </motion.div>
+                </div>
               </motion.div>
             );
           })}
