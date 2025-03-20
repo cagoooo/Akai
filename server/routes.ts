@@ -821,28 +821,116 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
-  app.get("/api/tools/stats", async (req, res) => {
+  // 修改工具使用統計的查詢邏輯
+  app.get("/api/tools/rankings", async (_req, res) => {
     try {
+      // 檢查是否有任何工具使用統計數據
       const stats = await db.query.toolUsageStats.findMany({
         orderBy: desc(toolUsageStats.totalClicks),
+        limit: 8, // 增加顯示數量以展示更多工具
       });
-      res.json(stats);
-    } catch (error) {
-      console.error("Error fetching tool stats:", error);
-      res.status(500).json({ message: "獲取使用統計時發生錯誤" });
-    }
-  });
 
-  app.get("/api/tools/rankings", async (req, res) => {
-    try {
-      const stats = await db.query.toolUsageStats.findMany({
-        orderBy: desc(toolUsageStats.totalClicks),
-        limit: 5,
-      });
+      // 如果沒有數據，初始化一些基本數據
+      if (!stats || stats.length === 0) {
+        // 為每個工具創建初始記錄
+        const initialStats = Array.from({ length: 10 }, (_, i) => ({
+          toolId: i + 1,
+          totalClicks: 0,
+          lastUsedAt: new Date(),
+          categoryClicks: {
+            communication: 0,
+            teaching: 0,
+            language: 0,
+            reading: 0,
+            utilities: 0,
+            games: 0
+          }
+        }));
+
+        // 批量插入初始數據
+        await db.insert(toolUsageStats).values(initialStats);
+
+        // 返回初始化的數據
+        return res.json(initialStats);
+      }
+
+      // 返回現有的統計數據
       res.json(stats);
     } catch (error) {
       console.error("Error fetching rankings:", error);
-      res.status(500).json({ message: "獲取排行榜時發生錯誤" });
+      // 返回更詳細的錯誤信息
+      res.status(500).json({
+        message: "獲取排行榜時發生錯誤",
+        error: error instanceof Error ? error.message : "未知錯誤",
+        timestamp: new Date().toISOString()
+      });
+
+      // 記錄錯誤到日誌表
+      try {
+        await db.insert(errorLogs).values({
+          level: "error",
+          message: "獲取工具排行榜失敗",
+          stack: error instanceof Error ? error.stack : undefined,
+          metadata: {
+            endpoint: "/api/tools/rankings",
+            timestamp: new Date().toISOString()
+          }
+        });
+      } catch (logError) {
+        console.error("Failed to log error:", logError);
+      }
+    }
+  });
+
+  app.get("/api/tools/stats", async (_req, res) => {
+    try {
+      const stats = await db.query.toolUsageStats.findMany({
+        orderBy: desc(toolUsageStats.totalClicks),
+      });
+
+      // 如果沒有數據，初始化基本數據
+      if (!stats || stats.length === 0) {
+        const initialStats = Array.from({ length: 10 }, (_, i) => ({
+          toolId: i + 1,
+          totalClicks: 0,
+          lastUsedAt: new Date(),
+          categoryClicks: {
+            communication: 0,
+            teaching: 0,
+            language: 0,
+            reading: 0,
+            utilities: 0,
+            games: 0
+          }
+        }));
+
+        await db.insert(toolUsageStats).values(initialStats);
+        return res.json(initialStats);
+      }
+
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching tool stats:", error);
+      res.status(500).json({
+        message: "獲取使用統計時發生錯誤",
+        error: error instanceof Error ? error.message : "未知錯誤",
+        timestamp: new Date().toISOString()
+      });
+
+      // 記錄錯誤到日誌表
+      try {
+        await db.insert(errorLogs).values({
+          level: "error",
+          message: "獲取工具統計失敗",
+          stack: error instanceof Error ? error.stack : undefined,
+          metadata: {
+            endpoint: "/api/tools/stats",
+            timestamp: new Date().toISOString()
+          }
+        });
+      } catch (logError) {
+        console.error("Failed to log error:", logError);
+      }
     }
   });
 
