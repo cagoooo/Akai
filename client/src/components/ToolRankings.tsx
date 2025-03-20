@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { RankingTutorial } from "./RankingTutorial";
 import { useLocation } from "wouter";
 import { useToolTracking } from "@/hooks/useToolTracking";
-import { useToast } from "@/hooks/use-toast"; // Fixed import
+import { useToast } from "@/hooks/use-toast";
 
 // 擴充表情符號庫,增加更多有趣的動態表情
 const rankEmojis = [
@@ -209,15 +209,23 @@ const rankColors = {
 export function ToolRankings() {
   const [previousRankings, setPreviousRankings] = useState<Record<number, number>>({});
   const [isMuted, setIsMuted] = useState(soundManager.isSoundMuted());
-  const [location] = useLocation();
   const queryClient = useQueryClient();
   const { trackToolUsage } = useToolTracking();
-  const { toast } = useToast(); // Added useToast hook
+  const { toast } = useToast();
 
-  const { data: rankings = [], isLoading, refetch } = useQuery<ToolRanking[]>({
+  const { data: rankings = [], isLoading, error, refetch } = useQuery<ToolRanking[]>({
     queryKey: ['/api/tools/rankings'],
     refetchOnWindowFocus: false,
     staleTime: 0,
+    retry: 3,
+    onError: (error) => {
+      console.error('排行榜數據獲取失敗:', error);
+      toast({
+        title: "錯誤",
+        description: "無法獲取工具排行榜數據，請稍後再試",
+        variant: "destructive",
+      });
+    },
     onSuccess(newRankings) {
       const newRankingPositions: Record<number, number> = {};
       newRankings.forEach((ranking, index) => {

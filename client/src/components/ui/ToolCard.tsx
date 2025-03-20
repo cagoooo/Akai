@@ -19,6 +19,7 @@ export function ToolCard({ id, name, description, icon, onClick }: ToolCardProps
   const [isHovered, setIsHovered] = useState(false);
   const queryClient = useQueryClient();
   const { trackToolUsage } = useToolTracking();
+  const [clicks, setClicks] = useState(0);
 
   const handleClick = async () => {
     try {
@@ -28,12 +29,30 @@ export function ToolCard({ id, name, description, icon, onClick }: ToolCardProps
       const result = await trackToolUsage(id);
       console.log('工具使用已追蹤:', id, result);
 
+      if (result?.totalClicks) {
+        setClicks(result.totalClicks);
+        // 更新相關查詢
+        queryClient.invalidateQueries({ 
+          queryKey: ['/api/tools/stats'],
+          refetchType: 'active'
+        });
+        queryClient.invalidateQueries({ 
+          queryKey: ['/api/tools/rankings'],
+          refetchType: 'active'
+        });
+      }
+
       // 執行原有的點擊事件
       if (onClick) {
         onClick();
       }
     } catch (error) {
       console.error('工具使用追蹤失敗:', error);
+      toast({
+        title: "錯誤",
+        description: "無法更新工具使用統計",
+        variant: "destructive",
+      });
     }
   };
 

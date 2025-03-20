@@ -3,20 +3,23 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BarChart, LineChart, PieChart } from "@/components/ui/charts";
 import { Button } from "@/components/ui/button";
-import { 
-  Calendar, Download, Activity, Users, TrendingUp, 
+import {
+  Calendar, Download, Activity, Users, TrendingUp,
   MousePointer, Eye, Clock, BarChart2, PieChart as PieChartIcon
 } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { VisitorStats, ToolUsageStat } from "@/types/analytics";
+import { useToast } from "@/hooks/use-toast"; 
+// Fixed import path
 
 export function AnalyticsDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const heatmapRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   // 獲取訪問統計
-  const { data: visitorStats } = useQuery<VisitorStats>({
+  const { data: visitorStats, error: visitorError } = useQuery<VisitorStats>({
     queryKey: ['visitorStats'],
     queryFn: async () => {
       const res = await fetch('/api/stats/visitors');
@@ -24,10 +27,19 @@ export function AnalyticsDashboard() {
       return res.json();
     },
     refetchInterval: 30000, // 每30秒刷新一次
+    retry: 3,
+    onError: (error) => {
+      console.error('訪問統計獲取失敗:', error);
+      toast({
+        title: "錯誤",
+        description: "無法獲取訪問統計數據，請稍後再試",
+        variant: "destructive",
+      });
+    }
   });
 
   // 獲取工具使用統計
-  const { data: toolStats } = useQuery<ToolUsageStat[]>({
+  const { data: toolStats, error: toolError } = useQuery<ToolUsageStat[]>({
     queryKey: ['toolStats'],
     queryFn: async () => {
       const res = await fetch('/api/tools/stats');
@@ -35,6 +47,15 @@ export function AnalyticsDashboard() {
       return res.json();
     },
     refetchInterval: 60000, // 每分鐘刷新一次
+    retry: 3,
+    onError: (error) => {
+      console.error('工具統計獲取失敗:', error);
+      toast({
+        title: "錯誤",
+        description: "無法獲取工具使用統計，請稍後再試",
+        variant: "destructive",
+      });
+    }
   });
 
   // 渲染熱力圖
@@ -206,7 +227,7 @@ export function AnalyticsDashboard() {
             </CardHeader>
             <CardContent>
               {visitorChartData.labels.length > 0 && (
-                <LineChart 
+                <LineChart
                   data={visitorChartData}
                   height={300}
                   options={{
@@ -232,7 +253,7 @@ export function AnalyticsDashboard() {
               </CardHeader>
               <CardContent>
                 {toolChartData.labels.length > 0 && (
-                  <PieChart 
+                  <PieChart
                     data={toolChartData}
                     height={250}
                     options={{
@@ -252,7 +273,7 @@ export function AnalyticsDashboard() {
                 <CardDescription>用戶來源渠道分析</CardDescription>
               </CardHeader>
               <CardContent>
-                <BarChart 
+                <BarChart
                   data={{
                     labels: ['直接訪問', '搜索引擎', '社交媒體', '郵件推廣', '外部連結'],
                     datasets: [{
@@ -340,7 +361,7 @@ export function AnalyticsDashboard() {
             </CardHeader>
             <CardContent>
               {toolStats && toolStats.length > 0 ? (
-                <BarChart 
+                <BarChart
                   data={{
                     labels: toolStats.map(stat => `工具 ${stat.toolId}`),
                     datasets: [{
@@ -357,46 +378,35 @@ export function AnalyticsDashboard() {
                       if (elements && elements.length > 0) {
                         const index = elements[0].index;
                         const toolId = toolStats[index].toolId;
-                        
+
                         try {
-                          const result = await trackToolUsage(toolId);
-                          console.log('儀表板圖表工具點擊已追蹤:', toolId, result);
+                          const trackingModule = await import('@/hooks/useToolTracking');
+                          const { useToolTracking } = trackingModule;
+                          const { trackToolUsage } = useToolTracking();
+
+                          await trackToolUsage(toolId);
+
+                          // 立即強制更新統計數據，使用正確的查詢鍵
+                          queryClient.invalidateQueries({
+                            queryKey: ['/api/tools/stats'],
+                            refetchType: 'all'
+                          });
+                          queryClient.invalidateQueries({
+                            queryKey: ['/api/tools/rankings'],
+                            refetchType: 'all'
+                          });
+
+                          // 確保所有相關查詢都會刷新
+                          queryClient.refetchQueries({
+                            predicate: (query) =>
+                              query.queryKey[0] === '/api/tools' ||
+                              String(query.queryKey[0]).includes('tools'),
+                            type: 'all'
+                          });
+
+                          console.log('工具使用已追蹤並更新統計:', toolId);
                         } catch (error) {
                           console.error('工具使用追蹤失敗:', error);
-                        }
-                      }ments && elements.length > 0) {
-                        const index = elements[0].index;
-                        const toolId = toolStats?.[index]?.toolId;
-                        if (toolId) {
-                          try {
-                            const trackingModule = await import('@/hooks/useToolTracking');
-                            const { useToolTracking } = trackingModule;
-                            const { trackToolUsage } = useToolTracking();
-
-                            await trackToolUsage(toolId);
-
-                            // 立即強制更新統計數據，使用正確的查詢鍵
-                            queryClient.invalidateQueries({ 
-                              queryKey: ['/api/tools/stats'],
-                              refetchType: 'all'
-                            });
-                            queryClient.invalidateQueries({ 
-                              queryKey: ['/api/tools/rankings'],
-                              refetchType: 'all'
-                            });
-                            
-                            // 確保所有相關查詢都會刷新
-                            queryClient.refetchQueries({
-                              predicate: (query) => 
-                                query.queryKey[0] === '/api/tools' || 
-                                String(query.queryKey[0]).includes('tools'),
-                              type: 'all'
-                            });
-
-                            console.log('工具使用已追蹤並更新統計:', toolId);
-                          } catch (error) {
-                            console.error('工具使用追蹤失敗:', error);
-                          }
                         }
                       }
                     },
@@ -437,11 +447,11 @@ export function AnalyticsDashboard() {
               <CardDescription>顯示用戶在頁面上的點擊與互動熱點</CardDescription>
             </CardHeader>
             <CardContent>
-              <div 
-                ref={heatmapRef} 
+              <div
+                ref={heatmapRef}
                 className="h-[500px] bg-muted rounded-md relative overflow-hidden"
               >
-                <div className="absolute inset-0 opacity-20 bg-repeat" style={{ 
+                <div className="absolute inset-0 opacity-20 bg-repeat" style={{
                   backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%239C92AC\' fill-opacity=\'0.4\'%3E%3Cpath d=\'M0 0h10v10H0zm10 10h10v10H10z\'/%3E%3C/g%3E%3C/svg%3E")',
                   backgroundSize: '20px 20px'
                 }}></div>
@@ -465,14 +475,14 @@ export function AnalyticsDashboard() {
             <CardContent>
               <div className="grid grid-cols-7 gap-1">
                 {Array.from({ length: 31 }, (_, i) => (
-                  <div 
-                    key={i} 
+                  <div
+                    key={i}
                     className="aspect-square border rounded-md flex flex-col items-center justify-center hover:bg-accent transition-colors cursor-pointer relative overflow-hidden"
                   >
                     <span className="text-sm font-medium">{i + 1}</span>
-                    <div 
-                      className="absolute bottom-0 left-0 right-0 bg-blue-500" 
-                      style={{ 
+                    <div
+                      className="absolute bottom-0 left-0 right-0 bg-blue-500"
+                      style={{
                         height: `${Math.floor(Math.random() * 100)}%`,
                         opacity: 0.3
                       }}
