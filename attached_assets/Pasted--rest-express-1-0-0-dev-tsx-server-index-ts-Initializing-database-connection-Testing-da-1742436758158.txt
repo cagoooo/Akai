@@ -1,0 +1,42 @@
+
+> rest-express@1.0.0 dev
+> tsx server/index.ts
+
+Initializing database connection...
+Testing database connection...
+Database connection failed: PostgresError: Console request failed: endpoint is disabled
+    at ErrorResponse (file:///home/runner/workspace/node_modules/postgres/src/connection.js:788:26)
+    at handle (file:///home/runner/workspace/node_modules/postgres/src/connection.js:474:6)
+    at TLSSocket.data (file:///home/runner/workspace/node_modules/postgres/src/connection.js:315:9)
+    at TLSSocket.emit (node:events:518:28)
+    at addChunk (node:internal/streams/readable:561:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    at Readable.push (node:internal/streams/readable:392:5)
+    at TLSWrap.onStreamRead (node:internal/stream_base_commons:191:23)
+    at cachedError (file:///home/runner/workspace/node_modules/postgres/src/query.js:170:23)
+    at new Query (file:///home/runner/workspace/node_modules/postgres/src/query.js:36:24)
+    at sql (file:///home/runner/workspace/node_modules/postgres/src/index.js:112:11)
+    at checkDatabaseConnection (/home/runner/workspace/db/index.ts:77:26) {
+  severity_local: 'ERROR',
+  code: 'XX000'
+}
+Connection error details: {
+  message: 'Console request failed: endpoint is disabled',
+  stack: 'PostgresError: Console request failed: endpoint is disabled\n' +
+    '    at ErrorResponse (file:///home/runner/workspace/node_modules/postgres/src/connection.js:788:26)\n' +
+    '    at handle (file:///home/runner/workspace/node_modules/postgres/src/connection.js:474:6)\n' +
+    '    at TLSSocket.data (file:///home/runner/workspace/node_modules/postgres/src/connection.js:315:9)\n' +
+    '    at TLSSocket.emit (node:events:518:28)\n' +
+    '    at addChunk (node:internal/streams/readable:561:12)\n' +
+    '    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)\n' +
+    '    at Readable.push (node:internal/streams/readable:392:5)\n' +
+    '    at TLSWrap.onStreamRead (node:internal/stream_base_commons:191:23)\n' +
+    '    at cachedError (file:///home/runner/workspace/node_modules/postgres/src/query.js:170:23)\n' +
+    '    at new Query (file:///home/runner/workspace/node_modules/postgres/src/query.js:36:24)\n' +
+    '    at sql (file:///home/runner/workspace/node_modules/postgres/src/index.js:112:11)\n' +
+    '    at checkDatabaseConnection (/home/runner/workspace/db/index.ts:77:26)',
+  name: 'PostgresError'
+}
+Failed to start server: Error: Database connection failed
+    at <anonymous> (/home/runner/workspace/server/index.ts:15:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)

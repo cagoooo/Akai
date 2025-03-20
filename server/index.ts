@@ -9,14 +9,16 @@ app.use(express.urlencoded({ extended: false }));
 
 (async () => {
   try {
-    // 檢查數據庫連接並初始化
-    const isConnected = await checkDatabaseConnection();
+    // 檢查數據庫連接並初始化，添加重試機制
+    log("Attempting to establish database connection...");
+    const isConnected = await checkDatabaseConnection(3, 2000); // 3次重試，每次間隔2秒
     if (!isConnected) {
-      throw new Error("Database connection failed");
+      throw new Error("Database connection failed after multiple attempts");
     }
     log("Database connection successful");
 
     // 初始化數據庫表和基礎數據
+    log("Initializing database tables and data...");
     const isInitialized = await initializeDatabase();
     if (!isInitialized) {
       throw new Error("Database initialization failed");

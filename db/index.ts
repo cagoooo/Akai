@@ -1,5 +1,5 @@
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
+import { drizzle } from 'drizzle-orm/neon-http';
+import { neon } from '@neondatabase/serverless';
 import * as schema from "@db/schema";
 
 if (!process.env.DATABASE_URL) {
@@ -10,24 +10,15 @@ if (!process.env.DATABASE_URL) {
 
 console.log('Initializing database connection...');
 
-// 使用 DATABASE_URL 直接初始化數據庫連接
-const queryClient = postgres(process.env.DATABASE_URL, {
-  ssl: {
-    rejectUnauthorized: false
-  },
-  max: 1, // 減少連接數以便調試
-  idle_timeout: 20,
-  connect_timeout: 10,
-});
-
-// 使用drizzle ORM包裝postgres客戶端
-export const db = drizzle(queryClient, { schema });
+// 使用 neon-http 客戶端
+const sql = neon(process.env.DATABASE_URL);
+export const db = drizzle(sql, { schema });
 
 // 初始化數據庫表和基礎數據
 export async function initializeDatabase() {
   try {
     console.log('Testing database connection...');
-    const result = await queryClient`SELECT NOW()`;
+    const result = await sql`SELECT NOW()`;
     console.log('Database connection successful:', result[0].now);
 
     console.log('Checking for existing tool usage stats...');
@@ -70,22 +61,21 @@ export async function initializeDatabase() {
   }
 }
 
-// 檢查數據庫連接
-export async function checkDatabaseConnection() {
-  try {
-    console.log('Testing database connection...');
-    const result = await queryClient`SELECT NOW()`;
-    console.log('Database connection successful:', result[0].now);
-    return true;
-  } catch (error) {
-    console.error('Database connection failed:', error);
-    if (error instanceof Error) {
-      console.error('Connection error details:', {
-        message: error.message,
-        stack: error.stack,
-        name: error.name
-      });
+// 添加重試機制的數據庫連接檢查
+export async function checkDatabaseConnection(retries = 3, delay = 2000) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      console.log(`Testing database connection (attempt ${i + 1}/${retries})...`);
+      const result = await sql`SELECT NOW()`;
+      console.log('Database connection successful:', result[0].now);
+      return true;
+    } catch (error) {
+      console.error(`Database connection attempt ${i + 1} failed:`, error);
+      if (i < retries - 1) {
+        console.log(`Retrying in ${delay}ms...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
     }
-    return false;
   }
+  return false;
 }
