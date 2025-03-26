@@ -1,0 +1,125 @@
+/* RankingTutorial 自定義樣式 */
+
+.ranking-tutorial-popover {
+  --driver-popover-bg: rgba(255, 255, 255, 0.95);
+  --driver-popover-text: #333;
+  --driver-stage-border-radius: 12px;
+  --driver-z-index: 1000;
+  
+  border-radius: 12px !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2) !important;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(100, 100, 100, 0.1) !important;
+}
+
+.ranking-tutorial-popover .driver-popover-title {
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  padding-bottom: 0.5rem !important;
+  border-bottom: 1px solid rgba(100, 100, 100, 0.15) !important;
+  color: var(--primary) !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ranking-tutorial-popover .driver-popover-description {
+  font-size: 0.95rem !important;
+  line-height: 1.6 !important;
+  padding: 1rem 0 !important;
+  color: #555 !important;
+}
+
+.ranking-tutorial-popover .driver-popover-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-top: 1px solid rgba(100, 100, 100, 0.15) !important;
+  padding-top: 0.75rem !important;
+}
+
+.ranking-tutorial-popover .driver-popover-prev-btn,
+.ranking-tutorial-popover .driver-popover-next-btn,
+.ranking-tutorial-popover .driver-popover-done-btn {
+  padding: 0.4rem 1rem !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s !important;
+  font-size: 0.9rem !important;
+}
+
+.ranking-tutorial-popover .driver-popover-next-btn,
+.ranking-tutorial-popover .driver-popover-done-btn {
+  background-color: var(--primary) !important;
+  color: white !important;
+}
+
+.ranking-tutorial-popover .driver-popover-next-btn:hover,
+.ranking-tutorial-popover .driver-popover-done-btn:hover {
+  opacity: 0.9 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.ranking-tutorial-popover .driver-popover-prev-btn {
+  color: #666 !important;
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  margin-right: 0.5rem !important;
+}
+
+.ranking-tutorial-popover .driver-popover-prev-btn:hover {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.ranking-tutorial-popover .driver-popover-progress-text {
+  color: #888 !important;
+  font-size: 0.85rem !important;
+  margin-right: auto !important;
+}
+
+.driver-active-element {
+  animation: pulse 1.5s infinite alternate !important;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0px rgba(var(--primary-rgb), 0.2);
+  }
+  100% {
+    box-shadow: 0 0 0 10px rgba(var(--primary-rgb), 0);
+  }
+}
+
+/* 深色模式適應 */
+@media (prefers-color-scheme: dark) {
+  .ranking-tutorial-popover {
+    --driver-popover-bg: rgba(30, 30, 35, 0.95);
+    --driver-popover-text: #e0e0e0;
+  }
+
+  .ranking-tutorial-popover .driver-popover-title {
+    color: var(--primary) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .ranking-tutorial-popover .driver-popover-description {
+    color: #bbb !important;
+  }
+
+  .ranking-tutorial-popover .driver-popover-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .ranking-tutorial-popover .driver-popover-prev-btn {
+    color: #ddd !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .ranking-tutorial-popover .driver-popover-prev-btn:hover {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+  }
+
+  .ranking-tutorial-popover .driver-popover-progress-text {
+    color: #999 !important;
+  }
+}

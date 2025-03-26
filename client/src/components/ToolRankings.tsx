@@ -408,7 +408,7 @@ export function ToolRankings() {
       <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent opacity-50 pointer-events-none z-0"></div>
       <CardHeader className="relative z-10">
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2" id="rankings-title">
             <BarChart className="w-5 h-5" />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 font-bold">
               工具使用排行榜
@@ -449,6 +449,7 @@ export function ToolRankings() {
                 custom={index}
                 whileHover="hover"
                 onClick={() => handleItemClick(tool)}
+                id={index === 0 ? "top-tool" : (index < 5 ? "interaction-area" : undefined)}
                 className={`
                   flex items-center space-x-4 p-4 rounded-lg 
                   transition-all duration-300 cursor-pointer
@@ -494,7 +495,9 @@ export function ToolRankings() {
                         <path d="M7 17l9.2-9.2M17 17V7H7"/>
                       </svg>
                     </p>
-                    {getRankChangeIndicator(ranking.change)}
+                    <div id={index === 0 ? "ranking-changes" : undefined}>
+                      {getRankChangeIndicator(ranking.change)}
+                    </div>
                   </div>
                   
                   <p className="text-sm text-muted-foreground truncate flex items-center">
@@ -506,7 +509,7 @@ export function ToolRankings() {
                   <span className="text-xs text-primary/70 italic mt-1 block font-light">點擊開啟新視窗</span>
                 </div>
 
-                <Badge variant={isTop ? "secondary" : "outline"} className="ml-2 shadow-sm">
+                <Badge variant={isTop ? "secondary" : "outline"} className="ml-2 shadow-sm" id={index === 0 ? "usage-stats" : undefined}>
                   <Sparkles className="w-4 h-4 mr-1" />
                   <span className="font-mono">{ranking.totalClicks}</span>
                   <span className="ml-1 text-xs">次使用</span>
