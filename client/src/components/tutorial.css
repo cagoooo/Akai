@@ -12,6 +12,7 @@
   border: 3px solid #4338ca !important; /* 深紫色邊框 */
   overflow: hidden !important;
   max-width: 400px !important;
+  background-color: #ffffff !important; /* 確保背景為純白色 */
 }
 
 .ranking-tutorial-popover .driver-popover-title {
@@ -120,13 +121,14 @@
   }
 
   .ranking-tutorial-popover .driver-popover-description {
-    color: #ffffff !important; /* 白色文字 */
+    color: #000000 !important; /* 黑色文字 */
     font-weight: 700 !important; /* 加粗 */
-    text-shadow: 0 0 2px rgba(0,0,0,0.5) !important; /* 添加文字陰影提高可讀性 */
-    background-color: rgba(0,0,0,0.2) !important; /* 稍微深色背景增強對比 */
+    text-shadow: 0 0 1px rgba(0,0,0,0.2) !important; /* 添加文字陰影提高可讀性 */
+    background-color: rgba(255,255,255,0.9) !important; /* 亮色背景增強對比 */
     border-radius: 8px !important;
     padding: 1rem 1.2rem !important;
     margin: 0 0.5rem !important;
+    border: 1px solid rgba(0,0,0,0.1) !important;
   }
 
   .ranking-tutorial-popover .driver-popover-footer {
