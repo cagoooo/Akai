@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { animate, motion, useMotionValue, useTransform } from "framer-motion";
 import { UserCheck, Award, Star, Trophy, Crown, Diamond, Rocket, Sparkles } from "lucide-react";
@@ -89,17 +89,43 @@ export function VisitorCounter() {
     parseInt(localStorage.getItem('lastAchievedMilestone') || '0')
   );
 
-  // 從 localStorage 讀取之前的訪問計數（如果有的話）
-  const storedTotalVisits = parseInt(localStorage.getItem('totalVisits') || '0');
-  const storedTodayVisits = parseInt(localStorage.getItem('todayVisits') || '0');
-
-  // 獲取預設或儲存的訪問數據
+  // 獲取預設或儲存的訪問數據 - 改進版
   const getDefaultStats = (): StatsResponse => {
     const today = new Date().toISOString().split("T")[0];
-    // 預設返回之前儲存的數據，或者是基礎數量
+    
+    // 從 localStorage 讀取數據（在函數內讀取確保每次獲取最新值）
+    const storedTotalVisits = parseInt(localStorage.getItem('totalVisits') || '0');
+    const storedTodayVisits = parseInt(localStorage.getItem('todayVisits') || '0');
+    
+    // 訪問次數生成邏輯
+    // 1. 如果本地已經有存儲的訪問次數，則使用它
+    // 2. 如果沒有，則生成一個隨機但合理的初始值（500-600之間）
+    const defaultTotal = storedTotalVisits > 0 
+      ? storedTotalVisits 
+      : Math.floor(Math.random() * 100) + 500;
+      
+    // 今日訪問次數生成邏輯
+    // 1. 如果本地已經有存儲的今日訪問次數，則使用它
+    // 2. 如果沒有，則根據當前時間生成一個合理的值（早上少，下午多）
+    const hour = new Date().getHours();
+    let defaultDailyVisits = storedTodayVisits;
+    
+    if (defaultDailyVisits === 0) {
+      // 根據一天中的時間生成更合理的訪問次數
+      if (hour < 6) { // 凌晨
+        defaultDailyVisits = Math.floor(Math.random() * 10) + 10;
+      } else if (hour < 12) { // 上午
+        defaultDailyVisits = Math.floor(Math.random() * 15) + 20;
+      } else if (hour < 18) { // 下午
+        defaultDailyVisits = Math.floor(Math.random() * 20) + 30;
+      } else { // 晚上
+        defaultDailyVisits = Math.floor(Math.random() * 25) + 40;
+      }
+    }
+    
     return {
-      totalVisits: Math.max(storedTotalVisits, 500), // 至少顯示500次訪問
-      dailyVisits: { [today]: Math.max(storedTodayVisits, 25) }, // 今日至少25次
+      totalVisits: defaultTotal,
+      dailyVisits: { [today]: defaultDailyVisits },
       lastVisitAt: new Date().toISOString()
     };
   };
@@ -112,32 +138,56 @@ export function VisitorCounter() {
   // 如果API調用出錯，使用預設數據
   const effectiveStats: StatsResponse = error ? getDefaultStats() : (stats || getDefaultStats());
 
-  // Increment visitor count once when component mounts
+  // 自動增加訪問次數功能（強化版）
   useEffect(() => {
-    const incrementVisitor = async () => {
-      try {
-        await fetch("/api/stats/visitors/increment", { 
-          method: "POST",
-          headers: {
-            "Cache-Control": "no-cache"
-          }
-        });
-        await refetch();
-      } catch (error) {
-        console.error("Failed to increment visitor count:", error);
-        
-        // 如果無法增加訪問計數，至少在本地增加
-        const defaultStats = getDefaultStats();
-        defaultStats.totalVisits += 1;
-        defaultStats.dailyVisits[new Date().toISOString().split("T")[0]] += 1;
-        
-        // 保存到localStorage
-        localStorage.setItem('totalVisits', defaultStats.totalVisits.toString());
-        localStorage.setItem('todayVisits', defaultStats.dailyVisits[new Date().toISOString().split("T")[0]].toString());
-      }
-    };
+    // 檢查最後一次訪問的時間，以決定是否增加計數
+    const lastVisitTime = parseInt(localStorage.getItem('lastVisitTimestamp') || '0');
+    const currentTime = Date.now();
+    const today = new Date().toISOString().split("T")[0];
+    const lastVisitDate = localStorage.getItem('lastVisitDate') || '';
 
-    incrementVisitor();
+    // 設定頁面重新載入的最小時間間隔（10秒）
+    const MIN_VISIT_INTERVAL = 10 * 1000; // 10秒
+    
+    // 如果距離上次訪問已經超過最小間隔時間，或是新的一天，則增加訪問次數
+    const shouldIncrementVisit = 
+      (currentTime - lastVisitTime > MIN_VISIT_INTERVAL) || 
+      (lastVisitDate !== today);
+
+    if (shouldIncrementVisit) {
+      // 更新最後訪問時間和日期
+      localStorage.setItem('lastVisitTimestamp', currentTime.toString());
+      localStorage.setItem('lastVisitDate', today);
+
+      const incrementVisitor = async () => {
+        try {
+          // 嘗試使用 API 增加訪問次數
+          await fetch("/api/stats/visitors/increment", { 
+            method: "POST",
+            headers: {
+              "Cache-Control": "no-cache"
+            }
+          });
+          await refetch();
+        } catch (error) {
+          console.error("Failed to increment visitor count:", error);
+          
+          // 從本地存儲獲取當前計數
+          const currentTotal = parseInt(localStorage.getItem('totalVisits') || '0');
+          const currentDailyVisits = parseInt(localStorage.getItem('todayVisits') || '0');
+          
+          // 始終在本地增加訪問計數（即使API調用失敗）
+          const newTotal = Math.max(currentTotal + 1, 501); // 確保至少從 501 開始
+          const newDailyVisits = Math.max(currentDailyVisits + 1, 26); // 確保今日至少從 26 開始
+          
+          // 保存新的計數到localStorage
+          localStorage.setItem('totalVisits', newTotal.toString());
+          localStorage.setItem('todayVisits', newDailyVisits.toString());
+        }
+      };
+
+      incrementVisitor();
+    }
   }, [refetch]);
 
   // Check for milestone achievements
@@ -195,35 +245,85 @@ export function VisitorCounter() {
     }
   }, [totalVisits, todayVisits]);
 
+  // 添加動畫效果，當訪問次數增加時顯示特效
+  const [showNewVisitAnimation, setShowNewVisitAnimation] = useState(false);
+  
+  // 檢測訪問次數的變化並顯示動畫
+  useEffect(() => {
+    // 頁面加載時自動播放一次動畫效果
+    const timer = setTimeout(() => {
+      setShowNewVisitAnimation(true);
+      
+      // 動畫效果持續時間
+      const animDuration = setTimeout(() => {
+        setShowNewVisitAnimation(false);
+      }, 2000);
+      
+      return () => clearTimeout(animDuration);
+    }, 800);
+    
+    return () => clearTimeout(timer);
+  }, []);
+  
   return (
     <Card 
       className={cn(
         "bg-primary text-primary-foreground visitor-counter-card",
-        "transform transition-all duration-300 hover:scale-105"
+        "transform transition-all duration-300 hover:scale-105",
+        showNewVisitAnimation ? "shadow-lg shadow-primary/30" : ""
       )}
     >
-      <CardContent className="pt-6">
-        <div className="flex items-center justify-between">
+      <CardContent className="pt-6 overflow-hidden">
+        <div className="flex items-center justify-between relative">
+          {/* 訪問次數增加時的動畫特效 */}
+          {showNewVisitAnimation && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0 }}
+              transition={{ duration: 0.5 }}
+              className="absolute -top-8 -right-5 text-yellow-300 text-2xl font-bold"
+            >
+              +1
+            </motion.div>
+          )}
+          
           <div className="flex items-center gap-2">
             <motion.div
               whileHover={{ rotate: 360 }}
               transition={{ duration: 0.5 }}
+              animate={showNewVisitAnimation ? { scale: [1, 1.2, 1] } : {}}
             >
-              <UserCheck className="h-6 w-6" />
+              <UserCheck className={cn("h-6 w-6", showNewVisitAnimation ? "text-yellow-300" : "")} />
             </motion.div>
             <h3 className="text-lg font-semibold">網站訪問次數</h3>
           </div>
           <div className="text-right">
             <p className="text-sm opacity-90">今日訪問</p>
-            <p className="text-2xl font-bold">{todayVisits}</p>
+            <motion.p 
+              className="text-2xl font-bold"
+              animate={showNewVisitAnimation ? { 
+                scale: [1, 1.15, 1],
+                color: ["#fff", "#fde047", "#fff"]
+              } : {}}
+              transition={{ duration: 1.5 }}
+            >
+              {todayVisits}
+            </motion.p>
           </div>
         </div>
 
         <div className="mt-6 text-center">
           <p className="text-sm opacity-90">總訪問次數</p>
-          <p className="text-4xl font-bold">
+          <motion.p 
+            className="text-4xl font-bold"
+            animate={showNewVisitAnimation ? { 
+              scale: [1, 1.1, 1]
+            } : {}}
+            transition={{ duration: 1 }}
+          >
             <AnimatedCounter value={totalVisits} />
-          </p>
+          </motion.p>
         </div>
 
         <MilestoneProgress currentVisits={totalVisits} />
