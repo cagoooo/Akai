@@ -58,11 +58,26 @@ export function ToolRankings() {
   const [isMuted, setIsMuted] = useState(soundManager.isSoundMuted());
   const { trackToolUsage } = useToolTracking();
 
+  // 從本地存儲中獲取排行榜數據
+  const getLocalRankings = (): ToolRanking[] => {
+    try {
+      const localData = localStorage.getItem('localToolsRankings');
+      if (localData) {
+        return JSON.parse(localData);
+      }
+    } catch (e) {
+      console.error('無法讀取本地排行榜數據:', e);
+    }
+    return [];
+  };
+
   const { data: rankings = [], isLoading, error } = useQuery<ToolRanking[]>({
     queryKey: ['/api/tools/rankings'],
     retry: 3,
     refetchOnWindowFocus: false,
-    staleTime: 30000 // 30 seconds
+    staleTime: 30000, // 30 seconds
+    // 如果API請求失敗，使用本地存儲的數據
+    initialData: getLocalRankings()
   });
 
   const toggleMute = () => {
@@ -127,27 +142,43 @@ export function ToolRankings() {
     );
   }
 
-  // Error state - 顯示預設數據而不是錯誤訊息
+  // Error state - 嘗試使用本地存儲的數據
   if (error) {
     console.error('Rankings error:', error);
     
-    // 生成預設排行榜數據
-    const defaultRankings: ToolRanking[] = tools
-      .slice(0, 8)
-      .map((tool, index) => ({
-        toolId: tool.id,
-        totalClicks: Math.floor(Math.random() * 100) + 50 - (index * 5), // 創建一個遞減的次數
-        lastUsedAt: new Date().toISOString(),
-        categoryClicks: {
-          communication: Math.floor(Math.random() * 20),
-          teaching: Math.floor(Math.random() * 20),
-          language: Math.floor(Math.random() * 20),
-          reading: Math.floor(Math.random() * 20),
-          utilities: Math.floor(Math.random() * 20),
-          games: Math.floor(Math.random() * 20)
-        }
-      }))
-      .sort((a, b) => b.totalClicks - a.totalClicks);
+    // 從本地存儲讀取數據
+    let localRankings = getLocalRankings();
+    
+    // 如果本地也沒有數據，才生成默認數據
+    if (!localRankings || localRankings.length === 0) {
+      const defaultRankings = tools
+        .slice(0, 8)
+        .map((tool, index) => ({
+          toolId: tool.id,
+          totalClicks: Math.max(1, 20 - index * 2), // 起始點擊數較合理
+          lastUsedAt: new Date().toISOString(),
+          categoryClicks: {
+            communication: 0,
+            teaching: 0,
+            language: 0,
+            reading: 0,
+            utilities: 0,
+            games: 0
+          }
+        }));
+      
+      // 保存到本地存儲
+      try {
+        localStorage.setItem('localToolsRankings', JSON.stringify(defaultRankings));
+      } catch (e) {
+        console.error('無法保存預設排行榜到本地存儲:', e);
+      }
+      
+      localRankings = defaultRankings;
+    }
+    
+    // 排序確保展示正確的排行
+    const defaultRankings = [...localRankings].sort((a, b) => b.totalClicks - a.totalClicks);
       
     // 使用默認數據渲染
     return (
