@@ -37,19 +37,6 @@ export function Home() {
             <div data-tour="theme-toggle">
               <ThemeToggle />
             </div>
-            <Button
-              variant="outline"
-              onClick={() => {
-                console.log("Starting site tour");
-                startTour();
-              }}
-              className="text-sm sm:text-base gap-2"
-              aria-label="開始網站導覽"
-              data-tour="start-tour"
-            >
-              <HelpCircle className="h-4 w-4" />
-              網站導覽
-            </Button>
           </div>
         </header>
 
@@ -71,9 +58,6 @@ export function Home() {
             <section className="mb-8 p-4 rounded-lg bg-green-50 dark:bg-green-950/50">
               <VisitorCounter />
             </section>
-
-            {/* 表情符號故事創作 - 作為虛擬區域，用於導覽 */}
-            <div className="hidden" data-tour="emoji-storytelling"></div>
 
             {/* 簡介文字區域 - 灰色系背景 */}
             <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mb-8 sm:mb-12 p-4 rounded-lg bg-gray-50 dark:bg-gray-950/50">

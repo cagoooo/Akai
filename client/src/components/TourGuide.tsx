@@ -155,15 +155,6 @@ export function TourGuide({ onComplete }: TourGuideProps) {
           }
         },
         {
-          element: '[data-tour="emoji-storytelling"]',
-          popover: {
-            title: "表情符號故事創作 📖",
-            description: "這是一個創新的表情符號故事創作工具！您可以輕鬆添加各種表情符號並編寫故事文字，激發學生的創造力和表達能力。完成後還可以分享您的作品！",
-            side: "left",
-            align: 'start',
-          }
-        },
-        {
           element: '[data-tour="theme-toggle"]',
           popover: {
             title: "主題切換 🎨",
