@@ -47,7 +47,7 @@ const rankAnimationVariants = {
   }
 };
 
-const rankColors = {
+const rankColors: Record<string | number, string> = {
   0: "from-yellow-50/80 via-yellow-100/50 to-yellow-200/30 dark:from-yellow-500/20 dark:to-yellow-600/20 border-yellow-200/50",
   1: "from-gray-50/80 via-gray-100/50 to-gray-200/30 dark:from-gray-500/20 dark:to-gray-600/20 border-gray-200/50",
   2: "from-amber-50/80 via-amber-100/50 to-amber-200/30 dark:from-amber-500/20 dark:to-amber-600/20 border-amber-200/50",
