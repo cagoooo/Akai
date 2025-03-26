@@ -19,6 +19,12 @@ interface ToolRanking {
   categoryClicks: Record<string, number>;
 }
 
+// 定義擴展的類型
+type RankingWithChange = ToolRanking & {
+  change: number;
+  prevIndex: number;
+};
+
 // 排名動畫變體 - 增強動態感
 const rankAnimationVariants = {
   hidden: { 
@@ -80,6 +86,9 @@ const rankColors: Record<string | number, string> = {
 export function ToolRankings() {
   const [isMuted, setIsMuted] = useState(soundManager.isSoundMuted());
   const { trackToolUsage } = useToolTracking();
+  
+  // 保存前一次的排名數據用於比較
+  const [prevRankings, setPrevRankings] = useState<Record<number, number>>({});
 
   // 從本地存儲中獲取排行榜數據
   const getLocalRankings = (): ToolRanking[] => {
@@ -102,6 +111,28 @@ export function ToolRankings() {
     // 如果API請求失敗，使用本地存儲的數據
     initialData: getLocalRankings()
   });
+
+  // 生成排名變動數據
+  const rankingsWithChange = useMemo<RankingWithChange[]>(() => {
+    const result = rankings.map((ranking, index) => {
+      const prevIndex = prevRankings[ranking.toolId] !== undefined ? prevRankings[ranking.toolId] : index;
+      const change = prevIndex - index; // 正數表示上升，負數表示下降
+      return { ...ranking, change, prevIndex };
+    });
+    
+    return result;
+  }, [rankings, prevRankings]);
+  
+  // 使用 useEffect 來更新前一次的排名，避免無限循環
+  useEffect(() => {
+    if (rankings.length > 0) {
+      const newPrevRankings: Record<number, number> = {};
+      rankings.forEach((r, i) => {
+        newPrevRankings[r.toolId] = i;
+      });
+      setPrevRankings(newPrevRankings);
+    }
+  }, [rankings]);
 
   const toggleMute = () => {
     const newMutedState = !isMuted;
@@ -138,6 +169,58 @@ export function ToolRankings() {
         console.error('二次嘗試打開 URL 失敗:', e);
       }
     }
+  };
+
+  // 為排名項目添加變動指示
+  const getRankChangeIndicator = (change: number) => {
+    if (change > 0) {
+      return (
+        <motion.div
+          initial={{ y: 10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="flex items-center text-green-500 ml-2 font-medium text-xs"
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            width="14" 
+            height="14" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+          >
+            <path d="m18 15-6-6-6 6"/>
+          </svg>
+          <span>{change}</span>
+        </motion.div>
+      );
+    } else if (change < 0) {
+      return (
+        <motion.div
+          initial={{ y: -10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="flex items-center text-red-500 ml-2 font-medium text-xs"
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            width="14" 
+            height="14" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+          >
+            <path d="m6 9 6 6 6-6"/>
+          </svg>
+          <span>{Math.abs(change)}</span>
+        </motion.div>
+      );
+    }
+    return null;
   };
 
   // Loading state
@@ -319,90 +402,6 @@ export function ToolRankings() {
       </Card>
     );
   }
-
-  // 保存前一次的排名數據用於比較
-  const [prevRankings, setPrevRankings] = useState<Record<number, number>>({});
-  
-  // 定義擴展的類型
-  type RankingWithChange = ToolRanking & {
-    change: number;
-    prevIndex: number;
-  };
-
-  // 生成排名變動數據
-  const rankingsWithChange = useMemo<RankingWithChange[]>(() => {
-    const result = rankings.map((ranking, index) => {
-      const prevIndex = prevRankings[ranking.toolId] !== undefined ? prevRankings[ranking.toolId] : index;
-      const change = prevIndex - index; // 正數表示上升，負數表示下降
-      return { ...ranking, change, prevIndex };
-    });
-    
-    // 在一個 useEffect 中更新前一次的排名，防止在渲染過程中更新狀態
-    return result;
-  }, [rankings, prevRankings]);
-  
-  // 使用 useEffect 來更新前一次的排名，避免無限循環
-  useEffect(() => {
-    if (rankings.length > 0) {
-      const newPrevRankings: Record<number, number> = {};
-      rankings.forEach((r, i) => {
-        newPrevRankings[r.toolId] = i;
-      });
-      setPrevRankings(newPrevRankings);
-    }
-  }, [rankings]);
-
-  // 為排名項目添加變動指示
-  const getRankChangeIndicator = (change: number) => {
-    if (change > 0) {
-      return (
-        <motion.div
-          initial={{ y: 10, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          className="flex items-center text-green-500 ml-2 font-medium text-xs"
-        >
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            width="14" 
-            height="14" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-          >
-            <path d="m18 15-6-6-6 6"/>
-          </svg>
-          <span>{change}</span>
-        </motion.div>
-      );
-    } else if (change < 0) {
-      return (
-        <motion.div
-          initial={{ y: -10, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          className="flex items-center text-red-500 ml-2 font-medium text-xs"
-        >
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            width="14" 
-            height="14" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-          >
-            <path d="m6 9 6 6 6-6"/>
-          </svg>
-          <span>{Math.abs(change)}</span>
-        </motion.div>
-      );
-    }
-    return null;
-  };
 
   return (
     <Card className="overflow-hidden relative">
