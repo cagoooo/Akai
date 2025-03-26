@@ -72,6 +72,9 @@ export function Home() {
               <VisitorCounter />
             </section>
 
+            {/* 表情符號故事創作 - 作為虛擬區域，用於導覽 */}
+            <div className="hidden" data-tour="emoji-storytelling"></div>
+
             {/* 簡介文字區域 - 灰色系背景 */}
             <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mb-8 sm:mb-12 p-4 rounded-lg bg-gray-50 dark:bg-gray-950/50">
               探索阿凱老師開發的教育工具，為您的教學增添創新的可能
