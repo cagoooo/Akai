@@ -5,7 +5,7 @@ import { BarChart, Trophy, Medal, Crown, Star, Sparkles, Volume2, VolumeX } from
 import { tools } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { soundManager } from "@/lib/soundManager";
 import { Button } from "@/components/ui/button";
 import { RankingTutorial } from "./RankingTutorial";
@@ -19,39 +19,62 @@ interface ToolRanking {
   categoryClicks: Record<string, number>;
 }
 
-// 排名動畫變體
+// 排名動畫變體 - 增強動態感
 const rankAnimationVariants = {
   hidden: { 
     opacity: 0, 
     scale: 0.8,
-    y: 20 
+    y: 40,
+    rotateX: -10
   },
   visible: (custom: number) => ({
     opacity: 1,
     scale: 1,
     y: 0,
+    rotateX: 0,
     transition: {
       type: "spring",
       stiffness: 500,
-      damping: 25,
-      delay: custom * 0.1
+      damping: 20,
+      delay: custom * 0.15,
+      duration: 0.6
     }
   }),
   hover: {
-    scale: 1.05,
+    scale: 1.03,
+    y: -5,
+    boxShadow: "0 10px 20px rgba(0, 0, 0, 0.1)",
     transition: {
       type: "spring",
       stiffness: 400,
-      damping: 10
+      damping: 8
     }
-  }
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.9,
+    y: -20,
+    transition: {
+      duration: 0.3
+    }
+  },
+  change: (isUp: boolean) => ({
+    backgroundColor: isUp ? ["#4ade80", "transparent"] : ["#ef4444", "transparent"],
+    transition: { duration: 1.5 }
+  })
 };
 
+// 更加豐富多彩的排名顏色
 const rankColors: Record<string | number, string> = {
-  0: "from-yellow-50/80 via-yellow-100/50 to-yellow-200/30 dark:from-yellow-500/20 dark:to-yellow-600/20 border-yellow-200/50",
-  1: "from-gray-50/80 via-gray-100/50 to-gray-200/30 dark:from-gray-500/20 dark:to-gray-600/20 border-gray-200/50",
-  2: "from-amber-50/80 via-amber-100/50 to-amber-200/30 dark:from-amber-500/20 dark:to-amber-600/20 border-amber-200/50",
-  default: "from-slate-50/50 via-white to-slate-50/50 hover:from-slate-100/50 hover:to-slate-100/50"
+  0: "from-yellow-400/30 via-amber-300/40 to-yellow-200/50 dark:from-yellow-500/40 dark:via-amber-400/30 dark:to-yellow-300/20 border-l-4 border-yellow-400 shadow-[0_0_15px_rgba(234,179,8,0.2)]",
+  1: "from-slate-300/30 via-gray-200/40 to-slate-100/50 dark:from-slate-600/40 dark:via-gray-500/30 dark:to-slate-400/20 border-l-4 border-slate-400 shadow-[0_0_15px_rgba(148,163,184,0.2)]",
+  2: "from-amber-400/30 via-orange-300/40 to-amber-200/50 dark:from-amber-600/40 dark:via-orange-500/30 dark:to-amber-400/20 border-l-4 border-amber-500 shadow-[0_0_15px_rgba(217,119,6,0.2)]",
+  3: "from-blue-400/20 via-blue-300/30 to-blue-200/40 dark:from-blue-600/30 dark:via-blue-500/20 dark:to-blue-400/10 border-l-4 border-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.1)]",
+  4: "from-green-400/20 via-green-300/30 to-green-200/40 dark:from-green-600/30 dark:via-green-500/20 dark:to-green-400/10 border-l-4 border-green-400 shadow-[0_0_10px_rgba(34,197,94,0.1)]",
+  5: "from-indigo-400/20 via-indigo-300/30 to-indigo-200/40 dark:from-indigo-600/30 dark:via-indigo-500/20 dark:to-indigo-400/10 border-l-4 border-indigo-400 shadow-[0_0_10px_rgba(99,102,241,0.1)]",
+  6: "from-purple-400/20 via-purple-300/30 to-purple-200/40 dark:from-purple-600/30 dark:via-purple-500/20 dark:to-purple-400/10 border-l-4 border-purple-400 shadow-[0_0_10px_rgba(168,85,247,0.1)]",
+  7: "from-pink-400/20 via-pink-300/30 to-pink-200/40 dark:from-pink-600/30 dark:via-pink-500/20 dark:to-pink-400/10 border-l-4 border-pink-400 shadow-[0_0_10px_rgba(236,72,153,0.1)]",
+  default: "from-slate-200/20 via-white to-slate-100/30 hover:from-slate-200/30 hover:to-slate-100/40 border-l-4 border-slate-200"
 };
 
 export function ToolRankings() {
@@ -182,12 +205,15 @@ export function ToolRankings() {
       
     // 使用默認數據渲染
     return (
-      <Card>
-        <CardHeader>
+      <Card className="overflow-hidden relative">
+        <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent opacity-50 pointer-events-none z-0"></div>
+        <CardHeader className="relative z-10">
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
               <BarChart className="w-5 h-5" />
-              工具使用排行榜
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 font-bold">
+                工具使用排行榜
+              </span>
             </CardTitle>
             <div className="flex items-center gap-2">
               <RankingTutorial />
@@ -202,42 +228,255 @@ export function ToolRankings() {
             </div>
           </div>
         </CardHeader>
-        <CardContent>
-          <AnimatePresence>
+        
+        <CardContent className="relative z-10">
+          <AnimatePresence mode="popLayout">
             {defaultRankings.map((ranking, index) => {
               const tool = tools.find(t => t.id === ranking.toolId);
               if (!tool) return null;
 
               const isTop = index < 3;
-              const rankColor = isTop ? rankColors[index] : rankColors.default;
+              const rankColor = rankColors[index] || rankColors.default;
 
               return (
                 <motion.div
                   key={ranking.toolId}
+                  layout
+                  layoutId={`ranking-${ranking.toolId}`}
                   variants={rankAnimationVariants}
                   initial="hidden"
                   animate="visible"
-                  exit={{ opacity: 0, scale: 0.8, y: 20 }}
+                  exit="exit"
                   custom={index}
                   whileHover="hover"
                   onClick={() => handleItemClick(tool)}
                   className={`
                     flex items-center space-x-4 p-4 rounded-lg 
                     transition-all duration-300 cursor-pointer
-                    bg-gradient-to-r shadow-sm
+                    bg-gradient-to-r 
                     ${rankColor}
-                    mb-3 relative overflow-hidden
+                    mb-4 relative overflow-hidden
                     hover:shadow-lg hover:translate-x-1
+                    perspective-500 transform-gpu backdrop-blur-sm
                   `}
                 >
-                  <div className="flex-shrink-0">
-                    {index === 0 && <Trophy className="w-6 h-6 text-yellow-500" />}
-                    {index === 1 && <Medal className="w-6 h-6 text-gray-400" />}
-                    {index === 2 && <Crown className="w-6 h-6 text-amber-400" />}
-                    {index > 2 && <Star className="w-6 h-6 text-muted-foreground" />}
+                  <div className="flex-shrink-0 w-10 flex justify-center">
+                    {index === 0 && (
+                      <motion.div initial={{ scale: 0.8 }} animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, repeatDelay: 5 }}>
+                        <Trophy className="w-6 h-6 text-yellow-500 drop-shadow-md" />
+                      </motion.div>
+                    )}
+                    {index === 1 && <Medal className="w-6 h-6 text-slate-400 drop-shadow-sm" />}
+                    {index === 2 && <Crown className="w-6 h-6 text-amber-400 drop-shadow-sm" />}
+                    {index > 2 && (
+                      <div className="w-6 h-6 rounded-full bg-muted/50 flex items-center justify-center text-xs font-semibold">
+                        {index + 1}
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex-1 min-w-0">
+                    <div className="flex items-center">
+                      <p className="text-sm font-medium text-foreground truncate flex items-center">
+                        {tool.title}
+                        <svg 
+                          xmlns="http://www.w3.org/2000/svg" 
+                          width="14" 
+                          height="14" 
+                          viewBox="0 0 24 24" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          strokeWidth="2" 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round" 
+                          className="ml-2 text-primary/70 transform -rotate-45"
+                          aria-hidden="true"
+                        >
+                          <path d="M7 17l9.2-9.2M17 17V7H7"/>
+                        </svg>
+                      </p>
+                    </div>
+                    
+                    <p className="text-sm text-muted-foreground truncate flex items-center">
+                      <span className="mr-1">最後使用：</span>
+                      <time dateTime={ranking.lastUsedAt}>
+                        {new Date(ranking.lastUsedAt).toLocaleDateString()}
+                      </time>
+                    </p>
+                    <span className="text-xs text-primary/70 italic mt-1 block font-light">點擊開啟新視窗</span>
+                  </div>
+
+                  <Badge variant={isTop ? "secondary" : "outline"} className="ml-2 shadow-sm">
+                    <Sparkles className="w-4 h-4 mr-1" />
+                    <span className="font-mono">{ranking.totalClicks}</span>
+                    <span className="ml-1 text-xs">次使用</span>
+                  </Badge>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // 保存前一次的排名數據用於比較
+  const [prevRankings, setPrevRankings] = useState<Record<number, number>>({});
+  
+  // 定義擴展的類型
+  type RankingWithChange = ToolRanking & {
+    change: number;
+    prevIndex: number;
+  };
+
+  // 生成排名變動數據
+  const rankingsWithChange = useMemo<RankingWithChange[]>(() => {
+    const result = rankings.map((ranking, index) => {
+      const prevIndex = prevRankings[ranking.toolId] !== undefined ? prevRankings[ranking.toolId] : index;
+      const change = prevIndex - index; // 正數表示上升，負數表示下降
+      return { ...ranking, change, prevIndex };
+    });
+    
+    // 在一個 useEffect 中更新前一次的排名，防止在渲染過程中更新狀態
+    return result;
+  }, [rankings, prevRankings]);
+  
+  // 使用 useEffect 來更新前一次的排名，避免無限循環
+  useEffect(() => {
+    if (rankings.length > 0) {
+      const newPrevRankings: Record<number, number> = {};
+      rankings.forEach((r, i) => {
+        newPrevRankings[r.toolId] = i;
+      });
+      setPrevRankings(newPrevRankings);
+    }
+  }, [rankings]);
+
+  // 為排名項目添加變動指示
+  const getRankChangeIndicator = (change: number) => {
+    if (change > 0) {
+      return (
+        <motion.div
+          initial={{ y: 10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="flex items-center text-green-500 ml-2 font-medium text-xs"
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            width="14" 
+            height="14" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+          >
+            <path d="m18 15-6-6-6 6"/>
+          </svg>
+          <span>{change}</span>
+        </motion.div>
+      );
+    } else if (change < 0) {
+      return (
+        <motion.div
+          initial={{ y: -10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="flex items-center text-red-500 ml-2 font-medium text-xs"
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            width="14" 
+            height="14" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+          >
+            <path d="m6 9 6 6 6-6"/>
+          </svg>
+          <span>{Math.abs(change)}</span>
+        </motion.div>
+      );
+    }
+    return null;
+  };
+
+  return (
+    <Card className="overflow-hidden relative">
+      <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent opacity-50 pointer-events-none z-0"></div>
+      <CardHeader className="relative z-10">
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2">
+            <BarChart className="w-5 h-5" />
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 font-bold">
+              工具使用排行榜
+            </span>
+          </CardTitle>
+          <div className="flex items-center gap-2">
+            <RankingTutorial />
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleMute}
+              className="h-8 w-8 p-0"
+            >
+              {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+            </Button>
+          </div>
+        </div>
+      </CardHeader>
+      
+      <CardContent className="relative z-10">
+        <AnimatePresence mode="popLayout">
+          {rankingsWithChange.map((ranking, index) => {
+            const tool = tools.find(t => t.id === ranking.toolId);
+            if (!tool) return null;
+
+            const isTop = index < 3;
+            const rankColor = rankColors[index] || rankColors.default;
+
+            return (
+              <motion.div
+                key={ranking.toolId}
+                layout
+                layoutId={`ranking-${ranking.toolId}`}
+                variants={rankAnimationVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                custom={index}
+                whileHover="hover"
+                onClick={() => handleItemClick(tool)}
+                className={`
+                  flex items-center space-x-4 p-4 rounded-lg 
+                  transition-all duration-300 cursor-pointer
+                  bg-gradient-to-r 
+                  ${rankColor}
+                  mb-4 relative overflow-hidden
+                  hover:shadow-lg hover:translate-x-1
+                  perspective-500 transform-gpu backdrop-blur-sm
+                `}
+              >
+                <div className="flex-shrink-0 w-10 flex justify-center">
+                  {index === 0 && (
+                    <motion.div initial={{ scale: 0.8 }} animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, repeatDelay: 5 }}>
+                      <Trophy className="w-6 h-6 text-yellow-500 drop-shadow-md" />
+                    </motion.div>
+                  )}
+                  {index === 1 && <Medal className="w-6 h-6 text-slate-400 drop-shadow-sm" />}
+                  {index === 2 && <Crown className="w-6 h-6 text-amber-400 drop-shadow-sm" />}
+                  {index > 2 && (
+                    <div className="w-6 h-6 rounded-full bg-muted/50 flex items-center justify-center text-xs font-semibold">
+                      {index + 1}
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center">
                     <p className="text-sm font-medium text-foreground truncate flex items-center">
                       {tool.title}
                       <svg 
@@ -256,109 +495,22 @@ export function ToolRankings() {
                         <path d="M7 17l9.2-9.2M17 17V7H7"/>
                       </svg>
                     </p>
-                    <p className="text-sm text-muted-foreground truncate">
-                      最後使用：{new Date(ranking.lastUsedAt).toLocaleDateString()}
-                    </p>
-                    <span className="text-xs text-primary/70 italic mt-1 block">點擊開啟新視窗</span>
+                    {getRankChangeIndicator(ranking.change)}
                   </div>
-
-                  <Badge variant={isTop ? "secondary" : "outline"}>
-                    <Sparkles className="w-4 h-4 mr-1" />
-                    {ranking.totalClicks} 次使用
-                  </Badge>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
-            <BarChart className="w-5 h-5" />
-            工具使用排行榜
-          </CardTitle>
-          <div className="flex items-center gap-2">
-            <RankingTutorial />
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleMute}
-              className="h-8 w-8 p-0"
-            >
-              {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-            </Button>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <AnimatePresence>
-          {rankings.map((ranking, index) => {
-            const tool = tools.find(t => t.id === ranking.toolId);
-            if (!tool) return null;
-
-            const isTop = index < 3;
-            const rankColor = isTop ? rankColors[index] : rankColors.default;
-
-            return (
-              <motion.div
-                key={ranking.toolId}
-                variants={rankAnimationVariants}
-                initial="hidden"
-                animate="visible"
-                exit={{ opacity: 0, scale: 0.8, y: 20 }}
-                custom={index}
-                whileHover="hover"
-                onClick={() => handleItemClick(tool)}
-                className={`
-                  flex items-center space-x-4 p-4 rounded-lg 
-                  transition-all duration-300 cursor-pointer
-                  bg-gradient-to-r shadow-sm
-                  ${rankColor}
-                  mb-3 relative overflow-hidden
-                  hover:shadow-lg hover:translate-x-1
-                `}
-              >
-                <div className="flex-shrink-0">
-                  {index === 0 && <Trophy className="w-6 h-6 text-yellow-500" />}
-                  {index === 1 && <Medal className="w-6 h-6 text-gray-400" />}
-                  {index === 2 && <Crown className="w-6 h-6 text-amber-400" />}
-                  {index > 2 && <Star className="w-6 h-6 text-muted-foreground" />}
+                  
+                  <p className="text-sm text-muted-foreground truncate flex items-center">
+                    <span className="mr-1">最後使用：</span>
+                    <time dateTime={ranking.lastUsedAt}>
+                      {new Date(ranking.lastUsedAt).toLocaleDateString()}
+                    </time>
+                  </p>
+                  <span className="text-xs text-primary/70 italic mt-1 block font-light">點擊開啟新視窗</span>
                 </div>
 
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground truncate flex items-center">
-                    {tool.title}
-                    <svg 
-                      xmlns="http://www.w3.org/2000/svg" 
-                      width="14" 
-                      height="14" 
-                      viewBox="0 0 24 24" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      strokeWidth="2" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round" 
-                      className="ml-2 text-primary/70 transform -rotate-45"
-                      aria-hidden="true"
-                    >
-                      <path d="M7 17l9.2-9.2M17 17V7H7"/>
-                    </svg>
-                  </p>
-                  <p className="text-sm text-muted-foreground truncate">
-                    最後使用：{new Date(ranking.lastUsedAt).toLocaleDateString()}
-                  </p>
-                  <span className="text-xs text-primary/70 italic mt-1 block">點擊開啟新視窗</span>
-                </div>
-
-                <Badge variant={isTop ? "secondary" : "outline"}>
+                <Badge variant={isTop ? "secondary" : "outline"} className="ml-2 shadow-sm">
                   <Sparkles className="w-4 h-4 mr-1" />
-                  {ranking.totalClicks} 次使用
+                  <span className="font-mono">{ranking.totalClicks}</span>
+                  <span className="ml-1 text-xs">次使用</span>
                 </Badge>
               </motion.div>
             );

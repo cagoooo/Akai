@@ -2,20 +2,15 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ToolCard } from "@/components/ToolCard";
 import { TeacherIntro } from "@/components/TeacherIntro";
-import { MoodTracker } from "@/components/MoodTracker";
 import { tools } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { HelpCircle } from "lucide-react";
 import { useTour } from "@/components/TourProvider";
-import { ProgressDashboard } from "@/components/ProgressDashboard";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { DiagnosticsDashboard } from "@/components/DiagnosticsDashboard";
 import { ToolRankings } from "@/components/ToolRankings";
 import { RankingTutorial } from "@/components/RankingTutorial";
 import { VisitorCounter } from "@/components/VisitorCounter";
-import { SeoAnalyticsDashboard } from "@/components/SeoAnalyticsDashboard";
-import { ColorContrastIndicator } from "@/components/ColorContrastIndicator";
 
 export function Home() {
   const { startTour } = useTour();
@@ -113,31 +108,13 @@ export function Home() {
               )}
             </section>
 
-            {/* 其他功能區域 */}
-            <div className="space-y-4 sm:space-y-6 mb-8">
-              {/* 心情追蹤區域 - 橙色系背景 */}
-              <section data-tour="mood-tracker" className="p-4 rounded-lg bg-orange-50 dark:bg-orange-950/50">
-                <MoodTracker toolId={1} />
-              </section>
-              {/* 進度面板區域 - 青色系背景 */}
-              <section data-tour="progress-dashboard" className="p-4 rounded-lg bg-teal-50 dark:bg-teal-950/50">
-                <ProgressDashboard />
-              </section>
-              {/* 診斷面板區域 - 青藍色系背景 */}
-              <section data-tour="diagnostics" className="p-4 rounded-lg bg-cyan-50 dark:bg-cyan-950/50">
-                <DiagnosticsDashboard />
-              </section>
+            {/* 頁腳資訊 - 可選 */}
+            <div className="mt-10 border-t pt-4 text-center text-sm text-muted-foreground">
+              <p>&copy; {new Date().getFullYear()} 阿凱老師教育工具集. 版權所有.</p>
+              <p className="mt-2">
+                已優化工具體驗，專注於提供最實用的教學資源
+              </p>
             </div>
-
-            {/* SEO 分析報告區域 - 紅色系背景 */}
-            <section className="mt-8 p-4 rounded-lg bg-red-50 dark:bg-red-950/50" data-tour="seo-analytics">
-              <SeoAnalyticsDashboard />
-            </section>
-
-            {/* 色彩對比度檢測區域 - 移動到最下方 */}
-            <section className="mt-8 p-4 rounded-lg bg-slate-50 dark:bg-slate-950/50" data-tour="color-contrast">
-              <ColorContrastIndicator />
-            </section>
           </div>
         </div>
       </main>
