@@ -89,43 +89,34 @@ export function VisitorCounter() {
     parseInt(localStorage.getItem('lastAchievedMilestone') || '0')
   );
 
-  // 獲取預設或儲存的訪問數據 - 改進版
+  // 生成初始訪問數據 - 優化版
   const getDefaultStats = (): StatsResponse => {
     const today = new Date().toISOString().split("T")[0];
+
+    // 訪問次數生成邏輯 - 此函數不再使用localStorage
+    // 而是生成合理的預設值，本地狀態管理放在組件中處理
     
-    // 從 localStorage 讀取數據（在函數內讀取確保每次獲取最新值）
-    const storedTotalVisits = parseInt(localStorage.getItem('totalVisits') || '0');
-    const storedTodayVisits = parseInt(localStorage.getItem('todayVisits') || '0');
-    
-    // 訪問次數生成邏輯
-    // 1. 如果本地已經有存儲的訪問次數，則使用它
-    // 2. 如果沒有，則生成一個隨機但合理的初始值（500-600之間）
-    const defaultTotal = storedTotalVisits > 0 
-      ? storedTotalVisits 
-      : Math.floor(Math.random() * 100) + 500;
+    // 總訪問次數基礎值：500-600之間
+    const baseTotal = Math.floor(Math.random() * 100) + 500;
       
-    // 今日訪問次數生成邏輯
-    // 1. 如果本地已經有存儲的今日訪問次數，則使用它
-    // 2. 如果沒有，則根據當前時間生成一個合理的值（早上少，下午多）
+    // 今日訪問次數生成邏輯，根據當前時間生成合理的值
     const hour = new Date().getHours();
-    let defaultDailyVisits = storedTodayVisits;
+    let baseDailyVisits;
     
-    if (defaultDailyVisits === 0) {
-      // 根據一天中的時間生成更合理的訪問次數
-      if (hour < 6) { // 凌晨
-        defaultDailyVisits = Math.floor(Math.random() * 10) + 10;
-      } else if (hour < 12) { // 上午
-        defaultDailyVisits = Math.floor(Math.random() * 15) + 20;
-      } else if (hour < 18) { // 下午
-        defaultDailyVisits = Math.floor(Math.random() * 20) + 30;
-      } else { // 晚上
-        defaultDailyVisits = Math.floor(Math.random() * 25) + 40;
-      }
+    // 根據一天中的時間生成更合理的訪問次數
+    if (hour < 6) { // 凌晨
+      baseDailyVisits = Math.floor(Math.random() * 10) + 10;
+    } else if (hour < 12) { // 上午
+      baseDailyVisits = Math.floor(Math.random() * 15) + 20;
+    } else if (hour < 18) { // 下午
+      baseDailyVisits = Math.floor(Math.random() * 20) + 30;
+    } else { // 晚上
+      baseDailyVisits = Math.floor(Math.random() * 25) + 40;
     }
     
     return {
-      totalVisits: defaultTotal,
-      dailyVisits: { [today]: defaultDailyVisits },
+      totalVisits: baseTotal,
+      dailyVisits: { [today]: baseDailyVisits },
       lastVisitAt: new Date().toISOString()
     };
   };
@@ -138,6 +129,17 @@ export function VisitorCounter() {
   // 如果API調用出錯，使用預設數據
   const effectiveStats: StatsResponse = error ? getDefaultStats() : (stats || getDefaultStats());
 
+  // 訪問計數本地狀態
+  const [localTotalVisits, setLocalTotalVisits] = useState(() => {
+    // 從localStorage獲取初始值
+    return parseInt(localStorage.getItem('totalVisits') || '0');
+  });
+  
+  const [localTodayVisits, setLocalTodayVisits] = useState(() => {
+    // 從localStorage獲取初始值
+    return parseInt(localStorage.getItem('todayVisits') || '0');
+  });
+
   // 自動增加訪問次數功能（強化版）
   useEffect(() => {
     // 檢查最後一次訪問的時間，以決定是否增加計數
@@ -146,8 +148,8 @@ export function VisitorCounter() {
     const today = new Date().toISOString().split("T")[0];
     const lastVisitDate = localStorage.getItem('lastVisitDate') || '';
 
-    // 設定頁面重新載入的最小時間間隔（10秒）
-    const MIN_VISIT_INTERVAL = 10 * 1000; // 10秒
+    // 設定頁面重新載入的最小時間間隔（5秒）
+    const MIN_VISIT_INTERVAL = 5 * 1000; // 5秒
     
     // 如果距離上次訪問已經超過最小間隔時間，或是新的一天，則增加訪問次數
     const shouldIncrementVisit = 
@@ -159,9 +161,23 @@ export function VisitorCounter() {
       localStorage.setItem('lastVisitTimestamp', currentTime.toString());
       localStorage.setItem('lastVisitDate', today);
 
+      // 立即更新本地狀態，確保UI立即反映變化
+      const newTotal = Math.max(localTotalVisits + 1, 501);
+      const newDailyVisits = Math.max(localTodayVisits + 1, 26);
+      
+      // 更新狀態和localStorage
+      setLocalTotalVisits(newTotal);
+      setLocalTodayVisits(newDailyVisits);
+      localStorage.setItem('totalVisits', newTotal.toString());
+      localStorage.setItem('todayVisits', newDailyVisits.toString());
+      
+      // 觸發動畫效果
+      setShowNewVisitAnimation(true);
+      setTimeout(() => setShowNewVisitAnimation(false), 2000);
+
+      // 嘗試使用API更新（但不依賴它來更新UI）
       const incrementVisitor = async () => {
         try {
-          // 嘗試使用 API 增加訪問次數
           await fetch("/api/stats/visitors/increment", { 
             method: "POST",
             headers: {
@@ -170,25 +186,14 @@ export function VisitorCounter() {
           });
           await refetch();
         } catch (error) {
-          console.error("Failed to increment visitor count:", error);
-          
-          // 從本地存儲獲取當前計數
-          const currentTotal = parseInt(localStorage.getItem('totalVisits') || '0');
-          const currentDailyVisits = parseInt(localStorage.getItem('todayVisits') || '0');
-          
-          // 始終在本地增加訪問計數（即使API調用失敗）
-          const newTotal = Math.max(currentTotal + 1, 501); // 確保至少從 501 開始
-          const newDailyVisits = Math.max(currentDailyVisits + 1, 26); // 確保今日至少從 26 開始
-          
-          // 保存新的計數到localStorage
-          localStorage.setItem('totalVisits', newTotal.toString());
-          localStorage.setItem('todayVisits', newDailyVisits.toString());
+          console.error("Failed to increment visitor count via API:", error);
+          // API失敗時已經使用了本地狀態，所以這裡不需要額外處理
         }
       };
 
       incrementVisitor();
     }
-  }, [refetch]);
+  }, [refetch, localTotalVisits, localTodayVisits]);
 
   // Check for milestone achievements
   useEffect(() => {
@@ -229,21 +234,36 @@ export function VisitorCounter() {
     }
   }, [effectiveStats?.totalVisits, toast]);
 
-  // 預設或從API獲取的訪問數據
-  const totalVisits = effectiveStats?.totalVisits || getDefaultStats().totalVisits;
-  const todayVisits = effectiveStats?.dailyVisits?.[
-    new Date().toISOString().split("T")[0]
-  ] || getDefaultStats().dailyVisits[new Date().toISOString().split("T")[0]] || 0;
+  // 獲取初始默認值一次性以避免每次重新計算
+  const defaultStats = useRef(getDefaultStats()).current;
   
-  // 將當前的訪問數據儲存到localStorage
+  // 使用本地狀態優先，然後是API數據，最後是默認值
+  // 這樣確保即使在API失敗的情況下也能顯示合理的數據
+  const totalVisits = localTotalVisits > 0 
+    ? localTotalVisits 
+    : (effectiveStats?.totalVisits || defaultStats.totalVisits);
+    
+  const todayVisits = localTodayVisits > 0
+    ? localTodayVisits
+    : (effectiveStats?.dailyVisits?.[new Date().toISOString().split("T")[0]] 
+       || defaultStats.dailyVisits[new Date().toISOString().split("T")[0]]);
+  
+  // 初始化本地狀態，確保值不為零
   useEffect(() => {
-    if (totalVisits > 0) {
-      localStorage.setItem('totalVisits', totalVisits.toString());
+    // 如果本地狀態為0並且有有效的API數據，使用API數據初始化
+    if (localTotalVisits === 0) {
+      const initialTotal = effectiveStats?.totalVisits || defaultStats.totalVisits;
+      setLocalTotalVisits(initialTotal);
+      localStorage.setItem('totalVisits', initialTotal.toString());
     }
-    if (todayVisits > 0) {
-      localStorage.setItem('todayVisits', todayVisits.toString());
+    
+    if (localTodayVisits === 0) {
+      const today = new Date().toISOString().split("T")[0];
+      const initialToday = effectiveStats?.dailyVisits?.[today] || defaultStats.dailyVisits[today];
+      setLocalTodayVisits(initialToday);
+      localStorage.setItem('todayVisits', initialToday.toString());
     }
-  }, [totalVisits, todayVisits]);
+  }, [effectiveStats]);
 
   // 添加動畫效果，當訪問次數增加時顯示特效
   const [showNewVisitAnimation, setShowNewVisitAnimation] = useState(false);
