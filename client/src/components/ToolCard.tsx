@@ -261,14 +261,14 @@ export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps
                       <p>{tool.title}</p>
                     </TooltipContent>
                   </Tooltip>
-                  {usageStats && (
+                  {(usageStats || tool.totalClicks) && (
                     <Badge
                       variant="secondary"
                       className="flex items-center gap-1 px-2 py-1"
                       title="使用次數"
                     >
                       <BarChart className="w-3 h-3" aria-hidden="true" />
-                      <span>{tool.totalClicks || usageStats.totalClicks} 次使用</span> {/* Use local state if available */}
+                      <span>{tool.totalClicks || (usageStats && usageStats.totalClicks) || 0} 次使用</span>
                     </Badge>
                   )}
                 </div>
