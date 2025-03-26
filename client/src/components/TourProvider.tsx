@@ -1,5 +1,5 @@
-import { createContext, useContext, ReactNode, useState, useRef, useCallback } from 'react';
-import { TourGuide } from './TourGuide';
+import { createContext, useContext, ReactNode, useState, useCallback } from 'react';
+import { TourGuide, tourEvents } from './TourGuide';
 
 interface TourContextType {
   startTour: () => void;
@@ -30,33 +30,21 @@ export function TourProvider({ children }: TourProviderProps) {
       return false;
     }
   });
-  
-  // 創建一個普通的參考，而不是指定類型
-  const tourGuideRef = useRef<any>(null);
 
   // 開始導覽
   const startTour = useCallback(() => {
     console.log("Starting tour from provider");
     setIsActive(true);
-    // 不使用ref方法，直接訪問Tour Guide實例方法
-    const tourGuideElement = document.querySelector('.tour-guide-container');
-    if (tourGuideElement) {
-      // 發布自定義事件
-      const startEvent = new CustomEvent('start-tour');
-      tourGuideElement.dispatchEvent(startEvent);
-    } else {
-      console.error("Tour guide element not found");
-    }
+    // 使用全局事件機制觸發導覽開始
+    tourEvents.startTour();
   }, []);
 
   // 重置導覽狀態（用於測試或允許用戶重新體驗）
   const resetTour = useCallback(() => {
     try {
-      localStorage.setItem("hasCompletedSiteTour", "false");
       setHasCompletedTour(false);
-      if (tourGuideRef.current) {
-        tourGuideRef.current.resetTour();
-      }
+      // 使用全局事件機制觸發導覽重置
+      tourEvents.resetTour();
     } catch (e) {
       console.error("無法重置導覽狀態", e);
     }
@@ -76,10 +64,7 @@ export function TourProvider({ children }: TourProviderProps) {
       hasCompletedTour 
     }}>
       {children}
-      <TourGuide 
-        ref={tourGuideRef} 
-        onComplete={handleTourComplete}
-      />
+      <TourGuide onComplete={handleTourComplete} />
     </TourContext.Provider>
   );
 }

@@ -1,73 +1,65 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import "./tour-guide.css"; // 導入我們自定義的樣式
 import { soundManager } from "@/lib/soundManager";
 import { motion } from "framer-motion";
-import { Trophy, Info, Lightbulb, HelpCircle, Sparkles } from "lucide-react";
+import { Info, Lightbulb, HelpCircle } from "lucide-react";
 import { Button } from "./ui/button";
+import { useToast } from "@/hooks/use-toast";
+
+// 建立全局事件發射器，用於外部觸發導覽開始
+export const tourEvents = {
+  startTour: () => {
+    window.dispatchEvent(new CustomEvent('start-site-tour'));
+  },
+  resetTour: () => {
+    window.dispatchEvent(new CustomEvent('reset-site-tour'));
+  }
+};
 
 interface TourGuideProps {
   onComplete?: () => void;
 }
 
-interface TourGuideState {
-  hasCompletedTour: boolean;
-  isVisible: boolean;
-}
-
-export class TourGuide extends React.Component<TourGuideProps, TourGuideState> {
-  private driverObj: any = null;
-  private notificationSound: HTMLAudioElement | null = null;
-  private readonly localStorageKey = "hasCompletedSiteTour";
-
-  constructor(props: TourGuideProps) {
-    super(props);
-    this.state = {
-      hasCompletedTour: this.getHasCompletedTour(),
-      isVisible: false
-    };
-    this.initializeDriver();
-    this.initializeAudio();
-  }
-
-  private getHasCompletedTour(): boolean {
+export function TourGuide({ onComplete }: TourGuideProps) {
+  const [hasCompletedTour, setHasCompletedTour] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [driverObj, setDriverObj] = useState<any>(null);
+  const { toast } = useToast();
+  const localStorageKey = "hasCompletedSiteTour";
+  
+  // 檢查是否已完成導覽
+  const getHasCompletedTour = () => {
     try {
-      return localStorage.getItem(this.localStorageKey) === "true";
+      return localStorage.getItem(localStorageKey) === "true";
     } catch (e) {
       return false;
     }
-  }
-
-  private setHasCompletedTour(completed: boolean): void {
+  };
+  
+  // 設置導覽完成狀態
+  const setTourCompleted = (completed: boolean) => {
     try {
-      localStorage.setItem(this.localStorageKey, completed ? "true" : "false");
-      this.setState({ hasCompletedTour: completed });
+      localStorage.setItem(localStorageKey, completed ? "true" : "false");
+      setHasCompletedTour(completed);
     } catch (e) {
       console.error("無法儲存導覽完成狀態:", e);
     }
-  }
-
-  private initializeAudio() {
-    try {
-      this.notificationSound = new Audio("/sounds/notification.mp3");
-    } catch (e) {
-      console.error("無法初始化音效:", e);
-    }
-  }
-
-  private playSound() {
+  };
+  
+  // 播放音效
+  const playSound = () => {
     try {
       soundManager.playSound("notification");
     } catch (e) {
-      if (this.notificationSound) {
-        this.notificationSound.play().catch(err => console.error("播放音效失敗:", err));
-      }
+      console.error("播放音效失敗:", e);
     }
-  }
-
-  private initializeDriver() {
-    this.driverObj = driver({
+  };
+  
+  // 初始化導覽驅動程序
+  const initializeDriver = () => {
+    const tourDriver = driver({
       showProgress: true,
       animate: true,
       allowClose: true,
@@ -79,7 +71,7 @@ export class TourGuide extends React.Component<TourGuideProps, TourGuideState> {
       popoverClass: "site-tour-popover",
       disableActiveInteraction: false, // 允許點擊高亮元素
       onHighlightStarted: (element) => {
-        this.playSound();
+        playSound();
         if (element) {
           // 平滑滾動到元素位置，並留出上方空間
           const rect = element.getBoundingClientRect();
@@ -101,7 +93,7 @@ export class TourGuide extends React.Component<TourGuideProps, TourGuideState> {
       onDestroyed: async () => {
         console.log("Site tour completed");
         // 記錄完成狀態
-        this.setHasCompletedTour(true);
+        setTourCompleted(true);
         
         try {
           const response = await fetch('/api/tour/complete', {
@@ -113,21 +105,25 @@ export class TourGuide extends React.Component<TourGuideProps, TourGuideState> {
           const data = await response.json();
 
           // 顯示成就通知
-          if (window.toast) {
-            window.toast({
-              title: "🎉 網站導覽完成！",
-              description: data.message || "感謝您完成網站導覽，已解鎖「探索者」成就！",
-              duration: 5000,
-            });
-          }
+          toast({
+            title: "🎉 網站導覽完成！",
+            description: data?.message || "感謝您完成網站導覽，已解鎖「探索者」成就！",
+            duration: 5000,
+          });
           
-          if (this.props.onComplete) {
-            this.props.onComplete();
+          if (onComplete) {
+            onComplete();
           }
         } catch (error) {
           console.error("記錄導覽完成時發生錯誤:", error);
           // 即使API請求失敗，也應該更新本地狀態
-          this.setHasCompletedTour(true);
+          setTourCompleted(true);
+          
+          toast({
+            title: "🎉 網站導覽完成！",
+            description: "感謝您完成網站導覽，已解鎖「探索者」成就！",
+            duration: 5000,
+          });
         }
       },
       steps: [
@@ -215,126 +211,158 @@ export class TourGuide extends React.Component<TourGuideProps, TourGuideState> {
         {
           popover: {
             title: "🎉 恭喜完成導覽！",
-            description: "感謝您完成網站導覽！現在您已經了解了平台的主要功能，可以開始探索和使用各種教育工具了。如果之後需要再次查看導覽，可以點擊「重新導覽」按鈕。祝您使用愉快！",
+            description: "感謝您完成網站導覽！現在您已經了解了平台的主要功能，可以開始探索和使用各種教育工具了。如果之後需要再次查看導覽，可以點擊「網站導覽」按鈕。祝您使用愉快！",
             doneBtnText: "開始使用",
           }
         }
       ],
     });
-  }
-
-  componentDidMount() {
-    console.log("TourGuide component mounted");
     
-    // 初次載入且尚未完成導覽時，設置延遲後顯示組件
-    if (!this.state.hasCompletedTour) {
-      setTimeout(() => {
-        this.setState({ isVisible: true });
-      }, 2000);
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.driverObj) {
-      this.driverObj.destroy();
-      this.driverObj = null;
-    }
-  }
-
-  startTour = () => {
+    setDriverObj(tourDriver);
+    return tourDriver;
+  };
+  
+  // 開始導覽
+  const startTour = () => {
     try {
       console.log("Starting site tour");
-      if (!this.driverObj) {
-        this.initializeDriver();
+      let tourInstance = driverObj;
+      if (!tourInstance) {
+        tourInstance = initializeDriver();
       }
-      this.driverObj.drive();
-      this.setState({ isVisible: false });
+      tourInstance.drive();
+      setIsVisible(false);
     } catch (error) {
-      console.error("Error starting tour:", error);
+      console.error("啟動導覽失敗:", error);
+      toast({
+        title: "導覽啟動失敗",
+        description: "無法啟動網站導覽，請稍後再試",
+        variant: "destructive"
+      });
     }
   };
-
-  dismissTour = () => {
-    this.setState({ isVisible: false });
+  
+  // 關閉導覽提示
+  const dismissTour = () => {
+    setIsVisible(false);
   };
-
-  resetTour = () => {
-    this.setHasCompletedTour(false);
-    this.setState({ isVisible: true });
+  
+  // 重置導覽狀態
+  const resetTour = () => {
+    setTourCompleted(false);
+    setIsVisible(true);
   };
-
-  render() {
-    const { hasCompletedTour, isVisible } = this.state;
-
-    // 渲染開始導覽按鈕
-    return (
-      <div className="tour-guide-container">
-        {/* 導覽提示彈窗 */}
-        {isVisible && !hasCompletedTour && (
-          <motion.div 
-            className="tour-prompt"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            style={{
-              position: 'fixed',
-              bottom: '20px',
-              right: '20px',
-              zIndex: 1000,
-              backgroundColor: 'white',
-              padding: '16px',
-              borderRadius: '12px',
-              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
-              width: '280px',
-              border: '2px solid #0891b2',
-            }}
-          >
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              marginBottom: '12px',
-              gap: '8px',
-              borderBottom: '1px solid rgba(8, 145, 178, 0.2)',
-              paddingBottom: '8px'
+  
+  // 元件掛載時
+  useEffect(() => {
+    // 檢查導覽完成狀態
+    const tourCompleted = getHasCompletedTour();
+    setHasCompletedTour(tourCompleted);
+    
+    // 初始化驅動程序
+    const driver = initializeDriver();
+    
+    // 初次載入且尚未完成導覽時，延遲顯示提示
+    if (!tourCompleted) {
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+    
+    // 監聽全局事件以啟動導覽
+    const handleStartTour = () => {
+      startTour();
+    };
+    
+    // 監聽全局事件以重置導覽
+    const handleResetTour = () => {
+      resetTour();
+    };
+    
+    window.addEventListener('start-site-tour', handleStartTour);
+    window.addEventListener('reset-site-tour', handleResetTour);
+    
+    // 清理函數
+    return () => {
+      if (driver) {
+        driver.destroy();
+      }
+      window.removeEventListener('start-site-tour', handleStartTour);
+      window.removeEventListener('reset-site-tour', handleResetTour);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  
+  return (
+    <div className="tour-guide-container">
+      {/* 導覽提示彈窗 */}
+      {isVisible && !hasCompletedTour && (
+        <motion.div 
+          className="tour-prompt"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          style={{
+            position: 'fixed',
+            bottom: '20px',
+            right: '20px',
+            zIndex: 1000,
+            backgroundColor: 'white',
+            padding: '16px',
+            borderRadius: '12px',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+            width: '280px',
+            border: '2px solid #0891b2',
+          }}
+        >
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            marginBottom: '12px',
+            gap: '8px',
+            borderBottom: '1px solid rgba(8, 145, 178, 0.2)',
+            paddingBottom: '8px'
+          }}>
+            <Info size={24} color="#0891b2" />
+            <h3 style={{ 
+              margin: 0, 
+              color: '#0891b2', 
+              fontSize: '18px', 
+              fontWeight: 'bold'
             }}>
-              <Info size={24} color="#0891b2" />
-              <h3 style={{ 
-                margin: 0, 
-                color: '#0891b2', 
-                fontSize: '18px', 
-                fontWeight: 'bold'
-              }}>
-                歡迎使用教育平台！
-              </h3>
-            </div>
-            <p style={{ 
-              margin: '0 0 16px 0', 
-              fontSize: '14px', 
-              color: '#333', 
-              lineHeight: 1.5 
-            }}>
-              想要了解平台的主要功能嗎？跟隨我們的導覽，快速掌握所有重要特性！
-            </p>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <Button 
-                onClick={this.startTour}
-                className="bg-cyan-600 hover:bg-cyan-700 gap-2"
-              >
-                <Lightbulb size={16} />
-                開始導覽
-              </Button>
-              <Button 
-                variant="outline" 
-                onClick={this.dismissTour}
-                className="border-cyan-600 text-cyan-600 hover:bg-cyan-50"
-              >
-                稍後再說
-              </Button>
-            </div>
-          </motion.div>
-        )}
-        
-        {/* 固定位置的導覽按鈕 */}
+              歡迎使用教育平台！
+            </h3>
+          </div>
+          <p style={{ 
+            margin: '0 0 16px 0', 
+            fontSize: '14px', 
+            color: '#333', 
+            lineHeight: 1.5 
+          }}>
+            想要了解平台的主要功能嗎？跟隨我們的導覽，快速掌握所有重要特性！
+          </p>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <Button 
+              onClick={startTour}
+              className="bg-cyan-600 hover:bg-cyan-700 gap-2"
+            >
+              <Lightbulb size={16} />
+              開始導覽
+            </Button>
+            <Button 
+              variant="outline" 
+              onClick={dismissTour}
+              className="border-cyan-600 text-cyan-600 hover:bg-cyan-50"
+            >
+              稍後再說
+            </Button>
+          </div>
+        </motion.div>
+      )}
+      
+      {/* 固定位置的導覽按鈕 */}
+      {hasCompletedTour && (
         <motion.div
           className="fixed-tour-button"
           initial={{ opacity: 0, scale: 0.8 }}
@@ -344,8 +372,7 @@ export class TourGuide extends React.Component<TourGuideProps, TourGuideState> {
             position: 'fixed',
             bottom: '80px',
             right: '20px',
-            zIndex: 50,
-            display: hasCompletedTour ? 'block' : 'none'
+            zIndex: 50
           }}
         >
           <motion.div
@@ -353,7 +380,7 @@ export class TourGuide extends React.Component<TourGuideProps, TourGuideState> {
             whileTap={{ scale: 0.95 }}
           >
             <Button 
-              onClick={this.startTour}
+              onClick={startTour}
               variant="default"
               size="sm"
               className="bg-cyan-600 hover:bg-cyan-700 gap-2 shadow-lg"
@@ -363,14 +390,7 @@ export class TourGuide extends React.Component<TourGuideProps, TourGuideState> {
             </Button>
           </motion.div>
         </motion.div>
-      </div>
-    );
-  }
-}
-
-// Add toast to window for access in onDestroyed callback
-declare global {
-  interface Window {
-    toast?: (props: { title: string; description: string; duration?: number }) => void;
-  }
+      )}
+    </div>
+  );
 }
