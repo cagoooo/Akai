@@ -1,0 +1,66 @@
+2025-03-26T05:13:35Z info: Deployment: e42f866d-0261-4cc6-8134-78a05d93d1ad
+2025-03-26T05:13:35Z info: Build: e616528b-5b36-4f84-80a8-3f84103afe88
+2025-03-26T05:13:35Z info: Connecting to builder
+2025-03-26T05:13:39Z info: Builder connected
+2025-03-26T05:13:41Z info: Installing packages
+2025-03-26T05:13:42Z info: Starting Build
+
+> rest-express@1.0.0 build
+> vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+
+
+vite v5.4.10 building for production...
+
+transforming...
+
+
+/grid.svg referenced in /grid.svg didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+✓ 3221 modules transformed.
+
+warnings when minifying css:
+▲ [WARNING] Expected identifier but found whitespace [css-syntax-error]
+
+    <stdin>:2535:25:
+      2535 │   --interactive-gradient: linear-gradient(135deg, rgba(6, 182, 2...
+           ╵                          ^
+
+
+▲ [WARNING] Unexpected "linear-gradient(" [css-syntax-error]
+
+    <stdin>:2535:26:
+      2535 │   --interactive-gradient: linear-gradient(135deg, rgba(6, 182, 2...
+           ╵                           ~~~~~~~~~~~~~~~~
+
+
+
+rendering chunks...
+
+computing gzip size...
+
+../dist/public/index.html                     5.04 kB │ gzip:   1.92 kB
+
+../dist/public/assets/index-CaSeud4A.css     90.17 kB │ gzip:  15.30 kB
+../dist/public/assets/index-DJ9wxl8q.js   1,795.17 kB │ gzip: 442.04 kB
+
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+✓ built in 15.21s
+
+
+  dist/index.js  40.7kb
+
+⚡ Done in 141ms
+
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.2.0
+npm notice To update run: npm install -g npm@11.2.0
+npm notice
+
+2025-03-26T05:14:02Z error: could not create static deployment
+2025-03-26T05:14:02Z info: Could not find an index.html file in the deployment's public directory. Check whether this application works as a static deployment. If not, try switching to an Autoscale deployment.
