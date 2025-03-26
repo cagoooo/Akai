@@ -14,7 +14,14 @@ interface ShareURLOptions {
   image?: string;
 }
 
-export function generateShareUrls(options: ShareURLOptions) {
+export interface ShareURLs {
+  facebook: string;
+  linkedin: string;
+  line: string;
+  copy?: string;
+}
+
+export function generateShareUrls(options: ShareURLOptions): ShareURLs {
   const params = new URLSearchParams();
 
   // 為每個平台添加必要的參數

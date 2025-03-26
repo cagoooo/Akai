@@ -10,6 +10,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as Icons from "lucide-react";
 import type { EducationalTool } from "@/lib/data";
 import type { LucideIcon } from 'lucide-react';
+
+// 擴展 EducationalTool 類型，添加可能從後端返回的屬性
+interface EnhancedTool extends EducationalTool {
+  totalClicks?: number;
+}
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PreviewGenerator } from "@/components/PreviewGenerator";
 import { IconCustomizer, type IconCustomization } from "@/components/IconCustomizer";
@@ -86,14 +91,19 @@ export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps
   const [customization, setCustomization] = useState<IconCustomization | undefined>();
   const [isPreviewLoading, setIsPreviewLoading] = useState(true);
   const [previewImage, setPreviewImage] = useState<string>();
-  const [tool, setTool] = useState(initialTool);
+  const [tool, setTool] = useState<EnhancedTool>(initialTool);
   const Icon = Icons[tool.icon as keyof typeof Icons] as LucideIcon;
   const { toast } = useToast();
 
   // Get usage statistics for this tool
   const { data: usageStats } = useQuery({
     queryKey: ['/api/tools/stats'],
-    select: (data) => data.find((stat: any) => stat.toolId === tool.id),
+    select: (data: unknown) => {
+      if (Array.isArray(data)) {
+        return data.find((stat: any) => stat.toolId === tool.id);
+      }
+      return undefined;
+    },
   });
 
   // 使用共用的工具追蹤鉤子
@@ -163,25 +173,47 @@ export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps
     });
   }, [tool]);
 
-  // 修改點擊處理部分
-  const handleClick = async () => {
+  // 改進點擊處理部分 - 確保點擊後一定會開啟新視窗
+  const handleClick = () => {
     try {
-      // 先觸發工具使用追蹤
-      const result = await trackToolUsage(tool.id);
-      console.log('工具使用已追蹤:', tool.id, result);
-
-      // 更新本地狀態
-      if (result.totalClicks) {
-        setTool(prevTool => ({
-          ...prevTool,
-          totalClicks: result.totalClicks
-        }));
+      // 首先，無論如何都確保開啟工具網站
+      const newWindow = window.open(tool.url, '_blank', 'noopener,noreferrer');
+      
+      // 確保新視窗被打開
+      if (newWindow) {
+        newWindow.opener = null; // 安全考量，斷開與原窗口的連接
+      } else {
+        // 如果瀏覽器阻止打開新視窗，則顯示提示
+        toast({
+          title: "彈出窗口已被阻止",
+          description: "請允許彈出窗口或點擊下方複製鏈接按鈕手動開啟",
+          variant: "destructive",
+        });
       }
-
-      // 開啟工具網站
-      window.open(tool.url, '_blank', 'noopener,noreferrer');
+      
+      // 然後再發送使用統計數據（不阻塞用戶體驗）
+      trackToolUsage(tool.id)
+        .then(result => {
+          console.log('工具使用已追蹤:', tool.id, result);
+          // 成功後更新本地狀態
+          if (result?.totalClicks) {
+            setTool(prevTool => ({
+              ...prevTool,
+              totalClicks: result.totalClicks
+            }));
+          }
+        })
+        .catch(error => {
+          console.error('工具使用追蹤失敗:', error);
+          // 即使追蹤失敗，也不影響用戶的正常使用
+        });
     } catch (error) {
-      console.error('工具使用追蹤失敗:', error);
+      console.error('開啟工具失敗:', error);
+      toast({
+        title: "開啟工具失敗",
+        description: "無法開啟工具連結，請嘗試使用複製連結按鈕",
+        variant: "destructive",
+      });
     }
   };
 
@@ -312,11 +344,42 @@ export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps
                 </>
               ) : (
                 <>
-                  <CardTitle className={`text-xl font-bold transition-colors duration-300 ${tool.category && categoryColors[tool.category] ? categoryColors[tool.category].icon : 'text-gray-600'} mb-2 relative`} itemProp="name">
+                  <CardTitle 
+                    className={`flex items-center text-xl font-bold transition-colors duration-300 ${tool.category && categoryColors[tool.category] ? categoryColors[tool.category].icon : 'text-gray-600'} mb-2 relative`} 
+                    itemProp="name"
+                  >
                     {tool.title}
+                    <motion.div 
+                      className="ml-2 text-primary/70 group-hover:text-primary"
+                      animate={{ scale: [1, 1.1, 1] }}
+                      transition={{ 
+                        repeat: Infinity, 
+                        repeatType: "reverse", 
+                        duration: 1.5 
+                      }}
+                    >
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="16" 
+                        height="16" 
+                        viewBox="0 0 24 24" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        strokeWidth="2" 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        className="transform -rotate-45"
+                        aria-hidden="true"
+                      >
+                        <path d="M7 17l9.2-9.2M17 17V7H7"/>
+                      </svg>
+                    </motion.div>
                   </CardTitle>
                   <CardDescription className="text-sm text-muted-foreground min-h-[3rem] mb-4 relative transition-colors duration-300 group-hover:text-foreground/80" itemProp="description">
                     {tool.description}
+                    <span className="block mt-2 text-xs text-primary/70 group-hover:text-primary italic">
+                      點擊開啟新視窗
+                    </span>
                   </CardDescription>
                 </>
               )}
@@ -404,7 +467,11 @@ export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps
                           if (platform.onClick) {
                             platform.onClick(e);
                           } else {
-                            window.open(getShareUrls(previewImage)[platform.name.toLowerCase()], '_blank');
+                            const urls = getShareUrls(previewImage);
+                            const key = platform.name.toLowerCase() as keyof typeof urls;
+                            if (urls[key]) {
+                              window.open(urls[key], '_blank');
+                            }
                           }
                         }}
                         aria-label={platform.name === 'Copy' ? '複製連結' : `分享到 ${platform.name}`}
