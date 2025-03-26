@@ -6,10 +6,13 @@ import {
   toolUsageStats,
   visitorStats,
   errorLogs,
+  achievements,
+  userAchievements
 } from "@db/schema";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, and } from "drizzle-orm";
 import { ampRouter } from './amp';
 import { log } from './vite';
+import path from "path";
 
 // 擴展 Express Request 類型以包含用戶信息
 declare global {
