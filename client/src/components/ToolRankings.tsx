@@ -71,16 +71,34 @@ export function ToolRankings() {
     setIsMuted(newMutedState);
   };
 
-  const handleItemClick = async (tool: typeof tools[number]) => {
+  const handleItemClick = (tool: typeof tools[number]) => {
     try {
-      // 先執行工具使用追蹤
-      await trackToolUsage(tool.id);
-      console.log('排行榜工具使用已追蹤:', tool.id);
-
-      // 開啟工具網站
-      window.open(tool.url, '_blank', 'noopener,noreferrer');
+      console.log('排行榜點擊工具:', tool.id, tool.url);
+      
+      // 首先確保打開新視窗，不等待 API 調用完成
+      const newWindow = window.open(tool.url, '_blank', 'noopener,noreferrer');
+      
+      // 確保新視窗被打開
+      if (newWindow) {
+        newWindow.opener = null; // 安全考量，斷開與原窗口的連接
+      } else {
+        console.warn('無法打開新視窗，可能是被瀏覽器阻止了');
+      }
+      
+      // 然後再異步追蹤工具使用（不阻塞用戶體驗）
+      trackToolUsage(tool.id)
+        .then(() => console.log('排行榜工具使用已追蹤:', tool.id))
+        .catch(err => console.error('排行榜工具使用追蹤失敗:', err));
+        
     } catch (error) {
       console.error('處理工具點擊時發生錯誤:', error);
+      
+      // 即使發生錯誤，也嘗試打開 URL
+      try {
+        window.open(tool.url, '_blank');
+      } catch (e) {
+        console.error('二次嘗試打開 URL 失敗:', e);
+      }
     }
   };
 
@@ -189,12 +207,28 @@ export function ToolRankings() {
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-foreground truncate">
+                    <p className="text-sm font-medium text-foreground truncate flex items-center">
                       {tool.title}
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="14" 
+                        height="14" 
+                        viewBox="0 0 24 24" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        strokeWidth="2" 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        className="ml-2 text-primary/70 transform -rotate-45"
+                        aria-hidden="true"
+                      >
+                        <path d="M7 17l9.2-9.2M17 17V7H7"/>
+                      </svg>
                     </p>
                     <p className="text-sm text-muted-foreground truncate">
                       最後使用：{new Date(ranking.lastUsedAt).toLocaleDateString()}
                     </p>
+                    <span className="text-xs text-primary/70 italic mt-1 block">點擊開啟新視窗</span>
                   </div>
 
                   <Badge variant={isTop ? "secondary" : "outline"}>
@@ -267,12 +301,28 @@ export function ToolRankings() {
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground truncate">
+                  <p className="text-sm font-medium text-foreground truncate flex items-center">
                     {tool.title}
+                    <svg 
+                      xmlns="http://www.w3.org/2000/svg" 
+                      width="14" 
+                      height="14" 
+                      viewBox="0 0 24 24" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      strokeWidth="2" 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                      className="ml-2 text-primary/70 transform -rotate-45"
+                      aria-hidden="true"
+                    >
+                      <path d="M7 17l9.2-9.2M17 17V7H7"/>
+                    </svg>
                   </p>
                   <p className="text-sm text-muted-foreground truncate">
                     最後使用：{new Date(ranking.lastUsedAt).toLocaleDateString()}
                   </p>
+                  <span className="text-xs text-primary/70 italic mt-1 block">點擊開啟新視窗</span>
                 </div>
 
                 <Badge variant={isTop ? "secondary" : "outline"}>
