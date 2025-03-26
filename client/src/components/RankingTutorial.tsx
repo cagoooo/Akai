@@ -27,8 +27,7 @@ export function RankingTutorial() {
       stagePadding: 8,
       smoothScroll: true,
       popoverClass: "ranking-tutorial-popover",
-      overlayColor: "rgba(0, 0, 0, 0.6)", 
-      opacity: 0.8,
+      overlayColor: "rgba(0, 0, 0, 0.6)",
       nextBtnText: "下一步",
       prevBtnText: "上一步",
       doneBtnText: "完成",
@@ -129,40 +128,41 @@ export function RankingTutorial() {
     >
       <Button 
         onClick={startTutorial}
-        variant={hasSeenTutorial ? "outline" : "secondary"}
+        variant={hasSeenTutorial ? "default" : "secondary"}
         size="sm"
         className={cn(
-          "gap-2 font-medium relative overflow-hidden", 
-          !hasSeenTutorial && "ring-2 ring-primary/30 shadow-md"
+          "gap-2 font-medium relative overflow-hidden border-2", 
+          hasSeenTutorial 
+            ? "bg-primary text-white hover:bg-primary/90 border-primary/80" 
+            : "bg-gradient-to-r from-yellow-500 to-amber-500 text-white border-amber-600 hover:from-yellow-600 hover:to-amber-600"
         )}
         id="ranking-tutorial-btn"
       >
         {!hasSeenTutorial && (
           <motion.span 
-            className="absolute inset-0 bg-primary/10"
+            className="absolute inset-0 bg-white"
             animate={{ 
-              opacity: [0.1, 0.2, 0.1],
-              scale: [1, 1.05, 1]
+              opacity: [0, 0.2, 0]
             }}
             transition={{ 
               repeat: Infinity, 
-              duration: 2 
+              duration: 1.5
             }}
           />
         )}
         {hasSeenTutorial ? (
-          <HelpCircle className="w-4 h-4" />
+          <HelpCircle className="w-4 h-4 text-white" />
         ) : (
           <motion.div
-            animate={{ rotate: [0, 10, 0, -10, 0] }}
-            transition={{ repeat: Infinity, duration: 2, repeatDelay: 1 }}
+            animate={{ rotate: [0, 15, 0, -15, 0] }}
+            transition={{ repeat: Infinity, duration: 2, repeatDelay: 0.5 }}
           >
-            <Lightbulb className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+            <Lightbulb className="w-4 h-4 text-white fill-yellow-200" />
           </motion.div>
         )}
-        <span>{hasSeenTutorial ? "排行榜教學" : "查看功能介紹"}</span>
+        <span className="font-bold">{hasSeenTutorial ? "排行榜教學" : "查看功能介紹"}</span>
         {!hasSeenTutorial && (
-          <Sparkles className="w-3 h-3 text-primary" />
+          <Sparkles className="w-3 h-3 text-yellow-200" />
         )}
       </Button>
     </motion.div>
