@@ -115,6 +115,8 @@ export function registerRoutes(app: Express): Server {
           const [newStats] = await db.insert(visitorStats).values({
             totalVisits: 0,
             dailyVisits: {},
+            createdAt: getTimestamp(),
+            lastVisitAt: getTimestamp()
           }).returning();
           
           // 更新內存緩存
@@ -187,7 +189,7 @@ export function registerRoutes(app: Express): Server {
             .update(visitorStats)
             .set({
               totalVisits: stats.totalVisits + 1,
-              lastVisitAt: new Date(),
+              lastVisitAt: getTimestamp(),
               dailyVisits
             })
             .where(eq(visitorStats.id, stats.id))
@@ -205,6 +207,8 @@ export function registerRoutes(app: Express): Server {
           const [newStats] = await db.insert(visitorStats).values({
             totalVisits: 1,
             dailyVisits: { [today]: 1 },
+            createdAt: getTimestamp(),
+            lastVisitAt: getTimestamp()
           }).returning();
 
           inMemoryCache.visitorStats = newStats;
@@ -274,13 +278,15 @@ export function registerRoutes(app: Express): Server {
             .update(toolUsageStats)
             .set({ 
               totalClicks: existingStats.totalClicks + 1,
-              lastUsedAt: new Date()
+              lastUsedAt: getTimestamp()
             })
             .where(eq(toolUsageStats.toolId, parsedId));
         } else {
           await db.insert(toolUsageStats).values({
             toolId: parsedId,
             totalClicks: 1,
+            createdAt: getTimestamp(),
+            lastUsedAt: getTimestamp()
           });
         }
 
