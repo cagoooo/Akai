@@ -16,9 +16,20 @@ app.use(express.urlencoded({ extended: false }));
     // 初始化時測試數據庫連接
     try {
       log("測試資料庫連接...");
-      // 使用 sql 客戶端直接查詢
-      const result = await sql`SELECT 1 as connected`;
-      log(`資料庫連接成功: ${JSON.stringify(result)}`);
+      
+      if (dbType === 'postgres' && sql) {
+        // 使用 sql 客戶端直接查詢 (僅 PostgreSQL)
+        const result = await sql`SELECT 1 as connected`;
+        log(`PostgreSQL 連接成功: ${JSON.stringify(result)}`);
+      } else if (dbType === 'sqlite') {
+        // 測試 SQLite 連接
+        try {
+          const result = db.run('SELECT 1 as connected');
+          log(`SQLite 連接成功: ${JSON.stringify(result)}`);
+        } catch (sqliteError) {
+          throw new Error(`SQLite 連接測試失敗: ${sqliteError.message}`);
+        }
+      }
     } catch (dbError) {
       console.error("警告: 資料庫連接測試失敗:", dbError);
       log("繼續啟動應用，但數據庫相關功能可能受限");

@@ -472,8 +472,8 @@ export function registerRoutes(app: Express): Server {
         }
 
         // 更新內存緩存
-        stats.forEach(stat => {
-          inMemoryCache.toolStats.set(stat.toolId, stat);
+        stats.forEach((stat: { toolId: number } & Record<string, any>) => {
+          inMemoryCache.toolStats.set(stat.toolId, stat as unknown as ToolStats);
         });
         return res.json(stats);
       } catch (dbError) {
