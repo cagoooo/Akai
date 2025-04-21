@@ -4,6 +4,7 @@
  */
 
 import { dbType } from './index';
+import { sql as sqlTemplate } from 'drizzle-orm';
 
 /**
  * 獲取當前時間的 SQL 表達式
@@ -15,9 +16,29 @@ export function getCurrentTimeSql(): string {
 }
 
 /**
+ * 獲取當前時間的 SQL 模板表達式，用於 Drizzle ORM
+ * 返回一個可以直接在 Drizzle SQL 表達式中使用的對象
+ */
+export function nowSql() {
+  return dbType === 'postgres' 
+    ? sqlTemplate`NOW()` 
+    : sqlTemplate`datetime('now')`;
+}
+
+/**
+ * 創建一個插入數據時可用的時間戳對象
+ * 解決 SQLite 的 now() 函數不存在的問題
+ */
+export function getTimestamp() {
+  return dbType === 'postgres' 
+    ? nowSql() 
+    : new Date();
+}
+
+/**
  * 將 JavaScript Date 對象轉換為適合當前數據庫的時間格式
  */
-export function dateToDbFormat(date: Date): string | Date {
+export function dateToDbFormat(date: Date): any {
   if (dbType === 'postgres') {
     return date; // PostgreSQL 可以直接使用 Date 對象
   } else {

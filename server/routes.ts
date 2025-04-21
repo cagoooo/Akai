@@ -1,7 +1,7 @@
 import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import express from "express";
-import { db } from "@db";
+import { db, dbType } from "@db";
 import { 
   toolUsageStats,
   visitorStats,
@@ -9,10 +9,11 @@ import {
   achievements,
   userAchievements
 } from "@db/schema";
-import { eq, desc, and } from "drizzle-orm";
+import { eq, desc, and, sql } from "drizzle-orm";
 import { ampRouter } from './amp';
 import { log } from './vite';
 import path from "path";
+import { getTimestamp, nowSql } from '../db/adapter';
 
 // 定義類型以確保類型安全
 interface VisitorStats {
@@ -149,7 +150,8 @@ export function registerRoutes(app: Express): Server {
           level: "error",
           message: "獲取訪問統計失敗",
           stack: error instanceof Error ? error.stack : undefined,
-          metadata: { errorMessage: error instanceof Error ? error.message : "未知錯誤" }
+          metadata: { errorMessage: error instanceof Error ? error.message : "未知錯誤" },
+          createdAt: getTimestamp()
         });
       } catch (logError) {
         console.error("Failed to log error:", logError);
@@ -237,7 +239,8 @@ export function registerRoutes(app: Express): Server {
           metadata: {
             errorMessage: error instanceof Error ? error.message : "未知錯誤",
             timestamp: new Date().toISOString()
-          }
+          },
+          createdAt: getTimestamp()
         });
       } catch (logError) {
         console.error("Failed to log error:", logError);
@@ -252,7 +255,11 @@ export function registerRoutes(app: Express): Server {
       const parsedId = parseInt(toolId);
       
       // 內存緩存更新
-      const toolStats = inMemoryCache.toolStats.get(parsedId) || { totalClicks: 0, lastUsedAt: new Date() };
+      const toolStats = inMemoryCache.toolStats.get(parsedId) || { 
+        toolId: parsedId,  // 確保 toolId 存在
+        totalClicks: 0, 
+        lastUsedAt: new Date() 
+      } as ToolStats;
       toolStats.totalClicks += 1;
       toolStats.lastUsedAt = new Date();
       inMemoryCache.toolStats.set(parsedId, toolStats);
@@ -415,7 +422,8 @@ export function registerRoutes(app: Express): Server {
           metadata: {
             endpoint: "/api/tools/rankings",
             timestamp: new Date().toISOString()
-          }
+          },
+          createdAt: getTimestamp()
         });
       } catch (logError) {
         console.error("Failed to log error:", logError);
@@ -449,8 +457,8 @@ export function registerRoutes(app: Express): Server {
           try {
             const newStats = await db.insert(toolUsageStats).values(initialStats).returning();
             // 更新內存緩存
-            newStats.forEach(stat => {
-              inMemoryCache.toolStats.set(stat.toolId, stat);
+            newStats.forEach((stat: { toolId: number } & Record<string, any>) => {
+              inMemoryCache.toolStats.set(stat.toolId, stat as unknown as ToolStats);
             });
             return res.json(newStats);
           } catch (insertError) {
@@ -508,7 +516,8 @@ export function registerRoutes(app: Express): Server {
           metadata: {
             endpoint: "/api/tools/stats",
             timestamp: new Date().toISOString()
-          }
+          },
+          createdAt: getTimestamp()
         });
       } catch (logError) {
         console.error("Failed to log error:", logError);
