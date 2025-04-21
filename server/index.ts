@@ -26,38 +26,87 @@ app.use(express.urlencoded({ extended: false }));
 
     // 增強的健康檢查端點
     app.get("/health", async (_req, res) => {
-      const status = {
+      // 獲取內存緩存狀態
+      const inMemoryCache = require('./cache').getCache();
+      
+      const status: any = {
         status: "healthy",
         timestamp: new Date().toISOString(),
-        database: "unknown",
         environment: process.env.NODE_ENV || 'development',
         isReplit: process.env.REPL_ID !== undefined,
         version: process.env.npm_package_version || '1.0.0',
         uptime: process.uptime(),
         memoryUsage: process.memoryUsage(),
-        databaseDriver: "@neondatabase/serverless"
+        databaseType: dbType,
+        cacheStatus: {
+          size: Object.keys(inMemoryCache).length,
+          lastSaved: inMemoryCache.lastSaved || null,
+          hasVisitorStats: !!inMemoryCache.visitorStats,
+          toolStatsCount: inMemoryCache.toolStats instanceof Map ? inMemoryCache.toolStats.size : 0
+        }
       };
       
       try {
-        const startTime = Date.now();
-        // 直接使用 sql 客戶端
-        const result = await sql`SELECT NOW() as now`;
-        const responseTime = Date.now() - startTime;
+        if (dbType === 'postgres' && sql) {
+          status.databaseDriver = "@neondatabase/serverless";
+          
+          const startTime = Date.now();
+          // 嘗試 PostgreSQL 連接
+          try {
+            const result = await sql`SELECT NOW() as now`;
+            const responseTime = Date.now() - startTime;
+            
+            status.database = "connected";
+            status.dbResponseTime = `${responseTime}ms`;
+            status.dbTimestamp = result[0]?.now;
+          } catch (pgError) {
+            status.database = "error";
+            status.dbError = pgError instanceof Error ? pgError.message : String(pgError);
+            status.errorTime = new Date().toISOString();
+          }
+        } else if (dbType === 'sqlite') {
+          status.databaseDriver = "better-sqlite3";
+          
+          // SQLite 健康檢查
+          try {
+            const startTime = Date.now();
+            // 簡單的 SQLite 查詢
+            const result = db.run("SELECT datetime('now') as current_time");
+            const responseTime = Date.now() - startTime;
+            
+            status.database = "connected";
+            status.dbResponseTime = `${responseTime}ms`;
+            status.dbEngine = "SQLite";
+            status.dbFile = db.databasePath || "N/A";
+          } catch (sqliteError) {
+            status.database = "error";
+            status.dbError = sqliteError instanceof Error ? sqliteError.message : String(sqliteError);
+          }
+        }
         
-        status.database = "connected";
-        // @ts-ignore - 添加動態屬性
-        status.dbResponseTime = `${responseTime}ms`;
-        // @ts-ignore - 添加動態屬性
-        status.dbTimestamp = result[0]?.now;
+        // 檢查文件系統
+        try {
+          const logDir = path.join(process.cwd(), 'logs');
+          const cacheDir = path.join(process.cwd(), 'cache');
+          const sqliteDir = path.join(process.cwd(), 'sqlite');
+          
+          status.filesystemStatus = {
+            logs: fs.existsSync(logDir) ? 'available' : 'missing',
+            cache: fs.existsSync(cacheDir) ? 'available' : 'missing',
+            sqlite: fs.existsSync(sqliteDir) ? 'available' : 'missing'
+          };
+        } catch (fsError) {
+          status.filesystemStatus = {
+            error: fsError instanceof Error ? fsError.message : String(fsError)
+          };
+        }
         
         res.json(status);
       } catch (error) {
         console.error("Health check failed:", error);
+        
         status.status = "degraded";
-        status.database = "disconnected";
-        // @ts-ignore - 添加動態屬性
         status.error = error instanceof Error ? error.message : "Unknown error";
-        // @ts-ignore - 添加動態屬性
         status.errorStack = error instanceof Error ? error.stack : undefined;
         
         // 仍返回200但標示為degraded，這樣負載均衡器不會直接將服務標記為不可用

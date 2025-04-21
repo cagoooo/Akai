@@ -1,0 +1,175 @@
+> rest-express@1.0.0 dev
+> tsx server/index.ts
+
+Initializing database connection with Neon serverless driver...
+The `fetchConnectionCache` option is deprecated (now always `true`)
+3:01:52 AM [express] Starting server...
+3:01:52 AM [express] 測試資料庫連接...
+警告: 資料庫連接測試失敗: NeonDbError: Server error (HTTP status 500): {"message":"Console request failed: endpoint is disabled","code":"","detail":null,"hint":null,"position":null,"internalPosition":null,"internalQuery":null,"severity":"","where":null,"table":null,"column":null,"schema":null,"dataType":null,"constraint":null,"file":null,"line":null,"routine":null}
+    at execute (file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1557:64)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async <anonymous> (/home/runner/workspace/server/index.ts:18:22) {
+  severity: undefined,
+  code: undefined,
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: undefined,
+  line: undefined,
+  routine: undefined,
+  sourceError: undefined
+}
+3:01:53 AM [express] 繼續啟動應用，但數據庫相關功能可能受限
+3:01:53 AM [express] Server running at http://0.0.0.0:5000
+Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+Error fetching visitor stats: NeonDbError: Server error (HTTP status 500): {"message":"Console request failed: endpoint is disabled","code":"","detail":null,"hint":null,"position":null,"internalPosition":null,"internalQuery":null,"severity":"","where":null,"table":null,"column":null,"schema":null,"dataType":null,"constraint":null,"file":null,"line":null,"routine":null}
+    at execute (file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1557:64)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async NeonHttpPreparedQuery.execute (/home/runner/workspace/node_modules/src/neon-http/session.ts:68:18)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:107:21) {
+  severity: undefined,
+  code: undefined,
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: undefined,
+  line: undefined,
+  routine: undefined,
+  sourceError: undefined
+}
+3:02:00 AM [express] GET /api/stats/visitors 200 in 710ms :: {"totalVisits":1,"dailyVisits":{"2025-0…
+Database error updating visitor stats: NeonDbError: Server error (HTTP status 500): {"message":"Console request failed: endpoint is disabled","code":"","detail":null,"hint":null,"position":null,"internalPosition":null,"internalQuery":null,"severity":"","where":null,"table":null,"column":null,"schema":null,"dataType":null,"constraint":null,"file":null,"line":null,"routine":null}
+    at execute (file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1557:64)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async NeonHttpPreparedQuery.execute (/home/runner/workspace/node_modules/src/neon-http/session.ts:68:18)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:176:23) {
+  severity: undefined,
+  code: undefined,
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: undefined,
+  line: undefined,
+  routine: undefined,
+  sourceError: undefined
+}
+3:02:00 AM [express] POST /api/stats/visitors/increment 200 in 708ms :: {"totalVisits":1,"dailyVisit…
+Database error fetching tool stats: NeonDbError: Server error (HTTP status 500): {"message":"Console request failed: endpoint is disabled","code":"","detail":null,"hint":null,"position":null,"internalPosition":null,"internalQuery":null,"severity":"","where":null,"table":null,"column":null,"schema":null,"dataType":null,"constraint":null,"file":null,"line":null,"routine":null}
+    at execute (file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1557:64)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async NeonHttpPreparedQuery.execute (/home/runner/workspace/node_modules/src/neon-http/session.ts:68:18)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:430:23) {
+  severity: undefined,
+  code: undefined,
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: undefined,
+  line: undefined,
+  routine: undefined,
+  sourceError: undefined
+}
+Error fetching tool stats: Error: 無法從數據庫或內存獲取數據
+    at <anonymous> (/home/runner/workspace/server/routes.ts:484:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+3:02:00 AM [express] GET /api/tools/stats 200 in 700ms :: {"message":"獲取使用統計時發生錯誤，顯示有限數據","data":[{"…
+Failed to log error: NeonDbError: Server error (HTTP status 500): {"message":"Console request failed: endpoint is disabled","code":"","detail":null,"hint":null,"position":null,"internalPosition":null,"internalQuery":null,"severity":"","where":null,"table":null,"column":null,"schema":null,"dataType":null,"constraint":null,"file":null,"line":null,"routine":null}
+    at execute (file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1557:64)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:504:9) {
+  severity: undefined,
+  code: undefined,
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: undefined,
+  line: undefined,
+  routine: undefined,
+  sourceError: undefined
+}
+Failed to log error: NeonDbError: Server error (HTTP status 500): {"message":"Console request failed: endpoint is disabled","code":"","detail":null,"hint":null,"position":null,"internalPosition":null,"internalQuery":null,"severity":"","where":null,"table":null,"column":null,"schema":null,"dataType":null,"constraint":null,"file":null,"line":null,"routine":null}
+    at execute (file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1557:64)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async <anonymous> (/home/runner/workspace/server/routes.ts:148:9) {
+  severity: undefined,
+  code: undefined,
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: undefined,
+  line: undefined,
+  routine: undefined,
+  sourceError: undefined
+}
+Health check failed: NeonDbError: Server error (HTTP status 500): {"message":"Console request failed: endpoint is disabled","code":"","detail":null,"hint":null,"position":null,"internalPosition":null,"internalQuery":null,"severity":"","where":null,"table":null,"column":null,"schema":null,"dataType":null,"constraint":null,"file":null,"line":null,"routine":null}
+    at execute (file:///home/runner/workspace/node_modules/@neondatabase/serverless/index.mjs:1557:64)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async <anonymous> (/home/runner/workspace/server/index.ts:44:24) {
+  severity: undefined,
+  code: undefined,
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: undefined,
+  line: undefined,
+  routine: undefined,
+  sourceError: undefined
+}
