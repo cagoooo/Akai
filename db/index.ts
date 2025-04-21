@@ -1,5 +1,5 @@
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
+import { drizzle } from 'drizzle-orm/neon-http';
+import { neon, neonConfig } from '@neondatabase/serverless';
 import * as schema from "@db/schema";
 
 if (!process.env.DATABASE_URL) {
@@ -8,15 +8,14 @@ if (!process.env.DATABASE_URL) {
   );
 }
 
-console.log('Initializing database connection...');
+console.log('Initializing database connection with Neon serverless driver...');
 
-// 使用 postgres-js 客戶端
-const sql = postgres(process.env.DATABASE_URL, { 
-  max: 10, // 設置連接池的最大連接數
-  idle_timeout: 20,
-  connect_timeout: 10
-});
+// 配置 Neon
+neonConfig.fetchConnectionCache = true;
 
-// 使用 drizzle ORM 包裝 postgres-js 客戶端
+// 使用 Neon 的 serverless HTTP 驅動
+const sql = neon(process.env.DATABASE_URL);
+
+// 使用 drizzle ORM 包裝 neon 客戶端
 export const db = drizzle(sql, { schema });
 export { sql }; // 導出 sql 查詢客戶端供健康檢查使用

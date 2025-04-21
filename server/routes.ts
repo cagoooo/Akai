@@ -14,6 +14,13 @@ import { ampRouter } from './amp';
 import { log } from './vite';
 import path from "path";
 
+// 內存中的緩存，用於降級服務
+const inMemoryCache = {
+  visitorStats: { totalVisits: 0, dailyVisits: {} },
+  toolStats: new Map(),
+  rankings: []
+};
+
 // 擴展 Express Request 類型以包含用戶信息
 declare global {
   namespace Express {
