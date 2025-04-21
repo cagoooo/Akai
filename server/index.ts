@@ -1,7 +1,9 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-import { db, sql } from "../db"; // Assuming db and sql are exported correctly
+import { db, sql, dbType } from "../db";
+import path from "node:path";
+import fs from "node:fs";
 
 const app = express();
 app.use(express.json());
