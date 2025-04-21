@@ -275,19 +275,35 @@ export function registerRoutes(app: Express): Server {
         });
 
         if (existingStats) {
-          await db
-            .update(toolUsageStats)
-            .set({ 
+          const currentTime = new Date();
+          
+          try {
+            // 使用適當格式的時間戳
+            await db
+              .update(toolUsageStats)
+              .set({ 
+                totalClicks: existingStats.totalClicks + 1,
+                lastUsedAt: currentTime
+              })
+              .where(eq(toolUsageStats.toolId, parsedId));
+              
+            console.log(`成功更新工具 ${parsedId} 的使用次數，新次數: ${existingStats.totalClicks + 1}`);
+          } catch (updateError) {
+            console.error(`更新工具 ${parsedId} 使用次數時出錯:`, updateError);
+            // 更新內存緩存，即使數據庫操作失敗
+            inMemoryCache.toolStats.set(parsedId, {
+              ...existingStats,
               totalClicks: existingStats.totalClicks + 1,
-              lastUsedAt: new Date().toISOString() // 直接使用 ISO 格式的時間字串
-            })
-            .where(eq(toolUsageStats.toolId, parsedId));
+              lastUsedAt: currentTime
+            });
+          }
         } else {
+          const currentTime = new Date();
           await db.insert(toolUsageStats).values({
             toolId: parsedId,
             totalClicks: 1,
-            createdAt: new Date().toISOString(),
-            lastUsedAt: new Date().toISOString()
+            createdAt: currentTime,
+            lastUsedAt: currentTime
           });
         }
 
