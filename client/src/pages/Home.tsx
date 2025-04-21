@@ -42,15 +42,17 @@ export function Home() {
 
         {/* 主要內容區域 */}
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
-          {/* 移動設備上的排行榜區域 - 紫色系背景 (只在移動設備顯示) */}
-          <aside className="w-full lg:hidden">
-            <div className="space-y-4 p-3 sm:p-4 rounded-lg bg-purple-50 dark:bg-purple-950/50">
-              <div data-tour="tool-rankings-mobile">
-                <ToolRankings />
-              </div>
-              <RankingTutorial />
-            </div>
-          </aside>
+          {/* 手機版排行榜切換按鈕（僅在小屏幕上顯示）*/}
+          <div className="lg:hidden w-full p-3 rounded-lg text-center">
+            <Button 
+              variant="outline" 
+              className="w-full flex items-center justify-center gap-2"
+              onClick={() => document.getElementById('mobile-rankings')?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              <Trophy className="w-4 h-4" />
+              <span>跳至工具排行榜</span>
+            </Button>
+          </div>
 
           {/* 主內容區域 */}
           <div className="w-full lg:w-2/3 space-y-5 sm:space-y-8">
@@ -104,9 +106,9 @@ export function Home() {
             </div>
           </div>
           
-          {/* 桌面版排行榜區域 - 紫色系背景 (只在桌面版顯示) */}
-          <aside className="hidden lg:block lg:w-1/3">
-            <div className="sticky top-4 space-y-4 p-3 sm:p-4 rounded-lg bg-purple-50 dark:bg-purple-950/50">
+          {/* 排行榜區域 - 紫色系背景 */}
+          <aside id="mobile-rankings" className="w-full lg:w-1/3 lg:order-last">
+            <div className="lg:sticky lg:top-4 space-y-4 p-3 sm:p-4 rounded-lg bg-purple-50 dark:bg-purple-950/50">
               <div data-tour="tool-rankings">
                 <ToolRankings />
               </div>
