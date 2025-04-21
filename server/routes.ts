@@ -346,9 +346,9 @@ export function registerRoutes(app: Express): Server {
         // 首先修復任何空的 lastUsedAt 記錄
         try {
           if (dbType === 'sqlite') {
-            await db.execute(sql`UPDATE tool_usage_stats SET last_used_at = datetime('now') WHERE last_used_at IS NULL`);
-          } else {
-            await db.execute(sql`UPDATE tool_usage_stats SET last_used_at = NOW() WHERE last_used_at IS NULL`);
+            await db.run("UPDATE tool_usage_stats SET last_used_at = datetime('now') WHERE last_used_at IS NULL");
+          } else if (sql) {
+            await sql`UPDATE tool_usage_stats SET last_used_at = NOW() WHERE last_used_at IS NULL`;
           }
         } catch (fixError) {
           console.error("嘗試修復 lastUsedAt 空值時出錯:", fixError);
@@ -469,9 +469,9 @@ export function registerRoutes(app: Express): Server {
         // 首先修復任何空的 lastUsedAt 記錄
         try {
           if (dbType === 'sqlite') {
-            await db.execute(sql`UPDATE tool_usage_stats SET last_used_at = datetime('now') WHERE last_used_at IS NULL`);
-          } else {
-            await db.execute(sql`UPDATE tool_usage_stats SET last_used_at = NOW() WHERE last_used_at IS NULL`);
+            await db.run("UPDATE tool_usage_stats SET last_used_at = datetime('now') WHERE last_used_at IS NULL");
+          } else if (sql) {
+            await sql`UPDATE tool_usage_stats SET last_used_at = NOW() WHERE last_used_at IS NULL`;
           }
         } catch (fixError) {
           console.error("嘗試修復 lastUsedAt 空值時出錯:", fixError);
