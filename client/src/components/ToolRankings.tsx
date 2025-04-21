@@ -345,10 +345,10 @@ export function ToolRankings() {
     return (
       <Card className="overflow-hidden relative">
         <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent opacity-50 pointer-events-none z-0"></div>
-        <CardHeader className="relative z-10">
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2">
-              <BarChart className="w-5 h-5" />
+        <CardHeader className="relative z-10 p-3 sm:p-4">
+          <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2">
+            <CardTitle className="flex items-center gap-2 text-base sm:text-lg whitespace-nowrap">
+              <BarChart className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 font-bold">
                 工具使用排行榜
               </span>
@@ -359,15 +359,15 @@ export function ToolRankings() {
                 variant="ghost"
                 size="icon"
                 onClick={toggleMute}
-                className="h-8 w-8 p-0"
+                className="h-7 w-7 sm:h-8 sm:w-8 p-0"
               >
-                {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                {isMuted ? <VolumeX className="h-3 w-3 sm:h-4 sm:w-4" /> : <Volume2 className="h-3 w-3 sm:h-4 sm:w-4" />}
               </Button>
             </div>
           </div>
         </CardHeader>
         
-        <CardContent className="relative z-10">
+        <CardContent className="relative z-10 p-2 sm:p-4">
           <AnimatePresence mode="popLayout">
             {defaultRankings.map((ranking, index) => {
               const tool = tools.find(t => t.id === ranking.toolId);
@@ -389,11 +389,11 @@ export function ToolRankings() {
                   whileHover="hover"
                   onClick={() => handleItemClick(tool)}
                   className={`
-                    flex items-center space-x-4 p-4 rounded-lg 
+                    flex items-center space-x-2 sm:space-x-4 p-2 sm:p-4 rounded-lg 
                     transition-all duration-300 cursor-pointer
                     bg-gradient-to-r 
                     ${rankColor}
-                    mb-4 relative overflow-hidden
+                    mb-3 sm:mb-4 relative overflow-hidden
                     hover:shadow-lg hover:translate-x-1
                     perspective-500 transform-gpu backdrop-blur-sm
                   `}
@@ -463,10 +463,10 @@ export function ToolRankings() {
   return (
     <Card className="overflow-hidden relative">
       <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent opacity-50 pointer-events-none z-0"></div>
-      <CardHeader className="relative z-10">
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2" id="rankings-title">
-            <BarChart className="w-5 h-5" />
+      <CardHeader className="relative z-10 p-3 sm:p-4">
+        <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2">
+          <CardTitle className="flex items-center gap-2 text-base sm:text-lg whitespace-nowrap" id="rankings-title">
+            <BarChart className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 font-bold">
               工具使用排行榜
             </span>
@@ -477,15 +477,15 @@ export function ToolRankings() {
               variant="ghost"
               size="icon"
               onClick={toggleMute}
-              className="h-8 w-8 p-0"
+              className="h-7 w-7 sm:h-8 sm:w-8 p-0"
             >
-              {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+              {isMuted ? <VolumeX className="h-3 w-3 sm:h-4 sm:w-4" /> : <Volume2 className="h-3 w-3 sm:h-4 sm:w-4" />}
             </Button>
           </div>
         </div>
       </CardHeader>
       
-      <CardContent className="relative z-10">
+      <CardContent className="relative z-10 p-2 sm:p-4">
         <AnimatePresence mode="popLayout">
           {rankingsWithChange.map((ranking, index) => {
             const tool = tools.find(t => t.id === ranking.toolId);
@@ -508,11 +508,11 @@ export function ToolRankings() {
                 onClick={() => handleItemClick(tool)}
                 id={index === 0 ? "top-tool" : (index < 5 ? "interaction-area" : undefined)}
                 className={`
-                  flex items-center space-x-4 p-4 rounded-lg 
+                  flex items-center space-x-2 sm:space-x-4 p-2 sm:p-4 rounded-lg 
                   transition-all duration-300 cursor-pointer
                   bg-gradient-to-r 
                   ${rankColor}
-                  mb-4 relative overflow-hidden
+                  mb-3 sm:mb-4 relative overflow-hidden
                   hover:shadow-lg hover:translate-x-1
                   perspective-500 transform-gpu backdrop-blur-sm
                 `}

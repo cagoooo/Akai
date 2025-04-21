@@ -65,18 +65,18 @@ function MilestoneProgress({ currentVisits }: { currentVisits: number }) {
   const NextIcon = nextMilestone.icon;
 
   return (
-    <div className="mt-4 space-y-2">
-      <div className="flex justify-between text-sm font-medium">
+    <div className="mt-3 sm:mt-4 space-y-2">
+      <div className="flex flex-col sm:flex-row justify-between text-xs sm:text-sm font-medium gap-1 sm:gap-0">
         <span className="text-primary-foreground/90">目前：{currentVisits}</span>
         <div className="flex items-center gap-1 text-primary-foreground/90">
-          <NextIcon className="h-4 w-4 text-yellow-400" />
-          <span>下一個里程碑：</span>
+          <NextIcon className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-400 flex-shrink-0" />
+          <span className="whitespace-nowrap">下一個里程碑：</span>
           <span className="font-bold">{nextMilestone.value.toLocaleString()}</span>
         </div>
       </div>
       <Progress 
         value={progress} 
-        className="h-2 bg-gradient-to-r from-yellow-200/20 to-yellow-600/30 [&>div]:bg-gradient-to-r [&>div]:from-yellow-300 [&>div]:via-yellow-500 [&>div]:to-yellow-600" 
+        className="h-1.5 sm:h-2 bg-gradient-to-r from-yellow-200/20 to-yellow-600/30 [&>div]:bg-gradient-to-r [&>div]:from-yellow-300 [&>div]:via-yellow-500 [&>div]:to-yellow-600" 
       />
     </div>
   );
@@ -308,8 +308,8 @@ export function VisitorCounter() {
         showNewVisitAnimation ? "shadow-lg shadow-primary/30" : ""
       )}
     >
-      <CardContent className="pt-6 overflow-hidden">
-        <div className="flex items-center justify-between relative">
+      <CardContent className="pt-4 sm:pt-6 overflow-hidden">
+        <div className="flex flex-wrap sm:flex-nowrap items-center justify-between relative gap-3">
           {/* 訪問次數增加時的動畫特效 */}
           {showNewVisitAnimation && (
             <motion.div
@@ -317,7 +317,7 @@ export function VisitorCounter() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0 }}
               transition={{ duration: 0.5 }}
-              className="absolute -top-8 -right-5 text-yellow-300 text-2xl font-bold"
+              className="absolute -top-6 -right-3 sm:-top-8 sm:-right-5 text-yellow-300 text-lg sm:text-2xl font-bold"
             >
               +1
             </motion.div>
@@ -329,14 +329,15 @@ export function VisitorCounter() {
               transition={{ duration: 0.5 }}
               animate={showNewVisitAnimation ? { scale: [1, 1.2, 1] } : {}}
             >
-              <UserCheck className={cn("h-6 w-6", showNewVisitAnimation ? "text-yellow-300" : "")} />
+              <UserCheck className={cn("h-5 w-5 sm:h-6 sm:w-6", showNewVisitAnimation ? "text-yellow-300" : "")} />
             </motion.div>
-            <h3 className="text-lg font-semibold">網站訪問次數</h3>
+            <h3 className="text-base sm:text-lg font-semibold whitespace-nowrap">網站訪問次數</h3>
           </div>
-          <div className="text-right">
-            <p className="text-sm opacity-90">今日訪問</p>
+          
+          <div className="flex items-center sm:block text-right ml-auto sm:ml-0">
+            <p className="text-xs sm:text-sm opacity-90 mr-1 sm:mr-0">今日訪問</p>
             <motion.p 
-              className="text-2xl font-bold"
+              className="text-xl sm:text-2xl font-bold"
               animate={showNewVisitAnimation ? { 
                 scale: [1, 1.15, 1],
                 color: ["#fff", "#fde047", "#fff"]
@@ -348,10 +349,10 @@ export function VisitorCounter() {
           </div>
         </div>
 
-        <div className="mt-6 text-center">
-          <p className="text-sm opacity-90">總訪問次數</p>
+        <div className="mt-4 sm:mt-6 text-center">
+          <p className="text-xs sm:text-sm opacity-90">總訪問次數</p>
           <motion.p 
-            className="text-4xl font-bold"
+            className="text-3xl sm:text-4xl font-bold"
             animate={showNewVisitAnimation ? { 
               scale: [1, 1.1, 1]
             } : {}}
