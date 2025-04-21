@@ -26,32 +26,39 @@ function getLocalToolStats() {
 }
 
 // 更新本地工具統計
-function updateLocalToolStats(toolId: number) {
+function updateLocalToolStats(toolId: number, serverTotalClicks?: number) {
   try {
     const stats = getLocalToolStats();
     const toolStat = stats.find((s: any) => s.toolId === toolId);
     
+    // 如果提供了服務器數據，使用它，否則本地加1
     if (toolStat) {
-      toolStat.totalClicks += 1;
+      if (serverTotalClicks !== undefined) {
+        toolStat.totalClicks = serverTotalClicks;
+      } else {
+        toolStat.totalClicks += 1;
+      }
       toolStat.lastUsedAt = new Date().toISOString();
     } else {
       stats.push({
         toolId,
-        totalClicks: 1,
+        totalClicks: serverTotalClicks !== undefined ? serverTotalClicks : 1,
         lastUsedAt: new Date().toISOString()
       });
     }
     
     localStorage.setItem(LOCAL_TOOLS_STATS_KEY, JSON.stringify(stats));
     
-    // 更新排行榜
-    const rankings = [...stats].sort((a, b) => b.totalClicks - a.totalClicks).slice(0, 8);
+    // 更新排行榜 - 排序後存儲
+    const rankings = [...stats]
+      .sort((a, b) => b.totalClicks - a.totalClicks)
+      .slice(0, 8);
     localStorage.setItem(LOCAL_TOOLS_RANKINGS_KEY, JSON.stringify(rankings));
     
-    return toolStat ? toolStat.totalClicks : 1;
+    return toolStat ? toolStat.totalClicks : (serverTotalClicks !== undefined ? serverTotalClicks : 1);
   } catch (e) {
     console.error('無法更新本地工具統計:', e);
-    return 1;
+    return serverTotalClicks !== undefined ? serverTotalClicks : 1;
   }
 }
 
@@ -103,29 +110,20 @@ export function useToolTracking() {
       
       if (apiSuccess) {
         // API成功：使用服務器返回的數據更新本地存儲
-        // 查找並更新現有記錄
-        const stats = getLocalToolStats();
-        const toolStat = stats.find((s: any) => s.toolId === toolId);
+        localTotalClicks = updateLocalToolStats(toolId, serverTotalClicks);
         
-        if (toolStat) {
-          // 使用服務器的計數而不是簡單加1
-          toolStat.totalClicks = serverTotalClicks;
-          toolStat.lastUsedAt = new Date().toISOString();
-        } else {
-          stats.push({
-            toolId,
-            totalClicks: serverTotalClicks,
-            lastUsedAt: new Date().toISOString()
-          });
+        // 直接從服務器獲取最新的排行榜數據
+        try {
+          // 立即獲取最新排行榜
+          const rankingsResponse = await fetch('/api/tools/rankings');
+          if (rankingsResponse.ok) {
+            const latestRankings = await rankingsResponse.json();
+            // 更新排行榜查詢緩存
+            queryClient.setQueryData(['/api/tools/rankings'], latestRankings);
+          }
+        } catch (err) {
+          console.error('獲取最新排行榜失敗:', err);
         }
-        
-        localStorage.setItem(LOCAL_TOOLS_STATS_KEY, JSON.stringify(stats));
-        
-        // 更新排行榜
-        const rankings = [...stats].sort((a, b) => b.totalClicks - a.totalClicks).slice(0, 8);
-        localStorage.setItem(LOCAL_TOOLS_RANKINGS_KEY, JSON.stringify(rankings));
-        
-        localTotalClicks = serverTotalClicks;
       } else {
         // API失敗：仍然更新本地數據，但不依賴服務器返回值
         localTotalClicks = updateLocalToolStats(toolId);

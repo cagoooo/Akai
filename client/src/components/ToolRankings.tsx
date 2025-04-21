@@ -103,14 +103,28 @@ export function ToolRankings() {
     return [];
   };
 
-  const { data: rankings = [], isLoading, error } = useQuery<ToolRanking[]>({
+  const { data: rankings = [], isLoading, error, refetch } = useQuery<ToolRanking[]>({
     queryKey: ['/api/tools/rankings'],
     retry: 3,
-    refetchOnWindowFocus: false,
-    staleTime: 30000, // 30 seconds
+    refetchOnWindowFocus: true, // 視窗獲得焦點時刷新
+    refetchInterval: 5000, // 每5秒自動刷新一次
+    staleTime: 2000, // 數據2秒後就視為過時
     // 如果API請求失敗，使用本地存儲的數據
     initialData: getLocalRankings()
   });
+  
+  // 強制每次顯示時都刷新一次排行榜
+  useEffect(() => {
+    // 立即刷新一次
+    refetch();
+    
+    // 設置定期刷新
+    const refreshTimer = setInterval(() => {
+      refetch();
+    }, 5000); // 每5秒刷新一次
+    
+    return () => clearInterval(refreshTimer);
+  }, [refetch]);
 
   // 生成排名變動數據
   const rankingsWithChange = useMemo<RankingWithChange[]>(() => {

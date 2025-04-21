@@ -1,6 +1,7 @@
 import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import express from "express";
+import { WebSocketServer, WebSocket } from "ws";
 import { db, dbType } from "@db";
 import { 
   toolUsageStats,
