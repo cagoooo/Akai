@@ -296,7 +296,20 @@ export function registerRoutes(app: Express): Server {
         });
 
         if (updatedStats) {
+          // 更新內存緩存中的工具統計
           inMemoryCache.toolStats.set(parsedId, updatedStats);
+          
+          // 更新排行榜緩存
+          // 1. 首先獲取最新的所有工具統計
+          const allStats = await db.query.toolUsageStats.findMany({
+            orderBy: desc(toolUsageStats.totalClicks),
+            limit: 8,
+          });
+          
+          // 2. 更新內存緩存中的排行榜
+          if (allStats && allStats.length > 0) {
+            inMemoryCache.rankings = allStats;
+          }
         }
 
         res.json({ 

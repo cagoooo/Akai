@@ -61,10 +61,14 @@ export function useToolTracking() {
 
   const trackToolUsage = async (toolId: number) => {
     try {
-      // 更新本地統計
-      const localTotalClicks = updateLocalToolStats(toolId);
+      // 先記錄當前API數據，以便後續同步本地數據
+      const currentStats = queryClient.getQueryData<any[]>(['/api/tools/stats']) || [];
+      const currentRankings = queryClient.getQueryData<any[]>(['/api/tools/rankings']) || [];
       
       // 嘗試發送API請求
+      let apiSuccess = false;
+      let serverTotalClicks = 0;
+      
       try {
         const response = await fetch(`/api/tools/${toolId}/track`, {
           method: "POST",
@@ -76,6 +80,8 @@ export function useToolTracking() {
         if (response.ok) {
           const data = await response.json();
           console.log('工具使用API已記錄:', toolId, data);
+          apiSuccess = true;
+          serverTotalClicks = data.totalClicks || 0;
           
           // 如果回傳成就訊息，顯示通知
           if (data.achievement) {
@@ -86,37 +92,63 @@ export function useToolTracking() {
             });
           }
         } else {
-          console.warn('API返回非200狀態碼，使用本地數據:', response.status);
-          
-          // 使用本地數據覆蓋API查詢緩存
-          queryClient.setQueryData(['/api/tools/stats'], getLocalToolStats());
-          
-          const rankings = getLocalToolStats()
-            .sort((a: any, b: any) => b.totalClicks - a.totalClicks)
-            .slice(0, 8);
-          queryClient.setQueryData(['/api/tools/rankings'], rankings);
+          console.warn('API返回非200狀態碼:', response.status);
         }
       } catch (apiError) {
-        console.error('API請求失敗，使用本地數據:', apiError);
+        console.error('API請求失敗:', apiError);
+      }
+      
+      // 根據API成功與否更新本地數據
+      let localTotalClicks = 0;
+      
+      if (apiSuccess) {
+        // API成功：使用服務器返回的數據更新本地存儲
+        // 查找並更新現有記錄
+        const stats = getLocalToolStats();
+        const toolStat = stats.find((s: any) => s.toolId === toolId);
         
-        // 使用本地數據覆蓋API查詢緩存
-        queryClient.setQueryData(['/api/tools/stats'], getLocalToolStats());
+        if (toolStat) {
+          // 使用服務器的計數而不是簡單加1
+          toolStat.totalClicks = serverTotalClicks;
+          toolStat.lastUsedAt = new Date().toISOString();
+        } else {
+          stats.push({
+            toolId,
+            totalClicks: serverTotalClicks,
+            lastUsedAt: new Date().toISOString()
+          });
+        }
         
-        const rankings = getLocalToolStats()
+        localStorage.setItem(LOCAL_TOOLS_STATS_KEY, JSON.stringify(stats));
+        
+        // 更新排行榜
+        const rankings = [...stats].sort((a, b) => b.totalClicks - a.totalClicks).slice(0, 8);
+        localStorage.setItem(LOCAL_TOOLS_RANKINGS_KEY, JSON.stringify(rankings));
+        
+        localTotalClicks = serverTotalClicks;
+      } else {
+        // API失敗：仍然更新本地數據，但不依賴服務器返回值
+        localTotalClicks = updateLocalToolStats(toolId);
+        
+        // 此時需要使用本地數據覆蓋API查詢緩存
+        const localStats = getLocalToolStats();
+        queryClient.setQueryData(['/api/tools/stats'], localStats);
+        
+        const rankings = [...localStats]
           .sort((a: any, b: any) => b.totalClicks - a.totalClicks)
           .slice(0, 8);
         queryClient.setQueryData(['/api/tools/rankings'], rankings);
       }
 
-      // 通知React Query刷新相關查詢
+      // 無論成功或失敗，都通知React Query刷新相關查詢
       await Promise.all([
         queryClient.invalidateQueries({ 
           queryKey: ['/api/tools/stats'],
-          refetchType: 'all',
+          refetchType: 'active', // 只刷新活動查詢
         }),
         queryClient.invalidateQueries({ 
           queryKey: ['/api/tools/rankings'],
-          refetchType: 'all',
+          refetchType: 'active', // 只刷新活動查詢
         })
       ]);
 
