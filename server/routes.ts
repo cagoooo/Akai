@@ -279,15 +279,15 @@ export function registerRoutes(app: Express): Server {
             .update(toolUsageStats)
             .set({ 
               totalClicks: existingStats.totalClicks + 1,
-              lastUsedAt: getTimestamp()
+              lastUsedAt: new Date().toISOString() // 直接使用 ISO 格式的時間字串
             })
             .where(eq(toolUsageStats.toolId, parsedId));
         } else {
           await db.insert(toolUsageStats).values({
             toolId: parsedId,
             totalClicks: 1,
-            createdAt: getTimestamp(),
-            lastUsedAt: getTimestamp()
+            createdAt: new Date().toISOString(),
+            lastUsedAt: new Date().toISOString()
           });
         }
 
@@ -343,6 +343,17 @@ export function registerRoutes(app: Express): Server {
   app.get("/api/tools/rankings", async (_req, res) => {
     try {
       try {
+        // 首先修復任何空的 lastUsedAt 記錄
+        try {
+          if (dbType === 'sqlite') {
+            await db.execute(sql`UPDATE tool_usage_stats SET last_used_at = datetime('now') WHERE last_used_at IS NULL`);
+          } else {
+            await db.execute(sql`UPDATE tool_usage_stats SET last_used_at = NOW() WHERE last_used_at IS NULL`);
+          }
+        } catch (fixError) {
+          console.error("嘗試修復 lastUsedAt 空值時出錯:", fixError);
+        }
+        
         const stats = await db.query.toolUsageStats.findMany({
           orderBy: desc(toolUsageStats.totalClicks),
           limit: 8,
@@ -455,6 +466,17 @@ export function registerRoutes(app: Express): Server {
     try {
       // 從數據庫獲取數據
       try {
+        // 首先修復任何空的 lastUsedAt 記錄
+        try {
+          if (dbType === 'sqlite') {
+            await db.execute(sql`UPDATE tool_usage_stats SET last_used_at = datetime('now') WHERE last_used_at IS NULL`);
+          } else {
+            await db.execute(sql`UPDATE tool_usage_stats SET last_used_at = NOW() WHERE last_used_at IS NULL`);
+          }
+        } catch (fixError) {
+          console.error("嘗試修復 lastUsedAt 空值時出錯:", fixError);
+        }
+      
         const stats = await db.query.toolUsageStats.findMany({
           orderBy: desc(toolUsageStats.totalClicks),
         });

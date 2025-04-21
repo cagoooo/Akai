@@ -437,8 +437,10 @@ export function ToolRankings() {
                     
                     <p className="text-sm text-muted-foreground truncate flex items-center">
                       <span className="mr-1">最後使用：</span>
-                      <time dateTime={ranking.lastUsedAt}>
-                        {new Date(ranking.lastUsedAt).toLocaleDateString()}
+                      <time dateTime={ranking.lastUsedAt || undefined}>
+                        {ranking.lastUsedAt 
+                          ? new Date(ranking.lastUsedAt).toLocaleDateString() 
+                          : '最近更新'}
                       </time>
                     </p>
                     <span className="text-xs text-primary/70 italic mt-1 block font-light">點擊開啟新視窗</span>
@@ -557,8 +559,10 @@ export function ToolRankings() {
                   
                   <p className="text-sm text-muted-foreground truncate flex items-center">
                     <span className="mr-1">最後使用：</span>
-                    <time dateTime={ranking.lastUsedAt}>
-                      {new Date(ranking.lastUsedAt).toLocaleDateString()}
+                    <time dateTime={ranking.lastUsedAt || undefined}>
+                      {ranking.lastUsedAt 
+                        ? new Date(ranking.lastUsedAt).toLocaleDateString() 
+                        : '最近更新'}
                     </time>
                   </p>
                   <span className="text-xs text-primary/70 italic mt-1 block font-light">點擊開啟新視窗</span>
