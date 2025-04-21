@@ -54,7 +54,7 @@ interface ApiResponse<T> extends Array<T> {
 }
 
 export function DiagnosticsDashboard() {
-  const [activeTab, setActiveTab] = useState("logs");
+  const [activeTab, setActiveTab] = useState("system");
 
   const { data: errorLogs, isLoading: isLoadingLogs } = useQuery<ApiResponse<ErrorLog>>({
     queryKey: ["/api/diagnostics/error-logs"],
@@ -65,8 +65,20 @@ export function DiagnosticsDashboard() {
     queryKey: ["/api/diagnostics/metrics"],
     refetchInterval: 5000,
   });
+  
+  // 系統信息
+  const { data: systemInfo, isLoading: isLoadingSystemInfo } = useQuery({
+    queryKey: ["/api/diagnostics/system-info"],
+    refetchInterval: 10000, // 每10秒刷新一次
+  });
+  
+  // 數據庫健康狀態
+  const { data: dbHealth, isLoading: isLoadingDbHealth } = useQuery({
+    queryKey: ["/api/diagnostics/db-health"],
+    refetchInterval: 10000, // 每10秒刷新一次
+  });
 
-  if (isLoadingLogs || isLoadingMetrics) {
+  if (isLoadingLogs || isLoadingMetrics || isLoadingSystemInfo || isLoadingDbHealth) {
     return <LoadingScreen message="載入診斷訊息中..." />;
   }
 
@@ -111,9 +123,131 @@ export function DiagnosticsDashboard() {
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList>
+            <TabsTrigger value="system">系統狀態</TabsTrigger>
             <TabsTrigger value="logs">錯誤日誌</TabsTrigger>
             <TabsTrigger value="metrics">系統指標</TabsTrigger>
           </TabsList>
+          
+          <TabsContent value="system" className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              {/* 系統信息卡片 */}
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base">系統信息</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <dl className="space-y-2">
+                    <div className="flex justify-between">
+                      <dt className="text-sm font-medium text-muted-foreground">操作系統:</dt>
+                      <dd className="text-sm font-medium">{systemInfo?.platform || 'N/A'}</dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-sm font-medium text-muted-foreground">Node.js 版本:</dt>
+                      <dd className="text-sm font-medium">{systemInfo?.nodeVersion || 'N/A'}</dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-sm font-medium text-muted-foreground">環境:</dt>
+                      <dd className="text-sm font-medium">{systemInfo?.environment || 'N/A'}</dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-sm font-medium text-muted-foreground">記憶體用量:</dt>
+                      <dd className="text-sm font-medium">
+                        {systemInfo?.memoryUsage ? 
+                          `${Math.round(systemInfo.memoryUsage.heapUsed / 1024 / 1024)} MB / ${Math.round(systemInfo.memoryUsage.heapTotal / 1024 / 1024)} MB` : 
+                          'N/A'}
+                      </dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-sm font-medium text-muted-foreground">運行時間:</dt>
+                      <dd className="text-sm font-medium">
+                        {systemInfo?.uptime ? 
+                          `${Math.floor(systemInfo.uptime / 60)} 分鐘 ${Math.floor(systemInfo.uptime % 60)} 秒` : 
+                          'N/A'}
+                      </dd>
+                    </div>
+                  </dl>
+                </CardContent>
+                <DataSourceIndicator data={systemInfo} />
+              </Card>
+              
+              {/* 數據庫狀態卡片 */}
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base">數據庫狀態</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <dl className="space-y-2">
+                    <div className="flex justify-between">
+                      <dt className="text-sm font-medium text-muted-foreground">狀態:</dt>
+                      <dd className="text-sm font-medium">
+                        <Badge variant={dbHealth?.status === 'connected' ? 'default' : 'destructive'}>
+                          {dbHealth?.status === 'connected' ? '已連接' : '連接失敗'}
+                        </Badge>
+                      </dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-sm font-medium text-muted-foreground">數據庫類型:</dt>
+                      <dd className="text-sm font-medium">{dbHealth?.databaseType || 'N/A'}</dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-sm font-medium text-muted-foreground">響應時間:</dt>
+                      <dd className="text-sm font-medium">{dbHealth?.responseTime || 'N/A'}</dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-sm font-medium text-muted-foreground">版本:</dt>
+                      <dd className="text-sm font-medium">{dbHealth?.version || 'N/A'}</dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-sm font-medium text-muted-foreground">時間戳:</dt>
+                      <dd className="text-sm font-medium">{dbHealth?.timestamp || 'N/A'}</dd>
+                    </div>
+                  </dl>
+                </CardContent>
+                <DataSourceIndicator data={dbHealth} />
+              </Card>
+            </div>
+            
+            {/* 多數據庫兼容性信息 */}
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base">多數據庫兼容性</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm mb-4">
+                  本系統支持在 PostgreSQL 和 SQLite 之間自動切換，確保在不同環境中的數據持久性。
+                  當 PostgreSQL 不可用時，系統會無縫切換到 SQLite 作為備用數據存儲。
+                </p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="rounded border p-3">
+                    <h4 className="font-medium mb-2">PostgreSQL</h4>
+                    <p className="text-sm text-muted-foreground">
+                      主要數據庫，用於生產環境，支持高並發和複雜查詢。
+                      {dbHealth?.databaseType === 'postgres' ? 
+                        ' (目前使用中)' : ''}
+                    </p>
+                  </div>
+                  
+                  <div className="rounded border p-3">
+                    <h4 className="font-medium mb-2">SQLite</h4>
+                    <p className="text-sm text-muted-foreground">
+                      備用數據庫，用於開發環境或當 PostgreSQL 不可用時。
+                      {dbHealth?.databaseType === 'sqlite' ? 
+                        ' (目前使用中)' : ''}
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="mt-4 p-3 rounded border bg-muted">
+                  <h4 className="font-medium mb-2">自動故障轉移</h4>
+                  <p className="text-sm text-muted-foreground">
+                    系統會自動檢測數據庫連接狀態，並在必要時進行切換。
+                    內存緩存確保在數據庫切換過程中數據不丟失。
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           <TabsContent value="logs" className="space-y-4">
             <div className="rounded-md border">
