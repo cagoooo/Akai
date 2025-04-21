@@ -122,7 +122,8 @@ export function saveCache(cache: MemoryCache): void {
     // 將 Map 轉換為可序列化對象
     const serializable = { ...cache };
     if (serializable.toolStats instanceof Map) {
-      serializable.toolStats = Object.fromEntries(serializable.toolStats);
+      // 明確標記類型以解決 TypeScript 錯誤
+      serializable.toolStats = Object.fromEntries(serializable.toolStats) as unknown as Map<number, ToolStats>;
     }
     
     fs.writeFileSync(CACHE_FILE, JSON.stringify(serializable, null, 2));

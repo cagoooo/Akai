@@ -596,6 +596,71 @@ export function registerRoutes(app: Express): Server {
   });
 
 
+  // 添加數據庫和系統診斷信息的路由
+  app.get('/api/diagnostics/system-info', (_req, res) => {
+    try {
+      const info = {
+        databaseType: dbType,
+        nodeVersion: process.version,
+        platform: process.platform,
+        memoryUsage: process.memoryUsage(),
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'development'
+      };
+      
+      // 添加元數據指示這是真實數據
+      Object.assign(info, {
+        _cached: false,
+        _databaseType: dbType
+      });
+      
+      res.json(info);
+    } catch (error) {
+      console.error("Error fetching system info:", error);
+      res.status(500).json({ 
+        message: "獲取系統信息失敗",
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+  
+  // 數據庫健康檢查路由
+  app.get('/api/diagnostics/db-health', async (_req, res) => {
+    try {
+      const startTime = Date.now();
+      
+      let result: any;
+      if (dbType === 'postgres' && sql) {
+        result = await sql`SELECT NOW() as now, version() as version`;
+      } else {
+        result = db.run("SELECT datetime('now') as now, sqlite_version() as version");
+      }
+      
+      const responseTime = Date.now() - startTime;
+      
+      res.json({
+        status: "connected",
+        databaseType: dbType,
+        responseTime: `${responseTime}ms`,
+        version: Array.isArray(result) ? result[0]?.version : result.version,
+        timestamp: Array.isArray(result) ? result[0]?.now : result.now,
+        _cached: false
+      });
+    } catch (error) {
+      console.error("Database health check failed:", error);
+      
+      res.json({
+        status: "error",
+        databaseType: dbType,
+        message: "無法連接到數據庫",
+        error: error instanceof Error ? error.message : String(error),
+        timestamp: new Date().toISOString(),
+        _cached: true
+      });
+    }
+  });
+  
   // Add AMP routes
   app.use('/amp', ampRouter);
 

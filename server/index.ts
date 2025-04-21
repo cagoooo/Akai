@@ -26,8 +26,9 @@ app.use(express.urlencoded({ extended: false }));
         try {
           const result = db.run('SELECT 1 as connected');
           log(`SQLite 連接成功: ${JSON.stringify(result)}`);
-        } catch (sqliteError) {
-          throw new Error(`SQLite 連接測試失敗: ${sqliteError.message}`);
+        } catch (sqliteError: unknown) {
+          const errorMessage = sqliteError instanceof Error ? sqliteError.message : String(sqliteError);
+          throw new Error(`SQLite 連接測試失敗: ${errorMessage}`);
         }
       }
     } catch (dbError) {
@@ -40,7 +41,8 @@ app.use(express.urlencoded({ extended: false }));
     // 增強的健康檢查端點
     app.get("/health", async (_req, res) => {
       // 獲取內存緩存狀態
-      const inMemoryCache = require('./cache').getCache();
+      const { getCache } = await import('./cache');
+      const inMemoryCache = getCache();
       
       const status: any = {
         status: "healthy",
@@ -91,7 +93,7 @@ app.use(express.urlencoded({ extended: false }));
             status.dbResponseTime = `${responseTime}ms`;
             status.dbEngine = "SQLite";
             status.dbFile = db.databasePath || "N/A";
-          } catch (sqliteError) {
+          } catch (sqliteError: unknown) {
             status.database = "error";
             status.dbError = sqliteError instanceof Error ? sqliteError.message : String(sqliteError);
           }
