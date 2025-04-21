@@ -95,12 +95,31 @@ export function ToolRankings() {
     try {
       const localData = localStorage.getItem('localToolsRankings');
       if (localData) {
-        return JSON.parse(localData);
+        const parsed = JSON.parse(localData);
+        
+        // 確保解析得到的是陣列
+        if (Array.isArray(parsed)) {
+          console.log('從本地讀取的排行榜數據:', parsed);
+          return parsed;
+        } else if (parsed && 'data' in parsed && Array.isArray(parsed.data)) {
+          console.log('從本地讀取的排行榜數據(data屬性):', parsed.data);
+          return parsed.data;
+        }
       }
     } catch (e) {
       console.error('無法讀取本地排行榜數據:', e);
     }
     return [];
+  };
+  
+  // 同步排行榜數據到本地存儲
+  const updateLocalRankings = (data: any[]) => {
+    try {
+      console.log('更新本地排行榜數據:', data);
+      localStorage.setItem('localToolsRankings', JSON.stringify(data));
+    } catch (e) {
+      console.error('無法更新本地排行榜數據:', e);
+    }
   };
 
   const { data: rankings = [], isLoading, error, refetch } = useQuery<ToolRanking[]>({
@@ -128,7 +147,16 @@ export function ToolRankings() {
 
   // 生成排名變動數據
   const rankingsWithChange = useMemo<RankingWithChange[]>(() => {
-    const result = rankings.map((ranking, index) => {
+    // 將數據帶入變更前先檢查結構
+    console.log('Current rankings data:', rankings);
+    
+    // 確保正確處理可能的API響應格式 (有些API回傳 {data: []} 格式)
+    let rankingsData = rankings;
+    if (rankingsData && 'data' in rankingsData && Array.isArray(rankingsData.data)) {
+      rankingsData = rankingsData.data;
+    }
+    
+    const result = rankingsData.map((ranking, index) => {
       const prevIndex = prevRankings[ranking.toolId] !== undefined ? prevRankings[ranking.toolId] : index;
       const change = prevIndex - index; // 正數表示上升，負數表示下降
       return { ...ranking, change, prevIndex };
@@ -140,11 +168,24 @@ export function ToolRankings() {
   // 使用 useEffect 來更新前一次的排名，避免無限循環
   useEffect(() => {
     if (rankings.length > 0) {
+      // 處理可能的API響應格式
+      let rankingsData = rankings;
+      if (rankingsData && 'data' in rankingsData && Array.isArray(rankingsData.data)) {
+        rankingsData = rankingsData.data;
+      }
+      
+      // 更新前一次排名
       const newPrevRankings: Record<number, number> = {};
-      rankings.forEach((r, i) => {
+      rankingsData.forEach((r, i) => {
         newPrevRankings[r.toolId] = i;
       });
       setPrevRankings(newPrevRankings);
+      
+      // 更新本地存儲
+      updateLocalRankings(rankingsData);
+      
+      // 打印排行榜數據
+      console.log('排行榜數據已更新:', rankingsData);
     }
   }, [rankings]);
 
