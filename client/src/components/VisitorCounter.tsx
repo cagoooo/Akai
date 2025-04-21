@@ -125,23 +125,34 @@ export function VisitorCounter() {
     return parseInt(localStorage.getItem('todayVisits') || '0');
   });
 
-  // 自動增加訪問次數功能（強化版）
+  // 自動增加訪問次數功能（改進版）- 加強防重複計數
   useEffect(() => {
     // 檢查最後一次訪問的時間，以決定是否增加計數
     const lastVisitTime = parseInt(localStorage.getItem('lastVisitTimestamp') || '0');
     const currentTime = Date.now();
     const today = new Date().toISOString().split("T")[0];
     const lastVisitDate = localStorage.getItem('lastVisitDate') || '';
+    const sessionVisited = sessionStorage.getItem('sessionVisited') || '';
 
-    // 設定頁面重新載入的最小時間間隔（5秒）
-    const MIN_VISIT_INTERVAL = 5 * 1000; // 5秒
+    // 設定頁面重新載入的最小時間間隔（30分鐘 = 30 * 60 * 1000毫秒）
+    const MIN_VISIT_INTERVAL = 30 * 60 * 1000; // 30分鐘
     
-    // 如果距離上次訪問已經超過最小間隔時間，或是新的一天，則增加訪問次數
+    // 只有當會話中第一次訪問，或者距離上次訪問已經超過最小間隔時間，或是新的一天時，才增加訪問次數
     const shouldIncrementVisit = 
-      (currentTime - lastVisitTime > MIN_VISIT_INTERVAL) || 
-      (lastVisitDate !== today);
+      !sessionVisited || // 會話中第一次訪問
+      (currentTime - lastVisitTime > MIN_VISIT_INTERVAL) || // 或超過30分鐘
+      (lastVisitDate !== today); // 或是新的一天
+
+    // 在會話中標記已訪問，防止重複計數
+    sessionStorage.setItem('sessionVisited', 'true');
 
     if (shouldIncrementVisit) {
+      console.log('增加訪問計數 - 條件:', { 
+        isFirstVisitInSession: !sessionVisited,
+        timeIntervalPassed: currentTime - lastVisitTime > MIN_VISIT_INTERVAL,
+        isNewDay: lastVisitDate !== today
+      });
+      
       // 更新最後訪問時間和日期
       localStorage.setItem('lastVisitTimestamp', currentTime.toString());
       localStorage.setItem('lastVisitDate', today);
@@ -177,6 +188,15 @@ export function VisitorCounter() {
       };
 
       incrementVisitor();
+    } else {
+      console.log('未增加訪問計數 - 條件:', { 
+        isFirstVisitInSession: !sessionVisited,
+        minutesSinceLastVisit: Math.round((currentTime - lastVisitTime) / (60 * 1000)),
+        isNewDay: lastVisitDate !== today
+      });
+      
+      // 雖然不增加計數，但仍然獲取最新數據
+      refetch().catch(err => console.error("訪問統計刷新失敗", err));
     }
   }, [refetch, localTotalVisits, localTodayVisits]);
 
@@ -265,22 +285,20 @@ export function VisitorCounter() {
   // 添加動畫效果，當訪問次數增加時顯示特效
   const [showNewVisitAnimation, setShowNewVisitAnimation] = useState(false);
   
-  // 檢測訪問次數的變化並顯示動畫
+  // 檢測訪問次數的變化並顯示動畫 - 改為僅在訪問計數增加時顯示
   useEffect(() => {
-    // 頁面加載時自動播放一次動畫效果
-    const timer = setTimeout(() => {
-      setShowNewVisitAnimation(true);
-      
-      // 動畫效果持續時間
+    // 不再自動播放加載動畫，而是依賴訪問計數增加的觸發器（在上面的shouldIncrementVisit條件中設置）
+    // 當訪問計數增加時，showNewVisitAnimation已經在那裡設置為true
+    
+    // 此處僅處理定時隱藏動畫
+    if (showNewVisitAnimation) {
       const animDuration = setTimeout(() => {
         setShowNewVisitAnimation(false);
       }, 2000);
       
       return () => clearTimeout(animDuration);
-    }, 800);
-    
-    return () => clearTimeout(timer);
-  }, []);
+    }
+  }, [showNewVisitAnimation]);
   
   return (
     <Card 
