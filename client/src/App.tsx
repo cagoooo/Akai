@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import { Switch, Route } from "wouter";
+import { HelmetProvider } from "react-helmet-async";
 import { TourProvider } from "@/components/TourProvider";
 import { Toaster } from "@/components/ui/toaster";
 import { PageTransition } from "@/components/PageTransition";
@@ -8,6 +9,8 @@ import { queryClient } from "./lib/queryClient";
 import { Footer } from "@/components/Footer";
 import { ErrorBoundary, SuspenseWrapper } from "@/components/ErrorBoundary";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SEOHead } from "@/components/SEOHead";
+import { WebsiteSchema, OrganizationSchema, AllToolsSchema } from "@/components/StructuredData";
 
 // 懶載入頁面元件 - 程式碼分割
 const Home = lazy(() => import("@/pages/Home").then(m => ({ default: m.Home })));
@@ -39,31 +42,39 @@ function PageSkeleton() {
 
 function App() {
   return (
-    <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <TourProvider>
-          <div className="min-h-screen flex flex-col">
-            <PageTransition>
-              <Switch>
-                <Route path="/">
-                  <Suspense fallback={<PageSkeleton />}>
-                    <Home />
-                  </Suspense>
-                </Route>
-              </Switch>
-            </PageTransition>
-            <Footer />
-          </div>
+    <HelmetProvider>
+      <ErrorBoundary>
+        {/* SEO 全域設定 */}
+        <SEOHead />
+        <WebsiteSchema />
+        <OrganizationSchema />
+        <AllToolsSchema />
 
-          {/* 懶載入對話框元件 */}
-          <SuspenseWrapper>
-            <TriviaDialog />
-          </SuspenseWrapper>
+        <QueryClientProvider client={queryClient}>
+          <TourProvider>
+            <div className="min-h-screen flex flex-col">
+              <PageTransition>
+                <Switch>
+                  <Route path="/">
+                    <Suspense fallback={<PageSkeleton />}>
+                      <Home />
+                    </Suspense>
+                  </Route>
+                </Switch>
+              </PageTransition>
+              <Footer />
+            </div>
 
-          <Toaster />
-        </TourProvider>
-      </QueryClientProvider>
-    </ErrorBoundary>
+            {/* 懶載入對話框元件 */}
+            <SuspenseWrapper>
+              <TriviaDialog />
+            </SuspenseWrapper>
+
+            <Toaster />
+          </TourProvider>
+        </QueryClientProvider>
+      </ErrorBoundary>
+    </HelmetProvider>
   );
 }
 

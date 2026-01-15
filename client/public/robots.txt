@@ -1,14 +1,13 @@
 User-agent: *
 Allow: /
-Allow: /amp/
 
-# Sitemaps
-Sitemap: https://smes.tyc.edu.tw/sitemap.xml
+# Sitemap
+Sitemap: https://akai-e693f.web.app/sitemap.xml
 
-# Crawl-delay
-Crawl-delay: 10
+# Crawl-delay suggestion
+Crawl-delay: 1
 
-# Disallow paths
+# Disallow common irrelevant paths
 Disallow: /api/
 Disallow: /admin/
 Disallow: /private/

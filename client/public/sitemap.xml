@@ -1,45 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- 主網站 -->
   <url>
-    <loc>https://smes.tyc.edu.tw/</loc>
-    <lastmod>2025-01-08</lastmod>
+    <loc>https://akai-e693f.web.app/</loc>
+    <lastmod>2026-01-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
+  
+  <!-- 教育工具 - AI 學生評語產生器 -->
   <url>
-    <loc>https://chat.smes.tyc.edu.tw/</loc>
-    <lastmod>2025-01-08</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://aireportgenerator.web.app/</loc>
+    <lastmod>2026-01-15</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  
+  <!-- 教育工具 - 即時投票系統 -->
   <url>
-    <loc>https://lesson.smes.tyc.edu.tw/</loc>
-    <lastmod>2025-01-08</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://realtime-vote.web.app/</loc>
+    <lastmod>2026-01-15</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  
+  <!-- 教育工具 - 考試計時器 -->
   <url>
-    <loc>https://words.smes.tyc.edu.tw/</loc>
-    <lastmod>2025-01-08</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://exam-timer.web.app/</loc>
+    <lastmod>2026-01-15</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  
+  <!-- 教育工具 - 抽獎系統 -->
   <url>
-    <loc>https://pirls.smes.tyc.edu.tw/</loc>
-    <lastmod>2025-01-08</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://cagoooo.github.io/lottery/</loc>
+    <lastmod>2026-01-15</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  
+  <!-- 教育工具 - 單字拼寫練習 -->
   <url>
-    <loc>https://qrcode.smes.tyc.edu.tw/</loc>
-    <lastmod>2025-01-08</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://cagoooo.github.io/word-spelling/</loc>
+    <lastmod>2026-01-15</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  
+  <!-- 教育工具 - AMP 音樂播放器 -->
   <url>
-    <loc>https://bee.smes.tyc.edu.tw/</loc>
-    <lastmod>2025-01-08</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://cagoooo.github.io/AMP/</loc>
+    <lastmod>2026-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- 教育工具 - 課堂計時器 -->
+  <url>
+    <loc>https://cagoooo.github.io/ClassroomTimer/</loc>
+    <lastmod>2026-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- 教育工具 - 隨機抽人系統 -->
+  <url>
+    <loc>https://cagoooo.github.io/random-name-picker/</loc>
+    <lastmod>2026-01-15</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 </urlset>
