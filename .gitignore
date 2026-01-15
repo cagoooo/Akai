@@ -8,6 +8,11 @@ vite.config.ts.*
 # Firebase
 .firebase/
 
+# Environment variables
+.env
+.env.local
+.env.*.local
+
 # Replit
 .local/
 .config/
