@@ -14,18 +14,12 @@ export function Footer() {
           rel="noopener noreferrer"
           className="transition-all duration-300 hover:scale-110"
         >
-          <picture>
-            <source
-              srcSet={getAssetPath('assets/圈圈-dark.png')}
-              media="(prefers-color-scheme: dark)"
-            />
-            <img
-              src={getAssetPath('assets/圈圈.png')}
-              alt="Shi Men Elementary School Logo"
-              className="h-6 w-6 sm:h-8 sm:w-8 object-contain transition-all duration-300 hover:rotate-[5deg] dark:invert mb-2 sm:mb-0"
-              loading="lazy"
-            />
-          </picture>
+          <img
+            src={getAssetPath('assets/圈圈.png')}
+            alt="Shi Men Elementary School Logo"
+            className="h-6 w-6 sm:h-8 sm:w-8 object-contain transition-all duration-300 hover:rotate-[5deg] dark:invert mb-2 sm:mb-0"
+            loading="lazy"
+          />
         </a>
         <p className="text-center sm:text-left">
           © {new Date().getFullYear()}{" "}
