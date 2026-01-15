@@ -1,5 +1,5 @@
 // 服務工作線程版本
-const CACHE_VERSION = 'v1.0.1';
+const CACHE_VERSION = 'v1.0.2';
 const CACHE_NAME = `site-static-${CACHE_VERSION}`;
 
 // 獲取 base path (支援 GitHub Pages)
@@ -48,31 +48,42 @@ self.addEventListener('activate', (event) => {
 
 // 獲取事件 - 實現網絡優先策略
 self.addEventListener('fetch', (event) => {
+  const request = event.request;
+
   // 僅處理 GET 請求
-  if (event.request.method !== 'GET') return;
+  if (request.method !== 'GET') return;
+
+  // 跳過不支援的 scheme (chrome-extension, etc.)
+  const url = new URL(request.url);
+  if (!['http:', 'https:'].includes(url.protocol)) return;
 
   // 跳過 API 請求
-  if (event.request.url.includes('/api/')) return;
+  if (request.url.includes('/api/')) return;
 
   // 跳過 Firebase 請求
-  if (event.request.url.includes('firestore.googleapis.com')) return;
-  if (event.request.url.includes('firebase')) return;
+  if (request.url.includes('firestore.googleapis.com')) return;
+  if (request.url.includes('firebase')) return;
+  if (request.url.includes('googleapis.com')) return;
 
   event.respondWith(
-    fetch(event.request)
+    fetch(request)
       .then((networkResponse) => {
-        // 如果網絡請求成功，更新緩存
-        if (networkResponse.ok) {
+        // 確保是有效的 HTTP/HTTPS 請求才快取
+        if (networkResponse.ok && ['http:', 'https:'].includes(url.protocol)) {
           const clonedResponse = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, clonedResponse);
+            try {
+              cache.put(request, clonedResponse);
+            } catch (e) {
+              console.warn('快取失敗:', e);
+            }
           });
         }
         return networkResponse;
       })
       .catch(() => {
         // 如果網絡請求失敗，嘗試從緩存中獲取
-        return caches.match(event.request);
+        return caches.match(request);
       })
   );
 });
