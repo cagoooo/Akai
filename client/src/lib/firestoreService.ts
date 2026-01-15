@@ -1,5 +1,5 @@
 // Firestore 資料庫服務層
-import { db } from './firebase';
+import { db, isFirebaseAvailable } from './firebase';
 import {
     doc,
     getDoc,
@@ -12,7 +12,8 @@ import {
     limit,
     increment,
     serverTimestamp,
-    Timestamp
+    Timestamp,
+    Firestore
 } from 'firebase/firestore';
 
 // ==================== 類型定義 ====================
@@ -39,8 +40,18 @@ const VISITOR_STATS_COLLECTION = 'visitorStats';
  * 取得訪客統計資料
  */
 export async function getVisitorStats(): Promise<VisitorStats> {
+    // 如果 Firebase 不可用，返回預設值
+    if (!isFirebaseAvailable() || !db) {
+        console.warn('Firebase 不可用，使用本地訪客統計');
+        return {
+            totalVisits: parseInt(localStorage.getItem('localVisitorCount') || '0'),
+            dailyVisits: {},
+            lastVisitAt: null
+        };
+    }
+
     try {
-        const docRef = doc(db, VISITOR_STATS_COLLECTION, VISITOR_STATS_DOC);
+        const docRef = doc(db as Firestore, VISITOR_STATS_COLLECTION, VISITOR_STATS_DOC);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -60,7 +71,7 @@ export async function getVisitorStats(): Promise<VisitorStats> {
         console.error('取得訪客統計失敗:', error);
         // 返回預設值
         return {
-            totalVisits: 0,
+            totalVisits: parseInt(localStorage.getItem('localVisitorCount') || '0'),
             dailyVisits: {},
             lastVisitAt: null
         };
@@ -71,9 +82,20 @@ export async function getVisitorStats(): Promise<VisitorStats> {
  * 增加訪客計數
  */
 export async function incrementVisitorCount(): Promise<VisitorStats> {
+    // 如果 Firebase 不可用，使用本地計數
+    if (!isFirebaseAvailable() || !db) {
+        const localCount = parseInt(localStorage.getItem('localVisitorCount') || '0') + 1;
+        localStorage.setItem('localVisitorCount', localCount.toString());
+        return {
+            totalVisits: localCount,
+            dailyVisits: {},
+            lastVisitAt: null
+        };
+    }
+
     try {
         const today = new Date().toISOString().split('T')[0];
-        const docRef = doc(db, VISITOR_STATS_COLLECTION, VISITOR_STATS_DOC);
+        const docRef = doc(db as Firestore, VISITOR_STATS_COLLECTION, VISITOR_STATS_DOC);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -109,7 +131,14 @@ export async function incrementVisitorCount(): Promise<VisitorStats> {
         }
     } catch (error) {
         console.error('增加訪客計數失敗:', error);
-        throw error;
+        // 使用本地備份
+        const localCount = parseInt(localStorage.getItem('localVisitorCount') || '0') + 1;
+        localStorage.setItem('localVisitorCount', localCount.toString());
+        return {
+            totalVisits: localCount,
+            dailyVisits: {},
+            lastVisitAt: null
+        };
     }
 }
 
@@ -121,8 +150,21 @@ const TOOL_STATS_COLLECTION = 'toolUsageStats';
  * 追蹤工具使用
  */
 export async function trackToolUsage(toolId: number): Promise<ToolStats> {
+    // 如果 Firebase 不可用，使用本地計數
+    if (!isFirebaseAvailable() || !db) {
+        const localKey = `localToolStats_${toolId}`;
+        const localClicks = parseInt(localStorage.getItem(localKey) || '0') + 1;
+        localStorage.setItem(localKey, localClicks.toString());
+        return {
+            toolId,
+            totalClicks: localClicks,
+            lastUsedAt: null,
+            categoryClicks: {}
+        };
+    }
+
     try {
-        const docRef = doc(db, TOOL_STATS_COLLECTION, `tool_${toolId}`);
+        const docRef = doc(db as Firestore, TOOL_STATS_COLLECTION, `tool_${toolId}`);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -143,14 +185,7 @@ export async function trackToolUsage(toolId: number): Promise<ToolStats> {
                 toolId,
                 totalClicks: 1,
                 lastUsedAt: Timestamp.now(),
-                categoryClicks: {
-                    communication: 0,
-                    teaching: 0,
-                    language: 0,
-                    reading: 0,
-                    utilities: 0,
-                    games: 0
-                }
+                categoryClicks: {}
             };
 
             await setDoc(docRef, {
@@ -162,7 +197,16 @@ export async function trackToolUsage(toolId: number): Promise<ToolStats> {
         }
     } catch (error) {
         console.error('追蹤工具使用失敗:', error);
-        throw error;
+        // 使用本地備份
+        const localKey = `localToolStats_${toolId}`;
+        const localClicks = parseInt(localStorage.getItem(localKey) || '0') + 1;
+        localStorage.setItem(localKey, localClicks.toString());
+        return {
+            toolId,
+            totalClicks: localClicks,
+            lastUsedAt: null,
+            categoryClicks: {}
+        };
     }
 }
 
@@ -170,9 +214,15 @@ export async function trackToolUsage(toolId: number): Promise<ToolStats> {
  * 取得工具排行榜
  */
 export async function getToolRankings(limitCount: number = 8): Promise<ToolStats[]> {
+    // 如果 Firebase 不可用，返回空陣列
+    if (!isFirebaseAvailable() || !db) {
+        console.warn('Firebase 不可用，無法取得排行榜');
+        return [];
+    }
+
     try {
         const q = query(
-            collection(db, TOOL_STATS_COLLECTION),
+            collection(db as Firestore, TOOL_STATS_COLLECTION),
             orderBy('totalClicks', 'desc'),
             limit(limitCount)
         );
@@ -195,9 +245,13 @@ export async function getToolRankings(limitCount: number = 8): Promise<ToolStats
  * 取得所有工具統計
  */
 export async function getAllToolStats(): Promise<ToolStats[]> {
+    if (!isFirebaseAvailable() || !db) {
+        return [];
+    }
+
     try {
         const q = query(
-            collection(db, TOOL_STATS_COLLECTION),
+            collection(db as Firestore, TOOL_STATS_COLLECTION),
             orderBy('totalClicks', 'desc')
         );
 
@@ -238,8 +292,13 @@ export async function logError(
         metadata?: Record<string, unknown>;
     }
 ): Promise<void> {
+    if (!isFirebaseAvailable() || !db) {
+        console.warn('Firebase 不可用，錯誤僅記錄在控制台:', level, message);
+        return;
+    }
+
     try {
-        const colRef = collection(db, ERROR_LOGS_COLLECTION);
+        const colRef = collection(db as Firestore, ERROR_LOGS_COLLECTION);
         const logEntry: ErrorLogEntry = {
             level,
             message,
