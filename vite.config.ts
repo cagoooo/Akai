@@ -8,7 +8,11 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// GitHub Pages 需要設定 base path
+const isGitHubPages = process.env.GITHUB_ACTIONS === 'true';
+
 export default defineConfig({
+  base: isGitHubPages ? '/Akai/' : '/',
   plugins: [react(), runtimeErrorOverlay(), themePlugin()],
   resolve: {
     alias: {
