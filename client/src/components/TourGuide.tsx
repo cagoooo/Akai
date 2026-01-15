@@ -28,7 +28,7 @@ export function TourGuide({ onComplete }: TourGuideProps) {
   const [driverObj, setDriverObj] = useState<any>(null);
   const { toast } = useToast();
   const localStorageKey = "hasCompletedSiteTour";
-  
+
   // 檢查是否已完成導覽
   const getHasCompletedTour = () => {
     try {
@@ -37,7 +37,7 @@ export function TourGuide({ onComplete }: TourGuideProps) {
       return false;
     }
   };
-  
+
   // 設置導覽完成狀態
   const setTourCompleted = (completed: boolean) => {
     try {
@@ -47,7 +47,7 @@ export function TourGuide({ onComplete }: TourGuideProps) {
       console.error("無法儲存導覽完成狀態:", e);
     }
   };
-  
+
   // 播放音效
   const playSound = () => {
     try {
@@ -56,7 +56,7 @@ export function TourGuide({ onComplete }: TourGuideProps) {
       console.error("播放音效失敗:", e);
     }
   };
-  
+
   // 初始化導覽驅動程序
   const initializeDriver = () => {
     const tourDriver = driver({
@@ -80,7 +80,7 @@ export function TourGuide({ onComplete }: TourGuideProps) {
             top: offset,
             behavior: 'smooth'
           });
-          
+
           // 添加高亮動畫效果
           element.classList.add('highlight-pulse');
         }
@@ -94,36 +94,16 @@ export function TourGuide({ onComplete }: TourGuideProps) {
         console.log("Site tour completed");
         // 記錄完成狀態
         setTourCompleted(true);
-        
-        try {
-          const response = await fetch('/api/tour/complete', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          });
-          const data = await response.json();
 
-          // 顯示成就通知
-          toast({
-            title: "🎉 網站導覽完成！",
-            description: data?.message || "感謝您完成網站導覽，已解鎖「探索者」成就！",
-            duration: 5000,
-          });
-          
-          if (onComplete) {
-            onComplete();
-          }
-        } catch (error) {
-          console.error("記錄導覽完成時發生錯誤:", error);
-          // 即使API請求失敗，也應該更新本地狀態
-          setTourCompleted(true);
-          
-          toast({
-            title: "🎉 網站導覽完成！",
-            description: "感謝您完成網站導覽，已解鎖「探索者」成就！",
-            duration: 5000,
-          });
+        // 顯示成就通知（純本地處理，不需要 API）
+        toast({
+          title: "🎉 網站導覽完成！",
+          description: "感謝您完成網站導覽，已解鎖「探索者」成就！",
+          duration: 5000,
+        });
+
+        if (onComplete) {
+          onComplete();
         }
       },
       steps: [
@@ -172,11 +152,11 @@ export function TourGuide({ onComplete }: TourGuideProps) {
         }
       ],
     });
-    
+
     setDriverObj(tourDriver);
     return tourDriver;
   };
-  
+
   // 開始導覽
   const startTour = () => {
     try {
@@ -196,27 +176,27 @@ export function TourGuide({ onComplete }: TourGuideProps) {
       });
     }
   };
-  
+
   // 關閉導覽提示
   const dismissTour = () => {
     setIsVisible(false);
   };
-  
+
   // 重置導覽狀態
   const resetTour = () => {
     setTourCompleted(false);
     setIsVisible(true);
   };
-  
+
   // 元件掛載時
   useEffect(() => {
     // 檢查導覽完成狀態
     const tourCompleted = getHasCompletedTour();
     setHasCompletedTour(tourCompleted);
-    
+
     // 初始化驅動程序
     const driver = initializeDriver();
-    
+
     // 初次載入且尚未完成導覽時，延遲顯示提示
     if (!tourCompleted) {
       const timer = setTimeout(() => {
@@ -224,20 +204,20 @@ export function TourGuide({ onComplete }: TourGuideProps) {
       }, 2000);
       return () => clearTimeout(timer);
     }
-    
+
     // 監聽全局事件以啟動導覽
     const handleStartTour = () => {
       startTour();
     };
-    
+
     // 監聽全局事件以重置導覽
     const handleResetTour = () => {
       resetTour();
     };
-    
+
     window.addEventListener('start-site-tour', handleStartTour);
     window.addEventListener('reset-site-tour', handleResetTour);
-    
+
     // 清理函數
     return () => {
       if (driver) {
@@ -246,14 +226,14 @@ export function TourGuide({ onComplete }: TourGuideProps) {
       window.removeEventListener('start-site-tour', handleStartTour);
       window.removeEventListener('reset-site-tour', handleResetTour);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   return (
     <div className="tour-guide-container">
       {/* 導覽提示彈窗 */}
       {isVisible && !hasCompletedTour && (
-        <motion.div 
+        <motion.div
           className="tour-prompt"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -271,42 +251,42 @@ export function TourGuide({ onComplete }: TourGuideProps) {
             border: '2px solid #0891b2',
           }}
         >
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
             marginBottom: '12px',
             gap: '8px',
             borderBottom: '1px solid rgba(8, 145, 178, 0.2)',
             paddingBottom: '8px'
           }}>
             <Info size={24} color="#0891b2" />
-            <h3 style={{ 
-              margin: 0, 
-              color: '#0891b2', 
-              fontSize: '18px', 
+            <h3 style={{
+              margin: 0,
+              color: '#0891b2',
+              fontSize: '18px',
               fontWeight: 'bold'
             }}>
               歡迎使用教育平台！
             </h3>
           </div>
-          <p style={{ 
-            margin: '0 0 16px 0', 
-            fontSize: '14px', 
-            color: '#333', 
-            lineHeight: 1.5 
+          <p style={{
+            margin: '0 0 16px 0',
+            fontSize: '14px',
+            color: '#333',
+            lineHeight: 1.5
           }}>
             想要了解平台的主要功能嗎？跟隨我們的導覽，快速掌握所有重要特性！
           </p>
           <div style={{ display: 'flex', gap: '8px' }}>
-            <Button 
+            <Button
               onClick={startTour}
               className="bg-cyan-600 hover:bg-cyan-700 gap-2"
             >
               <Lightbulb size={16} />
               開始導覽
             </Button>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={dismissTour}
               className="border-cyan-600 text-cyan-600 hover:bg-cyan-50"
             >
@@ -315,7 +295,7 @@ export function TourGuide({ onComplete }: TourGuideProps) {
           </div>
         </motion.div>
       )}
-      
+
       {/* 固定位置的導覽按鈕 */}
       {hasCompletedTour && (
         <motion.div
@@ -334,7 +314,7 @@ export function TourGuide({ onComplete }: TourGuideProps) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Button 
+            <Button
               onClick={startTour}
               variant="default"
               size="sm"
