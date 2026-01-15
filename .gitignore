@@ -4,3 +4,20 @@ dist
 server/public
 vite.config.ts.*
 *.tar.gz
+
+# Firebase
+.firebase/
+
+# Replit
+.local/
+.config/
+.cache/
+attached_assets/
+logs/
+cache/
+sqlite/
+
+# SQLite database files
+*.db
+*.db-shm
+*.db-wal

@@ -1,0 +1,82 @@
+[2025-04-21T03:25:40.203Z] [SYSTEM] 使用 SQLite 本地數據庫作為主要或備用數據庫
+[2025-04-21T03:25:40.237Z] [SYSTEM] SQLite 數據庫文件位置: /home/runner/workspace/sqlite/app.db
+[2025-04-21T03:25:40.246Z] [SYSTEM] 已確保 SQLite 基本表結構存在
+[2025-04-21T03:25:40.246Z] [SYSTEM] 數據庫初始化完成
+[2025-04-21T03:29:07.017Z] [SYSTEM] 使用 SQLite 本地數據庫作為主要或備用數據庫
+[2025-04-21T03:29:07.020Z] [SYSTEM] SQLite 數據庫文件位置: /home/runner/workspace/sqlite/app.db
+[2025-04-21T03:29:07.021Z] [SYSTEM] 已確保 SQLite 基本表結構存在
+[2025-04-21T03:29:07.021Z] [SYSTEM] 數據庫初始化完成
+[2025-04-21T03:33:37.690Z] [SYSTEM] 使用 SQLite 本地數據庫作為主要或備用數據庫
+[2025-04-21T03:33:37.694Z] [SYSTEM] SQLite 數據庫文件位置: /home/runner/workspace/sqlite/app.db
+[2025-04-21T03:33:37.694Z] [SYSTEM] 已確保 SQLite 基本表結構存在
+[2025-04-21T03:33:37.695Z] [SYSTEM] 數據庫初始化完成
+[2025-04-21T03:37:44.044Z] [SYSTEM] 使用 SQLite 本地數據庫作為主要或備用數據庫
+[2025-04-21T03:37:44.063Z] [SYSTEM] SQLite 數據庫文件位置: /home/runner/workspace/sqlite/app.db
+[2025-04-21T03:37:44.064Z] [SYSTEM] 已確保 SQLite 基本表結構存在
+[2025-04-21T03:37:44.064Z] [SYSTEM] 數據庫初始化完成
+[2025-04-21T03:40:56.974Z] [SYSTEM] 使用 SQLite 本地數據庫作為主要或備用數據庫
+[2025-04-21T03:40:56.994Z] [SYSTEM] SQLite 數據庫文件位置: /home/runner/workspace/sqlite/app.db
+[2025-04-21T03:40:56.995Z] [SYSTEM] 已確保 SQLite 基本表結構存在
+[2025-04-21T03:40:56.995Z] [SYSTEM] 數據庫初始化完成
+[2025-04-21T03:44:17.028Z] [SYSTEM] 使用 SQLite 本地數據庫作為主要或備用數據庫
+[2025-04-21T03:44:17.035Z] [SYSTEM] SQLite 數據庫文件位置: /home/runner/workspace/sqlite/app.db
+[2025-04-21T03:44:17.037Z] [SYSTEM] 已確保 SQLite 基本表結構存在
+[2025-04-21T03:44:17.037Z] [SYSTEM] 數據庫初始化完成
+[2025-04-21T03:44:35.546Z] [SYSTEM] 未找到有效緩存文件，使用默認緩存
+[2025-04-21T03:46:44.087Z] [SYSTEM] 緩存保存成功
+[2025-04-21T03:46:45.775Z] [SYSTEM] 使用 SQLite 本地數據庫作為主要或備用數據庫
+[2025-04-21T03:46:45.778Z] [SYSTEM] SQLite 數據庫文件位置: /home/runner/workspace/sqlite/app.db
+[2025-04-21T03:46:45.779Z] [SYSTEM] 已確保 SQLite 基本表結構存在
+[2025-04-21T03:46:45.779Z] [SYSTEM] 數據庫初始化完成
+[2025-04-21T04:10:58.400Z] [SYSTEM] 使用 SQLite 本地數據庫作為主要或備用數據庫
+[2025-04-21T04:10:58.404Z] [SYSTEM] SQLite 數據庫文件位置: /home/runner/workspace/sqlite/app.db
+[2025-04-21T04:10:58.405Z] [SYSTEM] 已確保 SQLite 基本表結構存在
+[2025-04-21T04:10:58.405Z] [SYSTEM] 數據庫初始化完成
+[2025-04-21T04:12:52.082Z] [SYSTEM] 使用 SQLite 本地數據庫作為主要或備用數據庫
+[2025-04-21T04:12:52.085Z] [SYSTEM] SQLite 數據庫文件位置: /home/runner/workspace/sqlite/app.db
+[2025-04-21T04:12:52.086Z] [SYSTEM] 已確保 SQLite 基本表結構存在
+[2025-04-21T04:12:52.086Z] [SYSTEM] 數據庫初始化完成
+[2025-04-21T04:22:24.672Z] [SYSTEM] 使用 SQLite 本地數據庫作為主要或備用數據庫
+[2025-04-21T04:22:24.676Z] [SYSTEM] SQLite 數據庫文件位置: /home/runner/workspace/sqlite/app.db
+[2025-04-21T04:22:24.677Z] [SYSTEM] 已確保 SQLite 基本表結構存在
+[2025-04-21T04:22:24.677Z] [SYSTEM] 數據庫初始化完成
+[2025-04-21T04:24:34.226Z] [SYSTEM] 使用 SQLite 本地數據庫作為主要或備用數據庫
+[2025-04-21T04:24:34.229Z] [SYSTEM] SQLite 數據庫文件位置: /home/runner/workspace/sqlite/app.db
+[2025-04-21T04:24:34.231Z] [SYSTEM] 已確保 SQLite 基本表結構存在
+[2025-04-21T04:24:34.231Z] [SYSTEM] 數據庫初始化完成
+[2025-04-21T04:43:15.866Z] [SYSTEM] 使用 SQLite 本地數據庫作為主要或備用數據庫
+[2025-04-21T04:43:15.869Z] [SYSTEM] SQLite 數據庫文件位置: /home/runner/workspace/sqlite/app.db
+[2025-04-21T04:43:15.870Z] [SYSTEM] 已確保 SQLite 基本表結構存在
+[2025-04-21T04:43:15.870Z] [SYSTEM] 數據庫初始化完成
+[2025-04-21T05:43:48.100Z] [SYSTEM] 使用 SQLite 本地數據庫作為主要或備用數據庫
+[2025-04-21T05:43:48.104Z] [SYSTEM] SQLite 數據庫文件位置: /home/runner/workspace/sqlite/app.db
+[2025-04-21T05:43:48.105Z] [SYSTEM] 已確保 SQLite 基本表結構存在
+[2025-04-21T05:43:48.105Z] [SYSTEM] 數據庫初始化完成
+[2025-04-21T05:47:48.158Z] [SYSTEM] 使用 SQLite 本地數據庫作為主要或備用數據庫
+[2025-04-21T05:47:48.174Z] [SYSTEM] SQLite 數據庫文件位置: /home/runner/workspace/sqlite/app.db
+[2025-04-21T05:47:48.175Z] [SYSTEM] 已確保 SQLite 基本表結構存在
+[2025-04-21T05:47:48.176Z] [SYSTEM] 數據庫初始化完成
+[2025-04-21T05:54:37.516Z] [SYSTEM] 使用 SQLite 本地數據庫作為主要或備用數據庫
+[2025-04-21T05:54:37.525Z] [SYSTEM] SQLite 數據庫文件位置: /home/runner/workspace/sqlite/app.db
+[2025-04-21T05:54:37.526Z] [SYSTEM] 已確保 SQLite 基本表結構存在
+[2025-04-21T05:54:37.527Z] [SYSTEM] 數據庫初始化完成
+[2025-04-21T05:57:08.054Z] [SYSTEM] 使用 SQLite 本地數據庫作為主要或備用數據庫
+[2025-04-21T05:57:08.065Z] [SYSTEM] SQLite 數據庫文件位置: /home/runner/workspace/sqlite/app.db
+[2025-04-21T05:57:08.066Z] [SYSTEM] 已確保 SQLite 基本表結構存在
+[2025-04-21T05:57:08.066Z] [SYSTEM] 數據庫初始化完成
+[2025-04-21T06:08:47.968Z] [SYSTEM] 使用 SQLite 本地數據庫作為主要或備用數據庫
+[2025-04-21T06:08:47.972Z] [SYSTEM] SQLite 數據庫文件位置: /home/runner/workspace/sqlite/app.db
+[2025-04-21T06:08:47.973Z] [SYSTEM] 已確保 SQLite 基本表結構存在
+[2025-04-21T06:08:47.973Z] [SYSTEM] 數據庫初始化完成
+[2025-04-24T04:20:02.708Z] [SYSTEM] 使用 SQLite 本地數據庫作為主要或備用數據庫
+[2025-04-24T04:20:02.737Z] [SYSTEM] SQLite 數據庫文件位置: /home/runner/workspace/sqlite/app.db
+[2025-04-24T04:20:02.739Z] [SYSTEM] 已確保 SQLite 基本表結構存在
+[2025-04-24T04:20:02.739Z] [SYSTEM] 數據庫初始化完成
+[2025-06-03T02:00:15.113Z] [SYSTEM] 使用 SQLite 本地數據庫作為主要或備用數據庫
+[2025-06-03T02:00:15.284Z] [SYSTEM] SQLite 數據庫文件位置: /home/runner/workspace/sqlite/app.db
+[2025-06-03T02:00:15.285Z] [SYSTEM] 已確保 SQLite 基本表結構存在
+[2025-06-03T02:00:15.286Z] [SYSTEM] 數據庫初始化完成
+[2026-01-15T06:29:35.189Z] [SYSTEM] 使用 SQLite 本地數據庫作為主要或備用數據庫
+[2026-01-15T06:29:35.212Z] [SYSTEM] SQLite 數據庫文件位置: /home/runner/workspace/sqlite/app.db
+[2026-01-15T06:29:35.213Z] [SYSTEM] 已確保 SQLite 基本表結構存在
+[2026-01-15T06:29:35.213Z] [SYSTEM] 數據庫初始化完成
