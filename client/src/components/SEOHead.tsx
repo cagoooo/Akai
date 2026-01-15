@@ -12,7 +12,7 @@ interface SEOHeadProps {
     modifiedTime?: string;
 }
 
-const DEFAULT_TITLE = '教育科技創新專區 | Akai 艾凱老師';
+const DEFAULT_TITLE = '教育科技創新專區 | Akai 阿凱老師';
 const DEFAULT_DESCRIPTION = '探索 8 種創新教育工具，提升教學效率與學生參與度。包含 AI 學生評語產生器、互動式投票系統、課堂計時工具等實用教育科技工具。';
 const DEFAULT_KEYWORDS = [
     '教育科技',
@@ -38,7 +38,7 @@ export function SEOHead({
     image = DEFAULT_IMAGE,
     url = SITE_URL,
     type = 'website',
-    author = '艾凱老師',
+    author = '阿凱老師',
     publishedTime,
     modifiedTime
 }: SEOHeadProps) {
@@ -99,7 +99,7 @@ export function ToolSEO({ toolName, toolDescription, toolUrl, category }: ToolSE
         <SEOHead
             title={toolName}
             description={toolDescription}
-            keywords={[toolName, category, '教育工具', '教學資源', '艾凱老師']}
+            keywords={[toolName, category, '教育工具', '教學資源', '阿凱老師']}
             url={toolUrl}
             type="product"
         />

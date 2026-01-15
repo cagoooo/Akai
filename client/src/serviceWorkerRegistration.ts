@@ -3,7 +3,9 @@
 export function registerServiceWorker() {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
+      // 使用相對路徑，支援不同的 base path (Firebase vs GitHub Pages)
+      const swPath = import.meta.env.BASE_URL + 'sw.js';
+      navigator.serviceWorker.register(swPath)
         .then((registration) => {
           console.log('ServiceWorker 註冊成功:', registration.scope);
         })

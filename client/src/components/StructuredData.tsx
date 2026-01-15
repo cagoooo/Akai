@@ -13,13 +13,13 @@ export function WebsiteSchema() {
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "教育科技創新專區",
-        "alternateName": "Akai 艾凱老師教育工具",
+        "alternateName": "Akai 阿凱老師教育工具",
         "url": SITE_URL,
         "description": "探索創新教育工具，提升教學效率與學生參與度",
         "inLanguage": "zh-TW",
         "publisher": {
             "@type": "Person",
-            "name": "艾凱老師",
+            "name": "阿凱老師",
             "url": SITE_URL
         }
     };
@@ -73,7 +73,7 @@ export function SoftwareApplicationSchema({
         },
         "author": {
             "@type": "Person",
-            "name": "艾凱老師"
+            "name": "阿凱老師"
         }
     };
 
@@ -156,7 +156,7 @@ export function OrganizationSchema() {
         ],
         "founder": {
             "@type": "Person",
-            "name": "艾凱老師"
+            "name": "阿凱老師"
         }
     };
 
