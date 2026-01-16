@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Switch, Route } from "wouter";
+import { Router, Switch, Route } from "wouter";
 import { HelmetProvider } from "react-helmet-async";
 import { TourProvider } from "@/components/TourProvider";
 import { Toaster } from "@/components/ui/toaster";
@@ -12,9 +12,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { SEOHead } from "@/components/SEOHead";
 import { WebsiteSchema, OrganizationSchema, AllToolsSchema } from "@/components/StructuredData";
 
-// 直接 import，暫時移除 lazy loading 來測試 GitHub Pages
+// 直接 import
 import { Home } from "@/pages/Home";
 import { TriviaDialog } from "@/components/TriviaDialog";
+
+// 取得 base path - Vite 會在建置時注入 BASE_URL
+const basePath = import.meta.env.BASE_URL || '/';
 
 // 頁面載入骨架屏
 function PageSkeleton() {
@@ -37,6 +40,11 @@ function PageSkeleton() {
 }
 
 function App() {
+  // 移除結尾的斜線以符合 wouter 格式
+  const base = basePath.endsWith('/') ? basePath.slice(0, -1) : basePath;
+
+  console.log('App basePath:', basePath, 'wouter base:', base);
+
   return (
     <HelmetProvider>
       <ErrorBoundary>
@@ -48,16 +56,19 @@ function App() {
 
         <QueryClientProvider client={queryClient}>
           <TourProvider>
-            <div className="min-h-screen flex flex-col">
-              <PageTransition>
-                <Switch>
-                  <Route path="/">
-                    <Home />
-                  </Route>
-                </Switch>
-              </PageTransition>
-              <Footer />
-            </div>
+            {/* 使用 Router base 設定 GitHub Pages 路徑 */}
+            <Router base={base}>
+              <div className="min-h-screen flex flex-col">
+                <PageTransition>
+                  <Switch>
+                    <Route path="/">
+                      <Home />
+                    </Route>
+                  </Switch>
+                </PageTransition>
+                <Footer />
+              </div>
+            </Router>
 
             <TriviaDialog />
 
