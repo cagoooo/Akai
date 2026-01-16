@@ -178,19 +178,13 @@ export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps
     try {
       // 首先，無論如何都確保開啟工具網站
       const newWindow = window.open(tool.url, '_blank', 'noopener,noreferrer');
-      
+
       // 確保新視窗被打開
       if (newWindow) {
         newWindow.opener = null; // 安全考量，斷開與原窗口的連接
-      } else {
-        // 如果瀏覽器阻止打開新視窗，則顯示提示
-        toast({
-          title: "彈出窗口已被阻止",
-          description: "請允許彈出窗口或點擊下方複製鏈接按鈕手動開啟",
-          variant: "destructive",
-        });
       }
-      
+      // 如果瀏覽器阻止打開新視窗，用戶可以點擊複製連結按鈕手動開啟
+
       // 然後再發送使用統計數據（不阻塞用戶體驗）
       trackToolUsage(tool.id)
         .then(result => {
@@ -344,34 +338,34 @@ export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps
                 </>
               ) : (
                 <>
-                  <CardTitle 
-                    className={`flex items-center text-xl font-bold transition-colors duration-300 ${tool.category && categoryColors[tool.category] ? categoryColors[tool.category].icon : 'text-gray-600'} mb-2 relative`} 
+                  <CardTitle
+                    className={`flex items-center text-xl font-bold transition-colors duration-300 ${tool.category && categoryColors[tool.category] ? categoryColors[tool.category].icon : 'text-gray-600'} mb-2 relative`}
                     itemProp="name"
                   >
                     {tool.title}
-                    <motion.div 
+                    <motion.div
                       className="ml-2 text-primary/70 group-hover:text-primary"
                       animate={{ scale: [1, 1.1, 1] }}
-                      transition={{ 
-                        repeat: Infinity, 
-                        repeatType: "reverse", 
-                        duration: 1.5 
+                      transition={{
+                        repeat: Infinity,
+                        repeatType: "reverse",
+                        duration: 1.5
                       }}
                     >
-                      <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="16" 
-                        height="16" 
-                        viewBox="0 0 24 24" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        strokeWidth="2" 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round" 
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                         className="transform -rotate-45"
                         aria-hidden="true"
                       >
-                        <path d="M7 17l9.2-9.2M17 17V7H7"/>
+                        <path d="M7 17l9.2-9.2M17 17V7H7" />
                       </svg>
                     </motion.div>
                   </CardTitle>
