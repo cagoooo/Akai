@@ -4,7 +4,7 @@ export interface EducationalTool {
   description: string;
   url: string;
   icon: string;
-  category: 'communication' | 'teaching' | 'language' | 'reading' | 'utilities' | 'games';
+  category: 'communication' | 'teaching' | 'language' | 'reading' | 'utilities' | 'games' | 'interactive';
   previewUrl?: string;
 }
 
