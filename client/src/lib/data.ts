@@ -359,6 +359,33 @@ export const tools: EducationalTool[] = [
     icon: "Wand2",
     category: "games",
     previewUrl: "/previews/magic-preview.svg"
+  },
+  {
+    id: 40,
+    title: "Padlet行政宣導動態牆",
+    description: "即時更新的行政宣導公告牆，方便資訊傳達",
+    url: "https://padlet.com/2104340/padlet-rl3l5wi9wmebku2k",
+    icon: "LayoutDashboard",
+    category: "utilities",
+    previewUrl: "/previews/padlet-preview.svg"
+  },
+  {
+    id: 41,
+    title: "吉他彈唱🎸點歌系統🎵",
+    description: "互動式吉他彈唱點歌平台，輕鬆點選喜愛的歌曲",
+    url: "https://cagoooo.github.io/song/",
+    icon: "Music",
+    category: "interactive",
+    previewUrl: "/previews/song-preview.svg"
+  },
+  {
+    id: 42,
+    title: "兒童臉部隱私保護工具",
+    description: "保護兒童照片隱私，自動模糊處理臉部",
+    url: "https://cagoooo.github.io/child-face-privacy/",
+    icon: "ShieldCheck",
+    category: "utilities",
+    previewUrl: "/previews/privacy-preview.svg"
   }
 ];
 
