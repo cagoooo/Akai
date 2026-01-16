@@ -80,3 +80,4 @@
 [2026-01-15T06:29:35.212Z] [SYSTEM] SQLite 數據庫文件位置: /home/runner/workspace/sqlite/app.db
 [2026-01-15T06:29:35.213Z] [SYSTEM] 已確保 SQLite 基本表結構存在
 [2026-01-15T06:29:35.213Z] [SYSTEM] 數據庫初始化完成
+[2026-01-15T22:45:41.842Z] [SYSTEM] 嘗試回退到 SQLite 數據庫

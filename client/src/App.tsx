@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { Suspense } from "react";
 import { Switch, Route } from "wouter";
 import { HelmetProvider } from "react-helmet-async";
 import { TourProvider } from "@/components/TourProvider";
@@ -12,13 +12,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { SEOHead } from "@/components/SEOHead";
 import { WebsiteSchema, OrganizationSchema, AllToolsSchema } from "@/components/StructuredData";
 
-// 懶載入頁面元件 - 程式碼分割
-const Home = lazy(() => import("@/pages/Home").then(m => ({ default: m.Home })));
-
-// 懶載入大型元件
-const TriviaDialog = lazy(() =>
-  import("@/components/TriviaDialog").then(m => ({ default: m.TriviaDialog }))
-);
+// 直接 import，暫時移除 lazy loading 來測試 GitHub Pages
+import { Home } from "@/pages/Home";
+import { TriviaDialog } from "@/components/TriviaDialog";
 
 // 頁面載入骨架屏
 function PageSkeleton() {
@@ -56,19 +52,14 @@ function App() {
               <PageTransition>
                 <Switch>
                   <Route path="/">
-                    <Suspense fallback={<PageSkeleton />}>
-                      <Home />
-                    </Suspense>
+                    <Home />
                   </Route>
                 </Switch>
               </PageTransition>
               <Footer />
             </div>
 
-            {/* 懶載入對話框元件 */}
-            <SuspenseWrapper>
-              <TriviaDialog />
-            </SuspenseWrapper>
+            <TriviaDialog />
 
             <Toaster />
           </TourProvider>
