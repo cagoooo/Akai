@@ -2,6 +2,39 @@
 
 此文件記錄專案的所有重要變更。
 
+## [2.2.0] - 2026-01-16
+
+### 新增功能
+- 🧪 **測試框架建立**：完整的測試基礎設施
+  - 安裝並配置 Vitest 單元測試框架
+  - 安裝並配置 Playwright E2E 測試框架
+  - 建立測試環境設定檔 (`vitest.config.ts`, `playwright.config.ts`)
+  - 新增 `npm run test`, `npm run test:coverage`, `npm run test:e2e` 指令
+- 🔍 **程式碼品質工具**：ESLint 和 Prettier 整合
+  - 安裝 ESLint 及 TypeScript、React、無障礙性插件
+  - 建立 `.eslintrc.json` 嚴格模式配置
+  - 安裝 Prettier 並建立 `.prettierrc` 配置
+  - 新增 `npm run lint`, `npm run format` 指令
+- 🖼️ **新預覽圖生成**：消除重複圖片
+  - Typing (打字練習) - 用於英打、中打、成語練習
+  - Puzzle (益智遊戲) - 用於蜂類配對消消樂
+  - Privacy (隱私保護) - 用於兒童臉部隱私保護工具
+  - Platformer (平台遊戲) - 用於瑪莉歲系列遊戲
+
+### 改進
+- 🧹 **程式碼清理**：移除 11 個除錯用 console.log
+  - 保留 console.error 和 console.warn 用於錯誤處理
+  - 清理檔案：authService.ts, useToolTracking.ts, TourProvider.tsx, TourGuide.tsx, VisitorCounter.tsx, ui/ToolCard.tsx
+- 📦 **Bundle 大小**：維持 78KB，達成 < 100KB 目標
+
+### 技術細節
+- 新增測試相關依賴：vitest, @vitest/ui, @vitest/coverage-v8, @playwright/test, @testing-library/react
+- 新增程式碼品質依賴：eslint, prettier, @typescript-eslint/*
+- 新增 4 張預覽圖到 `client/public/previews/`
+- 更新 `data.ts` 中相關工具的 previewUrl
+
+---
+
 ## [2.1.0] - 2026-01-16
 
 ### 新增功能

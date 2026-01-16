@@ -65,7 +65,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/bee/",
     icon: "Gamepad2",
     category: "games",
-    previewUrl: "/previews/preview_game_v2.png"
+    previewUrl: "/previews/preview_puzzle_v2.png"
   },
   {
     id: 7,
@@ -92,7 +92,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/mario-game/",
     icon: "Gamepad2",
     category: "games",
-    previewUrl: "/previews/preview_game_v2.png"
+    previewUrl: "/previews/preview_platformer_v2.png"
   },
   {
     id: 10,
@@ -191,7 +191,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/smes_html/typeEN.html",
     icon: "Keyboard",
     category: "language",
-    previewUrl: "/previews/preview_language_v2.png"
+    previewUrl: "/previews/preview_typing_v2.png"
   },
   {
     id: 21,
@@ -200,7 +200,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/smes_html/typeCC.html",
     icon: "Keyboard",
     category: "language",
-    previewUrl: "/previews/preview_language_v2.png"
+    previewUrl: "/previews/preview_typing_v2.png"
   },
   {
     id: 22,
@@ -209,7 +209,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/smes_html/typeTC.html",
     icon: "Languages",
     category: "language",
-    previewUrl: "/previews/preview_language_v2.png"
+    previewUrl: "/previews/preview_typing_v2.png"
   },
   {
     id: 23,
@@ -263,7 +263,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/smes_html/mariojump.html",
     icon: "Gamepad2",
     category: "games",
-    previewUrl: "/previews/preview_game_v2.png"
+    previewUrl: "/previews/preview_platformer_v2.png"
   },
   {
     id: 29,
@@ -389,7 +389,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/child-face-privacy/",
     icon: "ShieldCheck",
     category: "utilities",
-    previewUrl: "/previews/preview_utility_v2.png"
+    previewUrl: "/previews/preview_privacy_v2.png"
   }
 ];
 

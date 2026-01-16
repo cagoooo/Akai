@@ -91,7 +91,6 @@ export function TourGuide({ onComplete }: TourGuideProps) {
         }
       },
       onDestroyed: async () => {
-        console.log("Site tour completed");
         // 記錄完成狀態
         setTourCompleted(true);
 
@@ -160,7 +159,6 @@ export function TourGuide({ onComplete }: TourGuideProps) {
   // 開始導覽
   const startTour = () => {
     try {
-      console.log("Starting site tour");
       let tourInstance = driverObj;
       if (!tourInstance) {
         tourInstance = initializeDriver();

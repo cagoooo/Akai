@@ -1,8 +1,9 @@
 // Firebase 初始化設定
 import { initializeApp, FirebaseApp } from 'firebase/app';
 import {
-  getFirestore,
-  enableIndexedDbPersistence,
+  initializeFirestore,
+  persistentLocalCache,
+  persistentMultipleTabManager,
   Firestore
 } from 'firebase/firestore';
 import { getAuth, Auth } from 'firebase/auth';
@@ -29,24 +30,17 @@ if (hasValidConfig) {
     // 初始化 Firebase
     app = initializeApp(firebaseConfig);
 
-    // 初始化 Firestore
-    db = getFirestore(app);
+    // 使用新的 API 初始化 Firestore，包含持久化快取
+    db = initializeFirestore(app, {
+      localCache: persistentLocalCache({
+        tabManager: persistentMultipleTabManager()
+      })
+    });
 
     // 初始化 Authentication
     auth = getAuth(app);
 
-    // 啟用 IndexedDB 持久化快取
-    enableIndexedDbPersistence(db).then(() => {
-      console.log('Firestore 離線快取已啟用');
-    }).catch((err) => {
-      if (err.code === 'failed-precondition') {
-        console.warn('Firestore 持久化無法啟用：多個分頁開啟中');
-      } else if (err.code === 'unimplemented') {
-        console.warn('Firestore 持久化無法啟用：瀏覽器不支援');
-      }
-    });
-
-    console.log('Firebase 初始化成功');
+    console.log('Firebase 初始化成功（含離線快取）');
   } catch (error) {
     console.error('Firebase 初始化失敗:', error);
   }
@@ -67,4 +61,3 @@ export function isFirebaseAvailable(): boolean {
 export function isAuthAvailable(): boolean {
   return auth !== null;
 }
-

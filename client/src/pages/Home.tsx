@@ -1,16 +1,18 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ToolCard } from "@/components/ToolCard";
 import { TeacherIntro } from "@/components/TeacherIntro";
 import { tools } from "@/lib/data";
 import { Button } from "@/components/ui/button";
-import { Trophy, Clock, X } from "lucide-react";
+import { Trophy, Clock, X, Keyboard } from "lucide-react";
 import { useTour } from "@/components/TourProvider";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { SearchBar } from "@/components/SearchBar";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useRecentTools } from "@/hooks/useRecentTools";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
+import { KeyboardShortcutsDialog } from "@/components/KeyboardShortcutsDialog";
 
 import { ToolRankings } from "@/components/ToolRankings";
 import { RankingTutorial } from "@/components/RankingTutorial";
@@ -21,12 +23,45 @@ export function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showFavorites, setShowFavorites] = useState(false);
+  const [showShortcutsDialog, setShowShortcutsDialog] = useState(false);
+  const [selectedToolIndex, setSelectedToolIndex] = useState(0);
+
+  // 搜尋框 ref
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   // 收藏功能
   const { favorites, toggleFavorite, isFavorite, favoritesCount } = useFavorites();
 
   // 最近使用歷史
   const { recentIds, addToRecent, clearRecent, hasRecent } = useRecentTools();
+
+  // 鍵盤快捷鍵
+  useKeyboardShortcuts({
+    onSearch: () => searchInputRef.current?.focus(),
+    onClearSearch: () => setSearchQuery(''),
+    onShowHelp: () => setShowShortcutsDialog(true),
+    onToggleFavorite: () => {
+      const currentTool = filteredTools?.[selectedToolIndex];
+      if (currentTool) {
+        toggleFavorite(currentTool.id);
+      }
+    },
+    onNavigateUp: () => {
+      setSelectedToolIndex(prev => Math.max(0, prev - 1));
+    },
+    onNavigateDown: () => {
+      setSelectedToolIndex(prev =>
+        Math.min((filteredTools?.length || 1) - 1, prev + 1)
+      );
+    },
+    onOpenSelected: () => {
+      const currentTool = filteredTools?.[selectedToolIndex];
+      if (currentTool) {
+        window.open(currentTool.url, '_blank');
+        handleToolClick(currentTool.id);
+      }
+    }
+  });
 
   const { data: toolsData, isLoading } = useQuery({
     queryKey: ['/api/tools'],
@@ -277,6 +312,23 @@ export function Home() {
 
       {/* 回到頂部按鈕 */}
       <ScrollToTop />
+
+      {/* 快捷鍵說明對話框 */}
+      <KeyboardShortcutsDialog
+        open={showShortcutsDialog}
+        onOpenChange={setShowShortcutsDialog}
+      />
+
+      {/* 快捷鍵提示按鈕 */}
+      <Button
+        variant="outline"
+        size="icon"
+        className="fixed bottom-20 right-4 sm:right-6 rounded-full shadow-lg hover:shadow-xl transition-all"
+        onClick={() => setShowShortcutsDialog(true)}
+        title="鍵盤快捷鍵 (?)"
+      >
+        <Keyboard className="h-5 w-5" />
+      </Button>
     </div>
   );
 }

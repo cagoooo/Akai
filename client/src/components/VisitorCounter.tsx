@@ -121,17 +121,10 @@ export function VisitorCounter() {
           // 使用 Firestore 增加計數
           const updatedStats = await incrementVisitorCount();
           setStats(updatedStats);
-
-          // 顯示動畫
-          setShowNewVisitAnimation(true);
-          setTimeout(() => setShowNewVisitAnimation(false), 2000);
-
-          console.log('訪問計數已透過 Firestore 增加:', updatedStats);
         } else {
           // 只讀取統計資料
           const currentStats = await getVisitorStats();
           setStats(currentStats);
-          console.log('從 Firestore 讀取訪問統計:', currentStats);
         }
       } catch (error) {
         console.error('Firestore 訪問統計操作失敗:', error);

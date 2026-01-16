@@ -64,12 +64,8 @@ function updateLocalToolStats(toolId: number, serverTotalClicks?: number) {
 export function useToolTracking() {
   const trackToolUsage = async (toolId: number) => {
     try {
-      console.log('透過 Firestore 追蹤工具使用:', toolId);
-
       // 使用 Firestore 追蹤
       const result = await firestoreTrackToolUsage(toolId);
-
-      console.log('Firestore 工具使用追蹤成功:', toolId, result);
 
       // 更新本地快取
       updateLocalToolStats(toolId, result.totalClicks);

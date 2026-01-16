@@ -46,8 +46,6 @@ function App() {
   // 移除結尾的斜線以符合 wouter 格式
   const base = basePath.endsWith('/') ? basePath.slice(0, -1) : basePath;
 
-  console.log('App basePath:', basePath, 'wouter base:', base);
-
   return (
     <HelmetProvider>
       <ErrorBoundary>

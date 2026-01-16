@@ -22,11 +22,8 @@ export function ToolCard({ id, name, description, icon, onClick }: ToolCardProps
 
   const handleClick = async () => {
     try {
-      console.log('工具卡片點擊 ID:', id);
-
       // 使用共用的工具追蹤功能
       const result = await trackToolUsage(id);
-      console.log('工具使用已追蹤:', id, result);
 
       // 執行原有的點擊事件
       if (onClick) {

@@ -9,8 +9,8 @@ interface TourContextType {
 }
 
 const TourContext = createContext<TourContextType>({
-  startTour: () => {},
-  resetTour: () => {},
+  startTour: () => { },
+  resetTour: () => { },
   isActive: false,
   hasCompletedTour: false
 });
@@ -33,7 +33,6 @@ export function TourProvider({ children }: TourProviderProps) {
 
   // 開始導覽
   const startTour = useCallback(() => {
-    console.log("Starting tour from provider");
     setIsActive(true);
     // 使用全局事件機制觸發導覽開始
     tourEvents.startTour();
@@ -57,11 +56,11 @@ export function TourProvider({ children }: TourProviderProps) {
   }, []);
 
   return (
-    <TourContext.Provider value={{ 
-      startTour, 
-      resetTour, 
-      isActive, 
-      hasCompletedTour 
+    <TourContext.Provider value={{
+      startTour,
+      resetTour,
+      isActive,
+      hasCompletedTour
     }}>
       {children}
       <TourGuide onComplete={handleTourComplete} />

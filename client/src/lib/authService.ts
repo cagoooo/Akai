@@ -26,13 +26,12 @@ export async function signInWithGoogle(): Promise<User | null> {
 
     try {
         const result = await signInWithPopup(auth, googleProvider);
-        console.log('Google 登入成功:', result.user.displayName);
         return result.user;
     } catch (error: any) {
         if (error.code === 'auth/cancelled-popup-request') {
-            console.log('登入視窗已關閉');
+            // 登入視窗已關閉
         } else if (error.code === 'auth/popup-closed-by-user') {
-            console.log('使用者關閉登入視窗');
+            // 使用者關閉登入視窗
         } else {
             console.error('Google 登入失敗:', error);
         }
@@ -50,7 +49,6 @@ export async function signOut(): Promise<void> {
 
     try {
         await firebaseSignOut(auth);
-        console.log('已登出');
     } catch (error) {
         console.error('登出失敗:', error);
     }
