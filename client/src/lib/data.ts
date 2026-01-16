@@ -13,19 +13,19 @@ export const tools: EducationalTool[] = [
     id: 1,
     title: "線上即時客服",
     description: "提供即時的線上教育支援和諮詢服務，協助解決學習過程中的問題",
-    url: "https://chat.smes.tyc.edu.tw/",
+    url: "https://doc.smes.tyc.edu.tw/shared/A4uyH5OdHI",
     icon: "MessageCircle",
     category: "communication",
     previewUrl: "/previews/chat-preview.svg"
   },
   {
     id: 2,
-    title: "激發教案靈感",
-    description: "為教師提供創新的教學設計靈感，幫助開發有趣且有效的課程內容",
-    url: "https://lesson.smes.tyc.edu.tw/",
-    icon: "Lightbulb",
-    category: "teaching",
-    previewUrl: "/previews/lesson-preview.svg"
+    title: "行政業務協調系統",
+    description: "便捷的行政業務協調平台，提升校園行政工作效率",
+    url: "https://cagoooo.github.io/staff/",
+    icon: "ClipboardList",
+    category: "utilities",
+    previewUrl: "/previews/staff-preview.svg"
   },
   {
     id: 3,
