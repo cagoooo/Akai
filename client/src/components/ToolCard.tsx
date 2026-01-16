@@ -437,10 +437,15 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                         whileHover={{ scale: 1.05 }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
                       >
-                        <PreviewGenerator
-                          tool={tool}
-                          customization={customization}
+                        <img
+                          src={tool.previewUrl}
+                          alt={`${tool.title} 預覽圖`}
+                          className="w-full h-full object-cover"
                           onLoad={() => setIsPreviewLoading(false)}
+                          onError={(e) => {
+                            console.error(`圖片載入失敗: ${tool.previewUrl}`);
+                            e.currentTarget.style.display = 'none';
+                          }}
                         />
                       </motion.div>
                     )}
