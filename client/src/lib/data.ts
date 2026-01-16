@@ -206,6 +206,159 @@ export const tools: EducationalTool[] = [
     icon: "Languages",
     category: "language",
     previewUrl: "/previews/type-idiom-preview.svg"
+  },
+  {
+    id: 23,
+    title: "點石成金蜂🐝 評語優化網頁版",
+    description: "網頁版學生評語優化工具，輕鬆產出正向評語",
+    url: "https://cagoooo.github.io/comments/",
+    icon: "Sparkles",
+    category: "teaching",
+    previewUrl: "/previews/comments-preview.svg"
+  },
+  {
+    id: 24,
+    title: "教師午會記錄報告站",
+    description: "教師午會紀錄與報告分享平台",
+    url: "https://sites.google.com/mail2.smes.tyc.edu.tw/114teacher/",
+    icon: "ClipboardCheck",
+    category: "utilities",
+    previewUrl: "/previews/meeting-preview.svg"
+  },
+  {
+    id: 25,
+    title: "國語演說培訓班",
+    description: "國語演說練習與培訓工具",
+    url: "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E5%9C%8B%E8%AA%9E%E6%BC%94%E8%AA%AA%E7%B7%B4%E7%BF%92%E5%B0%8F%E5%B7%A5%E5%85%B7?authuser=0",
+    icon: "Mic",
+    category: "language",
+    previewUrl: "/previews/speech-preview.svg"
+  },
+  {
+    id: 26,
+    title: "九九乘法表練習器",
+    description: "互動式九九乘法表練習工具",
+    url: "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E4%B9%9D%E4%B9%9D%E4%B9%98%E6%B3%95%E8%A1%A8%E7%B7%B4%E7%BF%92%E5%99%A8?authuser=0",
+    icon: "Calculator",
+    category: "teaching",
+    previewUrl: "/previews/math-preview.svg"
+  },
+  {
+    id: 27,
+    title: "⬅️好用小工具(許願池)",
+    description: "各種好用的教學小工具集合與許願池",
+    url: "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/",
+    icon: "Wrench",
+    category: "utilities",
+    previewUrl: "/previews/tools-preview.svg"
+  },
+  {
+    id: 28,
+    title: "瑪莉歐風格平台跳躍遊戲",
+    description: "經典瑪莉歐風格的平台跳躍遊戲",
+    url: "https://www.smes.tyc.edu.tw/smes_html/mariojump.html",
+    icon: "Gamepad2",
+    category: "games",
+    previewUrl: "/previews/mariojump-preview.svg"
+  },
+  {
+    id: 29,
+    title: "太陽系探索者",
+    description: "3D 太陽系探索互動學習工具",
+    url: "https://www.smes.tyc.edu.tw/smes_html/3d-space.html",
+    icon: "Globe",
+    category: "teaching",
+    previewUrl: "/previews/space-preview.svg"
+  },
+  {
+    id: 30,
+    title: "小遊戲大集合",
+    description: "多款趣味小遊戲合集",
+    url: "https://www.smes.tyc.edu.tw/smes_html/little_games/",
+    icon: "Dice5",
+    category: "games",
+    previewUrl: "/previews/games-preview.svg"
+  },
+  {
+    id: 31,
+    title: "互動遊戲抓抓樂",
+    description: "趣味夾娃娃機互動遊戲",
+    url: "https://www.smes.tyc.edu.tw/claw-machine-game.html",
+    icon: "Gift",
+    category: "games",
+    previewUrl: "/previews/claw-preview.svg"
+  },
+  {
+    id: 32,
+    title: "遊戲觸屏碰碰碰",
+    description: "觸屏互動碰撞遊戲",
+    url: "https://www.smes.tyc.edu.tw/smes_html/touch.html",
+    icon: "Hand",
+    category: "games",
+    previewUrl: "/previews/touch-preview.svg"
+  },
+  {
+    id: 33,
+    title: "讓聲音具現化吧！",
+    description: "聲音視覺化互動體驗",
+    url: "https://www.smes.tyc.edu.tw/smes_html/sound.html",
+    icon: "AudioWaveform",
+    category: "games",
+    previewUrl: "/previews/sound-preview.svg"
+  },
+  {
+    id: 34,
+    title: "互動式影像聲音遊戲區",
+    description: "結合影像與聲音的互動遊戲",
+    url: "https://www.smes.tyc.edu.tw/smes_html/go.html",
+    icon: "Play",
+    category: "games",
+    previewUrl: "/previews/av-game-preview.svg"
+  },
+  {
+    id: 35,
+    title: "觸屏點點塗鴉區",
+    description: "觸屏塗鴉創作工具",
+    url: "https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2856",
+    icon: "Palette",
+    category: "games",
+    previewUrl: "/previews/doodle-preview.svg"
+  },
+  {
+    id: 36,
+    title: "貪食蛇互動遊戲",
+    description: "經典貪食蛇遊戲",
+    url: "https://www.smes.tyc.edu.tw/smes_html/snake_game.html",
+    icon: "Gamepad2",
+    category: "games",
+    previewUrl: "/previews/snake-preview.svg"
+  },
+  {
+    id: 37,
+    title: "聲波擴散360小遊戲",
+    description: "聲波視覺化互動遊戲",
+    url: "https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2863",
+    icon: "Waves",
+    category: "games",
+    previewUrl: "/previews/wave-preview.svg"
+  },
+  {
+    id: 38,
+    title: "聲音互動小遊戲",
+    description: "透過聲音控制的互動遊戲",
+    url: "https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2859",
+    icon: "Volume2",
+    category: "games",
+    previewUrl: "/previews/voice-game-preview.svg"
+  },
+  {
+    id: 39,
+    title: "孔明神算：心靈感應預言魔術",
+    description: "神奇的心靈感應預言魔術遊戲",
+    url: "https://claude.ai/public/artifacts/982f7b1c-8302-4112-a05f-342ad24bd421",
+    icon: "Wand2",
+    category: "games",
+    previewUrl: "/previews/magic-preview.svg"
   }
 ];
 
