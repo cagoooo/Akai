@@ -7,7 +7,7 @@
  * - Stale While Revalidate: 圖片
  */
 
-const CACHE_VERSION = 'v2.0.0';
+const CACHE_VERSION = 'v2.1.0';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
 
@@ -165,7 +165,8 @@ async function cacheFirst(request) {
 
   try {
     const networkResponse = await fetch(request);
-    if (networkResponse.ok) {
+    // 只快取完整的成功響應 (status 200)，跳過 206 Partial Response
+    if (networkResponse.ok && networkResponse.status === 200) {
       const cache = await caches.open(STATIC_CACHE);
       cache.put(request, networkResponse.clone());
     }
@@ -183,7 +184,8 @@ async function cacheFirst(request) {
 async function networkFirst(request) {
   try {
     const networkResponse = await fetch(request);
-    if (networkResponse.ok) {
+    // 只快取完整的成功響應 (status 200)，跳過 206 Partial Response
+    if (networkResponse.ok && networkResponse.status === 200) {
       const cache = await caches.open(DYNAMIC_CACHE);
       cache.put(request, networkResponse.clone());
     }
@@ -216,7 +218,8 @@ async function staleWhileRevalidate(request) {
   // 在背景更新快取
   const fetchPromise = fetch(request)
     .then((networkResponse) => {
-      if (networkResponse.ok) {
+      // 只快取完整的成功響應 (status 200)，跳過 206 Partial Response
+      if (networkResponse.ok && networkResponse.status === 200) {
         cache.put(request, networkResponse.clone());
       }
       return networkResponse;

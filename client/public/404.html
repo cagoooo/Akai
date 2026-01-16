@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="utf-8">
+    <title>教育科技創新專區 | Akai</title>
+    <script>
+        // GitHub Pages SPA 路由支援
+        // 將 404 錯誤重定向到 index.html，並保留原始路徑
+        const path = window.location.pathname;
+        const search = window.location.search;
+        const hash = window.location.hash;
+
+        // 重定向到首頁，並將原始路徑作為 query parameter 傳遞
+        const redirectUrl = '/Akai/?redirect=' + encodeURIComponent(path + search + hash);
+        window.location.replace(redirectUrl);
+    </script>
+</head>
+
+<body>
+    <p>正在重定向...</p>
+</body>
+
+</html>

@@ -103,6 +103,17 @@
 </head>
 
 <body>
+  <!-- GitHub Pages SPA 路由處理 -->
+  <script>
+    (function () {
+      // 處理從 404.html 重定向過來的路徑
+      var redirect = new URLSearchParams(window.location.search).get('redirect');
+      if (redirect) {
+        // 移除 redirect 參數並導航到正確的路徑
+        window.history.replaceState(null, '', redirect);
+      }
+    })();
+  </script>
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
 </body>
