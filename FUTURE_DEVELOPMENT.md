@@ -1,263 +1,443 @@
-# 教育科技創新專區 - 未來優化與開發建議
+# 教育科技創新專區 - 未來開發建議
 
-> 最後更新：2026-01-16 12:30
-> 專案：[Akai](https://cagoooo.github.io/Akai/)
-
----
-
-## 📋 目錄
-
-1. [已完成功能回顧](#-已完成功能回顧)
-2. [近期開發建議 (本月)](#-近期開發建議-本月)
-3. [功能擴展計畫 (下月)](#-功能擴展計畫-下月)
-4. [長期願景 (季度)](#-長期願景-季度)
-5. [技術優化建議](#-技術優化建議)
-6. [實作優先順序](#-實作優先順序)
+> 產生日期：2026-01-16  
+> 當前版本：v2.2.1  
+> 目標：提供詳細的功能規劃與技術實作建議
 
 ---
 
-## ✅ 已完成功能回顧
+## 📋 優先級矩陣
 
-### 效能優化 (2026-01-16)
-| 項目 | 成果 |
-|------|------|
-| Bundle 優化 | 248KB → gzip 78KB |
-| Service Worker | v2.0.0 三種快取策略 |
-| 離線提示 | OfflineIndicator.tsx |
-| PWA 安裝 | InstallPrompt.tsx |
-
-### 功能開發 (2026-01-16)
-| 項目 | 說明 |
-|------|------|
-| 工具詳情頁 | `/tool/:id` 完整資訊頁 |
-| 分類中文化 | 7 種分類 Emoji + 繁中 |
-| Firebase 連接 | envDir 修復本地環境 |
-
-### 新增檔案
-| 檔案 | 功能 |
-|------|------|
-| `categoryConstants.ts` | 統一分類常數 |
-| `ToolDetail.tsx` | 工具詳情頁面 |
+| 優先級 | 項目 | 影響力 | 實現難度 | 預估時間 |
+|--------|------|--------|----------|----------|
+| 🔴 P0 | 測試覆蓋率達成 80% | 高 | 中 | 1-2 週 |
+| 🔴 P0 | Lighthouse 效能優化 | 高 | 中 | 3-5 天 |
+| 🟡 P1 | 統計儀表板 | 中 | 中 | 1 週 |
+| 🟡 P1 | 成就系統擴展 | 中 | 低 | 3-5 天 |
+| 🟠 P2 | 評論系統增強 | 中 | 中 | 1 週 |
+| 🟠 P2 | 無障礙性 (A11y) | 高 | 高 | 2 週 |
+| 🟢 P3 | 多語言國際化 | 低 | 高 | 2-3 週 |
+| 🔵 P4 | AI 智慧推薦 | 低 | 高 | 1 個月 |
 
 ---
 
-## 🟡 近期開發建議 (本月)
+## 🔴 P0: 立即執行項目
 
-### 1. 鍵盤快捷鍵系統 ⭐ 簡單
+### 1. 測試覆蓋率達成 80%
 
-> **預估工時**：2-3 小時
+**目標**：確保程式碼品質與穩定性
+
+#### 1.1 單元測試 (Vitest)
+
+**需要測試的核心 Hooks：**
 
 ```typescript
-const shortcuts = {
-  '/': '聚焦搜尋框',
-  'Escape': '清除搜尋',
-  '↑/↓': '導航工具',
-  'Enter': '開啟工具',
-  'F': '切換收藏',
-  '?': '顯示說明'
+// client/src/hooks/__tests__/
+├── useFavorites.test.ts      // 收藏功能
+├── useRecentTools.test.ts    // 最近使用
+├── useToolTracking.test.ts   // 工具追蹤 (已建立)
+├── useKeyboardShortcuts.test.ts
+└── use-toast.test.ts
+```
+
+**測試範例（useFavorites）：**
+
+```typescript
+// useFavorites.test.ts
+import { renderHook, act } from '@testing-library/react';
+import { useFavorites } from '../useFavorites';
+
+describe('useFavorites', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
+  it('初始化時應該從 localStorage 載入收藏', () => {
+    localStorage.setItem('favorites', JSON.stringify([1, 2, 3]));
+    const { result } = renderHook(() => useFavorites());
+    expect(result.current.favorites).toEqual([1, 2, 3]);
+  });
+
+  it('toggleFavorite 應該正確切換收藏狀態', () => {
+    const { result } = renderHook(() => useFavorites());
+    
+    act(() => {
+      result.current.toggleFavorite(1);
+    });
+    expect(result.current.isFavorite(1)).toBe(true);
+    
+    act(() => {
+      result.current.toggleFavorite(1);
+    });
+    expect(result.current.isFavorite(1)).toBe(false);
+  });
+});
+```
+
+**需要測試的 Services：**
+
+```typescript
+// client/src/lib/__tests__/
+├── firestoreService.test.ts  // Firebase 操作
+├── authService.test.ts       // 認證服務
+├── soundManager.test.ts      // 音效管理
+└── utils.test.ts             // 工具函數
+```
+
+#### 1.2 E2E 測試 (Playwright)
+
+**關鍵使用者流程測試：**
+
+```typescript
+// e2e/
+├── home.spec.ts              // 首頁基本功能 (已建立)
+├── search-filter.spec.ts     // 搜尋與篩選
+├── favorites.spec.ts         // 收藏功能
+├── tool-detail.spec.ts       // 工具詳情頁
+├── rankings.spec.ts          // 排行榜互動
+└── responsive.spec.ts        // RWD 測試
+```
+
+**E2E 測試範例（search-filter.spec.ts）：**
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+test.describe('搜尋與篩選功能', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+    await page.waitForSelector('[data-tour="tools-grid"]');
+  });
+
+  test('搜尋框應該能過濾工具', async ({ page }) => {
+    await page.fill('input[placeholder*="搜尋"]', '投票');
+    await expect(page.locator('.tool-card')).toHaveCount(1);
+    await expect(page.locator('.tool-card')).toContainText('投票');
+  });
+
+  test('分類篩選應該正確運作', async ({ page }) => {
+    await page.click('button:has-text("🎮 趣味遊戲")');
+    const cards = await page.locator('.tool-card').count();
+    expect(cards).toBe(14); // games 分類有 14 個工具
+  });
+});
+```
+
+#### 1.3 執行指令
+
+```bash
+# 執行單元測試
+npm run test
+
+# 產生覆蓋率報告
+npm run test:coverage
+
+# 執行 E2E 測試
+npm run test:e2e
+
+# 開啟測試 UI
+npm run test:ui
+npm run test:e2e:ui
+```
+
+---
+
+### 2. Lighthouse 效能優化
+
+**目標指標：**
+
+| 指標 | 目標 | 當前 | 狀態 |
+|------|------|------|------|
+| Performance | > 95 | 待測 | ⏳ |
+| Accessibility | > 90 | 待測 | ⏳ |
+| Best Practices | > 95 | 待測 | ⏳ |
+| SEO | > 95 | 待測 | ⏳ |
+| FCP | < 1.5s | 待測 | ⏳ |
+| TTI | < 3s | 待測 | ⏳ |
+| CLS | < 0.1 | 待測 | ⏳ |
+
+#### 2.1 優化策略
+
+**圖片優化：**
+```typescript
+// 1. 使用 next-gen 格式 (WebP/AVIF)
+// 2. 實作圖片懶載入
+// 3. 設定適當的寬高比避免 CLS
+
+// vite.config.ts - 添加圖片優化插件
+import { imagetools } from 'vite-imagetools';
+
+plugins: [
+  imagetools({
+    defaultDirectives: (url) => {
+      return new URLSearchParams({
+        format: 'webp',
+        quality: '80',
+        w: '400;800',
+      });
+    },
+  }),
+]
+```
+
+**程式碼分割：**
+```typescript
+// 使用 React.lazy 進行頁面級分割
+const ToolDetail = lazy(() => import('@/pages/ToolDetail'));
+const AnalyticsDashboard = lazy(() => import('@/components/AnalyticsDashboard'));
+```
+
+**預載入關鍵資源：**
+```html
+<!-- index.html -->
+<link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/previews/preview_communication_v2.webp" as="image">
+```
+
+---
+
+## 🟡 P1: 短期執行項目 (1-2 週)
+
+### 3. 統計儀表板
+
+**目標**：視覺化工具使用數據
+
+#### 3.1 功能設計
+
+```typescript
+// components/AnalyticsDashboard.tsx
+interface DashboardProps {
+  timeRange: '7d' | '30d' | '90d' | 'all';
+}
+
+// 圖表類型
+const charts = {
+  usageTrend: 'LineChart',      // 每日使用趨勢
+  topTools: 'BarChart',         // 熱門工具 TOP 10
+  categoryDistribution: 'PieChart', // 分類分佈
+  usageHeatmap: 'HeatMap',      // 使用時段熱力圖
 };
 ```
 
-**實作步驟**：
-1. 建立 `useKeyboardShortcuts` hook
-2. 在 Home.tsx 註冊快捷鍵
-3. 建立快捷鍵說明 Modal
-
----
-
-### 2. 使用統計圖表 ⭐⭐ 中等
-
-> **預估工時**：3-4 小時
-
-**使用 Recharts**：
-```typescript
-// 已安裝 recharts 依賴
-import { LineChart, PieChart, BarChart } from 'recharts';
-```
-
-**建議圖表**：
-- 📈 每日使用趨勢（折線圖）
-- 📊 分類分佈（圓餅圖）
-- 🏆 熱門工具 TOP 10（長條圖）
-
----
-
-### 3. 深色模式增強 ⭐ 簡單
-
-> **預估工時**：1-2 小時
-
-**功能**：
-- 自動偵測系統偏好
-- 手動切換按鈕
-- 偏好設定持久化
+#### 3.2 資料模型
 
 ```typescript
-const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-localStorage.setItem('theme', 'dark' | 'light' | 'system');
-```
-
----
-
-### 4. 搜尋建議自動完成 ⭐ 簡單
-
-> **預估工時**：1-2 小時
-
-**功能**：
-- 輸入時顯示建議列表
-- 高亮匹配文字
-- 鍵盤選擇建議項
-
----
-
-## 🟢 功能擴展計畫 (下月)
-
-### 1. 使用者認證系統 ⭐⭐⭐ 需規劃
-
-> **預估工時**：6-8 小時
-
-**Firebase Authentication**：
-```typescript
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-```
-
-| 功能 | 匿名 | 登入後 |
-|------|------|--------|
-| 瀏覽工具 | ✅ | ✅ |
-| 收藏 (本地) | ✅ | ✅ |
-| 收藏 (雲端) | ❌ | ✅ |
-| 評論評分 | ❌ | ✅ |
-
----
-
-### 2. 評論與評分系統 ⭐⭐⭐ 需規劃
-
-> **預估工時**：4-6 小時
-
-**Firestore 結構**：
-```typescript
-interface Review {
-  toolId: number;
-  userId: string;
-  rating: 1 | 2 | 3 | 4 | 5;
-  comment: string;
-  createdAt: Timestamp;
+// Firestore 結構
+interface DailyStats {
+  date: string;           // '2026-01-16'
+  totalVisits: number;
+  toolUsage: {
+    [toolId: number]: number;
+  };
+  categoryUsage: {
+    [category: string]: number;
+  };
+  hourlyUsage: number[];  // [0-23] 每小時使用次數
 }
 ```
 
-**新增元件**：
-- `StarRating.tsx` - 星級評分
-- `ReviewList.tsx` - 評論列表
-- `ReviewForm.tsx` - 評論表單
+#### 3.3 實作步驟
+
+1. 建立 `DailyStats` Firestore collection
+2. 修改 `trackToolUsage` 同時更新每日統計
+3. 建立 `AnalyticsDashboard` 元件
+4. 使用 Recharts 繪製圖表
+5. 添加時間範圍選擇器
 
 ---
 
-### 3. QR Code 分享 ⭐ 簡單
+### 4. 成就系統擴展
 
-> **預估工時**：1 小時
+**目標**：增加使用者互動與黏著度
+
+#### 4.1 成就定義
 
 ```typescript
-import QRCode from 'qrcode.react';
-<QRCode value={tool.url} size={200} />
+// lib/achievements.ts
+const achievements = [
+  {
+    id: 'explorer',
+    name: '探索者',
+    description: '瀏覽超過 10 個工具',
+    icon: '🔍',
+    condition: (stats) => stats.uniqueToolsVisited >= 10,
+    points: 10,
+  },
+  {
+    id: 'power_user',
+    name: '熱情使用者',
+    description: '單日使用超過 5 個工具',
+    icon: '🔥',
+    condition: (stats) => stats.dailyUsage >= 5,
+    points: 20,
+  },
+  {
+    id: 'collector',
+    name: '收藏家',
+    description: '收藏超過 10 個工具',
+    icon: '⭐',
+    condition: (stats) => stats.favoritesCount >= 10,
+    points: 15,
+  },
+  {
+    id: 'perfectionist',
+    name: '完美主義者',
+    description: '瀏覽所有 42 個工具',
+    icon: '🏆',
+    condition: (stats) => stats.uniqueToolsVisited >= 42,
+    points: 100,
+  },
+];
+```
+
+#### 4.2 UI 設計
+
+```typescript
+// components/AchievementBadge.tsx
+// - 解鎖動畫（金色光環 + 粒子效果）
+// - 進度條顯示
+// - 點數累計
+// - 成就牆展示
 ```
 
 ---
 
-## 🔵 長期願景 (季度)
+## 🟠 P2: 中期執行項目 (2-4 週)
 
-### 1. 多語言支援
-- 技術：`react-i18next`
-- 語言：繁體中文、English
-- 工時估計：4-6 小時
+### 5. 評論系統增強
 
-### 2. AI 智慧推薦
-- 根據使用歷史推薦
-- 協同過濾演算法
-- 工時估計：8-12 小時
+**現有功能**：星級評分 + 文字評論
 
-### 3. 管理後台
-- 視覺化統計圖表
-- 工具管理 CRUD
-- 使用者管理
-- 工時估計：16-24 小時
+**增強功能**：
+
+```typescript
+// 1. 評論回覆功能
+interface ReviewReply {
+  replyId: string;
+  reviewId: string;
+  userId: string;
+  content: string;
+  createdAt: Timestamp;
+}
+
+// 2. 評論排序選項
+type SortOption = 'newest' | 'highest' | 'lowest' | 'most_helpful';
+
+// 3. 評論標籤
+const reviewTags = ['實用', '有趣', '推薦', '適合教學', '需改進'];
+
+// 4. 評論編輯/刪除
+// 5. 評論舉報功能
+```
 
 ---
 
-## 🔧 技術優化建議
+### 6. 無障礙性 (A11y) 優化
 
-### 程式碼品質
+**目標**：符合 WCAG 2.1 AA 標準
+
+#### 6.1 檢查清單
+
+- [ ] 所有互動元素可透過鍵盤操作
+- [ ] 焦點順序邏輯正確
+- [ ] 焦點視覺指示清晰
+- [ ] 所有圖片有 alt 屬性
+- [ ] 色彩對比度 > 4.5:1
+- [ ] 表單有關聯的 label
+- [ ] ARIA 標籤完整
+- [ ] Screen Reader 測試通過
+- [ ] 動畫可停用 (prefers-reduced-motion)
+
+#### 6.2 實作範例
+
+```typescript
+// 動畫停用
+const useReducedMotion = () => {
+  const [prefersReduced, setPrefersReduced] = useState(false);
+  
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReduced(mediaQuery.matches);
+    
+    const listener = (e) => setPrefersReduced(e.matches);
+    mediaQuery.addEventListener('change', listener);
+    return () => mediaQuery.removeEventListener('change', listener);
+  }, []);
+  
+  return prefersReduced;
+};
+```
+
+---
+
+## 🟢 P3: 長期執行項目 (1-2 個月)
+
+### 7. 多語言國際化 (i18n)
+
+**支援語言**：繁體中文 (預設)、English、日本語
+
 ```bash
-npm install -D eslint prettier husky
+npm install react-i18next i18next i18next-http-backend i18next-browser-languagedetector
 ```
 
-### 測試覆蓋
-| 類型 | 工具 | 優先測試 |
+**翻譯檔案結構**：
+```
+public/locales/
+├── zh-TW/
+│   ├── common.json
+│   └── tools.json
+├── en/
+│   └── ...
+└── ja/
+    └── ...
+```
+
+---
+
+### 8. AI 智慧推薦引擎
+
+**目標**：根據使用者行為推薦相關工具
+
+**推薦算法**：
+1. 基於內容的推薦 (Content-Based)
+2. 協同過濾 (Collaborative Filtering)
+3. 混合推薦
+
+---
+
+## 🔵 P4: 創新構想 (3-6 個月)
+
+### 9. 教學社群功能
+
+- 👥 教師討論區
+- 📢 經驗分享文章
+- 🎓 教學技巧交流
+- ⭐ 優秀教案評選
+- 📅 教育活動日曆
+
+### 10. 行動應用程式
+
+- React Native 跨平台開發
+- 離線功能增強
+- 推播通知
+- 快速啟動器
+
+---
+
+## 📅 建議時程
+
+| 週次 | 目標 | 交付項目 |
 |------|------|----------|
-| 單元 | Vitest | hooks |
-| 元件 | RTL | ToolCard |
-| E2E | Playwright | 關鍵流程 |
-
-### 狀態管理升級
-```typescript
-// 考慮使用 Zustand 統一狀態
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-```
+| W1 | 測試基礎 | 完成 5 個核心 Hook 單元測試 |
+| W2 | 測試擴展 | 完成 E2E 測試 + 達成 60% 覆蓋率 |
+| W3 | 效能優化 | Lighthouse > 90 + 圖片 WebP 轉換 |
+| W4 | 統計儀表板 | 基礎圖表 + 每日統計 |
+| W5 | 成就系統 | 6 個成就 + 解鎖動畫 |
+| W6 | 評論增強 | 回覆 + 排序 + 標籤 |
+| W7-8 | A11y 優化 | WCAG AA 合規 |
+| W9-12 | 國際化 | 英文 + 日文支援 |
 
 ---
 
-## 📊 實作優先順序
-
-### 🔴 本週建議 (快速完成)
-| 優先 | 項目 | 預估 | 難度 |
-|------|------|------|------|
-| 1 | 鍵盤快捷鍵 | 2h | ⭐ |
-| 2 | 深色模式增強 | 1h | ⭐ |
-| 3 | 搜尋自動完成 | 2h | ⭐ |
-
-### 🟡 本月建議 (重要功能)
-| 優先 | 項目 | 預估 | 難度 |
-|------|------|------|------|
-| 1 | 統計圖表 | 4h | ⭐⭐ |
-| 2 | QR Code 分享 | 1h | ⭐ |
-
-### 🟢 下月規劃 (需設計)
-| 優先 | 項目 | 預估 | 難度 |
-|------|------|------|------|
-| 1 | 使用者認證 | 8h | ⭐⭐⭐ |
-| 2 | 評論系統 | 6h | ⭐⭐⭐ |
-
----
-
-## 💡 創意功能池
-
-### 遊戲化元素
-- 🎯 每日簽到獎勵
-- 🏆 探索成就系統
-- 📈 使用者等級
-- 🎖️ 徽章收集
-
-### 社群互動
-- 👥 教師分享圈
-- 💬 線上討論區
-- 📢 公告通知
-
-### 進階整合
-- 🔔 推播通知
-- 📊 Google Analytics 4
-- 🔗 外部嵌入代碼
-
----
-
-## 🔗 參考資源
-
-| 技術 | 文件 |
-|------|------|
-| Vite | https://vitejs.dev/ |
-| TanStack Query | https://tanstack.com/query |
-| Firebase | https://firebase.google.com/docs |
-| Recharts | https://recharts.org/ |
-| Zustand | https://zustand-demo.pmnd.rs/ |
-
----
-
-*此文件將隨專案發展持續更新*
+*此文件應隨專案進展持續更新*  
+*最後更新：2026-01-16*
