@@ -1,11 +1,25 @@
 import { useToast } from "@/components/ui/use-toast";
 import { useQueryClient } from '@tanstack/react-query';
 
+// 檢測是否為靜態部署環境
+const isStaticDeployment = () => {
+  if (typeof window === 'undefined') return false;
+  return window.location.hostname.includes('github.io') ||
+    window.location.hostname.includes('netlify.app') ||
+    window.location.hostname.includes('vercel.app');
+};
+
 export function useToolTracking() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   const trackToolUsage = async (toolId: number) => {
+    // 在靜態部署環境中，跳過 API 請求
+    if (isStaticDeployment()) {
+      console.log('[Static Mode] 跳過工具使用追蹤:', toolId);
+      return { success: true, toolId, staticMode: true };
+    }
+
     try {
       const response = await fetch(`/api/tools/${toolId}/track`, {
         method: 'POST',
@@ -23,10 +37,10 @@ export function useToolTracking() {
 
       // 立即更新查詢數據
       await Promise.all([
-        queryClient.invalidateQueries({ 
+        queryClient.invalidateQueries({
           queryKey: ['/api/tools/stats']
         }),
-        queryClient.invalidateQueries({ 
+        queryClient.invalidateQueries({
           queryKey: ['/api/tools/rankings']
         })
       ]);
