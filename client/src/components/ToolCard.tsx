@@ -435,12 +435,11 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
                       >
                         <img
-                          src={tool.previewUrl}
+                          src={`${import.meta.env.BASE_URL}${tool.previewUrl?.startsWith('/') ? tool.previewUrl.slice(1) : tool.previewUrl}`}
                           alt={`${tool.title} 預覽圖`}
                           className="w-full h-full object-cover"
                           onLoad={() => setIsPreviewLoading(false)}
                           onError={(e) => {
-                            console.error(`圖片載入失敗: ${tool.previewUrl}`);
                             e.currentTarget.style.display = 'none';
                           }}
                         />
