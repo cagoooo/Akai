@@ -80,6 +80,24 @@ export const tools: EducationalTool[] = [
     icon: "Files",
     category: "teaching",
     previewUrl: "/previews/teaching-preview.svg"
+  },
+  {
+    id: 9,
+    title: "超級瑪莉歐冒險",
+    description: "經典遊戲風格的教育遊戲，結合趣味與學習的互動體驗",
+    url: "https://cagoooo.github.io/mario-game/",
+    icon: "Gamepad2",
+    category: "games",
+    previewUrl: "/previews/mario-preview.svg"
+  },
+  {
+    id: 10,
+    title: "班級小管家",
+    description: "便捷的班級管理工具，協助教師輕鬆管理班級事務",
+    url: "https://cagoooo.github.io/class/",
+    icon: "Users",
+    category: "utilities",
+    previewUrl: "/previews/class-preview.svg"
   }
 ];
 
