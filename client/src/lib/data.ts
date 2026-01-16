@@ -37,28 +37,28 @@ export const tools: EducationalTool[] = [
     previewUrl: "/previews/reading-preview.svg"
   },
   {
-    id: 4, 
+    id: 4,
     title: "PIRLS閱讀理解生成",
     description: "專業的閱讀理解評估工具，幫助提升學生的閱讀能力",
-    url: "https://pirls.smes.tyc.edu.tw/",
+    url: "https://pirlss.smes.tyc.edu.tw/",
     icon: "Book",
     category: "reading",
     previewUrl: "/previews/pirls-preview.svg"
   },
   {
     id: 5,
-    title: "QRCode批次產生器",
-    description: "便捷的QR碼批量生成工具，適用於教育資源的快速分享",
-    url: "https://qrcode.smes.tyc.edu.tw/",
-    icon: "QrCode",
+    title: "校園點餐系統",
+    description: "便捷的校園點餐平台，讓師生輕鬆訂購午餐",
+    url: "https://cagoooo.github.io/vendor/",
+    icon: "Utensils",
     category: "utilities",
-    previewUrl: "/previews/qrcode-preview.svg"
+    previewUrl: "/previews/vendor-preview.svg"
   },
   {
     id: 6,
     title: "蜂類配對消消樂",
     description: "寓教於樂的教育遊戲，通過趣味性的方式學習蜂類知識",
-    url: "https://bee.smes.tyc.edu.tw/",
+    url: "https://cagoooo.github.io/bee/",
     icon: "Gamepad2",
     category: "games",
     previewUrl: "/previews/bee-preview.svg"
