@@ -138,10 +138,10 @@ export function Home() {
           </h1>
         </header>
 
-        {/* 主要內容區域 */}
-        <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
-          {/* 手機版排行榜切換按鈕 */}
-          <div className="lg:hidden w-full p-3 rounded-lg text-center">
+        {/* 主要內容區域 - xl 以上才變為左右排版 */}
+        <div className="flex flex-col xl:flex-row gap-4 sm:gap-6 xl:gap-8">
+          {/* 手機版和平板版排行榜切換按鈕 */}
+          <div className="xl:hidden w-full p-3 rounded-lg text-center">
             <Button
               variant="outline"
               className="w-full flex items-center justify-center gap-2"
@@ -153,7 +153,7 @@ export function Home() {
           </div>
 
           {/* 主內容區域 */}
-          <div className="w-full lg:w-2/3 space-y-5 sm:space-y-8">
+          <div className="w-full xl:w-2/3 space-y-5 sm:space-y-8">
             {/* 訪問計數器 */}
             <section className="p-3 sm:p-4 rounded-lg bg-green-50">
               <VisitorCounter />
@@ -298,9 +298,9 @@ export function Home() {
             </div>
           </div>
 
-          {/* 排行榜區域 */}
-          <aside id="mobile-rankings" className="w-full lg:w-1/3 lg:order-last">
-            <div className="lg:sticky lg:top-4 space-y-4 p-3 sm:p-4 rounded-lg bg-purple-50">
+          {/* 排行榜區域 - xl 以上才顯示在側邊 */}
+          <aside id="mobile-rankings" className="w-full xl:w-1/3 xl:order-last">
+            <div className="xl:sticky xl:top-4 space-y-4 p-3 sm:p-4 rounded-lg bg-purple-50">
               <div data-tour="tool-rankings">
                 <ToolRankings />
               </div>
