@@ -98,6 +98,114 @@ export const tools: EducationalTool[] = [
     icon: "Users",
     category: "utilities",
     previewUrl: "/previews/class-preview.svg"
+  },
+  {
+    id: 11,
+    title: "剛好學：課堂互動so easy",
+    description: "即時課堂互動平台，讓教學更加生動有趣",
+    url: "https://class.smes.tyc.edu.tw/",
+    icon: "GraduationCap",
+    category: "teaching",
+    previewUrl: "/previews/interactive-preview.svg"
+  },
+  {
+    id: 12,
+    title: "PIRLS閱讀理解網",
+    description: "完整的 PIRLS 閱讀理解資源平台",
+    url: "https://read.smes.tyc.edu.tw/smes/PIRLS/",
+    icon: "BookOpen",
+    category: "reading",
+    previewUrl: "/previews/pirls-web-preview.svg"
+  },
+  {
+    id: 13,
+    title: "5W1H 靈感發射器 🚀",
+    description: "創意思維激發工具，協助發想教學內容",
+    url: "https://5w1h.smes.tyc.edu.tw/",
+    icon: "Rocket",
+    category: "teaching",
+    previewUrl: "/previews/5w1h-preview.svg"
+  },
+  {
+    id: 14,
+    title: "點亮詩意~『早安長輩圖產生器』",
+    description: "輕鬆製作溫馨的早安問候圖片",
+    url: "https://poet.smes.tyc.edu.tw/",
+    icon: "Image",
+    category: "utilities",
+    previewUrl: "/previews/poet-preview.svg"
+  },
+  {
+    id: 15,
+    title: "社群領域會議報告產出平台",
+    description: "快速產生會議報告的協作工具",
+    url: "https://report.smes.tyc.edu.tw/",
+    icon: "FileText",
+    category: "utilities",
+    previewUrl: "/previews/report-preview.svg"
+  },
+  {
+    id: 16,
+    title: "親師溝通小幫手",
+    description: "促進親師溝通的便捷平台",
+    url: "https://talk.smes.tyc.edu.tw/",
+    icon: "MessageSquare",
+    category: "communication",
+    previewUrl: "/previews/talk-preview.svg"
+  },
+  {
+    id: 17,
+    title: "單一抽籤系統",
+    description: "簡單快速的單一抽籤工具",
+    url: "https://www.smes.tyc.edu.tw/smes_html/gogogo.html",
+    icon: "Ticket",
+    category: "utilities",
+    previewUrl: "/previews/single-draw-preview.svg"
+  },
+  {
+    id: 18,
+    title: "大量抽籤系統",
+    description: "支援大量抽籤的進階工具",
+    url: "https://www.smes.tyc.edu.tw/smes_html/random.html",
+    icon: "Shuffle",
+    category: "utilities",
+    previewUrl: "/previews/batch-draw-preview.svg"
+  },
+  {
+    id: 19,
+    title: "設計自己的專屬客服",
+    description: "自訂專屬的智能客服系統",
+    url: "https://doc.smes.tyc.edu.tw/",
+    icon: "Bot",
+    category: "utilities",
+    previewUrl: "/previews/bot-preview.svg"
+  },
+  {
+    id: 20,
+    title: "英打練習",
+    description: "英文打字練習工具，提升打字速度與準確度",
+    url: "https://www.smes.tyc.edu.tw/smes_html/typeEN.html",
+    icon: "Keyboard",
+    category: "language",
+    previewUrl: "/previews/type-en-preview.svg"
+  },
+  {
+    id: 21,
+    title: "中打練習",
+    description: "中文打字練習工具，提升中文輸入能力",
+    url: "https://www.smes.tyc.edu.tw/smes_html/typeCC.html",
+    icon: "Keyboard",
+    category: "language",
+    previewUrl: "/previews/type-ch-preview.svg"
+  },
+  {
+    id: 22,
+    title: "成語中打練習",
+    description: "透過成語練習中文打字，邊打邊學成語",
+    url: "https://www.smes.tyc.edu.tw/smes_html/typeTC.html",
+    icon: "Languages",
+    category: "language",
+    previewUrl: "/previews/type-idiom-preview.svg"
   }
 ];
 
