@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Share2, Users, Settings2, Facebook as FacebookIcon, Linkedin as LinkedinIcon, MessageCircle, BarChart, Copy } from "lucide-react";
+import { Share2, Users, Settings2, Facebook as FacebookIcon, Linkedin as LinkedinIcon, MessageCircle, BarChart, Copy, Heart } from "lucide-react";
 import { useState, useCallback } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as Icons from "lucide-react";
@@ -82,9 +82,12 @@ const categoryColors = {
 interface ToolCardProps {
   tool: EducationalTool;
   isLoading?: boolean;
+  isFavorite?: boolean;
+  onToggleFavorite?: (toolId: number) => void;
+  onToolClick?: (toolId: number) => void;
 }
 
-export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps) {
+export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = false, onToggleFavorite, onToolClick }: ToolCardProps) {
   const queryClient = useQueryClient();
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [isCustomizeOpen, setIsCustomizeOpen] = useState(false);
@@ -276,6 +279,30 @@ export function ToolCard({ tool: initialTool, isLoading = false }: ToolCardProps
                   </>
                 ) : (
                   <>
+                    {/* 收藏按鈕 */}
+                    {onToggleFavorite && (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onToggleFavorite(tool.id);
+                            }}
+                            aria-label={isFavorite ? "取消收藏" : "加入收藏"}
+                          >
+                            <Heart
+                              className={`h-4 w-4 transition-colors ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-400 hover:text-red-400'}`}
+                            />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>{isFavorite ? '取消收藏' : '加入收藏'}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    )}
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button

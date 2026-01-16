@@ -18,6 +18,9 @@ interface CategoryFilterProps {
     selectedCategory: string | null;
     onCategoryChange: (category: string | null) => void;
     categoryCounts: Record<string, number>;
+    showFavorites?: boolean;
+    onToggleFavorites?: () => void;
+    favoritesCount?: number;
 }
 
 export function CategoryFilter({
@@ -25,6 +28,9 @@ export function CategoryFilter({
     selectedCategory,
     onCategoryChange,
     categoryCounts,
+    showFavorites = false,
+    onToggleFavorites,
+    favoritesCount = 0,
 }: CategoryFilterProps) {
     const totalCount = Object.values(categoryCounts).reduce((a, b) => a + b, 0);
 
@@ -32,9 +38,12 @@ export function CategoryFilter({
         <div className="flex flex-wrap gap-2">
             {/* 全部按鈕 */}
             <Button
-                variant={selectedCategory === null ? "default" : "outline"}
+                variant={selectedCategory === null && !showFavorites ? "default" : "outline"}
                 size="sm"
-                onClick={() => onCategoryChange(null)}
+                onClick={() => {
+                    onCategoryChange(null);
+                    if (showFavorites && onToggleFavorites) onToggleFavorites();
+                }}
                 className="gap-1"
             >
                 <span>{categoryLabels.all.emoji}</span>
@@ -44,6 +53,24 @@ export function CategoryFilter({
                 </Badge>
             </Button>
 
+            {/* 我的收藏按鈕 */}
+            {onToggleFavorites && (
+                <Button
+                    variant={showFavorites ? "default" : "outline"}
+                    size="sm"
+                    onClick={onToggleFavorites}
+                    className={`gap-1 ${showFavorites ? 'bg-red-500 hover:bg-red-600' : ''}`}
+                >
+                    <span>❤️</span>
+                    <span>收藏</span>
+                    {favoritesCount > 0 && (
+                        <Badge variant="secondary" className="ml-1 text-xs">
+                            {favoritesCount}
+                        </Badge>
+                    )}
+                </Button>
+            )}
+
             {/* 各分類按鈕 */}
             {categories.map((category) => {
                 const info = categoryLabels[category] || { label: category, emoji: '📌' };
@@ -52,9 +79,12 @@ export function CategoryFilter({
                 return (
                     <Button
                         key={category}
-                        variant={selectedCategory === category ? "default" : "outline"}
+                        variant={selectedCategory === category && !showFavorites ? "default" : "outline"}
                         size="sm"
-                        onClick={() => onCategoryChange(category)}
+                        onClick={() => {
+                            onCategoryChange(category);
+                            if (showFavorites && onToggleFavorites) onToggleFavorites();
+                        }}
                         className="gap-1"
                     >
                         <span>{info.emoji}</span>

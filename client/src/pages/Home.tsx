@@ -4,10 +4,13 @@ import { ToolCard } from "@/components/ToolCard";
 import { TeacherIntro } from "@/components/TeacherIntro";
 import { tools } from "@/lib/data";
 import { Button } from "@/components/ui/button";
-import { Trophy } from "lucide-react";
+import { Trophy, Clock, X } from "lucide-react";
 import { useTour } from "@/components/TourProvider";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { SearchBar } from "@/components/SearchBar";
+import { ScrollToTop } from "@/components/ScrollToTop";
+import { useFavorites } from "@/hooks/useFavorites";
+import { useRecentTools } from "@/hooks/useRecentTools";
 
 import { ToolRankings } from "@/components/ToolRankings";
 import { RankingTutorial } from "@/components/RankingTutorial";
@@ -17,6 +20,13 @@ export function Home() {
   const { startTour } = useTour();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [showFavorites, setShowFavorites] = useState(false);
+
+  // 收藏功能
+  const { favorites, toggleFavorite, isFavorite, favoritesCount } = useFavorites();
+
+  // 最近使用歷史
+  const { recentIds, addToRecent, clearRecent, hasRecent } = useRecentTools();
 
   const { data: toolsData, isLoading } = useQuery({
     queryKey: ['/api/tools'],
@@ -25,6 +35,14 @@ export function Home() {
       return tools;
     },
   });
+
+  // 取得最近使用的工具
+  const recentTools = useMemo(() => {
+    if (!toolsData || recentIds.length === 0) return [];
+    return recentIds
+      .map(id => toolsData.find(tool => tool.id === id))
+      .filter(Boolean) as typeof tools;
+  }, [toolsData, recentIds]);
 
   // 計算各分類的工具數量
   const categoryCounts = useMemo(() => {
@@ -44,14 +62,33 @@ export function Home() {
 
   // 篩選工具
   const filteredTools = useMemo(() => {
-    return toolsData?.filter(tool => {
-      const matchesSearch = !searchQuery ||
+    let result = toolsData;
+
+    // 收藏篩選
+    if (showFavorites) {
+      result = result?.filter(tool => favorites.includes(tool.id));
+    }
+
+    // 搜尋篩選
+    if (searchQuery) {
+      result = result?.filter(tool =>
         tool.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        tool.description.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesCategory = !selectedCategory || tool.category === selectedCategory;
-      return matchesSearch && matchesCategory;
-    });
-  }, [toolsData, searchQuery, selectedCategory]);
+        tool.description.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // 分類篩選
+    if (selectedCategory) {
+      result = result?.filter(tool => tool.category === selectedCategory);
+    }
+
+    return result;
+  }, [toolsData, searchQuery, selectedCategory, showFavorites, favorites]);
+
+  // 處理工具點擊
+  const handleToolClick = (toolId: number) => {
+    addToRecent(toolId);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -92,6 +129,39 @@ export function Home() {
               探索阿凱老師開發的教育工具，為您的教學增添創新的可能
             </p>
 
+            {/* 最近使用區塊 */}
+            {hasRecent && !isLoading && (
+              <section className="p-3 sm:p-4 rounded-lg bg-teal-50">
+                <div className="flex items-center justify-between mb-3">
+                  <h2 className="text-lg font-semibold text-teal-800 flex items-center gap-2">
+                    <Clock className="w-5 h-5" />
+                    最近使用
+                  </h2>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={clearRecent}
+                    className="text-teal-600 hover:text-teal-800"
+                  >
+                    <X className="w-4 h-4 mr-1" />
+                    清除
+                  </Button>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {recentTools.slice(0, 4).map((tool) => (
+                    <ToolCard
+                      key={`recent-${tool.id}`}
+                      tool={tool}
+                      isLoading={false}
+                      isFavorite={isFavorite(tool.id)}
+                      onToggleFavorite={toggleFavorite}
+                      onToolClick={handleToolClick}
+                    />
+                  ))}
+                </div>
+              </section>
+            )}
+
             {/* 搜尋與篩選區域 */}
             <section className="space-y-4 p-3 sm:p-4 rounded-lg bg-orange-50">
               <h2 className="text-lg font-semibold text-orange-800">🔍 搜尋與篩選</h2>
@@ -108,6 +178,9 @@ export function Home() {
                 selectedCategory={selectedCategory}
                 onCategoryChange={setSelectedCategory}
                 categoryCounts={categoryCounts}
+                showFavorites={showFavorites}
+                onToggleFavorites={() => setShowFavorites(!showFavorites)}
+                favoritesCount={favoritesCount}
               />
             </section>
 
@@ -127,13 +200,12 @@ export function Home() {
               data-tour="tools-grid"
               className="p-3 sm:p-4 rounded-lg bg-indigo-50"
             >
-              {!isLoading && (searchQuery || selectedCategory) && (
+              {!isLoading && (searchQuery || selectedCategory || showFavorites) && (
                 <div className="mb-4 text-sm text-muted-foreground">
                   顯示 {filteredTools?.length || 0} / {toolsData?.length || 0} 個工具
+                  {showFavorites && <span className="ml-2">(我的收藏)</span>}
                   {selectedCategory && (
-                    <span className="ml-2">
-                      (分類: <span className="font-medium">{selectedCategory}</span>)
-                    </span>
+                    <span className="ml-2">(分類: {selectedCategory})</span>
                   )}
                 </div>
               )}
@@ -149,18 +221,30 @@ export function Home() {
                   ))
                 ) : filteredTools && filteredTools.length > 0 ? (
                   filteredTools.map((tool) => (
-                    <ToolCard key={tool.id} tool={tool} isLoading={false} />
+                    <ToolCard
+                      key={tool.id}
+                      tool={tool}
+                      isLoading={false}
+                      isFavorite={isFavorite(tool.id)}
+                      onToggleFavorite={toggleFavorite}
+                      onToolClick={handleToolClick}
+                    />
                   ))
                 ) : (
                   <div className="col-span-2 text-center py-8 text-muted-foreground">
                     <p className="text-lg">😕 找不到符合條件的工具</p>
-                    <p className="text-sm mt-2">請嘗試調整搜尋關鍵字或分類篩選</p>
+                    <p className="text-sm mt-2">
+                      {showFavorites
+                        ? '還沒有收藏任何工具，點擊愛心按鈕收藏吧！'
+                        : '請嘗試調整搜尋關鍵字或分類篩選'}
+                    </p>
                     <Button
                       variant="outline"
                       className="mt-4"
                       onClick={() => {
                         setSearchQuery('');
                         setSelectedCategory(null);
+                        setShowFavorites(false);
                       }}
                     >
                       清除所有篩選
@@ -190,6 +274,9 @@ export function Home() {
           </aside>
         </div>
       </main>
+
+      {/* 回到頂部按鈕 */}
+      <ScrollToTop />
     </div>
   );
 }
