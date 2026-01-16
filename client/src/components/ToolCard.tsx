@@ -117,11 +117,9 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
   // 使用 mutation 作為後備機制
   const trackUsage = useMutation({
     mutationFn: async () => {
-      console.log('工具卡片點擊:', tool.id);
       return await trackToolUsage(tool.id);
     },
     onSuccess: (data) => {
-      console.log('工具卡片點擊成功:', tool.id, data);
       // 成功後確保數據被刷新，但使用 active 模式避免過多請求
       queryClient.invalidateQueries({
         queryKey: ['/api/tools/stats'],
@@ -193,7 +191,6 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
       // 然後再發送使用統計數據（不阻塞用戶體驗）
       trackToolUsage(tool.id)
         .then(result => {
-          console.log('工具使用已追蹤:', tool.id, result);
           // 成功後更新本地狀態
           if (result?.totalClicks) {
             setTool(prevTool => ({
