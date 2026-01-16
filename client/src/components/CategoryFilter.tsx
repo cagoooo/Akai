@@ -1,17 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
-// 分類顯示名稱與圖示
-const categoryLabels: Record<string, { label: string; emoji: string }> = {
-    all: { label: '全部', emoji: '📚' },
-    games: { label: '遊戲', emoji: '🎮' },
-    utilities: { label: '工具', emoji: '🛠️' },
-    teaching: { label: '教學', emoji: '📚' },
-    language: { label: '語言', emoji: '🗣️' },
-    communication: { label: '溝通', emoji: '💬' },
-    reading: { label: '閱讀', emoji: '📖' },
-    interactive: { label: '互動', emoji: '✨' },
-};
+import { categoryInfo, getCategoryColorClass } from "@/lib/categoryConstants";
+import type { ToolCategory } from "@/lib/data";
 
 interface CategoryFilterProps {
     categories: string[];
@@ -33,6 +23,7 @@ export function CategoryFilter({
     favoritesCount = 0,
 }: CategoryFilterProps) {
     const totalCount = Object.values(categoryCounts).reduce((a, b) => a + b, 0);
+    const allInfo = categoryInfo.all;
 
     return (
         <div className="flex flex-wrap gap-2">
@@ -44,11 +35,11 @@ export function CategoryFilter({
                     onCategoryChange(null);
                     if (showFavorites && onToggleFavorites) onToggleFavorites();
                 }}
-                className="gap-1"
+                className="gap-1.5 text-sm"
             >
-                <span>{categoryLabels.all.emoji}</span>
-                <span>{categoryLabels.all.label}</span>
-                <Badge variant="secondary" className="ml-1 text-xs">
+                <span>{allInfo.emoji}</span>
+                <span>{allInfo.label}</span>
+                <Badge variant="secondary" className="ml-1 text-xs px-1.5">
                     {totalCount}
                 </Badge>
             </Button>
@@ -59,12 +50,12 @@ export function CategoryFilter({
                     variant={showFavorites ? "default" : "outline"}
                     size="sm"
                     onClick={onToggleFavorites}
-                    className={`gap-1 ${showFavorites ? 'bg-red-500 hover:bg-red-600' : ''}`}
+                    className={`gap-1.5 text-sm ${showFavorites ? 'bg-red-500 hover:bg-red-600' : ''}`}
                 >
                     <span>❤️</span>
-                    <span>收藏</span>
+                    <span>我的收藏</span>
                     {favoritesCount > 0 && (
-                        <Badge variant="secondary" className="ml-1 text-xs">
+                        <Badge variant="secondary" className="ml-1 text-xs px-1.5">
                             {favoritesCount}
                         </Badge>
                     )}
@@ -73,7 +64,12 @@ export function CategoryFilter({
 
             {/* 各分類按鈕 */}
             {categories.map((category) => {
-                const info = categoryLabels[category] || { label: category, emoji: '📌' };
+                const info = categoryInfo[category as ToolCategory] || {
+                    label: category,
+                    emoji: '📌',
+                    color: 'bg-gray-100 text-gray-800',
+                    darkColor: 'dark:bg-gray-800 dark:text-gray-200'
+                };
                 const count = categoryCounts[category] || 0;
 
                 return (
@@ -85,11 +81,11 @@ export function CategoryFilter({
                             onCategoryChange(category);
                             if (showFavorites && onToggleFavorites) onToggleFavorites();
                         }}
-                        className="gap-1"
+                        className="gap-1.5 text-sm"
                     >
                         <span>{info.emoji}</span>
                         <span>{info.label}</span>
-                        <Badge variant="secondary" className="ml-1 text-xs">
+                        <Badge variant="secondary" className="ml-1 text-xs px-1.5">
                             {count}
                         </Badge>
                     </Button>

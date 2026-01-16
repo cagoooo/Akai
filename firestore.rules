@@ -30,5 +30,27 @@ service cloud.firestore {
     match /userAchievements/{docId} {
       allow read, write: if request.auth != null;
     }
+    
+    // ==================== 評論功能 ====================
+    
+    // 工具評論 - 所有人可讀，認證用戶可寫
+    match /toolReviews/{reviewId} {
+      // 所有人可讀
+      allow read: if true;
+      // 認證用戶可新增
+      allow create: if request.auth != null;
+      // 只有評論作者可編輯/刪除，或任何認證用戶可更新點讚
+      allow update: if request.auth != null && (
+        request.auth.uid == resource.data.userId ||
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes', 'likedBy'])
+      );
+      allow delete: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+    
+    // 工具評分統計 - 所有人可讀，系統可寫
+    match /toolRatings/{toolId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
   }
 }

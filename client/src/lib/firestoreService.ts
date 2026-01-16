@@ -211,6 +211,39 @@ export async function trackToolUsage(toolId: number): Promise<ToolStats> {
 }
 
 /**
+ * 取得單一工具統計
+ */
+export async function getToolStats(toolId: number): Promise<ToolStats | null> {
+    if (!isFirebaseAvailable() || !db) {
+        // 使用本地備份
+        const localKey = `localToolStats_${toolId}`;
+        const localClicks = parseInt(localStorage.getItem(localKey) || '0');
+        if (localClicks > 0) {
+            return {
+                toolId,
+                totalClicks: localClicks,
+                lastUsedAt: null,
+                categoryClicks: {}
+            };
+        }
+        return null;
+    }
+
+    try {
+        const docRef = doc(db as Firestore, TOOL_STATS_COLLECTION, `tool_${toolId}`);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            return docSnap.data() as ToolStats;
+        }
+        return null;
+    } catch (error) {
+        console.error('取得工具統計失敗:', error);
+        return null;
+    }
+}
+
+/**
  * 取得工具排行榜
  */
 export async function getToolRankings(limitCount: number = 8): Promise<ToolStats[]> {

@@ -5,6 +5,7 @@ import {
   enableIndexedDbPersistence,
   Firestore
 } from 'firebase/firestore';
+import { getAuth, Auth } from 'firebase/auth';
 
 // 從環境變數讀取 Firebase 設定
 const firebaseConfig = {
@@ -21,6 +22,7 @@ const hasValidConfig = firebaseConfig.apiKey && firebaseConfig.projectId;
 
 let app: FirebaseApp | null = null;
 let db: Firestore | null = null;
+let auth: Auth | null = null;
 
 if (hasValidConfig) {
   try {
@@ -29,6 +31,9 @@ if (hasValidConfig) {
 
     // 初始化 Firestore
     db = getFirestore(app);
+
+    // 初始化 Authentication
+    auth = getAuth(app);
 
     // 啟用 IndexedDB 持久化快取
     enableIndexedDbPersistence(db).then(() => {
@@ -50,10 +55,16 @@ if (hasValidConfig) {
 }
 
 // 導出 - 可能為 null 如果設定無效
-export { db };
+export { db, auth };
 export default app;
 
 // 輔助函式：檢查 Firebase 是否可用
 export function isFirebaseAvailable(): boolean {
   return db !== null;
 }
+
+// 輔助函式：檢查 Auth 是否可用
+export function isAuthAvailable(): boolean {
+  return auth !== null;
+}
+

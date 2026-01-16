@@ -4,11 +4,13 @@ import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Share2, Users, Settings2, Facebook as FacebookIcon, Linkedin as LinkedinIcon, MessageCircle, BarChart, Copy, Heart } from "lucide-react";
+import { Share2, Users, Settings2, Facebook as FacebookIcon, Linkedin as LinkedinIcon, MessageCircle, BarChart, Copy, Heart, Info } from "lucide-react";
 import { useState, useCallback } from "react";
+import { Link } from "wouter";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import * as Icons from "lucide-react";
-import type { EducationalTool } from "@/lib/data";
+import { iconRegistry, type IconName } from "@/lib/iconRegistry";
+import { categoryInfo, getCategoryColorClass } from "@/lib/categoryConstants";
+import type { EducationalTool, ToolCategory } from "@/lib/data";
 import type { LucideIcon } from 'lucide-react';
 
 // 擴展 EducationalTool 類型，添加可能從後端返回的屬性
@@ -95,7 +97,7 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
   const [isPreviewLoading, setIsPreviewLoading] = useState(true);
   const [previewImage, setPreviewImage] = useState<string>();
   const [tool, setTool] = useState<EnhancedTool>(initialTool);
-  const Icon = Icons[tool.icon as keyof typeof Icons] as LucideIcon;
+  const Icon = iconRegistry[tool.icon as IconName] as LucideIcon;
   const { toast } = useToast();
 
   // Get usage statistics for this tool
@@ -337,18 +339,37 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                         <p>分享並協作</p>
                       </TooltipContent>
                     </Tooltip>
+                    {/* 詳情按鈕 */}
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Link href={`/tool/${tool.id}`}>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className={`h-8 w-8 transition-colors duration-300 ${tool.category && categoryColors[tool.category] ? categoryColors[tool.category].icon : 'text-gray-600'}`}
+                            onClick={(e) => e.stopPropagation()}
+                            aria-label={`查看 ${tool.title} 詳情`}
+                          >
+                            <Info className="h-4 w-4" />
+                          </Button>
+                        </Link>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>查看詳情</p>
+                      </TooltipContent>
+                    </Tooltip>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Badge
                           variant="secondary"
-                          className={`${tool.category && categoryColors[tool.category] ? categoryColors[tool.category].badge : 'bg-gray-100 text-gray-800'} border-0 transition-colors duration-300`}
+                          className={`${getCategoryColorClass(tool.category as ToolCategory)} border-0 transition-colors duration-300`}
                         >
                           <span className="sr-only">工具類別：</span>
-                          {tool.category}
+                          {categoryInfo[tool.category as ToolCategory]?.emoji} {categoryInfo[tool.category as ToolCategory]?.label || tool.category}
                         </Badge>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>工具類別：{tool.category}</p>
+                        <p>工具類別：{categoryInfo[tool.category as ToolCategory]?.emoji} {categoryInfo[tool.category as ToolCategory]?.label || tool.category}</p>
                       </TooltipContent>
                     </Tooltip>
                   </>

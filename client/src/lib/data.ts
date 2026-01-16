@@ -1,11 +1,15 @@
+export type ToolCategory = 'communication' | 'teaching' | 'language' | 'reading' | 'utilities' | 'games' | 'interactive';
+
 export interface EducationalTool {
   id: number;
   title: string;
   description: string;
+  detailedDescription?: string;  // 詳細說明
   url: string;
   icon: string;
-  category: 'communication' | 'teaching' | 'language' | 'reading' | 'utilities' | 'games' | 'interactive';
+  category: ToolCategory;
   previewUrl?: string;
+  tags?: string[];               // 標籤
 }
 
 export const tools: EducationalTool[] = [

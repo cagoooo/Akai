@@ -1,5 +1,6 @@
 import { type Achievement } from "@/lib/types";
-import * as Icons from "lucide-react";
+import { iconRegistry, type IconName } from "@/lib/iconRegistry";
+import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import {
@@ -22,7 +23,7 @@ export function AchievementBadge({
   showProgress = false,
   className,
 }: AchievementBadgeProps) {
-  const Icon = Icons[achievement.icon as keyof typeof Icons];
+  const Icon = iconRegistry[achievement.icon as IconName] as LucideIcon;
 
   const badgeVariants = {
     initial: { scale: 0.8, opacity: 0 },

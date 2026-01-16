@@ -4,6 +4,7 @@ import themePlugin from "@replit/vite-plugin-shadcn-theme-json";
 import path, { dirname } from "path";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 import { fileURLToPath } from "url";
+import { visualizer } from "rollup-plugin-visualizer";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -13,7 +14,17 @@ const isGitHubPages = process.env.GITHUB_ACTIONS === 'true';
 
 export default defineConfig({
   base: isGitHubPages ? '/Akai/' : '/',
-  plugins: [react(), runtimeErrorOverlay(), themePlugin()],
+  plugins: [
+    react(),
+    runtimeErrorOverlay(),
+    themePlugin(),
+    // Bundle 分析工具
+    visualizer({
+      filename: 'stats.html',
+      gzipSize: true,
+      brotliSize: true,
+    }),
+  ],
   resolve: {
     alias: {
       "@db": path.resolve(__dirname, "db"),
@@ -21,6 +32,7 @@ export default defineConfig({
     },
   },
   root: path.resolve(__dirname, "client"),
+  envDir: path.resolve(__dirname), // 從專案根目錄讀取 .env 檔案
   build: {
     outDir: path.resolve(__dirname, "dist/public"),
     emptyOutDir: true,

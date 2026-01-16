@@ -11,9 +11,12 @@ import { ErrorBoundary, SuspenseWrapper } from "@/components/ErrorBoundary";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SEOHead } from "@/components/SEOHead";
 import { WebsiteSchema, OrganizationSchema, AllToolsSchema } from "@/components/StructuredData";
+import { OfflineIndicator } from "@/components/OfflineIndicator";
+import { InstallPrompt } from "@/components/InstallPrompt";
 
 // 直接 import
 import { Home } from "@/pages/Home";
+import { ToolDetail } from "@/pages/ToolDetail";
 import { TriviaDialog } from "@/components/TriviaDialog";
 
 // 取得 base path - Vite 會在建置時注入 BASE_URL
@@ -64,6 +67,9 @@ function App() {
                     <Route path="/">
                       <Home />
                     </Route>
+                    <Route path="/tool/:id">
+                      <ToolDetail />
+                    </Route>
                   </Switch>
                 </PageTransition>
                 <Footer />
@@ -73,6 +79,10 @@ function App() {
             <TriviaDialog />
 
             <Toaster />
+
+            {/* PWA 功能元件 */}
+            <OfflineIndicator />
+            <InstallPrompt />
           </TourProvider>
         </QueryClientProvider>
       </ErrorBoundary>

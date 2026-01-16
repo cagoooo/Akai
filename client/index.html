@@ -1,56 +1,66 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/x-icon" href="./favicon.ico" />
-    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png" />
-    <meta name="msapplication-TileColor" content="#ffffff" />
-    <meta name="theme-color" content="#ffffff" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="致力於開發實用的教育工具，結合科技與教育，為師生創造更好的教學與學習體驗。提供線上即時客服、教案靈感生成、漢語閱讀理解等多元化教育資源。" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="教育科技創新專區" />
+
+<head>
+  <meta charset="UTF-8" />
+
+  <!-- DNS 預連接與預獲取 - 改善 LCP/FCP -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://firestore.googleapis.com" />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="https://firestore.googleapis.com" />
+
+  <!-- Favicon 設定 -->
+  <link rel="icon" type="image/x-icon" href="./favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png" />
+  <meta name="msapplication-TileColor" content="#ffffff" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="致力於開發實用的教育工具，結合科技與教育，為師生創造更好的教學與學習體驗。提供線上即時客服、教案靈感生成、漢語閱讀理解等多元化教育資源。" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="教育科技創新專區" />
 
 
-    <!-- Primary Meta Tags -->
-    <title>教育科技創新專區 - 阿凱老師</title>
-    <meta name="title" content="教育科技創新專區 - 阿凱老師" />
-    <meta name="author" content="阿凱老師" />
-    <meta name="keywords" content="教育科技,教學工具,線上教育,教育創新,教育資源,教案設計,閱讀理解,PIRLS,QRCode工具,蜂類教育,教師評語,石門國小,桃園教育" />
+  <!-- Primary Meta Tags -->
+  <title>教育科技創新專區 - 阿凱老師</title>
+  <meta name="title" content="教育科技創新專區 - 阿凱老師" />
+  <meta name="author" content="阿凱老師" />
+  <meta name="keywords" content="教育科技,教學工具,線上教育,教育創新,教育資源,教案設計,閱讀理解,PIRLS,QRCode工具,蜂類教育,教師評語,石門國小,桃園教育" />
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="教育科技創新專區" />
-    <meta property="og:title" content="教育科技創新專區 - 阿凱老師" />
-    <meta property="og:description" content="致力於開發實用的教育工具，結合科技與教育，為師生創造更好的教學與學習體驗。" />
-    <meta property="og:image" content="/Akai.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:locale" content="zh_TW" />
-    <meta property="og:url" content="https://smes.tyc.edu.tw" />
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="教育科技創新專區" />
+  <meta property="og:title" content="教育科技創新專區 - 阿凱老師" />
+  <meta property="og:description" content="致力於開發實用的教育工具，結合科技與教育，為師生創造更好的教學與學習體驗。" />
+  <meta property="og:image" content="/Akai.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="zh_TW" />
+  <meta property="og:url" content="https://smes.tyc.edu.tw" />
 
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@教育科技創新專區" />
-    <meta name="twitter:title" content="教育科技創新專區 - 阿凱老師" />
-    <meta name="twitter:description" content="致力於開發實用的教育工具，結合科技與教育，為師生創造更好的教學與學習體驗。" />
-    <meta property="twitter:image" content="/Akai.png" />
-    <meta name="twitter:image:alt" content="教育科技創新專區預覽圖" />
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@教育科技創新專區" />
+  <meta name="twitter:title" content="教育科技創新專區 - 阿凱老師" />
+  <meta name="twitter:description" content="致力於開發實用的教育工具，結合科技與教育，為師生創造更好的教學與學習體驗。" />
+  <meta property="twitter:image" content="/Akai.png" />
+  <meta name="twitter:image:alt" content="教育科技創新專區預覽圖" />
 
-    <!-- Additional Meta -->
-    <meta name="robots" content="index, follow" />
-    <meta name="language" content="Traditional Chinese" />
-    <meta name="revisit-after" content="7 days" />
-    <meta name="generator" content="Vite" />
-    <meta name="format-detection" content="telephone=no" />
-    <link rel="manifest" href="./manifest.json" />
+  <!-- Additional Meta -->
+  <meta name="robots" content="index, follow" />
+  <meta name="language" content="Traditional Chinese" />
+  <meta name="revisit-after" content="7 days" />
+  <meta name="generator" content="Vite" />
+  <meta name="format-detection" content="telephone=no" />
+  <link rel="manifest" href="./manifest.json" />
 
 
-    <!-- Schema.org markup for Google -->
-    <script type="application/ld+json">
+  <!-- Schema.org markup for Google -->
+  <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "EducationalOrganization",
@@ -85,14 +95,16 @@
     }
     </script>
 
-    <!-- Alternate language versions -->
-    <link rel="alternate" href="https://smes.tyc.edu.tw" hreflang="zh-TW" />
+  <!-- Alternate language versions -->
+  <link rel="alternate" href="https://smes.tyc.edu.tw" hreflang="zh-TW" />
 
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://smes.tyc.edu.tw" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://smes.tyc.edu.tw" />
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>
