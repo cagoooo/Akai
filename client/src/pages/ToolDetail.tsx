@@ -227,9 +227,12 @@ export function ToolDetail() {
                 >
                     {tool.previewUrl ? (
                         <img
-                            src={tool.previewUrl}
+                            src={`${import.meta.env.BASE_URL}${tool.previewUrl?.startsWith('/') ? tool.previewUrl.slice(1) : tool.previewUrl}`}
                             alt={tool.title}
                             className="w-full h-full object-contain p-8"
+                            onError={(e) => {
+                                e.currentTarget.style.display = 'none';
+                            }}
                         />
                     ) : (
                         <div className="flex items-center justify-center h-full">
