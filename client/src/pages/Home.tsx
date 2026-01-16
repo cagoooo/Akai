@@ -140,16 +140,39 @@ export function Home() {
 
         {/* 主要內容區域 - xl 以上才變為左右排版 */}
         <div className="flex flex-col xl:flex-row gap-4 sm:gap-6 xl:gap-8">
-          {/* 手機版和平板版排行榜切換按鈕 */}
-          <div className="xl:hidden w-full p-3 rounded-lg text-center">
-            <Button
-              variant="outline"
-              className="w-full flex items-center justify-center gap-2"
+          {/* 手機版和平板版排行榜切換按鈕 - 吸睛設計 */}
+          <div className="xl:hidden w-full px-2 sm:px-0">
+            <button
               onClick={() => document.getElementById('mobile-rankings')?.scrollIntoView({ behavior: 'smooth' })}
+              className="w-full group relative overflow-hidden rounded-2xl bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 p-[2px] shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
             >
-              <Trophy className="w-4 h-4" />
-              <span>跳至工具排行榜</span>
-            </Button>
+              <div className="relative flex items-center justify-center gap-3 rounded-2xl bg-white/90 dark:bg-gray-900/90 px-4 py-3 sm:py-4 backdrop-blur-sm group-hover:bg-white/80 dark:group-hover:bg-gray-900/80 transition-all">
+                {/* 獎杯圖示帶動畫 */}
+                <div className="relative">
+                  <Trophy className="w-5 h-5 sm:w-6 sm:h-6 text-amber-500 group-hover:text-amber-600 transition-colors animate-bounce" style={{ animationDuration: '2s' }} />
+                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-rose-500 rounded-full animate-ping" />
+                </div>
+
+                {/* 文字 */}
+                <span className="text-sm sm:text-base font-bold bg-gradient-to-r from-amber-600 via-orange-600 to-rose-600 bg-clip-text text-transparent">
+                  跳至工具排行榜
+                </span>
+
+                {/* 箭頭指示 */}
+                <svg
+                  className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500 group-hover:translate-y-1 transition-transform animate-bounce"
+                  style={{ animationDuration: '1.5s', animationDelay: '0.5s' }}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+              </div>
+
+              {/* 背景光暈效果 */}
+              <div className="absolute inset-0 -z-10 bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 blur-xl opacity-50 group-hover:opacity-75 transition-opacity" />
+            </button>
           </div>
 
           {/* 主內容區域 */}
