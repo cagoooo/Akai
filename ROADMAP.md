@@ -1,7 +1,7 @@
 # 教育科技創新專區 - 發展路線圖 (Roadmap)
 
-> 最後更新：2026-01-16 16:20  
-> 版本：v2.1.0
+> 最後更新：2026-01-16 17:35  
+> 版本：v2.2.0
 
 ## 📊 目前進度總覽
 
@@ -37,8 +37,12 @@
 | UX | 分類標籤中文化 + Emoji | 2026-01-16 | ✅ |
 | **🎨 v2.1.0** | **Nano banana Pro 風格預覽圖** | **2026-01-16** | ✅ |
 | **🎨 v2.1.0** | **13 張獨特 3D 插圖** | **2026-01-16** | ✅ |
-| **🔧 v2.1.0** | **Firebase API 現代化** | **2026-01-16** | ✅ |
+| **🎨 v2.1.0** | **Firebase API 現代化** | **2026-01-16** | ✅ |
 | **📝 v2.1.0** | **CHANGELOG.md 建立** | **2026-01-16** | ✅ |
+| **🧪 v2.2.0** | **測試框架 (Vitest + Playwright)** | **2026-01-16** | ✅ |
+| **🔍 v2.2.0** | **程式碼品質工具 (ESLint + Prettier)** | **2026-01-16** | ✅ |
+| **🖼️ v2.2.0** | **新預覽圖 (Typing/Puzzle/Privacy/Platformer)** | **2026-01-16** | ✅ |
+| **🧹 v2.2.0** | **移除除錯用 console.log** | **2026-01-16** | ✅ |
 
 ---
 
@@ -54,11 +58,12 @@
 | reading | 📖 | 閱讀理解 | 2 | ✅ Reading |
 | interactive | ✨ | 即時互動 | 2 | ✅ Interactive/Music |
 
-### 🎨 預覽圖資產 (13 張)
+### 🎨 預覽圖資產 (17 張)
 - Communication（通訊）、Interactive（互動）、Utility（工具）
 - Reading（閱讀）、Games（遊戲）、Teaching（教學）、Language（語言）
 - Admin（行政）、Space（太空）、Music（音樂）、Magic（魔術）
 - Lottery（抽籤）、Feedback（評語）
+- **v2.2.0 新增**：Typing（打字）、Puzzle（益智）、Privacy（隱私）、Platformer（平台遊戲）
 
 ---
 
@@ -125,9 +130,9 @@
 
 #### 3. 剩餘預覽圖生成
 ```
-待生成：Typing（打字）、Puzzle（益智）、Privacy（隱私）、Platformer（平台遊戲）
-優先級：中
-預期效果：完全消除重複圖片
+✅ Typing（打字）、Puzzle（益智）、Privacy（隱私）、Platformer（平台遊戲）
+優先級：完成
+預期效果：完全消除重複圖片 ✅
 ```
 
 ---
@@ -271,18 +276,18 @@ toolReviews
 #### 1. 測試覆蓋率
 ```typescript
 目標：
-[ ] 單元測試 (Vitest) - 80% 覆蓋率
-[ ] 整合測試 - 核心流程
-[ ] E2E 測試 (Playwright) - 關鍵路徑
+✅ 單元測試 (Vitest) - 框架已建立
+✅ E2E 測試 (Playwright) - 框架已建立
+[ ] 達成 80% 覆蓋率
 ```
 
 #### 2. 程式碼品質
 ```typescript
 改進項目：
-[ ] ESLint 嚴格模式啟用
-[ ] TypeScript strict mode
-[ ] Prettier 格式化統一
-[ ] 移除 console.log (除錯誤)
+✅ ESLint 嚴格模式啟用
+✅ TypeScript strict mode
+✅ Prettier 格式化統一
+✅ 移除 console.log (除錯誤)
 ```
 
 #### 3. 效能優化
@@ -381,7 +386,7 @@ WCAG 2.1 AA 標準：
 
 ---
 
-*最後更新：2026-01-16 16:20*  
-*當前版本：v2.1.0*  
+*最後更新：2026-01-16 17:35*  
+*當前版本：v2.2.0*  
 *GitHub：https://github.com/cagoooo/Akai*  
 *線上版本：https://cagoooo.github.io/Akai/*
