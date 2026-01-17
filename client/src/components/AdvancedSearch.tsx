@@ -203,12 +203,13 @@ export const AdvancedSearch = forwardRef<HTMLInputElement, AdvancedSearchProps>(
                     </div>
                 </div>
 
-                {/* 標籤快選 */}
+                {/* 標籤快選 - 暫時隱藏以簡化版面
                 <TagQuickSelect
                     selectedTags={selectedTags}
                     onTagSelect={onTagSelect}
                     onClearTags={onClearTags}
                 />
+                */}
             </div>
         );
     }

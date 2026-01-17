@@ -40,8 +40,8 @@ export function TagQuickSelect({
             .map(([tag, count]) => ({ tag, count }));
     }, []);
 
-    // 顯示的標籤數量
-    const displayTags = isExpanded ? tagStats : tagStats.slice(0, 12);
+    // 顯示的標籤數量（預設顯示 8 個）
+    const displayTags = isExpanded ? tagStats : tagStats.slice(0, 8);
 
     return (
         <div className={cn("space-y-2", className)}>
@@ -103,7 +103,7 @@ export function TagQuickSelect({
             </div>
 
             {/* 展開/收合按鈕 */}
-            {tagStats.length > 12 && (
+            {tagStats.length > 8 && (
                 <Button
                     variant="ghost"
                     size="sm"
@@ -118,7 +118,7 @@ export function TagQuickSelect({
                     ) : (
                         <>
                             <ChevronDown className="w-3 h-3 mr-1" />
-                            顯示更多 ({tagStats.length - 12} 個)
+                            顯示更多 ({tagStats.length - 8} 個)
                         </>
                     )}
                 </Button>
