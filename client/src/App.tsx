@@ -11,8 +11,7 @@ import { ErrorBoundary, SuspenseWrapper } from "@/components/ErrorBoundary";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SEOHead } from "@/components/SEOHead";
 import { WebsiteSchema, OrganizationSchema, AllToolsSchema } from "@/components/StructuredData";
-import { OfflineIndicator } from "@/components/OfflineIndicator";
-import { InstallPrompt } from "@/components/InstallPrompt";
+import { PWAUpdatePrompt } from "@/components/PWAUpdatePrompt";
 
 // 直接 import
 import { Home } from "@/pages/Home";
@@ -79,8 +78,7 @@ function App() {
             <Toaster />
 
             {/* PWA 功能元件 */}
-            <OfflineIndicator />
-            <InstallPrompt />
+            <PWAUpdatePrompt />
           </TourProvider>
         </QueryClientProvider>
       </ErrorBoundary>

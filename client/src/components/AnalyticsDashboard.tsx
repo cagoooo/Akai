@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import type { VisitorStats, ToolUsageStat } from "@/types/analytics";
+import { TimeRangeSelector, type TimeRange, filterDailyDataByTimeRange, timeRangeOptions } from "./TimeRangeSelector";
 
 // 檢測是否為靜態部署環境
 const isStaticDeployment = () => {
@@ -20,6 +21,7 @@ const isStaticDeployment = () => {
 
 export function AnalyticsDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
+  const [timeRange, setTimeRange] = useState<TimeRange>('30d');
   const heatmapRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
 
@@ -83,19 +85,25 @@ export function AnalyticsDashboard() {
     }
   }, [heatmapRef, activeTab, visitorStats]);
 
-  // 準備圖表數據
+  // 準備圖表數據 (根據時間範圍過濾)
   const prepareVisitorChartData = () => {
     if (!visitorStats?.dailyVisits) return { labels: [], datasets: [] };
 
     const dailyVisits = visitorStats.dailyVisits as Record<string, number>;
-    const sortedDates = Object.keys(dailyVisits).sort();
+    // 應用時間範圍過濾
+    const filteredVisits = filterDailyDataByTimeRange(dailyVisits, timeRange);
+    const sortedDates = Object.keys(filteredVisits).sort();
+
+    // 根據時間範圍取數據
+    const days = timeRangeOptions.find(o => o.value === timeRange)?.days || 30;
+    const displayDates = timeRange === 'all' ? sortedDates : sortedDates.slice(-days);
 
     return {
-      labels: sortedDates.slice(-30), // 取最近30天
+      labels: displayDates,
       datasets: [
         {
           label: '每日訪問量',
-          data: sortedDates.slice(-30).map(date => dailyVisits[date] || 0),
+          data: displayDates.map(date => filteredVisits[date] || 0),
           borderColor: 'rgb(99, 102, 241)',
           backgroundColor: 'rgba(99, 102, 241, 0.5)',
           tension: 0.3
@@ -140,10 +148,16 @@ export function AnalyticsDashboard() {
           <h1 className="text-3xl font-bold">網站分析儀表板</h1>
           <p className="text-muted-foreground">監控網站流量和用戶活動的視覺化儀表板</p>
         </div>
-        <Button className="shrink-0">
-          <Download className="mr-2 h-4 w-4" />
-          下載報告
-        </Button>
+        <div className="flex items-center gap-3">
+          <TimeRangeSelector
+            value={timeRange}
+            onChange={setTimeRange}
+          />
+          <Button className="shrink-0">
+            <Download className="mr-2 h-4 w-4" />
+            下載報告
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -220,7 +234,9 @@ export function AnalyticsDashboard() {
           <Card>
             <CardHeader>
               <CardTitle>訪問者趨勢</CardTitle>
-              <CardDescription>過去30天的每日訪問量</CardDescription>
+              <CardDescription>
+                {timeRange === 'all' ? '全部時間' : `過去 ${timeRangeOptions.find(o => o.value === timeRange)?.label}`}的每日訪問量
+              </CardDescription>
             </CardHeader>
             <CardContent>
               {visitorChartData.labels.length > 0 && (

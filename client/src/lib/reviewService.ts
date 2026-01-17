@@ -39,6 +39,7 @@ export interface Review {
     likedBy: string[];
     createdAt: Timestamp;
     updatedAt?: Timestamp;
+    edited?: boolean;
 }
 
 export interface ToolRating {
@@ -219,8 +220,7 @@ export async function unlikeReview(
  * 刪除評論
  */
 export async function deleteReview(
-    reviewId: string,
-    userId: string
+    reviewId: string
 ): Promise<boolean> {
     if (!isFirebaseAvailable() || !db) {
         return false;
@@ -228,22 +228,43 @@ export async function deleteReview(
 
     try {
         const reviewRef = doc(db as Firestore, REVIEWS_COLLECTION, reviewId);
-        const reviewSnap = await getDoc(reviewRef);
-
-        if (!reviewSnap.exists()) {
-            return false;
-        }
-
-        const reviewData = reviewSnap.data();
-        if (reviewData.userId !== userId) {
-            console.warn('無權刪除此評論');
-            return false;
-        }
-
         await deleteDoc(reviewRef);
         return true;
     } catch (error) {
         console.error('刪除評論失敗:', error);
+        return false;
+    }
+}
+
+/**
+ * 更新評論
+ */
+export async function updateReview(
+    reviewId: string,
+    data: { comment?: string; rating?: number }
+): Promise<boolean> {
+    if (!isFirebaseAvailable() || !db) {
+        return false;
+    }
+
+    try {
+        const reviewRef = doc(db as Firestore, REVIEWS_COLLECTION, reviewId);
+        const updateData: any = {
+            updatedAt: serverTimestamp(),
+            edited: true,
+        };
+
+        if (data.comment !== undefined) {
+            updateData.comment = data.comment;
+        }
+        if (data.rating !== undefined) {
+            updateData.rating = Math.min(5, Math.max(1, Math.round(data.rating)));
+        }
+
+        await updateDoc(reviewRef, updateData);
+        return true;
+    } catch (error) {
+        console.error('更新評論失敗:', error);
         return false;
     }
 }

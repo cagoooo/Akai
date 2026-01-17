@@ -2,6 +2,146 @@
 
 此文件記錄專案的所有重要變更。
 
+## [2.11.0] - 2026-01-17
+
+### 📱 PWA 強化與工具更新通知
+
+- 🔄 **PWA 更新提示** - 自動檢測應用程式更新並提示用戶
+- 📴 **離線狀態指示器** - 顯示離線模式警示
+- 📲 **安裝提示優化** - 更美觀的 PWA 安裝提示
+- 🆕 **新工具通知橫幅** - 自動顯示新上線的工具
+- ✅ **已讀追蹤** - 使用 LocalStorage 追蹤已讀狀態
+
+### 📁 新增文件
+- `client/src/hooks/usePWAUpdate.ts` - PWA 更新管理 Hook
+- `client/src/hooks/useNewToolsNotification.ts` - 新工具通知 Hook
+- `client/src/components/PWAUpdatePrompt.tsx` - PWA 更新提示 UI
+- `client/src/components/NewToolsBanner.tsx` - 新工具通知橫幅
+
+---
+
+## [2.10.0] - 2026-01-17
+
+### 🧪 測試覆蓋率提升
+
+- ✅ **useFavorites.test.ts** - 收藏功能測試 (7 測試案例)
+- ✅ **useRecentTools.test.ts** - 最近使用測試 (7 測試案例)
+- ✅ **useSearchHistory.test.ts** - 搜尋歷史測試 (8 測試案例)
+- ✅ **useReviewSort.test.ts** - 評論排序測試 (9 測試案例)
+
+### 📁 新增文件
+- `client/src/hooks/__tests__/useFavorites.test.ts`
+- `client/src/hooks/__tests__/useRecentTools.test.ts`
+- `client/src/hooks/__tests__/useSearchHistory.test.ts`
+- `client/src/hooks/__tests__/useReviewSort.test.ts`
+
+---
+
+## [2.9.0] - 2026-01-17
+
+### 📊 統計儀表板完善
+
+- 📅 **時間範圍選擇器** - 支援 7天/30天/90天/全部時間範圍
+- 📈 **圖表動態更新** - 訪問趨勢圖表根據選定時間範圍過濾數據
+- 🎯 **描述文字動態** - 圖表描述根據時間範圍自動調整
+
+### 📁 新增文件
+- `client/src/components/TimeRangeSelector.tsx` - 時間範圍選擇器元件
+
+### 📁 修改文件
+- `client/src/components/AnalyticsDashboard.tsx` - 整合時間範圍選擇器
+
+---
+
+## [2.8.0] - 2026-01-17
+
+### 💬 評論系統增強
+
+- ↕️ **評論排序** - 支援最新/最舊/最高分/最低分/最多讚 5 種排序
+- ✏️ **評論編輯** - 作者可編輯自己的評論和評分
+- 🗑️ **評論刪除** - 作者可刪除自己的評論
+
+### 📁 新增/修改文件
+- `client/src/hooks/useReviewSort.ts` - 評論排序 Hook
+- `client/src/lib/reviewService.ts` - 新增 updateReview 函數
+- `client/src/components/ReviewList.tsx` - 整合排序 UI
+- `client/src/components/ReviewItem.tsx` - 新增編輯/刪除功能
+
+---
+
+## [2.7.0] - 2026-01-17
+
+### 🔍 進階搜尋與篩選
+
+- 📝 **搜尋歷史** - 自動記錄最近 10 筆搜尋，快速重複搜尋
+- 🏷️ **熱門標籤快選** - 一鍵點選標籤快速篩選工具
+- ↕️ **排序選項** - 支援隨機、熱門、名稱、最新排序
+- 🎯 **標籤篩選** - 多標籤組合篩選
+
+### 📁 新增文件
+- `client/src/hooks/useSearchHistory.ts` - 搜尋歷史 Hook
+- `client/src/hooks/useSortOptions.ts` - 排序選項 Hook
+- `client/src/components/TagQuickSelect.tsx` - 標籤快選元件
+- `client/src/components/AdvancedSearch.tsx` - 進階搜尋區塊
+
+### 📁 修改文件
+- `client/src/pages/Home.tsx` - 整合進階搜尋功能
+
+---
+
+## [2.6.0] - 2026-01-17
+
+### 🤖 AI 智慧推薦引擎
+
+- 🎯 **個人化推薦** - 基於使用習慣與收藏推薦工具
+- 📊 **多維度演算法** - 分類偏好 40% + 標籤相似度 30% + 熱門度 20% + 新鮮度 10%
+- 💡 **推薦原因** - 顯示「您喜歡遊戲類工具」等個人化原因
+- 🔥 **熱門推薦** - 新使用者顯示熱門工具排行
+
+### 📁 新增文件
+- `client/src/lib/recommendation.ts` - 推薦演算法核心
+- `client/src/hooks/useRecommendations.ts` - 推薦 Hook
+- `client/src/components/RecommendedTools.tsx` - 推薦區塊 UI
+
+### 📁 修改文件
+- `client/src/pages/Home.tsx` - 首頁整合推薦區塊
+
+---
+
+## [2.5.0] - 2026-01-17
+
+### 🏆 成就系統進階功能
+
+- 🎖️ **10 個成就徽章** - 探索者、收藏家、遊戲達人、知識海綿等
+- ✨ **金色光環動畫** - 解鎖時顯示華麗的光環與星星粒子效果
+- 📊 **進度追蹤** - 即時顯示各成就完成百分比
+- 🔔 **解鎖通知** - Toast 通知提示解鎖成就與獲得點數
+- 💾 **本地儲存** - LocalStorage 儲存成就進度，離線可用
+
+### 成就清單
+
+| 成就 | 解鎖條件 | 點數 |
+|------|----------|------|
+| 🌅 早起的鳥兒 | 早上 6-8 點使用 | 10 |
+| 🌙 夜貓子 | 晚上 22-24 點使用 | 10 |
+| 📚 知識海綿 | 教學類工具 20 次 | 25 |
+| 🎮 遊戲達人 | 遊戲類工具 30 次 | 25 |
+| 💬 評論家 | 發表 5 則評論 | 25 |
+| ⭐ 收藏家 | 收藏 10 個工具 | 15 |
+| 🔍 探索者 | 瀏覽 20 個工具 | 15 |
+| 🏆 完美主義者 | 瀏覽全部 43 個 | 100 |
+| 🔥 連續登入 | 連續 7 天 | 50 |
+| 💎 白金會員 | 累積 500 點 | 特殊 |
+
+### 📁 新增/修改文件
+- `client/src/lib/achievements.ts` - 成就定義與進度計算
+- `client/src/hooks/useAchievements.ts` - 成就追蹤 Hook
+- `client/src/components/AchievementBadge.tsx` - 金色光環動畫
+- `client/src/components/AchievementsList.tsx` - 成就列表重構
+- `client/src/pages/ToolDetail.tsx` - 整合成就追蹤
+
+---
+
 ## [2.4.0] - 2026-01-17
 
 ### 🖼️ 圖片 WebP 轉換

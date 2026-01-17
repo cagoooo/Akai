@@ -7,16 +7,19 @@ import { Button } from "@/components/ui/button";
 import { Trophy, Clock, X, Keyboard } from "lucide-react";
 import { useTour } from "@/components/TourProvider";
 import { CategoryFilter } from "@/components/CategoryFilter";
-import { SearchBar } from "@/components/SearchBar";
+import { AdvancedSearch } from "@/components/AdvancedSearch";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useRecentTools } from "@/hooks/useRecentTools";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { KeyboardShortcutsDialog } from "@/components/KeyboardShortcutsDialog";
+import { useSortOptions, type SortOption } from "@/hooks/useSortOptions";
 
 import { ToolRankings } from "@/components/ToolRankings";
 import { RankingTutorial } from "@/components/RankingTutorial";
 import { VisitorCounter } from "@/components/VisitorCounter";
+import { RecommendedTools } from "@/components/RecommendedTools";
+import { NewToolsBanner } from "@/components/NewToolsBanner";
 
 export function Home() {
   const { startTour } = useTour();
@@ -25,6 +28,7 @@ export function Home() {
   const [showFavorites, setShowFavorites] = useState(false);
   const [showShortcutsDialog, setShowShortcutsDialog] = useState(false);
   const [selectedToolIndex, setSelectedToolIndex] = useState(0);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   // 搜尋框 ref
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -125,13 +129,22 @@ export function Home() {
       );
     }
 
+    // 標籤篩選
+    if (selectedTags.length > 0) {
+      result = result?.filter(tool =>
+        selectedTags.some(tag =>
+          tool.tags?.some(t => t.toLowerCase() === tag.toLowerCase())
+        )
+      );
+    }
+
     // 分類篩選
     if (selectedCategory) {
       result = result?.filter(tool => tool.category === selectedCategory);
     }
 
     return result;
-  }, [toolsData, searchQuery, selectedCategory, showFavorites, favorites]);
+  }, [toolsData, searchQuery, selectedCategory, showFavorites, favorites, selectedTags]);
 
   // 處理工具點擊
   const handleToolClick = (toolId: number) => {
@@ -208,6 +221,13 @@ export function Home() {
               <VisitorCounter />
             </section>
 
+            {/* 🆕 新工具通知橫幅 */}
+            <NewToolsBanner />
+
+            {/* 🎯 AI 智慧推薦區塊 */}
+            {!isLoading && !searchQuery && !selectedCategory && !showFavorites && (
+              <RecommendedTools onToolClick={handleToolClick} />
+            )}
 
             {/* 最近使用區塊 */}
             {hasRecent && !isLoading && (
@@ -251,11 +271,23 @@ export function Home() {
                 <h2 className="text-base sm:text-lg font-bold text-orange-800">搜尋與篩選</h2>
               </div>
 
-              <SearchBar
+              <AdvancedSearch
+                ref={searchInputRef}
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}
                 resultCount={filteredTools?.length || 0}
                 totalCount={toolsData?.length || 0}
+                selectedTags={selectedTags}
+                onTagSelect={(tag) => {
+                  setSelectedTags(prev =>
+                    prev.includes(tag)
+                      ? prev.filter(t => t !== tag)
+                      : [...prev, tag]
+                  );
+                }}
+                onClearTags={() => setSelectedTags([])}
+                currentSort="random"
+                onSortChange={() => { }}
               />
 
               <CategoryFilter

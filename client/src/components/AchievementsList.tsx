@@ -1,80 +1,103 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { AchievementBadge } from "./AchievementBadge";
-import { useQuery } from "@tanstack/react-query";
-import { Skeleton } from "@/components/ui/skeleton";
-import type { Achievement } from "@/lib/types";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
-import { showErrorToast } from "@/lib/utils";
+import { useAchievements } from "@/hooks/useAchievements";
+import { motion } from "framer-motion";
+import { Trophy, Star, Flame } from "lucide-react";
 
 export function AchievementsList() {
-  const { data: achievements, isLoading, error } = useQuery<Achievement[]>({
-    queryKey: ['/api/achievements'],
-    queryFn: async () => {
-      try {
-        const res = await fetch('/api/achievements');
-        if (!res.ok) {
-          const error = await res.text();
-          throw new Error(error);
-        }
-        return res.json();
-      } catch (error) {
-        showErrorToast(error);
-        throw error;
-      }
-    },
-  });
+  const { achievements, totalEarned, totalAchievements, totalPoints } = useAchievements();
 
-  if (error) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            🏆 學習成就
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              無法載入成就列表，請稍後再試
-            </AlertDescription>
-          </Alert>
-        </CardContent>
-      </Card>
-    );
-  }
+  // 分離已解鎖與未解鎖成就
+  const earnedAchievements = achievements.filter(a => a.earned);
+  const lockedAchievements = achievements.filter(a => !a.earned);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          🏆 學習成就
+    <Card className="overflow-hidden">
+      <CardHeader className="bg-gradient-to-r from-amber-500/10 via-yellow-500/10 to-orange-500/10">
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Trophy className="w-5 h-5 text-amber-500" />
+            <span>學習成就</span>
+          </div>
+          <div className="flex items-center gap-3 text-sm font-normal">
+            <div className="flex items-center gap-1">
+              <Star className="w-4 h-4 text-yellow-500" />
+              <span className="text-muted-foreground">
+                {totalEarned}/{totalAchievements}
+              </span>
+            </div>
+            <div className="flex items-center gap-1 px-2 py-0.5 bg-amber-500/20 rounded-full">
+              <Flame className="w-4 h-4 text-amber-500" />
+              <span className="font-semibold text-amber-600">
+                {totalPoints} 點
+              </span>
+            </div>
+          </div>
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <ScrollArea className="h-[300px] pr-4">
-          {isLoading ? (
-            <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
-              {Array.from({ length: 8 }).map((_, i) => (
-                <Skeleton
-                  key={i}
-                  className="w-16 h-16 rounded-full"
-                />
-              ))}
+      <CardContent className="pt-4">
+        <ScrollArea className="h-[320px] pr-4">
+          {/* 已解鎖成就 */}
+          {earnedAchievements.length > 0 && (
+            <div className="mb-4">
+              <h4 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-1">
+                <span className="text-green-500">✓</span> 已解鎖
+              </h4>
+              <div className="grid grid-cols-4 sm:grid-cols-5 gap-3">
+                {earnedAchievements.map((achievement, index) => (
+                  <motion.div
+                    key={achievement.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                  >
+                    <AchievementBadge
+                      achievement={achievement}
+                      showProgress={false}
+                    />
+                  </motion.div>
+                ))}
+              </div>
             </div>
-          ) : (
-            <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
-              {achievements?.map((achievement) => (
-                <AchievementBadge
-                  key={achievement.id}
-                  achievement={achievement}
-                  earned={achievement.earned}
-                  showProgress={true}
-                />
-              ))}
+          )}
+
+          {/* 未解鎖成就 */}
+          {lockedAchievements.length > 0 && (
+            <div>
+              <h4 className="text-sm font-medium text-muted-foreground mb-3 flex items-center gap-1">
+                <span className="text-muted-foreground">🔒</span> 待解鎖
+              </h4>
+              <div className="grid grid-cols-4 sm:grid-cols-5 gap-3">
+                {lockedAchievements.map((achievement, index) => (
+                  <motion.div
+                    key={achievement.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                  >
+                    <AchievementBadge
+                      achievement={achievement}
+                      showProgress={true}
+                    />
+                  </motion.div>
+                ))}
+              </div>
             </div>
+          )}
+
+          {/* 全部解鎖時的慶祝訊息 */}
+          {earnedAchievements.length === totalAchievements && totalAchievements > 0 && (
+            <motion.div
+              className="mt-4 p-4 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 rounded-lg text-center"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+            >
+              <span className="text-2xl">🎉</span>
+              <p className="text-sm font-medium mt-1">
+                恭喜！您已解鎖所有成就！
+              </p>
+            </motion.div>
           )}
         </ScrollArea>
       </CardContent>

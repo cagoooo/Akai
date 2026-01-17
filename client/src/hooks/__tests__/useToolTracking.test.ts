@@ -1,6 +1,16 @@
+/**
+ * useToolTracking Hook 單元測試
+ * 測試工具使用追蹤功能
+ */
+
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act, waitFor } from '@testing-library/react';
 import { useToolTracking } from '../useToolTracking';
+
+// Mock firestoreService
+vi.mock('@/lib/firestoreService', () => ({
+    trackToolUsage: vi.fn().mockResolvedValue({ totalClicks: 1 }),
+}));
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -9,6 +19,9 @@ const localStorageMock = (() => {
         getItem: (key: string) => store[key] || null,
         setItem: (key: string, value: string) => {
             store[key] = value.toString();
+        },
+        removeItem: (key: string) => {
+            delete store[key];
         },
         clear: () => {
             store = {};
@@ -23,47 +36,50 @@ Object.defineProperty(window, 'localStorage', {
 describe('useToolTracking', () => {
     beforeEach(() => {
         localStorageMock.clear();
+        vi.clearAllMocks();
     });
 
-    it('should initialize with empty history', () => {
+    it('should provide trackToolUsage function', () => {
         const { result } = renderHook(() => useToolTracking());
-        expect(result.current.recentTools).toEqual([]);
+        expect(result.current.trackToolUsage).toBeDefined();
+        expect(typeof result.current.trackToolUsage).toBe('function');
     });
 
-    it('should track tool visit', () => {
+    it('should track tool usage and return result', async () => {
         const { result } = renderHook(() => useToolTracking());
 
-        act(() => {
-            result.current.trackToolVisit('tool-1', 'Tool 1');
+        let trackResult: any;
+        await act(async () => {
+            trackResult = await result.current.trackToolUsage(1);
         });
 
-        expect(result.current.recentTools).toHaveLength(1);
-        expect(result.current.recentTools[0]).toMatchObject({
-            id: 'tool-1',
-            name: 'Tool 1',
-        });
+        expect(trackResult).toBeDefined();
+        expect(trackResult.toolId).toBe(1);
+        expect(trackResult.message).toBeDefined();
     });
 
-    it('should limit recent tools to 10', () => {
+    it('should update local storage on track', async () => {
         const { result } = renderHook(() => useToolTracking());
 
-        act(() => {
-            for (let i = 0; i < 15; i++) {
-                result.current.trackToolVisit(`tool-${i}`, `Tool ${i}`);
-            }
+        await act(async () => {
+            await result.current.trackToolUsage(1);
         });
 
-        expect(result.current.recentTools).toHaveLength(10);
+        const stored = localStorageMock.getItem('localToolsStats');
+        expect(stored).not.toBeNull();
     });
 
-    it('should persist to localStorage', () => {
+    it('should handle multiple tool tracking', async () => {
         const { result } = renderHook(() => useToolTracking());
 
-        act(() => {
-            result.current.trackToolVisit('tool-1', 'Tool 1');
+        await act(async () => {
+            await result.current.trackToolUsage(1);
+            await result.current.trackToolUsage(2);
+            await result.current.trackToolUsage(3);
         });
 
-        const stored = JSON.parse(localStorageMock.getItem('recentTools') || '[]');
-        expect(stored).toHaveLength(1);
+        const stored = localStorageMock.getItem('localToolsStats');
+        expect(stored).not.toBeNull();
     });
 });
+

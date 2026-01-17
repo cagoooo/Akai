@@ -26,6 +26,7 @@ import { categoryInfo, getCategoryColorClass } from '@/lib/categoryConstants';
 import { getToolStats, trackToolUsage } from '@/lib/firestoreService';
 import { useFavorites } from '@/hooks/useFavorites';
 import { useRecentTools } from '@/hooks/useRecentTools';
+import { useAchievements } from '@/hooks/useAchievements';
 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -133,8 +134,9 @@ export function ToolDetail() {
     const tool = tools.find(t => t.id === toolId);
 
     // 整合現有 hooks
-    const { isFavorite, toggleFavorite } = useFavorites();
+    const { isFavorite, toggleFavorite, favoritesCount } = useFavorites();
     const { addToRecent } = useRecentTools();
+    const { trackToolUsage: trackAchievement, updateFavoritesCount } = useAchievements();
 
     // 取得統計資料
     const { data: stats, isLoading: statsLoading } = useQuery({
@@ -157,6 +159,8 @@ export function ToolDetail() {
         try {
             await trackToolUsage(tool.id);
             addToRecent(tool.id);
+            // 追蹤成就進度（工具分類使用次數）
+            trackAchievement(tool.id, tool.category);
             window.open(tool.url, '_blank', 'noopener,noreferrer');
             toast({
                 title: '已開啟工具',
