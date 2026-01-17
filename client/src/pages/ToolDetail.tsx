@@ -177,19 +177,31 @@ export function ToolDetail() {
         }
     };
 
-    // 分享
+    // 分享 - 優化桌面端處理
     const handleShare = async () => {
-        if (navigator.share) {
+        const shareData = {
+            title: tool.title,
+            text: tool.description,
+            url: tool.url,
+        };
+
+        // 檢查是否支援分享 API 且可以分享此內容
+        if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
             try {
-                await navigator.share({
-                    title: tool.title,
-                    text: tool.description,
-                    url: tool.url,
+                await navigator.share(shareData);
+                toast({
+                    title: '分享成功',
+                    description: '已分享工具連結',
                 });
-            } catch (error) {
-                // 使用者取消分享
+            } catch (error: any) {
+                // 使用者取消分享 (error.name === 'AbortError') 不需處理
+                if (error.name !== 'AbortError') {
+                    console.error('分享失敗:', error);
+                    handleCopyLink(); // 備援方案
+                }
             }
         } else {
+            // 桌面端或不支援分享 API，直接複製連結
             handleCopyLink();
         }
     };
