@@ -33,6 +33,9 @@ export function Home() {
   // 搜尋框 ref
   const searchInputRef = useRef<HTMLInputElement>(null);
 
+  // 排序選項
+  const { currentSort, setCurrentSort, sortTools } = useSortOptions();
+
   // 收藏功能
   const { favorites, toggleFavorite, isFavorite, favoritesCount } = useFavorites();
 
@@ -145,6 +148,12 @@ export function Home() {
 
     return result;
   }, [toolsData, searchQuery, selectedCategory, showFavorites, favorites, selectedTags]);
+
+  // 排序後的工具列表
+  const sortedTools = useMemo(() => {
+    if (!filteredTools) return [];
+    return sortTools(filteredTools);
+  }, [filteredTools, sortTools]);
 
   // 處理工具點擊
   const handleToolClick = (toolId: number) => {
@@ -286,8 +295,8 @@ export function Home() {
                   );
                 }}
                 onClearTags={() => setSelectedTags([])}
-                currentSort="random"
-                onSortChange={() => { }}
+                currentSort={currentSort}
+                onSortChange={setCurrentSort}
               />
 
               <CategoryFilter
@@ -319,7 +328,7 @@ export function Home() {
             >
               {!isLoading && (searchQuery || selectedCategory || showFavorites) && (
                 <div className="mb-4 text-sm text-muted-foreground">
-                  顯示 {filteredTools?.length || 0} / {toolsData?.length || 0} 個工具
+                  顯示 {sortedTools?.length || 0} / {toolsData?.length || 0} 個工具
                   {showFavorites && <span className="ml-2">(我的收藏)</span>}
                   {selectedCategory && (
                     <span className="ml-2">(分類: {selectedCategory})</span>
@@ -336,8 +345,8 @@ export function Home() {
                       isLoading={true}
                     />
                   ))
-                ) : filteredTools && filteredTools.length > 0 ? (
-                  filteredTools.map((tool) => (
+                ) : sortedTools && sortedTools.length > 0 ? (
+                  sortedTools.map((tool) => (
                     <ToolCard
                       key={tool.id}
                       tool={tool}
