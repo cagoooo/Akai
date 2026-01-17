@@ -2,6 +2,20 @@
 
 此文件記錄專案的所有重要變更。
 
+## [2.11.1] - 2026-01-17
+
+### 🐛 問題修復
+
+- 🔧 **新工具通知卡片圖標修復** - 修復 NewToolsBanner 顯示圖標名稱字串（如 MessageCircle）而非實際圖標的問題
+  - 引入 `iconRegistry` 動態渲染 Lucide 圖標組件
+  - 若找不到對應圖標，使用 Sparkles 作為預設圖標
+
+### 📁 修改文件
+- `client/src/components/NewToolsBanner.tsx` - 使用 iconRegistry 渲染圖標
+- `package.json` - 版本號更新至 2.11.1
+
+---
+
 ## [2.11.0] - 2026-01-17
 
 ### 📱 PWA 強化與工具更新通知
