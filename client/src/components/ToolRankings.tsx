@@ -89,7 +89,7 @@ export function ToolRankings() {
   // 從 Firestore 載入排行榜數據
   const loadRankings = async () => {
     try {
-      const firestoreRankings = await getToolRankings(8);
+      const firestoreRankings = await getToolRankings(10);
 
       // 轉換 Firestore 資料格式
       const formattedRankings: ToolRanking[] = firestoreRankings.map(stat => ({
@@ -106,7 +106,7 @@ export function ToolRankings() {
           setRankings(JSON.parse(localData));
         } else {
           // 使用預設資料
-          const defaultRankings = tools.slice(0, 8).map((tool, index) => ({
+          const defaultRankings = tools.slice(0, 10).map((tool, index) => ({
             toolId: tool.id,
             totalClicks: Math.max(1, 20 - index * 2),
             lastUsedAt: new Date().toISOString(),
