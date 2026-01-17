@@ -346,14 +346,21 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                         whileHover={{ scale: 1.05 }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
                       >
-                        <img
-                          src={`${import.meta.env.BASE_URL}${tool.previewUrl?.startsWith('/') ? tool.previewUrl.slice(1) : tool.previewUrl}`}
-                          alt={`${tool.title} 預覽圖`}
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                          }}
-                        />
+                        <picture>
+                          <source
+                            srcSet={`${import.meta.env.BASE_URL}${tool.previewUrl?.replace('.png', '.webp').replace(/^\//, '')}`}
+                            type="image/webp"
+                          />
+                          <img
+                            src={`${import.meta.env.BASE_URL}${tool.previewUrl?.startsWith('/') ? tool.previewUrl.slice(1) : tool.previewUrl}`}
+                            alt={`${tool.title} 預覽圖`}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                            }}
+                          />
+                        </picture>
                       </motion.div>
                     )}
                   </AspectRatio>

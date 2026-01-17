@@ -299,14 +299,21 @@ export function ToolDetail() {
                             {/* 預覽圖 */}
                             {tool.previewUrl && (
                                 <div className="relative aspect-video bg-white rounded-xl sm:rounded-2xl overflow-hidden border-2 border-gray-100 shadow-xl mb-6">
-                                    <img
-                                        src={`${import.meta.env.BASE_URL}${tool.previewUrl?.startsWith('/') ? tool.previewUrl.slice(1) : tool.previewUrl}`}
-                                        alt={tool.title}
-                                        className="w-full h-full object-contain p-4 sm:p-6"
-                                        onError={(e) => {
-                                            e.currentTarget.style.display = 'none';
-                                        }}
-                                    />
+                                    <picture>
+                                        <source
+                                            srcSet={`${import.meta.env.BASE_URL}${tool.previewUrl?.replace('.png', '.webp').replace(/^\//, '')}`}
+                                            type="image/webp"
+                                        />
+                                        <img
+                                            src={`${import.meta.env.BASE_URL}${tool.previewUrl?.startsWith('/') ? tool.previewUrl.slice(1) : tool.previewUrl}`}
+                                            alt={tool.title}
+                                            className="w-full h-full object-contain p-4 sm:p-6"
+                                            loading="lazy"
+                                            onError={(e) => {
+                                                e.currentTarget.style.display = 'none';
+                                            }}
+                                        />
+                                    </picture>
                                 </div>
                             )}
 

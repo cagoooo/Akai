@@ -140,7 +140,7 @@ export function Home() {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="container mx-auto px-3 sm:px-6 py-4 sm:py-6 md:py-8">
+      <main id="main-content" role="main" className="container mx-auto px-3 sm:px-6 py-4 sm:py-6 md:py-8" aria-label="教育工具列表">
         {/* 頂部標題區域 */}
         <header
           className="relative overflow-hidden mb-4 sm:mb-6 p-5 sm:p-6 md:p-8 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 shadow-lg"

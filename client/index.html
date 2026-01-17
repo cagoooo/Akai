@@ -162,6 +162,50 @@
 </head>
 
 <body>
+  <!-- 無障礙性：跳過導航直接到主內容 -->
+  <a href="#main-content" class="skip-link">
+    跳到主要內容
+  </a>
+  <style>
+    /* 無障礙性：Skip Link 樣式 */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: #6366f1;
+      color: white;
+      padding: 8px 16px;
+      z-index: 1000;
+      border-radius: 0 0 8px 0;
+      font-weight: 600;
+      text-decoration: none;
+      transition: top 0.2s;
+    }
+
+    .skip-link:focus {
+      top: 0;
+    }
+
+    /* 無障礙性：尊重使用者動畫偏好 */
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* 無障礙性：改善焦點可見性 */
+    :focus-visible {
+      outline: 3px solid #6366f1;
+      outline-offset: 2px;
+    }
+  </style>
+
   <!-- GitHub Pages SPA 路由處理 -->
   <script>
     (function () {
