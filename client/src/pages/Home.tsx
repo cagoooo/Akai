@@ -327,12 +327,43 @@ export function Home() {
             </section>
 
             {/* 頁腳資訊 */}
-            <div className="mt-6 sm:mt-10 border-t pt-4 text-center text-xs sm:text-sm text-muted-foreground">
-              <p>&copy; {new Date().getFullYear()} 阿凱老師教育工具集. 版權所有.</p>
-              <p className="mt-2">
-                已優化工具體驗，專注於提供最實用的教學資源
-              </p>
-            </div>
+            <footer className="mt-6 sm:mt-8">
+              <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-slate-800 via-slate-900 to-slate-800 px-4 py-4 sm:px-6 sm:py-5 text-center">
+                {/* 背景裝飾 */}
+                <div className="absolute top-0 left-0 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl" />
+                <div className="absolute bottom-0 right-0 w-28 h-28 bg-purple-500/10 rounded-full blur-2xl" />
+
+                <div className="relative z-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6">
+                  {/* Logo 和標題 */}
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl sm:text-2xl">🎓</span>
+                    <h3 className="text-base sm:text-lg font-bold text-white">
+                      阿凱老師教育工具集
+                    </h3>
+                  </div>
+
+                  {/* 分隔線 - 只在桌面顯示 */}
+                  <div className="hidden sm:block w-px h-6 bg-slate-600" />
+
+                  {/* 功能亮點 - 一行顯示 */}
+                  <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-300">
+                    <span>✨ 互動式工具</span>
+                    <span className="text-slate-500">•</span>
+                    <span>📚 教學資源</span>
+                    <span className="text-slate-500">•</span>
+                    <span>🎮 趣味遊戲</span>
+                  </div>
+
+                  {/* 分隔線 - 只在桌面顯示 */}
+                  <div className="hidden sm:block w-px h-6 bg-slate-600" />
+
+                  {/* 版權 */}
+                  <p className="text-xs text-slate-400">
+                    &copy; {new Date().getFullYear()} 版權所有
+                  </p>
+                </div>
+              </div>
+            </footer>
           </div>
 
           {/* 排行榜區域 - xl 以上才顯示在側邊 */}

@@ -2,6 +2,31 @@
 
 此文件記錄專案的所有重要變更。
 
+## [2.2.5] - 2026-01-17
+
+### 🎨 UI/UX 持續優化
+
+#### 頁尾區塊 (Footer)
+- 🎨 **深色漸層背景** - `from-slate-800 via-slate-900 to-slate-800`
+- 📐 **緊湊一行式佈局** - 水平排列 (桌面)
+- ✨ **功能亮點標籤** - 互動式工具 • 教學資源 • 趣味遊戲
+- 📱 **RWD 優化** - 手機端垂直排列
+
+#### 排行榜區塊 (ToolRankings)
+- 🏆 **更大獎杯圖標** - `w-7/8 h-7/8`
+- 📝 **更大工具標題** - `text-base/lg font-bold`
+- 🔢 **更大使用次數** - `text-base/lg font-mono`
+- 🎯 **更大排名數字** - `text-sm/base font-bold`
+- 📦 **更大 Badge** - `py-1.5/2 px-2/3` + 黃色圖標
+- 🗑️ **移除「點擊開啟新視窗」** - 減少雜訊
+- 📐 **更緊湊間距** - `p-3 mb-2 rounded-xl`
+
+### 📁 修改文件
+- `client/src/pages/Home.tsx` - 頁尾區塊緊湊化
+- `client/src/components/ToolRankings.tsx` - 排行榜字體放大
+
+---
+
 ## [2.2.4] - 2026-01-17
 
 ### 🎨 UI/UX 大幅優化

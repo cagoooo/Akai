@@ -279,25 +279,25 @@ export function ToolRankings() {
             onClick={() => handleItemClick(tool)}
             id={index === 0 ? "top-tool" : (index < 5 ? "interaction-area" : undefined)}
             className={`
-              flex items-center space-x-2 sm:space-x-4 p-2 sm:p-4 rounded-lg 
+              flex items-center gap-3 p-3 rounded-xl 
               transition-all duration-300 cursor-pointer
               bg-gradient-to-r 
               ${rankColor}
-              mb-3 sm:mb-4 relative overflow-hidden
+              mb-2 relative overflow-hidden
               hover:shadow-lg hover:translate-x-1
-              perspective-500 transform-gpu backdrop-blur-sm
+              transform-gpu
             `}
           >
-            <div className="flex-shrink-0 w-10 flex justify-center">
+            <div className="flex-shrink-0 w-8 sm:w-10 flex justify-center">
               {index === 0 && (
                 <motion.div initial={{ scale: 0.8 }} animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, repeatDelay: 5 }}>
-                  <Trophy className="w-6 h-6 text-yellow-500 drop-shadow-md" />
+                  <Trophy className="w-7 h-7 sm:w-8 sm:h-8 text-yellow-500 drop-shadow-md" />
                 </motion.div>
               )}
-              {index === 1 && <Medal className="w-6 h-6 text-slate-400 drop-shadow-sm" />}
-              {index === 2 && <Crown className="w-6 h-6 text-amber-400 drop-shadow-sm" />}
+              {index === 1 && <Medal className="w-6 h-6 sm:w-7 sm:h-7 text-slate-400 drop-shadow-sm" />}
+              {index === 2 && <Crown className="w-6 h-6 sm:w-7 sm:h-7 text-amber-500 drop-shadow-sm" />}
               {index > 2 && (
-                <div className="w-6 h-6 rounded-full bg-muted/50 flex items-center justify-center text-xs font-semibold">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-200 flex items-center justify-center text-sm sm:text-base font-bold text-slate-600">
                   {index + 1}
                 </div>
               )}
@@ -305,9 +305,9 @@ export function ToolRankings() {
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center">
-                <p className="text-sm font-medium text-foreground truncate flex items-center">
+                <p className="text-base sm:text-lg font-bold text-gray-900 truncate flex items-center">
                   {tool.title}
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-2 text-primary/70 transform -rotate-45" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1.5 text-primary/70 transform -rotate-45" aria-hidden="true">
                     <path d="M7 17l9.2-9.2M17 17V7H7" />
                   </svg>
                 </p>
@@ -316,21 +316,20 @@ export function ToolRankings() {
                 </div>
               </div>
 
-              <p className="text-sm text-muted-foreground truncate flex items-center">
-                <span className="mr-1">最後使用：</span>
-                <time dateTime={ranking.lastUsedAt || undefined}>
+              <p className="text-xs sm:text-sm text-muted-foreground truncate">
+                最後使用：
+                <time dateTime={ranking.lastUsedAt || undefined} className="font-medium">
                   {ranking.lastUsedAt
                     ? new Date(ranking.lastUsedAt).toLocaleDateString()
                     : '最近更新'}
                 </time>
               </p>
-              <span className="text-xs text-primary/70 italic mt-1 block font-light">點擊開啟新視窗</span>
             </div>
 
-            <Badge variant={isTop ? "secondary" : "outline"} className="ml-2 shadow-sm" id={index === 0 ? "usage-stats" : undefined}>
-              <Sparkles className="w-4 h-4 mr-1" />
-              <span className="font-mono">{ranking.totalClicks}</span>
-              <span className="ml-1 text-xs">次使用</span>
+            <Badge variant={isTop ? "secondary" : "outline"} className="ml-auto px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-bold shadow-sm" id={index === 0 ? "usage-stats" : undefined}>
+              <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 mr-1 text-yellow-500" />
+              <span className="font-mono text-base sm:text-lg">{ranking.totalClicks}</span>
+              <span className="ml-0.5 text-xs">次</span>
             </Badge>
           </motion.div>
         );
@@ -343,9 +342,11 @@ export function ToolRankings() {
       <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent opacity-50 pointer-events-none z-0"></div>
       <CardHeader className="relative z-10 p-3 sm:p-4">
         <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2">
-          <CardTitle className="flex items-center gap-2 text-base sm:text-lg whitespace-nowrap" id="rankings-title">
-            <BarChart className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 font-bold">
+          <CardTitle className="flex items-center gap-2 text-lg sm:text-xl whitespace-nowrap" id="rankings-title">
+            <div className="p-1.5 rounded-lg bg-primary/10">
+              <BarChart className="w-5 h-5 sm:w-6 sm:h-6 text-primary flex-shrink-0" />
+            </div>
+            <span className="font-black text-gray-900">
               工具使用排行榜
             </span>
           </CardTitle>
