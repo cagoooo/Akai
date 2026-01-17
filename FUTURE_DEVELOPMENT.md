@@ -1,7 +1,7 @@
 # 教育科技創新專區 - 未來開發建議
 
 > 產生日期：2026-01-17  
-> 當前版本：v2.2.8  
+> 當前版本：v2.3.3  
 > 目標：提供詳細的功能規劃與技術實作建議
 
 ---
@@ -11,11 +11,10 @@
 | 優先級 | 項目 | 影響力 | 實現難度 | 預估時間 |
 |--------|------|--------|----------|----------|
 | 🔴 P0 | 測試覆蓋率達成 50% | 高 | 中 | 3-5 天 |
-| 🔴 P0 | Lighthouse 效能優化 | 高 | 低 | 2-3 天 |
-| 🔴 P0 | 工具標籤系統 | 中 | 低 | 2 天 |
-| 🟡 P1 | 統計儀表板 | 中 | 中 | 1 週 |
-| 🟡 P1 | 成就系統擴展 | 中 | 低 | 3-5 天 |
-| 🟠 P2 | 評論系統增強 | 中 | 中 | 1 週 |
+| 🔴 P0 | 統計儀表板 | 中 | 中 | 3-5 天 |
+| 🔴 P0 | 成就系統擴展 | 中 | 低 | 2-3 天 |
+| 🟡 P1 | 評論系統增強 | 中 | 中 | 1 週 |
+| 🟡 P1 | 圖片 WebP 轉換 | 中 | 低 | 2-3 天 |
 | 🟠 P2 | 無障礙性 (A11y) | 高 | 高 | 2 週 |
 | 🟢 P3 | 多語言國際化 | 低 | 高 | 2-3 週 |
 | 🔵 P4 | AI 智慧推薦 | 低 | 高 | 1 個月 |
@@ -76,90 +75,19 @@ npm run test:e2e          # 執行 E2E 測試
 
 ---
 
-### 2. Lighthouse 效能優化
-
-**目標指標：**
-
-| 指標 | 目標 | 優化策略 |
-|------|------|----------|
-| Performance | > 90 | 圖片 WebP 轉換、程式碼分割 |
-| Accessibility | > 90 | ARIA 標籤、色彩對比度 |
-| Best Practices | > 95 | HTTPS、CSP 強化 |
-| SEO | > 95 | Meta 標籤、結構化資料 |
-| FCP | < 1.5s | 預載入關鍵資源 |
-| CLS | < 0.1 | 固定圖片寬高比 |
-
-#### 2.1 優化策略
-
-**圖片優化（最高優先）：**
-```typescript
-// 安裝圖片優化插件
-npm install vite-imagetools
-
-// vite.config.ts
-import { imagetools } from 'vite-imagetools';
-
-plugins: [
-  imagetools({
-    defaultDirectives: (url) => new URLSearchParams({
-      format: 'webp',
-      quality: '80',
-      w: '400;800',
-    }),
-  }),
-]
-```
-
-**預載入關鍵資源：**
-```html
-<!-- index.html -->
-<link rel="preload" href="/previews/preview_communication_v2.webp" as="image">
-<link rel="preconnect" href="https://firestore.googleapis.com">
-```
-
----
-
-### 3. 工具標籤系統
-
-**目標**：改善工具搜尋精準度
-
-#### 3.1 資料模型
-
-```typescript
-// data.ts - 為每個工具添加 tags 陣列
-interface EducationalTool {
-  id: number;
-  title: string;
-  description: string;
-  tags?: string[];  // 新增
-  // ...
-}
-
-// 標籤範例
-{
-  id: 43,
-  title: "課程計畫英文轉寫小精靈",
-  tags: ["翻譯", "雙語教育", "Markdown", "課程計畫", "PDF"]
-}
-```
-
-#### 3.2 UI 設計
-
-- 搜尋時同時比對標題、描述、標籤
-- 工具卡片顯示標籤 chips
-- 點擊標籤可快速篩選相關工具
-
----
-
-## 🟡 P1: 短期執行項目 (1-2 週)
-
-### 4. 統計儀表板
+### 2. 統計儀表板
 
 **目標**：視覺化工具使用數據
 
-#### 4.1 圖表類型
+#### 2.1 功能設計
 
 ```typescript
+// components/AnalyticsDashboard.tsx
+interface DashboardProps {
+  timeRange: '7d' | '30d' | '90d' | 'all';
+}
+
+// 圖表類型
 const charts = {
   usageTrend: 'LineChart',      // 每日使用趨勢
   topTools: 'BarChart',         // 熱門工具 TOP 10
@@ -167,39 +95,115 @@ const charts = {
 };
 ```
 
-#### 4.2 實作步驟
+#### 2.2 Firestore 資料模型
+
+```typescript
+// dailyStats collection
+interface DailyStats {
+  date: string;           // '2026-01-17'
+  totalVisits: number;
+  toolUsage: {
+    [toolId: number]: number;
+  };
+  categoryUsage: {
+    [category: string]: number;
+  };
+}
+```
+
+#### 2.3 實作步驟
 
 1. 建立 `DailyStats` Firestore collection
 2. 修改 `trackToolUsage` 同時更新每日統計
 3. 建立 `AnalyticsDashboard` 元件
 4. 使用 Recharts 繪製圖表 (已安裝)
+5. 添加時間範圍選擇器
 
 ---
 
-### 5. 成就系統擴展
+### 3. 成就系統擴展
 
 **目標**：增加使用者互動與黏著度
 
-#### 5.1 新增成就
+#### 3.1 成就定義
 
 ```typescript
+// lib/achievements.ts
 const achievements = [
-  { id: 'explorer', name: '探索者', icon: '🔍', 
-    description: '瀏覽超過 10 個工具', points: 10 },
-  { id: 'power_user', name: '熱情使用者', icon: '🔥', 
-    description: '單日使用超過 5 個工具', points: 20 },
-  { id: 'collector', name: '收藏家', icon: '⭐', 
-    description: '收藏超過 10 個工具', points: 15 },
-  { id: 'perfectionist', name: '完美主義者', icon: '🏆', 
-    description: '瀏覽所有 43 個工具', points: 100 },
+  {
+    id: 'explorer',
+    name: '探索者',
+    description: '瀏覽超過 10 個工具',
+    icon: '🔍',
+    condition: (stats) => stats.uniqueToolsVisited >= 10,
+    points: 10,
+  },
+  {
+    id: 'power_user',
+    name: '熱情使用者',
+    description: '單日使用超過 5 個工具',
+    icon: '🔥',
+    condition: (stats) => stats.dailyUsage >= 5,
+    points: 20,
+  },
+  {
+    id: 'collector',
+    name: '收藏家',
+    description: '收藏超過 10 個工具',
+    icon: '⭐',
+    condition: (stats) => stats.favoritesCount >= 10,
+    points: 15,
+  },
+  {
+    id: 'perfectionist',
+    name: '完美主義者',
+    description: '瀏覽所有 43 個工具',
+    icon: '🏆',
+    condition: (stats) => stats.uniqueToolsVisited >= 43,
+    points: 100,
+  },
+  {
+    id: 'reviewer',
+    name: '評論家',
+    description: '發表 5 則評論',
+    icon: '💬',
+    condition: (stats) => stats.reviewsCount >= 5,
+    points: 25,
+  },
+  {
+    id: 'early_bird',
+    name: '早起的鳥兒',
+    description: '在早上 6-8 點使用工具',
+    icon: '🌅',
+    condition: (stats) => stats.earlyMorningUsage > 0,
+    points: 10,
+  },
 ];
 ```
 
+#### 3.2 UI 設計
+
+```typescript
+// components/AchievementBadge.tsx
+// - 解鎖動畫（金色光環 + 粒子效果）
+// - 進度條顯示
+// - 點數累計
+// - 成就牆展示
+```
+
+#### 3.3 實作步驟
+
+1. 建立 `useAchievements` Hook
+2. 追蹤使用者行為統計
+3. 建立 `AchievementBadge` 和 `AchievementWall` 元件
+4. 實作解鎖動畫 (framer-motion)
+5. 儲存成就狀態 (LocalStorage)
+
 ---
 
-## 🟠 P2: 中期執行項目 (2-4 週)
+## 🟡 P1: 短期執行項目 (1-2 週)
 
-### 6. 評論系統增強
+### 4. 評論系統增強
 
 **現有功能**：星級評分 + 文字評論
 
@@ -212,6 +216,7 @@ interface ReviewReply {
   reviewId: string;
   userId: string;
   content: string;
+  createdAt: Timestamp;
 }
 
 // 2. 評論排序選項
@@ -219,28 +224,102 @@ type SortOption = 'newest' | 'highest' | 'lowest' | 'most_helpful';
 
 // 3. 評論標籤
 const reviewTags = ['實用', '有趣', '推薦', '適合教學', '需改進'];
+
+// 4. 評論編輯/刪除
+// 5. 評論舉報功能
+```
+
+#### 實作步驟
+
+1. 擴展 Firestore `reviews` collection 結構
+2. 建立 `ReviewReply` 元件
+3. 實作排序和篩選功能
+4. 添加編輯/刪除按鈕（作者限定）
+5. 實作舉報功能
+
+---
+
+### 5. 圖片 WebP 轉換
+
+**目標**：減少圖片載入時間 30-50%
+
+#### 實作步驟
+
+```bash
+# 1. 安裝圖片處理工具
+npm install sharp
+
+# 2. 建立轉換腳本
+node scripts/convert-to-webp.js
+
+# 3. 更新圖片引用
+```
+
+#### 轉換腳本範例
+
+```javascript
+// scripts/convert-to-webp.js
+const sharp = require('sharp');
+const fs = require('fs');
+const path = require('path');
+
+const inputDir = './client/public/previews';
+const outputDir = './client/public/previews/webp';
+
+fs.readdirSync(inputDir)
+  .filter(file => file.endsWith('.png'))
+  .forEach(file => {
+    sharp(path.join(inputDir, file))
+      .webp({ quality: 80 })
+      .toFile(path.join(outputDir, file.replace('.png', '.webp')));
+  });
 ```
 
 ---
 
-### 7. 無障礙性 (A11y) 優化
+## 🟠 P2: 中期執行項目 (2-4 週)
+
+### 6. 無障礙性 (A11y) 優化
 
 **目標**：符合 WCAG 2.1 AA 標準
 
-#### 7.1 檢查清單
+#### 檢查清單
 
 - [ ] 所有互動元素可透過鍵盤操作
 - [ ] 焦點順序邏輯正確
+- [ ] 焦點視覺指示清晰
 - [ ] 所有圖片有 alt 屬性
 - [ ] 色彩對比度 > 4.5:1
+- [ ] 表單有關聯的 label
 - [ ] ARIA 標籤完整
+- [ ] Screen Reader 測試通過
 - [ ] 動畫可停用 (prefers-reduced-motion)
+
+#### 實作範例
+
+```typescript
+// 動畫停用 Hook
+const useReducedMotion = () => {
+  const [prefersReduced, setPrefersReduced] = useState(false);
+  
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReduced(mediaQuery.matches);
+    
+    const listener = (e) => setPrefersReduced(e.matches);
+    mediaQuery.addEventListener('change', listener);
+    return () => mediaQuery.removeEventListener('change', listener);
+  }, []);
+  
+  return prefersReduced;
+};
+```
 
 ---
 
 ## 🟢 P3: 長期執行項目 (1-2 個月)
 
-### 8. 多語言國際化 (i18n)
+### 7. 多語言國際化 (i18n)
 
 **支援語言**：繁體中文 (預設)、English、日本語
 
@@ -251,14 +330,18 @@ npm install react-i18next i18next i18next-browser-languagedetector
 **翻譯檔案結構**：
 ```
 public/locales/
-├── zh-TW/common.json
-├── en/common.json
-└── ja/common.json
+├── zh-TW/
+│   ├── common.json
+│   └── tools.json
+├── en/
+│   └── ...
+└── ja/
+    └── ...
 ```
 
 ---
 
-### 9. AI 智慧推薦引擎
+### 8. AI 智慧推薦引擎
 
 **目標**：根據使用者行為推薦相關工具
 
@@ -267,11 +350,17 @@ public/locales/
 2. 協同過濾 (相似使用者的選擇)
 3. 混合推薦
 
+**資料來源**：
+- 使用者瀏覽歷史
+- 收藏記錄
+- 評分數據
+- 分類偏好
+
 ---
 
 ## 🔵 P4: 創新構想 (3-6 個月)
 
-### 10. 教學社群功能
+### 9. 教學社群功能
 
 - 👥 教師討論區
 - 📢 經驗分享文章
@@ -279,7 +368,7 @@ public/locales/
 - ⭐ 優秀教案評選
 - 📅 教育活動日曆
 
-### 11. 行動應用程式
+### 10. 行動應用程式
 
 - React Native 跨平台開發
 - 離線功能增強
@@ -293,41 +382,43 @@ public/locales/
 | 週次 | 目標 | 交付項目 |
 |------|------|----------|
 | W1 | 測試基礎 | 完成核心 Hook 單元測試、覆蓋率 30% |
-| W2 | 效能優化 | Lighthouse > 85、圖片 WebP 轉換 |
-| W3 | 標籤系統 | 為 43 個工具添加標籤、搜尋整合 |
-| W4 | 統計儀表板 | 基礎圖表 + 每日統計 |
-| W5 | 成就系統 | 6 個成就 + 解鎖動畫 |
-| W6 | 評論增強 | 回覆 + 排序 + 標籤 |
-| W7-8 | A11y 優化 | WCAG AA 合規 |
-| W9-12 | 國際化 | 英文 + 日文支援 |
+| W2 | 統計功能 | 統計儀表板 + 使用趨勢圖表 |
+| W3 | 成就系統 | 6 個成就 + 解鎖動畫 |
+| W4 | 評論增強 | 回覆 + 排序 + 編輯功能 |
+| W5 | 效能優化 | 圖片 WebP 轉換 + Lighthouse > 90 |
+| W6 | A11y 優化 | WCAG AA 合規 |
+| W7-8 | 國際化 | 英文版支援 |
 
 ---
 
-## 💡 下一步建議
+## 💡 立即可做建議
 
 根據目前專案狀態，建議優先執行以下項目：
 
-### 立即可做 (本週)
+### 本週可做
 
-1. **工具標籤系統** - 影響力高、實現簡單
-   - 為 43 個工具添加 2-5 個標籤
-   - 修改搜尋邏輯比對標籤
-   - 預估時間：2 天
+1. **統計儀表板原型** - 約 3-5 天
+   - 使用現有 Recharts 庫
+   - 從 Firestore 讀取使用統計
+   - 顯示 TOP 10 熱門工具
 
-2. **Lighthouse 效能優化** - 快速見效
-   - 圖片 WebP 轉換
-   - 預載入關鍵資源
-   - 預估時間：2-3 天
+2. **成就系統基礎版** - 約 2-3 天
+   - 定義 6 個基本成就
+   - 實作 `useAchievements` Hook
+   - 簡單的成就通知 Toast
 
-3. **測試覆蓋率提升** - 確保品質
-   - 針對 `useFavorites`、`useRecentTools` 撰寫測試
-   - 目標：覆蓋率 30% → 50%
-   - 預估時間：3-5 天
+3. **測試覆蓋率提升** - 持續進行
+   - 每天寫 1-2 個測試
+   - 目標：2 週內達到 50%
 
-### 下週可做
+### 已完成項目 ✅
 
-4. **統計儀表板原型** - 增加專業度
-5. **成就系統擴展** - 提升使用者黏著度
+- 工具標籤系統 (v2.2.9)
+- Lighthouse 效能優化 (v2.3.0)
+- Toast 通知美化 (v2.3.1)
+- 相關推薦捲動優化 (v2.3.2)
+- 分享按鈕桌面端修復 (v2.3.2)
+- 卡片隨機排列 (v2.3.3)
 
 ---
 
