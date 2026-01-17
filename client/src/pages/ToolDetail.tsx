@@ -54,7 +54,11 @@ function RelatedTools({ currentTool }: { currentTool: EducationalTool }) {
                     const IconComponent = iconRegistry[tool.icon as IconName];
                     const catInfo = categoryInfo[tool.category];
                     return (
-                        <Link key={tool.id} href={`/tool/${tool.id}`}>
+                        <Link
+                            key={tool.id}
+                            href={`/tool/${tool.id}`}
+                            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                        >
                             <motion.div
                                 whileHover={{ scale: 1.03, y: -2 }}
                                 whileTap={{ scale: 0.98 }}
@@ -177,7 +181,7 @@ export function ToolDetail() {
         }
     };
 
-    // 分享 - 優化桌面端處理
+    // 分享 - 只在行動裝置使用原生分享
     const handleShare = async () => {
         const shareData = {
             title: tool.title,
@@ -185,8 +189,11 @@ export function ToolDetail() {
             url: tool.url,
         };
 
-        // 檢查是否支援分享 API 且可以分享此內容
-        if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+        // 檢測是否為行動裝置 (觸控 + 小螢幕)
+        const isMobile = 'ontouchstart' in window && window.innerWidth < 768;
+
+        // 只在行動裝置且支援分享 API 時使用原生分享
+        if (isMobile && navigator.share && navigator.canShare && navigator.canShare(shareData)) {
             try {
                 await navigator.share(shareData);
                 toast({
@@ -194,14 +201,13 @@ export function ToolDetail() {
                     description: '已分享工具連結',
                 });
             } catch (error: any) {
-                // 使用者取消分享 (error.name === 'AbortError') 不需處理
+                // 使用者取消分享不需處理
                 if (error.name !== 'AbortError') {
-                    console.error('分享失敗:', error);
-                    handleCopyLink(); // 備援方案
+                    handleCopyLink();
                 }
             }
         } else {
-            // 桌面端或不支援分享 API，直接複製連結
+            // 桌面端直接複製連結，不彈出任何對話框
             handleCopyLink();
         }
     };
