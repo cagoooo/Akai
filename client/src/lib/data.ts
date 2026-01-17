@@ -290,7 +290,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/claw-machine-game.html",
     icon: "Gift",
     category: "games",
-    previewUrl: "/previews/preview_game_v2.png"
+    previewUrl: "/previews/preview_claw_machine.png"
   },
   {
     id: 32,
@@ -299,7 +299,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/smes_html/touch.html",
     icon: "Hand",
     category: "games",
-    previewUrl: "/previews/preview_game_v2.png"
+    previewUrl: "/previews/preview_touch_collision.png"
   },
   {
     id: 33,
@@ -317,7 +317,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/smes_html/go.html",
     icon: "Play",
     category: "games",
-    previewUrl: "/previews/preview_music_v2.png"
+    previewUrl: "/previews/preview_interactive_av.png"
   },
   {
     id: 35,
@@ -326,7 +326,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2856",
     icon: "Palette",
     category: "games",
-    previewUrl: "/previews/preview_game_v2.png"
+    previewUrl: "/previews/preview_touch_doodle.png"
   },
   {
     id: 36,
@@ -335,7 +335,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/smes_html/snake_game.html",
     icon: "Gamepad2",
     category: "games",
-    previewUrl: "/previews/preview_game_v2.png"
+    previewUrl: "/previews/preview_snake_game.png"
   },
   {
     id: 37,
@@ -344,7 +344,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2863",
     icon: "Waves",
     category: "games",
-    previewUrl: "/previews/preview_music_v2.png"
+    previewUrl: "/previews/preview_sound_wave.png"
   },
   {
     id: 38,
@@ -353,7 +353,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2859",
     icon: "Volume2",
     category: "games",
-    previewUrl: "/previews/preview_music_v2.png"
+    previewUrl: "/previews/preview_sound_control.png"
   },
   {
     id: 39,
@@ -371,7 +371,7 @@ export const tools: EducationalTool[] = [
     url: "https://padlet.com/2104340/padlet-rl3l5wi9wmebku2k",
     icon: "LayoutDashboard",
     category: "utilities",
-    previewUrl: "/previews/preview_admin_v2.png"
+    previewUrl: "/previews/preview_padlet_wall.png"
   },
   {
     id: 41,
@@ -380,7 +380,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/song/",
     icon: "Music",
     category: "interactive",
-    previewUrl: "/previews/preview_music_v2.png"
+    previewUrl: "/previews/preview_guitar_song.png"
   },
   {
     id: 42,

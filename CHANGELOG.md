@@ -2,6 +2,30 @@
 
 此文件記錄專案的所有重要變更。
 
+## [2.2.7] - 2026-01-17
+
+### 🎨 修復重複工具預覽圖
+
+- 🖼️ **9 個工具獨特預覽圖** - 消除所有重複使用的圖片
+- ✨ **高品質 AI 生成圖片** - 每個工具專屬設計
+
+#### 更新的工具
+- 互動遊戲抓抓樂 (Claw Machine)
+- 遊戲觸屏碰碰碰 (Touch Collision)
+- 觸屏點點塗鴉區 (Touch Doodle)
+- 貪食蛇互動遊戲 (Snake Game)
+- 互動式影像聲音遊戲區 (Interactive AV)
+- 聲波擴散360小遊戲 (Sound Wave)
+- 聲音互動小遊戲 (Sound Control)
+- 吉他彈唱🎸點歌系統🎵 (Guitar Song)
+- Padlet行政宣導動態牆 (Padlet Wall)
+
+### 📁 修改文件
+- `client/src/lib/data.ts` - 更新 previewUrl 路徑
+- `client/public/previews/` - 新增 9 張獨特工具圖片
+
+---
+
 ## [2.2.6] - 2026-01-17
 
 ### 🖼️ 工具卡片圖片更新
