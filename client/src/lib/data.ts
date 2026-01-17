@@ -390,6 +390,15 @@ export const tools: EducationalTool[] = [
     icon: "ShieldCheck",
     category: "utilities",
     previewUrl: "/previews/preview_privacy_v2.png"
+  },
+  {
+    id: 43,
+    title: "課程計畫英文轉寫小精靈",
+    description: "上傳中文課程計畫 (PDF, DOCX)，轉寫小精靈將自動翻譯並整理成 Markdown 表格",
+    url: "https://bilingual.smes.tyc.edu.tw/",
+    icon: "Languages",
+    category: "language",
+    previewUrl: "/previews/preview_bilingual_translator.png"
   }
 ];
 
