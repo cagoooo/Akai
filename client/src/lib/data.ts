@@ -20,7 +20,7 @@ export const tools: EducationalTool[] = [
     url: "https://doc.smes.tyc.edu.tw/shared/A4uyH5OdHI",
     icon: "MessageCircle",
     category: "communication",
-    previewUrl: "/previews/preview_communication_v2.png"
+    previewUrl: "/previews/tool_1.png"
   },
   {
     id: 2,
@@ -29,7 +29,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/staff/",
     icon: "ClipboardList",
     category: "utilities",
-    previewUrl: "/previews/preview_admin_v2.png"
+    previewUrl: "/previews/tool_2.png"
   },
   {
     id: 3,
@@ -38,7 +38,7 @@ export const tools: EducationalTool[] = [
     url: "https://vote.smes.tyc.edu.tw/",
     icon: "Vote",
     category: "interactive",
-    previewUrl: "/previews/preview_teaching_v2.png"
+    previewUrl: "/previews/tool_3.png"
   },
   {
     id: 4,
@@ -47,7 +47,7 @@ export const tools: EducationalTool[] = [
     url: "https://pirlss.smes.tyc.edu.tw/",
     icon: "Book",
     category: "reading",
-    previewUrl: "/previews/preview_reading_v2.png"
+    previewUrl: "/previews/tool_4.png"
   },
   {
     id: 5,
@@ -56,7 +56,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/vendor/",
     icon: "Utensils",
     category: "utilities",
-    previewUrl: "/previews/preview_utility_v2.png"
+    previewUrl: "/previews/tool_5.png"
   },
   {
     id: 6,
@@ -65,7 +65,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/bee/",
     icon: "Gamepad2",
     category: "games",
-    previewUrl: "/previews/preview_puzzle_v2.png"
+    previewUrl: "/previews/tool_6.png"
   },
   {
     id: 7,
@@ -74,7 +74,7 @@ export const tools: EducationalTool[] = [
     url: "https://line.me/R/ti/p/@733oiboa?oat_content=url&ts=05120012",
     icon: "MessageSquare",
     category: "teaching",
-    previewUrl: "/previews/preview_feedback_v2.png"
+    previewUrl: "/previews/tool_7.png"
   },
   {
     id: 8,
@@ -83,7 +83,7 @@ export const tools: EducationalTool[] = [
     url: "https://lin.ee/pCqnVhT",
     icon: "Files",
     category: "teaching",
-    previewUrl: "/previews/preview_teaching_v2.png"
+    previewUrl: "/previews/tool_8.png"
   },
   {
     id: 9,
@@ -92,7 +92,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/mario-game/",
     icon: "Gamepad2",
     category: "games",
-    previewUrl: "/previews/preview_platformer_v2.png"
+    previewUrl: "/previews/tool_9.png"
   },
   {
     id: 10,
@@ -101,7 +101,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/class/",
     icon: "Users",
     category: "utilities",
-    previewUrl: "/previews/preview_admin_v2.png"
+    previewUrl: "/previews/tool_10.png"
   },
   {
     id: 11,
@@ -110,7 +110,7 @@ export const tools: EducationalTool[] = [
     url: "https://class.smes.tyc.edu.tw/",
     icon: "GraduationCap",
     category: "teaching",
-    previewUrl: "/previews/preview_teaching_v2.png"
+    previewUrl: "/previews/tool_11.png"
   },
   {
     id: 12,
@@ -119,7 +119,7 @@ export const tools: EducationalTool[] = [
     url: "https://read.smes.tyc.edu.tw/smes/PIRLS/",
     icon: "BookOpen",
     category: "reading",
-    previewUrl: "/previews/preview_reading_v2.png"
+    previewUrl: "/previews/tool_12.png"
   },
   {
     id: 13,
@@ -128,7 +128,7 @@ export const tools: EducationalTool[] = [
     url: "https://5w1h.smes.tyc.edu.tw/",
     icon: "Rocket",
     category: "teaching",
-    previewUrl: "/previews/preview_teaching_v2.png"
+    previewUrl: "/previews/tool_13.png"
   },
   {
     id: 14,
@@ -137,7 +137,7 @@ export const tools: EducationalTool[] = [
     url: "https://poet.smes.tyc.edu.tw/",
     icon: "Image",
     category: "utilities",
-    previewUrl: "/previews/preview_utility_v2.png"
+    previewUrl: "/previews/tool_14.png"
   },
   {
     id: 15,
@@ -146,7 +146,7 @@ export const tools: EducationalTool[] = [
     url: "https://report.smes.tyc.edu.tw/",
     icon: "FileText",
     category: "utilities",
-    previewUrl: "/previews/preview_admin_v2.png"
+    previewUrl: "/previews/tool_15.png"
   },
   {
     id: 16,
@@ -155,7 +155,7 @@ export const tools: EducationalTool[] = [
     url: "https://talk.smes.tyc.edu.tw/",
     icon: "MessageSquare",
     category: "communication",
-    previewUrl: "/previews/preview_communication_v2.png"
+    previewUrl: "/previews/tool_16.png"
   },
   {
     id: 17,
@@ -164,7 +164,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/smes_html/gogogo.html",
     icon: "Ticket",
     category: "utilities",
-    previewUrl: "/previews/preview_lottery_v2.png"
+    previewUrl: "/previews/tool_17.png"
   },
   {
     id: 18,
@@ -173,7 +173,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/smes_html/random.html",
     icon: "Shuffle",
     category: "utilities",
-    previewUrl: "/previews/preview_lottery_v2.png"
+    previewUrl: "/previews/tool_18.png"
   },
   {
     id: 19,
@@ -182,7 +182,7 @@ export const tools: EducationalTool[] = [
     url: "https://doc.smes.tyc.edu.tw/",
     icon: "Bot",
     category: "utilities",
-    previewUrl: "/previews/preview_communication_v2.png"
+    previewUrl: "/previews/tool_19.png"
   },
   {
     id: 20,
@@ -191,7 +191,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/smes_html/typeEN.html",
     icon: "Keyboard",
     category: "language",
-    previewUrl: "/previews/preview_typing_v2.png"
+    previewUrl: "/previews/tool_20.png"
   },
   {
     id: 21,
@@ -200,7 +200,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/smes_html/typeCC.html",
     icon: "Keyboard",
     category: "language",
-    previewUrl: "/previews/preview_typing_v2.png"
+    previewUrl: "/previews/tool_21.png"
   },
   {
     id: 22,
