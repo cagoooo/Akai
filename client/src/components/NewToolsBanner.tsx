@@ -10,6 +10,7 @@ import { X, Sparkles, ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { Link } from 'wouter';
+import { iconRegistry, type IconName } from '@/lib/iconRegistry';
 
 export function NewToolsBanner() {
     const { newTools, hasNewTools, markAllAsRead, dismissTool } = useNewToolsNotification();
@@ -64,7 +65,18 @@ export function NewToolsBanner() {
                                     transition={{ delay: index * 0.1 }}
                                     className="flex items-center gap-3 p-2 rounded-lg bg-background/50 hover:bg-background/80 transition-colors group"
                                 >
-                                    <div className="text-2xl">{tool.icon}</div>
+                                    {(() => {
+                                        const IconComponent = iconRegistry[tool.icon as IconName];
+                                        return IconComponent ? (
+                                            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                                                <IconComponent className="w-4 h-4 text-primary" />
+                                            </div>
+                                        ) : (
+                                            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                                                <Sparkles className="w-4 h-4 text-primary" />
+                                            </div>
+                                        );
+                                    })()}
                                     <div className="flex-1 min-w-0">
                                         <h4 className="font-medium text-sm truncate">{tool.title}</h4>
                                         <p className="text-xs text-muted-foreground truncate">
