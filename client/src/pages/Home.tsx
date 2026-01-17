@@ -130,12 +130,25 @@ export function Home() {
       <main className="container mx-auto px-3 sm:px-6 py-4 sm:py-6 md:py-8">
         {/* 頂部標題區域 */}
         <header
-          className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-8 mb-4 sm:mb-8 p-3 sm:p-4 rounded-lg bg-blue-50"
+          className="relative overflow-hidden mb-4 sm:mb-6 p-5 sm:p-6 md:p-8 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 shadow-lg"
           data-tour="header-section"
         >
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-            教育科技創新專區
-          </h1>
+          {/* 背景裝飾 */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-white/20 via-transparent to-transparent" />
+          <div className="absolute top-0 right-0 w-32 h-32 sm:w-48 sm:h-48 bg-white/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-24 h-24 sm:w-36 sm:h-36 bg-purple-400/20 rounded-full blur-2xl" />
+
+          <div className="relative z-10 text-center">
+            {/* 主標題 */}
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white tracking-tight mb-2 sm:mb-3">
+              ✨ 教育科技創新專區 ✨
+            </h1>
+
+            {/* 副標題 */}
+            <p className="text-sm sm:text-base md:text-lg text-white/80 font-medium max-w-2xl mx-auto">
+              探索阿凱老師開發的教育工具，為您的教學增添創新的可能
+            </p>
+          </div>
         </header>
 
         {/* 主要內容區域 - xl 以上才變為左右排版 */}
@@ -182,10 +195,6 @@ export function Home() {
               <VisitorCounter />
             </section>
 
-            {/* 簡介文字 */}
-            <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl p-3 sm:p-4 rounded-lg bg-gray-50">
-              探索阿凱老師開發的教育工具，為您的教學增添創新的可能
-            </p>
 
             {/* 最近使用區塊 */}
             {hasRecent && !isLoading && (
@@ -221,8 +230,13 @@ export function Home() {
             )}
 
             {/* 搜尋與篩選區域 */}
-            <section className="space-y-4 p-3 sm:p-4 rounded-lg bg-orange-50">
-              <h2 className="text-lg font-semibold text-orange-800">🔍 搜尋與篩選</h2>
+            <section className="space-y-3 sm:space-y-4 p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 border border-orange-100 shadow-sm">
+              <div className="flex items-center gap-2">
+                <div className="p-2 rounded-lg bg-orange-100">
+                  <span className="text-lg">🔍</span>
+                </div>
+                <h2 className="text-base sm:text-lg font-bold text-orange-800">搜尋與篩選</h2>
+              </div>
 
               <SearchBar
                 searchQuery={searchQuery}

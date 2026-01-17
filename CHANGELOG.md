@@ -2,6 +2,65 @@
 
 此文件記錄專案的所有重要變更。
 
+## [2.2.4] - 2026-01-17
+
+### 🎨 UI/UX 大幅優化
+
+#### 主標題區塊
+- ✨ **漸層背景設計** - `from-blue-600 via-indigo-600 to-purple-600`
+- 🎯 **標題置中顯示** - 添加星星裝飾 ✨
+- 📝 **新增副標題** - 「探索阿凱老師開發的教育工具」
+- 💫 **光暈背景裝飾** - 圓形模糊效果
+
+#### 訪客計數器
+- 🔢 **超大數字顯示** - `text-5xl ~ 8xl font-black`
+- 📊 **增大統計標籤字體**
+- 🎨 **漸層進度條優化**
+
+#### 阿凱老師卡片
+- 🎨 **藍紫漸層背景** + 光暈效果
+- 💛 **黃色圖標設計** - `text-yellow-300`
+- 🪟 **玻璃效果成就標籤** - `backdrop-blur-sm`
+
+#### 搜尋與篩選區塊
+- 🔍 **更大搜尋輸入框** - `h-12` 橙色邊框
+- 🏷️ **分類按鈕豐富顏色** - 每個分類專屬色
+- 🎯 **自動跳轉功能** - 點擊分類後滾動到工具區
+- ⭕ **圓角按鈕設計** - `rounded-full`
+- 🔄 **hover 放大效果** - `hover:scale-105`
+
+#### 工具詳情頁 (/tool/:id)
+- 📌 **固定導航列** - sticky + backdrop-blur
+- 🎨 **Hero 區塊漸層背景**
+- 📸 **大預覽圖設計** - `rounded-2xl` + 陰影
+- 📊 **卡片式統計顯示** - 雙卡片網格
+- 📱 **手機端按鈕優化** - 垂直堆疊佈局
+
+#### 工具卡片 (ToolCard)
+- 💜 **分類專屬背景色** - 漸層效果
+- ❤️ **更大收藏按鈕** - `h-10 ~ h-11`
+- 📝 **更大標題字體** - `text-lg ~ 2xl font-bold`
+- 🔘 **吸睛開啟按鈕** - 漸層 + 陰影 + 圖標
+- 🎯 **hover 浮起效果** - `scale: 1.02, y: -4`
+- 📱 **RWD 響應式優化**
+
+### 🗑️ 移除功能
+- ❌ 移除自定義圖標按鈕 (Settings2)
+- ❌ 移除分享並協作按鈕 (Share2)
+- ❌ 移除相關 Dialog 和未使用的 imports
+- ❌ 移除重複的簡介文字區塊
+
+### 📁 修改文件
+- `client/src/pages/Home.tsx` - 主標題、搜尋區塊優化
+- `client/src/pages/ToolDetail.tsx` - 詳情頁面大幅重構
+- `client/src/components/ToolCard.tsx` - 卡片優化、移除未使用功能
+- `client/src/components/SearchBar.tsx` - 搜尋輸入框優化
+- `client/src/components/CategoryFilter.tsx` - 分類按鈕優化
+- `client/src/components/VisitorCounter.tsx` - 計數器字體增大
+- `client/src/components/TeacherIntro.tsx` - 老師卡片漸層效果
+
+---
+
 ## [2.2.3] - 2026-01-17
 
 ### 重大修復 🎉

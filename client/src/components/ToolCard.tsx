@@ -2,10 +2,9 @@ import { Card, CardContent, CardTitle, CardDescription } from "@/components/ui/c
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Share2, Users, Settings2, Facebook as FacebookIcon, Linkedin as LinkedinIcon, MessageCircle, BarChart, Copy, Heart, Info } from "lucide-react";
-import { useState, useCallback } from "react";
+import { BarChart, Heart, Info, ExternalLink } from "lucide-react";
+import { useState } from "react";
 import { Link } from "wouter";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { iconRegistry, type IconName } from "@/lib/iconRegistry";
@@ -17,16 +16,11 @@ import type { LucideIcon } from 'lucide-react';
 interface EnhancedTool extends EducationalTool {
   totalClicks?: number;
 }
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PreviewGenerator } from "@/components/PreviewGenerator";
-import { IconCustomizer, type IconCustomization } from "@/components/IconCustomizer";
-import { CustomizationTutorialProvider } from "./CustomizationTutorial";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
-import { SocialPreviewImage } from "./SocialPreviewImage";
-import { generateShareUrls } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
 import { useToolTracking } from "@/hooks/useToolTracking";
+import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
 // Enhanced category colors with hover states and transitions
 const categoryColors = {
@@ -36,6 +30,7 @@ const categoryColors = {
     border: "group-hover:border-blue-200",
     icon: "group-hover:text-blue-600",
     gradient: "var(--communication-gradient)",
+    bg: "bg-gradient-to-br from-blue-50 to-blue-100/50",
   },
   teaching: {
     badge: "bg-green-100 text-green-800",
@@ -43,6 +38,7 @@ const categoryColors = {
     border: "group-hover:border-green-200",
     icon: "group-hover:text-green-600",
     gradient: "var(--teaching-gradient)",
+    bg: "bg-gradient-to-br from-green-50 to-green-100/50",
   },
   language: {
     badge: "bg-purple-100 text-purple-800",
@@ -50,6 +46,7 @@ const categoryColors = {
     border: "group-hover:border-purple-200",
     icon: "group-hover:text-purple-600",
     gradient: "var(--language-gradient)",
+    bg: "bg-gradient-to-br from-purple-50 to-purple-100/50",
   },
   reading: {
     badge: "bg-yellow-100 text-yellow-800",
@@ -57,13 +54,15 @@ const categoryColors = {
     border: "group-hover:border-yellow-200",
     icon: "group-hover:text-yellow-600",
     gradient: "var(--reading-gradient)",
+    bg: "bg-gradient-to-br from-yellow-50 to-yellow-100/50",
   },
-  utilities: {
+  utility: {
     badge: "bg-gray-100 text-gray-800",
     hover: "from-gray-50/50 to-gray-100/50",
     border: "group-hover:border-gray-200",
     icon: "group-hover:text-gray-600",
-    gradient: "var(--utilities-gradient)",
+    gradient: "var(--utility-gradient)",
+    bg: "bg-gradient-to-br from-gray-50 to-gray-100/50",
   },
   games: {
     badge: "bg-pink-100 text-pink-800",
@@ -71,6 +70,7 @@ const categoryColors = {
     border: "group-hover:border-pink-200",
     icon: "group-hover:text-pink-600",
     gradient: "var(--games-gradient)",
+    bg: "bg-gradient-to-br from-pink-50 to-pink-100/50",
   },
   interactive: {
     badge: "bg-cyan-100 text-cyan-800",
@@ -78,6 +78,7 @@ const categoryColors = {
     border: "group-hover:border-cyan-200",
     icon: "group-hover:text-cyan-600",
     gradient: "var(--interactive-gradient)",
+    bg: "bg-gradient-to-br from-cyan-50 to-cyan-100/50",
   },
 } as const;
 
@@ -91,14 +92,11 @@ interface ToolCardProps {
 
 export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = false, onToggleFavorite, onToolClick }: ToolCardProps) {
   const queryClient = useQueryClient();
-  const [isShareOpen, setIsShareOpen] = useState(false);
-  const [isCustomizeOpen, setIsCustomizeOpen] = useState(false);
-  const [customization, setCustomization] = useState<IconCustomization | undefined>();
-  const [isPreviewLoading, setIsPreviewLoading] = useState(true);
-  const [previewImage, setPreviewImage] = useState<string>();
   const [tool, setTool] = useState<EnhancedTool>(initialTool);
   const Icon = iconRegistry[tool.icon as IconName] as LucideIcon;
   const { toast } = useToast();
+  const catInfo = categoryInfo[tool.category as ToolCategory];
+  const colors = categoryColors[tool.category as keyof typeof categoryColors];
 
   // Get usage statistics for this tool
   const { data: usageStats } = useQuery({
@@ -120,7 +118,6 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
       return await trackToolUsage(tool.id);
     },
     onSuccess: (data) => {
-      // 成功後確保數據被刷新，但使用 active 模式避免過多請求
       queryClient.invalidateQueries({
         queryKey: ['/api/tools/stats'],
         refetchType: 'active'
@@ -135,63 +132,17 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
     }
   });
 
-  const handleShare = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsShareOpen(true);
-  };
-
-  const handleCustomize = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsCustomizeOpen(true);
-  };
-
-  const handleCopyLink = async (e: React.MouseEvent) => {
-    e.stopPropagation();
-    try {
-      await navigator.clipboard.writeText(tool.url);
-      toast({
-        title: "複製成功",
-        description: "已將連結複製到剪貼簿",
-      });
-    } catch (error) {
-      toast({
-        title: "複製失敗",
-        description: "無法複製連結，請手動複製",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const getShareUrls = useCallback((previewUrl?: string) => {
-    // 直接使用 tool.url，不需要添加 baseUrl
-    const url = tool.url;
-    const text = `Check out ${tool.title} - ${tool.description}`;
-
-    return generateShareUrls({
-      url,
-      title: tool.title,
-      text,
-      description: tool.description,
-      image: previewUrl
-    });
-  }, [tool]);
 
   // 改進點擊處理部分 - 確保點擊後一定會開啟新視窗
   const handleClick = () => {
     try {
-      // 首先，無論如何都確保開啟工具網站
       const newWindow = window.open(tool.url, '_blank', 'noopener,noreferrer');
-
-      // 確保新視窗被打開
       if (newWindow) {
-        newWindow.opener = null; // 安全考量，斷開與原窗口的連接
+        newWindow.opener = null;
       }
-      // 如果瀏覽器阻止打開新視窗，用戶可以點擊複製連結按鈕手動開啟
 
-      // 然後再發送使用統計數據（不阻塞用戶體驗）
       trackToolUsage(tool.id)
         .then(result => {
-          // 成功後更新本地狀態
           if (result?.totalClicks) {
             setTool(prevTool => ({
               ...prevTool,
@@ -201,7 +152,6 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
         })
         .catch(error => {
           console.error('工具使用追蹤失敗:', error);
-          // 即使追蹤失敗，也不影響用戶的正常使用
         });
     } catch (error) {
       console.error('開啟工具失敗:', error);
@@ -217,11 +167,12 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
   return (
     <TooltipProvider>
       <motion.article
-        whileHover={{ scale: 1.02 }}
+        whileHover={{ scale: 1.02, y: -4 }}
         whileTap={{ scale: 0.98 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         itemScope
         itemType="https://schema.org/EducationalApplication"
+        className="h-full"
       >
         <meta itemProp="name" content={tool.title} />
         <meta itemProp="description" content={tool.description} />
@@ -229,63 +180,58 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
         <meta itemProp="url" content={tool.url} />
 
         <Card
-          className={`group hover:shadow-lg transition-all duration-500 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary overflow-hidden border-2 ${tool.category && categoryColors[tool.category] ? categoryColors[tool.category].border : 'border-gray-200'} hover:bg-gradient-to-br`}
+          className={cn(
+            "group h-full hover:shadow-xl transition-all duration-300 cursor-pointer",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+            "overflow-hidden border-2 rounded-2xl",
+            "hover:border-primary/30",
+            colors?.bg || "bg-white"
+          )}
           onClick={handleClick}
           tabIndex={isLoading ? -1 : 0}
           role={isLoading ? "presentation" : "button"}
           aria-label={isLoading ? undefined : `開啟 ${tool.title} 工具詳細資訊`}
         >
-          <CardContent className="p-6 relative">
-            <header className="flex items-start justify-between mb-4">
+          <CardContent className="p-4 sm:p-5 h-full flex flex-col">
+            {/* 頂部：圖標 + 收藏 + 詳情 + 分類 */}
+            <header className="flex items-start justify-between gap-2 mb-3">
               {isLoading ? (
-                <Skeleton className="w-10 h-10 rounded-lg" />
+                <Skeleton className="w-12 h-12 rounded-xl" />
               ) : (
-                <div className="flex items-center gap-2">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <motion.div
-                        className={`p-2 rounded-lg bg-primary/10 transition-all duration-300 ${tool.category && categoryColors[tool.category] ? categoryColors[tool.category].icon : 'text-gray-600'}`}
-                        whileHover={{ rotate: [0, -10, 10, -5, 5, 0] }}
-                        transition={{ duration: 0.5 }}
-                        role="img"
-                        aria-label={`${tool.title} 圖標`}
-                      >
-                        {Icon && <Icon className="w-6 h-6 transition-colors duration-300" aria-hidden="true" />}
-                      </motion.div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{tool.title}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                  {(usageStats || tool.totalClicks) && (
-                    <Badge
-                      variant="secondary"
-                      className="flex items-center gap-1 px-2 py-1"
-                      title="使用次數"
-                    >
-                      <BarChart className="w-3 h-3" aria-hidden="true" />
-                      <span>{tool.totalClicks || (usageStats && usageStats.totalClicks) || 0} 次使用</span>
-                    </Badge>
+                <motion.div
+                  className={cn(
+                    "p-2.5 sm:p-3 rounded-xl",
+                    "bg-white/80 shadow-sm",
+                    "transition-all duration-300"
                   )}
-                </div>
+                  whileHover={{ rotate: [0, -10, 10, -5, 5, 0] }}
+                  transition={{ duration: 0.5 }}
+                >
+                  {Icon && <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-primary" />}
+                </motion.div>
               )}
-              <div className="flex gap-2">
+
+              <div className="flex items-center gap-1.5 sm:gap-2">
                 {isLoading ? (
                   <>
-                    <Skeleton className="w-8 h-8 rounded" />
-                    <Skeleton className="w-8 h-8 rounded" />
-                    <Skeleton className="w-20 h-8 rounded" />
+                    <Skeleton className="w-10 h-10 rounded-lg" />
+                    <Skeleton className="w-10 h-10 rounded-lg" />
                   </>
                 ) : (
                   <>
-                    {/* 收藏按鈕 */}
+                    {/* 收藏按鈕 - 更大更好點 */}
                     {onToggleFavorite && (
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Button
-                            variant="ghost"
+                            variant={isFavorite ? "default" : "outline"}
                             size="icon"
-                            className="h-8 w-8"
+                            className={cn(
+                              "h-10 w-10 sm:h-11 sm:w-11 rounded-xl transition-all",
+                              isFavorite
+                                ? "bg-red-500 hover:bg-red-600 border-red-500"
+                                : "hover:bg-red-50 hover:border-red-200"
+                            )}
                             onClick={(e) => {
                               e.stopPropagation();
                               onToggleFavorite(tool.id);
@@ -293,7 +239,10 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                             aria-label={isFavorite ? "取消收藏" : "加入收藏"}
                           >
                             <Heart
-                              className={`h-4 w-4 transition-colors ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-400 hover:text-red-400'}`}
+                              className={cn(
+                                "h-5 w-5 sm:h-6 sm:w-6 transition-colors",
+                                isFavorite ? 'fill-white text-white' : 'text-red-400'
+                              )}
                             />
                           </Button>
                         </TooltipTrigger>
@@ -302,52 +251,19 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                         </TooltipContent>
                       </Tooltip>
                     )}
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className={`h-8 w-8 transition-colors duration-300 ${tool.category && categoryColors[tool.category] ? categoryColors[tool.category].icon : 'text-gray-600'}`}
-                          onClick={handleCustomize}
-                          data-customization="icon-settings"
-                          aria-label={`自定義 ${tool.title} 圖標`}
-                        >
-                          <Settings2 className="h-4 w-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>自定義圖標</p>
-                      </TooltipContent>
-                    </Tooltip>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className={`h-8 w-8 transition-colors duration-300 ${tool.category && categoryColors[tool.category] ? categoryColors[tool.category].icon : 'text-gray-600'}`}
-                          onClick={handleShare}
-                          data-tour="share-button"
-                          aria-label={`分享 ${tool.title}`}
-                        >
-                          <Share2 className="h-4 w-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>分享並協作</p>
-                      </TooltipContent>
-                    </Tooltip>
+
                     {/* 詳情按鈕 */}
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Link href={`/tool/${tool.id}`}>
                           <Button
-                            variant="ghost"
+                            variant="outline"
                             size="icon"
-                            className={`h-8 w-8 transition-colors duration-300 ${tool.category && categoryColors[tool.category] ? categoryColors[tool.category].icon : 'text-gray-600'}`}
+                            className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl hover:bg-primary/10 hover:border-primary/30"
                             onClick={(e) => e.stopPropagation()}
                             aria-label={`查看 ${tool.title} 詳情`}
                           >
-                            <Info className="h-4 w-4" />
+                            <Info className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                           </Button>
                         </Link>
                       </TooltipTrigger>
@@ -355,77 +271,54 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                         <p>查看詳情</p>
                       </TooltipContent>
                     </Tooltip>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Badge
-                          variant="secondary"
-                          className={`${getCategoryColorClass(tool.category as ToolCategory)} border-0 transition-colors duration-300`}
-                        >
-                          <span className="sr-only">工具類別：</span>
-                          {categoryInfo[tool.category as ToolCategory]?.emoji} {categoryInfo[tool.category as ToolCategory]?.label || tool.category}
-                        </Badge>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>工具類別：{categoryInfo[tool.category as ToolCategory]?.emoji} {categoryInfo[tool.category as ToolCategory]?.label || tool.category}</p>
-                      </TooltipContent>
-                    </Tooltip>
+
+                    {/* 分類標籤 */}
+                    <Badge
+                      variant="secondary"
+                      className={cn(
+                        getCategoryColorClass(tool.category as ToolCategory),
+                        "border-0 px-2.5 py-1.5 text-xs sm:text-sm font-semibold rounded-lg"
+                      )}
+                    >
+                      {catInfo?.emoji} <span className="hidden sm:inline ml-1">{catInfo?.label}</span>
+                    </Badge>
                   </>
                 )}
               </div>
             </header>
 
-            <main>
+            {/* 主要內容區 */}
+            <main className="flex-1 flex flex-col">
               {isLoading ? (
                 <>
-                  <Skeleton className="w-3/4 h-7 mb-2" />
+                  <Skeleton className="w-3/4 h-8 mb-2" />
                   <Skeleton className="w-full h-4 mb-2" />
                   <Skeleton className="w-5/6 h-4 mb-4" />
                 </>
               ) : (
                 <>
+                  {/* 工具標題 - 更大更清楚 */}
                   <CardTitle
-                    className={`flex items-center text-xl font-bold transition-colors duration-300 ${tool.category && categoryColors[tool.category] ? categoryColors[tool.category].icon : 'text-gray-600'} mb-2 relative`}
+                    className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-2 line-clamp-2"
                     itemProp="name"
                   >
                     {tool.title}
-                    <motion.div
-                      className="ml-2 text-primary/70 group-hover:text-primary"
-                      animate={{ scale: [1, 1.1, 1] }}
-                      transition={{
-                        repeat: Infinity,
-                        repeatType: "reverse",
-                        duration: 1.5
-                      }}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="transform -rotate-45"
-                        aria-hidden="true"
-                      >
-                        <path d="M7 17l9.2-9.2M17 17V7H7" />
-                      </svg>
-                    </motion.div>
                   </CardTitle>
-                  <CardDescription className="text-sm text-muted-foreground min-h-[3rem] mb-4 relative transition-colors duration-300 group-hover:text-foreground/80" itemProp="description">
+
+                  {/* 工具描述 - 更清楚 */}
+                  <CardDescription
+                    className="text-sm sm:text-base text-gray-600 mb-4 line-clamp-2 sm:line-clamp-3 flex-1"
+                    itemProp="description"
+                  >
                     {tool.description}
-                    <span className="block mt-2 text-xs text-primary/70 group-hover:text-primary italic">
-                      點擊開啟新視窗
-                    </span>
                   </CardDescription>
                 </>
               )}
 
+              {/* 預覽圖 */}
               {tool.previewUrl && (
                 <figure className="mb-4">
-                  <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg overflow-hidden">
+                  <AspectRatio ratio={16 / 9} className="bg-white rounded-xl overflow-hidden border shadow-sm">
                     {isLoading ? (
                       <Skeleton className="w-full h-full" />
                     ) : (
@@ -438,7 +331,6 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                           src={`${import.meta.env.BASE_URL}${tool.previewUrl?.startsWith('/') ? tool.previewUrl.slice(1) : tool.previewUrl}`}
                           alt={`${tool.title} 預覽圖`}
                           className="w-full h-full object-cover"
-                          onLoad={() => setIsPreviewLoading(false)}
                           onError={(e) => {
                             e.currentTarget.style.display = 'none';
                           }}
@@ -446,149 +338,46 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                       </motion.div>
                     )}
                   </AspectRatio>
-                  <figcaption className="sr-only">{tool.title} 預覽圖</figcaption>
                 </figure>
+              )}
+
+              {/* 底部：開啟按鈕 + 使用次數 */}
+              {!isLoading && (
+                <div className="flex items-center justify-between gap-3 mt-auto pt-3 border-t border-gray-100">
+                  {/* 開啟新視窗按鈕 - 更大更吸睛 */}
+                  <Button
+                    variant="default"
+                    size="lg"
+                    className={cn(
+                      "flex-1 gap-2 text-sm sm:text-base font-semibold py-5 sm:py-6 rounded-xl",
+                      "bg-gradient-to-r from-primary to-indigo-600",
+                      "hover:from-primary/90 hover:to-indigo-600/90",
+                      "shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30",
+                      "transition-all duration-300"
+                    )}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleClick();
+                    }}
+                  >
+                    <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5" />
+                    開啟使用
+                  </Button>
+
+                  {/* 使用次數 */}
+                  {(usageStats || tool.totalClicks) && (
+                    <div className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground bg-gray-100 px-3 py-2 rounded-lg">
+                      <BarChart className="w-4 h-4" />
+                      <span className="font-medium">{tool.totalClicks || usageStats?.totalClicks || 0}</span>
+                      <span className="hidden sm:inline">次</span>
+                    </div>
+                  )}
+                </div>
               )}
             </main>
           </CardContent>
         </Card>
       </motion.article>
-
-      <AnimatePresence>
-        {/* Dialog removed */}
-      </AnimatePresence>
-
-      <Dialog open={isShareOpen} onOpenChange={setIsShareOpen}>
-        <DialogContent className="sm:max-w-md">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-          >
-            <DialogHeader>
-              <DialogTitle>分享 {tool.title}</DialogTitle>
-              <DialogDescription>
-                透過社群媒體分享或邀請協作者
-              </DialogDescription>
-            </DialogHeader>
-
-            <Tabs defaultValue="social" className="w-full">
-              <TabsList className="grid w-full grid-cols-2" aria-label="分享選項">
-                <TabsTrigger value="social">社群分享</TabsTrigger>
-                <TabsTrigger value="collaborate">邀請協作</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="social" className="mt-4">
-                <SocialPreviewImage
-                  tool={tool}
-                  onGenerate={setPreviewImage}
-                />
-
-                <motion.div
-                  className="flex flex-wrap gap-4"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.2 }}
-                  role="group"
-                  aria-label="社群媒體分享按鈕"
-                >
-                  {[
-                    { name: 'Copy', icon: Copy, color: 'text-gray-600', onClick: handleCopyLink },
-                    { name: 'Facebook', icon: FacebookIcon, color: 'text-[#4267B2]' },
-                    { name: 'LinkedIn', icon: LinkedinIcon, color: 'text-[#0077B5]' },
-                    { name: 'LINE', icon: MessageCircle, color: 'text-[#00B900]' },
-                  ].map((platform) => (
-                    <motion.div
-                      key={platform.name}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <Button
-                        variant="outline"
-                        className="flex-1 min-w-[120px]"
-                        onClick={(e) => {
-                          if (platform.onClick) {
-                            platform.onClick(e);
-                          } else {
-                            const urls = getShareUrls(previewImage);
-                            const key = platform.name.toLowerCase() as keyof typeof urls;
-                            if (urls[key]) {
-                              window.open(urls[key], '_blank');
-                            }
-                          }
-                        }}
-                        aria-label={platform.name === 'Copy' ? '複製連結' : `分享到 ${platform.name}`}
-                      >
-                        <platform.icon className={`w-4 h-4 mr-2 ${platform.color}`} aria-hidden="true" />
-                        {platform.name === 'Copy' ? '複製連結' : platform.name}
-                      </Button>
-                    </motion.div>
-                  ))}
-                </motion.div>
-
-                {previewImage && (
-                  <div className="mt-4 p-4 border rounded-lg">
-                    <p className="text-sm text-muted-foreground mb-2">預覽圖片</p>
-                    <img
-                      src={previewImage}
-                      alt={`${tool.title} 分享預覽`}
-                      className="w-full h-auto rounded-md"
-                    />
-                  </div>
-                )}
-              </TabsContent>
-
-              <TabsContent value="collaborate" className="mt-4">
-                <motion.div
-                  className="grid gap-4"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.2 }}
-                >
-                  <div className="grid flex-1 gap-2">
-                    <label className="text-sm font-medium leading-none" id="collaborator-label">
-                      協作者
-                    </label>
-                    <Button
-                      variant="outline"
-                      className="justify-start"
-                      aria-labelledby="collaborator-label"
-                    >
-                      <Users className="mr-2 h-4 w-4" aria-hidden="true" />
-                      <span>選擇協作者</span>
-                    </Button>
-                  </div>
-                  <Button className="w-full">邀請協作</Button>
-                </motion.div>
-              </TabsContent>
-            </Tabs>
-          </motion.div>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={isCustomizeOpen} onOpenChange={setIsCustomizeOpen}>
-        <DialogContent className="max-w-lg">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-          >
-            <DialogHeader>
-              <DialogTitle>自定義圖標 - {tool.title}</DialogTitle>
-              <DialogDescription>
-                調整圖標的顏色、大小和樣式
-              </DialogDescription>
-            </DialogHeader>
-
-            <CustomizationTutorialProvider>
-              <IconCustomizer
-                tool={tool}
-                onCustomizationChange={setCustomization}
-              />
-            </CustomizationTutorialProvider>
-          </motion.div>
-        </DialogContent>
-      </Dialog>
     </TooltipProvider>
   );
 }

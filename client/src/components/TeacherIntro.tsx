@@ -10,9 +10,9 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const emojiAnimationVariants = {
   hidden: { opacity: 0, scale: 0.8, y: 20 },
-  visible: { 
-    opacity: 1, 
-    scale: 1, 
+  visible: {
+    opacity: 1,
+    scale: 1,
     y: 0,
     transition: {
       type: "spring",
@@ -100,23 +100,29 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
   }
 
   return (
-    <Card className="bg-primary text-primary-foreground overflow-hidden">
-      <CardContent className="pt-6">
-        <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
-          <motion.div 
-            className="p-3 rounded-full bg-primary-foreground/10"
-            whileHover={{ scale: 1.1 }}
+    <Card className="relative overflow-hidden border-0 shadow-xl">
+      {/* 漸層背景 */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent" />
+
+      <CardContent className="relative z-10 py-4 sm:py-5 px-4 sm:px-6 text-white">
+        {/* 頂部：圖標 + 名字 + 狀態 */}
+        <div className="flex items-center gap-3 mb-3 sm:mb-4">
+          <motion.div
+            className="p-2.5 sm:p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20"
+            whileHover={{ scale: 1.1, rotate: 5 }}
             whileTap={{ scale: 0.95 }}
             role="img"
             aria-label="教師資訊圖標"
           >
-            <Newspaper className="w-8 h-8" aria-hidden="true" />
+            <Newspaper className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-300" aria-hidden="true" />
           </motion.div>
+
           <div className="flex-1">
-            <div className="flex items-center gap-2">
-              <motion.a 
+            <div className="flex items-center gap-2 flex-wrap">
+              <motion.a
                 href={linkUrl}
-                className={linkClass}
+                className="text-2xl sm:text-3xl md:text-4xl font-black bg-gradient-to-r from-white via-yellow-100 to-white bg-clip-text text-transparent hover:from-yellow-200 hover:to-white transition-all duration-300"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="造訪阿凱老師的個人網頁"
@@ -128,13 +134,14 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
               <motion.button
                 whileHover={{ rotate: 180 }}
                 transition={{ duration: 0.3 }}
-                className="h-6 w-6"
+                className="p-1 rounded-full hover:bg-white/10"
                 onClick={() => setIsCustomizing(true)}
                 aria-label="自定義連結樣式"
               >
-                <Settings2 className="h-4 w-4" />
+                <Settings2 className="h-4 w-4 text-white/60" />
               </motion.button>
             </div>
+
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentMoodIndex}
@@ -142,17 +149,16 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
                 animate="visible"
                 exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.2 } }}
                 variants={emojiAnimationVariants}
-                whileHover="hover"
-                className="text-xl md:text-2xl text-primary-foreground/80 mt-2"
+                className="flex items-center gap-2 mt-1 text-sm sm:text-base"
                 role="doc-subtitle"
               >
-                <motion.span 
-                  className="inline-block"
-                  animate={{ 
+                <motion.span
+                  className="text-lg sm:text-xl"
+                  animate={{
                     rotate: [0, -10, 10, -5, 5, 0],
                     scale: [1, 1.1, 1]
                   }}
-                  transition={{ 
+                  transition={{
                     duration: 1,
                     repeat: Infinity,
                     repeatDelay: 4
@@ -160,22 +166,16 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
                 >
                   {currentMood.emoji}
                 </motion.span>
-                <span className="ml-2">教育科技創新者</span>
-                <motion.span 
-                  className="text-lg ml-2 opacity-75"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 0.75 }}
-                  transition={{ delay: 0.2 }}
-                >
-                  ({currentMood.description})
-                </motion.span>
+                <span className="font-semibold text-yellow-300">教育科技創新者</span>
+                <span className="text-white/60 text-xs sm:text-sm">({currentMood.description})</span>
               </motion.div>
             </AnimatePresence>
           </div>
         </div>
 
-        <motion.p 
-          className="text-primary-foreground/90 mb-6 mt-6 text-lg md:text-xl leading-relaxed"
+        {/* 描述文字 */}
+        <motion.p
+          className="text-white/90 text-sm sm:text-base leading-relaxed mb-3 sm:mb-4 pl-0 sm:pl-1"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
@@ -183,22 +183,23 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
           {teacherInfo.description}
         </motion.p>
 
-        <div 
-          className="flex flex-wrap gap-2"
+        {/* 成就標籤 */}
+        <div
+          className="flex flex-wrap gap-1.5 sm:gap-2"
           role="list"
           aria-label="教師成就"
         >
           {teacherInfo.achievements.map((achievement, index) => (
-            <motion.span 
+            <motion.span
               key={index}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.1 }}
-              whileHover={{ 
+              whileHover={{
                 scale: 1.05,
-                backgroundColor: "rgba(255,255,255,0.15)"
+                backgroundColor: "rgba(255,255,255,0.25)"
               }}
-              className="px-3 py-1.5 rounded-full text-base md:text-lg bg-primary-foreground/10 transition-colors duration-200"
+              className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium bg-white/15 backdrop-blur-sm border border-white/20 text-white/95 transition-colors duration-200"
               role="listitem"
             >
               {achievement}
