@@ -32,9 +32,8 @@
   <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
   <link rel="dns-prefetch" href="https://firestore.googleapis.com" />
 
-  <!-- 預載入關鍵字體 - 改善 FCP -->
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-    as="style" />
+  <!-- 字體載入 - 使用 stylesheet 而非 preload 避免警告 -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
 
   <!-- 關鍵 CSS 內聯 - 改善 CLS -->
   <style>
