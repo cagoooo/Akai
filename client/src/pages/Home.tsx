@@ -104,11 +104,13 @@ export function Home() {
       result = result?.filter(tool => favorites.includes(tool.id));
     }
 
-    // 搜尋篩選
+    // 搜尋篩選 (標題、描述、標籤)
     if (searchQuery) {
+      const query = searchQuery.toLowerCase();
       result = result?.filter(tool =>
-        tool.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        tool.description.toLowerCase().includes(searchQuery.toLowerCase())
+        tool.title.toLowerCase().includes(query) ||
+        tool.description.toLowerCase().includes(query) ||
+        tool.tags?.some(tag => tag.toLowerCase().includes(query))
       );
     }
 

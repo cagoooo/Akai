@@ -307,11 +307,30 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
 
                   {/* 工具描述 - 更清楚 */}
                   <CardDescription
-                    className="text-sm sm:text-base text-gray-600 mb-4 line-clamp-2 sm:line-clamp-3 flex-1"
+                    className="text-sm sm:text-base text-gray-600 mb-3 line-clamp-2 sm:line-clamp-3 flex-1"
                     itemProp="description"
                   >
                     {tool.description}
                   </CardDescription>
+
+                  {/* 標籤顯示 */}
+                  {tool.tags && tool.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mb-3">
+                      {tool.tags.slice(0, 4).map((tag, index) => (
+                        <span
+                          key={index}
+                          className="inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                      {tool.tags.length > 4 && (
+                        <span className="inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full bg-gray-50 text-gray-400">
+                          +{tool.tags.length - 4}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </>
               )}
 
