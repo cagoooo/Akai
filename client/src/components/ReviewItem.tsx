@@ -1,12 +1,13 @@
 /**
  * 單則評論卡片
- * 顯示評論內容、評分、點讚、編輯、刪除功能
+ * 顯示評論內容、評分、點讚、編輯、刪除、回覆功能
  */
 
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { likeReview, unlikeReview, deleteReview, updateReview, type Review } from '@/lib/reviewService';
 import { StarRating } from './StarRating';
+import { ReviewReply } from './ReviewReply';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -27,7 +28,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { ThumbsUp, User, MoreHorizontal, Pencil, Trash2, X, Check } from 'lucide-react';
+import { ThumbsUp, User, MoreHorizontal, Pencil, Trash2, X, Check, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from '@/hooks/use-toast';
@@ -72,6 +73,7 @@ export function ReviewItem({ review, toolId, onReviewUpdated }: ReviewItemProps)
     const [saving, setSaving] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [deleting, setDeleting] = useState(false);
+    const [showReplies, setShowReplies] = useState(false);
 
     const hasLiked = user && review.likedBy?.includes(user.uid);
     const isOwner = user && review.userId === user.uid;
@@ -248,9 +250,9 @@ export function ReviewItem({ review, toolId, onReviewUpdated }: ReviewItemProps)
                         </p>
                     )}
 
-                    {/* 點讚按鈕 */}
+                    {/* 點讚與回覆按鈕 */}
                     {!isEditing && (
-                        <div className="flex items-center">
+                        <div className="flex items-center gap-1">
                             <Button
                                 variant="ghost"
                                 size="sm"
@@ -269,8 +271,23 @@ export function ReviewItem({ review, toolId, onReviewUpdated }: ReviewItemProps)
                                 />
                                 <span>{review.likes || 0}</span>
                             </Button>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setShowReplies(!showReplies)}
+                                className={cn(
+                                    'gap-1.5 h-8 px-2',
+                                    showReplies && 'text-primary'
+                                )}
+                            >
+                                <MessageCircle className="w-4 h-4" />
+                                <span>回覆</span>
+                            </Button>
                         </div>
                     )}
+
+                    {/* 回覆區塊 */}
+                    <ReviewReply reviewId={review.id} isExpanded={showReplies} />
                 </CardContent>
             </Card>
 
