@@ -98,41 +98,38 @@ export function InstallPrompt() {
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: 100, opacity: 0 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                className="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:w-80 z-40 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 p-4"
+                className="fixed bottom-4 left-4 right-4 sm:left-1/2 sm:-translate-x-1/2 sm:right-auto sm:w-auto sm:max-w-md z-40 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 px-4 py-3"
                 role="dialog"
                 aria-labelledby="install-prompt-title"
             >
-                <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 p-2 bg-primary/10 rounded-lg">
-                        <Download className="w-6 h-6 text-primary" aria-hidden="true" />
+                <div className="flex items-center gap-3">
+                    <div className="flex-shrink-0 p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                        <Download className="w-5 h-5 text-blue-600 dark:text-blue-400" aria-hidden="true" />
                     </div>
 
                     <div className="flex-1 min-w-0">
-                        <h3 id="install-prompt-title" className="font-semibold text-gray-900 dark:text-white">
-                            安裝應用程式
-                        </h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                            將教育科技創新專區加入主畫面，享受更快速的存取體驗！
+                        <p id="install-prompt-title" className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                            將此應用加入主畫面，享受更好的體驗
                         </p>
+                    </div>
 
-                        <div className="flex gap-2 mt-3">
-                            <Button
-                                onClick={handleInstall}
-                                size="sm"
-                                className="flex-1"
-                            >
-                                <Download className="w-4 h-4 mr-1" aria-hidden="true" />
-                                安裝
-                            </Button>
-                            <Button
-                                onClick={handleDismiss}
-                                variant="ghost"
-                                size="sm"
-                                aria-label="關閉安裝提示"
-                            >
-                                <X className="w-4 h-4" aria-hidden="true" />
-                            </Button>
-                        </div>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                        <Button
+                            onClick={handleInstall}
+                            size="sm"
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-4"
+                        >
+                            安裝
+                        </Button>
+                        <Button
+                            onClick={handleDismiss}
+                            variant="ghost"
+                            size="sm"
+                            className="text-gray-400 hover:text-gray-600"
+                            aria-label="關閉安裝提示"
+                        >
+                            不用了
+                        </Button>
                     </div>
                 </div>
             </motion.div>

@@ -121,6 +121,134 @@ export function VisitorCounter() {
           // 使用 Firestore 增加計數
           const updatedStats = await incrementVisitorCount();
           setStats(updatedStats);
+
+          // 追蹤設備類型
+          try {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            const isTablet = /iPad|Android/i.test(navigator.userAgent) && !/Mobile/i.test(navigator.userAgent);
+
+            const deviceStats = JSON.parse(localStorage.getItem('visitorDeviceStats') || '{"desktop":0,"mobile":0,"tablet":0}');
+            if (isTablet) {
+              deviceStats.tablet = (deviceStats.tablet || 0) + 1;
+            } else if (isMobile) {
+              deviceStats.mobile = (deviceStats.mobile || 0) + 1;
+            } else {
+              deviceStats.desktop = (deviceStats.desktop || 0) + 1;
+            }
+            localStorage.setItem('visitorDeviceStats', JSON.stringify(deviceStats));
+
+            // 使用 ipinfo.io 進行 HTTPS IP 地理定位
+            try {
+              // ipinfo.io 支援 HTTPS，適合生產環境
+              const geoResponse = await fetch('https://ipinfo.io/json?token=');
+              if (geoResponse.ok) {
+                const geoData = await geoResponse.json();
+                const geoStats = JSON.parse(localStorage.getItem('visitorGeoStats') || '{}');
+
+                // ipinfo.io 返回 city, region, country
+                let location = geoData.city || geoData.region || geoData.country || '其他';
+
+                // 台灣地區名稱轉換（中英對照）
+                const taiwanCityMap: Record<string, string> = {
+                  'Taipei': '台北市',
+                  'Taipei City': '台北市',
+                  'New Taipei': '新北市',
+                  'New Taipei City': '新北市',
+                  'Taichung': '台中市',
+                  'Taichung City': '台中市',
+                  'Kaohsiung': '高雄市',
+                  'Kaohsiung City': '高雄市',
+                  'Taoyuan': '桃園市',
+                  'Taoyuan City': '桃園市',
+                  'Tainan': '台南市',
+                  'Tainan City': '台南市',
+                  'Hsinchu': '新竹市',
+                  'Hsinchu City': '新竹市',
+                  'Keelung': '基隆市',
+                  'Keelung City': '基隆市',
+                  'Chiayi': '嘉義市',
+                  'Chiayi City': '嘉義市',
+                  'Changhua': '彰化縣',
+                  'Changhua County': '彰化縣',
+                  'Pingtung': '屏東縣',
+                  'Pingtung County': '屏東縣',
+                  'Yilan': '宜蘭縣',
+                  'Yilan County': '宜蘭縣',
+                  'Hualien': '花蓮縣',
+                  'Hualien County': '花蓮縣',
+                  'Taitung': '台東縣',
+                  'Taitung County': '台東縣',
+                  'Nantou': '南投縣',
+                  'Nantou County': '南投縣',
+                  'Miaoli': '苗栗縣',
+                  'Miaoli County': '苗栗縣',
+                  'Yunlin': '雲林縣',
+                  'Yunlin County': '雲林縣',
+                  'Taiwan': '台灣',
+                  'TW': '台灣',
+                };
+
+                // 嘗試轉換為中文城市名稱
+                if (taiwanCityMap[location]) {
+                  location = taiwanCityMap[location];
+                }
+
+                geoStats[location] = (geoStats[location] || 0) + 1;
+                localStorage.setItem('visitorGeoStats', JSON.stringify(geoStats));
+                console.log('📍 IP 地理定位成功 (HTTPS):', location, geoData.country);
+              }
+            } catch (geoError) {
+              console.warn('IP 地理定位失敗，使用預設:', geoError);
+              // 如果 API 失敗，使用預設值
+              const geoStats = JSON.parse(localStorage.getItem('visitorGeoStats') || '{}');
+              geoStats['未知'] = (geoStats['未知'] || 0) + 1;
+              localStorage.setItem('visitorGeoStats', JSON.stringify(geoStats));
+            }
+
+            // 追蹤訪問來源 (Referrer)
+            try {
+              const referrer = document.referrer;
+              const referrerStats = JSON.parse(localStorage.getItem('visitorReferrerStats') ||
+                '{"direct":0,"search":0,"social":0,"email":0,"external":0}');
+
+              let source = 'direct'; // 預設為直接訪問
+
+              if (referrer) {
+                const referrerUrl = new URL(referrer);
+                const hostname = referrerUrl.hostname.toLowerCase();
+
+                // 搜索引擎
+                const searchEngines = ['google', 'bing', 'yahoo', 'baidu', 'duckduckgo', 'yandex'];
+                if (searchEngines.some(se => hostname.includes(se))) {
+                  source = 'search';
+                }
+                // 社交媒體
+                else if (['facebook', 'twitter', 'instagram', 'linkedin', 'youtube', 'tiktok', 'line.me', 'threads'].some(s => hostname.includes(s))) {
+                  source = 'social';
+                }
+                // 郵件服務
+                else if (['mail', 'outlook', 'gmail', 'yahoo'].some(m => hostname.includes(m)) && hostname.includes('mail')) {
+                  source = 'email';
+                }
+                // 自己的網站不算（防止內部頁面跳轉）
+                else if (hostname === window.location.hostname) {
+                  source = 'direct';
+                }
+                // 其他外部連結
+                else {
+                  source = 'external';
+                }
+              }
+
+              referrerStats[source] = (referrerStats[source] || 0) + 1;
+              localStorage.setItem('visitorReferrerStats', JSON.stringify(referrerStats));
+              console.log('🔗 訪問來源追蹤:', source, referrer || '(直接訪問)');
+            } catch (refError) {
+              console.warn('訪問來源追蹤失敗:', refError);
+            }
+          } catch (e) {
+            console.error('追蹤設備/地理/來源失敗:', e);
+          }
         } else {
           // 只讀取統計資料
           const currentStats = await getVisitorStats();

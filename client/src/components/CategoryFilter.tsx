@@ -53,14 +53,14 @@ export function CategoryFilter({
     };
 
     return (
-        <div className="flex flex-wrap gap-1.5 sm:gap-2">
+        <div className="flex flex-wrap gap-2 sm:gap-2.5">
             {/* 全部按鈕 */}
             <Button
                 variant="outline"
                 size="sm"
                 onClick={() => handleCategoryClick(null)}
                 className={cn(
-                    "gap-1 sm:gap-1.5 text-xs sm:text-sm font-semibold border-2 rounded-full transition-all duration-200 hover:scale-105",
+                    "gap-1.5 sm:gap-2 text-sm sm:text-base font-semibold border-2 rounded-full transition-all duration-200 hover:scale-105 px-3 py-1.5 sm:px-4 sm:py-2",
                     selectedCategory === null && !showFavorites
                         ? `${allColors.activeBg} text-white border-transparent shadow-md`
                         : `${allColors.bg} ${allColors.text} ${allColors.border} hover:${allColors.activeBg} hover:text-white`
@@ -71,7 +71,7 @@ export function CategoryFilter({
                 <Badge
                     variant="secondary"
                     className={cn(
-                        "ml-0.5 text-[10px] sm:text-xs px-1.5 font-bold",
+                        "ml-1 text-xs sm:text-sm px-2 font-bold",
                         selectedCategory === null && !showFavorites ? "bg-white/20 text-white" : "bg-blue-100 text-blue-700"
                     )}
                 >
@@ -86,7 +86,7 @@ export function CategoryFilter({
                     size="sm"
                     onClick={onToggleFavorites}
                     className={cn(
-                        "gap-1 sm:gap-1.5 text-xs sm:text-sm font-semibold border-2 rounded-full transition-all duration-200 hover:scale-105",
+                        "gap-1.5 sm:gap-2 text-sm sm:text-base font-semibold border-2 rounded-full transition-all duration-200 hover:scale-105 px-3 py-1.5 sm:px-4 sm:py-2",
                         showFavorites
                             ? "bg-red-500 text-white border-transparent shadow-md"
                             : "bg-red-50 text-red-600 border-red-200 hover:bg-red-500 hover:text-white"
@@ -98,7 +98,7 @@ export function CategoryFilter({
                         <Badge
                             variant="secondary"
                             className={cn(
-                                "ml-0.5 text-[10px] sm:text-xs px-1.5 font-bold",
+                                "ml-1 text-xs sm:text-sm px-2 font-bold",
                                 showFavorites ? "bg-white/20 text-white" : "bg-red-100 text-red-600"
                             )}
                         >
@@ -125,7 +125,7 @@ export function CategoryFilter({
                         size="sm"
                         onClick={() => handleCategoryClick(category)}
                         className={cn(
-                            "gap-1 sm:gap-1.5 text-xs sm:text-sm font-semibold border-2 rounded-full transition-all duration-200 hover:scale-105",
+                            "gap-1.5 sm:gap-2 text-sm sm:text-base font-semibold border-2 rounded-full transition-all duration-200 hover:scale-105 px-3 py-1.5 sm:px-4 sm:py-2",
                             isActive
                                 ? `${colors.activeBg} text-white border-transparent shadow-md`
                                 : `${colors.bg} ${colors.text} ${colors.border}`
@@ -136,7 +136,7 @@ export function CategoryFilter({
                         <Badge
                             variant="secondary"
                             className={cn(
-                                "ml-0.5 text-[10px] sm:text-xs px-1.5 font-bold",
+                                "ml-1 text-xs sm:text-sm px-2 font-bold",
                                 isActive ? "bg-white/20 text-white" : `${colors.bg} ${colors.text}`
                             )}
                         >

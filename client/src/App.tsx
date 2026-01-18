@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { Router, Switch, Route } from "wouter";
 import { HelmetProvider } from "react-helmet-async";
 import { TourProvider } from "@/components/TourProvider";
@@ -17,6 +17,7 @@ import { PWAUpdatePrompt } from "@/components/PWAUpdatePrompt";
 import { Home } from "@/pages/Home";
 import { ToolDetail } from "@/pages/ToolDetail";
 import { TriviaDialog } from "@/components/TriviaDialog";
+import { AnalyticsDashboard } from "@/components/AnalyticsDashboard";
 
 // 取得 base path - Vite 會在建置時注入 BASE_URL
 const basePath = import.meta.env.BASE_URL || '/';
@@ -45,6 +46,24 @@ function App() {
   // 移除結尾的斜線以符合 wouter 格式
   const base = basePath.endsWith('/') ? basePath.slice(0, -1) : basePath;
 
+  // 頁面載入或重新整理時自動滾動到頂部
+  useEffect(() => {
+    // 禁用瀏覽器的滾動記憶功能
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    // 強制滾動到頂部
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, []);
+
+  // 初始化點擊追蹤
+  useEffect(() => {
+    import('@/hooks/useClickTracking').then(({ initClickTracking }) => {
+      const cleanup = initClickTracking();
+      return () => cleanup();
+    });
+  }, []);
+
   return (
     <HelmetProvider>
       <ErrorBoundary>
@@ -66,6 +85,9 @@ function App() {
                     </Route>
                     <Route path="/tool/:id">
                       <ToolDetail />
+                    </Route>
+                    <Route path="/admin">
+                      <AnalyticsDashboard />
                     </Route>
                   </Switch>
                 </PageTransition>

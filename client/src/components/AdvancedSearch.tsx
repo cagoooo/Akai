@@ -183,20 +183,29 @@ export const AdvancedSearch = forwardRef<HTMLInputElement, AdvancedSearchProps>(
                     </div>
 
                     {/* 排序選項 */}
-                    <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-0.5">
-                        <ArrowUpDown className="w-4 h-4 text-gray-500 ml-2" />
+                    <div className="flex items-center gap-1.5 bg-gray-100 rounded-xl p-1">
+                        <ArrowUpDown className="w-5 h-5 text-gray-500 ml-2" />
                         {sortOptions.map((opt) => (
                             <button
                                 key={opt.option}
-                                onClick={() => onSortChange(opt.option)}
+                                onClick={() => {
+                                    onSortChange(opt.option);
+                                    // 自動跳轉到工具卡片區域
+                                    setTimeout(() => {
+                                        const toolsGrid = document.querySelector('[data-tour="tools-grid"]');
+                                        if (toolsGrid) {
+                                            toolsGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                        }
+                                    }, 100);
+                                }}
                                 className={cn(
-                                    "px-2.5 py-1 text-xs font-medium rounded-md transition-all",
+                                    "px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base font-medium rounded-lg transition-all",
                                     currentSort === opt.option
                                         ? "bg-white text-orange-600 shadow-sm"
                                         : "text-gray-600 hover:text-gray-900"
                                 )}
                             >
-                                <span className="mr-1">{opt.icon}</span>
+                                <span className="mr-1.5">{opt.icon}</span>
                                 {opt.label}
                             </button>
                         ))}
