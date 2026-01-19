@@ -435,6 +435,16 @@ export function Home() {
       {/* 回到頂部按鈕 */}
       <ScrollToTop />
 
+      {/* 後台入口 - 不顯眼的半透明按鈕 */}
+      <a
+        href="/admin"
+        className="fixed bottom-4 left-4 sm:left-6 w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-full bg-slate-500/10 hover:bg-slate-500/25 backdrop-blur-sm text-slate-400/50 hover:text-slate-500 transition-all duration-300 hover:scale-110 cursor-pointer z-40"
+        title="管理後台"
+        aria-label="進入管理後台"
+      >
+        <span className="text-lg sm:text-xl opacity-40 hover:opacity-70 transition-opacity">🛠️</span>
+      </a>
+
       {/* 快捷鍵說明對話框 */}
       <KeyboardShortcutsDialog
         open={showShortcutsDialog}

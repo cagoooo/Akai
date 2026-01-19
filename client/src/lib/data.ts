@@ -442,6 +442,16 @@ export const tools: EducationalTool[] = [
     category: "language",
     previewUrl: "/previews/preview_bilingual_translator.png",
     tags: ["翻譯", "雙語", "課程計畫", "Markdown", "PDF"]
+  },
+  {
+    id: 44,
+    title: "數學加減法練習器",
+    description: "互動式數學加減法練習工具，幫助學生熟練基礎運算能力",
+    url: "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E6%95%B8%E5%AD%B8%E5%8A%A0%E6%B8%9B%E6%B3%95%E7%B7%B4%E7%BF%92%E5%99%A8",
+    icon: "Calculator",
+    category: "teaching",
+    previewUrl: "/previews/tool_44.png",
+    tags: ["數學", "加法", "減法", "練習", "基礎運算"]
   }
 ];
 
