@@ -452,6 +452,16 @@ export const tools: EducationalTool[] = [
     category: "teaching",
     previewUrl: "/previews/tool_44.png",
     tags: ["數學", "加法", "減法", "練習", "基礎運算"]
+  },
+  {
+    id: 45,
+    title: "文字雲即時互動",
+    description: "即時協作的文字雲互動平台，讓參與者同步輸入關鍵詞，動態生成視覺化文字雲，適合課堂腦力激盪、意見收集與互動教學",
+    url: "https://cagoooo.github.io/cloud",
+    icon: "Cloud",
+    category: "interactive",
+    previewUrl: "/previews/tool_45.png",
+    tags: ["文字雲", "即時互動", "協作", "腦力激盪", "視覺化", "課堂互動"]
   }
 ];
 
