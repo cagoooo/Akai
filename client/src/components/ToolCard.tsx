@@ -82,6 +82,39 @@ const categoryColors = {
   },
 } as const;
 
+// 為標籤建立繽紛多彩的顏色調色盤
+const tagColorPalette = [
+  { bg: "bg-gradient-to-r from-pink-100 to-rose-100", text: "text-pink-700", border: "border-pink-200", hover: "hover:from-pink-200 hover:to-rose-200" },
+  { bg: "bg-gradient-to-r from-purple-100 to-violet-100", text: "text-purple-700", border: "border-purple-200", hover: "hover:from-purple-200 hover:to-violet-200" },
+  { bg: "bg-gradient-to-r from-indigo-100 to-blue-100", text: "text-indigo-700", border: "border-indigo-200", hover: "hover:from-indigo-200 hover:to-blue-200" },
+  { bg: "bg-gradient-to-r from-cyan-100 to-teal-100", text: "text-cyan-700", border: "border-cyan-200", hover: "hover:from-cyan-200 hover:to-teal-200" },
+  { bg: "bg-gradient-to-r from-emerald-100 to-green-100", text: "text-emerald-700", border: "border-emerald-200", hover: "hover:from-emerald-200 hover:to-green-200" },
+  { bg: "bg-gradient-to-r from-lime-100 to-yellow-100", text: "text-lime-700", border: "border-lime-200", hover: "hover:from-lime-200 hover:to-yellow-200" },
+  { bg: "bg-gradient-to-r from-amber-100 to-orange-100", text: "text-amber-700", border: "border-amber-200", hover: "hover:from-amber-200 hover:to-orange-200" },
+  { bg: "bg-gradient-to-r from-red-100 to-rose-100", text: "text-red-700", border: "border-red-200", hover: "hover:from-red-200 hover:to-rose-200" },
+  { bg: "bg-gradient-to-r from-fuchsia-100 to-pink-100", text: "text-fuchsia-700", border: "border-fuchsia-200", hover: "hover:from-fuchsia-200 hover:to-pink-200" },
+  { bg: "bg-gradient-to-r from-sky-100 to-blue-100", text: "text-sky-700", border: "border-sky-200", hover: "hover:from-sky-200 hover:to-blue-200" },
+  { bg: "bg-gradient-to-r from-teal-100 to-emerald-100", text: "text-teal-700", border: "border-teal-200", hover: "hover:from-teal-200 hover:to-emerald-200" },
+  { bg: "bg-gradient-to-r from-orange-100 to-amber-100", text: "text-orange-700", border: "border-orange-200", hover: "hover:from-orange-200 hover:to-amber-200" },
+] as const;
+
+// 根據標籤名稱取得一致的顏色索引
+const getTagColorIndex = (tag: string): number => {
+  let hash = 0;
+  for (let i = 0; i < tag.length; i++) {
+    const char = tag.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  return Math.abs(hash) % tagColorPalette.length;
+};
+
+// 取得標籤顏色樣式
+const getTagColors = (tag: string) => {
+  const index = getTagColorIndex(tag);
+  return tagColorPalette[index];
+};
+
 interface ToolCardProps {
   tool: EducationalTool;
   isLoading?: boolean;
@@ -313,19 +346,33 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                     {tool.description}
                   </CardDescription>
 
-                  {/* 標籤顯示 */}
+                  {/* 繽紛多彩標籤顯示 */}
                   {tool.tags && tool.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mb-3">
-                      {tool.tags.slice(0, 4).map((tag, index) => (
-                        <span
-                          key={index}
-                          className="inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
-                        >
-                          #{tag}
-                        </span>
-                      ))}
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3">
+                      {tool.tags.slice(0, 4).map((tag, index) => {
+                        const tagColors = getTagColors(tag);
+                        return (
+                          <span
+                            key={index}
+                            className={cn(
+                              "inline-flex items-center",
+                              "px-2 py-0.5 sm:px-2.5 sm:py-1",
+                              "text-[10px] sm:text-xs font-semibold",
+                              "rounded-full border shadow-sm",
+                              "transition-all duration-200 ease-in-out",
+                              "hover:scale-105 hover:shadow-md",
+                              tagColors.bg,
+                              tagColors.text,
+                              tagColors.border,
+                              tagColors.hover
+                            )}
+                          >
+                            <span className="opacity-70 mr-0.5">#</span>{tag}
+                          </span>
+                        );
+                      })}
                       {tool.tags.length > 4 && (
-                        <span className="inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full bg-gray-50 text-gray-400">
+                        <span className="inline-flex items-center px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-xs font-medium rounded-full bg-gradient-to-r from-gray-100 to-slate-100 text-gray-500 border border-gray-200">
                           +{tool.tags.length - 4}
                         </span>
                       )}
