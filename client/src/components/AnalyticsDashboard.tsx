@@ -231,7 +231,7 @@ export function AnalyticsDashboard() {
           <div className="flex items-center justify-between gap-2">
             {/* 返回首頁 */}
             <a
-              href="/"
+              href={import.meta.env.BASE_URL || "/"}
               className="flex items-center gap-1 px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors shrink-0"
             >
               <ArrowLeft className="w-4 h-4" />
