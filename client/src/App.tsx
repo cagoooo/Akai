@@ -17,7 +17,7 @@ import { PWAUpdatePrompt } from "@/components/PWAUpdatePrompt";
 import { Home } from "@/pages/Home";
 import { ToolDetail } from "@/pages/ToolDetail";
 import { TriviaDialog } from "@/components/TriviaDialog";
-import { AnalyticsDashboard } from "@/components/AnalyticsDashboard";
+import { AdminAuth } from "@/components/AdminAuth";
 
 // 取得 base path - Vite 會在建置時注入 BASE_URL
 const basePath = import.meta.env.BASE_URL || '/';
@@ -87,7 +87,7 @@ function App() {
                       <ToolDetail />
                     </Route>
                     <Route path="/admin">
-                      <AnalyticsDashboard />
+                      <AdminAuth />
                     </Route>
                   </Switch>
                 </PageTransition>
