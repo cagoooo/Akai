@@ -2,6 +2,16 @@
 
 此文件記錄專案的所有重要變更。
 
+## [2.17.1] - 2026-01-27
+
+### 🔧 連結更新
+
+- 🗳️ **學生即時投票系統連結更新**
+  - 將投票系統網址從 `https://vote.smes.tyc.edu.tw/` 更新為 `https://cagoooo.github.io/vote/`
+  - 同步更新 `data.ts`, `USER_GUIDE.md`, `README.md`, `sitemap.xml`
+
+---
+
 ## [2.16.0] - 2026-01-22
 
 ### 🎨 UI/UX 優化

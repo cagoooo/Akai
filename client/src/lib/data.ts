@@ -37,7 +37,7 @@ export const tools: EducationalTool[] = [
     id: 3,
     title: "學生即時投票系統",
     description: "即時收集學生意見的投票平台，提升課堂互動性與參與度",
-    url: "https://vote.smes.tyc.edu.tw/",
+    url: "https://cagoooo.github.io/vote/",
     icon: "Vote",
     category: "interactive",
     previewUrl: "/previews/tool_3.png",

@@ -31,7 +31,7 @@
 |---------|------|------|
 | 🗨️ 線上即時客服 | 提供即時的線上教育支援和諮詢服務 | chat.smes.tyc.edu.tw |
 | 💡 激發教案靈感 | 為教師提供創新的教學設計靈感 | lesson.smes.tyc.edu.tw |
-| 🗳️ 學生即時投票系統 | 即時收集學生意見的投票平台 | vote.smes.tyc.edu.tw |
+| 🗳️ 學生即時投票系統 | 即時收集學生意見的投票平台 | cagoooo.github.io/vote/ |
 | 📖 PIRLS閱讀理解生成 | 專業的閱讀理解評估工具 | pirls.smes.tyc.edu.tw |
 | 📱 QRCode批次產生器 | 便捷的QR碼批量生成工具 | qrcode.smes.tyc.edu.tw |
 | 🎮 蜂類配對消消樂 | 寓教於樂的教育遊戲 | bee.smes.tyc.edu.tw |
