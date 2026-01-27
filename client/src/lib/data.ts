@@ -462,6 +462,26 @@ export const tools: EducationalTool[] = [
     category: "interactive",
     previewUrl: "/previews/tool_45.png",
     tags: ["文字雲", "即時互動", "協作", "腦力激盪", "視覺化", "課堂互動"]
+  },
+  {
+    id: 46,
+    title: "禮堂預約系統",
+    description: "高效便捷的禮堂預約平台，即時查看場地空檔，簡化行政申請流程，讓校園空間管理更透明、更輕鬆",
+    url: "https://cagoooo.github.io/schedule/",
+    icon: "CalendarCheck",
+    category: "utilities",
+    previewUrl: "/previews/tool_46.png",
+    tags: ["預約", "禮堂", "校務", "管理", "行政", "場地"]
+  },
+  {
+    id: 47,
+    title: "學生肖像使用授權同意書線上簽名",
+    description: "提供便捷的線上簽署平台，讓家長能快速完成學生肖像使用授權，簡化紙本作業流程，確保資訊安全與效率",
+    url: "https://cagoooo.github.io/signature/",
+    icon: "FileSignature",
+    category: "utilities",
+    previewUrl: "/previews/tool_47.png",
+    tags: ["線上簽名", "肖像授權", "行政", "無紙化", "安全", "效率"]
   }
 ];
 
