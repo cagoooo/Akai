@@ -216,6 +216,94 @@
       }
     })();
   </script>
+  <!-- LINE 瀏覽器 Fallback 載入畫面 -->
+  <div id="line-fallback"
+    style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px;">
+    <div
+      style="background: rgba(255,255,255,0.95); border-radius: 20px; padding: 40px 30px; max-width: 350px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+      <div style="font-size: 48px; margin-bottom: 20px;">🚀</div>
+      <h2 style="color: #333; font-size: 20px; margin: 0 0 15px 0; font-weight: 700;">頁面載入中...</h2>
+      <p style="color: #666; font-size: 14px; line-height: 1.6; margin: 0 0 25px 0;">
+        若長時間無法載入，建議點擊下方按鈕用外部瀏覽器開啟
+      </p>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <a id="fallback-external-link" href="#" target="_blank" rel="noopener noreferrer"
+          style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 14px 28px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 15px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);">
+          🔗 用外部瀏覽器開啟
+        </a>
+        <button onclick="document.getElementById('line-fallback').style.display='none';"
+          style="background: transparent; border: 2px solid #ddd; color: #666; padding: 12px 24px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 500;">
+          繼續等待
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      // LINE 瀏覽器檢測
+      var ua = navigator.userAgent || navigator.vendor || window.opera;
+      var isLine = /Line/i.test(ua);
+      var isInAppBrowser = /FBAN|FBAV|Instagram|Twitter|MicroMessenger|Line/i.test(ua);
+
+      if (isLine || isInAppBrowser) {
+        // 設定超時顯示 fallback
+        var fallbackTimeout = setTimeout(function () {
+          var fallback = document.getElementById('line-fallback');
+          var root = document.getElementById('root');
+
+          // 如果 root 仍然是空的或只有載入動畫，顯示 fallback
+          if (root && (!root.hasChildNodes() || root.innerHTML.trim() === '')) {
+            fallback.style.display = 'flex';
+
+            // 設定外部連結
+            var externalLink = document.getElementById('fallback-external-link');
+            var currentUrl = window.location.href;
+
+            // 嘗試解析工具 ID 並獲取對應的外部連結
+            var toolMatch = currentUrl.match(/\/tool\/(\d+)/);
+            if (toolMatch) {
+              // 工具對應的外部連結映射 (常用工具)
+              var toolUrls = {
+                47: 'https://cagoooo.github.io/signature/',
+                48: 'https://cagoooo.github.io/form/',
+                46: 'https://cagoooo.github.io/schedule/',
+                45: 'https://cagoooo.github.io/cloud',
+                41: 'https://cagoooo.github.io/song/',
+                3: 'https://cagoooo.github.io/vote/',
+                2: 'https://cagoooo.github.io/staff/',
+                10: 'https://cagoooo.github.io/class/'
+              };
+              var toolId = parseInt(toolMatch[1]);
+              if (toolUrls[toolId]) {
+                externalLink.href = toolUrls[toolId];
+              } else {
+                externalLink.href = currentUrl;
+              }
+            } else {
+              externalLink.href = currentUrl;
+            }
+          }
+        }, 5000); // 5 秒後顯示 fallback
+
+        // 當 React 成功渲染後，取消 fallback
+        var checkInterval = setInterval(function () {
+          var root = document.getElementById('root');
+          if (root && root.children.length > 0 && root.querySelector('[class*="min-h-screen"]')) {
+            clearTimeout(fallbackTimeout);
+            clearInterval(checkInterval);
+            document.getElementById('line-fallback').style.display = 'none';
+          }
+        }, 500);
+
+        // 30 秒後停止檢查
+        setTimeout(function () {
+          clearInterval(checkInterval);
+        }, 30000);
+      }
+    })();
+  </script>
+
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
 </body>

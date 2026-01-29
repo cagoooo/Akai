@@ -1,12 +1,14 @@
 /**
- * 工具詳情頁面 v2.0
+ * 工具詳情頁面 v2.1
  * 顯示單一教育工具的完整資訊 - 升級版 UI/UX
+ * 已優化 LINE 內建瀏覽器相容性
  */
 
 import { useParams, Link, useLocation } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useMemo } from 'react';
 import {
     ArrowLeft,
     Heart,
@@ -30,6 +32,7 @@ import { getToolStats, trackToolUsage } from '@/lib/firestoreService';
 import { useFavorites } from '@/hooks/useFavorites';
 import { useRecentTools } from '@/hooks/useRecentTools';
 import { useAchievements } from '@/hooks/useAchievements';
+import { shouldReduceMotion, isInAppBrowser, getAnimationConfig } from '@/lib/browserDetection';
 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -85,25 +88,25 @@ const categoryGradients: Record<ToolCategory, { bg: string; text: string; border
     },
 };
 
-// 動畫配置
-const containerVariants = {
-    hidden: { opacity: 0 },
+// 動畫配置 - 根據瀏覽器環境動態調整
+const getContainerVariants = (reduceMotion: boolean) => ({
+    hidden: { opacity: reduceMotion ? 1 : 0 },
     visible: {
         opacity: 1,
-        transition: { staggerChildren: 0.1, delayChildren: 0.1 }
+        transition: reduceMotion ? { duration: 0 } : { staggerChildren: 0.1, delayChildren: 0.1 }
     }
-};
+});
 
-const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
+const getItemVariants = (reduceMotion: boolean) => ({
+    hidden: { opacity: reduceMotion ? 1 : 0, y: reduceMotion ? 0 : 30 },
     visible: {
         opacity: 1,
         y: 0,
-        transition: { type: 'spring', stiffness: 100, damping: 15 }
+        transition: reduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 100, damping: 15 }
     }
-};
+});
 
-const floatAnimation = {
+const getFloatAnimation = (reduceMotion: boolean) => reduceMotion ? {} : {
     y: [0, -8, 0],
     transition: {
         duration: 3,
@@ -112,11 +115,16 @@ const floatAnimation = {
     }
 };
 
-// 相關推薦元件 - 升級版
+// 相關推薦元件 - 升級版 (支援 LINE 瀏覽器)
 function RelatedTools({ currentTool }: { currentTool: EducationalTool }) {
     const relatedTools = tools
         .filter(t => t.category === currentTool.category && t.id !== currentTool.id)
         .slice(0, 4);
+
+    // 動態動畫配置
+    const reduceMotion = shouldReduceMotion();
+    const itemVariants = getItemVariants(reduceMotion);
+    const floatAnimation = getFloatAnimation(reduceMotion);
 
     if (relatedTools.length === 0) return null;
 
@@ -155,11 +163,11 @@ function RelatedTools({ currentTool }: { currentTool: EducationalTool }) {
                             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                         >
                             <motion.div
-                                initial={{ opacity: 0, y: 20 }}
+                                initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: index * 0.1 }}
-                                whileHover={{ scale: 1.03, y: -4 }}
-                                whileTap={{ scale: 0.98 }}
+                                transition={reduceMotion ? { duration: 0 } : { delay: index * 0.1 }}
+                                whileHover={reduceMotion ? {} : { scale: 1.03, y: -4 }}
+                                whileTap={reduceMotion ? {} : { scale: 0.98 }}
                                 className={cn(
                                     "group relative p-5 rounded-2xl bg-white",
                                     "border-2 hover:border-transparent",
@@ -178,8 +186,8 @@ function RelatedTools({ currentTool }: { currentTool: EducationalTool }) {
                                 <div className="relative z-10">
                                     <div className="flex items-center gap-3 mb-3">
                                         <motion.div
-                                            whileHover={{ rotate: 360 }}
-                                            transition={{ duration: 0.5 }}
+                                            whileHover={reduceMotion ? {} : { rotate: 360 }}
+                                            transition={reduceMotion ? { duration: 0 } : { duration: 0.5 }}
                                             className={cn(
                                                 "p-2.5 rounded-xl bg-gradient-to-br",
                                                 toolGradient.bg
@@ -206,14 +214,17 @@ function RelatedTools({ currentTool }: { currentTool: EducationalTool }) {
     );
 }
 
-// 404 頁面 - 升級版
+// 404 頁面 - 升級版 (支援 LINE 瀏覽器)
 function NotFound() {
     const [, navigate] = useLocation();
+    const reduceMotion = shouldReduceMotion();
+    const floatAnimation = getFloatAnimation(reduceMotion);
 
     return (
         <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={reduceMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
+            transition={reduceMotion ? { duration: 0 } : undefined}
             className="min-h-[70vh] flex flex-col items-center justify-center px-4 text-center"
         >
             <motion.div
@@ -228,7 +239,10 @@ function NotFound() {
             <p className="text-lg text-muted-foreground mb-8 max-w-md">
                 您要查看的工具不存在或已被移除，請返回首頁探索其他精彩工具！
             </p>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <motion.div
+                whileHover={reduceMotion ? {} : { scale: 1.05 }}
+                whileTap={reduceMotion ? {} : { scale: 0.95 }}
+            >
                 <Button
                     onClick={() => navigate('/')}
                     size="lg"
@@ -280,6 +294,16 @@ export function ToolDetail() {
     const toolId = parseInt(params.id || '0');
     const [, navigate] = useLocation();
     const { toast } = useToast();
+
+    // 檢測是否應該減少動畫 (LINE 內建瀏覽器或使用者偏好)
+    const reduceMotion = useMemo(() => shouldReduceMotion(), []);
+    const inAppBrowser = useMemo(() => isInAppBrowser(), []);
+
+    // 動態動畫配置
+    const containerVariants = useMemo(() => getContainerVariants(reduceMotion), [reduceMotion]);
+    const itemVariants = useMemo(() => getItemVariants(reduceMotion), [reduceMotion]);
+    const floatAnimation = useMemo(() => getFloatAnimation(reduceMotion), [reduceMotion]);
+    const animConfig = useMemo(() => getAnimationConfig(), []);
 
     // 查找工具
     const tool = tools.find(t => t.id === toolId);
