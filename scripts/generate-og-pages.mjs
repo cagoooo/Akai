@@ -16,44 +16,44 @@ const SITE_URL = 'https://cagoooo.github.io/Akai';
 
 // 從 data.ts 提取工具資料（使用正則表達式解析）
 function extractToolsFromDataFile() {
-    const dataPath = path.resolve(__dirname, '../client/src/lib/data.ts');
-    const content = fs.readFileSync(dataPath, 'utf-8');
+  const dataPath = path.resolve(__dirname, '../client/src/lib/data.ts');
+  const content = fs.readFileSync(dataPath, 'utf-8');
 
-    // 匹配工具物件的正則表達式
-    const toolRegex = /\{\s*id:\s*(\d+),\s*title:\s*"([^"]+)",\s*description:\s*"([^"]+)",(?:[\s\S]*?)url:\s*"([^"]+)"(?:[\s\S]*?)(?:previewUrl:\s*"([^"]*)")?[\s\S]*?\}/g;
+  // 匹配工具物件的正則表達式
+  const toolRegex = /\{\s*id:\s*(\d+),\s*title:\s*"([^"]+)",\s*description:\s*"([^"]+)",(?:[\s\S]*?)url:\s*"([^"]+)"(?:[\s\S]*?)(?:previewUrl:\s*"([^"]*)")?[\s\S]*?\}/g;
 
-    const tools = [];
-    let match;
+  const tools = [];
+  let match;
 
-    while ((match = toolRegex.exec(content)) !== null) {
-        const id = parseInt(match[1]);
-        const title = match[2];
-        const description = match[3];
-        const url = match[4];
+  while ((match = toolRegex.exec(content)) !== null) {
+    const id = parseInt(match[1]);
+    const title = match[2];
+    const description = match[3];
+    const url = match[4];
 
-        // 尋找對應的 previewUrl
-        const toolBlock = match[0];
-        const previewMatch = toolBlock.match(/previewUrl:\s*"([^"]*)"/);
-        const previewUrl = previewMatch ? previewMatch[1] : null;
+    // 尋找對應的 previewUrl
+    const toolBlock = match[0];
+    const previewMatch = toolBlock.match(/previewUrl:\s*"([^"]*)"/);
+    const previewUrl = previewMatch ? previewMatch[1] : null;
 
-        tools.push({ id, title, description, url, previewUrl });
-    }
+    tools.push({ id, title, description, url, previewUrl });
+  }
 
-    return tools;
+  return tools;
 }
 
 /**
  * 生成工具頁面 HTML
  */
 function generateToolPageHtml(tool) {
-    const pageUrl = `${SITE_URL}/tool/${tool.id}`;
-    const imageUrl = tool.previewUrl
-        ? `${SITE_URL}${tool.previewUrl.startsWith('/') ? '' : '/'}${tool.previewUrl}`
-        : `${SITE_URL}/apple-touch-icon.png`;
+  const pageUrl = `${SITE_URL}/tool/${tool.id}`;
+  const imageUrl = tool.previewUrl
+    ? `${SITE_URL}${tool.previewUrl.startsWith('/') ? '' : '/'}${tool.previewUrl}`
+    : `${SITE_URL}/apple-touch-icon.png`;
 
-    const fullTitle = `${tool.title} - 阿凱老師教育工具`;
+  const fullTitle = `${tool.title} - 阿凱老師教育工具`;
 
-    return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
@@ -98,10 +98,16 @@ function generateToolPageHtml(tool) {
   <script>
     // 重定向到 SPA 主頁面，保留路徑
     (function() {
+      var ua = navigator.userAgent || '';
       var path = window.location.pathname;
+      
+      // 檢測是否為社群平台爬蟲（用於抓取 OG 資訊）
+      // 注意：LINE 內建瀏覽器用戶 (Line/xxx) 不是爬蟲，應該正常載入應用
+      // LineBot 或 Line-Networking 才是爬蟲
+      var isSocialBot = /facebookexternalhit|Facebot|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Slackbot|Discordbot|Pinterest|Googlebot|bingbot|YandexBot|LineBot|Line-Networking/i.test(ua);
+      
       // 如果不是爬蟲，重定向到主應用
-      var isBot = /bot|crawl|spider|slurp|facebook|twitter|linkedin|whatsapp|telegram|line/i.test(navigator.userAgent);
-      if (!isBot) {
+      if (!isSocialBot) {
         // 使用 history API 保持路徑
         window.location.replace('/Akai/' + '?redirect=' + encodeURIComponent(path));
       }
@@ -164,44 +170,44 @@ function generateToolPageHtml(tool) {
  * 主函式
  */
 async function main() {
-    console.log('🚀 開始生成 OG 預覽頁面...');
+  console.log('🚀 開始生成 OG 預覽頁面...');
 
-    // 取得工具資料
-    const tools = extractToolsFromDataFile();
-    console.log(`📦 找到 ${tools.length} 個工具`);
+  // 取得工具資料
+  const tools = extractToolsFromDataFile();
+  console.log(`📦 找到 ${tools.length} 個工具`);
 
-    // 輸出目錄
-    const outputDir = path.resolve(__dirname, '../dist/public/tool');
+  // 輸出目錄
+  const outputDir = path.resolve(__dirname, '../dist/public/tool');
 
-    // 生成每個工具的頁面
-    let successCount = 0;
-    let errorCount = 0;
+  // 生成每個工具的頁面
+  let successCount = 0;
+  let errorCount = 0;
 
-    for (const tool of tools) {
-        try {
-            const toolDir = path.join(outputDir, String(tool.id));
+  for (const tool of tools) {
+    try {
+      const toolDir = path.join(outputDir, String(tool.id));
 
-            // 建立目錄
-            if (!fs.existsSync(toolDir)) {
-                fs.mkdirSync(toolDir, { recursive: true });
-            }
+      // 建立目錄
+      if (!fs.existsSync(toolDir)) {
+        fs.mkdirSync(toolDir, { recursive: true });
+      }
 
-            // 生成 HTML
-            const html = generateToolPageHtml(tool);
-            const htmlPath = path.join(toolDir, 'index.html');
+      // 生成 HTML
+      const html = generateToolPageHtml(tool);
+      const htmlPath = path.join(toolDir, 'index.html');
 
-            fs.writeFileSync(htmlPath, html, 'utf-8');
-            console.log(`  ✅ tool/${tool.id}/index.html - ${tool.title}`);
-            successCount++;
-        } catch (error) {
-            console.error(`  ❌ tool/${tool.id} 失敗:`, error.message);
-            errorCount++;
-        }
+      fs.writeFileSync(htmlPath, html, 'utf-8');
+      console.log(`  ✅ tool / ${tool.id}/index.html - ${tool.title}`);
+      successCount++;
+    } catch (error) {
+      console.error(`  ❌ tool/${tool.id} 失敗:`, error.message);
+      errorCount++;
     }
+  }
 
-    console.log('');
-    console.log(`📊 生成結果: ${successCount} 成功, ${errorCount} 失敗`);
-    console.log('✨ OG 預覽頁面生成完成！');
+  console.log('');
+  console.log(`📊 生成結果: ${successCount} 成功, ${errorCount} 失敗`);
+  console.log('✨ OG 預覽頁面生成完成！');
 }
 
 main().catch(console.error);
