@@ -5,21 +5,33 @@
 
 /**
  * 檢測是否為 LINE 內建瀏覽器
+ * LINE 內建瀏覽器的 User-Agent 格式：Line/x.x.x
  */
 export function isLineBrowser(): boolean {
     if (typeof navigator === 'undefined') return false;
     const ua = navigator.userAgent || '';
-    return /Line/i.test(ua);
+    // 使用更精確的正則表達式：Line 後面接 / 和版本號
+    // 例如：Line/14.5.0
+    return /\bLine\/\d/i.test(ua);
 }
 
 /**
  * 檢測是否為任何社群 App 的內建瀏覽器
  * (LINE, Facebook, Instagram, Twitter, WeChat 等)
+ * 使用更精確的正則表達式避免誤判
  */
 export function isInAppBrowser(): boolean {
     if (typeof navigator === 'undefined') return false;
     const ua = navigator.userAgent || '';
-    return /FBAN|FBAV|Instagram|Twitter|MicroMessenger|Line|KAKAOTALK|Snapchat/i.test(ua);
+    // 更精確的檢測規則：
+    // - FBAN/FBAV: Facebook App
+    // - Instagram: Instagram App
+    // - Twitter/TwitterAndroid: Twitter App
+    // - MicroMessenger: WeChat
+    // - Line/: LINE App (後面必須接版本號)
+    // - KAKAOTALK: KakaoTalk
+    // - Snapchat: Snapchat
+    return /FBAN|FBAV|Instagram|Twitter(?:Android)?\/|MicroMessenger|\bLine\/\d|KAKAOTALK|Snapchat/i.test(ua);
 }
 
 /**
