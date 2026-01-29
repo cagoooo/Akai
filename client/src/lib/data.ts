@@ -482,6 +482,16 @@ export const tools: EducationalTool[] = [
     category: "utilities",
     previewUrl: "/previews/tool_47.png",
     tags: ["線上簽名", "肖像授權", "行政", "無紙化", "安全", "效率"]
+  },
+  {
+    id: 48,
+    title: "動態表單自動回報系統",
+    description: "智慧化的表單管理平台，支援動態欄位設計與自動化回報機制，大幅提升行政作業效率，讓資料收集與追蹤更加便捷且精準",
+    url: "https://cagoooo.github.io/form/",
+    icon: "FileInput",
+    category: "utilities",
+    previewUrl: "/previews/tool_48.png",
+    tags: ["表單", "自動回報", "行政", "資料收集", "效率", "智慧化"]
   }
 ];
 
