@@ -1,12 +1,12 @@
 /**
- * 工具詳情頁面
- * 顯示單一教育工具的完整資訊
+ * 工具詳情頁面 v2.0
+ * 顯示單一教育工具的完整資訊 - 升級版 UI/UX
  */
 
 import { useParams, Link, useLocation } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet-async';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
     ArrowLeft,
     Heart,
@@ -18,6 +18,9 @@ import {
     ChevronRight,
     Star,
     Users,
+    TrendingUp,
+    Zap,
+    Award,
 } from 'lucide-react';
 
 import { tools, type EducationalTool, type ToolCategory } from '@/lib/data';
@@ -36,7 +39,80 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { ReviewList } from '@/components/ReviewList';
 
-// 相關推薦元件 - 優化版
+// 分類專屬配色 - 大膽漸層
+const categoryGradients: Record<ToolCategory, { bg: string; text: string; border: string; glow: string }> = {
+    communication: {
+        bg: 'from-blue-500 via-cyan-500 to-teal-400',
+        text: 'from-blue-600 to-cyan-500',
+        border: 'border-blue-200',
+        glow: 'shadow-blue-500/30',
+    },
+    teaching: {
+        bg: 'from-emerald-500 via-green-500 to-lime-400',
+        text: 'from-emerald-600 to-green-500',
+        border: 'border-emerald-200',
+        glow: 'shadow-emerald-500/30',
+    },
+    language: {
+        bg: 'from-violet-500 via-purple-500 to-fuchsia-400',
+        text: 'from-violet-600 to-purple-500',
+        border: 'border-violet-200',
+        glow: 'shadow-violet-500/30',
+    },
+    reading: {
+        bg: 'from-amber-500 via-yellow-500 to-orange-400',
+        text: 'from-amber-600 to-yellow-500',
+        border: 'border-amber-200',
+        glow: 'shadow-amber-500/30',
+    },
+    utilities: {
+        bg: 'from-slate-500 via-gray-500 to-zinc-400',
+        text: 'from-slate-600 to-gray-500',
+        border: 'border-slate-200',
+        glow: 'shadow-slate-500/30',
+    },
+    games: {
+        bg: 'from-pink-500 via-rose-500 to-red-400',
+        text: 'from-pink-600 to-rose-500',
+        border: 'border-pink-200',
+        glow: 'shadow-pink-500/30',
+    },
+    interactive: {
+        bg: 'from-cyan-500 via-sky-500 to-blue-400',
+        text: 'from-cyan-600 to-sky-500',
+        border: 'border-cyan-200',
+        glow: 'shadow-cyan-500/30',
+    },
+};
+
+// 動畫配置
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: { staggerChildren: 0.1, delayChildren: 0.1 }
+    }
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { type: 'spring', stiffness: 100, damping: 15 }
+    }
+};
+
+const floatAnimation = {
+    y: [0, -8, 0],
+    transition: {
+        duration: 3,
+        repeat: Infinity,
+        ease: 'easeInOut'
+    }
+};
+
+// 相關推薦元件 - 升級版
 function RelatedTools({ currentTool }: { currentTool: EducationalTool }) {
     const relatedTools = tools
         .filter(t => t.category === currentTool.category && t.id !== currentTool.id)
@@ -44,16 +120,34 @@ function RelatedTools({ currentTool }: { currentTool: EducationalTool }) {
 
     if (relatedTools.length === 0) return null;
 
+    const gradient = categoryGradients[currentTool.category as ToolCategory];
+
     return (
-        <section className="space-y-4">
-            <h2 className="text-lg sm:text-xl font-bold flex items-center gap-2">
-                <span className="p-1.5 rounded-lg bg-yellow-100">💡</span>
-                相關推薦
-            </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {relatedTools.map((tool) => {
+        <motion.section
+            variants={itemVariants}
+            className="space-y-6"
+        >
+            <div className="flex items-center gap-3">
+                <motion.div
+                    animate={floatAnimation}
+                    className={cn(
+                        "p-2.5 rounded-xl bg-gradient-to-br",
+                        gradient.bg
+                    )}
+                >
+                    <Sparkles className="w-5 h-5 text-white" />
+                </motion.div>
+                <h2 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+                    探索更多相關工具
+                </h2>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {relatedTools.map((tool, index) => {
                     const IconComponent = iconRegistry[tool.icon as IconName];
                     const catInfo = categoryInfo[tool.category];
+                    const toolGradient = categoryGradients[tool.category as ToolCategory];
+
                     return (
                         <Link
                             key={tool.id}
@@ -61,66 +155,123 @@ function RelatedTools({ currentTool }: { currentTool: EducationalTool }) {
                             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                         >
                             <motion.div
-                                whileHover={{ scale: 1.03, y: -2 }}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.1 }}
+                                whileHover={{ scale: 1.03, y: -4 }}
                                 whileTap={{ scale: 0.98 }}
-                                className="p-3 sm:p-4 rounded-xl border-2 border-gray-100 bg-white hover:border-primary/30 hover:shadow-lg transition-all cursor-pointer h-full"
+                                className={cn(
+                                    "group relative p-5 rounded-2xl bg-white",
+                                    "border-2 hover:border-transparent",
+                                    "shadow-sm hover:shadow-xl transition-all duration-300",
+                                    "cursor-pointer h-full overflow-hidden",
+                                    toolGradient.border
+                                )}
                             >
-                                <div className="flex items-center gap-2 mb-2">
-                                    <div className={cn("p-1.5 rounded-lg", getCategoryColorClass(tool.category))}>
-                                        {IconComponent && <IconComponent className="w-4 h-4" />}
+                                {/* 懸浮背景 */}
+                                <div className={cn(
+                                    "absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300",
+                                    "bg-gradient-to-br",
+                                    toolGradient.bg
+                                )} />
+
+                                <div className="relative z-10">
+                                    <div className="flex items-center gap-3 mb-3">
+                                        <motion.div
+                                            whileHover={{ rotate: 360 }}
+                                            transition={{ duration: 0.5 }}
+                                            className={cn(
+                                                "p-2.5 rounded-xl bg-gradient-to-br",
+                                                toolGradient.bg
+                                            )}
+                                        >
+                                            {IconComponent && <IconComponent className="w-5 h-5 text-white" />}
+                                        </motion.div>
+                                        <span className="text-xl">{catInfo.emoji}</span>
                                     </div>
+
+                                    <h3 className="font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-gray-900">
+                                        {tool.title}
+                                    </h3>
+                                    <p className="text-sm text-muted-foreground line-clamp-2">
+                                        {tool.description}
+                                    </p>
                                 </div>
-                                <h3 className="font-semibold text-sm mb-1 line-clamp-2">{tool.title}</h3>
-                                <p className="text-xs text-muted-foreground line-clamp-2">
-                                    {tool.description}
-                                </p>
                             </motion.div>
                         </Link>
                     );
                 })}
             </div>
-        </section>
+        </motion.section>
     );
 }
 
-// 404 頁面 - 優化版
+// 404 頁面 - 升級版
 function NotFound() {
     const [, navigate] = useLocation();
 
     return (
-        <div className="min-h-[60vh] flex flex-col items-center justify-center px-4 text-center">
-            <div className="text-6xl mb-4">🔍</div>
-            <h1 className="text-3xl sm:text-4xl font-black mb-3 text-gray-800">找不到工具</h1>
-            <p className="text-muted-foreground mb-6 max-w-md">
+        <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="min-h-[70vh] flex flex-col items-center justify-center px-4 text-center"
+        >
+            <motion.div
+                animate={floatAnimation}
+                className="text-8xl mb-6"
+            >
+                🔍
+            </motion.div>
+            <h1 className="text-4xl sm:text-5xl font-black mb-4 bg-gradient-to-r from-gray-800 to-gray-500 bg-clip-text text-transparent">
+                找不到工具
+            </h1>
+            <p className="text-lg text-muted-foreground mb-8 max-w-md">
                 您要查看的工具不存在或已被移除，請返回首頁探索其他精彩工具！
             </p>
-            <Button onClick={() => navigate('/')} size="lg" className="gap-2">
-                <ArrowLeft className="w-4 h-4" />
-                返回首頁
-            </Button>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                    onClick={() => navigate('/')}
+                    size="lg"
+                    className="gap-2 px-8 py-6 text-lg rounded-2xl bg-gradient-to-r from-primary to-indigo-600 shadow-xl shadow-primary/30"
+                >
+                    <ArrowLeft className="w-5 h-5" />
+                    返回首頁
+                </Button>
+            </motion.div>
+        </motion.div>
+    );
+}
+
+// 載入骨架 - 升級版
+function ToolDetailSkeleton() {
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
+            <div className="container mx-auto px-4 py-8 space-y-8">
+                <div className="flex justify-between items-center">
+                    <Skeleton className="h-12 w-32 rounded-xl" />
+                    <Skeleton className="h-12 w-28 rounded-xl" />
+                </div>
+                <Skeleton className="h-[400px] w-full rounded-3xl" />
+                <div className="grid grid-cols-2 gap-4">
+                    <Skeleton className="h-32 rounded-2xl" />
+                    <Skeleton className="h-32 rounded-2xl" />
+                </div>
+            </div>
         </div>
     );
 }
 
-// 載入骨架 - 優化版
-function ToolDetailSkeleton() {
+// 統計數字動畫元件
+function AnimatedNumber({ value }: { value: number }) {
     return (
-        <div className="container mx-auto px-4 py-6 space-y-6">
-            <div className="flex justify-between">
-                <Skeleton className="h-10 w-28" />
-                <Skeleton className="h-10 w-24" />
-            </div>
-            <Skeleton className="h-48 sm:h-64 w-full rounded-2xl" />
-            <div className="space-y-4">
-                <Skeleton className="h-10 w-48" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-3/4" />
-                <div className="flex gap-3">
-                    <Skeleton className="h-12 w-32" />
-                    <Skeleton className="h-12 w-28" />
-                </div>
-            </div>
-        </div>
+        <motion.span
+            key={value}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="tabular-nums"
+        >
+            {value.toLocaleString()}
+        </motion.span>
     );
 }
 
@@ -153,13 +304,13 @@ export function ToolDetail() {
     const IconComponent = iconRegistry[tool.icon as IconName];
     const isFav = isFavorite(toolId);
     const catInfo = categoryInfo[tool.category];
+    const gradient = categoryGradients[tool.category as ToolCategory];
 
     // 處理「立即使用」按鈕
     const handleUseTool = async () => {
         try {
             await trackToolUsage(tool.id);
             addToRecent(tool.id);
-            // 追蹤成就進度（工具分類使用次數）
             trackAchievement(tool.id, tool.category);
             window.open(tool.url, '_blank', 'noopener,noreferrer');
             toast({
@@ -185,7 +336,7 @@ export function ToolDetail() {
         }
     };
 
-    // 分享 - 只在行動裝置使用原生分享
+    // 分享
     const handleShare = async () => {
         const shareData = {
             title: tool.title,
@@ -193,10 +344,8 @@ export function ToolDetail() {
             url: tool.url,
         };
 
-        // 檢測是否為行動裝置 (觸控 + 小螢幕)
         const isMobile = 'ontouchstart' in window && window.innerWidth < 768;
 
-        // 只在行動裝置且支援分享 API 時使用原生分享
         if (isMobile && navigator.share && navigator.canShare && navigator.canShare(shareData)) {
             try {
                 await navigator.share(shareData);
@@ -205,13 +354,11 @@ export function ToolDetail() {
                     description: '已分享工具連結',
                 });
             } catch (error: any) {
-                // 使用者取消分享不需處理
                 if (error.name !== 'AbortError') {
                     handleCopyLink();
                 }
             }
         } else {
-            // 桌面端直接複製連結，不彈出任何對話框
             handleCopyLink();
         }
     };
@@ -227,74 +374,130 @@ export function ToolDetail() {
                 {tool.previewUrl && <meta property="og:image" content={tool.previewUrl} />}
             </Helmet>
 
-            <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-                {/* 頂部導航列 - 固定在頂部 */}
-                <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b">
-                    <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-                        <Button
-                            variant="ghost"
-                            onClick={() => navigate('/')}
-                            className="gap-2 text-sm sm:text-base"
-                        >
-                            <ArrowLeft className="w-4 h-4" />
-                            <span className="hidden sm:inline">返回首頁</span>
-                            <span className="sm:hidden">返回</span>
-                        </Button>
+            <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
+                {/* 頂部裝飾漸層 */}
+                <div className={cn(
+                    "absolute top-0 left-0 right-0 h-80 opacity-30 -z-10",
+                    "bg-gradient-to-br",
+                    gradient.bg
+                )} />
+                <div className="absolute top-0 left-0 right-0 h-80 bg-gradient-to-b from-transparent to-white -z-10" />
 
-                        <Button
-                            variant={isFav ? 'default' : 'outline'}
-                            onClick={() => toggleFavorite(toolId)}
-                            className={cn(
-                                "gap-2",
-                                isFav && "bg-red-500 hover:bg-red-600"
-                            )}
-                        >
-                            <Heart className={cn('w-4 h-4', isFav && 'fill-current')} />
-                            <span className="hidden sm:inline">{isFav ? '已收藏' : '收藏'}</span>
-                        </Button>
+                {/* 頂部導航列 */}
+                <motion.header
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="sticky top-0 z-50 backdrop-blur-xl bg-white/70 border-b border-gray-200/50"
+                >
+                    <div className="container mx-auto px-4 py-3 sm:py-4 flex items-center justify-between">
+                        <motion.div whileHover={{ x: -4 }} whileTap={{ scale: 0.95 }}>
+                            <Button
+                                variant="ghost"
+                                onClick={() => navigate('/')}
+                                className="gap-2 text-sm sm:text-base font-medium hover:bg-gray-100 rounded-xl"
+                            >
+                                <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+                                <span className="hidden sm:inline">返回首頁</span>
+                                <span className="sm:hidden">返回</span>
+                            </Button>
+                        </motion.div>
+
+                        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                            <Button
+                                variant={isFav ? 'default' : 'outline'}
+                                onClick={() => toggleFavorite(toolId)}
+                                className={cn(
+                                    "gap-2 rounded-xl px-4 sm:px-6 transition-all duration-300",
+                                    isFav
+                                        ? "bg-gradient-to-r from-red-500 to-pink-500 border-0 shadow-lg shadow-red-500/30"
+                                        : "hover:border-red-200 hover:text-red-500"
+                                )}
+                            >
+                                <motion.div
+                                    animate={isFav ? { scale: [1, 1.3, 1] } : {}}
+                                    transition={{ duration: 0.3 }}
+                                >
+                                    <Heart className={cn('w-4 h-4 sm:w-5 sm:h-5', isFav && 'fill-current')} />
+                                </motion.div>
+                                <span className="hidden sm:inline font-medium">{isFav ? '已收藏' : '收藏'}</span>
+                            </Button>
+                        </motion.div>
                     </div>
-                </header>
+                </motion.header>
 
-                <main className="container mx-auto px-4 py-4 sm:py-6 space-y-6">
-                    {/* Hero 區塊 - 預覽圖與工具資訊 */}
-                    <motion.section
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="relative"
-                    >
-                        {/* 背景漸層 */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-purple-50/50 to-blue-50/30 rounded-2xl sm:rounded-3xl -z-10" />
+                <motion.main
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="container mx-auto px-4 py-6 sm:py-10 space-y-8 sm:space-y-12"
+                >
+                    {/* Hero 區塊 */}
+                    <motion.section variants={itemVariants} className="relative">
+                        {/* 背景卡片 */}
+                        <div className={cn(
+                            "absolute inset-0 rounded-3xl sm:rounded-[2rem] -z-10",
+                            "bg-white shadow-2xl",
+                            gradient.border,
+                            gradient.glow
+                        )} />
 
-                        <div className="p-4 sm:p-6 md:p-8">
-                            {/* 分類標籤 */}
-                            <div className="flex items-center gap-2 mb-4">
-                                <Badge className={cn(getCategoryColorClass(tool.category), "text-sm px-3 py-1")}>
-                                    {catInfo.emoji} {catInfo.label}
-                                </Badge>
+                        <div className="p-5 sm:p-8 lg:p-10">
+                            {/* 分類區 */}
+                            <div className="flex flex-wrap items-center gap-3 mb-6">
+                                <motion.div
+                                    whileHover={{ scale: 1.05 }}
+                                    className={cn(
+                                        "inline-flex items-center gap-2 px-4 py-2 rounded-full",
+                                        "bg-gradient-to-r text-white font-semibold shadow-lg",
+                                        gradient.bg,
+                                        gradient.glow
+                                    )}
+                                >
+                                    <span className="text-lg">{catInfo.emoji}</span>
+                                    <span>{catInfo.label}</span>
+                                </motion.div>
+
                                 {stats && (
-                                    <span className="text-sm text-muted-foreground flex items-center gap-1">
-                                        <Sparkles className="w-4 h-4 text-yellow-500" />
-                                        {stats.totalClicks.toLocaleString()} 次使用
-                                    </span>
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.8 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        className="flex items-center gap-2 px-4 py-2 rounded-full bg-amber-50 border border-amber-200"
+                                    >
+                                        <TrendingUp className="w-4 h-4 text-amber-500" />
+                                        <span className="text-sm font-semibold text-amber-700">
+                                            {stats.totalClicks.toLocaleString()} 次使用
+                                        </span>
+                                    </motion.div>
                                 )}
                             </div>
 
-                            {/* 工具名稱 */}
-                            <div className="flex items-start gap-3 sm:gap-4 mb-4">
+                            {/* 工具標題區 */}
+                            <div className="flex flex-col lg:flex-row lg:items-start gap-5 lg:gap-8 mb-8">
+                                {/* 圖標 */}
                                 {IconComponent && (
-                                    <div className={cn(
-                                        "p-3 sm:p-4 rounded-xl sm:rounded-2xl",
-                                        "bg-gradient-to-br from-primary/20 to-primary/10",
-                                        "shadow-lg shadow-primary/10"
-                                    )}>
-                                        <IconComponent className="w-8 h-8 sm:w-10 sm:h-10 text-primary" />
-                                    </div>
+                                    <motion.div
+                                        animate={floatAnimation}
+                                        className={cn(
+                                            "flex-shrink-0 p-4 sm:p-5 rounded-2xl sm:rounded-3xl",
+                                            "bg-gradient-to-br shadow-2xl",
+                                            gradient.bg,
+                                            gradient.glow
+                                        )}
+                                    >
+                                        <IconComponent className="w-10 h-10 sm:w-14 sm:h-14 text-white" />
+                                    </motion.div>
                                 )}
+
+                                {/* 標題和描述 */}
                                 <div className="flex-1 min-w-0">
-                                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 mb-2">
+                                    <h1 className={cn(
+                                        "text-3xl sm:text-4xl lg:text-5xl font-black mb-4",
+                                        "bg-gradient-to-r bg-clip-text text-transparent",
+                                        gradient.text
+                                    )}>
                                         {tool.title}
                                     </h1>
-                                    <p className="text-sm sm:text-base md:text-lg text-muted-foreground">
+                                    <p className="text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed max-w-3xl">
                                         {tool.detailedDescription || tool.description}
                                     </p>
                                 </div>
@@ -302,7 +505,16 @@ export function ToolDetail() {
 
                             {/* 預覽圖 */}
                             {tool.previewUrl && (
-                                <div className="relative aspect-video bg-white rounded-xl sm:rounded-2xl overflow-hidden border-2 border-gray-100 shadow-xl mb-6">
+                                <motion.div
+                                    whileHover={{ scale: 1.01 }}
+                                    transition={{ type: 'spring', stiffness: 300 }}
+                                    className={cn(
+                                        "relative aspect-video rounded-2xl sm:rounded-3xl overflow-hidden mb-8",
+                                        "bg-gradient-to-br from-gray-50 to-gray-100",
+                                        "border-2 shadow-xl",
+                                        gradient.border
+                                    )}
+                                >
                                     <picture>
                                         <source
                                             srcSet={`${import.meta.env.BASE_URL}${tool.previewUrl?.replace('.png', '.webp').replace(/^\//, '')}`}
@@ -311,123 +523,160 @@ export function ToolDetail() {
                                         <img
                                             src={`${import.meta.env.BASE_URL}${tool.previewUrl?.startsWith('/') ? tool.previewUrl.slice(1) : tool.previewUrl}`}
                                             alt={tool.title}
-                                            className="w-full h-full object-contain p-4 sm:p-6"
+                                            className="w-full h-full object-contain p-4 sm:p-8"
                                             loading="lazy"
                                             onError={(e) => {
                                                 e.currentTarget.style.display = 'none';
                                             }}
                                         />
                                     </picture>
-                                </div>
+                                </motion.div>
                             )}
 
-                            {/* 行動按鈕 - 手機端優化 */}
-                            <div className="flex flex-col sm:flex-row gap-3">
-                                <Button
-                                    onClick={handleUseTool}
-                                    size="lg"
-                                    className="gap-2 text-base sm:text-lg py-6 sm:py-4 flex-1 sm:flex-none bg-gradient-to-r from-primary to-indigo-600 hover:from-primary/90 hover:to-indigo-600/90 shadow-lg shadow-primary/25"
+                            {/* 行動按鈕區 */}
+                            <div className="flex flex-col sm:flex-row gap-4">
+                                {/* 主要 CTA */}
+                                <motion.div
+                                    whileHover={{ scale: 1.02, y: -2 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="flex-1 sm:flex-none"
                                 >
-                                    <ExternalLink className="w-5 h-5" />
-                                    立即使用
-                                </Button>
+                                    <Button
+                                        onClick={handleUseTool}
+                                        size="lg"
+                                        className={cn(
+                                            "w-full sm:w-auto gap-3 text-lg py-7 px-8 rounded-2xl font-bold",
+                                            "bg-gradient-to-r shadow-2xl",
+                                            "hover:shadow-3xl transition-all duration-300",
+                                            gradient.bg,
+                                            gradient.glow
+                                        )}
+                                    >
+                                        <motion.div
+                                            animate={{ rotate: [0, 10, -10, 0] }}
+                                            transition={{ duration: 2, repeat: Infinity }}
+                                        >
+                                            <Zap className="w-6 h-6" />
+                                        </motion.div>
+                                        立即使用
+                                    </Button>
+                                </motion.div>
+
+                                {/* 次要按鈕 */}
                                 <div className="flex gap-3">
-                                    <Button
-                                        variant="outline"
-                                        onClick={handleCopyLink}
-                                        size="lg"
-                                        className="gap-2 flex-1 sm:flex-none"
-                                    >
-                                        <Copy className="w-4 h-4" />
-                                        <span className="hidden sm:inline">複製連結</span>
-                                        <span className="sm:hidden">複製</span>
-                                    </Button>
-                                    <Button
-                                        variant="outline"
-                                        onClick={handleShare}
-                                        size="lg"
-                                        className="gap-2 flex-1 sm:flex-none"
-                                    >
-                                        <Share2 className="w-4 h-4" />
-                                        <span className="hidden sm:inline">分享</span>
-                                    </Button>
+                                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex-1 sm:flex-none">
+                                        <Button
+                                            variant="outline"
+                                            onClick={handleCopyLink}
+                                            size="lg"
+                                            className="w-full sm:w-auto gap-2 py-7 px-6 rounded-2xl font-semibold border-2 hover:bg-gray-50"
+                                        >
+                                            <Copy className="w-5 h-5" />
+                                            <span className="hidden sm:inline">複製連結</span>
+                                            <span className="sm:hidden">複製</span>
+                                        </Button>
+                                    </motion.div>
+
+                                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex-1 sm:flex-none">
+                                        <Button
+                                            variant="outline"
+                                            onClick={handleShare}
+                                            size="lg"
+                                            className="w-full sm:w-auto gap-2 py-7 px-6 rounded-2xl font-semibold border-2 hover:bg-gray-50"
+                                        >
+                                            <Share2 className="w-5 h-5" />
+                                            <span className="hidden sm:inline">分享</span>
+                                        </Button>
+                                    </motion.div>
                                 </div>
                             </div>
                         </div>
                     </motion.section>
 
-                    {/* 使用統計 - 卡片式設計 */}
+                    {/* 使用統計區 */}
                     {(stats || statsLoading) && (
-                        <motion.section
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.15 }}
-                            className="grid grid-cols-2 gap-3 sm:gap-4"
-                        >
-                            <Card className="bg-gradient-to-br from-blue-50 to-white border-blue-100">
-                                <CardContent className="p-4 sm:p-6">
-                                    {statsLoading ? (
-                                        <Skeleton className="h-12 w-full" />
-                                    ) : (
-                                        <div className="text-center">
-                                            <Sparkles className="w-6 h-6 sm:w-8 sm:h-8 text-blue-500 mx-auto mb-2" />
-                                            <div className="text-2xl sm:text-3xl font-black text-blue-600">
-                                                {stats?.totalClicks?.toLocaleString() || 0}
-                                            </div>
-                                            <div className="text-xs sm:text-sm text-muted-foreground">累計使用次數</div>
-                                        </div>
-                                    )}
-                                </CardContent>
-                            </Card>
+                        <motion.section variants={itemVariants} className="grid grid-cols-2 gap-4 sm:gap-6">
+                            {/* 累計使用次數 */}
+                            <motion.div
+                                whileHover={{ scale: 1.02, y: -4 }}
+                                className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-white border-2 border-blue-100 shadow-lg p-5 sm:p-8"
+                            >
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-100 to-transparent rounded-bl-full opacity-50" />
 
-                            <Card className="bg-gradient-to-br from-green-50 to-white border-green-100">
-                                <CardContent className="p-4 sm:p-6">
-                                    {statsLoading ? (
-                                        <Skeleton className="h-12 w-full" />
-                                    ) : (
-                                        <div className="text-center">
-                                            <Clock className="w-6 h-6 sm:w-8 sm:h-8 text-green-500 mx-auto mb-2" />
-                                            <div className="text-lg sm:text-xl font-bold text-green-600">
-                                                {stats?.lastUsedAt
-                                                    ? new Date(stats.lastUsedAt.toDate()).toLocaleDateString()
-                                                    : '尚無紀錄'
-                                                }
-                                            </div>
-                                            <div className="text-xs sm:text-sm text-muted-foreground">最後使用日期</div>
+                                {statsLoading ? (
+                                    <Skeleton className="h-20 w-full" />
+                                ) : (
+                                    <div className="relative z-10 text-center">
+                                        <motion.div
+                                            animate={floatAnimation}
+                                            className="inline-flex p-3 sm:p-4 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 shadow-lg shadow-blue-500/30 mb-4"
+                                        >
+                                            <Sparkles className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+                                        </motion.div>
+                                        <div className="text-3xl sm:text-4xl lg:text-5xl font-black bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+                                            <AnimatedNumber value={stats?.totalClicks || 0} />
                                         </div>
-                                    )}
-                                </CardContent>
-                            </Card>
+                                        <div className="text-sm sm:text-base text-muted-foreground mt-2 font-medium">累計使用次數</div>
+                                    </div>
+                                )}
+                            </motion.div>
+
+                            {/* 最後使用時間 */}
+                            <motion.div
+                                whileHover={{ scale: 1.02, y: -4 }}
+                                className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-white border-2 border-emerald-100 shadow-lg p-5 sm:p-8"
+                            >
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-100 to-transparent rounded-bl-full opacity-50" />
+
+                                {statsLoading ? (
+                                    <Skeleton className="h-20 w-full" />
+                                ) : (
+                                    <div className="relative z-10 text-center">
+                                        <motion.div
+                                            animate={floatAnimation}
+                                            className="inline-flex p-3 sm:p-4 rounded-2xl bg-gradient-to-br from-emerald-500 to-green-500 shadow-lg shadow-emerald-500/30 mb-4"
+                                        >
+                                            <Clock className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+                                        </motion.div>
+                                        <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-emerald-600">
+                                            {stats?.lastUsedAt
+                                                ? new Date(stats.lastUsedAt.toDate()).toLocaleDateString('zh-TW')
+                                                : '尚無紀錄'}
+                                        </div>
+                                        <div className="text-sm sm:text-base text-muted-foreground mt-2 font-medium">最後使用日期</div>
+                                    </div>
+                                )}
+                            </motion.div>
                         </motion.section>
                     )}
 
                     {/* 評論區塊 */}
-                    <motion.section
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.25 }}
-                    >
+                    <motion.section variants={itemVariants}>
                         <ReviewList toolId={tool.id} />
                     </motion.section>
 
                     {/* 相關推薦 */}
-                    <motion.section
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.35 }}
-                    >
-                        <RelatedTools currentTool={tool} />
-                    </motion.section>
+                    <RelatedTools currentTool={tool} />
 
                     {/* 麵包屑導航 */}
-                    <nav className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1 pt-6 border-t flex-wrap">
-                        <Link href="/" className="hover:text-primary transition-colors">🏠 首頁</Link>
-                        <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
-                        <span>{catInfo.emoji} {catInfo.label}</span>
-                        <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
-                        <span className="text-foreground font-medium">{tool.title}</span>
-                    </nav>
-                </main>
+                    <motion.nav
+                        variants={itemVariants}
+                        className="flex flex-wrap items-center gap-2 px-4 py-4 rounded-2xl bg-gray-50 text-sm sm:text-base"
+                    >
+                        <Link href="/" className="hover:text-primary transition-colors font-medium flex items-center gap-1">
+                            🏠 <span className="hidden sm:inline">首頁</span>
+                        </Link>
+                        <ChevronRight className="w-4 h-4 text-gray-400" />
+                        <span className="text-muted-foreground">{catInfo.emoji} {catInfo.label}</span>
+                        <ChevronRight className="w-4 h-4 text-gray-400" />
+                        <span className={cn(
+                            "font-semibold bg-gradient-to-r bg-clip-text text-transparent",
+                            gradient.text
+                        )}>
+                            {tool.title}
+                        </span>
+                    </motion.nav>
+                </motion.main>
             </div>
         </>
     );
