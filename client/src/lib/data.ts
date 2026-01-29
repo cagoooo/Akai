@@ -492,6 +492,16 @@ export const tools: EducationalTool[] = [
     category: "utilities",
     previewUrl: "/previews/tool_48.png",
     tags: ["表單", "自動回報", "行政", "資料收集", "效率", "智慧化"]
+  },
+  {
+    id: 49,
+    title: "教務處寶藏庫",
+    description: "教務處精心彙整的豐富資源平台，集結課程計畫、評量工具、教學表單及行政公告等寶貴資料，是教師備課與行政作業的最佳後盾",
+    url: "https://sites.google.com/mail2.smes.tyc.edu.tw/academic/",
+    icon: "FolderOpen",
+    category: "teaching",
+    previewUrl: "/previews/tool_49.png",
+    tags: ["教務", "資源庫", "課程計畫", "評量", "行政", "表單"]
   }
 ];
 
