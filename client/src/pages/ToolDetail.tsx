@@ -333,17 +333,27 @@ export function ToolDetail() {
     // 處理「立即使用」按鈕
     const handleUseTool = async () => {
         try {
+            // 先追蹤使用記錄
             await trackToolUsage(tool.id);
             addToRecent(tool.id);
             trackAchievement(tool.id, tool.category);
-            window.open(tool.url, '_blank', 'noopener,noreferrer');
-            toast({
-                title: '已開啟工具',
-                description: tool.title,
-            });
+
+            // LINE 等內建瀏覽器會阻擋 window.open()，改用直接跳轉
+            if (inAppBrowser) {
+                // 在內建瀏覽器中，直接跳轉到目標網址
+                window.location.href = tool.url;
+            } else {
+                // 在一般瀏覽器中，開新視窗
+                window.open(tool.url, '_blank', 'noopener,noreferrer');
+                toast({
+                    title: '已開啟工具',
+                    description: tool.title,
+                });
+            }
         } catch (error) {
             console.error('開啟工具失敗:', error);
-            window.open(tool.url, '_blank');
+            // 失敗時也嘗試直接跳轉
+            window.location.href = tool.url;
         }
     };
 

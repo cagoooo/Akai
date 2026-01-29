@@ -21,6 +21,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useToolTracking } from "@/hooks/useToolTracking";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { isInAppBrowser } from "@/lib/browserDetection";
 
 // Enhanced category colors with hover states and transitions
 const categoryColors = {
@@ -166,33 +167,39 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
   });
 
 
-  // 改進點擊處理部分 - 確保點擊後一定會開啟新視窗
+  // 改進點擊處理部分 - LINE 等內建瀏覽器使用直接跳轉
   const handleClick = () => {
     try {
-      const newWindow = window.open(tool.url, '_blank', 'noopener,noreferrer');
-      if (newWindow) {
-        newWindow.opener = null;
-      }
+      // LINE 等內建瀏覽器會阻擋 window.open()，改用直接跳轉
+      if (isInAppBrowser()) {
+        // 先追蹤使用記錄
+        trackToolUsage(tool.id).catch(console.error);
+        // 直接跳轉到目標網址
+        window.location.href = tool.url;
+      } else {
+        // 一般瀏覽器開新視窗
+        const newWindow = window.open(tool.url, '_blank', 'noopener,noreferrer');
+        if (newWindow) {
+          newWindow.opener = null;
+        }
 
-      trackToolUsage(tool.id)
-        .then(result => {
-          if (result?.totalClicks) {
-            setTool(prevTool => ({
-              ...prevTool,
-              totalClicks: result.totalClicks
-            }));
-          }
-        })
-        .catch(error => {
-          console.error('工具使用追蹤失敗:', error);
-        });
+        trackToolUsage(tool.id)
+          .then(result => {
+            if (result?.totalClicks) {
+              setTool(prevTool => ({
+                ...prevTool,
+                totalClicks: result.totalClicks
+              }));
+            }
+          })
+          .catch(error => {
+            console.error('工具使用追蹤失敗:', error);
+          });
+      }
     } catch (error) {
       console.error('開啟工具失敗:', error);
-      toast({
-        title: "開啟工具失敗",
-        description: "無法開啟工具連結，請嘗試使用複製連結按鈕",
-        variant: "destructive",
-      });
+      // 失敗時也嘗試直接跳轉
+      window.location.href = tool.url;
     }
   };
 
