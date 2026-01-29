@@ -331,29 +331,40 @@ export function ToolDetail() {
     const gradient = categoryGradients[tool.category as ToolCategory];
 
     // 處理「立即使用」按鈕
-    const handleUseTool = async () => {
-        try {
-            // 先追蹤使用記錄
-            await trackToolUsage(tool.id);
+    const handleUseTool = () => {
+        // 重要：必須在用戶點擊事件中同步開啟視窗，否則會被彈出視窗阻擋器阻擋
+        // 所以先開啟視窗，再非同步追蹤使用記錄
+
+        if (inAppBrowser) {
+            // LINE 等內建瀏覽器：直接跳轉
+            // 先追蹤（不等待），再跳轉
+            trackToolUsage(tool.id).catch(console.error);
+            addToRecent(tool.id);
+            trackAchievement(tool.id, tool.category);
+            window.location.href = tool.url;
+        } else {
+            // 一般瀏覽器：開新視窗
+            // 必須同步開啟視窗，否則會被阻擋
+            const newWindow = window.open(tool.url, '_blank', 'noopener,noreferrer');
+
+            // 非同步追蹤使用記錄
+            trackToolUsage(tool.id).catch(console.error);
             addToRecent(tool.id);
             trackAchievement(tool.id, tool.category);
 
-            // LINE 等內建瀏覽器會阻擋 window.open()，改用直接跳轉
-            if (inAppBrowser) {
-                // 在內建瀏覽器中，直接跳轉到目標網址
-                window.location.href = tool.url;
-            } else {
-                // 在一般瀏覽器中，開新視窗
-                window.open(tool.url, '_blank', 'noopener,noreferrer');
+            if (newWindow) {
                 toast({
                     title: '已開啟工具',
                     description: tool.title,
                 });
+            } else {
+                // 如果彈出視窗被阻擋，改用直接跳轉
+                toast({
+                    title: '正在跳轉...',
+                    description: '如未自動跳轉，請點擊「複製連結」手動開啟',
+                });
+                window.location.href = tool.url;
             }
-        } catch (error) {
-            console.error('開啟工具失敗:', error);
-            // 失敗時也嘗試直接跳轉
-            window.location.href = tool.url;
         }
     };
 
