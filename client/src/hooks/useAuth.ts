@@ -17,6 +17,7 @@ interface UseAuthReturn {
     user: User | null;
     loading: boolean;
     isAuthenticated: boolean;
+    isAdmin: boolean;
     signIn: () => Promise<void>;
     logout: () => Promise<void>;
     isAvailable: boolean;
@@ -24,6 +25,7 @@ interface UseAuthReturn {
 
 export function useAuth(): UseAuthReturn {
     const [user, setUser] = useState<User | null>(null);
+    const [isAdmin, setIsAdmin] = useState(false);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -34,8 +36,19 @@ export function useAuth(): UseAuthReturn {
         }
 
         // 訂閱認證狀態變化
-        const unsubscribe = subscribeToAuthState((authUser) => {
+        const unsubscribe = subscribeToAuthState(async (authUser) => {
             setUser(authUser);
+            if (authUser) {
+                try {
+                    const idTokenResult = await authUser.getIdTokenResult();
+                    setIsAdmin(!!idTokenResult.claims.admin);
+                } catch (e) {
+                    console.error("Error getting token result", e);
+                    setIsAdmin(false);
+                }
+            } else {
+                setIsAdmin(false);
+            }
             setLoading(false);
         });
 
@@ -55,6 +68,7 @@ export function useAuth(): UseAuthReturn {
         setLoading(true);
         try {
             await signOut();
+            setIsAdmin(false);
         } finally {
             setLoading(false);
         }
@@ -64,6 +78,7 @@ export function useAuth(): UseAuthReturn {
         user,
         loading,
         isAuthenticated: !!user,
+        isAdmin,
         signIn,
         logout,
         isAvailable: isAuthAvailable(),
