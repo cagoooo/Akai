@@ -49,6 +49,7 @@ import {
     Cloud,              // 文字雲即時互動
     FileInput,          // 動態表單自動回報系統
     FolderOpen,         // 教務處寶藏庫
+    Baby,               // 童趣學園
 
     // === ToolCard.tsx 額外使用的圖標 ===
     Share2,
@@ -156,6 +157,7 @@ export const iconRegistry: Record<string, LucideIcon> = {
     Cloud,
     FileInput,
     FolderOpen,
+    Baby,
 
     // 其他圖標
     Share2,

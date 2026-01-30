@@ -2,6 +2,28 @@
 
 此文件記錄專案的所有重要變更。
 
+## [2.18.0] - 2026-01-30
+
+### ✨ 新增工具
+
+- 🎡 **童趣學園** (ID 50)
+  - 專為兒童設計的快樂學習探索樂園
+  - 集合豐富有趣的互動遊戲與多元學習資源
+  - 啟發孩子的好奇心，讓學習變得像遊戲一樣好玩
+  - 分類：遊戲 (games)
+  - 標籤：兒童、遊戲、學習、探索、樂園、互動
+  - 網址：https://cagoooo.github.io/kids/
+  - 生成 3D 風格 WebP 預覽圖
+  - 註冊專屬 Baby 圖標
+
+### 📁 修改文件
+- `client/src/lib/data.ts` - 新增工具 ID 50
+- `client/src/lib/iconRegistry.ts` - 新增 Baby 圖標
+- `client/public/previews/kids-zone-preview.webp` - 新增預覽圖
+- `package.json` - 版本號更新至 2.18.0
+
+---
+
 ## [2.17.1] - 2026-01-27
 
 ### 🔧 連結更新

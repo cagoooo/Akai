@@ -502,6 +502,16 @@ export const tools: EducationalTool[] = [
     category: "teaching",
     previewUrl: "/previews/tool_49.png",
     tags: ["教務", "資源庫", "課程計畫", "評量", "行政", "表單"]
+  },
+  {
+    id: 50,
+    title: "童趣學園",
+    description: "專為兒童設計的快樂學習探索樂園，集合了豐富有趣的互動遊戲與多元學習資源，啟發孩子的好奇心，讓學習變得像遊戲一樣好玩，陪伴孩子在歡樂中茁壯成長。",
+    url: "https://cagoooo.github.io/kids/",
+    icon: "Baby",
+    category: "games",
+    previewUrl: "/previews/kids-zone-preview.webp",
+    tags: ["兒童", "遊戲", "學習", "探索", "樂園", "互動"]
   }
 ];
 
