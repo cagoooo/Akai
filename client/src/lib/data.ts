@@ -512,6 +512,17 @@ export const tools: EducationalTool[] = [
     category: "games",
     previewUrl: "/previews/kids-zone-preview.webp",
     tags: ["兒童", "遊戲", "學習", "探索", "樂園", "互動"]
+  },
+  {
+    id: 51,
+    title: "自動排課系統",
+    description: "智能化的自動排課系統，協助學校快速生成課表，最佳化資源分配，解決排課難題。",
+    url: "https://cagoooo.github.io/course/login",
+    icon: "Calendar",
+    category: "utilities",
+    previewUrl: "/previews/auto-schedule-preview.png",
+    detailedDescription: "這是一款專為學校行政人員與教師設計的智慧排課系統。透過先進的演算技術，自動處理複雜的課程衝突、教師身分、教室空間與時段限制，讓原本需要數週的人力排課作業，在幾分鐘內即可初步完成，大幅提升校務運作效率。",
+    tags: ["排課", "自動化", "課表", "行政", "效率"]
   }
 ];
 
