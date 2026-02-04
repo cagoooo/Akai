@@ -51,6 +51,7 @@ import {
     FolderOpen,         // 教務處寶藏庫
     Baby,               // 童趣學園
     Calendar,           // 自動排課系統
+    Library,            // 創價・教育 EXPO 線上選課
 
     // === ToolCard.tsx 額外使用的圖標 ===
     Share2,
@@ -160,6 +161,7 @@ export const iconRegistry: Record<string, LucideIcon> = {
     FolderOpen,
     Baby,
     Calendar,
+    Library,
 
     // 其他圖標
     Share2,

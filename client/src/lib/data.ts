@@ -523,6 +523,17 @@ export const tools: EducationalTool[] = [
     previewUrl: "/previews/auto-schedule-preview.png",
     detailedDescription: "這是一款專為學校行政人員與教師設計的智慧排課系統。透過先進的演算技術，自動處理複雜的課程衝突、教師身分、教室空間與時段限制，讓原本需要數週的人力排課作業，在幾分鐘內即可初步完成，大幅提升校務運作效率。",
     tags: ["排課", "自動化", "課表", "行政", "效率"]
+  },
+  {
+    id: 52,
+    title: "創價・教育 EXPO 線上選課",
+    description: "專為創價・教育 EXPO 打造的線上選課平台，提供流暢的課程探索與即時報名體驗，讓學習參與更簡單。",
+    url: "https://cagoooo.github.io/soka/",
+    icon: "Library",
+    category: "interactive",
+    previewUrl: "/previews/expo-soka-preview.png",
+    detailedDescription: "創價・教育 EXPO 線上選課系統是一個整合式的教育資源平台。使用者可以透過直觀的介面瀏覽博覽會中的各大領域課程，從科學技術到人文藝術一應俱全。系統支援即時選課、報名狀態追蹤以及個人化的課程清單管理，是博覽會參與者的數位導覽小幫手。",
+    tags: ["創價", "教育 EXPO", "線上選課", "課程選擇", "互動體驗"]
   }
 ];
 
