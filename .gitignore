@@ -26,3 +26,7 @@ sqlite/
 *.db
 *.db-shm
 *.db-wal
+
+# Security
+service-account.json
+.env
