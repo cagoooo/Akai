@@ -517,7 +517,7 @@ export const tools: EducationalTool[] = [
     id: 51,
     title: "自動排課系統",
     description: "智能化的自動排課系統，協助學校快速生成課表，最佳化資源分配，解決排課難題。",
-    url: "https://cagoooo.github.io/course/login",
+    url: "https://cagoooo.github.io/course/",
     icon: "Calendar",
     category: "utilities",
     previewUrl: "/previews/auto-schedule-preview.png",
