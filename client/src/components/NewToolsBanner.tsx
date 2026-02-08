@@ -14,11 +14,13 @@ import { iconRegistry, type IconName } from '@/lib/iconRegistry';
 
 export function NewToolsBanner() {
     const { newTools, hasNewTools, markAllAsRead, dismissTool } = useNewToolsNotification();
-    const [isExpanded, setIsExpanded] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState(true);
+    // 移除舊的 isExpanded 狀態，改用 isCollapsed
 
     if (!hasNewTools) return null;
 
-    const displayTools = isExpanded ? newTools : newTools.slice(0, 2);
+    // 直接顯示所有新工具，但外層會被收合
+    const displayTools = newTools;
 
     return (
         <AnimatePresence>
@@ -31,7 +33,10 @@ export function NewToolsBanner() {
                 <Card className="border-green-500/30 bg-gradient-to-r from-green-500/5 via-emerald-500/5 to-teal-500/5 overflow-hidden">
                     <CardContent className="p-4">
                         {/* 標題列 */}
-                        <div className="flex items-center justify-between mb-3">
+                        <div
+                            className="flex items-center justify-between mb-3 cursor-pointer select-none"
+                            onClick={() => setIsCollapsed(!isCollapsed)}
+                        >
                             <div className="flex items-center gap-2">
                                 <div className="w-8 h-8 rounded-full bg-green-500/10 flex items-center justify-center">
                                     <Sparkles className="w-4 h-4 text-green-500" />
@@ -45,88 +50,87 @@ export function NewToolsBanner() {
                                     </p>
                                 </div>
                             </div>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={markAllAsRead}
-                                className="text-xs"
-                            >
-                                全部標為已讀
-                            </Button>
+                            <div className="flex items-center gap-2">
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        markAllAsRead();
+                                    }}
+                                    className="text-xs"
+                                >
+                                    全部標為已讀
+                                </Button>
+                                <Button variant="ghost" size="sm" className="p-0 h-6 w-6 hover:bg-green-100/50 rounded-full">
+                                    {isCollapsed ? <ChevronDown className="w-4 h-4 text-green-600" /> : <ChevronUp className="w-4 h-4 text-green-600" />}
+                                </Button>
+                            </div>
                         </div>
 
-                        {/* 新工具列表 */}
-                        <div className="space-y-2">
-                            {displayTools.map((tool, index) => (
+                        <AnimatePresence>
+                            {!isCollapsed && (
                                 <motion.div
-                                    key={tool.id}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: index * 0.1 }}
-                                    className="flex items-center gap-3 p-2 rounded-lg bg-background/50 hover:bg-background/80 transition-colors group"
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: "auto", opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="overflow-hidden"
                                 >
-                                    {(() => {
-                                        const IconComponent = iconRegistry[tool.icon as IconName];
-                                        return IconComponent ? (
-                                            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                                                <IconComponent className="w-4 h-4 text-primary" />
-                                            </div>
-                                        ) : (
-                                            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                                                <Sparkles className="w-4 h-4 text-primary" />
-                                            </div>
-                                        );
-                                    })()}
-                                    <div className="flex-1 min-w-0">
-                                        <h4 className="font-medium text-sm truncate">{tool.title}</h4>
-                                        <p className="text-xs text-muted-foreground truncate">
-                                            {tool.description}
-                                        </p>
-                                    </div>
-                                    <div className="flex items-center gap-1 shrink-0">
-                                        <Link href={`/tool/${tool.id}`}>
-                                            <Button
-                                                size="sm"
-                                                variant="ghost"
-                                                className="h-8 px-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                                    {/* 新工具列表 */}
+                                    <div className="space-y-2 pb-1">
+                                        {displayTools.map((tool, index) => (
+                                            <motion.div
+                                                key={tool.id}
+                                                initial={{ opacity: 0, x: -20 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                transition={{ delay: index * 0.1 }}
+                                                className="flex items-center gap-3 p-2 rounded-lg bg-background/50 hover:bg-background/80 transition-colors group"
                                             >
-                                                查看 <ArrowRight className="w-3 h-3 ml-1" />
-                                            </Button>
-                                        </Link>
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
-                                            onClick={() => dismissTool(tool.id)}
-                                        >
-                                            <X className="w-3 h-3" />
-                                        </Button>
+                                                {(() => {
+                                                    const IconComponent = iconRegistry[tool.icon as IconName];
+                                                    return IconComponent ? (
+                                                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                                                            <IconComponent className="w-4 h-4 text-primary" />
+                                                        </div>
+                                                    ) : (
+                                                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                                                            <Sparkles className="w-4 h-4 text-primary" />
+                                                        </div>
+                                                    );
+                                                })()}
+                                                <div className="flex-1 min-w-0">
+                                                    <h4 className="font-medium text-sm truncate">{tool.title}</h4>
+                                                    <p className="text-xs text-muted-foreground truncate">
+                                                        {tool.description}
+                                                    </p>
+                                                </div>
+                                                <div className="flex items-center gap-1 shrink-0">
+                                                    <Link href={`/tool/${tool.id}`}>
+                                                        <Button
+                                                            size="sm"
+                                                            variant="ghost"
+                                                            className="h-8 px-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                        >
+                                                            查看 <ArrowRight className="w-3 h-3 ml-1" />
+                                                        </Button>
+                                                    </Link>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                        onClick={() => dismissTool(tool.id)}
+                                                    >
+                                                        <X className="w-3 h-3" />
+                                                    </Button>
+                                                </div>
+                                            </motion.div>
+                                        ))}
                                     </div>
                                 </motion.div>
-                            ))}
-                        </div>
+                            )}
+                        </AnimatePresence>
 
-                        {/* 展開/收合按鈕 */}
-                        {newTools.length > 2 && (
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => setIsExpanded(!isExpanded)}
-                                className="w-full mt-2 text-xs"
-                            >
-                                {isExpanded ? (
-                                    <>
-                                        <ChevronUp className="w-3 h-3 mr-1" />
-                                        收合
-                                    </>
-                                ) : (
-                                    <>
-                                        <ChevronDown className="w-3 h-3 mr-1" />
-                                        顯示全部 {newTools.length} 個
-                                    </>
-                                )}
-                            </Button>
-                        )}
                     </CardContent>
                 </Card>
             </motion.div>

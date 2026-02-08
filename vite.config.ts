@@ -64,4 +64,12 @@ export default defineConfig({
     // 設定 chunk 大小警告閾值 (500KB)
     chunkSizeWarningLimit: 500,
   },
+  server: {
+    hmr: {
+      clientPort: 5000,
+    },
+    watch: {
+      usePolling: true,
+    },
+  },
 });

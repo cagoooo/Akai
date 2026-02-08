@@ -23,15 +23,9 @@ try {
         credential: cert(serviceAccount)
     });
 
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
+    const targetEmail = process.argv[2];
 
-    console.log('🔐 Firebase Admin 權限設定工具');
-    console.log('--------------------------------');
-
-    rl.question('請輸入要設定為管理員的 Email: ', async (email) => {
+    const setClaim = async (email: string) => {
         try {
             console.log(`正在查找使用者: ${email}...`);
             const user = await getAuth().getUserByEmail(email);
@@ -49,10 +43,26 @@ try {
                 console.error('原因：找不到該 Email 的使用者，請確認該用戶已註冊。');
             }
         } finally {
-            rl.close();
             process.exit(0);
         }
-    });
+    };
+
+    if (targetEmail) {
+        setClaim(targetEmail);
+    } else {
+        const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
+
+        console.log('🔐 Firebase Admin 權限設定工具');
+        console.log('--------------------------------');
+
+        rl.question('請輸入要設定為管理員的 Email: ', (email) => {
+            rl.close();
+            setClaim(email);
+        });
+    }
 
 } catch (error) {
     console.error('無法讀取 Service Account:', error);

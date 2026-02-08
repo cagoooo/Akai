@@ -1,10 +1,11 @@
 import { useState, useMemo, useRef } from "react";
+import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from "@tanstack/react-query";
 import { ToolCard } from "@/components/ToolCard";
 import { TeacherIntro } from "@/components/TeacherIntro";
 import { tools } from "@/lib/data";
 import { Button } from "@/components/ui/button";
-import { Trophy, Clock, X, Keyboard } from "lucide-react";
+import { Trophy, Clock, X, Keyboard, ChevronDown, ChevronUp } from "lucide-react";
 import { useTour } from "@/components/TourProvider";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { AdvancedSearch } from "@/components/AdvancedSearch";
@@ -26,6 +27,7 @@ export function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showFavorites, setShowFavorites] = useState(false);
+  const [isRecentCollapsed, setIsRecentCollapsed] = useState(true);
   const [showShortcutsDialog, setShowShortcutsDialog] = useState(false);
   const [selectedToolIndex, setSelectedToolIndex] = useState(0);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -230,47 +232,6 @@ export function Home() {
               <VisitorCounter />
             </section>
 
-            {/* 🆕 新工具通知橫幅 */}
-            <NewToolsBanner />
-
-            {/* 🎯 AI 智慧推薦區塊 */}
-            {!isLoading && !searchQuery && !selectedCategory && !showFavorites && (
-              <RecommendedTools onToolClick={handleToolClick} />
-            )}
-
-            {/* 最近使用區塊 */}
-            {hasRecent && !isLoading && (
-              <section className="p-3 sm:p-4 rounded-lg bg-teal-50">
-                <div className="flex items-center justify-between mb-3">
-                  <h2 className="text-lg font-semibold text-teal-800 flex items-center gap-2">
-                    <Clock className="w-5 h-5" />
-                    最近使用
-                  </h2>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={clearRecent}
-                    className="text-teal-600 hover:text-teal-800"
-                  >
-                    <X className="w-4 h-4 mr-1" />
-                    清除
-                  </Button>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {recentTools.slice(0, 4).map((tool) => (
-                    <ToolCard
-                      key={`recent-${tool.id}`}
-                      tool={tool}
-                      isLoading={false}
-                      isFavorite={isFavorite(tool.id)}
-                      onToggleFavorite={toggleFavorite}
-                      onToolClick={handleToolClick}
-                    />
-                  ))}
-                </div>
-              </section>
-            )}
-
             {/* 搜尋與篩選區域 */}
             <section className="space-y-3 sm:space-y-4 p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 border border-orange-100 shadow-sm">
               <div className="flex items-center gap-2">
@@ -309,6 +270,73 @@ export function Home() {
                 favoritesCount={favoritesCount}
               />
             </section>
+
+            {/* 🆕 新工具通知橫幅 */}
+            <NewToolsBanner />
+
+            {/* 🎯 AI 智慧推薦區塊 */}
+            {!isLoading && !searchQuery && !selectedCategory && !showFavorites && (
+              <RecommendedTools onToolClick={handleToolClick} />
+            )}
+
+            {/* 最近使用區塊 */}
+            {hasRecent && !isLoading && (
+              <section className="p-3 sm:p-4 rounded-lg bg-teal-50">
+                <div
+                  className="flex items-center justify-between mb-3 cursor-pointer select-none"
+                  onClick={() => setIsRecentCollapsed(!isRecentCollapsed)}
+                >
+                  <h2 className="text-lg font-semibold text-teal-800 flex items-center gap-2">
+                    <Clock className="w-5 h-5" />
+                    最近使用
+                  </h2>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        clearRecent();
+                      }}
+                      className="text-teal-600 hover:text-teal-800"
+                    >
+                      <X className="w-4 h-4 mr-1" />
+                      清除
+                    </Button>
+                    <Button variant="ghost" size="sm" className="p-0 h-8 w-8 hover:bg-teal-100/50 rounded-full">
+                      {isRecentCollapsed ? <ChevronDown className="w-5 h-5 text-teal-600" /> : <ChevronUp className="w-5 h-5 text-teal-600" />}
+                    </Button>
+                  </div>
+                </div>
+
+                <AnimatePresence>
+                  {!isRecentCollapsed && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pb-1">
+                        {recentTools.slice(0, 4).map((tool) => (
+                          <ToolCard
+                            key={`recent-${tool.id}`}
+                            tool={tool}
+                            isLoading={false}
+                            isFavorite={isFavorite(tool.id)}
+                            onToggleFavorite={toggleFavorite}
+                            onToolClick={handleToolClick}
+                          />
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </section>
+            )}
+
+
 
             {/* 教師介紹區域 */}
             <section

@@ -6,6 +6,18 @@
   <!-- 動態設定 base URL -->
   <script>
     (function () {
+      // 開發環境強制移除 Service Worker (避免 503 Service Unavailable)
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function (registrations) {
+            for (let registration of registrations) {
+              console.warn('[Dev] 強制移除 Service Worker:', registration.scope);
+              registration.unregister();
+            }
+          });
+        }
+      }
+
       var base = window.location.pathname.startsWith('/Akai') ? '/Akai/' : '/';
       // 動態插入 link 標籤
       var head = document.head;
