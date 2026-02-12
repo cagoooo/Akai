@@ -361,7 +361,7 @@ export function ToolDetail() {
                 // 如果彈出視窗被阻擋，改用直接跳轉
                 toast({
                     title: '正在跳轉...',
-                    description: '如未自動跳轉，請點擊「複製連結」手動開啟',
+                    description: '彈窗被封鎖，正在原視窗開啟工具',
                 });
                 window.location.href = tool.url;
             }

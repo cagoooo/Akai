@@ -168,7 +168,12 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
 
 
   // 改進點擊處理部分 - LINE 等內建瀏覽器使用直接跳轉
-  const handleClick = () => {
+  const handleClick = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
     try {
       // LINE 等內建瀏覽器會阻擋 window.open()，改用直接跳轉
       if (isInAppBrowser()) {
@@ -179,8 +184,10 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
       } else {
         // 一般瀏覽器開新視窗
         const newWindow = window.open(tool.url, '_blank', 'noopener,noreferrer');
-        if (newWindow) {
-          newWindow.opener = null;
+
+        if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+          // 如果彈窗被阻擋，才嘗試在原視窗開啟
+          window.location.href = tool.url;
         }
 
         trackToolUsage(tool.id)
@@ -198,8 +205,7 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
       }
     } catch (error) {
       console.error('開啟工具失敗:', error);
-      // 失敗時也嘗試直接跳轉
-      window.location.href = tool.url;
+      // 只有在 window.open 噴錯（極少見）時才考慮回退
     }
   };
 
