@@ -1,6 +1,6 @@
 # 教育科技創新專區 - 阿凱老師
 
-![Version](https://img.shields.io/badge/version-2.1.0-brightgreen.svg)
+![Version](https://img.shields.io/badge/version-2.20.0-brightgreen.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-20.x-green.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.6.3-blue.svg)
