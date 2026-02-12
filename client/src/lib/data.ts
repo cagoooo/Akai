@@ -534,6 +534,17 @@ export const tools: EducationalTool[] = [
     previewUrl: "/previews/expo-soka-preview.png",
     detailedDescription: "創價・教育 EXPO 線上選課系統是一個整合式的教育資源平台。使用者可以透過直觀的介面瀏覽博覽會中的各大領域課程，從科學技術到人文藝術一應俱全。系統支援即時選課、報名狀態追蹤以及個人化的課程清單管理，是博覽會參與者的數位導覽小幫手。",
     tags: ["創價", "教育 EXPO", "線上選課", "課程選擇", "互動體驗"]
+  },
+  {
+    id: 53,
+    title: "智慧校園報修系統",
+    description: "專為校園打造的智慧報修平台，簡化修繕申請流程，讓校園維護更加即時與透明。",
+    url: "https://cagoooo.github.io/repair/",
+    icon: "Tool",
+    category: "utilities",
+    previewUrl: "/previews/repair-preview.png",
+    detailedDescription: "智慧校園報修系統旨在提供師生一個便捷、透明的報修門面。使用者只需透過手機或電腦，即可快速提交維護需求，並即時追蹤處理進度。行政單位則能有效管理各項報修案件，最佳化修繕人力派送，確保校園設施始終保持在最佳狀態。",
+    tags: ["報修", "校務", "修繕", "管理", "效率"]
   }
 ];
 
