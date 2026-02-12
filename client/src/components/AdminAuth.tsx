@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Lock, LogOut, Shield, ShieldAlert, Loader2 } from "lucide-react";
 import { AnalyticsDashboard } from "@/components/AnalyticsDashboard";
 import { useAuth } from "@/hooks/useAuth";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 
 export function AdminAuth() {
     const { user, isAdmin, loading, signIn, logout } = useAuth();
@@ -94,9 +94,11 @@ export function AdminAuth() {
                             登出並切換帳號
                         </Button>
                         <div className="text-center">
-                            <a href="/" className="text-sm text-slate-500 hover:text-slate-700 no-underline hover:underline">
-                                返回首頁
-                            </a>
+                            <Link href="/">
+                                <a className="text-sm text-slate-500 hover:text-slate-700 no-underline hover:underline">
+                                    返回首頁
+                                </a>
+                            </Link>
                         </div>
                     </CardContent>
                 </Card>
@@ -130,12 +132,11 @@ export function AdminAuth() {
                         </Button>
 
                         <div className="mt-6 text-center">
-                            <a
-                                href="/"
-                                className="text-sm text-slate-500 hover:text-indigo-600 transition-colors flex items-center justify-center gap-1"
-                            >
-                                ← 返回首頁
-                            </a>
+                            <Link href="/">
+                                <a className="text-sm text-slate-500 hover:text-indigo-600 transition-colors flex items-center justify-center gap-1">
+                                    ← 返回首頁
+                                </a>
+                            </Link>
                         </div>
                     </div>
                 </CardContent>

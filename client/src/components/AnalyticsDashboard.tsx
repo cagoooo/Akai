@@ -9,6 +9,7 @@ import {
   Home, ArrowLeft
 } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Link } from "wouter";
 import type { VisitorStats, ToolUsageStat } from "@/types/analytics";
 
 // 檢測是否為靜態部署環境
@@ -230,13 +231,12 @@ export function AnalyticsDashboard() {
           {/* 手機端：緊湊佈局 */}
           <div className="flex items-center justify-between gap-2">
             {/* 返回首頁 */}
-            <a
-              href={import.meta.env.BASE_URL || "/"}
-              className="flex items-center gap-1 px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors shrink-0"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              <span className="hidden sm:inline text-sm">返回首頁</span>
-            </a>
+            <Link href="/">
+              <a className="flex items-center gap-1 px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors shrink-0">
+                <ArrowLeft className="w-4 h-4" />
+                <span className="hidden sm:inline text-sm">返回首頁</span>
+              </a>
+            </Link>
 
             {/* 標題 */}
             <div className="flex-1 min-w-0 mx-2 sm:mx-4">
