@@ -167,45 +167,43 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
   });
 
 
-  // 改進點擊處理部分 - LINE 等內建瀏覽器使用直接跳轉
+  // 改進點擊處理部分 - 採用隱藏 <a> 標籤模擬點擊以避免 window.open 被阻擋或誤判
   const handleClick = (e?: React.MouseEvent) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
     }
 
+    // 先追蹤使用記錄（非同步）
+    trackToolUsage(tool.id)
+      .then(result => {
+        if (result?.totalClicks) {
+          setTool(prevTool => ({
+            ...prevTool,
+            totalClicks: result.totalClicks
+          }));
+        }
+      })
+      .catch(error => console.error('工具使用追蹤失敗:', error));
+
     try {
-      // LINE 等內建瀏覽器會阻擋 window.open()，改用直接跳轉
+      // LINE 等內建瀏覽器會阻擋新視窗，改用直接跳轉
       if (isInAppBrowser()) {
-        // 先追蹤使用記錄
-        trackToolUsage(tool.id).catch(console.error);
-        // 直接跳轉到目標網址
         window.location.href = tool.url;
       } else {
-        // 一般瀏覽器開新視窗
-        const newWindow = window.open(tool.url, '_blank', 'noopener,noreferrer');
-
-        if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
-          // 如果彈窗被阻擋，才嘗試在原視窗開啟
-          window.location.href = tool.url;
-        }
-
-        trackToolUsage(tool.id)
-          .then(result => {
-            if (result?.totalClicks) {
-              setTool(prevTool => ({
-                ...prevTool,
-                totalClicks: result.totalClicks
-              }));
-            }
-          })
-          .catch(error => {
-            console.error('工具使用追蹤失敗:', error);
-          });
+        // 使用 <a> 標籤模擬點擊是開新分頁最穩定的做法
+        const link = document.createElement('a');
+        link.href = tool.url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       }
     } catch (error) {
       console.error('開啟工具失敗:', error);
-      // 只有在 window.open 噴錯（極少見）時才考慮回退
+      // 極端情況下的回退
+      window.location.href = tool.url;
     }
   };
 

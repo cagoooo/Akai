@@ -330,39 +330,34 @@ export function ToolDetail() {
     const catInfo = categoryInfo[tool.category];
     const gradient = categoryGradients[tool.category as ToolCategory];
 
-    // 處理「立即使用」按鈕
+    // 處理「立即使用」按鈕 - 採用 <a> 模擬點擊以確保行為穩定
     const handleUseTool = () => {
-        // 重要：必須在用戶點擊事件中同步開啟視窗，否則會被彈出視窗阻擋器阻擋
-        // 所以先開啟視窗，再非同步追蹤使用記錄
+        // 非同步追蹤使用記錄
+        trackToolUsage(tool.id).catch(console.error);
+        addToRecent(tool.id);
+        trackAchievement(tool.id, tool.category);
 
         if (inAppBrowser) {
             // LINE 等內建瀏覽器：直接跳轉
-            // 先追蹤（不等待），再跳轉
-            trackToolUsage(tool.id).catch(console.error);
-            addToRecent(tool.id);
-            trackAchievement(tool.id, tool.category);
             window.location.href = tool.url;
         } else {
-            // 一般瀏覽器：開新視窗
-            // 必須同步開啟視窗，否則會被阻擋
-            const newWindow = window.open(tool.url, '_blank', 'noopener,noreferrer');
+            try {
+                // 使用 <a> 標籤模擬點擊是開新分頁最穩定的做法，能有效避免彈窗阻擋誤判
+                const link = document.createElement('a');
+                link.href = tool.url;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
 
-            // 非同步追蹤使用記錄
-            trackToolUsage(tool.id).catch(console.error);
-            addToRecent(tool.id);
-            trackAchievement(tool.id, tool.category);
-
-            if (newWindow) {
                 toast({
                     title: '已開啟工具',
                     description: tool.title,
                 });
-            } else {
-                // 如果彈出視窗被阻擋，改用直接跳轉
-                toast({
-                    title: '正在跳轉...',
-                    description: '彈窗被封鎖，正在原視窗開啟工具',
-                });
+            } catch (error) {
+                console.error('開啟工具失敗:', error);
+                // 如果模擬點擊失敗，回退到原視窗跳轉
                 window.location.href = tool.url;
             }
         }
