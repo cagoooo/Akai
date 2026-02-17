@@ -545,6 +545,17 @@ export const tools: EducationalTool[] = [
     previewUrl: "/previews/repair-preview.png",
     detailedDescription: "智慧校園報修系統旨在提供師生一個便捷、透明的報修門面。使用者只需透過手機或電腦，即可快速提交維護需求，並即時追蹤處理進度。行政單位則能有效管理各項報修案件，最佳化修繕人力派送，確保校園設施始終保持在最佳狀態。",
     tags: ["報修", "校務", "修繕", "管理", "效率"]
+  },
+  {
+    id: 54,
+    title: "臉盲教師專用 - 識生學坊",
+    description: "專為教師設計的學生辨識訓練工坊，透過遊戲化測驗強化對學生面孔的記憶。",
+    url: "https://cagoooo.github.io/recognize/",
+    icon: "ScanFace",
+    category: "teaching",
+    previewUrl: "/previews/recognize_preview.webp",
+    detailedDescription: "識生學坊是一款專為教師打造的輔助工具，特別針對「臉盲」或需要快速記住大量學生面孔的需求。系統支援自定義班級名單與照片匯入，讓記憶訓練更貼近實際教學場景。",
+    tags: ["臉盲", "學生辨識", "記憶訓練", "師生互動", "教學輔助"]
   }
 ];
 

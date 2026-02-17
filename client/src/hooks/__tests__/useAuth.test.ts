@@ -134,4 +134,5 @@ describe('useAuth', () => {
         expect(mockSignOut).toHaveBeenCalled();
         expect(result.current.isAdmin).toBe(false);
     });
+
 });

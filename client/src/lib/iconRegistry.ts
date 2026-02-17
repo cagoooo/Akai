@@ -52,6 +52,7 @@ import {
     Baby,               // 童趣學園
     Calendar,           // 自動排課系統
     Library,            // 創價・教育 EXPO 線上選課
+    ScanFace,           // 臉盲教師專用 - 識生學坊
 
     // === ToolCard.tsx 額外使用的圖標 ===
     Share2,
@@ -162,6 +163,7 @@ export const iconRegistry: Record<string, LucideIcon> = {
     Baby,
     Calendar,
     Library,
+    ScanFace,
 
     // 其他圖標
     Share2,

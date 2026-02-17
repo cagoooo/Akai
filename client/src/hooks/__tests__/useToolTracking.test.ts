@@ -81,5 +81,6 @@ describe('useToolTracking', () => {
         const stored = localStorageMock.getItem('localToolsStats');
         expect(stored).not.toBeNull();
     });
+
 });
 
