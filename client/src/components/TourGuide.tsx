@@ -133,15 +133,7 @@ export function TourGuide({ onComplete }: TourGuideProps) {
             align: 'start',
           }
         },
-        {
-          element: '[data-tour="theme-toggle"]',
-          popover: {
-            title: "主題切換 🎨",
-            description: "點擊這裡可以在淺色/深色主題之間切換，讓您在不同光線環境下都能舒適使用平台。系統也會自動適應您設備的顯示模式偏好。",
-            side: "bottom",
-            align: 'start',
-          }
-        },
+
         {
           popover: {
             title: "🎉 恭喜完成導覽！",

@@ -26,7 +26,6 @@ export function ColorContrastIndicator() {
       try {
         // 定義要檢查的區域
         const zones = [
-          { name: "頂部標題區", selector: "div[data-tour='theme-toggle']", bgClass: "bg-blue-50" },
           { name: "排行榜區域", selector: "div[data-tour='tool-rankings']", bgClass: "bg-purple-50" },
           { name: "訪問計數器", selector: ".bg-green-50", bgClass: "bg-green-50" },
           { name: "工具卡片區", selector: "section[data-tour='tools-grid']", bgClass: "bg-indigo-50" },
