@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from "@tanstack/react-query";
 import { ToolCard } from "@/components/ToolCard";
@@ -13,7 +13,7 @@ import { ScrollToTop } from "@/components/ScrollToTop";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useRecentTools } from "@/hooks/useRecentTools";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
-import { KeyboardShortcutsDialog } from "@/components/KeyboardShortcutsDialog";
+const KeyboardShortcutsDialog = lazy(() => import("@/components/KeyboardShortcutsDialog").then(module => ({ default: module.KeyboardShortcutsDialog })));
 import { useSortOptions, type SortOption } from "@/hooks/useSortOptions";
 
 import { ToolRankings } from "@/components/ToolRankings";
@@ -21,7 +21,7 @@ import { RankingTutorial } from "@/components/RankingTutorial";
 import { VisitorCounter } from "@/components/VisitorCounter";
 import { RecommendedTools } from "@/components/RecommendedTools";
 import { NewToolsBanner } from "@/components/NewToolsBanner";
-import { WishingWellDialog } from "@/components/WishingWellDialog";
+const WishingWellDialog = lazy(() => import("@/components/WishingWellDialog").then(module => ({ default: module.WishingWellDialog })));
 import { Wand2 } from "lucide-react";
 
 export function Home() {
@@ -477,16 +477,24 @@ export function Home() {
       </a>
 
       {/* 快捷鍵說明對話框 */}
-      <KeyboardShortcutsDialog
-        open={showShortcutsDialog}
-        onOpenChange={setShowShortcutsDialog}
-      />
+      {showShortcutsDialog && (
+        <Suspense fallback={null}>
+          <KeyboardShortcutsDialog
+            open={showShortcutsDialog}
+            onOpenChange={setShowShortcutsDialog}
+          />
+        </Suspense>
+      )}
 
       {/* 許願池對話框 */}
-      <WishingWellDialog
-        open={showWishingWell}
-        onOpenChange={setShowWishingWell}
-      />
+      {showWishingWell && (
+        <Suspense fallback={null}>
+          <WishingWellDialog
+            open={showWishingWell}
+            onOpenChange={setShowWishingWell}
+          />
+        </Suspense>
+      )}
 
       {/* 許願池浮動按鈕 */}
       <Button

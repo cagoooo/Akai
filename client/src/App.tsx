@@ -1,4 +1,4 @@
-import { Suspense, useEffect } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { Router, Switch, Route } from "wouter";
 import { HelmetProvider } from "react-helmet-async";
 import { TourProvider } from "@/components/TourProvider";
@@ -11,13 +11,16 @@ import { ErrorBoundary, SuspenseWrapper } from "@/components/ErrorBoundary";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SEOHead } from "@/components/SEOHead";
 import { WebsiteSchema, OrganizationSchema, AllToolsSchema } from "@/components/StructuredData";
-import { PWAUpdatePrompt } from "@/components/PWAUpdatePrompt";
 
-// 直接 import
+// 直接 import 首頁 (首屏必須載入)
 import { Home } from "@/pages/Home";
-import { ToolDetail } from "@/pages/ToolDetail";
-import { TriviaDialog } from "@/components/TriviaDialog";
-import { AdminAuth } from "@/components/AdminAuth";
+
+// 延遲載入次要路由元件與彈窗元件 (解決 Code Splitting)
+// 注意：因為是以 named export 導出，需轉為 default format
+const ToolDetail = lazy(() => import("@/pages/ToolDetail").then(module => ({ default: module.ToolDetail })));
+const AdminAuth = lazy(() => import("@/components/AdminAuth").then(module => ({ default: module.AdminAuth })));
+const TriviaDialog = lazy(() => import("@/components/TriviaDialog").then(module => ({ default: module.TriviaDialog })));
+const PWAUpdatePrompt = lazy(() => import("@/components/PWAUpdatePrompt").then(module => ({ default: module.PWAUpdatePrompt })));
 
 // 取得 base path - Vite 會在建置時注入 BASE_URL
 const basePath = import.meta.env.BASE_URL || '/';
@@ -79,28 +82,34 @@ function App() {
             <Router base={base}>
               <div className="min-h-screen flex flex-col">
                 <PageTransition>
-                  <Switch>
-                    <Route path="/">
-                      <Home />
-                    </Route>
-                    <Route path="/tool/:id">
-                      <ToolDetail />
-                    </Route>
-                    <Route path="/admin">
-                      <AdminAuth />
-                    </Route>
-                  </Switch>
+                  <Suspense fallback={<PageSkeleton />}>
+                    <Switch>
+                      <Route path="/">
+                        <Home />
+                      </Route>
+                      <Route path="/tool/:id">
+                        <ToolDetail />
+                      </Route>
+                      <Route path="/admin">
+                        <AdminAuth />
+                      </Route>
+                    </Switch>
+                  </Suspense>
                 </PageTransition>
                 <Footer />
               </div>
             </Router>
 
-            <TriviaDialog />
+            <Suspense fallback={null}>
+              <TriviaDialog />
+            </Suspense>
 
             <Toaster />
 
             {/* PWA 功能元件 */}
-            <PWAUpdatePrompt />
+            <Suspense fallback={null}>
+              <PWAUpdatePrompt />
+            </Suspense>
           </TourProvider>
         </QueryClientProvider>
       </ErrorBoundary>
