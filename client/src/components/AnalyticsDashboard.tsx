@@ -11,6 +11,7 @@ import {
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "wouter";
 import type { VisitorStats, ToolUsageStat } from "@/types/analytics";
+import { WishingWellAdmin } from "@/components/admin/WishingWellAdmin";
 
 // 檢測是否為靜態部署環境
 const isStaticDeployment = () => {
@@ -468,6 +469,10 @@ export function AnalyticsDashboard() {
               <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               <span className="leading-tight">日曆</span>
             </TabsTrigger>
+            <TabsTrigger value="wishes" className="text-[10px] sm:text-sm px-1 sm:px-3 py-1.5 sm:py-2 data-[state=active]:bg-indigo-600 data-[state=active]:text-white flex flex-col sm:flex-row items-center gap-0.5 sm:gap-2">
+              <span className="text-sm">✨</span>
+              <span className="leading-tight">許願池</span>
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-4">
@@ -739,6 +744,18 @@ export function AnalyticsDashboard() {
                     })()}
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="wishes">
+            <Card>
+              <CardHeader>
+                <CardTitle>老師們的許願池</CardTitle>
+                <CardDescription>查閱並管理使用者提出的新工具建議與星等回饋</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <WishingWellAdmin />
               </CardContent>
             </Card>
           </TabsContent>

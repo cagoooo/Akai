@@ -21,6 +21,8 @@ import { RankingTutorial } from "@/components/RankingTutorial";
 import { VisitorCounter } from "@/components/VisitorCounter";
 import { RecommendedTools } from "@/components/RecommendedTools";
 import { NewToolsBanner } from "@/components/NewToolsBanner";
+import { WishingWellDialog } from "@/components/WishingWellDialog";
+import { Wand2 } from "lucide-react";
 
 export function Home() {
   const { startTour } = useTour();
@@ -29,6 +31,7 @@ export function Home() {
   const [showFavorites, setShowFavorites] = useState(false);
   const [isRecentCollapsed, setIsRecentCollapsed] = useState(true);
   const [showShortcutsDialog, setShowShortcutsDialog] = useState(false);
+  const [showWishingWell, setShowWishingWell] = useState(false);
   const [selectedToolIndex, setSelectedToolIndex] = useState(0);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
@@ -478,6 +481,24 @@ export function Home() {
         open={showShortcutsDialog}
         onOpenChange={setShowShortcutsDialog}
       />
+
+      {/* 許願池對話框 */}
+      <WishingWellDialog
+        open={showWishingWell}
+        onOpenChange={setShowWishingWell}
+      />
+
+      {/* 許願池浮動按鈕 */}
+      <Button
+        onClick={() => setShowWishingWell(true)}
+        className="fixed bottom-36 right-4 sm:right-6 h-14 pl-4 pr-5 rounded-full shadow-2xl hover:shadow-indigo-500/25 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 text-white transition-all duration-300 hover:scale-[1.05] z-40 group flex items-center gap-2 border-none"
+      >
+        <div className="relative">
+          <Wand2 className="w-6 h-6 animate-pulse" />
+          <div className="absolute inset-0 bg-white/30 blur-md rounded-full group-hover:bg-white/50 transition-colors" />
+        </div>
+        <span className="font-bold text-base tracking-wide whitespace-nowrap hidden sm:inline-block shadow-black/10">許願池</span>
+      </Button>
 
       {/* 快捷鍵提示按鈕 */}
       <Button
