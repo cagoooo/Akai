@@ -448,7 +448,7 @@ export function AnalyticsDashboard() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid grid-cols-5 mb-4 bg-white/80 p-0.5 sm:p-1 rounded-lg w-full">
+          <TabsList className="grid grid-cols-3 sm:grid-cols-6 mb-4 bg-white/80 p-0.5 sm:p-1 rounded-lg w-full h-auto">
             <TabsTrigger value="overview" className="text-[10px] sm:text-sm px-1 sm:px-3 py-1.5 sm:py-2 data-[state=active]:bg-indigo-600 data-[state=active]:text-white flex flex-col sm:flex-row items-center gap-0.5 sm:gap-2">
               <Activity className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               <span className="leading-tight">總覽</span>
