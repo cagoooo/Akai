@@ -94,10 +94,8 @@ export function AdminAuth() {
                             登出並切換帳號
                         </Button>
                         <div className="text-center">
-                            <Link href="/">
-                                <a className="text-sm text-slate-500 hover:text-slate-700 no-underline hover:underline">
-                                    返回首頁
-                                </a>
+                            <Link href="/" className="text-sm text-slate-500 hover:text-slate-700 no-underline hover:underline">
+                                返回首頁
                             </Link>
                         </div>
                     </CardContent>
@@ -132,10 +130,8 @@ export function AdminAuth() {
                         </Button>
 
                         <div className="mt-6 text-center">
-                            <Link href="/">
-                                <a className="text-sm text-slate-500 hover:text-indigo-600 transition-colors flex items-center justify-center gap-1">
-                                    ← 返回首頁
-                                </a>
+                            <Link href="/" className="text-sm text-slate-500 hover:text-indigo-600 transition-colors flex items-center justify-center gap-1">
+                                ← 返回首頁
                             </Link>
                         </div>
                     </div>
