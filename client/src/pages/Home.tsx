@@ -16,10 +16,12 @@ import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 const KeyboardShortcutsDialog = lazy(() => import("@/components/KeyboardShortcutsDialog").then(module => ({ default: module.KeyboardShortcutsDialog })));
 import { useSortOptions, type SortOption } from "@/hooks/useSortOptions";
 
-import { ToolRankings } from "@/components/ToolRankings";
+// 延遲載入帶有 Firebase 依賴的重型元件
+const ToolRankings = lazy(() => import("@/components/ToolRankings").then(module => ({ default: module.ToolRankings })));
+const VisitorCounter = lazy(() => import("@/components/VisitorCounter").then(module => ({ default: module.VisitorCounter })));
+const RecommendedTools = lazy(() => import("@/components/RecommendedTools").then(module => ({ default: module.RecommendedTools })));
+
 import { RankingTutorial } from "@/components/RankingTutorial";
-import { VisitorCounter } from "@/components/VisitorCounter";
-import { RecommendedTools } from "@/components/RecommendedTools";
 import { NewToolsBanner } from "@/components/NewToolsBanner";
 const WishingWellDialog = lazy(() => import("@/components/WishingWellDialog").then(module => ({ default: module.WishingWellDialog })));
 import { Wand2 } from "lucide-react";
@@ -232,7 +234,9 @@ export function Home() {
           <div className="w-full xl:w-2/3 space-y-5 sm:space-y-8">
             {/* 訪問計數器 */}
             <section className="p-3 sm:p-4 rounded-lg bg-green-50">
-              <VisitorCounter />
+              <Suspense fallback={<div className="h-32 rounded-xl bg-green-100/50 animate-pulse" />}>
+                <VisitorCounter />
+              </Suspense>
             </section>
 
             {/* 搜尋與篩選區域 */}
@@ -279,7 +283,9 @@ export function Home() {
 
             {/* 🎯 AI 智慧推薦區塊 */}
             {!isLoading && !searchQuery && !selectedCategory && !showFavorites && (
-              <RecommendedTools onToolClick={handleToolClick} />
+              <Suspense fallback={<div className="h-48 rounded-xl bg-purple-100/30 animate-pulse p-4" />}>
+                <RecommendedTools onToolClick={handleToolClick} />
+              </Suspense>
             )}
 
             {/* 最近使用區塊 */}
@@ -455,7 +461,9 @@ export function Home() {
           <aside id="mobile-rankings" className="w-full xl:w-1/3 xl:order-last">
             <div className="xl:sticky xl:top-4 space-y-4 p-3 sm:p-4 rounded-lg bg-purple-50">
               <div data-tour="tool-rankings">
-                <ToolRankings />
+                <Suspense fallback={<div className="h-96 rounded-xl bg-purple-100/50 animate-pulse" />}>
+                  <ToolRankings />
+                </Suspense>
               </div>
               <RankingTutorial />
             </div>
