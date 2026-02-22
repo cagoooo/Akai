@@ -43,19 +43,18 @@ export function KeyboardShortcutsDialog({ open, onOpenChange }: KeyboardShortcut
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[550px] w-[95vw] glass-panel text-slate-800 z-50 p-0 overflow-hidden border-0 shadow-2xl rounded-3xl">
+            <DialogContent className="sm:max-w-[550px] w-[95vw] bg-white text-slate-800 z-50 p-0 overflow-hidden border-0 shadow-2xl rounded-2xl">
                 {/* Header Section with Gradient */}
-                <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 p-8 sm:p-10 text-white relative overflow-hidden">
-                    <div className="absolute inset-0 bg-white/5 backdrop-blur-[2px] pointer-events-none"></div>
-                    <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[80%] bg-white/10 rounded-full blur-[60px]" />
+                <div className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-6 sm:p-8 text-white relative overflow-hidden">
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20"></div>
                     <DialogHeader className="relative z-10">
-                        <DialogTitle className="flex items-center gap-4 text-3xl sm:text-4xl font-black tracking-tighter drop-shadow-lg">
-                            <div className="p-3 sm:p-4 bg-white/20 backdrop-blur-xl rounded-2xl shadow-xl border border-white/40 spring-bounce hover:rotate-6">
-                                <Keyboard className="h-8 w-8 sm:h-10 sm:w-10 text-white" />
+                        <DialogTitle className="flex items-center gap-3 text-2xl sm:text-3xl font-black drop-shadow-md">
+                            <div className="p-2 sm:p-3 bg-white/20 backdrop-blur-md rounded-xl shadow-inner border border-white/30">
+                                <Keyboard className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                             </div>
                             鍵盤快捷鍵
                         </DialogTitle>
-                        <DialogDescription className="text-white/90 text-sm sm:text-lg mt-3 font-semibold leading-relaxed">
+                        <DialogDescription className="text-white/90 text-sm sm:text-base mt-2 font-medium">
                             化身鍵盤達人，讓操作如絲般順滑 🚀
                         </DialogDescription>
                     </DialogHeader>
@@ -76,10 +75,10 @@ export function KeyboardShortcutsDialog({ open, onOpenChange }: KeyboardShortcut
                                 {shortcuts.map(({ key, description, color }) => (
                                     <div
                                         key={key}
-                                        className={`flex items-center justify-between p-4 sm:p-5 rounded-2xl border-2 transition-all duration-300 hover-float bouncy-active ${color} bg-white/80 backdrop-blur-sm shadow-sm hover:shadow-xl`}
+                                        className={`flex items-center justify-between p-3 sm:p-4 rounded-xl border-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-md ${color} bg-white`}
                                     >
-                                        <span className="text-sm sm:text-base font-bold text-slate-700">{description}</span>
-                                        <kbd className="px-3 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-black bg-white text-slate-800 border-2 border-slate-200 rounded-xl shadow-[0_4px_0_0_rgba(148,163,184,0.3)] tracking-widest bouncy-active">
+                                        <span className="text-sm sm:text-base font-medium">{description}</span>
+                                        <kbd className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold bg-white text-slate-700 border border-slate-200 rounded-lg shadow-[0_3px_0_0_rgba(148,163,184,0.4)]  tracking-wider">
                                             {key}
                                         </kbd>
                                     </div>
@@ -90,10 +89,10 @@ export function KeyboardShortcutsDialog({ open, onOpenChange }: KeyboardShortcut
                 </div>
 
                 {/* Footer Section */}
-                <div className="p-6 sm:p-8 bg-white/50 backdrop-blur-md border-t border-slate-100 flex justify-end items-center rounded-b-3xl">
+                <div className="p-4 sm:p-6 bg-white border-t border-slate-100 flex justify-end items-center rounded-b-2xl shadow-[inset_0_5px_10px_-10px_rgba(0,0,0,0.1)]">
                     <Button
                         onClick={() => onOpenChange(false)}
-                        className="bg-indigo-600 hover:bg-gradient-to-r hover:from-indigo-600 hover:to-indigo-500 text-white font-black px-10 py-6 text-lg rounded-2xl clay-button bouncy-active shadow-xl shadow-indigo-200"
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-2 rounded-xl shadow-[0_4px_0_0_rgba(67,56,202,1)] hover:shadow-[0_2px_0_0_rgba(67,56,202,1)] hover:translate-y-[2px] transition-all active:shadow-none active:translate-y-[4px]"
                     >
                         知道了！🔥
                     </Button>

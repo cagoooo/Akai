@@ -60,10 +60,10 @@ export function CategoryFilter({
                 size="sm"
                 onClick={() => handleCategoryClick(null)}
                 className={cn(
-                    "gap-1.5 sm:gap-2 text-sm sm:text-base font-bold border-2 rounded-full transition-all duration-300 hover:scale-110 px-4 py-2 sm:px-5 sm:py-2.5 bouncy-active",
+                    "gap-1.5 sm:gap-2 text-sm sm:text-base font-semibold border-2 rounded-full transition-all duration-200 hover:scale-105 px-3 py-1.5 sm:px-4 sm:py-2",
                     selectedCategory === null && !showFavorites
-                        ? `${allColors.activeBg} text-white border-transparent shadow-lg shadow-blue-200/50 scale-105`
-                        : `${allColors.bg} ${allColors.text} ${allColors.border} hover:border-blue-300`
+                        ? `${allColors.activeBg} text-white border-transparent shadow-md`
+                        : `${allColors.bg} ${allColors.text} ${allColors.border} hover:${allColors.activeBg} hover:text-white`
                 )}
             >
                 <span>{allInfo.emoji}</span>
@@ -86,10 +86,10 @@ export function CategoryFilter({
                     size="sm"
                     onClick={onToggleFavorites}
                     className={cn(
-                        "gap-1.5 sm:gap-2 text-sm sm:text-base font-bold border-2 rounded-full transition-all duration-300 hover:scale-110 px-4 py-2 sm:px-5 sm:py-2.5 bouncy-active",
+                        "gap-1.5 sm:gap-2 text-sm sm:text-base font-semibold border-2 rounded-full transition-all duration-200 hover:scale-105 px-3 py-1.5 sm:px-4 sm:py-2",
                         showFavorites
-                            ? "bg-red-500 text-white border-transparent shadow-lg shadow-red-200/50 scale-105"
-                            : "bg-red-50 text-red-600 border-red-200 hover:border-red-300"
+                            ? "bg-red-500 text-white border-transparent shadow-md"
+                            : "bg-red-50 text-red-600 border-red-200 hover:bg-red-500 hover:text-white"
                     )}
                 >
                     <span>❤️</span>
@@ -125,10 +125,10 @@ export function CategoryFilter({
                         size="sm"
                         onClick={() => handleCategoryClick(category)}
                         className={cn(
-                            "gap-1.5 sm:gap-2 text-sm sm:text-base font-bold border-2 rounded-full transition-all duration-300 hover:scale-110 px-4 py-2 sm:px-5 sm:py-2.5 bouncy-active",
+                            "gap-1.5 sm:gap-2 text-sm sm:text-base font-semibold border-2 rounded-full transition-all duration-200 hover:scale-105 px-3 py-1.5 sm:px-4 sm:py-2",
                             isActive
-                                ? `${colors.activeBg} text-white border-transparent shadow-lg scale-105 shadow-primary/20`
-                                : `${colors.bg} ${colors.text} ${colors.border} hover:border-primary/30`
+                                ? `${colors.activeBg} text-white border-transparent shadow-md`
+                                : `${colors.bg} ${colors.text} ${colors.border}`
                         )}
                     >
                         <span>{info.emoji}</span>
