@@ -5,7 +5,7 @@ import { ToolCard } from "@/components/ToolCard";
 import { TeacherIntro } from "@/components/TeacherIntro";
 import { tools } from "@/lib/data";
 import { Button } from "@/components/ui/button";
-import { Trophy, Clock, X, Keyboard, ChevronDown, ChevronUp } from "lucide-react";
+import { Trophy, Clock, X, Keyboard, ChevronDown, ChevronUp, ArrowRight, Sparkles } from "lucide-react";
 import { useTour } from "@/components/TourProvider";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { AdvancedSearch } from "@/components/AdvancedSearch";
@@ -170,22 +170,22 @@ export function Home() {
       <main id="main-content" role="main" className="container mx-auto px-3 sm:px-6 py-4 sm:py-6 md:py-8" aria-label="教育工具列表">
         {/* 頂部標題區域 */}
         <header
-          className="relative overflow-hidden mb-4 sm:mb-6 p-5 sm:p-6 md:p-8 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 shadow-lg"
+          className="relative overflow-hidden mb-6 sm:mb-8 p-6 sm:p-10 md:p-14 rounded-[2rem] bg-gradient-to-br from-indigo-600 via-blue-600 to-indigo-700 shadow-2xl border border-white/20"
           data-tour="header-section"
         >
-          {/* 背景裝飾 */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-white/20 via-transparent to-transparent" />
-          <div className="absolute top-0 right-0 w-32 h-32 sm:w-48 sm:h-48 bg-white/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-24 h-24 sm:w-36 sm:h-36 bg-purple-400/20 rounded-full blur-2xl" />
+          {/* 背景裝飾 - 更加細緻的極光感 */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,_rgba(255,255,255,0.15),_transparent)]" />
+          <div className="absolute top-[-10%] right-[-5%] w-[40%] h-[60%] bg-white/10 rounded-full blur-[100px] animate-pulse" style={{ animationDuration: '4s' }} />
+          <div className="absolute bottom-[-20%] left-[-10%] w-[50%] h-[70%] bg-purple-500/20 rounded-full blur-[120px]" />
 
           <div className="relative z-10 text-center">
-            {/* 主標題 */}
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white tracking-tight mb-2 sm:mb-3">
-              ✨ 教育科技創新專區 ✨
+            {/* 主標題 - 套用 Plus Jakarta Sans 與緊湊排版 */}
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-white tracking-tighter mb-4 drop-shadow-sm">
+              教育科技創新專區
             </h1>
 
-            {/* 副標題 */}
-            <p className="text-sm sm:text-base md:text-lg text-white/80 font-medium max-w-2xl mx-auto">
+            {/* 副標題 - 更具現代感的文字間距 */}
+            <p className="text-sm sm:text-lg md:text-xl text-white/90 font-medium max-w-2xl mx-auto leading-relaxed tracking-wide opacity-90">
               探索阿凱老師開發的教育工具，為您的教學增添創新的可能
             </p>
           </div>
@@ -197,9 +197,9 @@ export function Home() {
           <div className="xl:hidden w-full px-2 sm:px-0">
             <button
               onClick={() => document.getElementById('mobile-rankings')?.scrollIntoView({ behavior: 'smooth' })}
-              className="w-full group relative overflow-hidden rounded-2xl bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 p-[2px] shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+              className="w-full group relative overflow-hidden rounded-2xl bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 p-[2px] shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] bouncy-active"
             >
-              <div className="relative flex items-center justify-center gap-3 rounded-2xl bg-white/90 dark:bg-gray-900/90 px-4 py-3 sm:py-4 backdrop-blur-sm group-hover:bg-white/80 dark:group-hover:bg-gray-900/80 transition-all">
+              <div className="relative flex items-center justify-center gap-3 rounded-2xl bg-white/80 dark:bg-gray-900/80 px-4 py-3 sm:py-4 backdrop-blur-md group-hover:bg-white/70 dark:group-hover:bg-gray-900/70 transition-all">
                 {/* 獎杯圖示帶動畫 */}
                 <div className="relative">
                   <Trophy className="w-5 h-5 sm:w-6 sm:h-6 text-amber-500 group-hover:text-amber-600 transition-colors animate-bounce" style={{ animationDuration: '2s' }} />
@@ -207,20 +207,14 @@ export function Home() {
                 </div>
 
                 {/* 文字 */}
-                <span className="text-sm sm:text-base font-bold bg-gradient-to-r from-amber-600 via-orange-600 to-rose-600 bg-clip-text text-transparent">
-                  跳至工具排行榜
+                <span className="text-sm sm:text-base font-bold bg-gradient-to-r from-amber-600 via-orange-600 to-rose-600 bg-clip-text text-transparent tracking-tight">
+                  挑戰工具影響力排行榜
                 </span>
 
                 {/* 箭頭指示 */}
-                <svg
-                  className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500 group-hover:translate-y-1 transition-transform animate-bounce"
-                  style={{ animationDuration: '1.5s', animationDelay: '0.5s' }}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                </svg>
+                <ArrowRight
+                  className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500 group-hover:translate-x-1 transition-transform"
+                />
               </div>
 
               {/* 背景光暈效果 */}

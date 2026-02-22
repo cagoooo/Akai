@@ -225,10 +225,10 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
 
         <Card
           className={cn(
-            "group h-full hover:shadow-xl transition-all duration-300 cursor-pointer",
+            "group h-full transition-all duration-300 cursor-pointer spring-bounce hover-float bouncy-active",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-            "overflow-hidden border-2 rounded-2xl",
-            "hover:border-primary/30",
+            "overflow-hidden border-2 rounded-2xl soft-shadow",
+            "hover:border-primary/40",
             colors?.bg || "bg-white"
           )}
           onClick={handleClick}
@@ -433,10 +433,10 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                     variant="default"
                     size="lg"
                     className={cn(
-                      "flex-1 gap-2 text-sm sm:text-base font-semibold py-5 sm:py-6 rounded-xl",
+                      "flex-1 gap-2 text-sm sm:text-base font-bold py-5 sm:py-6 rounded-xl",
                       "bg-gradient-to-r from-primary to-indigo-600",
                       "hover:from-primary/90 hover:to-indigo-600/90",
-                      "shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30",
+                      "clay-button bouncy-active shadow-lg shadow-primary/20",
                       "transition-all duration-300"
                     )}
                     onClick={(e) => {
@@ -444,7 +444,7 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                       handleClick();
                     }}
                   >
-                    <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5 group-hover:rotate-12 transition-transform" />
                     開啟使用
                   </Button>
 
