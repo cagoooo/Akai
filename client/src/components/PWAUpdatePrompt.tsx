@@ -20,7 +20,26 @@ export function PWAUpdatePrompt() {
         dismissUpdate,
     } = usePWAUpdate();
 
-    const [showInstallPrompt, setShowInstallPrompt] = useState(true);
+    const [showInstallPrompt, setShowInstallPrompt] = useState(() => {
+        try {
+            const lastDismissed = localStorage.getItem('lastPwaPromptDismissedAt');
+            if (lastDismissed) {
+                const dismissedAt = parseInt(lastDismissed, 10);
+                const oneDayMs = 24 * 60 * 60 * 1000;
+                if (Date.now() - dismissedAt < oneDayMs) {
+                    return false;
+                }
+            }
+        } catch (e) { }
+        return true;
+    });
+
+    const handleDismissInstall = () => {
+        setShowInstallPrompt(false);
+        try {
+            localStorage.setItem('lastPwaPromptDismissedAt', Date.now().toString());
+        } catch (e) { }
+    };
 
     // 離線指示器
     const OfflineIndicator = () => (
@@ -120,7 +139,7 @@ export function PWAUpdatePrompt() {
                                         <Button
                                             size="sm"
                                             variant="ghost"
-                                            onClick={() => setShowInstallPrompt(false)}
+                                            onClick={handleDismissInstall}
                                         >
                                             不用了
                                         </Button>
@@ -130,7 +149,7 @@ export function PWAUpdatePrompt() {
                                     variant="ghost"
                                     size="icon"
                                     className="shrink-0 h-8 w-8"
-                                    onClick={() => setShowInstallPrompt(false)}
+                                    onClick={handleDismissInstall}
                                 >
                                     <X className="w-4 h-4" />
                                 </Button>

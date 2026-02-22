@@ -178,6 +178,9 @@ export function TourGuide({ onComplete }: TourGuideProps) {
   // 關閉導覽提示
   const dismissTour = () => {
     setIsVisible(false);
+    try {
+      localStorage.setItem('lastTourPromptDismissedAt', Date.now().toString());
+    } catch (e) { }
   };
 
   // 重置導覽狀態
@@ -195,8 +198,23 @@ export function TourGuide({ onComplete }: TourGuideProps) {
     // 初始化驅動程序
     const driver = initializeDriver();
 
+    // 檢查導覽提示的冷卻時間 (24小時)
+    const checkPromptCooldown = () => {
+      try {
+        const lastDismissed = localStorage.getItem('lastTourPromptDismissedAt');
+        if (lastDismissed) {
+          const dismissedAt = parseInt(lastDismissed, 10);
+          const oneDayMs = 24 * 60 * 60 * 1000;
+          if (Date.now() - dismissedAt < oneDayMs) {
+            return false; // 還在冷卻期
+          }
+        }
+      } catch (e) { }
+      return true; // 可以顯示
+    };
+
     // 初次載入且尚未完成導覽時，延遲顯示提示
-    if (!tourCompleted) {
+    if (!tourCompleted && checkPromptCooldown()) {
       const timer = setTimeout(() => {
         setIsVisible(true);
       }, 2000);
