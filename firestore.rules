@@ -56,7 +56,10 @@ service cloud.firestore {
     // ==================== 許願池 ====================
     
     match /wishingWell/{wishId} {
+      // 所有人都可以提交新許願
       allow create: if true;
+      // 只有登入者（管理員）可以讀取、更新、刪除
+      // 注意：實測建議確認 request.auth.uid 是否在管理員清單中
       allow read, update, delete: if request.auth != null;
     }
   }
