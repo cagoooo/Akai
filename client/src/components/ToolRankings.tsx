@@ -135,14 +135,59 @@ export function ToolRankings() {
     }
   };
 
-  // 初始載入與定期刷新
+  // 初始載入與即時監聽
   useEffect(() => {
-    loadRankings();
+    let unsubscribe: (() => void) | undefined;
 
-    // 每 10 秒刷新一次
-    const refreshTimer = setInterval(loadRankings, 10000);
+    const initRealtimeRankings = async () => {
+      try {
+        const { db, isFirebaseAvailable } = await import('@/lib/firebase');
+        const { collection, onSnapshot, orderBy, query, limit } = await import('firebase/firestore');
 
-    return () => clearInterval(refreshTimer);
+        if (!isFirebaseAvailable() || !db) {
+          console.warn('Firebase 不可用，執行一次性獲取');
+          loadRankings();
+          return;
+        }
+
+        // 即時監聽排行榜 (前 10 名)
+        unsubscribe = onSnapshot(
+          query(collection(db, 'toolUsageStats'), orderBy('totalClicks', 'desc'), limit(10)),
+          (snapshot) => {
+            const stats: ToolRanking[] = [];
+            snapshot.forEach((doc) => {
+              const data = doc.data();
+              stats.push({
+                toolId: data.toolId,
+                totalClicks: data.totalClicks,
+                lastUsedAt: data.lastUsedAt?.toDate?.()?.toISOString() || null,
+                categoryClicks: data.categoryClicks || {}
+              });
+            });
+
+            if (stats.length > 0) {
+              setRankings(stats);
+              localStorage.setItem('localToolsRankings', JSON.stringify(stats));
+            }
+            setIsLoading(false);
+            setError(null);
+            console.log('🏆 排行榜已即時更新');
+          },
+          (err) => {
+            console.error('排行榜監聽失敗:', err);
+            setError(err as Error);
+            loadRankings(); // 失敗時嘗試一次性載入
+          }
+        );
+      } catch (err) {
+        console.error('初始化排行榜監聽失敗:', err);
+        loadRankings();
+      }
+    };
+
+    initRealtimeRankings();
+
+    return () => unsubscribe?.();
   }, []);
 
   // 生成排名變動數據

@@ -76,7 +76,6 @@ export function AnalyticsDashboard() {
           return;
         }
 
-        // 即時監聽訪問統計
         unsubscribeVisitor = onSnapshot(
           doc(db, 'visitorStats', 'global'),
           (snapshot) => {
@@ -84,11 +83,11 @@ export function AnalyticsDashboard() {
               setVisitorStats(snapshot.data() as VisitorStats);
               setLastUpdated(new Date());
               setIsRealtime(true);
-              console.log('📊 訪問統計已即時更新');
+              console.log('📊 儀表板數據已由 Firebase 即時推送');
             }
           },
           (error) => {
-            console.error('訪問統計監聽失敗:', error);
+            console.error('儀表板監聽失敗:', error);
             setIsRealtime(false);
           }
         );
