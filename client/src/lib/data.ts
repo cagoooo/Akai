@@ -556,6 +556,17 @@ export const tools: EducationalTool[] = [
     previewUrl: "/previews/recognize_preview.webp",
     detailedDescription: "識生學坊是一款專為教師打造的輔助工具，特別針對「臉盲」或需要快速記住大量學生面孔的需求。系統支援自定義班級名單與照片匯入，讓記憶訓練更貼近實際教學場景。",
     tags: ["臉盲", "學生辨識", "記憶訓練", "師生互動", "教學輔助"]
+  },
+  {
+    id: 55,
+    title: "ㄅㄆㄇ注音大挑戰",
+    description: "專為兒童設計的注音學習挑戰，透過趣味互動讓孩子輕鬆掌握ㄅㄆㄇ。",
+    url: "https://cagoooo.github.io/zhuyin/",
+    icon: "Languages",
+    category: "language",
+    previewUrl: "/previews/zhuyin_preview.webp",
+    detailedDescription: "「ㄅㄆㄇ注音大挑戰」是一款針對幼童與初學學童所開發的注音學習輔助工具。透過豐富的視覺回饋與漸進式的設計，不但能提升孩子對注音符號的辨識能力，還能有效增加學習動機，是家長與教師的好幫手。",
+    tags: ["注音", "ㄅㄆㄇ", "國語", "幼童", "拼音"]
   }
 ];
 
