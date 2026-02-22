@@ -9,6 +9,17 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// 跨網域與安全性標頭設定 (解決 Firebase Auth 彈窗無法關閉的問題)
+app.use((req, res, next) => {
+  // 允許 Firebase Auth 彈窗與主頁面通訊
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+  res.setHeader("Cross-Origin-Embedder-Policy", "unsafe-none");
+
+  // 基本的 CORS 支援，避免部分資源加載失敗
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  next();
+});
+
 (async () => {
   try {
     log("Starting server...");
@@ -16,7 +27,7 @@ app.use(express.urlencoded({ extended: false }));
     // 初始化時測試數據庫連接
     try {
       log("測試資料庫連接...");
-      
+
       if (dbType === 'postgres' && sql) {
         // 使用 sql 客戶端直接查詢 (僅 PostgreSQL)
         const result = await sql`SELECT 1 as connected`;
@@ -43,7 +54,7 @@ app.use(express.urlencoded({ extended: false }));
       // 獲取內存緩存狀態
       const { getCache } = await import('./cache');
       const inMemoryCache = getCache();
-      
+
       const status: any = {
         status: "healthy",
         timestamp: new Date().toISOString(),
@@ -60,17 +71,17 @@ app.use(express.urlencoded({ extended: false }));
           toolStatsCount: inMemoryCache.toolStats instanceof Map ? inMemoryCache.toolStats.size : 0
         }
       };
-      
+
       try {
         if (dbType === 'postgres' && sql) {
           status.databaseDriver = "@neondatabase/serverless";
-          
+
           const startTime = Date.now();
           // 嘗試 PostgreSQL 連接
           try {
             const result = await sql`SELECT NOW() as now`;
             const responseTime = Date.now() - startTime;
-            
+
             status.database = "connected";
             status.dbResponseTime = `${responseTime}ms`;
             status.dbTimestamp = result[0]?.now;
@@ -81,14 +92,14 @@ app.use(express.urlencoded({ extended: false }));
           }
         } else if (dbType === 'sqlite') {
           status.databaseDriver = "better-sqlite3";
-          
+
           // SQLite 健康檢查
           try {
             const startTime = Date.now();
             // 簡單的 SQLite 查詢
             const result = db.run("SELECT datetime('now') as current_time");
             const responseTime = Date.now() - startTime;
-            
+
             status.database = "connected";
             status.dbResponseTime = `${responseTime}ms`;
             status.dbEngine = "SQLite";
@@ -98,13 +109,13 @@ app.use(express.urlencoded({ extended: false }));
             status.dbError = sqliteError instanceof Error ? sqliteError.message : String(sqliteError);
           }
         }
-        
+
         // 檢查文件系統
         try {
           const logDir = path.join(process.cwd(), 'logs');
           const cacheDir = path.join(process.cwd(), 'cache');
           const sqliteDir = path.join(process.cwd(), 'sqlite');
-          
+
           status.filesystemStatus = {
             logs: fs.existsSync(logDir) ? 'available' : 'missing',
             cache: fs.existsSync(cacheDir) ? 'available' : 'missing',
@@ -115,15 +126,15 @@ app.use(express.urlencoded({ extended: false }));
             error: fsError instanceof Error ? fsError.message : String(fsError)
           };
         }
-        
+
         res.json(status);
       } catch (error) {
         console.error("Health check failed:", error);
-        
+
         status.status = "degraded";
         status.error = error instanceof Error ? error.message : "Unknown error";
         status.errorStack = error instanceof Error ? error.stack : undefined;
-        
+
         // 仍返回200但標示為degraded，這樣負載均衡器不會直接將服務標記為不可用
         res.status(200).json(status);
       }
