@@ -41,7 +41,7 @@ export function KeyboardShortcutsDialog({ open, onOpenChange }: KeyboardShortcut
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="sm:max-w-[500px] bg-background text-foreground z-50 border shadow-lg">
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
                         <Keyboard className="h-5 w-5" />
