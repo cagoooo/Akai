@@ -1,0 +1,39 @@
+<svg width="800" height="450" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#EAB308" stopOpacity="0.1"/>
+      <stop offset="100%" stopColor="#FCD34D" stopOpacity="0.1"/>
+    </linearGradient>
+    <linearGradient id="icon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#EAB308"/>
+      <stop offset="100%" stopColor="#FCD34D"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="800" height="450" fill="#ffffff"/>
+  <rect width="800" height="450" fill="url(#bg-gradient)"/>
+  
+  <!-- 主要圖示：書本和分析圖表 -->
+  <g transform="translate(350, 175)">
+    <circle cx="50" cy="50" r="40" fill="url(#icon-gradient)" opacity="0.1"/>
+    <!-- 書本圖標 -->
+    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" 
+          transform="translate(30, 30)" 
+          stroke="url(#icon-gradient)" 
+          strokeWidth="2" 
+          fill="none"/>
+    <!-- 圖表圖標 -->
+    <path d="M18 20V10M12 20V4M6 20v-6" 
+          transform="translate(60, 20)" 
+          stroke="url(#icon-gradient)" 
+          strokeWidth="2" 
+          fill="none"/>
+  </g>
+  
+  <!-- 裝飾元素 -->
+  <circle cx="200" cy="100" r="5" fill="#EAB308" opacity="0.5"/>
+  <circle cx="600" cy="350" r="5" fill="#FCD34D" opacity="0.5"/>
+  <circle cx="150" cy="400" r="3" fill="#EAB308" opacity="0.3"/>
+  <circle cx="650" cy="50" r="3" fill="#FCD34D" opacity="0.3"/>
+</svg>

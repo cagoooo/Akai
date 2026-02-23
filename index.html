@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <style data-vite-theme="" data-inject-first="">:root {
+      --background: 0 0% 100%;
+--foreground: 20 14.3% 4.1%;
+--muted: 60 4.8% 95.9%;
+--muted-foreground: 25 5.3% 44.7%;
+--popover: 0 0% 100%;
+--popover-foreground: 20 14.3% 4.1%;
+--card: 0 0% 100%;
+--card-foreground: 20 14.3% 4.1%;
+--border: 20 5.9% 90%;
+--input: 20 5.9% 90%;
+--primary: 220 80% 50%;
+--primary-foreground: 218 98% 99%;
+--secondary: 60 4.8% 95.9%;
+--secondary-foreground: 24 9.8% 10%;
+--accent: 60 4.8% 95.9%;
+--accent-foreground: 24 9.8% 10%;
+--destructive: 0 84.2% 60.2%;
+--destructive-foreground: 60 9.1% 97.8%;
+--ring: 20 14.3% 4.1%;
+--radius: 0.75rem;
+  }
+  .dark {
+      --background: 240 10% 3.9%;
+--foreground: 0 0% 98%;
+--muted: 240 3.7% 15.9%;
+--muted-foreground: 240 5% 64.9%;
+--popover: 240 10% 3.9%;
+--popover-foreground: 0 0% 98%;
+--card: 240 10% 3.9%;
+--card-foreground: 0 0% 98%;
+--border: 240 3.7% 15.9%;
+--input: 240 3.7% 15.9%;
+--primary: 220 80% 50%;
+--primary-foreground: 218 98% 99%;
+--secondary: 240 3.7% 15.9%;
+--secondary-foreground: 0 0% 98%;
+--accent: 240 3.7% 15.9%;
+--accent-foreground: 0 0% 98%;
+--destructive: 0 62.8% 30.6%;
+--destructive-foreground: 0 0% 98%;
+--ring: 240 4.9% 83.9%;
+--radius: 0.75rem;
+  }</style>
+
+  <meta charset="UTF-8" />
+  <!-- 動態設定 base URL -->
+  <script>
+    (function () {
+      // 開發環境強制移除 Service Worker (避免 503 Service Unavailable)
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function (registrations) {
+            for (let registration of registrations) {
+              console.warn('[Dev] 強制移除 Service Worker:', registration.scope);
+              registration.unregister();
+            }
+          });
+        }
+      }
+
+      var base = window.location.pathname.startsWith('/Akai') ? '/Akai/' : '/';
+      // 動態插入 link 標籤
+      var head = document.head;
+      var createLink = function (rel, href, type, sizes) {
+        var link = document.createElement('link');
+        link.rel = rel;
+        link.href = base + href;
+        if (type) link.type = type;
+        if (sizes) link.sizes = sizes;
+        head.appendChild(link);
+      };
+      createLink('icon', 'favicon.ico', 'image/x-icon');
+      createLink('icon', 'favicon-32x32.png', 'image/png', '32x32');
+      createLink('icon', 'favicon-16x16.png', 'image/png', '16x16');
+      createLink('apple-touch-icon', 'apple-touch-icon.png', null, '180x180');
+      createLink('manifest', 'manifest.json');
+    })();
+  </script>
+
+  <!-- DNS 預連接與預獲取 - 改善 LCP/FCP -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://firestore.googleapis.com" />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="https://firestore.googleapis.com" />
+
+  <!-- Preload 關鍵字體 (減少 FOUT/CLS) -->
+  <link rel="preload"
+    href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" as="font"
+    type="font/woff2" crossorigin />
+  <link rel="preload"
+    href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6fAZ9hiA.woff2" as="font"
+    type="font/woff2" crossorigin />
+
+  <!-- Preload 關鍵資源 (LCP 優化) - 預載入首屏起初必定會在視口內的前兩張圖片 -->
+  <link rel="preload" as="image" href="./previews/tool_1.webp" fetchpriority="high" />
+  <link rel="preload" as="image" href="./previews/tool_2.webp" fetchpriority="high" />
+
+  <!-- 關鍵 CSS 內聯與字體防閃爍 -->
+  <style>
+    /* 防止 FOUT 和 CLS */
+    @font-face {
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: local('Inter Regular'), local('Inter-Regular'), url(https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
+    @font-face {
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: local('Inter Medium'), local('Inter-Medium'), url(https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6fAZ9hiA.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
+    @font-face {
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 600;
+      font-display: swap;
+      src: local('Inter SemiBold'), local('Inter-SemiBold'), url(https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuGKYAZ9hiA.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
+    @font-face {
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: local('Inter Bold'), local('Inter-Bold'), url(https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuFuYAZ9hiA.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
+    :root {
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      margin: 0;
+      min-height: 100vh;
+      background-color: #fafafa;
+    }
+
+    /* 骨架屏預設顯示 */
+    #root:empty {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    #root:empty::after {
+      content: '';
+      width: 40px;
+      height: 40px;
+      border: 3px solid #e5e7eb;
+      border-top-color: #6366f1;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+
+  <!-- Favicon 和 manifest 由上方腳本動態插入 -->
+  <meta name="msapplication-TileColor" content="#ffffff" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="致力於開發實用的教育工具，結合科技與教育，為師生創造更好的教學與學習體驗。提供線上即時客服、教案靈感生成、漢語閱讀理解等多元化教育資源。" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="教育科技創新專區" />
+
+
+  <!-- Primary Meta Tags -->
+  <title>教育科技創新專區 - 阿凱老師</title>
+  <meta name="title" content="教育科技創新專區 - 阿凱老師" />
+  <meta name="author" content="阿凱老師" />
+  <meta name="keywords" content="教育科技,教學工具,線上教育,教育創新,教育資源,教案設計,閱讀理解,PIRLS,QRCode工具,蜂類教育,教師評語,石門國小,桃園教育" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="教育科技創新專區" />
+  <meta property="og:title" content="教育科技創新專區 - 阿凱老師" />
+  <meta property="og:description" content="致力於開發實用的教育工具，結合科技與教育，為師生創造更好的教學與學習體驗。" />
+  <meta property="og:image" content="/Akai.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="zh_TW" />
+  <meta property="og:url" content="https://smes.tyc.edu.tw" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@教育科技創新專區" />
+  <meta name="twitter:title" content="教育科技創新專區 - 阿凱老師" />
+  <meta name="twitter:description" content="致力於開發實用的教育工具，結合科技與教育，為師生創造更好的教學與學習體驗。" />
+  <meta property="twitter:image" content="/Akai.png" />
+  <meta name="twitter:image:alt" content="教育科技創新專區預覽圖" />
+
+  <!-- Additional Meta -->
+  <meta name="robots" content="index, follow" />
+  <meta name="language" content="Traditional Chinese" />
+  <meta name="revisit-after" content="7 days" />
+  <meta name="generator" content="Vite" />
+  <meta name="format-detection" content="telephone=no" />
+
+
+  <!-- Schema.org markup for Google -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "EducationalOrganization",
+      "name": "教育科技創新專區",
+      "description": "致力於開發實用的教育工具，結合科技與教育，為師生創造更好的教學與學習體驗。",
+      "url": "https://smes.tyc.edu.tw",
+      "logo": "apple-touch-icon.png",
+      "sameAs": [
+        "https://line.me/R/ti/p/@733oiboa",
+        "https://lin.ee/pCqnVhT"
+      ],
+      "founder": {
+        "@type": "Person",
+        "name": "阿凱老師",
+        "jobTitle": "教育科技創新者"
+      },
+      "offers": {
+        "@type": "AggregateOffer",
+        "offers": [
+          {
+            "@type": "Offer",
+            "name": "線上即時客服",
+            "description": "提供即時的線上教育支援和諮詢服務"
+          },
+          {
+            "@type": "Offer",
+            "name": "教案靈感生成",
+            "description": "為教師提供創新的教學設計靈感"
+          }
+        ]
+      }
+    }
+    </script>
+
+  <!-- Alternate language versions -->
+  <link rel="alternate" href="https://smes.tyc.edu.tw" hreflang="zh-TW" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://smes.tyc.edu.tw" />
+  <script type="module" crossorigin src="/assets/index-DEb58Ahh.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/vendor-react-CJhR42E5.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor-ui-C4lPoWQy.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor-utils-C4xBKWBT.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor-animation-ES48FiY_.js">
+  <link rel="stylesheet" crossorigin href="/assets/index-DrmOb73j.css">
+</head>
+
+<body>
+  <!-- 無障礙性：跳過導航直接到主內容 -->
+  <a href="#main-content" class="skip-link">
+    跳到主要內容
+  </a>
+  <style>
+    /* 無障礙性：Skip Link 樣式 */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: #6366f1;
+      color: white;
+      padding: 8px 16px;
+      z-index: 1000;
+      border-radius: 0 0 8px 0;
+      font-weight: 600;
+      text-decoration: none;
+      transition: top 0.2s;
+    }
+
+    .skip-link:focus {
+      top: 0;
+    }
+
+    /* 無障礙性：尊重使用者動畫偏好 */
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* 無障礙性：改善焦點可見性 */
+    :focus-visible {
+      outline: 3.5px solid #1e40af !important;
+      /* 深藍色強化 */
+      outline-offset: 3px;
+    }
+  </style>
+
+  <!-- GitHub Pages SPA 路由處理 -->
+  <script>
+    (function () {
+      // 處理從 404.html 重定向過來的路徑
+      var redirect = new URLSearchParams(window.location.search).get('redirect');
+      if (redirect) {
+        // 移除 redirect 參數並導航到正確的路徑
+        window.history.replaceState(null, '', redirect);
+      }
+    })();
+  </script>
+  <!-- LINE 瀏覽器 Fallback 載入畫面 -->
+  <div id="line-fallback"
+    style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px;">
+    <div
+      style="background: rgba(255,255,255,0.95); border-radius: 20px; padding: 40px 30px; max-width: 350px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+      <div style="font-size: 48px; margin-bottom: 20px;">🚀</div>
+      <h2 style="color: #333; font-size: 20px; margin: 0 0 15px 0; font-weight: 700;">頁面載入中...</h2>
+      <p style="color: #666; font-size: 14px; line-height: 1.6; margin: 0 0 25px 0;">
+        若長時間無法載入，建議點擊下方按鈕用外部瀏覽器開啟
+      </p>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <a id="fallback-external-link" href="#" target="_blank" rel="noopener noreferrer"
+          style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 14px 28px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 15px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);">
+          🔗 用外部瀏覽器開啟
+        </a>
+        <button onclick="document.getElementById('line-fallback').style.display='none';"
+          style="background: transparent; border: 2px solid #ddd; color: #666; padding: 12px 24px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 500;">
+          繼續等待
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      // LINE 瀏覽器檢測 - 延遲至 DOMContentLoaded 以免阻塞初次算繪
+      (function () {
+        // LINE 瀏覽器檢測
+        var ua = navigator.userAgent || navigator.vendor || window.opera;
+        var isLine = /Line/i.test(ua);
+        var isInAppBrowser = /FBAN|FBAV|Instagram|Twitter|MicroMessenger|Line/i.test(ua);
+
+        if (isLine || isInAppBrowser) {
+          // 設定超時顯示 fallback
+          var fallbackTimeout = setTimeout(function () {
+            var fallback = document.getElementById('line-fallback');
+            var root = document.getElementById('root');
+
+            // 如果 root 仍然是空的或只有載入動畫，顯示 fallback
+            if (root && (!root.hasChildNodes() || root.innerHTML.trim() === '')) {
+              fallback.style.display = 'flex';
+
+              // 設定外部連結
+              var externalLink = document.getElementById('fallback-external-link');
+              var currentUrl = window.location.href;
+
+              // 嘗試解析工具 ID 並獲取對應的外部連結
+              var toolMatch = currentUrl.match(/\/tool\/(\d+)/);
+              if (toolMatch) {
+                // 工具對應的外部連結映射 (常用工具)
+                var toolUrls = {
+                  47: 'https://cagoooo.github.io/signature/',
+                  48: 'https://cagoooo.github.io/form/',
+                  46: 'https://cagoooo.github.io/schedule/',
+                  45: 'https://cagoooo.github.io/cloud',
+                  41: 'https://cagoooo.github.io/song/',
+                  3: 'https://cagoooo.github.io/vote/',
+                  2: 'https://cagoooo.github.io/staff/',
+                  10: 'https://cagoooo.github.io/class/'
+                };
+                var toolId = parseInt(toolMatch[1]);
+                if (toolUrls[toolId]) {
+                  externalLink.href = toolUrls[toolId];
+                } else {
+                  externalLink.href = currentUrl;
+                }
+              } else {
+                externalLink.href = currentUrl;
+              }
+            }
+          }, 5000); // 5 秒後顯示 fallback
+
+          // 當 React 成功渲染後，取消 fallback
+          var checkInterval = setInterval(function () {
+            var root = document.getElementById('root');
+            if (root && root.children.length > 0 && root.querySelector('[class*="min-h-screen"]')) {
+              clearTimeout(fallbackTimeout);
+              clearInterval(checkInterval);
+              document.getElementById('line-fallback').style.display = 'none';
+            }
+          }, 500);
+
+          // 30 秒後停止檢查
+          setTimeout(function () {
+            clearInterval(checkInterval);
+          }, 30000);
+        }
+      })();
+    });
+  </script>
+
+  <div id="root"></div>
+</body>
+
+</html>

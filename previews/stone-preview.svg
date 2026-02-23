@@ -1,0 +1,29 @@
+<svg width="800" height="450" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#4F46E5" stopOpacity="0.1"/>
+      <stop offset="100%" stopColor="#06B6D4" stopOpacity="0.1"/>
+    </linearGradient>
+    <linearGradient id="icon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#4F46E5"/>
+      <stop offset="100%" stopColor="#06B6D4"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="800" height="450" fill="#ffffff"/>
+  <rect width="800" height="450" fill="url(#bg-gradient)"/>
+  
+  <!-- 主要圖示 -->
+  <g transform="translate(350, 175)">
+    <circle cx="50" cy="50" r="40" fill="url(#icon-gradient)" opacity="0.1"/>
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z" transform="translate(30, 30)" stroke="url(#icon-gradient)" strokeWidth="2" fill="none"/>
+    <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313-12.454z" transform="translate(60, 20)" stroke="url(#icon-gradient)" strokeWidth="2" fill="none"/>
+  </g>
+  
+  <!-- 裝飾元素 -->
+  <circle cx="200" cy="100" r="5" fill="#4F46E5" opacity="0.5"/>
+  <circle cx="600" cy="350" r="5" fill="#06B6D4" opacity="0.5"/>
+  <circle cx="150" cy="400" r="3" fill="#4F46E5" opacity="0.3"/>
+  <circle cx="650" cy="50" r="3" fill="#06B6D4" opacity="0.3"/>
+</svg>

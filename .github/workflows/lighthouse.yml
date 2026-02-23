@@ -1,0 +1,74 @@
+name: Lighthouse CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Wait for deployment
+        # 等待 GitHub Pages 部署完成
+        run: sleep 30
+
+      - name: Run Lighthouse
+        uses: treosh/lighthouse-ci-action@v10
+        id: lighthouse
+        continue-on-error: true
+        with:
+          urls: |
+            https://cagoooo.github.io/Akai/
+          budgetPath: ./budget.json
+          uploadArtifacts: false
+          temporaryPublicStorage: true
+
+      - name: Format Lighthouse Score
+        id: format_lighthouse_score
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            try {
+              const results = JSON.parse(fs.readFileSync('.lighthouseci/manifest.json', 'utf8'));
+              const summary = results[0]?.summary || {};
+              
+              const formatScore = (score) => {
+                if (!score) return '❓';
+                const value = Math.round(score * 100);
+                if (value >= 90) return `🟢 ${value}`;
+                if (value >= 50) return `🟡 ${value}`;
+                return `🔴 ${value}`;
+              };
+              
+              const output = `
+              ## Lighthouse 效能報告
+              
+              | 指標 | 分數 |
+              |------|------|
+              | Performance | ${formatScore(summary.performance)} |
+              | Accessibility | ${formatScore(summary.accessibility)} |
+              | Best Practices | ${formatScore(summary['best-practices'])} |
+              | SEO | ${formatScore(summary.seo)} |
+              `;
+              
+              console.log(output);
+            } catch (e) {
+              console.log('無法讀取 Lighthouse 結果:', e.message);
+            }
+
+      - name: Upload Lighthouse Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-report-${{ github.run_number }}
+          path: .lighthouseci/
+          retention-days: 30
+          if-no-files-found: ignore
