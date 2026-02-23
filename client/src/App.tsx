@@ -29,6 +29,7 @@ import { queryClient } from "./lib/queryClient";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TourProvider } from "@/components/TourProvider";
+import { useToast } from "@/hooks/use-toast";
 
 // 取得 base path - Vite 會在建置時注入 BASE_URL
 const basePath = import.meta.env.BASE_URL || '/';
@@ -66,8 +67,42 @@ function PageSkeleton() {
 }
 
 function App() {
+  const { toast } = useToast();
   const [location, setLocation] = useLocation();
   const base = basePath.endsWith('/') ? basePath.slice(0, -1) : basePath;
+
+  useEffect(() => {
+    // 🛡️ [安全性修復] 全局資源 404 監聽（自癒補償機制）
+    const handleAssetError = (event: ErrorEvent | PromiseRejectionEvent) => {
+      const message = 'reason' in event ? event.reason?.message : event.message;
+      const isChunkError = /Loading chunk|Failed to fetch dynamically imported module/i.test(message || '');
+
+      if (isChunkError) {
+        console.error('🚀 偵測到版本斷層：資源已在伺服器更新，正在導引恢復...', message);
+        toast({
+          title: "🚀 偵測到系統更新",
+          description: "為了確保功能完全正常，我們需要快速為您同步最新資產。",
+          variant: "default",
+          action: (
+            <button
+              onClick={() => window.location.reload()}
+              className="px-3 py-1 bg-primary text-primary-foreground rounded-md text-sm font-bold shadow-lg"
+            >
+              立即同步
+            </button>
+          ),
+          duration: 10000,
+        });
+      }
+    };
+
+    window.addEventListener('error', handleAssetError, true);
+    window.addEventListener('unhandledrejection', handleAssetError);
+    return () => {
+      window.removeEventListener('error', handleAssetError, true);
+      window.removeEventListener('unhandledrejection', handleAssetError);
+    };
+  }, [toast]);
 
   useEffect(() => {
     // 🚀 SPA 路由恢復邏輯：處理 GitHub Pages 404 重定向

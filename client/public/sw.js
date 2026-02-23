@@ -7,7 +7,7 @@
  * - Stale While Revalidate: 圖片
  */
 
-const CACHE_VERSION = 'v3.1.8-update-fix';
+const CACHE_VERSION = 'v3.1.9-asset-recovery';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
 
@@ -170,14 +170,31 @@ async function cacheFirst(request) {
     if (networkResponse.ok && networkResponse.status === 200) {
       const cache = await caches.open(STATIC_CACHE);
       cache.put(request, networkResponse.clone());
-    } else if (networkResponse.status === 404 && request.url.endsWith('.js')) {
-      // 🚀 關鍵修復：如果是 JS 資源 404，通常代表版本更新，應刪除靜態緩存中的 index.html 迫使重新載入
-      console.warn('[SW] 檢測到資產 404，可能需要重新加載頁面:', request.url);
+    } else {
+      // 🚀 [緊急修復] 自癒機制：如果資源 (尤其是 .js) 發生 404，代表可能伺服器已更新但本地 index.html 還是舊的
+      if (networkResponse.status === 404) {
+        if (request.url.endsWith('.js') || request.url.includes('/assets/')) {
+          console.warn('[SW] 偵測到關鍵資產 404，正在清理 index.html 快取以強制自癒...', request.url);
+          caches.open(STATIC_CACHE).then(cache => {
+            cache.delete(`${BASE_PATH}index.html`);
+            cache.delete(BASE_PATH); // 也刪除根路徑的快取
+          });
+        }
+      }
     }
     return networkResponse;
   } catch (error) {
     console.warn('[SW] Cache First 失敗:', request.url, error);
-    return new Response('離線中', { status: 503, statusText: 'Service Unavailable' });
+
+    // 如果是 JS 加載失敗，嘗試清理 index 快取
+    if (request.url.endsWith('.js')) {
+      caches.open(STATIC_CACHE).then(cache => {
+        cache.delete(`${BASE_PATH}index.html`);
+        cache.delete(BASE_PATH); // 也刪除根路徑的快取
+      });
+    }
+
+    return new Response('離線中或資源遺失', { status: 503 });
   }
 }
 

@@ -37,17 +37,15 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
     queryKey: ['/api/teacher/info'],
     queryFn: async () => {
       try {
-        const response = await fetch('/api/teacher/info');
-        if (!response.ok) throw new Error('API 失敗');
-        return await response.json();
+        const response = await fetch(`${import.meta.env.BASE_URL}api/teacher.json`);
+        if (!response.ok) throw new Error('無法載入教師資訊');
+        return response.json();
       } catch (err) {
         console.warn('正在切換至靜態教師數據備援...');
-        const staticResponse = await fetch(`${import.meta.env.BASE_URL}api/teacher.json`);
-        if (!staticResponse.ok) throw new Error('無法獲取教師資訊 (包含備援)');
-        return await staticResponse.json();
+        return fallbackTeacherInfo;
       }
     },
-    staleTime: 3600000, // 1 小時
+    staleTime: 1000 * 60 * 30, // 30 分鐘內不重複請求
   });
 
   const currentTeacherInfo = teacherData || fallbackTeacherInfo;
