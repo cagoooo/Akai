@@ -2,6 +2,20 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.1.0] - 2026-02-23
+
+### ⚡️ 效能優化 (Performance Plus)
+
+- 🚀 **資源預載 (Resource Preloading)**：實施 `tools.json` 與 `teacher.json` 的 API 預載，提升內容生成速度。
+- 瓦解 **TBT (Total Blocking Time)**：導入 `requestIdleCallback` 分段渲染「排行榜」、「訪客計數器」與「教師介紹」。
+- 重奪 **LCP (Largest Contentful Paint)**：為首屏首張卡片設定 `fetchpriority="high"`，並優化圖片佔位邏輯。
+- 🛠️ **SW 啟動優化**：延遲 Service Worker 註冊至 `window.onload`，避免啟動競爭。
+
+### ✨ UX 改良
+
+- 🖱️ **自動跳轉功能**：點擊「我的收藏」或「工具分類」按鈕後，頁面將自動平滑滾動至顯示區域，解決手機端視窗遮擋問題。
+
+---
 ## [2.20.1] - 2026-02-12
 
 ### 🔧 問題修復
