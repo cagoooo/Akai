@@ -66,7 +66,7 @@ const rankAnimationVariants = {
   }
 };
 
-// 更加豐富多彩的排名顏色
+// 更加豐富多彩的排名顏色 - 支持到前 10 名
 const rankColors: Record<string | number, string> = {
   0: "from-yellow-400/30 via-amber-300/40 to-yellow-200/50 dark:from-yellow-500/40 dark:via-amber-400/30 dark:to-yellow-300/20 border-l-4 border-yellow-400 shadow-[0_0_15px_rgba(234,179,8,0.2)]",
   1: "from-slate-300/30 via-gray-200/40 to-slate-100/50 dark:from-slate-600/40 dark:via-gray-500/30 dark:to-slate-400/20 border-l-4 border-slate-400 shadow-[0_0_15px_rgba(148,163,184,0.2)]",
@@ -74,8 +74,10 @@ const rankColors: Record<string | number, string> = {
   3: "from-blue-400/20 via-blue-300/30 to-blue-200/40 dark:from-blue-600/30 dark:via-blue-500/20 dark:to-blue-400/10 border-l-4 border-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.1)]",
   4: "from-green-400/20 via-green-300/30 to-green-200/40 dark:from-green-600/30 dark:via-green-500/20 dark:to-green-400/10 border-l-4 border-green-400 shadow-[0_0_10px_rgba(34,197,94,0.1)]",
   5: "from-indigo-400/20 via-indigo-300/30 to-indigo-200/40 dark:from-indigo-600/30 dark:via-indigo-500/20 dark:to-indigo-400/10 border-l-4 border-indigo-400 shadow-[0_0_10px_rgba(99,102,241,0.1)]",
-  6: "from-purple-400/20 via-purple-300/30 to-purple-200/40 dark:from-purple-600/30 dark:via-purple-500/20 dark:to-purple-400/10 border-l-4 border-purple-400 shadow-[0_0_10px_rgba(168,85,247,0.1)]",
-  7: "from-pink-400/20 via-pink-300/30 to-pink-200/40 dark:from-pink-600/30 dark:via-pink-500/20 dark:to-pink-400/10 border-l-4 border-pink-400 shadow-[0_0_10px_rgba(236,72,153,0.1)]",
+  6: "from-teal-400/20 via-teal-300/30 to-teal-200/40 dark:from-teal-600/30 dark:via-teal-500/20 dark:to-teal-400/10 border-l-4 border-teal-400 shadow-[0_0_10px_rgba(20,184,166,0.1)]",
+  7: "from-rose-400/20 via-rose-300/30 to-rose-200/40 dark:from-rose-600/30 dark:via-rose-500/20 dark:to-rose-400/10 border-l-4 border-rose-400 shadow-[0_0_10px_rgba(244,63,94,0.1)]",
+  8: "from-orange-400/20 via-orange-300/30 to-orange-200/40 dark:from-orange-600/30 dark:via-orange-500/30 dark:to-orange-400/10 border-l-4 border-orange-400 shadow-[0_0_10px_rgba(249,115,22,0.1)]",
+  9: "from-violet-400/20 via-violet-300/30 to-violet-200/40 dark:from-violet-600/30 dark:via-violet-500/20 dark:to-violet-400/10 border-l-4 border-violet-400 shadow-[0_0_10px_rgba(139,92,246,0.1)]",
   default: "from-slate-200/20 via-white to-slate-100/30 hover:from-slate-200/30 hover:to-slate-100/40 border-l-4 border-slate-200"
 };
 
@@ -88,6 +90,7 @@ export function ToolRankings({ tools: toolsProp }: ToolRankingsProps) {
   const [isMuted, setIsMuted] = useState(soundManager.isSoundMuted());
   const [rankings, setRankings] = useState<ToolRanking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
   // 保存前一次的排名數據用於比較
@@ -130,7 +133,7 @@ export function ToolRankings({ tools: toolsProp }: ToolRankingsProps) {
 
           if (isFirebaseAvailable() && db) {
             unsubscribe = onSnapshot(
-              query(collection(db, 'toolUsageStats'), orderBy('totalClicks', 'desc'), limit(5)),
+              query(collection(db, 'toolUsageStats'), orderBy('totalClicks', 'desc'), limit(10)),
               (snapshot) => {
                 const stats: ToolRanking[] = [];
                 snapshot.forEach((doc) => {
@@ -170,7 +173,7 @@ export function ToolRankings({ tools: toolsProp }: ToolRankingsProps) {
     let cleanupFn: (() => void) | undefined;
     setupRankings().then(cleanup => {
       if (typeof cleanup === 'function') {
-        cleanupFn = cleanup;
+        cleanupFn = cleanup as any;
       }
     });
 
@@ -295,87 +298,91 @@ export function ToolRankings({ tools: toolsProp }: ToolRankingsProps) {
     );
   }
 
-  // 渲染排行榜
-  const renderRankings = (rankingsData: RankingWithChange[]) => (
-    <AnimatePresence mode="sync">
-      {rankingsData.map((ranking, index) => {
-        const tool = currentTools.find(t => t.id === ranking.toolId);
-        if (!tool) return null;
+  // 渲染排行榜列表
+  const renderRankingsList = (rankingsData: RankingWithChange[]) => {
+    const displayData = isExpanded ? rankingsData : rankingsData.slice(0, 5);
 
-        const isTop = index < 3;
-        const rankColor = rankColors[index] || rankColors.default;
+    return (
+      <AnimatePresence mode="popLayout">
+        {displayData.map((ranking, index) => {
+          const tool = currentTools.find(t => t.id === ranking.toolId);
+          if (!tool) return null;
 
-        return (
-          <motion.div
-            key={ranking.toolId}
-            layout="position"
-            layoutId={`ranking-${ranking.toolId}`}
-            variants={rankAnimationVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            custom={index}
-            whileHover="hover"
-            onClick={() => handleItemClick(tool)}
-            id={index === 0 ? "top-tool" : (index < 5 ? "interaction-area" : undefined)}
-            className={`
-              flex items-center gap-3 p-3 rounded-xl 
-              transition-all duration-300 cursor-pointer
-              bg-gradient-to-r 
-              ${rankColor}
-              mb-2 relative overflow-hidden
-              hover:shadow-lg hover:translate-x-1
-              transform-gpu
-            `}
-          >
-            <div className="flex-shrink-0 w-8 sm:w-10 flex justify-center">
-              {index === 0 && (
-                <motion.div initial={{ scale: 0.8 }} animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, repeatDelay: 5 }}>
-                  <Trophy className="w-7 h-7 sm:w-8 sm:h-8 text-yellow-500 drop-shadow-md" />
-                </motion.div>
-              )}
-              {index === 1 && <Medal className="w-6 h-6 sm:w-7 sm:h-7 text-slate-400 drop-shadow-sm" />}
-              {index === 2 && <Crown className="w-6 h-6 sm:w-7 sm:h-7 text-amber-500 drop-shadow-sm" />}
-              {index > 2 && (
-                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-200 flex items-center justify-center text-sm sm:text-base font-bold text-slate-600">
-                  {index + 1}
-                </div>
-              )}
-            </div>
+          const isTop = index < 3;
+          const rankColor = rankColors[index] || rankColors.default;
 
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center">
-                <p className="text-base sm:text-lg font-bold text-gray-900 truncate flex items-center">
-                  {tool.title}
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1.5 text-primary/70 transform -rotate-45" aria-hidden="true">
-                    <path d="M7 17l9.2-9.2M17 17V7H7" />
-                  </svg>
-                </p>
-                <div id={index === 0 ? "ranking-changes" : undefined}>
-                  {getRankChangeIndicator(ranking.change)}
-                </div>
+          return (
+            <motion.div
+              key={ranking.toolId}
+              layout="position"
+              layoutId={`ranking-${ranking.toolId}`}
+              variants={rankAnimationVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              custom={index}
+              whileHover="hover"
+              onClick={() => handleItemClick(tool)}
+              id={index === 0 ? "top-tool" : (index < 5 ? "interaction-area" : undefined)}
+              className={`
+                flex items-center gap-3 p-3 rounded-xl 
+                transition-all duration-300 cursor-pointer
+                bg-gradient-to-r 
+                ${rankColor}
+                mb-2 relative overflow-hidden
+                hover:shadow-lg hover:translate-x-1
+                transform-gpu
+              `}
+            >
+              <div className="flex-shrink-0 w-8 sm:w-10 flex justify-center">
+                {index === 0 && (
+                  <motion.div initial={{ scale: 0.8 }} animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, repeatDelay: 5 }}>
+                    <Trophy className="w-7 h-7 sm:w-8 sm:h-8 text-yellow-500 drop-shadow-md" />
+                  </motion.div>
+                )}
+                {index === 1 && <Medal className="w-6 h-6 sm:w-7 sm:h-7 text-slate-400 drop-shadow-sm" />}
+                {index === 2 && <Crown className="w-6 h-6 sm:w-7 sm:h-7 text-amber-500 drop-shadow-sm" />}
+                {index > 2 && (
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-200 flex items-center justify-center text-sm sm:text-base font-bold text-slate-600">
+                    {index + 1}
+                  </div>
+                )}
               </div>
 
-              <p className="text-xs sm:text-sm text-muted-foreground truncate">
-                最後使用：
-                <time dateTime={ranking.lastUsedAt || undefined} className="font-medium">
-                  {ranking.lastUsedAt
-                    ? new Date(ranking.lastUsedAt).toLocaleDateString()
-                    : '最近更新'}
-                </time>
-              </p>
-            </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center">
+                  <p className="text-base sm:text-lg font-bold text-gray-900 truncate flex items-center">
+                    {tool.title}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1.5 text-primary/70 transform -rotate-45" aria-hidden="true">
+                      <path d="M7 17l9.2-9.2M17 17V7H7" />
+                    </svg>
+                  </p>
+                  <div id={index === 0 ? "ranking-changes" : undefined}>
+                    {getRankChangeIndicator(ranking.change)}
+                  </div>
+                </div>
 
-            <Badge variant={isTop ? "secondary" : "outline"} className="ml-auto px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-bold shadow-sm" id={index === 0 ? "usage-stats" : undefined}>
-              <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 mr-1 text-yellow-500" />
-              <span className="font-mono text-base sm:text-lg">{ranking.totalClicks}</span>
-              <span className="ml-0.5 text-xs">次</span>
-            </Badge>
-          </motion.div>
-        );
-      })}
-    </AnimatePresence>
-  );
+                <p className="text-xs sm:text-sm text-muted-foreground truncate">
+                  最後使用：
+                  <time dateTime={ranking.lastUsedAt || undefined} className="font-medium">
+                    {ranking.lastUsedAt
+                      ? new Date(ranking.lastUsedAt).toLocaleDateString()
+                      : '最近更新'}
+                  </time>
+                </p>
+              </div>
+
+              <Badge variant={isTop ? "secondary" : "outline"} className="ml-auto px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-bold shadow-sm" id={index === 0 ? "usage-stats" : undefined}>
+                <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 mr-1 text-yellow-500" />
+                <span className="font-mono text-base sm:text-lg">{ranking.totalClicks}</span>
+                <span className="ml-0.5 text-xs">次</span>
+              </Badge>
+            </motion.div>
+          );
+        })}
+      </AnimatePresence>
+    );
+  };
 
   return (
     <Card className="overflow-hidden relative">
@@ -405,7 +412,39 @@ export function ToolRankings({ tools: toolsProp }: ToolRankingsProps) {
       </CardHeader>
 
       <CardContent className="relative z-10 p-2 sm:p-4">
-        {rankings.length > 0 ? renderRankings(rankingsWithChange) : (
+        {rankings.length > 0 ? (
+          <>
+            {renderRankingsList(rankingsWithChange)}
+
+            {/* 展開/收合按鈕 */}
+            {rankings.length > 5 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="mt-4 flex justify-center"
+              >
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="group gap-2 rounded-full px-6 hover:bg-primary/5 hover:border-primary/30 transition-all duration-300 shadow-sm"
+                >
+                  <span className="text-sm font-bold text-primary">
+                    {isExpanded ? "收合排行榜" : `顯示更多 (Top 10)`}
+                  </span>
+                  <motion.div
+                    animate={{ rotate: isExpanded ? 180 : 0 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </motion.div>
+                </Button>
+              </motion.div>
+            )}
+          </>
+        ) : (
           <div className="flex flex-col items-center justify-center p-8 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
             <BarChart className="w-12 h-12 text-slate-300 mb-3" />
             <p className="text-slate-500 mb-4">目前尚無使用數據</p>
