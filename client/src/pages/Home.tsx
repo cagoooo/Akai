@@ -91,8 +91,11 @@ export function Home() {
     queryKey: ['/api/tools'],
     queryFn: async () => {
       // 移除人為延遲以加速 FCP/LCP
-      // 每次載入時隨機排序工具
-      return shuffleArray(tools);
+      // 為了優化 LCP (Largest Contentful Paint)，我們固定前 4 個熱門工具不進行隨機排序
+      // 這樣我們就可以在 index.html 中實施 Preload 預載入
+      const fixedTools = tools.slice(0, 4);
+      const remainingTools = tools.slice(4);
+      return [...fixedTools, ...shuffleArray(remainingTools)];
     },
   });
 

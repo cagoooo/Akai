@@ -20,7 +20,7 @@ export const tools: EducationalTool[] = [
     url: "https://doc.smes.tyc.edu.tw/shared/A4uyH5OdHI",
     icon: "MessageCircle",
     category: "communication",
-    previewUrl: "/previews/tool_1.png",
+    previewUrl: "/previews/tool_1.webp",
     tags: ["客服", "即時通訊", "問答", "支援"]
   },
   {
@@ -30,7 +30,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/staff/",
     icon: "ClipboardList",
     category: "utilities",
-    previewUrl: "/previews/tool_2.png",
+    previewUrl: "/previews/tool_2.webp",
     tags: ["行政", "協調", "校務", "管理"]
   },
   {
@@ -40,7 +40,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/vote/",
     icon: "Vote",
     category: "interactive",
-    previewUrl: "/previews/tool_3.png",
+    previewUrl: "/previews/tool_3.webp",
     tags: ["投票", "互動", "課堂", "即時", "民主"]
   },
   {
@@ -50,7 +50,7 @@ export const tools: EducationalTool[] = [
     url: "https://pirlss.smes.tyc.edu.tw/",
     icon: "Book",
     category: "reading",
-    previewUrl: "/previews/tool_4.png",
+    previewUrl: "/previews/tool_4.webp",
     tags: ["PIRLS", "閱讀理解", "評估", "生成", "AI"]
   },
   {
@@ -60,7 +60,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/vendor/",
     icon: "Utensils",
     category: "utilities",
-    previewUrl: "/previews/tool_5.png",
+    previewUrl: "/previews/tool_5.webp",
     tags: ["點餐", "午餐", "訂餐", "校園", "便利"]
   },
   {
@@ -70,7 +70,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/bee/",
     icon: "Gamepad2",
     category: "games",
-    previewUrl: "/previews/tool_6.png",
+    previewUrl: "/previews/tool_6.webp",
     tags: ["遊戲", "蜜蜂", "配對", "消消樂", "自然"]
   },
   {
@@ -80,7 +80,7 @@ export const tools: EducationalTool[] = [
     url: "https://line.me/R/ti/p/@733oiboa?oat_content=url&ts=05120012",
     icon: "MessageSquare",
     category: "teaching",
-    previewUrl: "/previews/tool_7.png",
+    previewUrl: "/previews/tool_7.webp",
     tags: ["評語", "AI", "LINE", "正向", "學生"]
   },
   {
@@ -90,7 +90,7 @@ export const tools: EducationalTool[] = [
     url: "https://lin.ee/pCqnVhT",
     icon: "Files",
     category: "teaching",
-    previewUrl: "/previews/tool_8.png",
+    previewUrl: "/previews/tool_8.webp",
     tags: ["教案", "十二年國教", "課綱", "資源", "分享"]
   },
   {
@@ -100,7 +100,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/mario-game/",
     icon: "Gamepad2",
     category: "games",
-    previewUrl: "/previews/tool_9.png",
+    previewUrl: "/previews/tool_9.webp",
     tags: ["遊戲", "瑪莉歐", "冒險", "跳躍", "經典"]
   },
   {
@@ -110,7 +110,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/class/",
     icon: "Users",
     category: "utilities",
-    previewUrl: "/previews/tool_10.png",
+    previewUrl: "/previews/tool_10.webp",
     tags: ["班級", "管理", "導師", "學生", "事務"]
   },
   {
@@ -120,7 +120,7 @@ export const tools: EducationalTool[] = [
     url: "https://class.smes.tyc.edu.tw/",
     icon: "GraduationCap",
     category: "teaching",
-    previewUrl: "/previews/tool_11.png",
+    previewUrl: "/previews/tool_11.webp",
     tags: ["互動", "課堂", "即時", "教學", "問答"]
   },
   {
@@ -130,7 +130,7 @@ export const tools: EducationalTool[] = [
     url: "https://read.smes.tyc.edu.tw/smes/PIRLS/",
     icon: "BookOpen",
     category: "reading",
-    previewUrl: "/previews/tool_12.png",
+    previewUrl: "/previews/tool_12.webp",
     tags: ["PIRLS", "閱讀", "理解", "資源", "評量"]
   },
   {
@@ -140,7 +140,7 @@ export const tools: EducationalTool[] = [
     url: "https://5w1h.smes.tyc.edu.tw/",
     icon: "Rocket",
     category: "teaching",
-    previewUrl: "/previews/tool_13.png",
+    previewUrl: "/previews/tool_13.webp",
     tags: ["5W1H", "創意", "靈感", "思維", "發想"]
   },
   {
@@ -150,7 +150,7 @@ export const tools: EducationalTool[] = [
     url: "https://poet.smes.tyc.edu.tw/",
     icon: "Image",
     category: "utilities",
-    previewUrl: "/previews/tool_14.png",
+    previewUrl: "/previews/tool_14.webp",
     tags: ["長輩圖", "早安", "圖片", "問候", "詩詞"]
   },
   {
@@ -160,7 +160,7 @@ export const tools: EducationalTool[] = [
     url: "https://report.smes.tyc.edu.tw/",
     icon: "FileText",
     category: "utilities",
-    previewUrl: "/previews/tool_15.png",
+    previewUrl: "/previews/tool_15.webp",
     tags: ["會議", "報告", "社群", "記錄", "產出"]
   },
   {
@@ -170,7 +170,7 @@ export const tools: EducationalTool[] = [
     url: "https://talk.smes.tyc.edu.tw/",
     icon: "MessageSquare",
     category: "communication",
-    previewUrl: "/previews/tool_16.png",
+    previewUrl: "/previews/tool_16.webp",
     tags: ["親師", "溝通", "家長", "聯絡", "通知"]
   },
   {
@@ -180,7 +180,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/smes_html/gogogo.html",
     icon: "Ticket",
     category: "utilities",
-    previewUrl: "/previews/tool_17.png",
+    previewUrl: "/previews/tool_17.webp",
     tags: ["抽籤", "隨機", "點名", "簡單", "快速"]
   },
   {
@@ -190,7 +190,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/smes_html/random.html",
     icon: "Shuffle",
     category: "utilities",
-    previewUrl: "/previews/tool_18.png",
+    previewUrl: "/previews/tool_18.webp",
     tags: ["抽籤", "隨機", "大量", "分組", "進階"]
   },
   {
@@ -200,7 +200,7 @@ export const tools: EducationalTool[] = [
     url: "https://doc.smes.tyc.edu.tw/",
     icon: "Bot",
     category: "utilities",
-    previewUrl: "/previews/tool_19.png",
+    previewUrl: "/previews/tool_19.webp",
     tags: ["客服", "AI", "機器人", "自訂", "智能"]
   },
   {
@@ -210,7 +210,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/smes_html/typeEN.html",
     icon: "Keyboard",
     category: "language",
-    previewUrl: "/previews/tool_20.png",
+    previewUrl: "/previews/tool_20.webp",
     tags: ["打字", "英文", "練習", "鍵盤", "速度"]
   },
   {
@@ -220,7 +220,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/smes_html/typeCC.html",
     icon: "Keyboard",
     category: "language",
-    previewUrl: "/previews/tool_21.png",
+    previewUrl: "/previews/tool_21.webp",
     tags: ["打字", "中文", "練習", "注音", "輸入法"]
   },
   {
@@ -230,7 +230,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/smes_html/typeTC.html",
     icon: "Languages",
     category: "language",
-    previewUrl: "/previews/preview_typing_v2.png",
+    previewUrl: "/previews/preview_typing_v2.webp",
     tags: ["打字", "成語", "中文", "學習", "國語"]
   },
   {
@@ -240,7 +240,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/comments/",
     icon: "Sparkles",
     category: "teaching",
-    previewUrl: "/previews/preview_feedback_v2.png",
+    previewUrl: "/previews/preview_feedback_v2.webp",
     tags: ["評語", "AI", "正向", "學生", "網頁版"]
   },
   {
@@ -250,7 +250,7 @@ export const tools: EducationalTool[] = [
     url: "https://sites.google.com/mail2.smes.tyc.edu.tw/114teacher/",
     icon: "ClipboardCheck",
     category: "utilities",
-    previewUrl: "/previews/preview_admin_v2.png",
+    previewUrl: "/previews/preview_admin_v2.webp",
     tags: ["午會", "記錄", "教師", "報告", "行政"]
   },
   {
@@ -260,7 +260,7 @@ export const tools: EducationalTool[] = [
     url: "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E5%9C%8B%E8%AA%9E%E6%BC%94%E8%AA%AA%E7%B7%B4%E7%BF%92%E5%B0%8F%E5%B7%A5%E5%85%B7?authuser=0",
     icon: "Mic",
     category: "language",
-    previewUrl: "/previews/preview_language_v2.png",
+    previewUrl: "/previews/preview_language_v2.webp",
     tags: ["演說", "國語", "口說", "培訓", "比賽"]
   },
   {
@@ -270,7 +270,7 @@ export const tools: EducationalTool[] = [
     url: "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E4%B9%9D%E4%B9%9D%E4%B9%98%E6%B3%95%E8%A1%A8%E7%B7%B4%E7%BF%92%E5%99%A8?authuser=0",
     icon: "Calculator",
     category: "teaching",
-    previewUrl: "/previews/preview_teaching_v2.png",
+    previewUrl: "/previews/preview_teaching_v2.webp",
     tags: ["數學", "乘法", "九九", "練習", "計算"]
   },
   {
@@ -280,7 +280,7 @@ export const tools: EducationalTool[] = [
     url: "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/",
     icon: "Wrench",
     category: "utilities",
-    previewUrl: "/previews/preview_utility_v2.png",
+    previewUrl: "/previews/preview_utility_v2.webp",
     tags: ["工具", "集合", "許願", "小工具", "瑞士刀"]
   },
   {
@@ -290,7 +290,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/smes_html/mariojump.html",
     icon: "Gamepad2",
     category: "games",
-    previewUrl: "/previews/preview_platformer_v2.png",
+    previewUrl: "/previews/preview_platformer_v2.webp",
     tags: ["遊戲", "瑪莉歐", "跳躍", "平台", "經典"]
   },
   {
@@ -300,7 +300,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/smes_html/3d-space.html",
     icon: "Globe",
     category: "teaching",
-    previewUrl: "/previews/preview_space_v2.png",
+    previewUrl: "/previews/preview_space_v2.webp",
     tags: ["太陽系", "3D", "太空", "行星", "自然"]
   },
   {
@@ -310,7 +310,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/smes_html/little_games/",
     icon: "Dice5",
     category: "games",
-    previewUrl: "/previews/preview_game_v2.png",
+    previewUrl: "/previews/preview_game_v2.webp",
     tags: ["遊戲", "合集", "趣味", "休閒", "多款"]
   },
   {
@@ -320,7 +320,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/claw-machine-game.html",
     icon: "Gift",
     category: "games",
-    previewUrl: "/previews/preview_claw_machine.png",
+    previewUrl: "/previews/preview_claw_machine.webp",
     tags: ["遊戲", "夾娃娃", "互動", "趣味", "獎品"]
   },
   {
@@ -330,7 +330,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/smes_html/touch.html",
     icon: "Hand",
     category: "games",
-    previewUrl: "/previews/preview_touch_collision.png",
+    previewUrl: "/previews/preview_touch_collision.webp",
     tags: ["遊戲", "觸屏", "碰撞", "互動", "觸控"]
   },
   {
@@ -340,7 +340,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/smes_html/sound.html",
     icon: "AudioWaveform",
     category: "games",
-    previewUrl: "/previews/preview_music_v2.png",
+    previewUrl: "/previews/preview_music_v2.webp",
     tags: ["聲音", "視覺化", "互動", "音樂", "波形"]
   },
   {
@@ -350,7 +350,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/smes_html/go.html",
     icon: "Play",
     category: "games",
-    previewUrl: "/previews/preview_interactive_av.png",
+    previewUrl: "/previews/preview_interactive_av.webp",
     tags: ["遊戲", "影像", "聲音", "互動", "多媒體"]
   },
   {
@@ -360,7 +360,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2856",
     icon: "Palette",
     category: "games",
-    previewUrl: "/previews/preview_touch_doodle.png",
+    previewUrl: "/previews/preview_touch_doodle.webp",
     tags: ["塗鴉", "觸屏", "繪畫", "創作", "藝術"]
   },
   {
@@ -370,7 +370,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/smes_html/snake_game.html",
     icon: "Gamepad2",
     category: "games",
-    previewUrl: "/previews/preview_snake_game.png",
+    previewUrl: "/previews/preview_snake_game.webp",
     tags: ["遊戲", "貪食蛇", "經典", "休閒", "懷舊"]
   },
   {
@@ -380,7 +380,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2863",
     icon: "Waves",
     category: "games",
-    previewUrl: "/previews/preview_sound_wave.png",
+    previewUrl: "/previews/preview_sound_wave.webp",
     tags: ["遊戲", "聲波", "視覺化", "360", "互動"]
   },
   {
@@ -390,7 +390,7 @@ export const tools: EducationalTool[] = [
     url: "https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2859",
     icon: "Volume2",
     category: "games",
-    previewUrl: "/previews/preview_sound_control.png",
+    previewUrl: "/previews/preview_sound_control.webp",
     tags: ["遊戲", "聲音", "控制", "互動", "麥克風"]
   },
   {
@@ -400,7 +400,7 @@ export const tools: EducationalTool[] = [
     url: "https://claude.ai/public/artifacts/982f7b1c-8302-4112-a05f-342ad24bd421",
     icon: "Wand2",
     category: "games",
-    previewUrl: "/previews/preview_magic_v2.png",
+    previewUrl: "/previews/preview_magic_v2.webp",
     tags: ["魔術", "預言", "心靈感應", "神奇", "表演"]
   },
   {
@@ -410,7 +410,7 @@ export const tools: EducationalTool[] = [
     url: "https://padlet.com/2104340/padlet-rl3l5wi9wmebku2k",
     icon: "LayoutDashboard",
     category: "utilities",
-    previewUrl: "/previews/preview_padlet_wall.png",
+    previewUrl: "/previews/preview_padlet_wall.webp",
     tags: ["Padlet", "公告", "行政", "宣導", "動態牆"]
   },
   {
@@ -420,7 +420,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/song/",
     icon: "Music",
     category: "interactive",
-    previewUrl: "/previews/preview_guitar_song.png",
+    previewUrl: "/previews/preview_guitar_song.webp",
     tags: ["音樂", "吉他", "點歌", "彈唱", "歌曲"]
   },
   {
@@ -430,7 +430,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/child-face-privacy/",
     icon: "ShieldCheck",
     category: "utilities",
-    previewUrl: "/previews/preview_privacy_v2.png",
+    previewUrl: "/previews/preview_privacy_v2.webp",
     tags: ["隱私", "兒童", "模糊", "臉部", "保護"]
   },
   {
@@ -440,7 +440,7 @@ export const tools: EducationalTool[] = [
     url: "https://bilingual.smes.tyc.edu.tw/",
     icon: "Languages",
     category: "language",
-    previewUrl: "/previews/preview_bilingual_translator.png",
+    previewUrl: "/previews/preview_bilingual_translator.webp",
     tags: ["翻譯", "雙語", "課程計畫", "Markdown", "PDF"]
   },
   {
@@ -450,7 +450,7 @@ export const tools: EducationalTool[] = [
     url: "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E6%95%B8%E5%AD%B8%E5%8A%A0%E6%B8%9B%E6%B3%95%E7%B7%B4%E7%BF%92%E5%99%A8",
     icon: "Calculator",
     category: "teaching",
-    previewUrl: "/previews/tool_44.png",
+    previewUrl: "/previews/tool_44.webp",
     tags: ["數學", "加法", "減法", "練習", "基礎運算"]
   },
   {
@@ -460,7 +460,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/cloud",
     icon: "Cloud",
     category: "interactive",
-    previewUrl: "/previews/tool_45.png",
+    previewUrl: "/previews/tool_45.webp",
     tags: ["文字雲", "即時互動", "協作", "腦力激盪", "視覺化", "課堂互動"]
   },
   {
@@ -490,7 +490,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/form/",
     icon: "FileInput",
     category: "utilities",
-    previewUrl: "/previews/tool_48.png",
+    previewUrl: "/previews/tool_48.webp",
     tags: ["表單", "自動回報", "行政", "資料收集", "效率", "智慧化"]
   },
   {
@@ -500,7 +500,7 @@ export const tools: EducationalTool[] = [
     url: "https://sites.google.com/mail2.smes.tyc.edu.tw/academic/",
     icon: "FolderOpen",
     category: "teaching",
-    previewUrl: "/previews/tool_49.png",
+    previewUrl: "/previews/tool_49.webp",
     tags: ["教務", "資源庫", "課程計畫", "評量", "行政", "表單"]
   },
   {
@@ -520,7 +520,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/course/",
     icon: "Calendar",
     category: "utilities",
-    previewUrl: "/previews/auto-schedule-preview.png",
+    previewUrl: "/previews/auto-schedule-preview.webp",
     detailedDescription: "這是一款專為學校行政人員與教師設計的智慧排課系統。透過先進的演算技術，自動處理複雜的課程衝突、教師身分、教室空間與時段限制，讓原本需要數週的人力排課作業，在幾分鐘內即可初步完成，大幅提升校務運作效率。",
     tags: ["排課", "自動化", "課表", "行政", "效率"]
   },
@@ -531,7 +531,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/soka/",
     icon: "Library",
     category: "interactive",
-    previewUrl: "/previews/expo-soka-preview.png",
+    previewUrl: "/previews/expo-soka-preview.webp",
     detailedDescription: "創價・教育 EXPO 線上選課系統是一個整合式的教育資源平台。使用者可以透過直觀的介面瀏覽博覽會中的各大領域課程，從科學技術到人文藝術一應俱全。系統支援即時選課、報名狀態追蹤以及個人化的課程清單管理，是博覽會參與者的數位導覽小幫手。",
     tags: ["創價", "教育 EXPO", "線上選課", "課程選擇", "互動體驗"]
   },
@@ -542,7 +542,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/repair/",
     icon: "Tool",
     category: "utilities",
-    previewUrl: "/previews/repair-preview.png",
+    previewUrl: "/previews/repair-preview.webp",
     detailedDescription: "智慧校園報修系統旨在提供師生一個便捷、透明的報修門面。使用者只需透過手機或電腦，即可快速提交維護需求，並即時追蹤處理進度。行政單位則能有效管理各項報修案件，最佳化修繕人力派送，確保校園設施始終保持在最佳狀態。",
     tags: ["報修", "校務", "修繕", "管理", "效率"]
   },

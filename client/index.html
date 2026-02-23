@@ -44,6 +44,10 @@
   <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
   <link rel="dns-prefetch" href="https://firestore.googleapis.com" />
 
+  <!-- Preload 關鍵資源 (LCP 優化) -->
+  <link rel="preload" as="image" href="./previews/tool_1.webp" fetchpriority="high" />
+  <link rel="preload" as="image" href="./previews/tool_2.webp" fetchpriority="high" />
+
   <!-- 關鍵 CSS 內聯與字體防閃爍 -->
   <style>
     /* 防止 FOUT 和 CLS */
@@ -285,68 +289,71 @@
   </div>
 
   <script>
-    (function () {
-      // LINE 瀏覽器檢測
-      var ua = navigator.userAgent || navigator.vendor || window.opera;
-      var isLine = /Line/i.test(ua);
-      var isInAppBrowser = /FBAN|FBAV|Instagram|Twitter|MicroMessenger|Line/i.test(ua);
+    window.addEventListener('DOMContentLoaded', function () {
+      // LINE 瀏覽器檢測 - 延遲至 DOMContentLoaded 以免阻塞初次算繪
+      (function () {
+        // LINE 瀏覽器檢測
+        var ua = navigator.userAgent || navigator.vendor || window.opera;
+        var isLine = /Line/i.test(ua);
+        var isInAppBrowser = /FBAN|FBAV|Instagram|Twitter|MicroMessenger|Line/i.test(ua);
 
-      if (isLine || isInAppBrowser) {
-        // 設定超時顯示 fallback
-        var fallbackTimeout = setTimeout(function () {
-          var fallback = document.getElementById('line-fallback');
-          var root = document.getElementById('root');
+        if (isLine || isInAppBrowser) {
+          // 設定超時顯示 fallback
+          var fallbackTimeout = setTimeout(function () {
+            var fallback = document.getElementById('line-fallback');
+            var root = document.getElementById('root');
 
-          // 如果 root 仍然是空的或只有載入動畫，顯示 fallback
-          if (root && (!root.hasChildNodes() || root.innerHTML.trim() === '')) {
-            fallback.style.display = 'flex';
+            // 如果 root 仍然是空的或只有載入動畫，顯示 fallback
+            if (root && (!root.hasChildNodes() || root.innerHTML.trim() === '')) {
+              fallback.style.display = 'flex';
 
-            // 設定外部連結
-            var externalLink = document.getElementById('fallback-external-link');
-            var currentUrl = window.location.href;
+              // 設定外部連結
+              var externalLink = document.getElementById('fallback-external-link');
+              var currentUrl = window.location.href;
 
-            // 嘗試解析工具 ID 並獲取對應的外部連結
-            var toolMatch = currentUrl.match(/\/tool\/(\d+)/);
-            if (toolMatch) {
-              // 工具對應的外部連結映射 (常用工具)
-              var toolUrls = {
-                47: 'https://cagoooo.github.io/signature/',
-                48: 'https://cagoooo.github.io/form/',
-                46: 'https://cagoooo.github.io/schedule/',
-                45: 'https://cagoooo.github.io/cloud',
-                41: 'https://cagoooo.github.io/song/',
-                3: 'https://cagoooo.github.io/vote/',
-                2: 'https://cagoooo.github.io/staff/',
-                10: 'https://cagoooo.github.io/class/'
-              };
-              var toolId = parseInt(toolMatch[1]);
-              if (toolUrls[toolId]) {
-                externalLink.href = toolUrls[toolId];
+              // 嘗試解析工具 ID 並獲取對應的外部連結
+              var toolMatch = currentUrl.match(/\/tool\/(\d+)/);
+              if (toolMatch) {
+                // 工具對應的外部連結映射 (常用工具)
+                var toolUrls = {
+                  47: 'https://cagoooo.github.io/signature/',
+                  48: 'https://cagoooo.github.io/form/',
+                  46: 'https://cagoooo.github.io/schedule/',
+                  45: 'https://cagoooo.github.io/cloud',
+                  41: 'https://cagoooo.github.io/song/',
+                  3: 'https://cagoooo.github.io/vote/',
+                  2: 'https://cagoooo.github.io/staff/',
+                  10: 'https://cagoooo.github.io/class/'
+                };
+                var toolId = parseInt(toolMatch[1]);
+                if (toolUrls[toolId]) {
+                  externalLink.href = toolUrls[toolId];
+                } else {
+                  externalLink.href = currentUrl;
+                }
               } else {
                 externalLink.href = currentUrl;
               }
-            } else {
-              externalLink.href = currentUrl;
             }
-          }
-        }, 5000); // 5 秒後顯示 fallback
+          }, 5000); // 5 秒後顯示 fallback
 
-        // 當 React 成功渲染後，取消 fallback
-        var checkInterval = setInterval(function () {
-          var root = document.getElementById('root');
-          if (root && root.children.length > 0 && root.querySelector('[class*="min-h-screen"]')) {
-            clearTimeout(fallbackTimeout);
+          // 當 React 成功渲染後，取消 fallback
+          var checkInterval = setInterval(function () {
+            var root = document.getElementById('root');
+            if (root && root.children.length > 0 && root.querySelector('[class*="min-h-screen"]')) {
+              clearTimeout(fallbackTimeout);
+              clearInterval(checkInterval);
+              document.getElementById('line-fallback').style.display = 'none';
+            }
+          }, 500);
+
+          // 30 秒後停止檢查
+          setTimeout(function () {
             clearInterval(checkInterval);
-            document.getElementById('line-fallback').style.display = 'none';
-          }
-        }, 500);
-
-        // 30 秒後停止檢查
-        setTimeout(function () {
-          clearInterval(checkInterval);
-        }, 30000);
-      }
-    })();
+          }, 30000);
+        }
+      })();
+    });
   </script>
 
   <div id="root"></div>
