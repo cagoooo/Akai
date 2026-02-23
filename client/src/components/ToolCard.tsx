@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { BarChart, Heart, Info, ExternalLink } from "lucide-react";
+import { OptimizedIcon } from "./OptimizedIcons";
 import { useState } from "react";
 import { Link } from "wouter";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -250,7 +250,7 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                 whileHover={{ rotate: [0, -10, 10, -5, 5, 0] }}
                 transition={{ duration: 0.5 }}
               >
-                {Icon && <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-primary" />}
+                {tool.icon && <OptimizedIcon name={tool.icon} className="w-6 h-6 sm:w-7 sm:h-7 text-primary" />}
               </motion.div>
             )}
 
@@ -281,7 +281,8 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                           }}
                           aria-label={isFavorite ? "取消收藏" : "加入收藏"}
                         >
-                          <Heart
+                          <OptimizedIcon
+                            name="Heart"
                             className={cn(
                               "h-5 w-5 sm:h-6 sm:w-6 transition-colors",
                               isFavorite ? 'fill-white text-white' : 'text-red-400'
@@ -306,7 +307,7 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                           onClick={(e) => e.stopPropagation()}
                           aria-label={`查看 ${tool.title} 詳情`}
                         >
-                          <Info className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+                          <OptimizedIcon name="Info" className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                         </Button>
                       </Link>
                     </TooltipTrigger>
@@ -440,7 +441,7 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                     handleClick();
                   }}
                 >
-                  <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <OptimizedIcon name="ExternalLink" className="h-5 w-5 sm:h-6 sm:w-6" />
                   開啟使用
                 </Button>
 

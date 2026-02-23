@@ -5,7 +5,7 @@ import { ToolCard } from "@/components/ToolCard";
 import { TeacherIntro } from "@/components/TeacherIntro";
 import { tools } from "@/lib/data";
 import { Button } from "@/components/ui/button";
-import { Trophy, Clock, X, Keyboard, ChevronDown, ChevronUp } from "lucide-react";
+import { OptimizedIcon } from "@/components/OptimizedIcons";
 import { useTour } from "@/components/TourProvider";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { AdvancedSearch } from "@/components/AdvancedSearch";
@@ -24,7 +24,9 @@ const RecommendedTools = lazy(() => import("@/components/RecommendedTools").then
 import { RankingTutorial } from "@/components/RankingTutorial";
 import { NewToolsBanner } from "@/components/NewToolsBanner";
 const WishingWellDialog = lazy(() => import("@/components/WishingWellDialog").then(module => ({ default: module.WishingWellDialog })));
-import { Wand2 } from "lucide-react";
+import { Wand2 } from "lucide-react"; // 可保留或替換，先替換常用的
+import { useEffect } from "react";
+import { tools as allTools } from "@/lib/data";
 
 export function Home() {
   const { startTour } = useTour();
@@ -36,6 +38,13 @@ export function Home() {
   const [showWishingWell, setShowWishingWell] = useState(false);
   const [selectedToolIndex, setSelectedToolIndex] = useState(0);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [showSecondaryContent, setShowSecondaryContent] = useState(false);
+
+  // 延遲載入次要內容，避免首屏 Hydration 過重
+  useEffect(() => {
+    const timer = setTimeout(() => setShowSecondaryContent(true), 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
   // 搜尋框 ref
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -183,6 +192,48 @@ export function Home() {
     return sortedTools?.slice(0, visibleCount);
   }, [sortedTools, visibleCount]);
 
+  // 延遲注入大型 SEO 結構化數據，避免阻塞首屏 Hydration
+  useEffect(() => {
+    const injectSchema = () => {
+      if (document.getElementById('all-tools-schema')) return;
+
+      const schema = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "教育工具清單",
+        "description": "阿凱老師開發的各式教育科技工具",
+        "numberOfItems": allTools.length,
+        "itemListElement": allTools.map((tool, index) => ({
+          "@type": "ListItem",
+          "position": index + 1,
+          "item": {
+            "@type": "SoftwareApplication",
+            "name": tool.title,
+            "description": tool.description,
+            "url": tool.url,
+            "applicationCategory": "EducationalApplication",
+            "operatingSystem": "Web Browser"
+          }
+        }))
+      };
+
+      const script = document.createElement('script');
+      script.id = 'all-tools-schema';
+      script.type = 'application/ld+json';
+      script.text = JSON.stringify(schema);
+      document.head.appendChild(script);
+    };
+
+    // 延遲 3 秒或在瀏覽器空閒時注入
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(() => {
+        setTimeout(injectSchema, 2000);
+      });
+    } else {
+      setTimeout(injectSchema, 3000);
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       <main id="main-content" role="main" className="container mx-auto px-3 sm:px-6 py-4 sm:py-6 md:py-8" aria-label="教育工具列表">
@@ -220,7 +271,7 @@ export function Home() {
               <div className="relative flex items-center justify-center gap-3 rounded-2xl bg-white/90 dark:bg-gray-900/90 px-4 py-3 sm:py-4 backdrop-blur-sm group-hover:bg-white/80 dark:group-hover:bg-gray-900/80 transition-all">
                 {/* 獎杯圖示帶動畫 */}
                 <div className="relative">
-                  <Trophy className="w-5 h-5 sm:w-6 sm:h-6 text-amber-500 group-hover:text-amber-600 transition-colors animate-bounce" style={{ animationDuration: '2s' }} />
+                  <OptimizedIcon name="Trophy" className="w-5 h-5 sm:w-6 sm:h-6 text-amber-500 group-hover:text-amber-600 transition-colors animate-bounce" />
                   <div className="absolute -top-1 -right-1 w-2 h-2 bg-rose-500 rounded-full animate-ping" />
                 </div>
 
@@ -248,12 +299,14 @@ export function Home() {
 
           {/* 主內容區域 */}
           <div className="w-full xl:w-2/3 space-y-5 sm:space-y-8">
-            {/* 訪問計數器 */}
-            <section className="p-3 sm:p-4 rounded-lg bg-green-50">
-              <Suspense fallback={<div className="h-32 rounded-xl bg-green-100/50 animate-pulse" />}>
-                <VisitorCounter />
-              </Suspense>
-            </section>
+            {/* 訪問計數器 - 延遲顯示 */}
+            {showSecondaryContent && (
+              <section className="p-3 sm:p-4 rounded-lg bg-green-50">
+                <Suspense fallback={<div className="h-32 rounded-xl bg-green-100/50 animate-pulse" />}>
+                  <VisitorCounter />
+                </Suspense>
+              </section>
+            )}
 
             {/* 搜尋與篩選區域 */}
             <section className="space-y-3 sm:space-y-4 p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 border border-orange-100 shadow-sm">
@@ -312,7 +365,7 @@ export function Home() {
                   onClick={() => setIsRecentCollapsed(!isRecentCollapsed)}
                 >
                   <h2 className="text-lg font-semibold text-teal-800 flex items-center gap-2">
-                    <Clock className="w-5 h-5" />
+                    <OptimizedIcon name="Clock" className="w-5 h-5" />
                     最近使用
                   </h2>
                   <div className="flex items-center gap-2">
@@ -325,11 +378,11 @@ export function Home() {
                       }}
                       className="text-teal-600 hover:text-teal-800"
                     >
-                      <X className="w-4 h-4 mr-1" />
+                      <OptimizedIcon name="X" className="w-4 h-4 mr-1" />
                       清除
                     </Button>
                     <Button variant="ghost" size="sm" className="p-0 h-8 w-8 hover:bg-teal-100/50 rounded-full">
-                      {isRecentCollapsed ? <ChevronDown className="w-5 h-5 text-teal-600" /> : <ChevronUp className="w-5 h-5 text-teal-600" />}
+                      {isRecentCollapsed ? <OptimizedIcon name="ChevronDown" className="w-5 h-5 text-teal-600" /> : <OptimizedIcon name="ChevronUp" className="w-5 h-5 text-teal-600" />}
                     </Button>
                   </div>
                 </div>
@@ -480,15 +533,18 @@ export function Home() {
             </footer>
           </div>
 
-          {/* 排行榜區域 - xl 以上才顯示在側邊 */}
           <aside id="mobile-rankings" className="w-full xl:w-1/3 xl:order-last">
             <div className="xl:sticky xl:top-4 space-y-4 p-3 sm:p-4 rounded-lg bg-purple-50">
-              <div data-tour="tool-rankings">
-                <Suspense fallback={<div className="h-96 rounded-xl bg-purple-100/50 animate-pulse" />}>
-                  <ToolRankings />
-                </Suspense>
-              </div>
-              <RankingTutorial />
+              {showSecondaryContent && (
+                <>
+                  <div data-tour="tool-rankings">
+                    <Suspense fallback={<div className="h-96 rounded-xl bg-purple-100/50 animate-pulse" />}>
+                      <ToolRankings />
+                    </Suspense>
+                  </div>
+                  <RankingTutorial />
+                </>
+              )}
             </div>
           </aside>
         </div>
@@ -547,7 +603,7 @@ export function Home() {
         onClick={() => setShowShortcutsDialog(true)}
         title="鍵盤快捷鍵 (?)"
       >
-        <Keyboard className="h-5 w-5" />
+        <OptimizedIcon name="Keyboard" className="h-5 w-5" />
       </Button>
     </div>
   );

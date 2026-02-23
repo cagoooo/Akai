@@ -4,6 +4,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { TourProvider } from "@/components/TourProvider";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { OptimizedIcon } from "@/components/OptimizedIcons";
 import { PageTransition } from "@/components/PageTransition";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/queryClient";
@@ -11,7 +12,7 @@ import { Footer } from "@/components/Footer";
 import { ErrorBoundary, SuspenseWrapper } from "@/components/ErrorBoundary";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SEOHead } from "@/components/SEOHead";
-import { WebsiteSchema, OrganizationSchema, AllToolsSchema } from "@/components/StructuredData";
+import { WebsiteSchema, OrganizationSchema } from "@/components/StructuredData";
 import { LazyMotion } from "framer-motion";
 
 // 動態載入 Framer Motion 特徵 (進一步縮減初始 JS，使用獨立檔案支援 Tree-Shaking)
@@ -35,6 +36,7 @@ function PageSkeleton() {
   return (
     <div className="container mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-6">
       {/* 標題骨架 */}
+      <OptimizedIcon name="Keyboard" className="h-5 w-5" />
       <Skeleton className="h-12 w-64" />
 
       {/* 訪客計數器骨架 */}
@@ -79,7 +81,6 @@ function App() {
         <SEOHead />
         <WebsiteSchema />
         <OrganizationSchema />
-        <AllToolsSchema />
 
         <QueryClientProvider client={queryClient}>
           <TooltipProvider>
