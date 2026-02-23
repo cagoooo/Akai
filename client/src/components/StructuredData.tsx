@@ -169,21 +169,35 @@ export function OrganizationSchema() {
     );
 }
 
-// 所有工具的結構化數據
+// 所有工具的結構化數據 (優化後：合併為單一 ItemList 避免 48 個腳本注入)
 import { tools } from '@/lib/data';
 
 export function AllToolsSchema() {
+    const schema = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "教育工具清單",
+        "description": "阿凱老師開發的各式教育科技工具",
+        "numberOfItems": tools.length,
+        "itemListElement": tools.map((tool, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "item": {
+                "@type": "SoftwareApplication",
+                "name": tool.title,
+                "description": tool.description,
+                "url": tool.url,
+                "applicationCategory": "EducationalApplication",
+                "operatingSystem": "Web Browser"
+            }
+        }))
+    };
+
     return (
-        <>
-            {tools.map(tool => (
-                <SoftwareApplicationSchema
-                    key={tool.id}
-                    name={tool.title}
-                    description={tool.description}
-                    url={tool.url}
-                    category={tool.category}
-                />
-            ))}
-        </>
+        <Helmet>
+            <script type="application/ld+json">
+                {JSON.stringify(schema)}
+            </script>
+        </Helmet>
     );
 }

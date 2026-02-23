@@ -44,6 +44,14 @@
   <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
   <link rel="dns-prefetch" href="https://firestore.googleapis.com" />
 
+  <!-- Preload 關鍵字體 (減少 FOUT/CLS) -->
+  <link rel="preload"
+    href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" as="font"
+    type="font/woff2" crossorigin />
+  <link rel="preload"
+    href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6fAZ9hiA.woff2" as="font"
+    type="font/woff2" crossorigin />
+
   <!-- Preload 關鍵資源 (LCP 優化) -->
   <link rel="preload" as="image" href="./previews/tool_1.webp" fetchpriority="high" />
   <link rel="preload" as="image" href="./previews/tool_2.webp" fetchpriority="high" />
