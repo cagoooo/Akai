@@ -39,11 +39,19 @@ export function Home() {
   const [selectedToolIndex, setSelectedToolIndex] = useState(0);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [showSecondaryContent, setShowSecondaryContent] = useState(false);
+  const [showFullList, setShowFullList] = useState(false);
 
   // 延遲載入次要內容，避免首屏 Hydration 過重
   useEffect(() => {
-    const timer = setTimeout(() => setShowSecondaryContent(true), 1500);
-    return () => clearTimeout(timer);
+    // 次要區塊延遲
+    const secondaryTimer = setTimeout(() => setShowSecondaryContent(true), 2000);
+    // 剩餘工具列表延遲 - 關鍵優化：將大量卡片的 Hydration 推遲到首屏穩定後
+    const listTimer = setTimeout(() => setShowFullList(true), 800);
+
+    return () => {
+      clearTimeout(secondaryTimer);
+      clearTimeout(listTimer);
+    };
   }, []);
 
   // 搜尋框 ref
@@ -188,9 +196,15 @@ export function Home() {
   // 分頁邏輯：初始顯示 12 個工具
   const [visibleCount, setVisibleCount] = useState(12);
   const incrementVisible = () => setVisibleCount(prev => prev + 12);
+  // 取得當前可見的工具 (根據分段渲染邏輯)
   const visibleTools = useMemo(() => {
-    return sortedTools?.slice(0, visibleCount);
-  }, [sortedTools, visibleCount]);
+    const baseList = sortedTools || [];
+    // 關鍵優化：首屏僅渲染前 8 個工具，避免 1s+ 的單次長任務
+    if (!showFullList && !selectedCategory && !searchQuery && !showFavorites) {
+      return baseList.slice(0, 8);
+    }
+    return baseList.slice(0, visibleCount);
+  }, [sortedTools, visibleCount, showFullList, selectedCategory, searchQuery, showFavorites]);
 
   // 延遲注入大型 SEO 結構化數據，避免阻塞首屏 Hydration
   useEffect(() => {

@@ -1,5 +1,6 @@
-import { createContext, useContext, ReactNode, useState, useCallback } from 'react';
-import { TourGuide, tourEvents } from './TourGuide';
+import { createContext, useContext, ReactNode, useState, useCallback, lazy, Suspense } from 'react';
+const TourGuide = lazy(() => import('./TourGuide').then(module => ({ default: module.TourGuide })));
+import { tourEvents } from './TourGuide';
 
 interface TourContextType {
   startTour: () => void;
@@ -63,7 +64,9 @@ export function TourProvider({ children }: TourProviderProps) {
       hasCompletedTour
     }}>
       {children}
-      <TourGuide onComplete={handleTourComplete} />
+      <Suspense fallback={null}>
+        <TourGuide onComplete={handleTourComplete} />
+      </Suspense>
     </TourContext.Provider>
   );
 }
