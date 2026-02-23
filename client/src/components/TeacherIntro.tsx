@@ -75,20 +75,20 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
 
   if (isLoading || isDataLoading) {
     return (
-      <Card className="bg-primary text-primary-foreground">
+      <Card className="bg-primary text-primary-foreground min-h-[200px]">
         <CardContent className="pt-6">
           <div className="flex items-center gap-4 mb-4">
-            <Skeleton className="h-14 w-14 rounded-full" />
+            <Skeleton className="h-14 w-14 rounded-full bg-white/20" />
             <div className="flex-1">
-              <Skeleton className="h-8 w-48 mb-2" />
-              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-8 w-48 mb-2 bg-white/20" />
+              <Skeleton className="h-4 w-32 bg-white/20" />
             </div>
           </div>
-          <Skeleton className="h-4 w-full mb-2" />
-          <Skeleton className="h-4 w-5/6 mb-4" />
+          <Skeleton className="h-4 w-full mb-2 bg-white/20" />
+          <Skeleton className="h-4 w-5/6 mb-4 bg-white/20" />
           <div className="flex flex-wrap gap-2">
             {[1, 2, 3].map((i) => (
-              <Skeleton key={i} className="h-8 w-24 rounded-full" />
+              <Skeleton key={i} className="h-8 w-24 rounded-full bg-white/20" />
             ))}
           </div>
         </CardContent>
@@ -97,7 +97,7 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
   }
 
   return (
-    <Card className="relative overflow-hidden border-0 shadow-xl">
+    <Card className="relative overflow-hidden border-0 shadow-xl min-h-[200px]">
       {/* 強化後的漸層背景，提高對比度 */}
       <div className="absolute inset-0 bg-blue-700" />
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 to-purple-900 opacity-95" />

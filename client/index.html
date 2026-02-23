@@ -43,8 +43,8 @@
   <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
 
   <!-- 🚀 關鍵資料預載 (Preload API) - 極速提升內容生成速度 -->
-  <link rel="preload" href="./api/tools.json" as="fetch" crossorigin />
-  <link rel="preload" href="./api/teacher.json" as="fetch" crossorigin />
+  <link rel="preload" href="./api/tools.json" as="fetch" crossorigin fetchpriority="high" />
+  <link rel="preload" href="./api/teacher.json" as="fetch" crossorigin fetchpriority="high" />
 
   <!-- Preload 關鍵字體 (減少 FOUT/CLS) -->
   <link rel="preload"

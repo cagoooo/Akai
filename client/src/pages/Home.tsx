@@ -119,15 +119,20 @@ export function Home() {
   const { data: toolsData, isLoading } = useQuery({
     queryKey: ['/api/tools'],
     queryFn: async () => {
+      // 🚀 優先嘗試靜態路徑以命配 index.html 中的 Preload
+      const staticUrl = `${import.meta.env.BASE_URL}api/tools.json`;
       try {
+        const staticResponse = await fetch(staticUrl);
+        if (staticResponse.ok) return await staticResponse.json();
+
+        // 備援：嘗試 API
         const response = await fetch('/api/tools');
-        if (!response.ok) throw new Error('API 失敗');
-        return await response.json();
+        if (response.ok) return await response.json();
+
+        throw new Error('無法獲取工具數據');
       } catch (err) {
-        console.warn('正在切換至靜態工具數據備援...');
-        const staticResponse = await fetch(`${import.meta.env.BASE_URL}api/tools.json`);
-        if (!staticResponse.ok) throw new Error('無法獲取工具數據 (包含備援)');
-        return await staticResponse.json();
+        console.error('數據獲取失敗:', err);
+        throw err;
       }
     },
     select: (data) => {
@@ -449,16 +454,16 @@ export function Home() {
             {/* 教師介紹區域 */}
             <section
               aria-labelledby="teacher-info"
-              className="p-3 sm:p-4 rounded-lg bg-yellow-50"
+              className="p-3 sm:p-4 rounded-lg bg-yellow-50 min-h-[200px]"
               data-tour="teacher-intro"
             >
               <h2 id="teacher-info" className="sr-only">教師介紹</h2>
               {showSecondaryContent ? (
-                <Suspense fallback={<div className="h-40 rounded-xl bg-yellow-100/50 animate-pulse" />}>
+                <Suspense fallback={<div className="h-[200px] rounded-xl bg-yellow-100/50 animate-pulse" />}>
                   <TeacherIntro isLoading={isLoading} />
                 </Suspense>
               ) : (
-                <div className="h-40 rounded-xl bg-yellow-100/50 animate-pulse" />
+                <div className="h-[200px] rounded-xl bg-yellow-100/50 animate-pulse" />
               )}
             </section>
 
