@@ -136,9 +136,10 @@ function App() {
 }
 
 // 用 LazyMotion 包裝整個 App，確保所有 `m` 元件都能獲得動畫能力
+// ⚠️ 不使用 strict 模式：strict=true 會強制 m.* 等待 features 載入，導致 LCP 8s
 export default function AppWithLazyMotion() {
   return (
-    <LazyMotion features={loadFramerFeatures} strict>
+    <LazyMotion features={loadFramerFeatures}>
       <App />
     </LazyMotion>
   );
