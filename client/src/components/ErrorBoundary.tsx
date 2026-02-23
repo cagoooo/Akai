@@ -130,8 +130,8 @@ interface SuspenseWrapperProps {
 
 export function SuspenseWrapper({ children, fallback }: SuspenseWrapperProps) {
     const defaultFallback = (
-        <div className="flex items-center justify-center p-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <div className="flex items-center justify-center p-8" role="status" aria-label="載入中">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" role="progressbar" aria-label="正在載入內容"></div>
         </div>
     );
 

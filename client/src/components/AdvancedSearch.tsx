@@ -94,6 +94,7 @@ export const AdvancedSearch = forwardRef<HTMLInputElement, AdvancedSearchProps>(
                             ref={ref}
                             type="text"
                             placeholder="搜尋工具名稱、描述或標籤..."
+                            aria-label="搜尋教育工具"
                             value={searchQuery}
                             onChange={(e) => onSearchChange(e.target.value)}
                             onFocus={() => setIsFocused(true)}
@@ -106,6 +107,7 @@ export const AdvancedSearch = forwardRef<HTMLInputElement, AdvancedSearchProps>(
                             <Button
                                 variant="ghost"
                                 size="icon"
+                                aria-label="清除搜尋文字"
                                 className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 text-gray-400 hover:text-orange-500 hover:bg-orange-100 rounded-lg"
                                 onClick={() => onSearchChange('')}
                             >
@@ -131,6 +133,7 @@ export const AdvancedSearch = forwardRef<HTMLInputElement, AdvancedSearchProps>(
                                         </span>
                                         <button
                                             onClick={clearHistory}
+                                            aria-label="清除所有搜尋歷史"
                                             className="flex items-center gap-1 text-red-500 hover:text-red-600 transition-colors"
                                         >
                                             <Trash2 className="w-3 h-3" />
@@ -150,6 +153,7 @@ export const AdvancedSearch = forwardRef<HTMLInputElement, AdvancedSearchProps>(
                                                         e.stopPropagation();
                                                         removeFromHistory(query);
                                                     }}
+                                                    aria-label={`刪除歷史記錄: ${query}`}
                                                     className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition-all"
                                                 >
                                                     <X className="w-3 h-3" />
@@ -198,6 +202,7 @@ export const AdvancedSearch = forwardRef<HTMLInputElement, AdvancedSearchProps>(
                                         }
                                     }, 100);
                                 }}
+                                aria-label={`改為排序方式: ${opt.label}`}
                                 className={cn(
                                     "px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base font-medium rounded-lg transition-all",
                                     currentSort === opt.option

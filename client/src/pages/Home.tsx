@@ -7,8 +7,8 @@ import { tools } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { OptimizedIcon } from "@/components/OptimizedIcons";
 import { useTour } from "@/components/TourProvider";
-const CategoryFilter = lazy(() => import("@/components/CategoryFilter").then(module => ({ default: module.CategoryFilter })));
-const AdvancedSearch = lazy(() => import("@/components/AdvancedSearch").then(module => ({ default: module.AdvancedSearch })));
+import { CategoryFilter } from "@/components/CategoryFilter";
+import { AdvancedSearch } from "@/components/AdvancedSearch";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useRecentTools } from "@/hooks/useRecentTools";
@@ -323,7 +323,7 @@ export function Home() {
 
             {/* 搜尋與篩選區域 - 延遲載入 */}
             <section className="space-y-3 sm:space-y-4 p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 border border-orange-100 shadow-sm">
-              <Suspense fallback={<div className="h-48 rounded-xl bg-orange-100/20 animate-pulse" />}>
+              <div className="space-y-3 sm:space-y-4">
                 <AdvancedSearch
                   ref={searchInputRef}
                   searchQuery={searchQuery}
@@ -351,7 +351,7 @@ export function Home() {
                   onToggleFavorites={() => setShowFavorites(!showFavorites)}
                   favoritesCount={favoritesCount}
                 />
-              </Suspense>
+              </div>
             </section>
 
             {/* 🆕 新工具通知橫幅 */}

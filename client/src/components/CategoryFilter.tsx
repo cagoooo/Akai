@@ -59,6 +59,7 @@ export function CategoryFilter({
                 variant="outline"
                 size="sm"
                 onClick={() => handleCategoryClick(null)}
+                aria-label="顯示全部工具"
                 className={cn(
                     "gap-1.5 sm:gap-2 text-sm sm:text-base font-semibold border-2 rounded-full transition-all duration-200 hover:scale-105 px-3 py-1.5 sm:px-4 sm:py-2",
                     selectedCategory === null && !showFavorites
@@ -85,6 +86,7 @@ export function CategoryFilter({
                     variant="outline"
                     size="sm"
                     onClick={onToggleFavorites}
+                    aria-label="顯示我的收藏工具"
                     className={cn(
                         "gap-1.5 sm:gap-2 text-sm sm:text-base font-semibold border-2 rounded-full transition-all duration-200 hover:scale-105 px-3 py-1.5 sm:px-4 sm:py-2",
                         showFavorites
@@ -124,6 +126,7 @@ export function CategoryFilter({
                         variant="outline"
                         size="sm"
                         onClick={() => handleCategoryClick(category)}
+                        aria-label={`篩選分類: ${info.label}`}
                         className={cn(
                             "gap-1.5 sm:gap-2 text-sm sm:text-base font-semibold border-2 rounded-full transition-all duration-200 hover:scale-105 px-3 py-1.5 sm:px-4 sm:py-2",
                             isActive

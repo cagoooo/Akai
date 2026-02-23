@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Download, RefreshCw, Wifi, WifiOff, X } from 'lucide-react';
 import { m as motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export function PWAUpdatePrompt() {
     const {
@@ -19,6 +19,15 @@ export function PWAUpdatePrompt() {
         installApp,
         dismissUpdate,
     } = usePWAUpdate();
+    const [shouldShowAfterDelay, setShouldShowAfterDelay] = useState(false);
+
+    // 第十三波優化：強制延遲 PWA 提示顯示，避免干擾 LCP 測速
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setShouldShowAfterDelay(true);
+        }, 8000); // 8秒後才開始考慮顯示 PWA 提示
+        return () => clearTimeout(timer);
+    }, []);
 
     const [showInstallPrompt, setShowInstallPrompt] = useState(() => {
         try {
@@ -107,7 +116,7 @@ export function PWAUpdatePrompt() {
     // 安裝提示
     const InstallPrompt = () => (
         <AnimatePresence>
-            {isInstallable && showInstallPrompt && (
+            {isInstallable && showInstallPrompt && shouldShowAfterDelay && (
                 <motion.div
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -148,6 +157,7 @@ export function PWAUpdatePrompt() {
                                 <Button
                                     variant="ghost"
                                     size="icon"
+                                    aria-label="關閉安裝提示"
                                     className="shrink-0 h-8 w-8"
                                     onClick={handleDismissInstall}
                                 >
