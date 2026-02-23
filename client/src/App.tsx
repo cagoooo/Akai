@@ -5,14 +5,13 @@ import { SEOHead } from "@/components/SEOHead";
 import { WebsiteSchema, OrganizationSchema } from "@/components/StructuredData";
 import { LazyMotion } from "framer-motion";
 
-// 動態載入 Framer Motion 特徵 (進一步縮減初始 JS，使用獨立檔案支援 Tree-Shaking)
+// 動態載入 Framer Motion 特徵
 const loadFramerFeatures = () => import("./framerFeatures").then(res => res.default);
 
 // 直接 import 首頁 (首屏必須載入)
 import { Home } from "@/pages/Home";
 
-// 延遲載入次要路由元件與彈窗元件 (解決 Code Splitting)
-// 注意：因為是以 named export 導出，需轉為 default format
+// 延遲載入次要路由元件與彈窗元件
 const ToolDetail = lazy(() => import("@/pages/ToolDetail").then(module => ({ default: module.ToolDetail })));
 const AdminAuth = lazy(() => import("@/components/AdminAuth").then(module => ({ default: module.AdminAuth })));
 const TriviaDialog = lazy(() => import("@/components/TriviaDialog").then(module => ({ default: module.TriviaDialog })));
@@ -23,12 +22,10 @@ const RecommendedTools = lazy(() => import("@/components/RecommendedTools").then
 const Footer = lazy(() => import("@/components/Footer").then(module => ({ default: module.Footer })));
 const Toaster = lazy(() => import("@/components/ui/toaster").then(module => ({ default: module.Toaster })));
 
-// ⚠️ TooltipProvider 必須同步導入！
-// lazy 加載 TooltipProvider 會讓它進入 <Suspense fallback={null}>，
-// 在其 chunk 下載期間整個 App 顯示空白，造成 FCP 5s 阻塞。
-import { TooltipProvider } from "@/components/ui/tooltip";
+// ✅ 策略：TooltipProvider 保持 lazy（避免拉大主 bundle 造成 TBT 爆表）
+// ✅ 但外層 Suspense 的 fallback 改為 PageSkeleton（骨架立即觸發 FCP，不再空白）
+const TooltipProvider = lazy(() => import("@/components/ui/tooltip").then(module => ({ default: module.TooltipProvider })));
 
-// 同步導入其他核心組件
 import { OptimizedIcon } from "@/components/OptimizedIcons";
 import { PageTransition } from "@/components/PageTransition";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -61,20 +58,15 @@ function PageSkeleton() {
 }
 
 function App() {
-  // 移除結尾的斜線以符合 wouter 格式
   const base = basePath.endsWith('/') ? basePath.slice(0, -1) : basePath;
 
-  // 頁面載入或重新整理時自動滾動到頂部
   useEffect(() => {
-    // 禁用瀏覽器的滾動記憶功能
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
     }
-    // 強制滾動到頂部
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, []);
 
-  // 初始化點擊追蹤
   useEffect(() => {
     import('@/hooks/useClickTracking').then(({ initClickTracking }) => {
       const cleanup = initClickTracking();
@@ -85,60 +77,62 @@ function App() {
   return (
     <HelmetProvider>
       <ErrorBoundary>
-        {/* SEO 全域設定 */}
         <SEOHead />
         <WebsiteSchema />
         <OrganizationSchema />
 
         <QueryClientProvider client={queryClient}>
-          {/* TooltipProvider 同步渲染，避免 fallback=null 造成 5s FCP 空白屏幕 */}
-          <TooltipProvider>
-            <TourProvider>
-              {/* 使用 Router base 設定 GitHub Pages 路徑 */}
-              <Router base={base}>
-                <div className="min-h-screen flex flex-col">
-                  <PageTransition>
-                    <Suspense fallback={<PageSkeleton />}>
-                      <Switch>
-                        <Route path="/">
-                          <Home />
-                        </Route>
-                        <Route path="/tool/:id">
-                          <ToolDetail />
-                        </Route>
-                        <Route path="/admin">
-                          <AdminAuth />
-                        </Route>
-                      </Switch>
+          {/*
+           * ✅ 核心策略：TooltipProvider 保持 lazy（不塞大主 bundle，避免 TBT↑）
+           * ✅ fallback 改為 PageSkeleton（骨架立即可見，觸發 FCP）
+           * 💡 骨架觸發 FCP → 真實內容觸發 LCP，兩者分離，各自計時
+           */}
+          <Suspense fallback={<PageSkeleton />}>
+            <TooltipProvider>
+              <TourProvider>
+                <Router base={base}>
+                  <div className="min-h-screen flex flex-col">
+                    <PageTransition>
+                      <Suspense fallback={<PageSkeleton />}>
+                        <Switch>
+                          <Route path="/">
+                            <Home />
+                          </Route>
+                          <Route path="/tool/:id">
+                            <ToolDetail />
+                          </Route>
+                          <Route path="/admin">
+                            <AdminAuth />
+                          </Route>
+                        </Switch>
+                      </Suspense>
+                    </PageTransition>
+                    <Suspense fallback={null}>
+                      <Footer />
                     </Suspense>
-                  </PageTransition>
-                  <Suspense fallback={null}>
-                    <Footer />
-                  </Suspense>
-                </div>
-              </Router>
+                  </div>
+                </Router>
 
-              <Suspense fallback={null}>
-                <TriviaDialog />
-              </Suspense>
+                <Suspense fallback={null}>
+                  <TriviaDialog />
+                </Suspense>
 
-              <Suspense fallback={null}>
-                <Toaster />
-              </Suspense>
+                <Suspense fallback={null}>
+                  <Toaster />
+                </Suspense>
 
-              {/* PWA 功能元件 */}
-              <Suspense fallback={null}>
-                <PWAUpdatePrompt />
-              </Suspense>
-            </TourProvider>
-          </TooltipProvider>
+                <Suspense fallback={null}>
+                  <PWAUpdatePrompt />
+                </Suspense>
+              </TourProvider>
+            </TooltipProvider>
+          </Suspense>
         </QueryClientProvider>
       </ErrorBoundary>
     </HelmetProvider>
   );
 }
 
-// 用 LazyMotion 包裝整個 App，確保所有 `m` 元件都能獲得動畫能力
 // ⚠️ 不使用 strict 模式：strict=true 會強制 m.* 等待 features 載入，導致 LCP 8s
 export default function AppWithLazyMotion() {
   return (
