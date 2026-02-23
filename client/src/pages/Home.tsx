@@ -41,14 +41,22 @@ export function Home() {
 
   // 延遲載入次要內容，避免首屏 Hydration 過重
   useEffect(() => {
-    // 次要區塊延遲
+    // 次要區塊延遲（主要衡量指標：FCP 與 LCP）
     const secondaryTimer = setTimeout(() => setShowSecondaryContent(true), 1500);
-    // 剩餘工具列表延遲 - 關鍵優化：縮短延遲以利 Lighthouse 提前捕捉 LCP 元素
-    const listTimer = setTimeout(() => setShowFullList(true), 100);
+    // 剩餘工具列表延遲 - 關鍵優化：首屏先渲染前 4 張，其餘用 rIC 在空閒時渲染
+    // ⚠️ 不能過短 (< 500ms)，否則會阻塞主執行緒造成 TBT 爆表
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(() => setShowFullList(true), { timeout: 2000 });
+    } else {
+      const listTimer = setTimeout(() => setShowFullList(true), 1200);
+      return () => {
+        clearTimeout(listTimer);
+        clearTimeout(secondaryTimer);
+      };
+    }
 
     return () => {
       clearTimeout(secondaryTimer);
-      clearTimeout(listTimer);
     };
   }, []);
 
