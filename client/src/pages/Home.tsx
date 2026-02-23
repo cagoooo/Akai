@@ -41,7 +41,8 @@ export function Home() {
   // 延遲載入次要內容，避免首屏 Hydration 過重
   useEffect(() => {
     // 次要區塊延遲 - 排行榜、計數器等。主要衡量指標：TBT
-    const secondaryDelay = 2500;
+    // 🚀 LCP 敏感期優化：縮短延遲至 1s，避免 LCP 超時
+    const secondaryDelay = 1000;
 
     if ('requestIdleCallback' in window) {
       const idleId = (window as any).requestIdleCallback(() => {
@@ -484,7 +485,19 @@ export function Home() {
               )}
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {visibleTools && visibleTools.length > 0 ? (
+                {isLoading ? (
+                  // 🚀 LCP 修復：載入期間顯示骨架屏，填補內容空窗期
+                  <>
+                    {[1, 2, 3, 4].map((i) => (
+                      <ToolCard
+                        key={`skeleton-${i}`}
+                        tool={{} as any}
+                        isLoading={true}
+                        priority={i <= 2}
+                      />
+                    ))}
+                  </>
+                ) : visibleTools && visibleTools.length > 0 ? (
                   <>
                     {visibleTools.map((tool, index) => (
                       <ToolCard
