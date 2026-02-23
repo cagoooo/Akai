@@ -20,6 +20,20 @@ export function usePWAUpdate() {
         installPrompt: null,
     });
 
+    // 🚀 全域監聽 Service Worker 控制權變更，確保能在更新後立刻自動重載
+    useEffect(() => {
+        if ('serviceWorker' in navigator) {
+            const handleControllerChange = () => {
+                console.log('🚀 [PWA] Controller changed, reloading page...');
+                window.location.reload();
+            };
+            navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange);
+            return () => {
+                navigator.serviceWorker.removeEventListener('controllerchange', handleControllerChange);
+            };
+        }
+    }, []);
+
     // 監聽離線/上線狀態
     useEffect(() => {
         const handleOnline = () => setState(prev => ({ ...prev, isOffline: false }));
@@ -43,6 +57,7 @@ export function usePWAUpdate() {
                     if (newWorker) {
                         newWorker.addEventListener('statechange', () => {
                             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                console.log('🚀 [PWA] New version installed and waiting.');
                                 setState(prev => ({ ...prev, isUpdateAvailable: true }));
                             }
                         });
@@ -53,6 +68,7 @@ export function usePWAUpdate() {
             // 檢查是否有等待中的更新
             navigator.serviceWorker.getRegistration().then(registration => {
                 if (registration?.waiting) {
+                    console.log('🚀 [PWA] Found waiting worker on load.');
                     setState(prev => ({ ...prev, isUpdateAvailable: true }));
                 }
             });
@@ -79,19 +95,20 @@ export function usePWAUpdate() {
 
     // 執行更新
     const updateApp = useCallback(() => {
+        console.log('🚀 [PWA] User clicked update button.');
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.getRegistration().then(registration => {
                 if (registration?.waiting) {
-                    // 🚀 監聽 controllerchange，當新 SW 啟動時才觸發重新整理
-                    const onControllerChange = () => {
-                        window.location.reload();
-                    };
-                    navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
-
-                    // 發送指令
+                    console.log('🚀 [PWA] Sending SKIP_WAITING to worker...');
                     registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+                } else {
+                    // 🛡️ 保底機制：如果提示已出現但找不到 waiting worker，代表可能已在激活中或狀態同步延遲
+                    console.warn('⚠️ [PWA] No waiting worker found, triggering fallback reload.');
+                    window.location.reload();
                 }
             });
+        } else {
+            window.location.reload();
         }
     }, []);
 
