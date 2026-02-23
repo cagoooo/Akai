@@ -82,8 +82,14 @@ export function usePWAUpdate() {
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.getRegistration().then(registration => {
                 if (registration?.waiting) {
+                    // 🚀 監聽 controllerchange，當新 SW 啟動時才觸發重新整理
+                    const onControllerChange = () => {
+                        window.location.reload();
+                    };
+                    navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
+
+                    // 發送指令
                     registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-                    window.location.reload();
                 }
             });
         }
