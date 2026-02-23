@@ -87,17 +87,23 @@ export function Home() {
     return shuffled;
   };
 
-  const { data: toolsData, isLoading } = useQuery({
+  // 準備初始數據 (同步) 以便 LCP 能立刻抓取到圖片
+  const initialToolsData = useMemo(() => {
+    const fixedTools = tools.slice(0, 4);
+    const remainingTools = tools.slice(4);
+    return [...fixedTools, ...shuffleArray(remainingTools)];
+  }, []);
+
+  const { data: toolsData = initialToolsData } = useQuery({
     queryKey: ['/api/tools'],
     queryFn: async () => {
-      // 移除人為延遲以加速 FCP/LCP
-      // 為了優化 LCP (Largest Contentful Paint)，我們固定前 4 個熱門工具不進行隨機排序
-      // 這樣我們就可以在 index.html 中實施 Preload 預載入
-      const fixedTools = tools.slice(0, 4);
-      const remainingTools = tools.slice(4);
-      return [...fixedTools, ...shuffleArray(remainingTools)];
+      // 這裡可以保留，用於將來從伺服器更新點擊數等動態數據
+      return initialToolsData;
     },
+    staleTime: Infinity, // 靜態數據不頻繁更新
   });
+
+  const isLoading = false; // 同步渲染不需要載入狀態
 
   // 取得最近使用的工具
   const recentTools = useMemo(() => {
@@ -384,15 +390,7 @@ export function Home() {
               )}
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {isLoading ? (
-                  Array.from({ length: 4 }).map((_, index) => (
-                    <ToolCard
-                      key={`loading-${index}`}
-                      tool={tools[0]}
-                      isLoading={true}
-                    />
-                  ))
-                ) : visibleTools && visibleTools.length > 0 ? (
+                {visibleTools && visibleTools.length > 0 ? (
                   <>
                     {visibleTools.map((tool, index) => (
                       <ToolCard

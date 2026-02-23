@@ -210,260 +210,253 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
 
 
   return (
-    <TooltipProvider>
-      <motion.article
-        whileHover={{ scale: 1.02, y: -4 }}
-        whileTap={{ scale: 0.98 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        itemScope
-        itemType="https://schema.org/EducationalApplication"
-        className="h-full"
+    <motion.article
+      whileHover={{ y: -4 }}
+      whileTap={{ scale: 0.98 }}
+      itemScope
+      itemType="https://schema.org/EducationalApplication"
+      className="h-full"
+    >
+      <meta itemProp="name" content={tool.title} />
+      <meta itemProp="description" content={tool.description} />
+      <meta itemProp="applicationCategory" content={tool.category} />
+      <meta itemProp="url" content={tool.url} />
+
+      <Card
+        className={cn(
+          "group h-full hover:shadow-xl transition-all duration-300 cursor-pointer",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+          "overflow-hidden border-2 rounded-2xl",
+          "hover:border-primary/30",
+          colors?.bg || "bg-white"
+        )}
+        onClick={handleClick}
+        tabIndex={isLoading ? -1 : 0}
+        role={isLoading ? "presentation" : "button"}
+        aria-label={isLoading ? undefined : `開啟 ${tool.title} 工具詳細資訊`}
       >
-        <meta itemProp="name" content={tool.title} />
-        <meta itemProp="description" content={tool.description} />
-        <meta itemProp="applicationCategory" content={tool.category} />
-        <meta itemProp="url" content={tool.url} />
+        <CardContent className="p-4 sm:p-5 h-full flex flex-col">
+          {/* 頂部：圖標 + 收藏 + 詳情 + 分類 */}
+          <header className="flex items-start justify-between gap-2 mb-3">
+            {isLoading ? (
+              <Skeleton className="w-12 h-12 rounded-xl" />
+            ) : (
+              <motion.div
+                className={cn(
+                  "p-2.5 sm:p-3 rounded-xl",
+                  "bg-white/80 shadow-sm",
+                  "transition-all duration-300"
+                )}
+                whileHover={{ rotate: [0, -10, 10, -5, 5, 0] }}
+                transition={{ duration: 0.5 }}
+              >
+                {Icon && <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-primary" />}
+              </motion.div>
+            )}
 
-        <Card
-          className={cn(
-            "group h-full hover:shadow-xl transition-all duration-300 cursor-pointer",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
-            "overflow-hidden border-2 rounded-2xl",
-            "hover:border-primary/30",
-            colors?.bg || "bg-white"
-          )}
-          onClick={handleClick}
-          tabIndex={isLoading ? -1 : 0}
-          role={isLoading ? "presentation" : "button"}
-          aria-label={isLoading ? undefined : `開啟 ${tool.title} 工具詳細資訊`}
-        >
-          <CardContent className="p-4 sm:p-5 h-full flex flex-col">
-            {/* 頂部：圖標 + 收藏 + 詳情 + 分類 */}
-            <header className="flex items-start justify-between gap-2 mb-3">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               {isLoading ? (
-                <Skeleton className="w-12 h-12 rounded-xl" />
+                <>
+                  <Skeleton className="w-10 h-10 rounded-lg" />
+                  <Skeleton className="w-10 h-10 rounded-lg" />
+                </>
               ) : (
-                <motion.div
-                  className={cn(
-                    "p-2.5 sm:p-3 rounded-xl",
-                    "bg-white/80 shadow-sm",
-                    "transition-all duration-300"
-                  )}
-                  whileHover={{ rotate: [0, -10, 10, -5, 5, 0] }}
-                  transition={{ duration: 0.5 }}
-                >
-                  {Icon && <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-primary" />}
-                </motion.div>
-              )}
-
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                {isLoading ? (
-                  <>
-                    <Skeleton className="w-10 h-10 rounded-lg" />
-                    <Skeleton className="w-10 h-10 rounded-lg" />
-                  </>
-                ) : (
-                  <>
-                    {/* 收藏按鈕 - 更大更好點 */}
-                    {onToggleFavorite && (
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            variant={isFavorite ? "default" : "outline"}
-                            size="icon"
-                            className={cn(
-                              "h-10 w-10 sm:h-11 sm:w-11 rounded-xl transition-all",
-                              isFavorite
-                                ? "bg-red-500 hover:bg-red-600 border-red-500"
-                                : "hover:bg-red-50 hover:border-red-200"
-                            )}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onToggleFavorite(tool.id);
-                            }}
-                            aria-label={isFavorite ? "取消收藏" : "加入收藏"}
-                          >
-                            <Heart
-                              className={cn(
-                                "h-5 w-5 sm:h-6 sm:w-6 transition-colors",
-                                isFavorite ? 'fill-white text-white' : 'text-red-400'
-                              )}
-                            />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>{isFavorite ? '取消收藏' : '加入收藏'}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    )}
-
-                    {/* 詳情按鈕 */}
+                <>
+                  {/* 收藏按鈕 - 更大更好點 */}
+                  {onToggleFavorite && (
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Link href={`/tool/${tool.id}`}>
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl hover:bg-primary/10 hover:border-primary/30"
-                            onClick={(e) => e.stopPropagation()}
-                            aria-label={`查看 ${tool.title} 詳情`}
-                          >
-                            <Info className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
-                          </Button>
-                        </Link>
+                        <Button
+                          variant={isFavorite ? "default" : "outline"}
+                          size="icon"
+                          className={cn(
+                            "h-10 w-10 sm:h-11 sm:w-11 rounded-xl transition-all",
+                            isFavorite
+                              ? "bg-red-500 hover:bg-red-600 border-red-500"
+                              : "hover:bg-red-50 hover:border-red-200"
+                          )}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onToggleFavorite(tool.id);
+                          }}
+                          aria-label={isFavorite ? "取消收藏" : "加入收藏"}
+                        >
+                          <Heart
+                            className={cn(
+                              "h-5 w-5 sm:h-6 sm:w-6 transition-colors",
+                              isFavorite ? 'fill-white text-white' : 'text-red-400'
+                            )}
+                          />
+                        </Button>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>查看詳情</p>
+                        <p>{isFavorite ? '取消收藏' : '加入收藏'}</p>
                       </TooltipContent>
                     </Tooltip>
+                  )}
 
-                    {/* 分類標籤 */}
-                    <Badge
-                      variant="secondary"
-                      className={cn(
-                        getCategoryColorClass(tool.category as ToolCategory),
-                        "border-0 px-2.5 py-1.5 text-xs sm:text-sm font-semibold rounded-lg"
-                      )}
-                    >
-                      {catInfo?.emoji} <span className="hidden sm:inline ml-1">{catInfo?.label}</span>
-                    </Badge>
-                  </>
+                  {/* 詳情按鈕 */}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Link href={`/tool/${tool.id}`}>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl hover:bg-primary/10 hover:border-primary/30"
+                          onClick={(e) => e.stopPropagation()}
+                          aria-label={`查看 ${tool.title} 詳情`}
+                        >
+                          <Info className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+                        </Button>
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>查看詳情</p>
+                    </TooltipContent>
+                  </Tooltip>
+
+                  {/* 分類標籤 */}
+                  <Badge
+                    variant="secondary"
+                    className={cn(
+                      getCategoryColorClass(tool.category as ToolCategory),
+                      "border-0 px-2.5 py-1.5 text-xs sm:text-sm font-semibold rounded-lg"
+                    )}
+                  >
+                    {catInfo?.emoji} <span className="hidden sm:inline ml-1">{catInfo?.label}</span>
+                  </Badge>
+                </>
+              )}
+            </div>
+          </header>
+
+          {/* 主要內容區 */}
+          <main className="flex-1 flex flex-col">
+            {isLoading ? (
+              <>
+                <Skeleton className="w-3/4 h-8 mb-2" />
+                <Skeleton className="w-full h-4 mb-2" />
+                <Skeleton className="w-5/6 h-4 mb-4" />
+              </>
+            ) : (
+              <>
+                {/* 工具標題 - 更大更清楚 */}
+                <CardTitle
+                  className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-2 line-clamp-2"
+                  itemProp="name"
+                >
+                  {tool.title}
+                </CardTitle>
+
+                {/* 工具描述 - 更清楚 */}
+                <CardDescription
+                  className="text-sm sm:text-base text-gray-600 mb-3 line-clamp-2 sm:line-clamp-3 flex-1"
+                  itemProp="description"
+                >
+                  {tool.description}
+                </CardDescription>
+
+                {/* 繽紛多彩標籤顯示 */}
+                {tool.tags && tool.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3">
+                    {tool.tags.slice(0, 4).map((tag, index) => {
+                      const tagColors = getTagColors(tag);
+                      return (
+                        <span
+                          key={index}
+                          className={cn(
+                            "inline-flex items-center",
+                            "px-2 py-0.5 sm:px-2.5 sm:py-1",
+                            "text-[10px] sm:text-xs font-semibold",
+                            "rounded-full border shadow-sm",
+                            "transition-all duration-200 ease-in-out",
+                            "hover:scale-105 hover:shadow-md",
+                            tagColors.bg,
+                            tagColors.text,
+                            tagColors.border,
+                            tagColors.hover
+                          )}
+                        >
+                          <span className="opacity-70 mr-0.5">#</span>{tag}
+                        </span>
+                      );
+                    })}
+                    {tool.tags.length > 4 && (
+                      <span className="inline-flex items-center px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-xs font-medium rounded-full bg-gradient-to-r from-gray-100 to-slate-100 text-gray-500 border border-gray-200">
+                        +{tool.tags.length - 4}
+                      </span>
+                    )}
+                  </div>
+                )}
+              </>
+            )}
+
+            {/* 預覽圖 */}
+            {tool.previewUrl && (
+              <figure className="mb-4">
+                <AspectRatio ratio={16 / 9} className="bg-white rounded-xl overflow-hidden border shadow-sm">
+                  {isLoading ? (
+                    <Skeleton className="w-full h-full" />
+                  ) : (
+                    <div className="w-full h-full relative group-hover:scale-105 transition-transform duration-300">
+                      <picture>
+                        <source
+                          srcSet={`/Akai/previews/${tool.previewUrl?.split('/').pop()?.replace('.png', '.webp')}`}
+                          type="image/webp"
+                        />
+                        <img
+                          src={`/Akai/previews/${tool.previewUrl?.split('/').pop()}`}
+                          alt={`${tool.title} 預覽圖`}
+                          className="w-full h-full object-cover"
+                          loading={priority ? "eager" : "lazy"}
+                          {...(priority ? { fetchpriority: "high" } : {})}
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                          }}
+                        />
+                      </picture>
+                    </div>
+                  )}
+                </AspectRatio>
+              </figure>
+            )}
+
+            {/* 底部：開啟按鈕 + 使用次數 */}
+            {!isLoading && (
+              <div className="flex items-center justify-between gap-3 mt-auto pt-3 border-t border-gray-100">
+                {/* 開啟新視窗按鈕 - 更大更吸睛 */}
+                <Button
+                  variant="default"
+                  size="lg"
+                  className={cn(
+                    "flex-1 gap-2 text-sm sm:text-base font-semibold py-5 sm:py-6 rounded-xl",
+                    "bg-gradient-to-r from-primary to-indigo-600",
+                    "hover:from-primary/90 hover:to-indigo-600/90",
+                    "shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30",
+                    "transition-all duration-300"
+                  )}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleClick();
+                  }}
+                >
+                  <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5" />
+                  開啟使用
+                </Button>
+
+                {/* 使用次數 */}
+                {(usageStats || tool.totalClicks) && (
+                  <div className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground bg-gray-100 px-3 py-2 rounded-lg">
+                    <BarChart className="w-4 h-4" />
+                    <span className="font-medium">{tool.totalClicks || usageStats?.totalClicks || 0}</span>
+                    <span className="hidden sm:inline">次</span>
+                  </div>
                 )}
               </div>
-            </header>
-
-            {/* 主要內容區 */}
-            <main className="flex-1 flex flex-col">
-              {isLoading ? (
-                <>
-                  <Skeleton className="w-3/4 h-8 mb-2" />
-                  <Skeleton className="w-full h-4 mb-2" />
-                  <Skeleton className="w-5/6 h-4 mb-4" />
-                </>
-              ) : (
-                <>
-                  {/* 工具標題 - 更大更清楚 */}
-                  <CardTitle
-                    className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-2 line-clamp-2"
-                    itemProp="name"
-                  >
-                    {tool.title}
-                  </CardTitle>
-
-                  {/* 工具描述 - 更清楚 */}
-                  <CardDescription
-                    className="text-sm sm:text-base text-gray-600 mb-3 line-clamp-2 sm:line-clamp-3 flex-1"
-                    itemProp="description"
-                  >
-                    {tool.description}
-                  </CardDescription>
-
-                  {/* 繽紛多彩標籤顯示 */}
-                  {tool.tags && tool.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3">
-                      {tool.tags.slice(0, 4).map((tag, index) => {
-                        const tagColors = getTagColors(tag);
-                        return (
-                          <span
-                            key={index}
-                            className={cn(
-                              "inline-flex items-center",
-                              "px-2 py-0.5 sm:px-2.5 sm:py-1",
-                              "text-[10px] sm:text-xs font-semibold",
-                              "rounded-full border shadow-sm",
-                              "transition-all duration-200 ease-in-out",
-                              "hover:scale-105 hover:shadow-md",
-                              tagColors.bg,
-                              tagColors.text,
-                              tagColors.border,
-                              tagColors.hover
-                            )}
-                          >
-                            <span className="opacity-70 mr-0.5">#</span>{tag}
-                          </span>
-                        );
-                      })}
-                      {tool.tags.length > 4 && (
-                        <span className="inline-flex items-center px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-xs font-medium rounded-full bg-gradient-to-r from-gray-100 to-slate-100 text-gray-500 border border-gray-200">
-                          +{tool.tags.length - 4}
-                        </span>
-                      )}
-                    </div>
-                  )}
-                </>
-              )}
-
-              {/* 預覽圖 */}
-              {tool.previewUrl && (
-                <figure className="mb-4">
-                  <AspectRatio ratio={16 / 9} className="bg-white rounded-xl overflow-hidden border shadow-sm">
-                    {isLoading ? (
-                      <Skeleton className="w-full h-full" />
-                    ) : (
-                      <motion.div
-                        className="w-full h-full relative"
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                      >
-                        <picture>
-                          <source
-                            srcSet={`${import.meta.env.BASE_URL}${tool.previewUrl?.replace('.png', '.webp').replace(/^\//, '')}`}
-                            type="image/webp"
-                          />
-                          <img
-                            src={`${import.meta.env.BASE_URL}${tool.previewUrl?.startsWith('/') ? tool.previewUrl.slice(1) : tool.previewUrl}`}
-                            alt={`${tool.title} 預覽圖`}
-                            className="w-full h-full object-cover"
-                            loading={priority ? "eager" : "lazy"}
-                            {...(priority ? { fetchpriority: "high" } : {})}
-                            onError={(e) => {
-                              e.currentTarget.style.display = 'none';
-                            }}
-                          />
-                        </picture>
-                      </motion.div>
-                    )}
-                  </AspectRatio>
-                </figure>
-              )}
-
-              {/* 底部：開啟按鈕 + 使用次數 */}
-              {!isLoading && (
-                <div className="flex items-center justify-between gap-3 mt-auto pt-3 border-t border-gray-100">
-                  {/* 開啟新視窗按鈕 - 更大更吸睛 */}
-                  <Button
-                    variant="default"
-                    size="lg"
-                    className={cn(
-                      "flex-1 gap-2 text-sm sm:text-base font-semibold py-5 sm:py-6 rounded-xl",
-                      "bg-gradient-to-r from-primary to-indigo-600",
-                      "hover:from-primary/90 hover:to-indigo-600/90",
-                      "shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30",
-                      "transition-all duration-300"
-                    )}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleClick();
-                    }}
-                  >
-                    <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5" />
-                    開啟使用
-                  </Button>
-
-                  {/* 使用次數 */}
-                  {(usageStats || tool.totalClicks) && (
-                    <div className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground bg-gray-100 px-3 py-2 rounded-lg">
-                      <BarChart className="w-4 h-4" />
-                      <span className="font-medium">{tool.totalClicks || usageStats?.totalClicks || 0}</span>
-                      <span className="hidden sm:inline">次</span>
-                    </div>
-                  )}
-                </div>
-              )}
-            </main>
-          </CardContent>
-        </Card>
-      </motion.article>
-    </TooltipProvider>
+            )}
+          </main>
+        </CardContent>
+      </Card>
+    </motion.article>
   );
 }

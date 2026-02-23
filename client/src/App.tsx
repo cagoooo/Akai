@@ -3,6 +3,7 @@ import { Router, Switch, Route } from "wouter";
 import { HelmetProvider } from "react-helmet-async";
 import { TourProvider } from "@/components/TourProvider";
 import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { PageTransition } from "@/components/PageTransition";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/queryClient";
@@ -81,40 +82,42 @@ function App() {
         <AllToolsSchema />
 
         <QueryClientProvider client={queryClient}>
-          <TourProvider>
-            {/* 使用 Router base 設定 GitHub Pages 路徑 */}
-            <Router base={base}>
-              <div className="min-h-screen flex flex-col">
-                <PageTransition>
-                  <Suspense fallback={<PageSkeleton />}>
-                    <Switch>
-                      <Route path="/">
-                        <Home />
-                      </Route>
-                      <Route path="/tool/:id">
-                        <ToolDetail />
-                      </Route>
-                      <Route path="/admin">
-                        <AdminAuth />
-                      </Route>
-                    </Switch>
-                  </Suspense>
-                </PageTransition>
-                <Footer />
-              </div>
-            </Router>
+          <TooltipProvider>
+            <TourProvider>
+              {/* 使用 Router base 設定 GitHub Pages 路徑 */}
+              <Router base={base}>
+                <div className="min-h-screen flex flex-col">
+                  <PageTransition>
+                    <Suspense fallback={<PageSkeleton />}>
+                      <Switch>
+                        <Route path="/">
+                          <Home />
+                        </Route>
+                        <Route path="/tool/:id">
+                          <ToolDetail />
+                        </Route>
+                        <Route path="/admin">
+                          <AdminAuth />
+                        </Route>
+                      </Switch>
+                    </Suspense>
+                  </PageTransition>
+                  <Footer />
+                </div>
+              </Router>
 
-            <Suspense fallback={null}>
-              <TriviaDialog />
-            </Suspense>
+              <Suspense fallback={null}>
+                <TriviaDialog />
+              </Suspense>
 
-            <Toaster />
+              <Toaster />
 
-            {/* PWA 功能元件 */}
-            <Suspense fallback={null}>
-              <PWAUpdatePrompt />
-            </Suspense>
-          </TourProvider>
+              {/* PWA 功能元件 */}
+              <Suspense fallback={null}>
+                <PWAUpdatePrompt />
+              </Suspense>
+            </TourProvider>
+          </TooltipProvider>
         </QueryClientProvider>
       </ErrorBoundary>
     </HelmetProvider>

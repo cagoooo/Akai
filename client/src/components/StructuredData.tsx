@@ -169,34 +169,38 @@ export function OrganizationSchema() {
     );
 }
 
-// 所有工具的結構化數據 (優化後：合併為單一 ItemList 避免 48 個腳本注入)
+// 所有工具的結構化數據 (優化後：合併為單一 ItemList 避免 48 個腳本注入，並使用 useMemo 避免重複計算)
 import { tools } from '@/lib/data';
+import { useMemo } from 'react';
 
 export function AllToolsSchema() {
-    const schema = {
-        "@context": "https://schema.org",
-        "@type": "ItemList",
-        "name": "教育工具清單",
-        "description": "阿凱老師開發的各式教育科技工具",
-        "numberOfItems": tools.length,
-        "itemListElement": tools.map((tool, index) => ({
-            "@type": "ListItem",
-            "position": index + 1,
-            "item": {
-                "@type": "SoftwareApplication",
-                "name": tool.title,
-                "description": tool.description,
-                "url": tool.url,
-                "applicationCategory": "EducationalApplication",
-                "operatingSystem": "Web Browser"
-            }
-        }))
-    };
+    const schemaContent = useMemo(() => {
+        const schema = {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "name": "教育工具清單",
+            "description": "阿凱老師開發的各式教育科技工具",
+            "numberOfItems": tools.length,
+            "itemListElement": tools.map((tool, index) => ({
+                "@type": "ListItem",
+                "position": index + 1,
+                "item": {
+                    "@type": "SoftwareApplication",
+                    "name": tool.title,
+                    "description": tool.description,
+                    "url": tool.url,
+                    "applicationCategory": "EducationalApplication",
+                    "operatingSystem": "Web Browser"
+                }
+            }))
+        };
+        return JSON.stringify(schema);
+    }, []);
 
     return (
         <Helmet>
             <script type="application/ld+json">
-                {JSON.stringify(schema)}
+                {schemaContent}
             </script>
         </Helmet>
     );

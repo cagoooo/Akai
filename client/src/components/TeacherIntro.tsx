@@ -9,23 +9,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { m as motion, AnimatePresence } from 'framer-motion';
 
 const emojiAnimationVariants = {
-  hidden: { opacity: 0, scale: 0.8, y: 20 },
+  hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: {
-      type: "spring",
-      stiffness: 300,
-      damping: 25
-    }
-  },
-  hover: {
-    scale: 1.2,
-    rotate: [0, -10, 10, -5, 5, 0],
-    transition: {
-      duration: 0.5
-    }
+    transition: { duration: 0.3 }
   }
 };
 
@@ -101,22 +88,18 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
 
   return (
     <Card className="relative overflow-hidden border-0 shadow-xl">
-      {/* 漸層背景 */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent" />
+      {/* 簡化後的漸層背景 */}
+      <div className="absolute inset-0 bg-blue-600" />
+      <div className="absolute inset-0 bg-gradient-to-br from-indigo-700 to-purple-800 opacity-90" />
 
       <CardContent className="relative z-10 py-4 sm:py-5 px-4 sm:px-6 text-white">
         {/* 頂部：圖標 + 名字 + 狀態 */}
         <div className="flex items-center gap-3 mb-3 sm:mb-4">
-          <motion.div
+          <div
             className="p-2.5 sm:p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20"
-            whileHover={{ scale: 1.1, rotate: 5 }}
-            whileTap={{ scale: 0.95 }}
-            role="img"
-            aria-label="教師資訊圖標"
           >
             <Newspaper className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-300" aria-hidden="true" />
-          </motion.div>
+          </div>
 
           <div className="flex-1">
             <div className="flex items-center gap-2 flex-wrap">
