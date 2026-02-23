@@ -30,7 +30,7 @@ const rankAnimationVariants = {
   hidden: {
     opacity: 0,
     scale: 0.8,
-    y: 40,
+    y: 20,
     rotateX: -10
   },
   visible: (custom: number) => ({
@@ -40,10 +40,10 @@ const rankAnimationVariants = {
     rotateX: 0,
     transition: {
       type: "spring",
-      stiffness: 500,
-      damping: 20,
-      delay: custom * 0.15,
-      duration: 0.6
+      stiffness: 400,
+      damping: 25,
+      delay: (custom % 5) * 0.1, // 為新展開的筆數提供微小的階梯感
+      duration: 0.5
     }
   }),
   hover: {
@@ -59,7 +59,7 @@ const rankAnimationVariants = {
   exit: {
     opacity: 0,
     scale: 0.9,
-    y: -20,
+    y: -10,
     transition: {
       duration: 0.3
     }
@@ -213,35 +213,26 @@ export function ToolRankings({ tools: toolsProp }: ToolRankingsProps) {
     try {
       console.log('排行榜點擊工具:', tool.id, tool.url);
 
-      // 首先確保打開新視窗
       const newWindow = window.open(tool.url, '_blank', 'noopener,noreferrer');
-
       if (newWindow) {
         newWindow.opener = null;
       }
 
-      // 使用 Firestore 追蹤工具使用
       try {
         const { trackToolUsage } = await import("@/lib/firestoreService");
         await trackToolUsage(tool.id);
-        console.log('工具使用已透過 Firestore 追蹤:', tool.id);
-        // 刷新排行榜
-        if (isProd) {
-          // Firebase 環境下由 onSnapshot 自動更新，如需手動則不執行任何動作
-        } else {
+        if (!isProd) {
           await loadRankingsFromAPI();
         }
       } catch (err) {
         console.error('追蹤失敗:', err);
       }
-
     } catch (error) {
       console.error('處理工具點擊時發生錯誤:', error);
       window.open(tool.url, '_blank');
     }
   };
 
-  // 為排名項目添加變動指示
   const getRankChangeIndicator = (change: number) => {
     if (change > 0) {
       return (
@@ -273,7 +264,6 @@ export function ToolRankings({ tools: toolsProp }: ToolRankingsProps) {
     return null;
   };
 
-  // Loading state
   if (isLoading) {
     return (
       <Card className="w-full">
@@ -298,12 +288,12 @@ export function ToolRankings({ tools: toolsProp }: ToolRankingsProps) {
     );
   }
 
-  // 渲染排行榜列表
-  const renderRankingsList = (rankingsData: RankingWithChange[]) => {
+  // 渲染清單，加入 AnimatePresence 與 staggered 動畫
+  const renderRankingsElements = (rankingsData: RankingWithChange[]) => {
     const displayData = isExpanded ? rankingsData : rankingsData.slice(0, 5);
 
     return (
-      <AnimatePresence mode="popLayout">
+      <AnimatePresence mode="popLayout" initial={false}>
         {displayData.map((ranking, index) => {
           const tool = currentTools.find(t => t.id === ranking.toolId);
           if (!tool) return null;
@@ -314,7 +304,7 @@ export function ToolRankings({ tools: toolsProp }: ToolRankingsProps) {
           return (
             <motion.div
               key={ranking.toolId}
-              layout="position"
+              layout
               layoutId={`ranking-${ranking.toolId}`}
               variants={rankAnimationVariants}
               initial="hidden"
@@ -323,7 +313,6 @@ export function ToolRankings({ tools: toolsProp }: ToolRankingsProps) {
               custom={index}
               whileHover="hover"
               onClick={() => handleItemClick(tool)}
-              id={index === 0 ? "top-tool" : (index < 5 ? "interaction-area" : undefined)}
               className={`
                 flex items-center gap-3 p-3 rounded-xl 
                 transition-all duration-300 cursor-pointer
@@ -357,9 +346,7 @@ export function ToolRankings({ tools: toolsProp }: ToolRankingsProps) {
                       <path d="M7 17l9.2-9.2M17 17V7H7" />
                     </svg>
                   </p>
-                  <div id={index === 0 ? "ranking-changes" : undefined}>
-                    {getRankChangeIndicator(ranking.change)}
-                  </div>
+                  <div>{getRankChangeIndicator(ranking.change)}</div>
                 </div>
 
                 <p className="text-xs sm:text-sm text-muted-foreground truncate">
@@ -372,7 +359,7 @@ export function ToolRankings({ tools: toolsProp }: ToolRankingsProps) {
                 </p>
               </div>
 
-              <Badge variant={isTop ? "secondary" : "outline"} className="ml-auto px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-bold shadow-sm" id={index === 0 ? "usage-stats" : undefined}>
+              <Badge variant={isTop ? "secondary" : "outline"} className="ml-auto px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-bold shadow-sm">
                 <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 mr-1 text-yellow-500" />
                 <span className="font-mono text-base sm:text-lg">{ranking.totalClicks}</span>
                 <span className="ml-0.5 text-xs">次</span>
@@ -385,17 +372,15 @@ export function ToolRankings({ tools: toolsProp }: ToolRankingsProps) {
   };
 
   return (
-    <Card className="overflow-hidden relative">
+    <Card className="overflow-hidden relative border-none shadow-xl bg-white/50 backdrop-blur-sm">
       <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent opacity-50 pointer-events-none z-0"></div>
       <CardHeader className="relative z-10 p-3 sm:p-4">
         <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2">
-          <CardTitle className="flex items-center gap-2 text-lg sm:text-xl whitespace-nowrap" id="rankings-title">
+          <CardTitle className="flex items-center gap-2 text-lg sm:text-xl whitespace-nowrap">
             <div className="p-1.5 rounded-lg bg-primary/10">
               <BarChart className="w-5 h-5 sm:w-6 sm:h-6 text-primary flex-shrink-0" />
             </div>
-            <span className="font-black text-gray-900">
-              工具使用排行榜
-            </span>
+            <span className="font-black text-gray-900">工具使用排行榜</span>
           </CardTitle>
           <div className="flex items-center gap-2">
             <RankingTutorial />
@@ -412,45 +397,45 @@ export function ToolRankings({ tools: toolsProp }: ToolRankingsProps) {
       </CardHeader>
 
       <CardContent className="relative z-10 p-2 sm:p-4">
-        {rankings.length > 0 ? (
-          <>
-            {renderRankingsList(rankingsWithChange)}
+        <motion.div layout className="flex flex-col">
+          {rankings.length > 0 ? (
+            <>
+              {renderRankingsElements(rankingsWithChange)}
 
-            {/* 展開/收合按鈕 */}
-            {rankings.length > 5 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="mt-4 flex justify-center"
-              >
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setIsExpanded(!isExpanded)}
-                  className="group gap-2 rounded-full px-6 hover:bg-primary/5 hover:border-primary/30 transition-all duration-300 shadow-sm"
+              {rankings.length > 5 && (
+                <motion.div
+                  layout
+                  className="mt-4 flex justify-center"
                 >
-                  <span className="text-sm font-bold text-primary">
-                    {isExpanded ? "收合排行榜" : `顯示更多 (Top 10)`}
-                  </span>
-                  <motion.div
-                    animate={{ rotate: isExpanded ? 180 : 0 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="group gap-2 rounded-full px-6 hover:bg-primary/5 hover:border-primary/30 transition-all duration-300 shadow-sm border-primary/20"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
-                      <path d="m6 9 6 6 6-6" />
-                    </svg>
-                  </motion.div>
-                </Button>
-              </motion.div>
-            )}
-          </>
-        ) : (
-          <div className="flex flex-col items-center justify-center p-8 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
-            <BarChart className="w-12 h-12 text-slate-300 mb-3" />
-            <p className="text-slate-500 mb-4">目前尚無使用數據</p>
-            <RankingTutorial />
-          </div>
-        )}
+                    <span className="text-sm font-bold text-primary">
+                      {isExpanded ? "收合排行榜" : `顯示更多 (Top 10)`}
+                    </span>
+                    <motion.div
+                      animate={{ rotate: isExpanded ? 180 : 0 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
+                        <path d="m6 9 6 6 6-6" />
+                      </svg>
+                    </motion.div>
+                  </Button>
+                </motion.div>
+              )}
+            </>
+          ) : (
+            <div className="flex flex-col items-center justify-center p-8 text-center bg-slate-50/50 rounded-xl border border-dashed border-slate-200">
+              <BarChart className="w-12 h-12 text-slate-300 mb-3" />
+              <p className="text-slate-500 mb-4 font-medium">目前尚無使用數據</p>
+              <RankingTutorial />
+            </div>
+          )}
+        </motion.div>
       </CardContent>
     </Card>
   );

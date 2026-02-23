@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -151,8 +151,8 @@ export function WishingWellDialog({ open, onOpenChange }: WishingWellDialogProps
                                         >
                                             <Star
                                                 className={`w-8 h-8 ${(hoverRating || rating) >= star
-                                                        ? "fill-yellow-400 text-yellow-400 drop-shadow-sm"
-                                                        : "text-slate-300"
+                                                    ? "fill-yellow-400 text-yellow-400 drop-shadow-sm"
+                                                    : "text-slate-300"
                                                     } transition-colors duration-200`}
                                             />
                                         </button>
@@ -200,14 +200,3 @@ export function WishingWellDialog({ open, onOpenChange }: WishingWellDialogProps
     );
 }
 
-// DialogFooter helper definition within the file itself since it was missed from imports
-const DialogFooter = ({
-    className,
-    ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-    <div
-        className={`flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 ${className || ''}`}
-        {...props}
-    />
-)
-DialogFooter.displayName = "DialogFooter"

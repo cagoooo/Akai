@@ -7,7 +7,7 @@
  * - Stale While Revalidate: 圖片
  */
 
-const CACHE_VERSION = 'v3.0.0-data-api';
+const CACHE_VERSION = 'v3.1.5-data-fix';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
 
@@ -170,6 +170,9 @@ async function cacheFirst(request) {
     if (networkResponse.ok && networkResponse.status === 200) {
       const cache = await caches.open(STATIC_CACHE);
       cache.put(request, networkResponse.clone());
+    } else if (networkResponse.status === 404 && request.url.endsWith('.js')) {
+      // 🚀 關鍵修復：如果是 JS 資源 404，通常代表版本更新，應刪除靜態緩存中的 index.html 迫使重新載入
+      console.warn('[SW] 檢測到資產 404，可能需要重新加載頁面:', request.url);
     }
     return networkResponse;
   } catch (error) {
