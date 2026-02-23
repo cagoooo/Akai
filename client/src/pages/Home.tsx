@@ -113,10 +113,19 @@ export function Home() {
   const { data: toolsData, isLoading } = useQuery({
     queryKey: ['/api/tools'],
     queryFn: async () => {
-      const response = await fetch('/api/tools');
-      if (!response.ok) throw new Error('無法獲取工具數據');
-      const data = await response.json();
-      // 保持之前的隨機洗牌邏輯，但首屏 4 個工具固定以優化 LCP
+      try {
+        const response = await fetch('/api/tools');
+        if (!response.ok) throw new Error('API 失敗');
+        return await response.json();
+      } catch (err) {
+        console.warn('正在切換至靜態工具數據備援...');
+        const staticResponse = await fetch(`${import.meta.env.BASE_URL}api/tools.json`);
+        if (!staticResponse.ok) throw new Error('無法獲取工具數據 (包含備援)');
+        return await staticResponse.json();
+      }
+    },
+    select: (data) => {
+      if (!Array.isArray(data)) return [];
       const fixedTools = data.slice(0, 4);
       const remainingTools = data.slice(4);
       return [...fixedTools, ...shuffleArray(remainingTools)];
@@ -163,7 +172,7 @@ export function Home() {
       result = result?.filter(tool =>
         tool.title.toLowerCase().includes(query) ||
         tool.description.toLowerCase().includes(query) ||
-        tool.tags?.some(tag => tag.toLowerCase().includes(query))
+        tool.tags?.some((tag: string) => tag.toLowerCase().includes(query))
       );
     }
 

@@ -93,49 +93,92 @@ export function ToolRankings({ tools: toolsProp }: ToolRankingsProps) {
   // 保存前一次的排名數據用於比較
   const [prevRankings, setPrevRankings] = useState<Record<number, number>>({});
 
+  // 偵測是否為生產環境 (GitHub Pages)
+  const isProd = import.meta.env.PROD || window.location.hostname !== 'localhost';
+
   // 從本地 API 載入排行榜數據
-  const loadRankings = async () => {
+  const loadRankingsFromAPI = async () => {
     try {
       setIsLoading(true);
       const response = await fetch('/api/tools/rankings');
-      if (!response.ok) throw new Error('無法獲取排行榜數據');
-
+      if (!response.ok) throw new Error('無法獲獲本地排行榜數據');
       const json = await response.json();
-      // 處理 API 返回格式 (應優先讀取 .data 屬位)
       const rawRankings = json.data || (Array.isArray(json) ? json : []);
-
       if (rawRankings && rawRankings.length > 0) {
         setRankings(rawRankings);
         localStorage.setItem('localToolsRankings', JSON.stringify(rawRankings));
-      } else {
-        // 使用預設資料防呆
-        const defaultRankings = tools.slice(0, 5).map((tool, index) => ({
-          toolId: tool.id,
-          totalClicks: Math.max(0, 10 - index),
-          lastUsedAt: new Date().toISOString(),
-          categoryClicks: {}
-        }));
-        setRankings(defaultRankings);
       }
-      setError(null);
+      return true;
     } catch (err) {
-      console.error('載入排行榜失敗:', err);
-      setError(err as Error);
-      const localData = localStorage.getItem('localToolsRankings');
-      if (localData) setRankings(JSON.parse(localData));
+      console.warn('本地排行榜 API 調用失敗:', err);
+      return false;
     } finally {
       setIsLoading(false);
     }
   };
 
-  // 初始載入
+  // 初始載入與即時監聽
   useEffect(() => {
-    loadRankings();
+    let unsubscribe: (() => void) | undefined;
 
-    // 設定定時刷新 (例如每 1 分鐘)
-    const interval = setInterval(loadRankings, 60000);
-    return () => clearInterval(interval);
-  }, []);
+    const setupRankings = async () => {
+      // 在生產環境或嘗試使用 Firebase
+      if (isProd) {
+        try {
+          const { db, isFirebaseAvailable } = await import('@/lib/firebase');
+          const { collection, onSnapshot, orderBy, query, limit } = await import('firebase/firestore');
+
+          if (isFirebaseAvailable() && db) {
+            unsubscribe = onSnapshot(
+              query(collection(db, 'toolUsageStats'), orderBy('totalClicks', 'desc'), limit(5)),
+              (snapshot) => {
+                const stats: ToolRanking[] = [];
+                snapshot.forEach((doc) => {
+                  const data = doc.data();
+                  stats.push({
+                    toolId: data.toolId,
+                    totalClicks: data.totalClicks,
+                    lastUsedAt: data.lastUsedAt?.toDate?.()?.toISOString() || null,
+                    categoryClicks: data.categoryClicks || {}
+                  });
+                });
+
+                if (stats.length > 0) {
+                  setRankings(stats);
+                  localStorage.setItem('localToolsRankings', JSON.stringify(stats));
+                }
+                setIsLoading(false);
+              },
+              (err) => {
+                console.warn('Firebase 排行榜監聽失敗，嘗試本地 API:', err);
+                loadRankingsFromAPI();
+              }
+            );
+            return;
+          }
+        } catch (err) {
+          console.warn('初始化 Firebase 失敗，使用本地 API:', err);
+        }
+      }
+
+      // 非生產環境或 Firebase 不可用時，使用本地 API
+      loadRankingsFromAPI();
+      const interval = setInterval(loadRankingsFromAPI, 60000);
+      return () => clearInterval(interval);
+    };
+
+    let cleanupFn: (() => void) | undefined;
+    setupRankings().then(cleanup => {
+      if (typeof cleanup === 'function') {
+        cleanupFn = cleanup;
+      }
+    });
+
+    return () => {
+      unsubscribe?.();
+      if (cleanupFn) cleanupFn();
+    };
+  }, [isProd]);
 
   // 生成排名變動數據
   const rankingsWithChange = useMemo<RankingWithChange[]>(() => {
@@ -180,9 +223,13 @@ export function ToolRankings({ tools: toolsProp }: ToolRankingsProps) {
         await trackToolUsage(tool.id);
         console.log('工具使用已透過 Firestore 追蹤:', tool.id);
         // 刷新排行榜
-        await loadRankings();
+        if (isProd) {
+          // Firebase 環境下由 onSnapshot 自動更新，如需手動則不執行任何動作
+        } else {
+          await loadRankingsFromAPI();
+        }
       } catch (err) {
-        console.error('Firestore 追蹤失敗:', err);
+        console.error('追蹤失敗:', err);
       }
 
     } catch (error) {
