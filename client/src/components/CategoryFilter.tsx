@@ -52,6 +52,19 @@ export function CategoryFilter({
         }, 100);
     };
 
+    const handleFavoritesClick = () => {
+        if (onToggleFavorites) {
+            onToggleFavorites();
+            // 自動跳轉到工具卡片區域
+            setTimeout(() => {
+                const toolsGrid = document.querySelector('[data-tour="tools-grid"]');
+                if (toolsGrid) {
+                    toolsGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 100);
+        }
+    };
+
     return (
         <div className="flex flex-wrap gap-2 sm:gap-2.5">
             {/* 全部按鈕 */}
@@ -85,7 +98,7 @@ export function CategoryFilter({
                 <Button
                     variant="outline"
                     size="sm"
-                    onClick={onToggleFavorites}
+                    onClick={handleFavoritesClick}
                     aria-label="顯示我的收藏工具"
                     className={cn(
                         "gap-1.5 sm:gap-2 text-sm sm:text-base font-semibold border-2 rounded-full transition-all duration-200 hover:scale-105 px-3 py-1.5 sm:px-4 sm:py-2",
