@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { teacherInfo } from "@/lib/data";
-import { Newspaper, Settings2 } from "lucide-react";
+import { teacherInfo as fallbackTeacherInfo, type TeacherInfo } from "@/lib/data";
+import { OptimizedIcon } from "./OptimizedIcons";
 import { LinkCustomizer, type LinkStyle } from "./LinkCustomizer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { m as motion, AnimatePresence } from 'framer-motion';
+import { useQuery } from "@tanstack/react-query";
 
 const emojiAnimationVariants = {
   hidden: { opacity: 0 },
@@ -32,38 +32,41 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
     isUnderlineVisible: true,
     isHoverUnderline: false,
   });
-  const [linkText, setLinkText] = useState(teacherInfo.name);
+
+  const { data: teacherData, isLoading: isDataLoading } = useQuery<TeacherInfo>({
+    queryKey: ['/api/teacher/info'],
+    queryFn: async () => {
+      const response = await fetch('/api/teacher/info');
+      if (!response.ok) throw new Error('無法獲取教師資訊');
+      return response.json();
+    },
+    staleTime: 3600000, // 1 小時
+  });
+
+  const currentTeacherInfo = teacherData || fallbackTeacherInfo;
+  const [linkText, setLinkText] = useState(currentTeacherInfo.name);
   const [linkUrl, setLinkUrl] = useState("https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5");
+
+  // 當數據獲取成功後更新 LinkText
+  useEffect(() => {
+    if (teacherData?.name) {
+      setLinkText(teacherData.name);
+    }
+  }, [teacherData]);
 
   // Cycle through teacher moods with smoother transitions
   useEffect(() => {
+    if (!currentTeacherInfo.moods?.length) return;
     const interval = setInterval(() => {
-      setCurrentMoodIndex((prevIndex) => (prevIndex + 1) % teacherInfo.moods.length);
+      setCurrentMoodIndex((prevIndex) => (prevIndex + 1) % currentTeacherInfo.moods.length);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [currentTeacherInfo.moods]);
 
-  const currentMood = teacherInfo.moods[currentMoodIndex];
+  const currentMood = currentTeacherInfo.moods?.[currentMoodIndex] || { emoji: "👨‍🏫", description: "教育科技創新者" };
 
-  const linkClass = `
-    text-4xl md:text-5xl lg:text-6xl font-extrabold
-    bg-clip-text text-transparent
-    bg-gradient-to-r from-white to-white/80
-    hover:from-white hover:to-primary-foreground/60
-    transition-all duration-300
-    hover:scale-105 transform
-    ${linkStyle.isUnderlineVisible ? "hover:after:w-full" : ""}
-    relative
-    after:absolute after:bottom-0 after:left-0 
-    after:h-0.5 after:bg-white
-    after:transition-all after:duration-300
-    after:w-0
-    tracking-wide
-    leading-tight
-  `.trim();
-
-  if (isLoading) {
+  if (isLoading || isDataLoading) {
     return (
       <Card className="bg-primary text-primary-foreground">
         <CardContent className="pt-6">
@@ -98,7 +101,7 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
           <div
             className="p-2.5 sm:p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20"
           >
-            <Newspaper className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-300" aria-hidden="true" />
+            <OptimizedIcon name="Newspaper" className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-300" aria-hidden="true" />
           </div>
 
           <div className="flex-1">
@@ -119,7 +122,7 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
                 onClick={() => setIsCustomizing(true)}
                 aria-label="自定義連結樣式"
               >
-                <Settings2 className="h-4 w-4 text-white/60" />
+                <OptimizedIcon name="Settings2" className="h-4 w-4 text-white/60" />
               </motion.button>
             </div>
 
@@ -156,7 +159,7 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
 
         {/* 描述文字：移除動畫以加速渲染 */}
         <p className="text-white/95 text-sm sm:text-base leading-relaxed mb-3 sm:mb-4 pl-0 sm:pl-1 font-medium">
-          {teacherInfo.description}
+          {currentTeacherInfo.description}
         </p>
 
         {/* 成就標籤 */}
@@ -165,7 +168,7 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
           role="list"
           aria-label="教師成就"
         >
-          {teacherInfo.achievements.map((achievement, index) => (
+          {currentTeacherInfo.achievements.map((achievement, index) => (
             <motion.span
               key={index}
               initial={{ opacity: 0, scale: 0.9 }}

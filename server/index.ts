@@ -4,8 +4,10 @@ import { setupVite, serveStatic, log } from "./vite";
 import { db, sql, dbType } from "../db";
 import path from "node:path";
 import fs from "node:fs";
+import compression from "compression";
 
 const app = express();
+app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 

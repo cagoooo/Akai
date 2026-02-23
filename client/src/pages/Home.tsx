@@ -2,13 +2,13 @@ import { useState, useMemo, useRef, lazy, Suspense, useEffect } from "react";
 import { m as motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from "@tanstack/react-query";
 import { ToolCard } from "@/components/ToolCard";
-import { TeacherIntro } from "@/components/TeacherIntro";
+const TeacherIntro = lazy(() => import("@/components/TeacherIntro").then(module => ({ default: module.TeacherIntro })));
 import { tools } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { OptimizedIcon } from "@/components/OptimizedIcons";
 import { useTour } from "@/components/TourProvider";
-import { CategoryFilter } from "@/components/CategoryFilter";
-import { AdvancedSearch } from "@/components/AdvancedSearch";
+const CategoryFilter = lazy(() => import("@/components/CategoryFilter").then(module => ({ default: module.CategoryFilter })));
+const AdvancedSearch = lazy(() => import("@/components/AdvancedSearch").then(module => ({ default: module.AdvancedSearch })));
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useRecentTools } from "@/hooks/useRecentTools";
@@ -20,10 +20,9 @@ const ToolRankings = lazy(() => import("@/components/ToolRankings").then(module 
 const VisitorCounter = lazy(() => import("@/components/VisitorCounter").then(module => ({ default: module.VisitorCounter })));
 const RecommendedTools = lazy(() => import("@/components/RecommendedTools").then(module => ({ default: module.RecommendedTools })));
 
-import { RankingTutorial } from "@/components/RankingTutorial";
-import { NewToolsBanner } from "@/components/NewToolsBanner";
+const RankingTutorial = lazy(() => import("@/components/RankingTutorial").then(module => ({ default: module.RankingTutorial })));
+const NewToolsBanner = lazy(() => import("@/components/NewToolsBanner").then(module => ({ default: module.NewToolsBanner })));
 const WishingWellDialog = lazy(() => import("@/components/WishingWellDialog").then(module => ({ default: module.WishingWellDialog })));
-import { Wand2 } from "lucide-react"; // 可保留或替換，先替換常用的
 import { tools as allTools } from "@/lib/data";
 
 export function Home() {
@@ -110,23 +109,20 @@ export function Home() {
     return shuffled;
   };
 
-  // 準備初始數據 (同步) 以便 LCP 能立刻抓取到圖片
-  const initialToolsData = useMemo(() => {
-    const fixedTools = tools.slice(0, 4);
-    const remainingTools = tools.slice(4);
-    return [...fixedTools, ...shuffleArray(remainingTools)];
-  }, []);
-
-  const { data: toolsData = initialToolsData } = useQuery({
+  // 從 API 獲取工具數據
+  const { data: toolsData, isLoading } = useQuery({
     queryKey: ['/api/tools'],
     queryFn: async () => {
-      // 這裡可以保留，用於將來從伺服器更新點擊數等動態數據
-      return initialToolsData;
+      const response = await fetch('/api/tools');
+      if (!response.ok) throw new Error('無法獲取工具數據');
+      const data = await response.json();
+      // 保持之前的隨機洗牌邏輯，但首屏 4 個工具固定以優化 LCP
+      const fixedTools = data.slice(0, 4);
+      const remainingTools = data.slice(4);
+      return [...fixedTools, ...shuffleArray(remainingTools)];
     },
-    staleTime: Infinity, // 靜態數據不頻繁更新
+    staleTime: 300000, // 5 分鐘
   });
-
-  const isLoading = false; // 同步渲染不需要載入狀態
 
   // 取得最近使用的工具
   const recentTools = useMemo(() => {
@@ -163,7 +159,7 @@ export function Home() {
 
     // 搜尋篩選 (標題、描述、標籤)
     if (searchQuery) {
-      const query = searchQuery.toLowerCase();
+      const query: string = searchQuery.toLowerCase();
       result = result?.filter(tool =>
         tool.title.toLowerCase().includes(query) ||
         tool.description.toLowerCase().includes(query) ||
@@ -174,8 +170,8 @@ export function Home() {
     // 標籤篩選
     if (selectedTags.length > 0) {
       result = result?.filter(tool =>
-        selectedTags.some(tag =>
-          tool.tags?.some(t => t.toLowerCase() === tag.toLowerCase())
+        selectedTags.some((tag: string) =>
+          tool.tags?.some((t: string) => t.toLowerCase() === tag.toLowerCase())
         )
       );
     }
@@ -222,8 +218,8 @@ export function Home() {
         "@type": "ItemList",
         "name": "教育工具清單",
         "description": "阿凱老師開發的各式教育科技工具",
-        "numberOfItems": allTools.length,
-        "itemListElement": allTools.map((tool, index) => ({
+        "numberOfItems": toolsData?.length || 0,
+        "itemListElement": (toolsData || []).map((tool, index) => ({
           "@type": "ListItem",
           "position": index + 1,
           "item": {
@@ -331,39 +327,43 @@ export function Home() {
 
             {/* 搜尋與篩選區域 - 延遲載入 */}
             <section className="space-y-3 sm:space-y-4 p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 border border-orange-100 shadow-sm">
-              <div className="space-y-3 sm:space-y-4">
-                <AdvancedSearch
-                  ref={searchInputRef}
-                  searchQuery={searchQuery}
-                  onSearchChange={setSearchQuery}
-                  resultCount={filteredTools?.length || 0}
-                  totalCount={toolsData?.length || 0}
-                  selectedTags={selectedTags}
-                  onTagSelect={(tag) => {
-                    setSelectedTags(prev =>
-                      prev.includes(tag)
-                        ? prev.filter(t => t !== tag)
-                        : [...prev, tag]
-                    );
-                  }}
-                  onClearTags={() => setSelectedTags([])}
-                  currentSort={currentSort}
-                  onSortChange={setCurrentSort}
-                />
-                <CategoryFilter
-                  categories={categories}
-                  selectedCategory={selectedCategory}
-                  onCategoryChange={setSelectedCategory}
-                  categoryCounts={categoryCounts}
-                  showFavorites={showFavorites}
-                  onToggleFavorites={() => setShowFavorites(!showFavorites)}
-                  favoritesCount={favoritesCount}
-                />
-              </div>
+              <Suspense fallback={<div className="h-32 rounded-xl bg-orange-100/50 animate-pulse" />}>
+                <div className="space-y-3 sm:space-y-4">
+                  <AdvancedSearch
+                    ref={searchInputRef}
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                    resultCount={filteredTools?.length || 0}
+                    totalCount={toolsData?.length || 0}
+                    selectedTags={selectedTags}
+                    onTagSelect={(tag) => {
+                      setSelectedTags(prev =>
+                        prev.includes(tag)
+                          ? prev.filter(t => t !== tag)
+                          : [...prev, tag]
+                      );
+                    }}
+                    onClearTags={() => setSelectedTags([])}
+                    currentSort={currentSort}
+                    onSortChange={setCurrentSort}
+                  />
+                  <CategoryFilter
+                    categories={categories}
+                    selectedCategory={selectedCategory}
+                    onCategoryChange={setSelectedCategory}
+                    categoryCounts={categoryCounts}
+                    showFavorites={showFavorites}
+                    onToggleFavorites={() => setShowFavorites(!showFavorites)}
+                    favoritesCount={favoritesCount}
+                  />
+                </div>
+              </Suspense>
             </section>
 
             {/* 🆕 新工具通知橫幅 */}
-            <NewToolsBanner />
+            <Suspense fallback={null}>
+              <NewToolsBanner />
+            </Suspense>
 
             {/* 🎯 AI 智慧推薦區塊 */}
             {!isLoading && !searchQuery && !selectedCategory && !showFavorites && (
@@ -438,7 +438,9 @@ export function Home() {
               data-tour="teacher-intro"
             >
               <h2 id="teacher-info" className="sr-only">教師介紹</h2>
-              <TeacherIntro isLoading={isLoading} />
+              <Suspense fallback={<div className="h-40 rounded-xl bg-yellow-100/50 animate-pulse" />}>
+                <TeacherIntro isLoading={isLoading} />
+              </Suspense>
             </section>
 
             {/* 工具卡片區域 */}
@@ -554,10 +556,9 @@ export function Home() {
                 <>
                   <div data-tour="tool-rankings">
                     <Suspense fallback={<div className="h-96 rounded-xl bg-purple-100/50 animate-pulse" />}>
-                      <ToolRankings />
+                      <ToolRankings tools={toolsData || []} />
                     </Suspense>
                   </div>
-                  <RankingTutorial />
                 </>
               )}
             </div>
@@ -604,7 +605,7 @@ export function Home() {
         className="fixed bottom-36 right-4 sm:right-6 h-14 pl-4 pr-5 rounded-full shadow-2xl hover:shadow-indigo-500/25 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 text-white transition-all duration-300 hover:scale-[1.05] z-40 group flex items-center gap-2 border-none"
       >
         <div className="relative">
-          <Wand2 className="w-6 h-6 animate-pulse" />
+          <OptimizedIcon name="Wand2" className="w-6 h-6 animate-pulse" />
           <div className="absolute inset-0 bg-white/30 blur-md rounded-full group-hover:bg-white/50 transition-colors" />
         </div>
         <span className="font-bold text-base tracking-wide whitespace-nowrap hidden sm:inline-block shadow-black/10">許願池</span>

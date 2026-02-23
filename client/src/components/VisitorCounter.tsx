@@ -78,6 +78,7 @@ function MilestoneProgress({ currentVisits }: { currentVisits: number }) {
 
 export function VisitorCounter() {
   const { toast } = useToast();
+  const cardRef = useRef<HTMLDivElement>(null);
   // 使用 localStorage 記錄最高里程碑，確保重新載入頁面不會重複通知
   const lastMilestoneRef = useRef<number>(
     parseInt(localStorage.getItem('lastAchievedMilestone') || '0')
@@ -241,9 +242,8 @@ export function VisitorCounter() {
       });
 
       // 播放成就解鎖動畫
-      const card = document.querySelector('.visitor-counter-card');
-      if (card) {
-        card.animate([
+      if (cardRef.current) {
+        cardRef.current.animate([
           { transform: 'scale(1)', boxShadow: '0 0 0 rgba(59, 130, 246, 0)' },
           { transform: 'scale(1.05)', boxShadow: '0 0 30px rgba(59, 130, 246, 0.5)' },
           { transform: 'scale(1)', boxShadow: '0 0 0 rgba(59, 130, 246, 0)' }
@@ -261,6 +261,7 @@ export function VisitorCounter() {
 
   return (
     <Card
+      ref={cardRef}
       className={cn(
         "bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-500 text-primary-foreground visitor-counter-card",
         "transform transition-all duration-300 hover:scale-[1.02]",

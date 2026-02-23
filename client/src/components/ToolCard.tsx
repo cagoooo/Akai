@@ -3,14 +3,22 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { OptimizedIcon } from "./OptimizedIcons";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useState } from "react";
 import { Link } from "wouter";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { iconRegistry, type IconName } from "@/lib/iconRegistry";
+import { OptimizedIcon } from "@/components/OptimizedIcons";
 import { categoryInfo, getCategoryColorClass } from "@/lib/categoryConstants";
 import type { EducationalTool, ToolCategory } from "@/lib/data";
-import type { LucideIcon } from 'lucide-react';
 
 // 擴展 EducationalTool 類型，添加可能從後端返回的屬性
 interface EnhancedTool extends EducationalTool {
@@ -22,6 +30,7 @@ import { useToolTracking } from "@/hooks/useToolTracking";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { isInAppBrowser } from "@/lib/browserDetection";
+import { useInView } from "react-intersection-observer";
 
 // Enhanced category colors with hover states and transitions
 const categoryColors = {
@@ -128,10 +137,19 @@ interface ToolCardProps {
 export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = false, onToggleFavorite, onToolClick, priority = false }: ToolCardProps) {
   const queryClient = useQueryClient();
   const [tool, setTool] = useState<EnhancedTool>(initialTool);
-  const Icon = iconRegistry[tool.icon as IconName] as LucideIcon;
   const { toast } = useToast();
   const catInfo = categoryInfo[tool.category as ToolCategory];
   const colors = categoryColors[tool.category as keyof typeof categoryColors];
+
+  // Intersection observer for image lazy loading
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    rootMargin: '200px 0px', // 提前 200px 開始加載
+    skip: priority || isLoading, // 如果是優先加載或正在加載骨架，則跳過
+  });
+
+  // Determine if we should show the image
+  const shouldShowImage = priority || inView;
 
   // Get usage statistics for this tool
   const { data: usageStats } = useQuery({
@@ -399,23 +417,26 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                   {isLoading ? (
                     <Skeleton className="w-full h-full" />
                   ) : (
-                    <div className="w-full h-full relative group-hover:scale-105 transition-transform duration-300">
-                      <picture>
-                        <source
-                          srcSet={`/Akai/previews/${tool.previewUrl?.split('/').pop()?.replace('.png', '.webp')}`}
-                          type="image/webp"
-                        />
-                        <img
-                          src={`/Akai/previews/${tool.previewUrl?.split('/').pop()}`}
-                          alt={`${tool.title} 預覽圖`}
-                          className="w-full h-full object-cover"
-                          loading={priority ? "eager" : "lazy"}
-                          {...(priority ? { fetchpriority: "high" } : {})}
-                          onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                          }}
-                        />
-                      </picture>
+                    <div ref={ref} className="w-full h-full relative group-hover:scale-105 transition-transform duration-300">
+                      {shouldShowImage && (
+                        <picture>
+                          <source
+                            srcSet={`${import.meta.env.BASE_URL}previews/${tool.previewUrl?.split('/').pop()?.replace('.png', '.webp')}`}
+                            type="image/webp"
+                          />
+                          <img
+                            src={`${import.meta.env.BASE_URL}previews/${tool.previewUrl?.split('/').pop()}`}
+                            alt={`${tool.title} 預覽圖`}
+                            className="w-full h-full object-cover"
+                            loading={priority ? "eager" : "lazy"}
+                            {...(priority ? { fetchpriority: "high" } : {})}
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                            }}
+                          />
+                        </picture>
+                      )}
+                      {!shouldShowImage && <Skeleton className="w-full h-full" />}
                     </div>
                   )}
                 </AspectRatio>
@@ -448,7 +469,7 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                 {/* 使用次數 */}
                 {(usageStats || tool.totalClicks) && (
                   <div className="flex items-center gap-1.5 text-xs sm:text-sm text-muted-foreground bg-gray-100 px-3 py-2 rounded-lg">
-                    <BarChart className="w-4 h-4" />
+                    <OptimizedIcon name="BarChart" className="w-4 h-4" />
                     <span className="font-medium">{tool.totalClicks || usageStats?.totalClicks || 0}</span>
                     <span className="hidden sm:inline">次</span>
                   </div>

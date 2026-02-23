@@ -7,7 +7,7 @@
  * - Stale While Revalidate: 圖片
  */
 
-const CACHE_VERSION = 'v2.2.1-dev-fix';
+const CACHE_VERSION = 'v3.0.0-data-api';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
 
@@ -19,6 +19,8 @@ const PRECACHE_ASSETS = [
   BASE_PATH,
   `${BASE_PATH}index.html`,
   `${BASE_PATH}manifest.json`,
+  `${BASE_PATH}api/tools`,
+  `${BASE_PATH}api/teacher/info`,
 ];
 
 // 快取策略判斷
@@ -45,7 +47,6 @@ const CACHE_STRATEGIES = {
   ],
   // 需要跳過的請求
   skip: [
-    /\/api\//,
     /firestore\.googleapis\.com/,
     /firebase/,
     /googleapis\.com/,

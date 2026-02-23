@@ -79,7 +79,12 @@ const rankColors: Record<string | number, string> = {
   default: "from-slate-200/20 via-white to-slate-100/30 hover:from-slate-200/30 hover:to-slate-100/40 border-l-4 border-slate-200"
 };
 
-export function ToolRankings() {
+interface ToolRankingsProps {
+  tools?: typeof tools;
+}
+
+export function ToolRankings({ tools: toolsProp }: ToolRankingsProps) {
+  const currentTools = toolsProp || tools;
   const [isMuted, setIsMuted] = useState(soundManager.isSoundMuted());
   const [rankings, setRankings] = useState<ToolRanking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -88,109 +93,48 @@ export function ToolRankings() {
   // 保存前一次的排名數據用於比較
   const [prevRankings, setPrevRankings] = useState<Record<number, number>>({});
 
-  // 從 Firestore 載入排行榜數據
+  // 從本地 API 載入排行榜數據
   const loadRankings = async () => {
     try {
-      const { getToolRankings } = await import("@/lib/firestoreService");
-      const firestoreRankings = await getToolRankings(5);
+      setIsLoading(true);
+      const response = await fetch('/api/tools/rankings');
+      if (!response.ok) throw new Error('無法獲取排行榜數據');
 
-      // 轉換 Firestore 資料格式
-      const formattedRankings: ToolRanking[] = firestoreRankings.map(stat => ({
-        toolId: stat.toolId,
-        totalClicks: stat.totalClicks,
-        lastUsedAt: stat.lastUsedAt?.toDate?.()?.toISOString() || null,
-        categoryClicks: stat.categoryClicks || {}
-      }));
+      const json = await response.json();
+      // 處理 API 返回格式 (應優先讀取 .data 屬位)
+      const rawRankings = json.data || (Array.isArray(json) ? json : []);
 
-      // 如果 Firestore 沒有資料，使用本地快取或預設值
-      if (formattedRankings.length === 0) {
-        const localData = localStorage.getItem('localToolsRankings');
-        if (localData) {
-          setRankings(JSON.parse(localData));
-        } else {
-          // 使用預設資料
-          const defaultRankings = tools.slice(0, 5).map((tool, index) => ({
-            toolId: tool.id,
-            totalClicks: Math.max(1, 20 - index * 2),
-            lastUsedAt: new Date().toISOString(),
-            categoryClicks: {}
-          }));
-          setRankings(defaultRankings);
-        }
+      if (rawRankings && rawRankings.length > 0) {
+        setRankings(rawRankings);
+        localStorage.setItem('localToolsRankings', JSON.stringify(rawRankings));
       } else {
-        setRankings(formattedRankings);
-        // 更新本地快取
-        localStorage.setItem('localToolsRankings', JSON.stringify(formattedRankings));
+        // 使用預設資料防呆
+        const defaultRankings = tools.slice(0, 5).map((tool, index) => ({
+          toolId: tool.id,
+          totalClicks: Math.max(0, 10 - index),
+          lastUsedAt: new Date().toISOString(),
+          categoryClicks: {}
+        }));
+        setRankings(defaultRankings);
       }
-
       setError(null);
     } catch (err) {
       console.error('載入排行榜失敗:', err);
       setError(err as Error);
-
-      // 使用本地快取
       const localData = localStorage.getItem('localToolsRankings');
-      if (localData) {
-        setRankings(JSON.parse(localData));
-      }
+      if (localData) setRankings(JSON.parse(localData));
     } finally {
       setIsLoading(false);
     }
   };
 
-  // 初始載入與即時監聽
+  // 初始載入
   useEffect(() => {
-    let unsubscribe: (() => void) | undefined;
+    loadRankings();
 
-    const initRealtimeRankings = async () => {
-      try {
-        const { db, isFirebaseAvailable } = await import('@/lib/firebase');
-        const { collection, onSnapshot, orderBy, query, limit } = await import('firebase/firestore');
-
-        if (!isFirebaseAvailable() || !db) {
-          console.warn('Firebase 不可用，執行一次性獲取');
-          loadRankings();
-          return;
-        }
-
-        // 即時監聽排行榜 (前 5 名)
-        unsubscribe = onSnapshot(
-          query(collection(db, 'toolUsageStats'), orderBy('totalClicks', 'desc'), limit(5)),
-          (snapshot) => {
-            const stats: ToolRanking[] = [];
-            snapshot.forEach((doc) => {
-              const data = doc.data();
-              stats.push({
-                toolId: data.toolId,
-                totalClicks: data.totalClicks,
-                lastUsedAt: data.lastUsedAt?.toDate?.()?.toISOString() || null,
-                categoryClicks: data.categoryClicks || {}
-              });
-            });
-
-            if (stats.length > 0) {
-              setRankings(stats);
-              localStorage.setItem('localToolsRankings', JSON.stringify(stats));
-            }
-            setIsLoading(false);
-            setError(null);
-            console.log('🏆 排行榜已即時更新');
-          },
-          (err) => {
-            console.error('排行榜監聽失敗:', err);
-            setError(err as Error);
-            loadRankings(); // 失敗時嘗試一次性載入
-          }
-        );
-      } catch (err) {
-        console.error('初始化排行榜監聽失敗:', err);
-        loadRankings();
-      }
-    };
-
-    initRealtimeRankings();
-
-    return () => unsubscribe?.();
+    // 設定定時刷新 (例如每 1 分鐘)
+    const interval = setInterval(loadRankings, 60000);
+    return () => clearInterval(interval);
   }, []);
 
   // 生成排名變動數據
@@ -219,7 +163,7 @@ export function ToolRankings() {
     setIsMuted(newMutedState);
   };
 
-  const handleItemClick = async (tool: typeof tools[number]) => {
+  const handleItemClick = async (tool: (typeof tools)[number]) => {
     try {
       console.log('排行榜點擊工具:', tool.id, tool.url);
 
@@ -306,9 +250,9 @@ export function ToolRankings() {
 
   // 渲染排行榜
   const renderRankings = (rankingsData: RankingWithChange[]) => (
-    <AnimatePresence mode="popLayout">
+    <AnimatePresence mode="sync">
       {rankingsData.map((ranking, index) => {
-        const tool = tools.find(t => t.id === ranking.toolId);
+        const tool = currentTools.find(t => t.id === ranking.toolId);
         if (!tool) return null;
 
         const isTop = index < 3;
@@ -317,7 +261,7 @@ export function ToolRankings() {
         return (
           <motion.div
             key={ranking.toolId}
-            layout
+            layout="position"
             layoutId={`ranking-${ranking.toolId}`}
             variants={rankAnimationVariants}
             initial="hidden"
@@ -414,7 +358,13 @@ export function ToolRankings() {
       </CardHeader>
 
       <CardContent className="relative z-10 p-2 sm:p-4">
-        {renderRankings(rankingsWithChange)}
+        {rankings.length > 0 ? renderRankings(rankingsWithChange) : (
+          <div className="flex flex-col items-center justify-center p-8 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
+            <BarChart className="w-12 h-12 text-slate-300 mb-3" />
+            <p className="text-slate-500 mb-4">目前尚無使用數據</p>
+            <RankingTutorial />
+          </div>
+        )}
       </CardContent>
     </Card>
   );

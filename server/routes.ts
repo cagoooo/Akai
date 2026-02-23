@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import express from "express";
 import { WebSocketServer, WebSocket } from "ws";
 import { db, dbType } from "@db";
-import { 
+import {
   toolUsageStats,
   visitorStats,
   errorLogs,
@@ -15,6 +15,7 @@ import { ampRouter } from './amp';
 import { log } from './vite';
 import path from "path";
 import { getTimestamp, nowSql } from '../db/adapter';
+import fs from "node:fs/promises";
 
 // 定義類型以確保類型安全
 interface VisitorStats {
@@ -103,6 +104,32 @@ export function registerRoutes(app: Express): Server {
     next();
   });
 
+  // 靜態數據 API
+  app.get("/api/tools", async (_req, res) => {
+    try {
+      const dataPath = path.resolve(process.cwd(), "server/data/tools.json");
+      const data = await fs.readFile(dataPath, "utf-8");
+      // 靜態工具數據較少變動，設定 5 分鐘快取
+      res.setHeader("Cache-Control", "public, max-age=300");
+      res.json(JSON.parse(data));
+    } catch (error) {
+      console.error("讀取 tools.json 失敗:", error);
+      res.status(500).json({ message: "無法獲取工具數據" });
+    }
+  });
+
+  app.get("/api/teacher/info", async (_req, res) => {
+    try {
+      const dataPath = path.resolve(process.cwd(), "server/data/teacher.json");
+      const data = await fs.readFile(dataPath, "utf-8");
+      res.setHeader("Cache-Control", "public, max-age=600");
+      res.json(JSON.parse(data));
+    } catch (error) {
+      console.error("讀取 teacher.json 失敗:", error);
+      res.status(500).json({ message: "無法獲取教師資訊" });
+    }
+  });
+
   // 訪問計數器相關路由
   app.get("/api/stats/visitors", async (_req, res) => {
     try {
@@ -119,7 +146,7 @@ export function registerRoutes(app: Express): Server {
             createdAt: getTimestamp(),
             lastVisitAt: getTimestamp()
           }).returning();
-          
+
           // 更新內存緩存
           inMemoryCache.visitorStats = newStats;
           return res.json(newStats);
@@ -139,14 +166,14 @@ export function registerRoutes(app: Express): Server {
       res.json(stats);
     } catch (error) {
       console.error("Error fetching visitor stats:", error);
-      
+
       // 返回內存中的緩存數據，而不是錯誤
       res.json({
         ...inMemoryCache.visitorStats,
         _note: "從內存緩存提供的數據，資料庫暫時不可用",
         _cached: true
       });
-      
+
       // 錯誤記錄嘗試，但不中斷響應
       try {
         await db.insert(errorLogs).values({
@@ -165,18 +192,18 @@ export function registerRoutes(app: Express): Server {
   app.post("/api/stats/visitors/increment", async (req, res) => {
     try {
       const today = new Date().toISOString().split('T')[0];
-      
+
       // 使用內存緩存更新，無論數據庫成功與否都能響應
       if (!inMemoryCache.visitorStats.dailyVisits) {
         inMemoryCache.visitorStats.dailyVisits = {};
       }
-      
+
       inMemoryCache.visitorStats.totalVisits = (inMemoryCache.visitorStats.totalVisits || 0) + 1;
       inMemoryCache.visitorStats.dailyVisits[today] = (
         inMemoryCache.visitorStats.dailyVisits[today] || 0
       ) + 1;
       inMemoryCache.visitorStats.lastVisitAt = new Date();
-      
+
       try {
         const stats = await db.query.visitorStats.findFirst({
           orderBy: desc(visitorStats.id),
@@ -217,7 +244,7 @@ export function registerRoutes(app: Express): Server {
         }
       } catch (dbError) {
         console.error("Database error updating visitor stats:", dbError);
-        
+
         // 返回內存中的數據
         return res.json({
           ...inMemoryCache.visitorStats,
@@ -227,14 +254,14 @@ export function registerRoutes(app: Express): Server {
       }
     } catch (error) {
       console.error("Error updating visitor stats:", error);
-      
+
       // 返回內存數據
       res.json({
         ...inMemoryCache.visitorStats,
         _note: "從內存緩存提供的數據，資料庫暫時不可用",
         _cached: true
       });
-      
+
       // 嘗試記錄錯誤，但不影響響應
       try {
         await db.insert(errorLogs).values({
@@ -258,12 +285,12 @@ export function registerRoutes(app: Express): Server {
     try {
       const { toolId } = req.params;
       const parsedId = parseInt(toolId);
-      
+
       // 內存緩存更新
-      const toolStats = inMemoryCache.toolStats.get(parsedId) || { 
+      const toolStats = inMemoryCache.toolStats.get(parsedId) || {
         toolId: parsedId,  // 確保 toolId 存在
-        totalClicks: 0, 
-        lastUsedAt: new Date() 
+        totalClicks: 0,
+        lastUsedAt: new Date()
       } as ToolStats;
       toolStats.totalClicks += 1;
       toolStats.lastUsedAt = new Date();
@@ -276,17 +303,17 @@ export function registerRoutes(app: Express): Server {
 
         if (existingStats) {
           const currentTime = new Date();
-          
+
           try {
             // 使用適當格式的時間戳
             await db
               .update(toolUsageStats)
-              .set({ 
+              .set({
                 totalClicks: existingStats.totalClicks + 1,
                 lastUsedAt: currentTime
               })
               .where(eq(toolUsageStats.toolId, parsedId));
-              
+
             console.log(`成功更新工具 ${parsedId} 的使用次數，新次數: ${existingStats.totalClicks + 1}`);
           } catch (updateError) {
             console.error(`更新工具 ${parsedId} 使用次數時出錯:`, updateError);
@@ -315,28 +342,28 @@ export function registerRoutes(app: Express): Server {
         if (updatedStats) {
           // 更新內存緩存中的工具統計
           inMemoryCache.toolStats.set(parsedId, updatedStats);
-          
+
           // 更新排行榜緩存
           // 1. 首先獲取最新的所有工具統計
           const allStats = await db.query.toolUsageStats.findMany({
             orderBy: desc(toolUsageStats.totalClicks),
             limit: 8,
           });
-          
+
           // 2. 更新內存緩存中的排行榜
           if (allStats && allStats.length > 0) {
             inMemoryCache.rankings = allStats;
           }
         }
 
-        res.json({ 
+        res.json({
           message: "使用統計已更新",
           totalClicks: updatedStats?.totalClicks || 1,
           toolId: parsedId
         });
       } catch (dbError) {
         console.error("Database error tracking tool usage:", dbError);
-        
+
         // 返回內存中的數據
         res.json({
           message: "使用統計已在內存中更新",
@@ -347,9 +374,9 @@ export function registerRoutes(app: Express): Server {
       }
     } catch (error) {
       console.error("Error tracking tool usage:", error);
-      
+
       // 返回基本響應
-      res.json({ 
+      res.json({
         message: "使用統計處理遇到問題，但已記錄請求",
         _cached: true
       });
@@ -369,7 +396,7 @@ export function registerRoutes(app: Express): Server {
         } catch (fixError) {
           console.error("嘗試修復 lastUsedAt 空值時出錯:", fixError);
         }
-        
+
         const stats = await db.query.toolUsageStats.findMany({
           orderBy: desc(toolUsageStats.totalClicks),
           limit: 8,
@@ -406,7 +433,7 @@ export function registerRoutes(app: Express): Server {
         return res.json(stats);
       } catch (dbError) {
         console.error("Database error fetching rankings:", dbError);
-        
+
         // 如果內存中有數據，使用內存數據
         if (inMemoryCache.rankings && inMemoryCache.rankings.length > 0) {
           return res.json({
@@ -415,7 +442,7 @@ export function registerRoutes(app: Express): Server {
             _cached: true
           });
         }
-        
+
         // 否則返回默認數據
         const defaultRankings = Array.from({ length: 8 }, (_, i) => ({
           toolId: i + 1,
@@ -430,7 +457,7 @@ export function registerRoutes(app: Express): Server {
             games: 0
           }
         }));
-        
+
         return res.json({
           data: defaultRankings,
           _note: "無法連接數據庫，顯示預設排行榜",
@@ -439,7 +466,7 @@ export function registerRoutes(app: Express): Server {
       }
     } catch (error) {
       console.error("Error fetching rankings:", error);
-      
+
       // 如果內存中有數據，使用內存數據
       if (inMemoryCache.rankings && inMemoryCache.rankings.length > 0) {
         return res.json({
@@ -448,7 +475,7 @@ export function registerRoutes(app: Express): Server {
           _cached: true
         });
       }
-      
+
       // 否則返回基本響應
       res.json({
         message: "獲取排行榜數據時發生錯誤，顯示預設數據",
@@ -459,7 +486,7 @@ export function registerRoutes(app: Express): Server {
         })),
         _cached: true
       });
-      
+
       // 嘗試記錄錯誤
       try {
         await db.insert(errorLogs).values({
@@ -492,7 +519,7 @@ export function registerRoutes(app: Express): Server {
         } catch (fixError) {
           console.error("嘗試修復 lastUsedAt 空值時出錯:", fixError);
         }
-      
+
         const stats = await db.query.toolUsageStats.findMany({
           orderBy: desc(toolUsageStats.totalClicks),
         });
@@ -536,7 +563,7 @@ export function registerRoutes(app: Express): Server {
         return res.json(stats);
       } catch (dbError) {
         console.error("Database error fetching tool stats:", dbError);
-        
+
         // 如果內存中有數據，將內存數據轉換為數組
         if (inMemoryCache.toolStats.size > 0) {
           const cachedStats = Array.from(inMemoryCache.toolStats.values());
@@ -546,25 +573,25 @@ export function registerRoutes(app: Express): Server {
             _cached: true
           });
         }
-        
+
         throw new Error("無法從數據庫或內存獲取數據");
       }
     } catch (error) {
       console.error("Error fetching tool stats:", error);
-      
+
       // 返回基本響應
       res.json({
         message: "獲取使用統計時發生錯誤，顯示有限數據",
-        data: Array.from(inMemoryCache.toolStats.size > 0 
-          ? inMemoryCache.toolStats.values() 
+        data: Array.from(inMemoryCache.toolStats.size > 0
+          ? inMemoryCache.toolStats.values()
           : Array.from({ length: 10 }, (_, i) => ({
-              toolId: i + 1,
-              totalClicks: i * 5,
-              lastUsedAt: new Date()
-            }))),
+            toolId: i + 1,
+            totalClicks: i * 5,
+            lastUsedAt: new Date()
+          }))),
         _cached: true
       });
-      
+
       // 嘗試記錄錯誤
       try {
         await db.insert(errorLogs).values({
@@ -660,37 +687,37 @@ export function registerRoutes(app: Express): Server {
         timestamp: new Date().toISOString(),
         environment: process.env.NODE_ENV || 'development'
       };
-      
+
       // 添加元數據指示這是真實數據
       Object.assign(info, {
         _cached: false,
         _databaseType: dbType
       });
-      
+
       res.json(info);
     } catch (error) {
       console.error("Error fetching system info:", error);
-      res.status(500).json({ 
+      res.status(500).json({
         message: "獲取系統信息失敗",
         error: error instanceof Error ? error.message : String(error)
       });
     }
   });
-  
+
   // 數據庫健康檢查路由
   app.get('/api/diagnostics/db-health', async (_req, res) => {
     try {
       const startTime = Date.now();
-      
+
       let result: any;
       if (dbType === 'postgres' && sql) {
         result = await sql`SELECT NOW() as now, version() as version`;
       } else {
         result = db.run("SELECT datetime('now') as now, sqlite_version() as version");
       }
-      
+
       const responseTime = Date.now() - startTime;
-      
+
       res.json({
         status: "connected",
         databaseType: dbType,
@@ -701,7 +728,7 @@ export function registerRoutes(app: Express): Server {
       });
     } catch (error) {
       console.error("Database health check failed:", error);
-      
+
       res.json({
         status: "error",
         databaseType: dbType,
@@ -712,7 +739,7 @@ export function registerRoutes(app: Express): Server {
       });
     }
   });
-  
+
   // Add AMP routes
   app.use('/amp', ampRouter);
 
