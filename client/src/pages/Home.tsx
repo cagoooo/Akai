@@ -40,23 +40,29 @@ export function Home() {
 
   // 延遲載入次要內容，避免首屏 Hydration 過重
   useEffect(() => {
-    // 次要區塊延遲（主要衡量指標：FCP 與 LCP）
-    const secondaryTimer = setTimeout(() => setShowSecondaryContent(true), 1500);
-    // 剩餘工具列表延遲 - 關鍵優化：首屏先渲染前 4 張，其餘用 rIC 在空閒時渲染
-    // ⚠️ 不能過短 (< 500ms)，否則會阻塞主執行緒造成 TBT 爆表
+    // 次要區塊延遲 - 排行榜、計數器等。主要衡量指標：TBT
+    const secondaryDelay = 2500;
+
     if ('requestIdleCallback' in window) {
-      (window as any).requestIdleCallback(() => setShowFullList(true), { timeout: 2000 });
-    } else {
-      const listTimer = setTimeout(() => setShowFullList(true), 1200);
+      const idleId = (window as any).requestIdleCallback(() => {
+        const timer = setTimeout(() => setShowSecondaryContent(true), 500);
+        return () => clearTimeout(timer);
+      }, { timeout: secondaryDelay });
+
+      const listId = (window as any).requestIdleCallback(() => setShowFullList(true), { timeout: 3000 });
+
       return () => {
-        clearTimeout(listTimer);
+        (window as any).cancelIdleCallback(idleId);
+        (window as any).cancelIdleCallback(listId);
+      };
+    } else {
+      const secondaryTimer = setTimeout(() => setShowSecondaryContent(true), secondaryDelay);
+      const listTimer = setTimeout(() => setShowFullList(true), 2000);
+      return () => {
         clearTimeout(secondaryTimer);
+        clearTimeout(listTimer);
       };
     }
-
-    return () => {
-      clearTimeout(secondaryTimer);
-    };
   }, []);
 
   // 搜尋框 ref
@@ -447,9 +453,13 @@ export function Home() {
               data-tour="teacher-intro"
             >
               <h2 id="teacher-info" className="sr-only">教師介紹</h2>
-              <Suspense fallback={<div className="h-40 rounded-xl bg-yellow-100/50 animate-pulse" />}>
-                <TeacherIntro isLoading={isLoading} />
-              </Suspense>
+              {showSecondaryContent ? (
+                <Suspense fallback={<div className="h-40 rounded-xl bg-yellow-100/50 animate-pulse" />}>
+                  <TeacherIntro isLoading={isLoading} />
+                </Suspense>
+              ) : (
+                <div className="h-40 rounded-xl bg-yellow-100/50 animate-pulse" />
+              )}
             </section>
 
             {/* 工具卡片區域 */}

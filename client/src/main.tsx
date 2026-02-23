@@ -10,4 +10,7 @@ createRoot(document.getElementById("root")!).render(
   </StrictMode>,
 );
 
-registerServiceWorker(); // Added service worker registration
+// 延遲 Service Worker 註冊，確保不影響首屏 TBT
+window.addEventListener('load', () => {
+  registerServiceWorker();
+});

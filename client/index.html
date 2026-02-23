@@ -40,9 +40,11 @@
   <!-- DNS 預連接與預獲取 - 改善 LCP/FCP -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preconnect" href="https://firestore.googleapis.com" />
   <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-  <link rel="dns-prefetch" href="https://firestore.googleapis.com" />
+
+  <!-- 🚀 關鍵資料預載 (Preload API) - 極速提升內容生成速度 -->
+  <link rel="preload" href="./api/tools.json" as="fetch" crossorigin />
+  <link rel="preload" href="./api/teacher.json" as="fetch" crossorigin />
 
   <!-- Preload 關鍵字體 (減少 FOUT/CLS) -->
   <link rel="preload"
@@ -52,7 +54,7 @@
     href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6fAZ9hiA.woff2" as="font"
     type="font/woff2" crossorigin />
 
-  <!-- Prefetch 關鍵資源 - 預先獲取首屏圖片，避免 preload 未立即使用導致警告 -->
+  <!-- Prefetch 關鍵資源 - 預先獲取首屏圖片 -->
   <link rel="prefetch" as="image" href="./previews/tool_1.webp" />
   <link rel="prefetch" as="image" href="./previews/tool_2.webp" />
 
