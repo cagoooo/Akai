@@ -253,7 +253,7 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
         role={isLoading ? "presentation" : "button"}
         aria-label={isLoading ? undefined : `開啟 ${tool.title} 工具詳細資訊`}
       >
-        <CardContent className="p-4 sm:p-5 h-full flex flex-col">
+        <CardContent className="p-4 sm:p-5 min-h-[460px] h-full flex flex-col">
           {/* 頂部：圖標 + 收藏 + 詳情 + 分類 */}
           <header className="flex items-start justify-between gap-2 mb-3">
             {isLoading ? (
@@ -275,8 +275,9 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
             <div className="flex items-center gap-1.5 sm:gap-2">
               {isLoading ? (
                 <>
-                  <Skeleton className="w-10 h-10 rounded-lg" />
-                  <Skeleton className="w-10 h-10 rounded-lg" />
+                  <Skeleton className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl" />
+                  <Skeleton className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl" />
+                  <Skeleton className="w-12 h-8 rounded-lg" />
                 </>
               ) : (
                 <>
@@ -353,23 +354,22 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
           <main className="flex-1 flex flex-col">
             {isLoading ? (
               <>
-                <Skeleton className="w-3/4 h-8 mb-2" />
-                <Skeleton className="w-full h-4 mb-2" />
-                <Skeleton className="w-5/6 h-4 mb-4" />
+                <Skeleton className="w-3/4 h-8 sm:h-10 mb-2 mt-1" />
+                <Skeleton className="w-full h-12 sm:h-16 mb-4" />
               </>
             ) : (
               <>
-                {/* 工具標題 - 更大更清楚 */}
+                {/* 工具標題 - 鎖定高度以防 CLS */}
                 <CardTitle
-                  className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-2 line-clamp-2"
+                  className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-2 line-clamp-2 min-h-[3.5rem] flex items-center"
                   itemProp="name"
                 >
                   {tool.title}
                 </CardTitle>
 
-                {/* 工具描述 - 更清楚 */}
+                {/* 工具描述 - 鎖定高度以防 CLS */}
                 <CardDescription
-                  className="text-sm sm:text-base text-gray-600 mb-3 line-clamp-2 sm:line-clamp-3 flex-1"
+                  className="text-sm sm:text-base text-gray-600 mb-3 line-clamp-2 sm:line-clamp-3 min-h-[4rem]"
                   itemProp="description"
                 >
                   {tool.description}

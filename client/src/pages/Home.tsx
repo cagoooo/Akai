@@ -41,8 +41,8 @@ export function Home() {
   // 延遲載入次要內容，避免首屏 Hydration 過重
   useEffect(() => {
     // 次要區塊延遲 - 排行榜、計數器等。主要衡量指標：TBT
-    // 🚀 LCP 敏感期優化：縮短延遲至 1s，避免 LCP 超時
-    const secondaryDelay = 1000;
+    // 🚀 TBT 優化：回調延遲至 3s，釋放首屏 Hydration 壓力
+    const secondaryDelay = 3000;
 
     if ('requestIdleCallback' in window) {
       const idleId = (window as any).requestIdleCallback(() => {
@@ -455,16 +455,16 @@ export function Home() {
             {/* 教師介紹區域 */}
             <section
               aria-labelledby="teacher-info"
-              className="p-3 sm:p-4 rounded-lg bg-yellow-50 min-h-[200px]"
+              className="p-3 sm:p-4 rounded-lg bg-yellow-50 min-h-[220px]"
               data-tour="teacher-intro"
             >
               <h2 id="teacher-info" className="sr-only">教師介紹</h2>
               {showSecondaryContent ? (
-                <Suspense fallback={<div className="h-[200px] rounded-xl bg-yellow-100/50 animate-pulse" />}>
+                <Suspense fallback={<div className="h-[220px] rounded-xl bg-yellow-100/50 animate-pulse" />}>
                   <TeacherIntro isLoading={isLoading} />
                 </Suspense>
               ) : (
-                <div className="h-[200px] rounded-xl bg-yellow-100/50 animate-pulse" />
+                <div className="h-[220px] rounded-xl bg-yellow-100/50 animate-pulse" />
               )}
             </section>
 
