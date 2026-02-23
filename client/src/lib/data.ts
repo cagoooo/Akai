@@ -470,7 +470,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/schedule/",
     icon: "CalendarCheck",
     category: "utilities",
-    previewUrl: "/previews/tool_46.png",
+    previewUrl: "/previews/tool_46.webp",
     tags: ["預約", "禮堂", "校務", "管理", "行政", "場地"]
   },
   {
@@ -480,7 +480,7 @@ export const tools: EducationalTool[] = [
     url: "https://cagoooo.github.io/signature/",
     icon: "FileSignature",
     category: "utilities",
-    previewUrl: "/previews/tool_47.png",
+    previewUrl: "/previews/tool_47.webp",
     tags: ["線上簽名", "肖像授權", "行政", "無紙化", "安全", "效率"]
   },
   {
