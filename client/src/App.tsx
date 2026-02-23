@@ -16,14 +16,10 @@ const ToolDetail = lazy(() => import("@/pages/ToolDetail").then(module => ({ def
 const AdminAuth = lazy(() => import("@/components/AdminAuth").then(module => ({ default: module.AdminAuth })));
 const TriviaDialog = lazy(() => import("@/components/TriviaDialog").then(module => ({ default: module.TriviaDialog })));
 const PWAUpdatePrompt = lazy(() => import("@/components/PWAUpdatePrompt").then(module => ({ default: module.PWAUpdatePrompt })));
-const ToolRankings = lazy(() => import("@/components/ToolRankings").then(module => ({ default: module.ToolRankings })));
-const VisitorCounter = lazy(() => import("@/components/VisitorCounter").then(module => ({ default: module.VisitorCounter })));
-const RecommendedTools = lazy(() => import("@/components/RecommendedTools").then(module => ({ default: module.RecommendedTools })));
 const Footer = lazy(() => import("@/components/Footer").then(module => ({ default: module.Footer })));
 const Toaster = lazy(() => import("@/components/ui/toaster").then(module => ({ default: module.Toaster })));
 
-// ✅ 策略：TooltipProvider 保持 lazy（避免拉大主 bundle 造成 TBT 爆表）
-// ✅ 但外層 Suspense 的 fallback 改為 PageSkeleton（骨架立即觸發 FCP，不再空白）
+// ✅ 策略：TooltipProvider 保持 lazy（避免加大主 bundle 造成 TBT↑）
 const TooltipProvider = lazy(() => import("@/components/ui/tooltip").then(module => ({ default: module.TooltipProvider })));
 
 import { OptimizedIcon } from "@/components/OptimizedIcons";
@@ -37,22 +33,34 @@ import { TourProvider } from "@/components/TourProvider";
 // 取得 base path - Vite 會在建置時注入 BASE_URL
 const basePath = import.meta.env.BASE_URL || '/';
 
+/**
+ * ✅ 核心 LCP 優化骨架：
+ * 包含真實 h1 文字（而非純骨架），讓 Lighthouse 能立即識別到大型文字元素為 LCP。
+ * TooltipProvider lazy 加載期間，此骨架提供有意義的 FCP + LCP 內容。
+ */
 function PageSkeleton() {
   return (
-    <div className="container mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-6">
-      {/* 標題骨架 */}
-      <OptimizedIcon name="Keyboard" className="h-5 w-5" />
-      <Skeleton className="h-12 w-64" />
+    <div className="min-h-screen bg-background">
+      <main className="container mx-auto px-3 sm:px-6 py-4 sm:py-6 md:py-8">
+        {/* ✅ 真實 h1：讓 Lighthouse 捕捉到大文字作為 LCP 元素，而非 placeholder */}
+        <header className="relative overflow-hidden mb-4 sm:mb-6 p-5 sm:p-6 md:p-8 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 shadow-lg">
+          <div className="relative z-10 text-center">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white tracking-tight mb-2 sm:mb-3">
+              ✨ 教育科技創新專區 ✨
+            </h1>
+            <p className="text-sm sm:text-base md:text-lg text-white/80 font-medium max-w-2xl mx-auto">
+              探索阿凱老師開發的教育工具，為您的教學增添創新的可能
+            </p>
+          </div>
+        </header>
 
-      {/* 訪客計數器骨架 */}
-      <Skeleton className="h-32 w-full rounded-lg" />
-
-      {/* 工具卡片骨架 */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton key={i} className="h-48 rounded-lg" />
-        ))}
-      </div>
+        {/* 工具卡片骨架 */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-48 rounded-lg" />
+          ))}
+        </div>
+      </main>
     </div>
   );
 }
@@ -83,9 +91,11 @@ function App() {
 
         <QueryClientProvider client={queryClient}>
           {/*
-           * ✅ 核心策略：TooltipProvider 保持 lazy（不塞大主 bundle，避免 TBT↑）
-           * ✅ fallback 改為 PageSkeleton（骨架立即可見，觸發 FCP）
-           * 💡 骨架觸發 FCP → 真實內容觸發 LCP，兩者分離，各自計時
+           * ✅ 核心策略：
+           * - TooltipProvider 保持 lazy → 主 bundle 不膨脹 → TBT 維持低水準
+           * - fallback 改為含 h1 真實文字的 PageSkeleton
+           * - h1 "✨ 教育科技創新專區 ✨" 是大文字 → 成為 LCP 元素
+           * - 骨架立即觸發有意義的 FCP，不再是空白屏幕
            */}
           <Suspense fallback={<PageSkeleton />}>
             <TooltipProvider>
@@ -133,7 +143,7 @@ function App() {
   );
 }
 
-// ⚠️ 不使用 strict 模式：strict=true 會強制 m.* 等待 features 載入，導致 LCP 8s
+// ⚠️ 不使用 strict 模式：strict=true 會強制 m.* 等到 features 載入後才渲染，造成 LCP 8s
 export default function AppWithLazyMotion() {
   return (
     <LazyMotion features={loadFramerFeatures}>
