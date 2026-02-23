@@ -90,7 +90,7 @@ export function Home() {
   const { data: toolsData, isLoading } = useQuery({
     queryKey: ['/api/tools'],
     queryFn: async () => {
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // 移除人為延遲以加速 FCP/LCP
       // 每次載入時隨機排序工具
       return shuffleArray(tools);
     },
@@ -166,6 +166,13 @@ export function Home() {
   const handleToolClick = (toolId: number) => {
     addToRecent(toolId);
   };
+
+  // 分頁邏輯：初始顯示 12 個工具
+  const [visibleCount, setVisibleCount] = useState(12);
+  const incrementVisible = () => setVisibleCount(prev => prev + 12);
+  const visibleTools = useMemo(() => {
+    return sortedTools?.slice(0, visibleCount);
+  }, [sortedTools, visibleCount]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -382,17 +389,32 @@ export function Home() {
                       isLoading={true}
                     />
                   ))
-                ) : sortedTools && sortedTools.length > 0 ? (
-                  sortedTools.map((tool) => (
-                    <ToolCard
-                      key={tool.id}
-                      tool={tool}
-                      isLoading={false}
-                      isFavorite={isFavorite(tool.id)}
-                      onToggleFavorite={toggleFavorite}
-                      onToolClick={handleToolClick}
-                    />
-                  ))
+                ) : visibleTools && visibleTools.length > 0 ? (
+                  <>
+                    {visibleTools.map((tool, index) => (
+                      <ToolCard
+                        key={tool.id}
+                        tool={tool}
+                        isLoading={false}
+                        isFavorite={isFavorite(tool.id)}
+                        onToggleFavorite={toggleFavorite}
+                        onToolClick={handleToolClick}
+                        priority={index < 2} // 前兩個卡片圖片設置為高優先級，優化 LCP
+                      />
+                    ))}
+                    {sortedTools && sortedTools.length > visibleCount && (
+                      <div className="col-span-1 sm:col-span-2 flex justify-center mt-6">
+                        <Button
+                          variant="outline"
+                          size="lg"
+                          onClick={incrementVisible}
+                          className="w-full sm:w-auto px-12 py-6 rounded-2xl border-2 border-indigo-200 text-indigo-700 hover:bg-indigo-50 font-bold shadow-sm"
+                        >
+                          顯示更多工具 ({sortedTools.length - visibleCount})
+                        </Button>
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <div className="col-span-2 text-center py-8 text-muted-foreground">
                     <p className="text-lg">😕 找不到符合條件的工具</p>

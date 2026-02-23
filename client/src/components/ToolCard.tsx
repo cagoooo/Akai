@@ -122,9 +122,10 @@ interface ToolCardProps {
   isFavorite?: boolean;
   onToggleFavorite?: (toolId: number) => void;
   onToolClick?: (toolId: number) => void;
+  priority?: boolean;
 }
 
-export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = false, onToggleFavorite, onToolClick }: ToolCardProps) {
+export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = false, onToggleFavorite, onToolClick, priority = false }: ToolCardProps) {
   const queryClient = useQueryClient();
   const [tool, setTool] = useState<EnhancedTool>(initialTool);
   const Icon = iconRegistry[tool.icon as IconName] as LucideIcon;
@@ -413,7 +414,8 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                             src={`${import.meta.env.BASE_URL}${tool.previewUrl?.startsWith('/') ? tool.previewUrl.slice(1) : tool.previewUrl}`}
                             alt={`${tool.title} 預覽圖`}
                             className="w-full h-full object-cover"
-                            loading="lazy"
+                            loading={priority ? "eager" : "lazy"}
+                            {...(priority ? { fetchpriority: "high" } : {})}
                             onError={(e) => {
                               e.currentTarget.style.display = 'none';
                             }}
