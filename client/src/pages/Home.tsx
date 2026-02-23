@@ -42,9 +42,9 @@ export function Home() {
   // 延遲載入次要內容，避免首屏 Hydration 過重
   useEffect(() => {
     // 次要區塊延遲
-    const secondaryTimer = setTimeout(() => setShowSecondaryContent(true), 2000);
-    // 剩餘工具列表延遲 - 關鍵優化：將大量卡片的 Hydration 推遲到首屏穩定後
-    const listTimer = setTimeout(() => setShowFullList(true), 800);
+    const secondaryTimer = setTimeout(() => setShowSecondaryContent(true), 1500);
+    // 剩餘工具列表延遲 - 關鍵優化：縮短延遲以利 Lighthouse 提前捕捉 LCP 元素
+    const listTimer = setTimeout(() => setShowFullList(true), 100);
 
     return () => {
       clearTimeout(secondaryTimer);
