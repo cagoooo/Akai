@@ -22,9 +22,13 @@ const VisitorCounter = lazy(() => import("@/components/VisitorCounter").then(mod
 const RecommendedTools = lazy(() => import("@/components/RecommendedTools").then(module => ({ default: module.RecommendedTools })));
 const Footer = lazy(() => import("@/components/Footer").then(module => ({ default: module.Footer })));
 const Toaster = lazy(() => import("@/components/ui/toaster").then(module => ({ default: module.Toaster })));
-const TooltipProvider = lazy(() => import("@/components/ui/tooltip").then(module => ({ default: module.TooltipProvider })));
 
-// 這些組件需要同步導入以維持核心功能穩定性，或者已經被 lazy 替代但需要基礎導入
+// ⚠️ TooltipProvider 必須同步導入！
+// lazy 加載 TooltipProvider 會讓它進入 <Suspense fallback={null}>，
+// 在其 chunk 下載期間整個 App 顯示空白，造成 FCP 5s 阻塞。
+import { TooltipProvider } from "@/components/ui/tooltip";
+
+// 同步導入其他核心組件
 import { OptimizedIcon } from "@/components/OptimizedIcons";
 import { PageTransition } from "@/components/PageTransition";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -87,48 +91,47 @@ function App() {
         <OrganizationSchema />
 
         <QueryClientProvider client={queryClient}>
-          <Suspense fallback={null}>
-            <TooltipProvider>
-              <TourProvider>
-                {/* 使用 Router base 設定 GitHub Pages 路徑 */}
-                <Router base={base}>
-                  <div className="min-h-screen flex flex-col">
-                    <PageTransition>
-                      <Suspense fallback={<PageSkeleton />}>
-                        <Switch>
-                          <Route path="/">
-                            <Home />
-                          </Route>
-                          <Route path="/tool/:id">
-                            <ToolDetail />
-                          </Route>
-                          <Route path="/admin">
-                            <AdminAuth />
-                          </Route>
-                        </Switch>
-                      </Suspense>
-                    </PageTransition>
-                    <Suspense fallback={null}>
-                      <Footer />
+          {/* TooltipProvider 同步渲染，避免 fallback=null 造成 5s FCP 空白屏幕 */}
+          <TooltipProvider>
+            <TourProvider>
+              {/* 使用 Router base 設定 GitHub Pages 路徑 */}
+              <Router base={base}>
+                <div className="min-h-screen flex flex-col">
+                  <PageTransition>
+                    <Suspense fallback={<PageSkeleton />}>
+                      <Switch>
+                        <Route path="/">
+                          <Home />
+                        </Route>
+                        <Route path="/tool/:id">
+                          <ToolDetail />
+                        </Route>
+                        <Route path="/admin">
+                          <AdminAuth />
+                        </Route>
+                      </Switch>
                     </Suspense>
-                  </div>
-                </Router>
+                  </PageTransition>
+                  <Suspense fallback={null}>
+                    <Footer />
+                  </Suspense>
+                </div>
+              </Router>
 
-                <Suspense fallback={null}>
-                  <TriviaDialog />
-                </Suspense>
+              <Suspense fallback={null}>
+                <TriviaDialog />
+              </Suspense>
 
-                <Suspense fallback={null}>
-                  <Toaster />
-                </Suspense>
+              <Suspense fallback={null}>
+                <Toaster />
+              </Suspense>
 
-                {/* PWA 功能元件 */}
-                <Suspense fallback={null}>
-                  <PWAUpdatePrompt />
-                </Suspense>
-              </TourProvider>
-            </TooltipProvider>
-          </Suspense>
+              {/* PWA 功能元件 */}
+              <Suspense fallback={null}>
+                <PWAUpdatePrompt />
+              </Suspense>
+            </TourProvider>
+          </TooltipProvider>
         </QueryClientProvider>
       </ErrorBoundary>
     </HelmetProvider>
