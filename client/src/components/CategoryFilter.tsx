@@ -16,14 +16,14 @@ interface CategoryFilterProps {
 
 // 分類顏色配置
 const categoryColorMap: Record<string, { bg: string; text: string; border: string; activeBg: string }> = {
-    all: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', activeBg: 'bg-blue-600' },
-    games: { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200', activeBg: 'bg-purple-600' },
-    utility: { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200', activeBg: 'bg-green-600' },
-    teaching: { bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200', activeBg: 'bg-orange-600' },
-    language: { bg: 'bg-pink-50', text: 'text-pink-700', border: 'border-pink-200', activeBg: 'bg-pink-600' },
-    communication: { bg: 'bg-cyan-50', text: 'text-cyan-700', border: 'border-cyan-200', activeBg: 'bg-cyan-600' },
-    interactive: { bg: 'bg-yellow-50', text: 'text-yellow-700', border: 'border-yellow-200', activeBg: 'bg-yellow-600' },
-    reading: { bg: 'bg-indigo-50', text: 'text-indigo-700', border: 'border-indigo-200', activeBg: 'bg-indigo-600' },
+    all: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', activeBg: 'bg-blue-700' },
+    games: { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200', activeBg: 'bg-purple-700' },
+    utility: { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200', activeBg: 'bg-green-700' },
+    teaching: { bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200', activeBg: 'bg-orange-700' },
+    language: { bg: 'bg-pink-50', text: 'text-pink-700', border: 'border-pink-200', activeBg: 'bg-pink-700' },
+    communication: { bg: 'bg-cyan-50', text: 'text-cyan-700', border: 'border-cyan-200', activeBg: 'bg-cyan-700' },
+    interactive: { bg: 'bg-yellow-50', text: 'text-yellow-700', border: 'border-yellow-200', activeBg: 'bg-yellow-700' },
+    reading: { bg: 'bg-indigo-50', text: 'text-indigo-700', border: 'border-indigo-200', activeBg: 'bg-indigo-700' },
 };
 
 export function CategoryFilter({
@@ -73,7 +73,7 @@ export function CategoryFilter({
                     variant="secondary"
                     className={cn(
                         "ml-1 text-xs sm:text-sm px-2 font-bold",
-                        selectedCategory === null && !showFavorites ? "bg-white/20 text-white" : "bg-blue-100 text-blue-700"
+                        selectedCategory === null && !showFavorites ? "bg-white/20 text-white" : "bg-blue-100 text-blue-800"
                     )}
                 >
                     {totalCount}
@@ -90,8 +90,8 @@ export function CategoryFilter({
                     className={cn(
                         "gap-1.5 sm:gap-2 text-sm sm:text-base font-semibold border-2 rounded-full transition-all duration-200 hover:scale-105 px-3 py-1.5 sm:px-4 sm:py-2",
                         showFavorites
-                            ? "bg-red-500 text-white border-transparent shadow-md"
-                            : "bg-red-50 text-red-600 border-red-200 hover:bg-red-500 hover:text-white"
+                            ? "bg-red-600 text-white border-transparent shadow-md"
+                            : "bg-red-50 text-red-700 border-red-200 hover:bg-red-600 hover:text-white"
                     )}
                 >
                     <span>❤️</span>
@@ -101,7 +101,7 @@ export function CategoryFilter({
                             variant="secondary"
                             className={cn(
                                 "ml-1 text-xs sm:text-sm px-2 font-bold",
-                                showFavorites ? "bg-white/20 text-white" : "bg-red-100 text-red-600"
+                                showFavorites ? "bg-white/20 text-white" : "bg-red-100 text-red-700"
                             )}
                         >
                             {favoritesCount}

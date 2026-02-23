@@ -79,6 +79,7 @@ const ToastClose = React.forwardRef<
       className
     )}
     toast-close=""
+    aria-label="關閉提示"
     {...props}
   >
     <X className="h-4 w-4" />

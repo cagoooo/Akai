@@ -88,9 +88,9 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
 
   return (
     <Card className="relative overflow-hidden border-0 shadow-xl">
-      {/* 簡化後的漸層背景 */}
-      <div className="absolute inset-0 bg-blue-600" />
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-700 to-purple-800 opacity-90" />
+      {/* 強化後的漸層背景，提高對比度 */}
+      <div className="absolute inset-0 bg-blue-700" />
+      <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 to-purple-900 opacity-95" />
 
       <CardContent className="relative z-10 py-4 sm:py-5 px-4 sm:px-6 text-white">
         {/* 頂部：圖標 + 名字 + 狀態 */}
@@ -103,17 +103,15 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
 
           <div className="flex-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <motion.a
+              <a
                 href={linkUrl}
                 className="text-2xl sm:text-3xl md:text-4xl font-black bg-gradient-to-r from-white via-yellow-100 to-white bg-clip-text text-transparent hover:from-yellow-200 hover:to-white transition-all duration-300"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="造訪阿凱老師的個人網頁"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
               >
                 {linkText}
-              </motion.a>
+              </a>
               <motion.button
                 whileHover={{ rotate: 180 }}
                 transition={{ duration: 0.3 }}
@@ -156,15 +154,10 @@ export function TeacherIntro({ isLoading }: TeacherIntroProps) {
           </div>
         </div>
 
-        {/* 描述文字 */}
-        <motion.p
-          className="text-white/90 text-sm sm:text-base leading-relaxed mb-3 sm:mb-4 pl-0 sm:pl-1"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
+        {/* 描述文字：移除動畫以加速渲染 */}
+        <p className="text-white/95 text-sm sm:text-base leading-relaxed mb-3 sm:mb-4 pl-0 sm:pl-1 font-medium">
           {teacherInfo.description}
-        </motion.p>
+        </p>
 
         {/* 成就標籤 */}
         <div

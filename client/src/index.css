@@ -180,6 +180,15 @@
   outline-offset: 2px;
 }
 
+/* Skip Link 樣式優化 */
+.skip-link:focus {
+  background-color: #1e3a8a !important;
+  /* 深藍色確保對比度 */
+  color: #ffffff !important;
+  outline: 4px solid #facc15 !important;
+  /* 黃色焦點框 */
+}
+
 @media (prefers-reduced-motion) {
 
   *,

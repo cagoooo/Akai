@@ -172,23 +172,23 @@ export const AdvancedSearch = forwardRef<HTMLInputElement, AdvancedSearchProps>(
                     {/* 搜尋結果提示 */}
                     <div className="flex items-center gap-2">
                         <Sparkles className="w-4 h-4 text-orange-500" />
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-700">
                             {searchQuery || selectedTags.length > 0 ? (
                                 <>
-                                    找到 <span className="font-bold text-orange-600">{resultCount}</span> 個工具
+                                    找到 <span className="font-bold text-orange-800">{resultCount}</span> 個工具
                                     {resultCount < totalCount && (
-                                        <span className="text-gray-400 ml-1">（共 {totalCount} 個）</span>
+                                        <span className="text-gray-700 ml-1">（共 {totalCount} 個）</span>
                                     )}
                                 </>
                             ) : (
-                                <span className="text-gray-500">共 {totalCount} 個工具</span>
+                                <span className="text-gray-700">共 {totalCount} 個工具</span>
                             )}
                         </p>
                     </div>
 
                     {/* 排序選項 */}
-                    <div className="flex items-center gap-1.5 bg-gray-100 rounded-xl p-1">
-                        <ArrowUpDown className="w-5 h-5 text-gray-500 ml-2" />
+                    <div className="flex items-center gap-1.5 bg-gray-200 rounded-xl p-1">
+                        <ArrowUpDown className="w-5 h-5 text-gray-700 ml-2" />
                         {sortOptions.map((opt) => (
                             <button
                                 key={opt.option}
@@ -206,8 +206,8 @@ export const AdvancedSearch = forwardRef<HTMLInputElement, AdvancedSearchProps>(
                                 className={cn(
                                     "px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base font-medium rounded-lg transition-all",
                                     currentSort === opt.option
-                                        ? "bg-white text-orange-600 shadow-sm"
-                                        : "text-gray-600 hover:text-gray-900"
+                                        ? "bg-white text-orange-800 shadow-sm"
+                                        : "text-gray-700 hover:text-gray-900"
                                 )}
                             >
                                 <span className="mr-1.5">{opt.icon}</span>

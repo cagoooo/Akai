@@ -58,12 +58,18 @@ export function NewToolsBanner() {
                                         e.stopPropagation();
                                         markAllAsRead();
                                     }}
-                                    className="text-xs"
+                                    aria-label="將所有新工具標為已讀"
+                                    className="text-xs text-green-800 hover:text-green-900"
                                 >
                                     全部標為已讀
                                 </Button>
-                                <Button variant="ghost" size="sm" className="p-0 h-6 w-6 hover:bg-green-100/50 rounded-full">
-                                    {isCollapsed ? <ChevronDown className="w-4 h-4 text-green-600" /> : <ChevronUp className="w-4 h-4 text-green-600" />}
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    aria-label={isCollapsed ? "展開新工具列表" : "收合新工具列表"}
+                                    className="p-0 h-6 w-6 hover:bg-green-100/50 rounded-full"
+                                >
+                                    {isCollapsed ? <ChevronDown className="w-4 h-4 text-green-700" /> : <ChevronUp className="w-4 h-4 text-green-700" />}
                                 </Button>
                             </div>
                         </div>
@@ -110,7 +116,8 @@ export function NewToolsBanner() {
                                                         <Button
                                                             size="sm"
                                                             variant="ghost"
-                                                            className="h-8 px-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                            aria-label={`查看新工具 ${tool.title}`}
+                                                            className="h-8 px-2 opacity-0 group-hover:opacity-100 transition-opacity text-green-800"
                                                         >
                                                             查看 <ArrowRight className="w-3 h-3 ml-1" />
                                                         </Button>
@@ -118,7 +125,8 @@ export function NewToolsBanner() {
                                                     <Button
                                                         variant="ghost"
                                                         size="icon"
-                                                        className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                        aria-label={`忽略新工具通知 ${tool.title}`}
+                                                        className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity text-gray-500 hover:text-red-600"
                                                         onClick={() => dismissTool(tool.id)}
                                                     >
                                                         <X className="w-3 h-3" />
