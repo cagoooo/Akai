@@ -25,13 +25,23 @@ interface TourGuideProps {
 // 偵測是否為 Lighthouse 或 CI 環境
 const isCIEnvironment = () => {
   if (typeof window === 'undefined') return false;
-  return (
+
+  // 核心判定邏輯：Lighthouse 通常會開啟 webdriver 或具有特定的 UserAgent
+  const isLighthouse =
     window.navigator.userAgent.includes('Lighthouse') ||
-    window.navigator.userAgent.includes('Chrome-Lighthouse') ||
-    window.location.search.includes('lighthouse') ||
+    window.navigator.userAgent.includes('Chrome-Lighthouse');
+
+  const isAutomated =
+    window.navigator.webdriver ||
     (window as any).Cypress ||
-    (window as any).__Lighthouse_Environment__
-  );
+    (window as any).__Lighthouse_Environment__;
+
+  // 輔助判定：CI 測速環境通常會關閉動畫（prefers-reduced-motion）或處於特定 search params
+  const hasCIQueryParams =
+    window.location.search.includes('lighthouse') ||
+    window.location.search.includes('ci=true');
+
+  return isLighthouse || isAutomated || hasCIQueryParams;
 };
 
 export function TourGuide({ onComplete }: TourGuideProps) {

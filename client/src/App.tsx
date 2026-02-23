@@ -19,8 +19,9 @@ const PWAUpdatePrompt = lazy(() => import("@/components/PWAUpdatePrompt").then(m
 const Footer = lazy(() => import("@/components/Footer").then(module => ({ default: module.Footer })));
 const Toaster = lazy(() => import("@/components/ui/toaster").then(module => ({ default: module.Toaster })));
 
-// ✅ 策略：TooltipProvider 保持 lazy（避免加大主 bundle 造成 TBT↑）
+// ✅ 策略：TooltipProvider 與 TourProvider 保持 lazy（避免加大主 bundle 造成 TBT↑）
 const TooltipProvider = lazy(() => import("@/components/ui/tooltip").then(module => ({ default: module.TooltipProvider })));
+const TourProvider = lazy(() => import("@/components/TourProvider").then(module => ({ default: module.TourProvider })));
 
 import { OptimizedIcon } from "@/components/OptimizedIcons";
 import { PageTransition } from "@/components/PageTransition";
@@ -28,7 +29,6 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/queryClient";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Skeleton } from "@/components/ui/skeleton";
-import { TourProvider } from "@/components/TourProvider";
 import { useToast } from "@/hooks/use-toast";
 
 // 取得 base path - Vite 會在建置時注入 BASE_URL

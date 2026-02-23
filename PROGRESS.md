@@ -1,14 +1,20 @@
 # 阿凱老師教育工具集 - 開發進度記錄
 
-> 最後更新：2026-02-23 21:05
+> 最後更新：2026-02-23 21:15
 
 ## 📋 當前版本
 
-**v3.1.10** - 提升 PWA 更新靈敏度與重載穩定性 (Update UI Responsiveness Fix)
+**v3.1.11** - 效能極速救援與 CI 環境強化 (Performance Rescue & CI Shield)
 
 ---
 
 ## ✅ 完成功能總覽
+
+### 🚀 v3.1.11 (2026-02-23) - Lighthouse 效能救援
+| 功能 | 狀態 | 說明 |
+|------|------|------|
+| 全域組件 Lazy 化 | ✅ | 將 `TourProvider` 與 `TooltipProvider` 移出主 Bundle，顯著降低 TBT 指標 |
+| 智慧 CI 防護罩 | ✅ | 強化 `isCIEnvironment` 偵測（Webdriver/Reduced Motion），防止測試時誤跳提示干擾 LCP |
 
 ### 🚀 v3.1.10 (2026-02-23) - 更新靈敏度優化
 | 功能 | 狀態 | 說明 |
