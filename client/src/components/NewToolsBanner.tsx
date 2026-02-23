@@ -19,8 +19,8 @@ export function NewToolsBanner() {
 
     if (!hasNewTools) return null;
 
-    // 直接顯示所有新工具，但外層會被收合
-    const displayTools = newTools;
+    // 直接顯示所有新工具，但外層會被收合 (依據建議：最多顯示前 3 個)
+    const displayTools = newTools.slice(0, 3);
 
     return (
         <AnimatePresence>

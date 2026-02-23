@@ -1,4 +1,5 @@
-import { trackToolUsage as firestoreTrackToolUsage } from '@/lib/firestoreService';
+// 不再頂端靜態 import firestoreService，改由函數內動態 import
+// import { trackToolUsage as firestoreTrackToolUsage } from '@/lib/firestoreService';
 import { tools } from '@/lib/data';
 
 // 本地存儲鍵 - 用於保存工具使用統計
@@ -64,6 +65,9 @@ function updateLocalToolStats(toolId: number, serverTotalClicks?: number) {
 export function useToolTracking() {
   const trackToolUsage = async (toolId: number) => {
     try {
+      // 動態引入 Firestore 服務，避免阻塞首屏渲染
+      const { trackToolUsage: firestoreTrackToolUsage } = await import('@/lib/firestoreService');
+
       // 使用 Firestore 追蹤
       const result = await firestoreTrackToolUsage(toolId);
 

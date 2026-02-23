@@ -199,8 +199,8 @@ export function Home() {
     addToRecent(toolId);
   };
 
-  // 分頁邏輯：初始顯示 8 個工具（消滅 1s 長任務的關鍵）
-  const [visibleCount, setVisibleCount] = useState(8);
+  // 分頁邏輯：初始顯示 4 個工具（配合首屏優化策略）
+  const [visibleCount, setVisibleCount] = useState(4);
   const incrementVisible = () => setVisibleCount(prev => prev + 12);
   // 取得當前可見的工具 (根據分段渲染邏輯)
   const visibleTools = useMemo(() => {
@@ -412,7 +412,7 @@ export function Home() {
                       className="overflow-hidden"
                     >
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pb-1">
-                        {recentTools.slice(0, 4).map((tool) => (
+                        {recentTools.slice(0, 2).map((tool) => (
                           <ToolCard
                             key={`recent-${tool.id}`}
                             tool={tool}

@@ -8,7 +8,9 @@ import { useState, useMemo, useEffect } from 'react';
 import { soundManager } from "@/lib/soundManager";
 import { Button } from "@/components/ui/button";
 import { RankingTutorial } from "./RankingTutorial";
-import { getToolRankings, trackToolUsage, type ToolStats } from "@/lib/firestoreService";
+
+// 僅匯入型別
+import type { ToolStats } from "@/lib/firestoreService";
 
 interface ToolRanking {
   toolId: number;
@@ -89,7 +91,8 @@ export function ToolRankings() {
   // 從 Firestore 載入排行榜數據
   const loadRankings = async () => {
     try {
-      const firestoreRankings = await getToolRankings(10);
+      const { getToolRankings } = await import("@/lib/firestoreService");
+      const firestoreRankings = await getToolRankings(5);
 
       // 轉換 Firestore 資料格式
       const formattedRankings: ToolRanking[] = firestoreRankings.map(stat => ({
@@ -106,7 +109,7 @@ export function ToolRankings() {
           setRankings(JSON.parse(localData));
         } else {
           // 使用預設資料
-          const defaultRankings = tools.slice(0, 10).map((tool, index) => ({
+          const defaultRankings = tools.slice(0, 5).map((tool, index) => ({
             toolId: tool.id,
             totalClicks: Math.max(1, 20 - index * 2),
             lastUsedAt: new Date().toISOString(),
@@ -150,9 +153,9 @@ export function ToolRankings() {
           return;
         }
 
-        // 即時監聽排行榜 (前 10 名)
+        // 即時監聽排行榜 (前 5 名)
         unsubscribe = onSnapshot(
-          query(collection(db, 'toolUsageStats'), orderBy('totalClicks', 'desc'), limit(10)),
+          query(collection(db, 'toolUsageStats'), orderBy('totalClicks', 'desc'), limit(5)),
           (snapshot) => {
             const stats: ToolRanking[] = [];
             snapshot.forEach((doc) => {
@@ -229,6 +232,7 @@ export function ToolRankings() {
 
       // 使用 Firestore 追蹤工具使用
       try {
+        const { trackToolUsage } = await import("@/lib/firestoreService");
         await trackToolUsage(tool.id);
         console.log('工具使用已透過 Firestore 追蹤:', tool.id);
         // 刷新排行榜

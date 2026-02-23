@@ -18,7 +18,7 @@ interface RecommendedToolsProps {
 }
 
 export function RecommendedTools({ onToolClick, className }: RecommendedToolsProps) {
-    const { recommendations, isPersonalized, hasRecommendations } = useRecommendations(6);
+    const { recommendations, isPersonalized, hasRecommendations } = useRecommendations(3);
     const { isFavorite, toggleFavorite } = useFavorites();
     const [isCollapsed, setIsCollapsed] = useState(true);
 
@@ -100,7 +100,7 @@ export function RecommendedTools({ onToolClick, className }: RecommendedToolsPro
                     >
                         {/* 推薦卡片網格 */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 pb-1">
-                            {recommendations.slice(0, 6).map((tool, index) => (
+                            {recommendations.slice(0, 3).map((tool, index) => (
                                 <motion.div
                                     key={tool.id}
                                     initial={{ opacity: 0, y: 20 }}

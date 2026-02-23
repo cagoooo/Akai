@@ -5,7 +5,7 @@ import { UserCheck, Award, Star, Trophy, Crown, Diamond, Rocket, Sparkles } from
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { Progress } from "@/components/ui/progress";
-import { getVisitorStats, incrementVisitorCount, type VisitorStats } from "@/lib/firestoreService";
+import type { VisitorStats } from "@/lib/firestoreService";
 
 // Define milestones for the counter
 const MILESTONES = [
@@ -115,6 +115,7 @@ export function VisitorCounter() {
         if (shouldIncrement) {
           localStorage.setItem('lastVisitTimestamp', currentTime.toString());
           localStorage.setItem('lastVisitDate', today);
+          const { incrementVisitorCount } = await import('@/lib/firestoreService');
           await incrementVisitorCount();
         }
 
@@ -139,6 +140,7 @@ export function VisitorCounter() {
           );
         } else {
           // Fallback to one-time fetch if Firebase not ready
+          const { getVisitorStats } = await import('@/lib/firestoreService');
           const currentStats = await getVisitorStats();
           setStats(currentStats);
         }
