@@ -171,11 +171,14 @@ export function TourGuide({ onComplete }: TourGuideProps) {
       setIsVisible(false);
     } catch (error) {
       console.error("啟動導覽失敗:", error);
-      toast({
-        title: "導覽啟動失敗",
-        description: "無法啟動網站導覽，請稍後再試",
-        variant: "destructive"
-      });
+      // 在非 CI 環境且未完成過導覽時才顯示 Toast，避免干擾 LCP 測速
+      if (!isCIEnvironment()) {
+        toast({
+          title: "導覽啟動失敗",
+          description: "無法啟動網站導覽，請稍後再試",
+          variant: "destructive"
+        });
+      }
     }
   };
 

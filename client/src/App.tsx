@@ -1,16 +1,6 @@
 import { Suspense, lazy, useEffect } from "react";
 import { Router, Switch, Route } from "wouter";
 import { HelmetProvider } from "react-helmet-async";
-import { TourProvider } from "@/components/TourProvider";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { OptimizedIcon } from "@/components/OptimizedIcons";
-import { PageTransition } from "@/components/PageTransition";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "./lib/queryClient";
-import { Footer } from "@/components/Footer";
-import { ErrorBoundary, SuspenseWrapper } from "@/components/ErrorBoundary";
-import { Skeleton } from "@/components/ui/skeleton";
 import { SEOHead } from "@/components/SEOHead";
 import { WebsiteSchema, OrganizationSchema } from "@/components/StructuredData";
 import { LazyMotion } from "framer-motion";
@@ -27,11 +17,25 @@ const ToolDetail = lazy(() => import("@/pages/ToolDetail").then(module => ({ def
 const AdminAuth = lazy(() => import("@/components/AdminAuth").then(module => ({ default: module.AdminAuth })));
 const TriviaDialog = lazy(() => import("@/components/TriviaDialog").then(module => ({ default: module.TriviaDialog })));
 const PWAUpdatePrompt = lazy(() => import("@/components/PWAUpdatePrompt").then(module => ({ default: module.PWAUpdatePrompt })));
+const ToolRankings = lazy(() => import("@/components/ToolRankings").then(module => ({ default: module.ToolRankings })));
+const VisitorCounter = lazy(() => import("@/components/VisitorCounter").then(module => ({ default: module.VisitorCounter })));
+const RecommendedTools = lazy(() => import("@/components/RecommendedTools").then(module => ({ default: module.RecommendedTools })));
+const Footer = lazy(() => import("@/components/Footer").then(module => ({ default: module.Footer })));
+const Toaster = lazy(() => import("@/components/ui/toaster").then(module => ({ default: module.Toaster })));
+const TooltipProvider = lazy(() => import("@/components/ui/tooltip").then(module => ({ default: module.TooltipProvider })));
+
+// 這些組件需要同步導入以維持核心功能穩定性，或者已經被 lazy 替代但需要基礎導入
+import { OptimizedIcon } from "@/components/OptimizedIcons";
+import { PageTransition } from "@/components/PageTransition";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "./lib/queryClient";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { Skeleton } from "@/components/ui/skeleton";
+import { TourProvider } from "@/components/TourProvider";
 
 // 取得 base path - Vite 會在建置時注入 BASE_URL
 const basePath = import.meta.env.BASE_URL || '/';
 
-// 頁面載入骨架屏
 function PageSkeleton() {
   return (
     <div className="container mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-6">
@@ -83,42 +87,48 @@ function App() {
         <OrganizationSchema />
 
         <QueryClientProvider client={queryClient}>
-          <TooltipProvider>
-            <TourProvider>
-              {/* 使用 Router base 設定 GitHub Pages 路徑 */}
-              <Router base={base}>
-                <div className="min-h-screen flex flex-col">
-                  <PageTransition>
-                    <Suspense fallback={<PageSkeleton />}>
-                      <Switch>
-                        <Route path="/">
-                          <Home />
-                        </Route>
-                        <Route path="/tool/:id">
-                          <ToolDetail />
-                        </Route>
-                        <Route path="/admin">
-                          <AdminAuth />
-                        </Route>
-                      </Switch>
+          <Suspense fallback={null}>
+            <TooltipProvider>
+              <TourProvider>
+                {/* 使用 Router base 設定 GitHub Pages 路徑 */}
+                <Router base={base}>
+                  <div className="min-h-screen flex flex-col">
+                    <PageTransition>
+                      <Suspense fallback={<PageSkeleton />}>
+                        <Switch>
+                          <Route path="/">
+                            <Home />
+                          </Route>
+                          <Route path="/tool/:id">
+                            <ToolDetail />
+                          </Route>
+                          <Route path="/admin">
+                            <AdminAuth />
+                          </Route>
+                        </Switch>
+                      </Suspense>
+                    </PageTransition>
+                    <Suspense fallback={null}>
+                      <Footer />
                     </Suspense>
-                  </PageTransition>
-                  <Footer />
-                </div>
-              </Router>
+                  </div>
+                </Router>
 
-              <Suspense fallback={null}>
-                <TriviaDialog />
-              </Suspense>
+                <Suspense fallback={null}>
+                  <TriviaDialog />
+                </Suspense>
 
-              <Toaster />
+                <Suspense fallback={null}>
+                  <Toaster />
+                </Suspense>
 
-              {/* PWA 功能元件 */}
-              <Suspense fallback={null}>
-                <PWAUpdatePrompt />
-              </Suspense>
-            </TourProvider>
-          </TooltipProvider>
+                {/* PWA 功能元件 */}
+                <Suspense fallback={null}>
+                  <PWAUpdatePrompt />
+                </Suspense>
+              </TourProvider>
+            </TooltipProvider>
+          </Suspense>
         </QueryClientProvider>
       </ErrorBoundary>
     </HelmetProvider>

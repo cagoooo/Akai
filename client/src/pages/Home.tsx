@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, lazy, Suspense } from "react";
+import { useState, useMemo, useRef, lazy, Suspense, useEffect } from "react";
 import { m as motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from "@tanstack/react-query";
 import { ToolCard } from "@/components/ToolCard";
@@ -7,8 +7,8 @@ import { tools } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { OptimizedIcon } from "@/components/OptimizedIcons";
 import { useTour } from "@/components/TourProvider";
-import { CategoryFilter } from "@/components/CategoryFilter";
-import { AdvancedSearch } from "@/components/AdvancedSearch";
+const CategoryFilter = lazy(() => import("@/components/CategoryFilter").then(module => ({ default: module.CategoryFilter })));
+const AdvancedSearch = lazy(() => import("@/components/AdvancedSearch").then(module => ({ default: module.AdvancedSearch })));
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useRecentTools } from "@/hooks/useRecentTools";
@@ -16,7 +16,6 @@ import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 const KeyboardShortcutsDialog = lazy(() => import("@/components/KeyboardShortcutsDialog").then(module => ({ default: module.KeyboardShortcutsDialog })));
 import { useSortOptions, type SortOption } from "@/hooks/useSortOptions";
 
-// 延遲載入帶有 Firebase 依賴的重型元件
 const ToolRankings = lazy(() => import("@/components/ToolRankings").then(module => ({ default: module.ToolRankings })));
 const VisitorCounter = lazy(() => import("@/components/VisitorCounter").then(module => ({ default: module.VisitorCounter })));
 const RecommendedTools = lazy(() => import("@/components/RecommendedTools").then(module => ({ default: module.RecommendedTools })));
@@ -25,7 +24,6 @@ import { RankingTutorial } from "@/components/RankingTutorial";
 import { NewToolsBanner } from "@/components/NewToolsBanner";
 const WishingWellDialog = lazy(() => import("@/components/WishingWellDialog").then(module => ({ default: module.WishingWellDialog })));
 import { Wand2 } from "lucide-react"; // 可保留或替換，先替換常用的
-import { useEffect } from "react";
 import { tools as allTools } from "@/lib/data";
 
 export function Home() {
@@ -193,15 +191,15 @@ export function Home() {
     addToRecent(toolId);
   };
 
-  // 分頁邏輯：初始顯示 12 個工具
-  const [visibleCount, setVisibleCount] = useState(12);
+  // 分頁邏輯：初始顯示 8 個工具（消滅 1s 長任務的關鍵）
+  const [visibleCount, setVisibleCount] = useState(8);
   const incrementVisible = () => setVisibleCount(prev => prev + 12);
   // 取得當前可見的工具 (根據分段渲染邏輯)
   const visibleTools = useMemo(() => {
     const baseList = sortedTools || [];
-    // 關鍵優化：首屏僅渲染前 8 個工具，避免 1s+ 的單次長任務
+    // 關鍵優化：首屏僅渲染前 4 張卡片，極速完成 Hydration
     if (!showFullList && !selectedCategory && !searchQuery && !showFavorites) {
-      return baseList.slice(0, 8);
+      return baseList.slice(0, 4);
     }
     return baseList.slice(0, visibleCount);
   }, [sortedTools, visibleCount, showFullList, selectedCategory, searchQuery, showFavorites]);
@@ -247,6 +245,7 @@ export function Home() {
       setTimeout(injectSchema, 3000);
     }
   }, []);
+
 
   return (
     <div className="min-h-screen bg-background">
@@ -322,43 +321,37 @@ export function Home() {
               </section>
             )}
 
-            {/* 搜尋與篩選區域 */}
+            {/* 搜尋與篩選區域 - 延遲載入 */}
             <section className="space-y-3 sm:space-y-4 p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 border border-orange-100 shadow-sm">
-              <div className="flex items-center gap-2">
-                <div className="p-2 rounded-lg bg-orange-100">
-                  <span className="text-lg">🔍</span>
-                </div>
-                <h2 className="text-base sm:text-lg font-bold text-orange-800">搜尋與篩選</h2>
-              </div>
-
-              <AdvancedSearch
-                ref={searchInputRef}
-                searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
-                resultCount={filteredTools?.length || 0}
-                totalCount={toolsData?.length || 0}
-                selectedTags={selectedTags}
-                onTagSelect={(tag) => {
-                  setSelectedTags(prev =>
-                    prev.includes(tag)
-                      ? prev.filter(t => t !== tag)
-                      : [...prev, tag]
-                  );
-                }}
-                onClearTags={() => setSelectedTags([])}
-                currentSort={currentSort}
-                onSortChange={setCurrentSort}
-              />
-
-              <CategoryFilter
-                categories={categories}
-                selectedCategory={selectedCategory}
-                onCategoryChange={setSelectedCategory}
-                categoryCounts={categoryCounts}
-                showFavorites={showFavorites}
-                onToggleFavorites={() => setShowFavorites(!showFavorites)}
-                favoritesCount={favoritesCount}
-              />
+              <Suspense fallback={<div className="h-48 rounded-xl bg-orange-100/20 animate-pulse" />}>
+                <AdvancedSearch
+                  ref={searchInputRef}
+                  searchQuery={searchQuery}
+                  onSearchChange={setSearchQuery}
+                  resultCount={filteredTools?.length || 0}
+                  totalCount={toolsData?.length || 0}
+                  selectedTags={selectedTags}
+                  onTagSelect={(tag) => {
+                    setSelectedTags(prev =>
+                      prev.includes(tag)
+                        ? prev.filter(t => t !== tag)
+                        : [...prev, tag]
+                    );
+                  }}
+                  onClearTags={() => setSelectedTags([])}
+                  currentSort={currentSort}
+                  onSortChange={setCurrentSort}
+                />
+                <CategoryFilter
+                  categories={categories}
+                  selectedCategory={selectedCategory}
+                  onCategoryChange={setSelectedCategory}
+                  categoryCounts={categoryCounts}
+                  showFavorites={showFavorites}
+                  onToggleFavorites={() => setShowFavorites(!showFavorites)}
+                  favoritesCount={favoritesCount}
+                />
+              </Suspense>
             </section>
 
             {/* 🆕 新工具通知橫幅 */}
