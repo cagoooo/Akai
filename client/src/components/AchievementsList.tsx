@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { AchievementBadge } from "./AchievementBadge";
 import { useAchievements } from "@/hooks/useAchievements";
-import { motion } from "framer-motion";
+import { m as motion } from 'framer-motion';
 import { Trophy, Star, Flame } from "lucide-react";
 
 export function AchievementsList() {

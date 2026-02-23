@@ -44,8 +44,14 @@
   <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
   <link rel="dns-prefetch" href="https://firestore.googleapis.com" />
 
-  <!-- 字體載入 - 使用 stylesheet 而非 preload 避免警告 -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+  <!-- 字體載入 - 使用異步加載避免阻塞初次渲染 (Render-Blocking) -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    as="style" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+  </noscript>
 
   <!-- 關鍵 CSS 內聯 - 改善 CLS -->
   <style>
@@ -251,7 +257,7 @@
     </div>
   </div>
 
-  <script>
+  <script defer>
     (function () {
       // LINE 瀏覽器檢測
       var ua = navigator.userAgent || navigator.vendor || window.opera;

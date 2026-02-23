@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { BarChart, Trophy, Medal, Crown, Sparkles, Volume2, VolumeX } from "lucide-react";
 import { tools } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
-import { motion, AnimatePresence } from "framer-motion";
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { useState, useMemo, useEffect } from 'react';
 import { soundManager } from "@/lib/soundManager";
 import { Button } from "@/components/ui/button";

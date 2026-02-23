@@ -6,7 +6,7 @@
 import { useState, useEffect } from 'react';
 import { Download, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 
 // BeforeInstallPromptEvent 類型定義
 interface BeforeInstallPromptEvent extends Event {

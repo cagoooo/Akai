@@ -4,7 +4,7 @@
  */
 
 import { useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { Tag, ChevronDown, ChevronUp, X } from 'lucide-react';
 import { tools } from '@/lib/data';
 import { Button } from '@/components/ui/button';

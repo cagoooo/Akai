@@ -3,7 +3,7 @@ import "driver.js/dist/driver.css";
 import { useEffect, useCallback, useState } from "react";
 import { Button } from "./ui/button";
 import { Trophy, HelpCircle, Lightbulb, Sparkles } from "lucide-react";
-import { motion } from "framer-motion";
+import { m as motion } from 'framer-motion';
 import { cn } from "@/lib/utils";
 import { soundManager } from "@/lib/soundManager";
 

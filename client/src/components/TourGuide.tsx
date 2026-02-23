@@ -3,7 +3,7 @@ import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import "./tour-guide.css"; // 導入我們自定義的樣式
 import { soundManager } from "@/lib/soundManager";
-import { motion } from "framer-motion";
+import { m as motion } from 'framer-motion';
 import { Info, Lightbulb, HelpCircle } from "lucide-react";
 import { Button } from "./ui/button";
 import { useToast } from "@/hooks/use-toast";

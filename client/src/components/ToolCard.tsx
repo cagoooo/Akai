@@ -16,7 +16,7 @@ import type { LucideIcon } from 'lucide-react';
 interface EnhancedTool extends EducationalTool {
   totalClicks?: number;
 }
-import { motion } from "framer-motion";
+import { m as motion } from 'framer-motion';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToolTracking } from "@/hooks/useToolTracking";
 import { useToast } from "@/hooks/use-toast";

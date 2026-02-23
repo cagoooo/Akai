@@ -19,7 +19,7 @@ import {
 } from "recharts";
 import { format } from "date-fns";
 import { LoadingScreen } from "./LoadingScreen";
-import { motion, AnimatePresence } from "framer-motion";
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { Progress } from "@/components/ui/progress";

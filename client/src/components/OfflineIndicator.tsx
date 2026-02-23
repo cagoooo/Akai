@@ -5,7 +5,7 @@
 
 import { useState, useEffect } from 'react';
 import { WifiOff, Wifi } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 
 interface NetworkStatus {
     isOnline: boolean;

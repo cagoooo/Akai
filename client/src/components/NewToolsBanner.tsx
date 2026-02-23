@@ -7,7 +7,7 @@ import { useNewToolsNotification } from '@/hooks/useNewToolsNotification';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { X, Sparkles, ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { Link } from 'wouter';
 import { iconRegistry, type IconName } from '@/lib/iconRegistry';

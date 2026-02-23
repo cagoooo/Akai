@@ -11,6 +11,10 @@ import { ErrorBoundary, SuspenseWrapper } from "@/components/ErrorBoundary";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SEOHead } from "@/components/SEOHead";
 import { WebsiteSchema, OrganizationSchema, AllToolsSchema } from "@/components/StructuredData";
+import { LazyMotion } from "framer-motion";
+
+// 動態載入 Framer Motion 特徵 (進一步縮減初始 JS，使用獨立檔案支援 Tree-Shaking)
+const loadFramerFeatures = () => import("./framerFeatures").then(res => res.default);
 
 // 直接 import 首頁 (首屏必須載入)
 import { Home } from "@/pages/Home";
@@ -117,4 +121,11 @@ function App() {
   );
 }
 
-export default App;
+// 用 LazyMotion 包裝整個 App，確保所有 `m` 元件都能獲得動畫能力
+export default function AppWithLazyMotion() {
+  return (
+    <LazyMotion features={loadFramerFeatures} strict>
+      <App />
+    </LazyMotion>
+  );
+}

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { animate, motion, useMotionValue, useTransform } from "framer-motion";
+import { animate, m as motion, useMotionValue, useTransform } from 'framer-motion';
 import { UserCheck, Award, Star, Trophy, Crown, Diamond, Rocket, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";

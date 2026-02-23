@@ -8,7 +8,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Star, Wand2, Send, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { submitWish, type WishType } from "@/lib/wishingService";
-import { motion, AnimatePresence } from "framer-motion";
+import { m as motion, AnimatePresence } from 'framer-motion';
 
 interface WishingWellDialogProps {
     open: boolean;

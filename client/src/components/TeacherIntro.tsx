@@ -6,7 +6,7 @@ import { teacherInfo } from "@/lib/data";
 import { Newspaper, Settings2 } from "lucide-react";
 import { LinkCustomizer, type LinkStyle } from "./LinkCustomizer";
 import { Skeleton } from "@/components/ui/skeleton";
-import { motion, AnimatePresence } from "framer-motion";
+import { m as motion, AnimatePresence } from 'framer-motion';
 
 const emojiAnimationVariants = {
   hidden: { opacity: 0, scale: 0.8, y: 20 },

@@ -4,7 +4,7 @@
  */
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, TrendingUp, Heart, Lightbulb, ChevronDown, ChevronUp } from 'lucide-react';
 import { useRecommendations } from '@/hooks/useRecommendations';
 import { useFavorites } from '@/hooks/useFavorites';

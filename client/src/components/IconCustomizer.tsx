@@ -7,7 +7,7 @@ import { HelpCircle } from "lucide-react";
 import { type EducationalTool } from "@/lib/data";
 import { PreviewGenerator } from "@/components/PreviewGenerator";
 import { useCustomizationTutorial } from "./CustomizationTutorial";
-import { motion } from "framer-motion";
+import { m as motion } from 'framer-motion';
 
 interface IconCustomizerProps {
   tool: EducationalTool;
