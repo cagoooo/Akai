@@ -53,8 +53,8 @@
     type="font/woff2" crossorigin />
 
   <!-- Preload 關鍵資源 (LCP 優化) -->
-  <link rel="preload" as="image" href="/Akai/previews/tool_1.webp" fetchpriority="high" />
-  <link rel="preload" as="image" href="/Akai/previews/tool_2.webp" fetchpriority="high" />
+  <link rel="preload" as="image" href="./previews/tool_1.webp" fetchpriority="high" />
+  <link rel="preload" as="image" href="./previews/tool_2.webp" fetchpriority="high" />
 
   <!-- 關鍵 CSS 內聯與字體防閃爍 -->
   <style>
@@ -257,8 +257,9 @@
 
     /* 無障礙性：改善焦點可見性 */
     :focus-visible {
-      outline: 3px solid #6366f1;
-      outline-offset: 2px;
+      outline: 3.5px solid #1e40af !important;
+      /* 深藍色強化 */
+      outline-offset: 3px;
     }
   </style>
 

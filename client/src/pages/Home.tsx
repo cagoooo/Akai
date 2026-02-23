@@ -249,12 +249,6 @@ export function Home() {
 
   return (
     <div className="min-h-screen bg-background">
-      <a
-        href="#main-content"
-        className="skip-link fixed top-4 left-4 z-[100] bg-primary text-white px-4 py-2 rounded-lg shadow-xl -translate-y-[200%] focus:translate-y-0 transition-transform duration-200 font-bold"
-      >
-        跳到主要內容
-      </a>
       <main id="main-content" role="main" className="container mx-auto px-3 sm:px-6 py-4 sm:py-6 md:py-8" aria-label="教育工具列表">
         {/* 頂部標題區域 */}
         <header
