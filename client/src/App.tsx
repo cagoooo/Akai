@@ -19,9 +19,10 @@ const PWAUpdatePrompt = lazy(() => import("@/components/PWAUpdatePrompt").then(m
 const Footer = lazy(() => import("@/components/Footer").then(module => ({ default: module.Footer })));
 const Toaster = lazy(() => import("@/components/ui/toaster").then(module => ({ default: module.Toaster })));
 
-// ✅ 策略：TooltipProvider 與 TourProvider 保持 lazy（避免加大主 bundle 造成 TBT↑）
-const TooltipProvider = lazy(() => import("@/components/ui/tooltip").then(module => ({ default: module.TooltipProvider })));
-const TourProvider = lazy(() => import("@/components/TourProvider").then(module => ({ default: module.TourProvider })));
+// ✅ 策略：TooltipProvider 改回直接 import
+// 原因：TooltipProvider 是整個 App 的包袹層，若使用 lazy 會導致首頁必須等待其載入才能顯示，反而推遲 LCP
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { TourProvider } from "@/components/TourProvider";
 
 import { OptimizedIcon } from "@/components/OptimizedIcons";
 import { PageTransition } from "@/components/PageTransition";
@@ -153,46 +154,44 @@ function App() {
            * - h1 "✨ 教育科技創新專區 ✨" 是大文字 → 成為 LCP 元素
            * - 骨架立即觸發有意義的 FCP，不再是空白屏幕
            */}
-          <Suspense fallback={<PageSkeleton />}>
-            <TooltipProvider>
-              <TourProvider>
-                <Router base={base}>
-                  <div className="min-h-screen flex flex-col">
-                    <PageTransition>
-                      <Suspense fallback={<PageSkeleton />}>
-                        <Switch>
-                          <Route path="/">
-                            <Home />
-                          </Route>
-                          <Route path="/tool/:id">
-                            <ToolDetail />
-                          </Route>
-                          <Route path="/admin">
-                            <AdminAuth />
-                          </Route>
-                        </Switch>
-                      </Suspense>
-                    </PageTransition>
-                    <Suspense fallback={null}>
-                      <Footer />
+          <TooltipProvider>
+            <TourProvider>
+              <Router base={base}>
+                <div className="min-h-screen flex flex-col">
+                  <PageTransition>
+                    <Suspense fallback={<PageSkeleton />}>
+                      <Switch>
+                        <Route path="/">
+                          <Home />
+                        </Route>
+                        <Route path="/tool/:id">
+                          <ToolDetail />
+                        </Route>
+                        <Route path="/admin">
+                          <AdminAuth />
+                        </Route>
+                      </Switch>
                     </Suspense>
-                  </div>
-                </Router>
+                  </PageTransition>
+                  <Suspense fallback={null}>
+                    <Footer />
+                  </Suspense>
+                </div>
+              </Router>
 
-                <Suspense fallback={null}>
-                  <TriviaDialog />
-                </Suspense>
+              <Suspense fallback={null}>
+                <TriviaDialog />
+              </Suspense>
 
-                <Suspense fallback={null}>
-                  <Toaster />
-                </Suspense>
+              <Suspense fallback={null}>
+                <Toaster />
+              </Suspense>
 
-                <Suspense fallback={null}>
-                  <PWAUpdatePrompt />
-                </Suspense>
-              </TourProvider>
-            </TooltipProvider>
-          </Suspense>
+              <Suspense fallback={null}>
+                <PWAUpdatePrompt />
+              </Suspense>
+            </TourProvider>
+          </TooltipProvider>
         </QueryClientProvider>
       </ErrorBoundary>
     </HelmetProvider>

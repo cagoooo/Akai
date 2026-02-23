@@ -1,14 +1,19 @@
 # 阿凱老師教育工具集 - 開發進度記錄
 
-> 最後更新：2026-02-23 21:15
+> 最後更新：2026-02-23 21:25
 
 ## 📋 當前版本
 
-**v3.1.11** - 效能極速救援與 CI 環境強化 (Performance Rescue & CI Shield)
+**v3.1.12** - 緊急回滾 Lazy Loading 架構退化 (Emergency Rollback & LCP Fix)
 
 ---
 
 ## ✅ 完成功能總覽
+
+### 🚀 v3.1.12 (2026-02-23) - 緊急回滾
+| 功能 | 狀態 | 說明 |
+|------|------|------|
+| 回滾包裹層 Lazy Loading | ✅ | 將 `TooltipProvider`/`TourProvider` 改回直接 import，修復首頁被阻塞導致 LCP 12.9s 的退化 |
 
 ### 🚀 v3.1.11 (2026-02-23) - Lighthouse 效能救援
 | 功能 | 狀態 | 說明 |
