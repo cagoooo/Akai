@@ -7,7 +7,7 @@
  * - Stale While Revalidate: 圖片
  */
 
-const CACHE_VERSION = 'v3.1.5-data-fix';
+const CACHE_VERSION = 'v3.1.7-stable';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
 
@@ -19,8 +19,8 @@ const PRECACHE_ASSETS = [
   BASE_PATH,
   `${BASE_PATH}index.html`,
   `${BASE_PATH}manifest.json`,
-  `${BASE_PATH}api/tools`,
-  `${BASE_PATH}api/teacher/info`,
+  `${BASE_PATH}api/tools.json`,
+  `${BASE_PATH}api/teacher.json`,
 ];
 
 // 快取策略判斷

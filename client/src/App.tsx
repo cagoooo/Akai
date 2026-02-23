@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect } from "react";
-import { Router, Switch, Route } from "wouter";
+import { Router, Switch, Route, useLocation } from "wouter";
 import { HelmetProvider } from "react-helmet-async";
 import { SEOHead } from "@/components/SEOHead";
 import { WebsiteSchema, OrganizationSchema } from "@/components/StructuredData";
@@ -66,7 +66,28 @@ function PageSkeleton() {
 }
 
 function App() {
+  const [location, setLocation] = useLocation();
   const base = basePath.endsWith('/') ? basePath.slice(0, -1) : basePath;
+
+  useEffect(() => {
+    // 🚀 SPA 路由恢復邏輯：處理 GitHub Pages 404 重定向
+    const params = new URLSearchParams(window.location.search);
+    const redirectPath = params.get('redirect');
+
+    if (redirectPath) {
+      console.log('Detected redirect path, navigating to:', redirectPath);
+      // 移除可能存在的 base path 前綴
+      const cleanPath = redirectPath.startsWith(base)
+        ? redirectPath.substring(base.length)
+        : redirectPath;
+
+      setLocation(cleanPath || '/');
+
+      // 清除 URL 中的 redirect 參數，維持網址美觀
+      const newUrl = window.location.pathname + window.location.hash;
+      window.history.replaceState(null, '', newUrl);
+    }
+  }, [base, setLocation]);
 
   useEffect(() => {
     if ('scrollRestoration' in history) {
