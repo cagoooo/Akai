@@ -3,6 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { QRCodeSVG } from 'qrcode.react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -334,6 +336,62 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                       <p>查看詳情</p>
                     </TooltipContent>
                   </Tooltip>
+
+                  {/* 複製連結按鈕 */}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl hover:bg-primary/10 hover:border-primary/30"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigator.clipboard.writeText(tool.url);
+                          toast({ title: "✅ 複製成功", description: "工具網址已經複製到剪貼簿！" });
+                        }}
+                        aria-label="複製連結"
+                      >
+                        <OptimizedIcon name="Link2" className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>複製連結</p>
+                    </TooltipContent>
+                  </Tooltip>
+
+                  {/* QRCode 彈窗 */}
+                  <Dialog>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl hover:bg-primary/10 hover:border-primary/30"
+                            onClick={(e) => e.stopPropagation()}
+                            aria-label="顯示 QRCode"
+                          >
+                            <OptimizedIcon name="QrCode" className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+                          </Button>
+                        </DialogTrigger>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>投影 QRCode</p>
+                      </TooltipContent>
+                    </Tooltip>
+
+                    <DialogContent onClick={(e) => e.stopPropagation()} className="sm:max-w-md flex flex-col items-center justify-center p-8 border-2 border-indigo-100/50 shadow-xl rounded-3xl">
+                      <DialogHeader className="w-full text-center mb-2">
+                        <DialogTitle className="text-2xl font-bold text-indigo-950">{tool.title}</DialogTitle>
+                      </DialogHeader>
+                      <div className="bg-white p-6 rounded-2xl shadow-sm border border-indigo-50 flex items-center justify-center">
+                        <QRCodeSVG value={tool.url} size={256} level="H" includeMargin={true} />
+                      </div>
+                      <p className="text-sm font-medium text-indigo-900/60 mt-4 text-center">
+                        請學生開啟載具相機掃描此條碼即可進入
+                      </p>
+                    </DialogContent>
+                  </Dialog>
 
                   {/* 分類標籤 */}
                   <Badge
