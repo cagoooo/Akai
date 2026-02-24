@@ -344,11 +344,13 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                         variant="outline"
                         size="icon"
                         className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl hover:bg-primary/10 hover:border-primary/30"
-                        onClick={(e) => {
+                        onClickCapture={(e) => {
                           e.stopPropagation();
+                          e.preventDefault();
                           navigator.clipboard.writeText(tool.url);
                           toast({ title: "✅ 複製成功", description: "工具網址已經複製到剪貼簿！" });
                         }}
+                        onPointerDown={(e) => e.stopPropagation()}
                         aria-label="複製連結"
                       >
                         <OptimizedIcon name="Link2" className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
@@ -363,27 +365,33 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                   <Dialog>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <DialogTrigger asChild>
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl hover:bg-primary/10 hover:border-primary/30"
-                            onClick={(e) => e.stopPropagation()}
-                            aria-label="顯示 QRCode"
-                          >
-                            <OptimizedIcon name="QrCode" className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
-                          </Button>
-                        </DialogTrigger>
+                        <div>
+                          <DialogTrigger asChild>
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl hover:bg-primary/10 hover:border-primary/30"
+                              onClickCapture={(e) => {
+                                // 使用 onClickCapture 強制在捕獲階段就攔截事件，防止任何冒泡到外層 Card
+                                e.stopPropagation();
+                                e.preventDefault();
+                              }}
+                              aria-label="顯示 QRCode"
+                            >
+                              <OptimizedIcon name="QrCode" className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+                            </Button>
+                          </DialogTrigger>
+                        </div>
                       </TooltipTrigger>
                       <TooltipContent>
                         <p>投影 QRCode</p>
                       </TooltipContent>
                     </Tooltip>
 
-                    <DialogContent onClick={(e) => e.stopPropagation()} className="sm:max-w-md flex flex-col items-center justify-center p-8 border-2 border-indigo-100/50 shadow-xl rounded-3xl">
+                    <DialogContent aria-describedby={`dialog-desc-${tool.id}`} onClick={(e) => e.stopPropagation()} className="sm:max-w-md flex flex-col items-center justify-center p-8 border-2 border-indigo-100/50 shadow-xl rounded-3xl">
                       <DialogHeader className="w-full text-center mb-2">
                         <DialogTitle className="text-2xl font-bold text-indigo-950">{tool.title}</DialogTitle>
-                        <DialogDescription className="sr-only" id={`dialog-desc-${tool.id}`}>
+                        <DialogDescription id={`dialog-desc-${tool.id}`} className="sr-only">
                           供學生掃描以進入 {tool.title} 工具的 QRCode 條碼
                         </DialogDescription>
                       </DialogHeader>
