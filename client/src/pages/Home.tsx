@@ -521,6 +521,7 @@ export function Home() {
                             damping: 20,
                             mass: 0.8,
                             delay: animationDelay,
+                            filter: { type: "tween", duration: 0.4 } // 獨立設定 filter 避免 spring 造成負值 blur
                           }}
                           className="h-full"
                         >

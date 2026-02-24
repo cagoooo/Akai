@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { QRCodeSVG } from 'qrcode.react';
 import {
   DropdownMenu,
@@ -383,6 +383,9 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                     <DialogContent onClick={(e) => e.stopPropagation()} className="sm:max-w-md flex flex-col items-center justify-center p-8 border-2 border-indigo-100/50 shadow-xl rounded-3xl">
                       <DialogHeader className="w-full text-center mb-2">
                         <DialogTitle className="text-2xl font-bold text-indigo-950">{tool.title}</DialogTitle>
+                        <DialogDescription className="sr-only" id={`dialog-desc-${tool.id}`}>
+                          供學生掃描以進入 {tool.title} 工具的 QRCode 條碼
+                        </DialogDescription>
                       </DialogHeader>
                       <div className="bg-white p-6 rounded-2xl shadow-sm border border-indigo-50 flex items-center justify-center">
                         <QRCodeSVG value={tool.url} size={256} level="H" includeMargin={true} />
