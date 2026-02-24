@@ -4,7 +4,7 @@
  */
 
 import { useMemo } from 'react';
-import { tools } from '@/lib/data';
+import { tools, type EducationalTool } from '@/lib/data';
 import { useFavorites } from './useFavorites';
 import { useRecentTools } from './useRecentTools';
 import { useAchievements } from './useAchievements';
@@ -33,10 +33,13 @@ function getToolStats(): Record<number, number> {
     return {};
 }
 
-export function useRecommendations(limit: number = 6) {
+export function useRecommendations(toolsList: EducationalTool[] = [], limit: number = 6) {
     const { favorites } = useFavorites();
     const { recentIds } = useRecentTools();
     const { stats } = useAchievements();
+
+    const finalTools = useMemo(() => toolsList.length > 0 ? toolsList : tools, [toolsList]);
+
 
     // 計算推薦
     const recommendations = useMemo<RecommendedTool[]>(() => {
@@ -57,12 +60,12 @@ export function useRecommendations(limit: number = 6) {
             Object.keys(stats.categoryUsage).length > 0;
 
         if (hasEnoughData) {
-            return generateRecommendations(tools, behavior, toolStats, limit);
+            return generateRecommendations(finalTools, behavior, toolStats, limit);
         } else {
             // 新使用者：回傳熱門工具
-            return getDefaultRecommendations(tools, toolStats, limit);
+            return getDefaultRecommendations(finalTools, toolStats, limit);
         }
-    }, [favorites, recentIds, stats.categoryUsage, stats.uniqueToolsVisited, limit]);
+    }, [finalTools, favorites, recentIds, stats.categoryUsage, stats.uniqueToolsVisited, limit]);
 
     // 是否為個人化推薦
     const isPersonalized = useMemo(() => {

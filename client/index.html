@@ -21,12 +21,18 @@
       var base = window.location.pathname.startsWith('/Akai') ? '/Akai/' : '/';
       // 動態插入 link 標籤
       var head = document.head;
-      var createLink = function (rel, href, type, sizes) {
+      var createLink = function (rel, href, type, sizes, asType) {
         var link = document.createElement('link');
         link.rel = rel;
         link.href = base + href;
         if (type) link.type = type;
         if (sizes) link.sizes = sizes;
+        if (asType) {
+          link.as = asType;
+          link.crossOrigin = "anonymous";
+          // 只有 preload fetch 時加上 fetchpriority
+          if (asType === 'fetch') link.setAttribute('fetchpriority', 'high');
+        }
         head.appendChild(link);
       };
       createLink('icon', 'favicon.ico', 'image/x-icon');
@@ -34,6 +40,10 @@
       createLink('icon', 'favicon-16x16.png', 'image/png', '16x16');
       createLink('apple-touch-icon', 'apple-touch-icon.png', null, '180x180');
       createLink('manifest', 'manifest.json');
+
+      // 動態預載 API
+      createLink('preload', 'api/tools.json', null, null, 'fetch');
+      createLink('preload', 'api/teacher.json', null, null, 'fetch');
     })();
   </script>
 
@@ -42,9 +52,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
 
-  <!-- 🚀 關鍵資料預載 (Preload API) - 極速提升內容生成速度 -->
-  <link rel="preload" href="./api/tools.json" as="fetch" crossorigin fetchpriority="high" />
-  <link rel="preload" href="./api/teacher.json" as="fetch" crossorigin fetchpriority="high" />
+  <!-- 動態載入關鍵資料將在下方腳本執行 -->
 
   <!-- Preload 關鍵字體 (減少 FOUT/CLS) -->
   <link rel="preload"

@@ -116,8 +116,8 @@ const getFloatAnimation = (reduceMotion: boolean) => reduceMotion ? {} : {
 };
 
 // 相關推薦元件 - 升級版 (支援 LINE 瀏覽器)
-function RelatedTools({ currentTool }: { currentTool: EducationalTool }) {
-    const relatedTools = tools
+function RelatedTools({ currentTool, tools: toolsList }: { currentTool: EducationalTool; tools: EducationalTool[] }) {
+    const relatedTools = (toolsList || [])
         .filter(t => t.category === currentTool.category && t.id !== currentTool.id)
         .slice(0, 4);
 
@@ -305,8 +305,32 @@ export function ToolDetail() {
     const floatAnimation = useMemo(() => getFloatAnimation(reduceMotion), [reduceMotion]);
     const animConfig = useMemo(() => getAnimationConfig(), []);
 
+    // 從 API 獲取工具數據
+    const { data: allTools, isLoading: toolsLoading } = useQuery({
+        queryKey: ['/api/tools'],
+        queryFn: async () => {
+            const staticUrl = `${import.meta.env.BASE_URL}api/tools.json`;
+            try {
+                const staticResponse = await fetch(staticUrl);
+                if (staticResponse.ok) return await staticResponse.json() as EducationalTool[];
+
+                const response = await fetch('/api/tools');
+                if (response.ok) return await response.json() as EducationalTool[];
+
+                throw new Error('無法獲取工具數據');
+            } catch (err) {
+                console.error('數據獲取失敗:', err);
+                throw err;
+            }
+        },
+        staleTime: 300000,
+    });
+
     // 查找工具
-    const tool = tools.find(t => t.id === toolId);
+    const tool = useMemo(() => {
+        if (!allTools) return null;
+        return allTools.find(t => t.id === toolId);
+    }, [allTools, toolId]);
 
     // 整合現有 hooks
     const { isFavorite, toggleFavorite, favoritesCount } = useFavorites();
@@ -319,6 +343,11 @@ export function ToolDetail() {
         queryFn: () => getToolStats(toolId),
         enabled: !!tool,
     });
+
+    // 載入狀態處理
+    if (toolsLoading) {
+        return <ToolDetailSkeleton />;
+    }
 
     // 404 處理
     if (!tool) {
@@ -696,7 +725,7 @@ export function ToolDetail() {
                     </motion.section>
 
                     {/* 相關推薦 */}
-                    <RelatedTools currentTool={tool} />
+                    <RelatedTools currentTool={tool} tools={allTools || []} />
 
                     {/* 麵包屑導航 */}
                     <motion.nav

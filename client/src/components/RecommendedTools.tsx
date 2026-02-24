@@ -13,12 +13,13 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 interface RecommendedToolsProps {
+    tools?: any[]; // 使用 EducationalTool[] 但為了避免循環引用或複雜性，這裡可以用 any[] 或從 Prop 傳入
     onToolClick?: (toolId: number) => void;
     className?: string;
 }
 
-export function RecommendedTools({ onToolClick, className }: RecommendedToolsProps) {
-    const { recommendations, isPersonalized, hasRecommendations } = useRecommendations(3);
+export function RecommendedTools({ tools: toolsProp, onToolClick, className }: RecommendedToolsProps) {
+    const { recommendations, isPersonalized, hasRecommendations } = useRecommendations(toolsProp || [], 3);
     const { isFavorite, toggleFavorite } = useFavorites();
     const [isCollapsed, setIsCollapsed] = useState(true);
 

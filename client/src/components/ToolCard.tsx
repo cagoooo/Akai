@@ -274,7 +274,14 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
               </motion.div>
             )}
 
-            <div className="flex items-center gap-1.5 sm:gap-2">
+            <div
+              className="flex items-center gap-1.5 sm:gap-2"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+              onPointerDown={(e) => e.stopPropagation()}
+            >
               {isLoading ? (
                 <>
                   <Skeleton className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl" />
@@ -325,7 +332,6 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                           variant="outline"
                           size="icon"
                           className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl hover:bg-primary/10 hover:border-primary/30"
-                          onClick={(e) => e.stopPropagation()}
                           aria-label={`查看 ${tool.title} 詳情`}
                         >
                           <OptimizedIcon name="Info" className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
@@ -344,13 +350,10 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                         variant="outline"
                         size="icon"
                         className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl hover:bg-primary/10 hover:border-primary/30"
-                        onClickCapture={(e) => {
-                          e.stopPropagation();
-                          e.preventDefault();
+                        onClick={() => {
                           navigator.clipboard.writeText(tool.url);
                           toast({ title: "✅ 複製成功", description: "工具網址已經複製到剪貼簿！" });
                         }}
-                        onPointerDown={(e) => e.stopPropagation()}
                         aria-label="複製連結"
                       >
                         <OptimizedIcon name="Link2" className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
@@ -371,11 +374,6 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                               variant="outline"
                               size="icon"
                               className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl hover:bg-primary/10 hover:border-primary/30"
-                              onClickCapture={(e) => {
-                                // 使用 onClickCapture 強制在捕獲階段就攔截事件，防止任何冒泡到外層 Card
-                                e.stopPropagation();
-                                e.preventDefault();
-                              }}
                               aria-label="顯示 QRCode"
                             >
                               <OptimizedIcon name="QrCode" className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />

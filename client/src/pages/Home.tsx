@@ -389,7 +389,7 @@ export function Home() {
             {/* 🎯 AI 智慧推薦區塊 */}
             {!isLoading && !searchQuery && !selectedCategory && !showFavorites && (
               <Suspense fallback={<div className="h-48 rounded-xl bg-purple-100/30 animate-pulse p-4" />}>
-                <RecommendedTools onToolClick={handleToolClick} />
+                <RecommendedTools tools={toolsData} onToolClick={handleToolClick} />
               </Suspense>
             )}
 
