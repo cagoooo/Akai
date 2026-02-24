@@ -498,31 +498,89 @@ export function Home() {
                     ))}
                   </>
                 ) : visibleTools && visibleTools.length > 0 ? (
-                  <>
-                    {visibleTools.map((tool, index) => (
-                      <ToolCard
-                        key={tool.id}
-                        tool={tool}
-                        isLoading={false}
-                        isFavorite={isFavorite(tool.id)}
-                        onToggleFavorite={toggleFavorite}
-                        onToolClick={handleToolClick}
-                        priority={index < 2} // 前兩個卡片圖片設置為高優先級，優化 LCP
-                      />
-                    ))}
+                  <AnimatePresence mode="popLayout">
+                    {visibleTools.map((tool, index) => {
+                      // 當前這批卡片是否是剛透過「顯示更多」所展開的（超過原本的數量）
+                      const isNewlyRevealed = index >= visibleCount - 12 && visibleCount > 4;
+                      // 取得這是新展開批次中的第幾個（0~11）
+                      const relativeIndex = isNewlyRevealed ? index - (visibleCount - 12) : 0;
+                      // 設定動畫延遲：確保是依照 `relativeIndex` 順序，而非 `index % 12` 這樣會跳號
+                      const animationDelay = isNewlyRevealed ? relativeIndex * 0.05 : 0;
+
+                      return (
+                        <motion.div
+                          key={tool.id}
+                          layout
+                          // 讓新卡片從上方稍偏下的位置往下生長 (y: -20)，而不是從很下面往上浮(上推錯覺)
+                          initial={isNewlyRevealed ? { opacity: 0, y: -20, scale: 0.95, filter: "blur(4px)" } : false}
+                          animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                          exit={{ opacity: 0, scale: 0.95, filter: "blur(4px)" }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 260,
+                            damping: 20,
+                            mass: 0.8,
+                            delay: animationDelay,
+                          }}
+                          className="h-full"
+                        >
+                          <ToolCard
+                            tool={tool}
+                            isLoading={false}
+                            isFavorite={isFavorite(tool.id)}
+                            onToggleFavorite={toggleFavorite}
+                            onToolClick={handleToolClick}
+                            priority={index < 2} // 前兩個卡片圖片設置為高優先級，優化 LCP
+                          />
+                        </motion.div>
+                      );
+                    })}
                     {sortedTools && sortedTools.length > visibleCount && (
-                      <div className="col-span-1 sm:col-span-2 flex justify-center mt-6">
+                      <motion.div
+                        key="show-more-btn"
+                        layout
+                        className="col-span-1 sm:col-span-2 flex justify-center mt-8 mb-4 border-2 border-transparent"
+                        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2 } }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 25,
+                          delay: 0.2
+                        }}
+                      >
                         <Button
                           variant="outline"
                           size="lg"
                           onClick={incrementVisible}
-                          className="w-full sm:w-auto px-12 py-6 rounded-2xl border-2 border-indigo-200 text-indigo-700 hover:bg-indigo-50 font-bold shadow-sm"
+                          className="group relative w-full sm:w-auto px-12 py-7 flex items-center justify-center rounded-2xl border-2 border-indigo-100 bg-white/80 backdrop-blur-sm shadow-md hover:shadow-xl hover:border-indigo-300 transition-all duration-300 overflow-hidden hover:-translate-y-1 active:scale-[0.98]"
                         >
-                          顯示更多工具 ({sortedTools.length - visibleCount})
+                          <span className="relative z-10 flex items-center justify-center gap-3 w-full">
+                            <span className="text-lg font-bold bg-gradient-to-r from-indigo-700 to-purple-700 bg-clip-text text-transparent group-hover:from-indigo-800 group-hover:to-purple-800 transition-colors">
+                              顯示更多工具
+                            </span>
+                            <span className="flex items-center justify-center min-w-[2rem] h-6 px-2 bg-indigo-100/80 text-indigo-700 font-bold group-hover:bg-indigo-500 group-hover:text-white transition-colors duration-300 rounded-full text-sm border border-indigo-200 group-hover:border-indigo-500 shadow-sm">
+                              {sortedTools.length - visibleCount}
+                            </span>
+                            <motion.div
+                              animate={{ y: [0, 4, 0] }}
+                              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                            >
+                              <OptimizedIcon
+                                name="ChevronDown"
+                                className="w-5 h-5 text-indigo-600 group-hover:text-indigo-800 transition-colors duration-300"
+                              />
+                            </motion.div>
+                          </span>
+
+                          {/* 發光漸層背景效果 */}
+                          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-transparent via-indigo-100/40 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-[1.5s] ease-in-out" />
+                          <div className="absolute inset-0 -z-20 bg-gradient-to-b from-transparent to-indigo-50/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         </Button>
-                      </div>
+                      </motion.div>
                     )}
-                  </>
+                  </AnimatePresence>
                 ) : (
                   <div className="col-span-2 text-center py-8 text-muted-foreground">
                     <p className="text-lg">😕 找不到符合條件的工具</p>
