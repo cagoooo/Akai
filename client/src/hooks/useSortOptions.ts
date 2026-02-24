@@ -49,6 +49,9 @@ function shuffleArray<T>(array: T[]): T[] {
     return shuffled;
 }
 
+// 會話級別的隨機種子，確保在頁面不重整的情況下，隨機排序結果是穩定的
+const sessionSeed = Math.random();
+
 export function useSortOptions() {
     const [currentSort, setCurrentSort] = useState<SortOption>('random');
 
@@ -68,7 +71,13 @@ export function useSortOptions() {
                 return toolsCopy.sort((a, b) => b.id - a.id);
             case 'random':
             default:
-                return shuffleArray(toolsCopy);
+                // 🚀 [穩定性優化] 改成基於 ID 與 SessionSeed 的穩定隨機權重
+                // 這樣在同一個會話中，即使組件重新渲染，順序也會保持一致
+                return toolsCopy.sort((a, b) => {
+                    const weightA = Math.sin(a.id * 878.5 + sessionSeed) * 10000;
+                    const weightB = Math.sin(b.id * 878.5 + sessionSeed) * 10000;
+                    return (weightA - Math.floor(weightA)) - (weightB - Math.floor(weightB));
+                });
         }
     }, [currentSort]);
 

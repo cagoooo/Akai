@@ -3,7 +3,7 @@ import { m as motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from "@tanstack/react-query";
 import { ToolCard } from "@/components/ToolCard";
 const TeacherIntro = lazy(() => import("@/components/TeacherIntro").then(module => ({ default: module.TeacherIntro })));
-import { tools } from "@/lib/data";
+import { tools, type EducationalTool } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { OptimizedIcon } from "@/components/OptimizedIcons";
 import { useTour } from "@/components/TourProvider";
@@ -124,23 +124,17 @@ export function Home() {
       const staticUrl = `${import.meta.env.BASE_URL}api/tools.json`;
       try {
         const staticResponse = await fetch(staticUrl);
-        if (staticResponse.ok) return await staticResponse.json();
+        if (staticResponse.ok) return await staticResponse.json() as EducationalTool[];
 
         // 備援：嘗試 API
         const response = await fetch('/api/tools');
-        if (response.ok) return await response.json();
+        if (response.ok) return await response.json() as EducationalTool[];
 
         throw new Error('無法獲取工具數據');
       } catch (err) {
         console.error('數據獲取失敗:', err);
         throw err;
       }
-    },
-    select: (data) => {
-      if (!Array.isArray(data)) return [];
-      const fixedTools = data.slice(0, 4);
-      const remainingTools = data.slice(4);
-      return [...fixedTools, ...shuffleArray(remainingTools)];
     },
     staleTime: 300000, // 5 分鐘
   });
