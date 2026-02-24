@@ -129,8 +129,9 @@ function App() {
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
     }
+    // 🚀 [UX 優化] 當路由路徑發生變化時，自動捲動至頂部
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-  }, []);
+  }, [location]);
 
   useEffect(() => {
     import('@/hooks/useClickTracking').then(({ initClickTracking }) => {
