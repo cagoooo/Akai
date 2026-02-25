@@ -7,7 +7,7 @@
  * - Stale While Revalidate: 圖片
  */
 
-const CACHE_VERSION = 'v2.2.1-dev-fix';
+const CACHE_VERSION = 'v3.1.9-asset-recovery';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
 
@@ -19,6 +19,8 @@ const PRECACHE_ASSETS = [
   BASE_PATH,
   `${BASE_PATH}index.html`,
   `${BASE_PATH}manifest.json`,
+  `${BASE_PATH}api/tools.json`,
+  `${BASE_PATH}api/teacher.json`,
 ];
 
 // 快取策略判斷
@@ -45,7 +47,6 @@ const CACHE_STRATEGIES = {
   ],
   // 需要跳過的請求
   skip: [
-    /\/api\//,
     /firestore\.googleapis\.com/,
     /firebase/,
     /googleapis\.com/,
@@ -169,11 +170,31 @@ async function cacheFirst(request) {
     if (networkResponse.ok && networkResponse.status === 200) {
       const cache = await caches.open(STATIC_CACHE);
       cache.put(request, networkResponse.clone());
+    } else {
+      // 🚀 [緊急修復] 自癒機制：如果資源 (尤其是 .js) 發生 404，代表可能伺服器已更新但本地 index.html 還是舊的
+      if (networkResponse.status === 404) {
+        if (request.url.endsWith('.js') || request.url.includes('/assets/')) {
+          console.warn('[SW] 偵測到關鍵資產 404，正在清理 index.html 快取以強制自癒...', request.url);
+          caches.open(STATIC_CACHE).then(cache => {
+            cache.delete(`${BASE_PATH}index.html`);
+            cache.delete(BASE_PATH); // 也刪除根路徑的快取
+          });
+        }
+      }
     }
     return networkResponse;
   } catch (error) {
     console.warn('[SW] Cache First 失敗:', request.url, error);
-    return new Response('離線中', { status: 503, statusText: 'Service Unavailable' });
+
+    // 如果是 JS 加載失敗，嘗試清理 index 快取
+    if (request.url.endsWith('.js')) {
+      caches.open(STATIC_CACHE).then(cache => {
+        cache.delete(`${BASE_PATH}index.html`);
+        cache.delete(BASE_PATH); // 也刪除根路徑的快取
+      });
+    }
+
+    return new Response('離線中或資源遺失', { status: 503 });
   }
 }
 
@@ -235,7 +256,7 @@ async function staleWhileRevalidate(request) {
 
 // ==================== 訊息處理 ====================
 self.addEventListener('message', (event) => {
-  if (event.data === 'skipWaiting') {
+  if (event.data === 'skipWaiting' || event.data?.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
 

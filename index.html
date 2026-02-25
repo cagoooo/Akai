@@ -66,12 +66,18 @@
       var base = window.location.pathname.startsWith('/Akai') ? '/Akai/' : '/';
       // 動態插入 link 標籤
       var head = document.head;
-      var createLink = function (rel, href, type, sizes) {
+      var createLink = function (rel, href, type, sizes, asType) {
         var link = document.createElement('link');
         link.rel = rel;
         link.href = base + href;
         if (type) link.type = type;
         if (sizes) link.sizes = sizes;
+        if (asType) {
+          link.as = asType;
+          link.crossOrigin = "anonymous";
+          // 只有 preload fetch 時加上 fetchpriority
+          if (asType === 'fetch') link.setAttribute('fetchpriority', 'high');
+        }
         head.appendChild(link);
       };
       createLink('icon', 'favicon.ico', 'image/x-icon');
@@ -79,15 +85,19 @@
       createLink('icon', 'favicon-16x16.png', 'image/png', '16x16');
       createLink('apple-touch-icon', 'apple-touch-icon.png', null, '180x180');
       createLink('manifest', 'manifest.json');
+
+      // 動態預載 API
+      createLink('preload', 'api/tools.json', null, null, 'fetch');
+      createLink('preload', 'api/teacher.json', null, null, 'fetch');
     })();
   </script>
 
   <!-- DNS 預連接與預獲取 - 改善 LCP/FCP -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preconnect" href="https://firestore.googleapis.com" />
   <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-  <link rel="dns-prefetch" href="https://firestore.googleapis.com" />
+
+  <!-- 動態載入關鍵資料將在下方腳本執行 -->
 
   <!-- Preload 關鍵字體 (減少 FOUT/CLS) -->
   <link rel="preload"
@@ -97,9 +107,9 @@
     href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6fAZ9hiA.woff2" as="font"
     type="font/woff2" crossorigin />
 
-  <!-- Preload 關鍵資源 (LCP 優化) - 預載入首屏起初必定會在視口內的前兩張圖片 -->
-  <link rel="preload" as="image" href="./previews/tool_1.webp" fetchpriority="high" />
-  <link rel="preload" as="image" href="./previews/tool_2.webp" fetchpriority="high" />
+  <!-- Prefetch 關鍵資源 - 預先獲取首屏圖片 -->
+  <link rel="prefetch" as="image" href="./previews/tool_1.webp" />
+  <link rel="prefetch" as="image" href="./previews/tool_2.webp" />
 
   <!-- 關鍵 CSS 內聯與字體防閃爍 -->
   <style>
@@ -260,60 +270,15 @@
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://smes.tyc.edu.tw" />
-  <script type="module" crossorigin src="/assets/index-DEb58Ahh.js"></script>
+  <script type="module" crossorigin src="/assets/index-B6_pDiAe.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/vendor-react-CJhR42E5.js">
-  <link rel="modulepreload" crossorigin href="/assets/vendor-ui-C4lPoWQy.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor-ui-KW9HTD7S.js">
   <link rel="modulepreload" crossorigin href="/assets/vendor-utils-C4xBKWBT.js">
-  <link rel="modulepreload" crossorigin href="/assets/vendor-animation-ES48FiY_.js">
-  <link rel="stylesheet" crossorigin href="/assets/index-DrmOb73j.css">
+  <link rel="modulepreload" crossorigin href="/assets/vendor-animation-C9pvRWsW.js">
+  <link rel="stylesheet" crossorigin href="/assets/index-Fq5DcOHX.css">
 </head>
 
 <body>
-  <!-- 無障礙性：跳過導航直接到主內容 -->
-  <a href="#main-content" class="skip-link">
-    跳到主要內容
-  </a>
-  <style>
-    /* 無障礙性：Skip Link 樣式 */
-    .skip-link {
-      position: absolute;
-      top: -40px;
-      left: 0;
-      background: #6366f1;
-      color: white;
-      padding: 8px 16px;
-      z-index: 1000;
-      border-radius: 0 0 8px 0;
-      font-weight: 600;
-      text-decoration: none;
-      transition: top 0.2s;
-    }
-
-    .skip-link:focus {
-      top: 0;
-    }
-
-    /* 無障礙性：尊重使用者動畫偏好 */
-    @media (prefers-reduced-motion: reduce) {
-
-      *,
-      *::before,
-      *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-      }
-    }
-
-    /* 無障礙性：改善焦點可見性 */
-    :focus-visible {
-      outline: 3.5px solid #1e40af !important;
-      /* 深藍色強化 */
-      outline-offset: 3px;
-    }
-  </style>
-
   <!-- GitHub Pages SPA 路由處理 -->
   <script>
     (function () {
