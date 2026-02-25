@@ -887,5 +887,23 @@
             "幼童",
             "拼音"
         ]
+    },
+    {
+        "id": 56,
+        "title": "元宵猜燈謎闖關遊戲",
+        "description": "充滿節慶氣氛的元宵猜燈謎互動遊戲，讓學生在趣味闖關中學習傳統文化。",
+        "url": "https://cagoooo.github.io/lantern/",
+        "icon": "Lightbulb",
+        "category": "games",
+        "previewUrl": "/previews/preview_lantern_festival.webp",
+        "detailedDescription": "「元宵猜燈謎闖關遊戲」是一款結合傳統節慶與互動學習的教育遊戲。玩家透過解開一道道趣味燈謎來推進關卡，不僅能親身體驗元宵節的濃厚氛圍，還能從中學習各種字面意義與文化典故。適合教師在課堂上與學生進行節慶主題互動。",
+        "tags": [
+            "元宵節",
+            "猜燈謎",
+            "傳統文化",
+            "遊戲",
+            "節慶",
+            "教育"
+        ]
     }
 ]
