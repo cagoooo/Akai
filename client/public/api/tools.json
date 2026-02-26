@@ -856,7 +856,7 @@
     },
     {
         "id": 54,
-        "title": "臉盲教師專用 - 識生學坊",
+        "title": "臉盲教師救星 - 識生學坊",
         "description": "專為教師設計的學生辨識訓練工坊透過遊戲化測驗強化對學生面孔的記憶。",
         "url": "https://cagoooo.github.io/recognize/",
         "icon": "ScanFace",
@@ -904,6 +904,23 @@
             "遊戲",
             "節慶",
             "教育"
+        ]
+    },
+    {
+        "id": 57,
+        "title": "選擇障礙專用 - 餐廳命運轉盤",
+        "description": "為選擇障礙打造的餐廳抽籤工具，幫助你迅速決定今天要吃什麼美食！",
+        "url": "https://cagoooo.github.io/food/",
+        "icon": "Utensils",
+        "category": "utilities",
+        "previewUrl": "/previews/preview_food_wheel.webp",
+        "detailedDescription": "每次到了用餐時間總是不知道該吃什麼嗎？「餐廳命運轉盤」專為有選擇困難症的你設計，只需輕鬆一點，讓轉盤為你決定今天的美味餐點！",
+        "tags": [
+            "餐廳",
+            "抽籤",
+            "轉盤",
+            "美食",
+            "選擇障礙"
         ]
     }
 ]
