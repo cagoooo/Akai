@@ -2,6 +2,33 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.2.9] - 2026-03-02
+
+### ✨ 新增工具
+
+- 🤖 **小智鈴 AI 客服系統** (ID 59)
+  - 專為教育場域開發的智慧 AI 客服交談機器人
+  - 結合先進語言模型，自動學習學校行政、教學資源及常見 QA 資料
+  - 透過自然流暢對話即時反饋，24/7 全天候提供諮詢支援
+  - 分類：親師溝通 (communication)
+  - 標籤：AI 客服、智慧對話、即時支援、24/7、行政自動化、教育科技
+  - 網址：https://cagoooo.github.io/smes/
+  - 生成 3D 風格 WebP 預覽圖 (`tool_59.webp`)
+
+### 🔧 技術改進
+
+- 🎨 **OptimizedIcons 擴充**：新增 `MessageSquareText`、`Lightbulb` 等 SVG 圖示
+- 📦 **靜態資料同步**：更新 `client/public/api/tools.json` 確保前端靜態載入最新工具清單
+
+### 📁 修改文件
+- `server/data/tools.json` - 新增工具 ID 59
+- `client/public/api/tools.json` - 同步靜態工具清單
+- `client/public/previews/tool_59.webp` - 新增 AI 客服機器人預覽圖
+- `client/src/components/OptimizedIcons.tsx` - 新增 MessageSquareText、Lightbulb 圖示
+- `package.json` - 版本號更新至 3.2.9
+
+---
+
 ## [3.2.8] - 2026-02-28
 
 ### ✨ 新增工具

@@ -941,5 +941,23 @@
             "效率工具",
             "108課綱"
         ]
+    },
+    {
+        "id": 59,
+        "title": "小智鈴 AI 客服系統",
+        "description": "智慧型 AI 客服助理，提供 24/7 全天候即時諮詢與教育支援，精準回答各類常見問題。",
+        "url": "https://cagoooo.github.io/smes/",
+        "icon": "MessageSquareText",
+        "category": "communication",
+        "previewUrl": "/previews/tool_59.webp",
+        "detailedDescription": "「小智鈴 AI 客服系統」是專為教育場域開發的智慧交談機器人。結合先進的語言模型，它能自動學習學校行政、教學資源及常見 QA 資料，透過自然流暢的對話提供即時反饋。不僅減輕行政人員負擔，也提供親師生隨時隨地獲取資訊的便利管道。",
+        "tags": [
+            "AI 客服",
+            "智慧對話",
+            "即時支援",
+            "24/7",
+            "行政自動化",
+            "教育科技"
+        ]
     }
 ]
