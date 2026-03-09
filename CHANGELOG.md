@@ -2,6 +2,26 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.3.1] - 2026-03-09
+
+### ✨ 新增工具
+
+- ⌨️ **英打打字超互動遊戲** (ID 61)
+  - 互動式英文打字學習遊戲
+  - 透過趣味關卡幫助學生提升英文打字速度與準確度
+  - 分類：語言 (language)
+  - 標籤：打字、英文、鍵盤、練習、互動、遊戲、輸入法
+  - 網址：https://cagoooo.github.io/typeEN/
+  - 生成 WebP 預覽圖 (`tool_61.webp`)
+
+### 📁 修改文件
+- `server/data/tools.json` - 新增工具 ID 61
+- `client/public/api/tools.json` - 同步靜態工具清單
+- `client/public/previews/tool_61.webp` - 新增預覽圖
+- `package.json` - 版本號更新至 3.3.1
+
+---
+
 ## [3.3.0] - 2026-03-05
 
 ### 🔧 連結更新
