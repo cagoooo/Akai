@@ -14,32 +14,17 @@ const __dirname = path.dirname(__filename);
 // 網站基礎 URL
 const SITE_URL = 'https://cagoooo.github.io/Akai';
 
-// 從 data.ts 提取工具資料（使用正則表達式解析）
-function extractToolsFromDataFile() {
-  const dataPath = path.resolve(__dirname, '../client/src/lib/data.ts');
-  const content = fs.readFileSync(dataPath, 'utf-8');
-
-  // 匹配工具物件的正則表達式
-  const toolRegex = /\{\s*id:\s*(\d+),\s*title:\s*"([^"]+)",\s*description:\s*"([^"]+)",(?:[\s\S]*?)url:\s*"([^"]+)"(?:[\s\S]*?)(?:previewUrl:\s*"([^"]*)")?[\s\S]*?\}/g;
-
-  const tools = [];
-  let match;
-
-  while ((match = toolRegex.exec(content)) !== null) {
-    const id = parseInt(match[1]);
-    const title = match[2];
-    const description = match[3];
-    const url = match[4];
-
-    // 尋找對應的 previewUrl
-    const toolBlock = match[0];
-    const previewMatch = toolBlock.match(/previewUrl:\s*"([^"]*)"/);
-    const previewUrl = previewMatch ? previewMatch[1] : null;
-
-    tools.push({ id, title, description, url, previewUrl });
+// 從 tools.json 提取工具資料
+function extractToolsFromJson() {
+  const dataPath = path.resolve(__dirname, '../client/public/api/tools.json');
+  try {
+    const content = fs.readFileSync(dataPath, 'utf-8');
+    const tools = JSON.parse(content);
+    return tools;
+  } catch (error) {
+    console.error('讀取 tools.json 發生錯誤:', error);
+    return [];
   }
-
-  return tools;
 }
 
 /**
@@ -173,7 +158,7 @@ async function main() {
   console.log('🚀 開始生成 OG 預覽頁面...');
 
   // 取得工具資料
-  const tools = extractToolsFromDataFile();
+  const tools = extractToolsFromJson();
   console.log(`📦 找到 ${tools.length} 個工具`);
 
   // 輸出目錄
