@@ -125,46 +125,46 @@ export function ToolRankings({ tools: toolsProp }: ToolRankingsProps) {
     let unsubscribe: (() => void) | undefined;
 
     const setupRankings = async () => {
-      // 在生產環境或嘗試使用 Firebase
-      if (isProd) {
-        try {
-          const { db, isFirebaseAvailable } = await import('@/lib/firebase');
-          const { collection, onSnapshot, orderBy, query, limit } = await import('firebase/firestore');
+      try {
+        const { db, isFirebaseAvailable } = await import('@/lib/firebase');
+        const { collection, onSnapshot, orderBy, query, limit } = await import('firebase/firestore');
 
-          if (isFirebaseAvailable() && db) {
-            unsubscribe = onSnapshot(
-              query(collection(db, 'toolUsageStats'), orderBy('totalClicks', 'desc'), limit(10)),
-              (snapshot) => {
-                const stats: ToolRanking[] = [];
-                snapshot.forEach((doc) => {
-                  const data = doc.data();
-                  stats.push({
-                    toolId: data.toolId,
-                    totalClicks: data.totalClicks,
-                    lastUsedAt: data.lastUsedAt?.toDate?.()?.toISOString() || null,
-                    categoryClicks: data.categoryClicks || {}
-                  });
+        if (isFirebaseAvailable() && db) {
+          unsubscribe = onSnapshot(
+            query(collection(db, 'toolUsageStats'), orderBy('totalClicks', 'desc'), limit(10)),
+            (snapshot) => {
+              const stats: ToolRanking[] = [];
+              snapshot.forEach((doc) => {
+                const data = doc.data();
+                stats.push({
+                  toolId: data.toolId,
+                  totalClicks: data.totalClicks,
+                  lastUsedAt: data.lastUsedAt?.toDate?.()?.toISOString() || null,
+                  categoryClicks: data.categoryClicks || {}
                 });
+              });
 
-                if (stats.length > 0) {
-                  setRankings(stats);
-                  localStorage.setItem('localToolsRankings', JSON.stringify(stats));
-                }
-                setIsLoading(false);
-              },
-              (err) => {
-                console.warn('Firebase 排行榜監聽失敗，嘗試本地 API:', err);
-                loadRankingsFromAPI();
+              if (stats.length > 0) {
+                setRankings(stats);
+                localStorage.setItem('localToolsRankings', JSON.stringify(stats));
               }
-            );
-            return;
-          }
-        } catch (err) {
-          console.warn('初始化 Firebase 失敗，使用本地 API:', err);
+              setIsLoading(false);
+            },
+            (err) => {
+              console.warn('Firebase 排行榜監聽失敗，嘗試本地 API:', err);
+              fallbackToAPI();
+            }
+          );
+          return;
         }
+      } catch (err) {
+        console.warn('初始化 Firebase 失敗或環境不支援，使用本地 API:', err);
       }
 
-      // 非生產環境或 Firebase 不可用時，使用本地 API
+      fallbackToAPI();
+    };
+
+    const fallbackToAPI = () => {
       loadRankingsFromAPI();
       const interval = setInterval(loadRankingsFromAPI, 60000);
       return () => clearInterval(interval);
@@ -221,7 +221,9 @@ export function ToolRankings({ tools: toolsProp }: ToolRankingsProps) {
       try {
         const { trackToolUsage } = await import("@/lib/firestoreService");
         await trackToolUsage(tool.id);
-        if (!isProd) {
+        // 如果 Firebase 不可用，手動刷一下 API 數據
+        const { isFirebaseAvailable } = await import('@/lib/firebase');
+        if (!isFirebaseAvailable()) {
           await loadRankingsFromAPI();
         }
       } catch (err) {
