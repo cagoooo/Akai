@@ -362,19 +362,27 @@ export function Home() {
               <div className="xl:hidden">
                 <Button
                   onClick={() => setIsSidebarOpen(true)}
-                  className="w-full h-12 rounded-xl bg-white dark:bg-gray-800 border-2 border-indigo-100 shadow-sm text-indigo-700 hover:bg-indigo-50 flex items-center justify-center gap-2"
+                  className="group relative w-full h-14 rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-indigo-600 hover:via-purple-600 hover:to-pink-600 text-white shadow-lg shadow-indigo-500/25 border-none transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-3 overflow-hidden"
                 >
-                  <OptimizedIcon name="Filter" className="w-5 h-5" />
-                  <span className="font-bold">搜尋與分類篩選</span>
-                  {(searchQuery || selectedCategory || selectedTags.length > 0 || showFavorites) && (
-                    <span className="ml-2 w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
-                  )}
+                  <div className="relative z-10 flex items-center gap-2">
+                    <OptimizedIcon name="Filter" className="w-5 h-5 group-hover:animate-bounce" />
+                    <span className="font-bold text-lg tracking-wide drop-shadow-sm">搜尋與分類篩選</span>
+                    {(searchQuery || selectedCategory || selectedTags.length > 0 || showFavorites) && (
+                      <span className="ml-2 w-2.5 h-2.5 rounded-full bg-yellow-300 animate-pulse shadow-[0_0_8px_rgba(253,224,71,0.8)]" />
+                    )}
+                  </div>
+                  {/* 背景微光暈 */}
+                  <div className="absolute inset-0 -z-10 bg-white/20 blur-md group-hover:bg-transparent transition-colors" />
                 </Button>
               </div>
 
               {/* 桌機版搜尋與篩選區域 (xl 以上顯示) */}
-              <section className="hidden xl:block space-y-3 sm:space-y-4 p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 border border-orange-100 shadow-sm">
-                <Suspense fallback={<div className="h-32 rounded-xl bg-orange-100/50 animate-pulse" />}>
+              <section className="hidden xl:block space-y-3 sm:space-y-4 p-5 sm:p-6 rounded-3xl bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] relative overflow-hidden">
+                {/* 裝飾性光暈 */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-orange-400/10 dark:bg-orange-500/10 rounded-full blur-3xl -z-10 pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-rose-400/10 dark:bg-rose-500/10 rounded-full blur-3xl -z-10 pointer-events-none" />
+
+                <Suspense fallback={<div className="h-32 rounded-xl bg-gray-100/50 dark:bg-gray-800/50 animate-pulse" />}>
                   <div className="space-y-3 sm:space-y-4">
                     <AdvancedSearch
                       ref={searchInputRef}

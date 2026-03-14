@@ -99,7 +99,7 @@ export const AdvancedSearch = forwardRef<HTMLInputElement, AdvancedSearchProps>(
                             onChange={(e) => onSearchChange(e.target.value)}
                             onFocus={() => setIsFocused(true)}
                             onKeyDown={handleKeyDown}
-                            className="pl-11 pr-10 h-12 text-base font-medium bg-white border-2 border-orange-200 rounded-xl shadow-sm focus:border-orange-400 focus:ring-2 focus:ring-orange-200 placeholder:text-gray-400 transition-all duration-200"
+                            className="pl-11 pr-10 h-12 text-base font-medium bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-2 border-orange-200 dark:border-orange-800 rounded-xl shadow-sm focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 dark:focus:ring-orange-500/30 placeholder:text-gray-400 dark:placeholder:text-gray-500 transition-all duration-300"
                         />
 
                         {/* 清除按鈕 */}
@@ -186,34 +186,38 @@ export const AdvancedSearch = forwardRef<HTMLInputElement, AdvancedSearchProps>(
                         </p>
                     </div>
 
-                    {/* 排序選項 */}
-                    <div className="flex items-center gap-1.5 bg-gray-200 rounded-xl p-1">
-                        <ArrowUpDown className="w-5 h-5 text-gray-700 ml-2" />
-                        {sortOptions.map((opt) => (
-                            <button
-                                key={opt.option}
-                                onClick={() => {
-                                    onSortChange(opt.option);
-                                    // 自動跳轉到工具卡片區域
-                                    setTimeout(() => {
-                                        const toolsGrid = document.querySelector('[data-tour="tools-grid"]');
-                                        if (toolsGrid) {
-                                            toolsGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                        }
-                                    }, 100);
-                                }}
-                                aria-label={`改為排序方式: ${opt.label}`}
-                                className={cn(
-                                    "px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base font-medium rounded-lg transition-all",
-                                    currentSort === opt.option
-                                        ? "bg-white text-orange-800 shadow-sm"
-                                        : "text-gray-700 hover:text-gray-900"
-                                )}
-                            >
-                                <span className="mr-1.5">{opt.icon}</span>
-                                {opt.label}
-                            </button>
-                        ))}
+                    {/* 排序選項 (手機版雙排，桌機版單排) */}
+                    <div className="w-full sm:w-auto bg-gray-200 rounded-xl p-1 shrink-0">
+                        <div className="grid grid-cols-2 sm:flex sm:items-center gap-1 sm:gap-1.5 w-full">
+                            <div className="hidden sm:flex items-center justify-center pl-1 sm:pl-2 shrink-0">
+                                <ArrowUpDown className="w-5 h-5 text-gray-700" />
+                            </div>
+                            {sortOptions.map((opt) => (
+                                <button
+                                    key={opt.option}
+                                    onClick={() => {
+                                        onSortChange(opt.option);
+                                        // 自動跳轉到工具卡片區域
+                                        setTimeout(() => {
+                                            const toolsGrid = document.querySelector('[data-tour="tools-grid"]');
+                                            if (toolsGrid) {
+                                                toolsGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                            }
+                                        }, 100);
+                                    }}
+                                    aria-label={`改為排序方式: ${opt.label}`}
+                                    className={cn(
+                                        "px-2 sm:px-4 py-2 text-sm sm:text-base font-medium rounded-lg transition-all duration-300 flex items-center justify-center whitespace-nowrap",
+                                        currentSort === opt.option
+                                            ? "bg-gradient-to-r from-orange-500 to-rose-500 text-white shadow-md shadow-orange-500/30"
+                                            : "text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-white/50 dark:hover:bg-gray-800/50"
+                                    )}
+                                >
+                                    <span className={cn("mr-1 sm:mr-1.5", currentSort === opt.option ? "text-white" : "")}>{opt.icon}</span>
+                                    {opt.label}
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 </div>
 

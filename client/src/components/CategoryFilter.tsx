@@ -14,16 +14,16 @@ interface CategoryFilterProps {
     favoritesCount?: number;
 }
 
-// 分類顏色配置
-const categoryColorMap: Record<string, { bg: string; text: string; border: string; activeBg: string }> = {
-    all: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', activeBg: 'bg-blue-700' },
-    games: { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200', activeBg: 'bg-purple-700' },
-    utility: { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200', activeBg: 'bg-green-700' },
-    teaching: { bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200', activeBg: 'bg-orange-700' },
-    language: { bg: 'bg-pink-50', text: 'text-pink-700', border: 'border-pink-200', activeBg: 'bg-pink-700' },
-    communication: { bg: 'bg-cyan-50', text: 'text-cyan-700', border: 'border-cyan-200', activeBg: 'bg-cyan-700' },
-    interactive: { bg: 'bg-yellow-50', text: 'text-yellow-700', border: 'border-yellow-200', activeBg: 'bg-yellow-700' },
-    reading: { bg: 'bg-indigo-50', text: 'text-indigo-700', border: 'border-indigo-200', activeBg: 'bg-indigo-700' },
+// 分類顏色配置 (增強 Vibrant & Neon 風格)
+const categoryColorMap: Record<string, { bg: string; text: string; border: string; activeClasses: string }> = {
+    all: { bg: 'bg-blue-50 dark:bg-blue-950/30', text: 'text-blue-700 dark:text-blue-400', border: 'border-blue-200 dark:border-blue-800', activeClasses: 'bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/40 text-white border-transparent' },
+    games: { bg: 'bg-purple-50 dark:bg-purple-950/30', text: 'text-purple-700 dark:text-purple-400', border: 'border-purple-200 dark:border-purple-800', activeClasses: 'bg-gradient-to-r from-purple-500 to-fuchsia-600 shadow-lg shadow-purple-500/40 text-white border-transparent' },
+    utility: { bg: 'bg-green-50 dark:bg-green-950/30', text: 'text-green-700 dark:text-green-400', border: 'border-green-200 dark:border-green-800', activeClasses: 'bg-gradient-to-r from-green-500 to-emerald-600 shadow-lg shadow-green-500/40 text-white border-transparent' },
+    teaching: { bg: 'bg-orange-50 dark:bg-orange-950/30', text: 'text-orange-700 dark:text-orange-400', border: 'border-orange-200 dark:border-orange-800', activeClasses: 'bg-gradient-to-r from-orange-500 to-amber-600 shadow-lg shadow-orange-500/40 text-white border-transparent' },
+    language: { bg: 'bg-pink-50 dark:bg-pink-950/30', text: 'text-pink-700 dark:text-pink-400', border: 'border-pink-200 dark:border-pink-800', activeClasses: 'bg-gradient-to-r from-pink-500 to-rose-600 shadow-lg shadow-pink-500/40 text-white border-transparent' },
+    communication: { bg: 'bg-cyan-50 dark:bg-cyan-950/30', text: 'text-cyan-700 dark:text-cyan-400', border: 'border-cyan-200 dark:border-cyan-800', activeClasses: 'bg-gradient-to-r from-cyan-500 to-teal-600 shadow-lg shadow-cyan-500/40 text-white border-transparent' },
+    interactive: { bg: 'bg-yellow-50 dark:bg-yellow-950/30', text: 'text-yellow-700 dark:text-yellow-400', border: 'border-yellow-200 dark:border-yellow-800', activeClasses: 'bg-gradient-to-r from-yellow-400 to-amber-500 shadow-lg shadow-yellow-500/40 text-white border-transparent' },
+    reading: { bg: 'bg-indigo-50 dark:bg-indigo-950/30', text: 'text-indigo-700 dark:text-indigo-400', border: 'border-indigo-200 dark:border-indigo-800', activeClasses: 'bg-gradient-to-r from-indigo-500 to-blue-600 shadow-lg shadow-indigo-500/40 text-white border-transparent' },
 };
 
 export function CategoryFilter({
@@ -74,10 +74,10 @@ export function CategoryFilter({
                 onClick={() => handleCategoryClick(null)}
                 aria-label="顯示全部工具"
                 className={cn(
-                    "gap-1.5 sm:gap-2 text-sm sm:text-base font-semibold border-2 rounded-full transition-all duration-200 hover:scale-105 px-3 py-1.5 sm:px-4 sm:py-2",
+                    "gap-1.5 sm:gap-2 text-sm sm:text-base font-semibold border-2 rounded-full transition-all duration-300 hover:scale-105 px-3 py-1.5 sm:px-4 sm:py-2",
                     selectedCategory === null && !showFavorites
-                        ? `${allColors.activeBg} text-white border-transparent shadow-md`
-                        : `${allColors.bg} ${allColors.text} ${allColors.border} hover:${allColors.activeBg} hover:text-white`
+                        ? allColors.activeClasses
+                        : `${allColors.bg} ${allColors.text} ${allColors.border} hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-md`
                 )}
             >
                 <span>{allInfo.emoji}</span>
@@ -85,8 +85,8 @@ export function CategoryFilter({
                 <Badge
                     variant="secondary"
                     className={cn(
-                        "ml-1 text-xs sm:text-sm px-2 font-bold",
-                        selectedCategory === null && !showFavorites ? "bg-white/20 text-white" : "bg-blue-100 text-blue-800"
+                        "ml-1 text-xs sm:text-sm px-2 font-bold transition-colors",
+                        selectedCategory === null && !showFavorites ? "bg-white/20 text-white" : "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100"
                     )}
                 >
                     {totalCount}
@@ -141,10 +141,10 @@ export function CategoryFilter({
                         onClick={() => handleCategoryClick(category)}
                         aria-label={`篩選分類: ${info.label}`}
                         className={cn(
-                            "gap-1.5 sm:gap-2 text-sm sm:text-base font-semibold border-2 rounded-full transition-all duration-200 hover:scale-105 px-3 py-1.5 sm:px-4 sm:py-2",
+                            "gap-1.5 sm:gap-2 text-sm sm:text-base font-semibold border-2 rounded-full transition-all duration-300 hover:scale-105 px-3 py-1.5 sm:px-4 sm:py-2",
                             isActive
-                                ? `${colors.activeBg} text-white border-transparent shadow-md`
-                                : `${colors.bg} ${colors.text} ${colors.border}`
+                                ? colors.activeClasses
+                                : `${colors.bg} ${colors.text} ${colors.border} hover:border-${colors.text.split('-')[1]}-400 dark:hover:border-${colors.text.split('-')[1]}-500 hover:shadow-md`
                         )}
                     >
                         <span>{info.emoji}</span>
@@ -152,8 +152,8 @@ export function CategoryFilter({
                         <Badge
                             variant="secondary"
                             className={cn(
-                                "ml-1 text-xs sm:text-sm px-2 font-bold",
-                                isActive ? "bg-white/20 text-white" : `${colors.bg} ${colors.text}`
+                                "ml-1 text-xs sm:text-sm px-2 font-bold transition-colors",
+                                isActive ? "bg-white/20 text-white" : `${colors.bg.replace('/30', '')} ${colors.text} dark:bg-${colors.text.split('-')[1]}-900/50`
                             )}
                         >
                             {count}

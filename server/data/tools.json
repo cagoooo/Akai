@@ -1057,5 +1057,21 @@
             "樂理",
             "互動學習"
         ]
+    },
+    {
+        "id": 65,
+        "title": "AI 影片創作與教學整合資源",
+        "description": "整合 Grok 與 Canva 的 AI 影片創作指南，協助教師與創作者輕鬆製作專業級教學影片與微電影。",
+        "url": "https://cagoooo.github.io/Grok-Canva/",
+        "icon": "Clapperboard",
+        "category": "teaching",
+        "previewUrl": "/previews/tool_65.webp",
+        "tags": [
+            "AI",
+            "影片創作",
+            "教學",
+            "Canva",
+            "Grok"
+        ]
     }
 ]

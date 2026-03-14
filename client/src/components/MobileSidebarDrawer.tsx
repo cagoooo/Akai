@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { m as motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { OptimizedIcon } from '@/components/OptimizedIcons';
+import { cn } from '@/lib/utils';
 
 interface MobileSidebarDrawerProps {
     children: React.ReactNode;
@@ -90,7 +91,10 @@ export function MobileSidebarDrawer({ children, isOpen, onOpenChange }: MobileSi
 
             {/* 側邊欄 */}
             <motion.div
-                className="fixed top-0 left-0 bottom-0 w-[85vw] max-w-[320px] bg-background z-[70] shadow-2xl xl:hidden overflow-y-auto"
+                className={cn(
+                    "fixed top-0 left-0 bottom-0 w-[85vw] max-w-[320px] bg-white/95 dark:bg-gray-950/95 backdrop-blur-2xl z-[70] shadow-[15px_0_40px_rgba(0,0,0,0.1)] dark:shadow-[15px_0_40px_rgba(0,0,0,0.5)] border-r border-white/20 dark:border-white/10 xl:hidden overflow-y-auto",
+                    !isOpen && "pointer-events-none"
+                )}
                 initial={{ x: '-100%' }}
                 animate={{ x: isOpen ? 0 : '-100%' }}
                 transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
@@ -117,8 +121,8 @@ export function MobileSidebarDrawer({ children, isOpen, onOpenChange }: MobileSi
                     </Button>
 
                     <div className="pt-8 flex-1">
-                        <h3 className="text-lg font-bold mb-4 flex items-center gap-2 text-indigo-700 dark:text-indigo-400">
-                            <OptimizedIcon name="Filter" className="w-5 h-5" />
+                        <h3 className="text-xl font-black mb-6 flex items-center gap-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent drop-shadow-sm">
+                            <OptimizedIcon name="Filter" className="w-6 h-6 text-indigo-500 drop-shadow-[0_0_8px_rgba(99,102,241,0.5)]" />
                             搜尋與分類篩選
                         </h3>
                         {children}
