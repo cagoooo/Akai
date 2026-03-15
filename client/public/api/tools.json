@@ -1073,5 +1073,25 @@
             "Canva",
             "Grok"
         ]
+    },
+    {
+        "id": 66,
+        "title": "Sora AI 旅遊全記錄教學網",
+        "description": "探索 Sora AI 與旅遊記錄的完美結合，掌握如何利用 AI 技術捕捉、編輯並分享您的旅遊點滴，打造個人專屬的高質感全記錄教學平台。",
+        "detailedDescription": "「Sora AI 旅遊全記錄教學網」是一個專為旅遊愛好者與創作者設計的 AI 教學資源庫。本平台深入探討 OpenAI Sora 技術在旅遊影片創作上的應用，從初步的提示詞撰寫到後期的高細節生成。使用者將學會如何將零散的旅遊素材，轉化為具備電影質感的全記錄短片，並透過 AI 工具優化敘事節奏與視覺呈現，讓每一段旅程都能以最動人的方式被銘記。",
+        "url": "https://cagoooo.github.io/Sora/",
+        "icon": "Plane",
+        "category": "teaching",
+        "previewUrl": "/previews/tool_66.png",
+        "ogPreviewUrl": "/previews/tool_66_og.png",
+        "tags": [
+            "Sora AI",
+            "旅遊記錄",
+            "AI 影片",
+            "教學資源",
+            "生活記錄",
+            "影像創作",
+            "OpenAI"
+        ]
     }
 ]
