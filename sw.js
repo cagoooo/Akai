@@ -7,9 +7,11 @@
  * - Stale While Revalidate: 圖片
  */
 
-const CACHE_VERSION = 'v3.1.9-asset-recovery';
+const CACHE_VERSION = 'v3.2.7-dual-cache';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
+const ASSETS_ARCHIVE = 'assets-archive-v1';
+const MAX_ARCHIVED_ASSETS = 150; // 最多保留 150 個歷史 Chunk 組件
 
 // 獲取 base path (支援 GitHub Pages)
 const BASE_PATH = self.location.pathname.replace('sw.js', '');
@@ -105,16 +107,52 @@ self.addEventListener('activate', (event) => {
   console.log('[SW] 激活中...', CACHE_VERSION);
 
   event.waitUntil(
-    caches.keys().then((keyList) => {
-      return Promise.all(
-        keyList.map((key) => {
-          // 刪除舊版本的快取
-          if (key !== STATIC_CACHE && key !== DYNAMIC_CACHE) {
+    caches.keys().then(async (keyList) => {
+      const archiveCache = await caches.open(ASSETS_ARCHIVE);
+
+      await Promise.all(
+        keyList.map(async (key) => {
+          // 刪除舊版本的快取，但保留重要靜態資源
+          if (key !== STATIC_CACHE && key !== DYNAMIC_CACHE && key !== ASSETS_ARCHIVE) {
+            console.log('[SW] 處理舊快取:', key);
+
+            // 若為舊的 static 快取，將當中的 /assets/ (含 Hash) 檔案備份至 ARCHIVE
+            if (key.startsWith('static-') || key.startsWith('dynamic-')) {
+              try {
+                const oldCache = await caches.open(key);
+                const oldRequests = await oldCache.keys();
+                // 找出 .js / .css / .woff 等靜態資源
+                const assetsToArchive = oldRequests.filter(req =>
+                  req.url.includes('/assets/') &&
+                  (req.url.endsWith('.js') || req.url.endsWith('.css') || req.url.endsWith('.woff2'))
+                );
+
+                // 將資源存入 Archive
+                for (const req of assetsToArchive) {
+                  const response = await oldCache.match(req);
+                  if (response) {
+                    await archiveCache.put(req, response);
+                  }
+                }
+                console.log(`[SW] 已備份 ${assetsToArchive.length} 個舊資源至 Archive`);
+              } catch (e) {
+                console.warn('[SW] 備份舊快取資源失敗:', e);
+              }
+            }
+
             console.log('[SW] 刪除舊快取:', key);
             return caches.delete(key);
           }
         })
       );
+
+      // 清理 Archive 中過多的舊資源，避免無限制增長
+      const archiveRequests = await archiveCache.keys();
+      if (archiveRequests.length > MAX_ARCHIVED_ASSETS) {
+        const keysToDelete = archiveRequests.slice(0, archiveRequests.length - MAX_ARCHIVED_ASSETS);
+        await Promise.all(keysToDelete.map(req => archiveCache.delete(req)));
+        console.log(`[SW] 清理了 ${keysToDelete.length} 個過期的歷史資產`);
+      }
     }).then(() => {
       console.log('[SW] 激活完成');
       return self.clients.claim();

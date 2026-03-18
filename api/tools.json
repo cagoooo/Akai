@@ -161,7 +161,7 @@
         "id": 11,
         "title": "剛好學：課堂互動so easy",
         "description": "即時課堂互動平台，讓教學更加生動有趣",
-        "url": "https://class.smes.tyc.edu.tw/",
+        "url": "https://cagoooo.github.io/Akailao/",
         "icon": "GraduationCap",
         "category": "teaching",
         "previewUrl": "/previews/tool_11.webp",
@@ -856,7 +856,7 @@
     },
     {
         "id": 54,
-        "title": "臉盲教師專用 - 識生學坊",
+        "title": "臉盲教師救星 - 識生學坊",
         "description": "專為教師設計的學生辨識訓練工坊透過遊戲化測驗強化對學生面孔的記憶。",
         "url": "https://cagoooo.github.io/recognize/",
         "icon": "ScanFace",
@@ -904,6 +904,234 @@
             "遊戲",
             "節慶",
             "教育"
+        ]
+    },
+    {
+        "id": 57,
+        "title": "選擇障礙專用 - 餐廳命運轉盤",
+        "description": "為選擇障礙打造的餐廳抽籤工具，幫助你迅速決定今天要吃什麼美食！",
+        "url": "https://cagoooo.github.io/food/",
+        "icon": "Utensils",
+        "category": "utilities",
+        "previewUrl": "/previews/preview_food_wheel.webp",
+        "detailedDescription": "每次到了用餐時間總是不知道該吃什麼嗎？「餐廳命運轉盤」專為有選擇困難症的你設計，只需輕鬆一點，讓轉盤為你決定今天的美味餐點！",
+        "tags": [
+            "餐廳",
+            "抽籤",
+            "轉盤",
+            "美食",
+            "選擇障礙"
+        ]
+    },
+    {
+        "id": 58,
+        "title": "教師數位備課教案小幫手",
+        "description": "專為老師設計的 AI 數位備課工具，能快速生成優質教案與教學活動設計，大幅節省行政與備課時間。",
+        "detailedDescription": "「教師數位備課教案小幫手」專為解決老師繁忙的備課壓力而生。結合先進 AI 技術，只需輸入單元名稱或教學目標，即可自動產出結構完整的教案草稿、創新的教學活動設計以及多元的評量建議。支援符合 108 課綱的核心素養導向設計，是老師進行數位教學轉型、提升備課品質的最佳夥伴。",
+        "url": "https://cagoooo.github.io/prepare/",
+        "icon": "Wand2",
+        "category": "teaching",
+        "previewUrl": "/previews/tool_58.webp",
+        "tags": [
+            "AI",
+            "備課",
+            "教案生成",
+            "教學設計",
+            "數位轉型",
+            "效率工具",
+            "108課綱"
+        ]
+    },
+    {
+        "id": 59,
+        "title": "小智鈴 AI 客服系統",
+        "description": "智慧型 AI 客服助理，提供 24/7 全天候即時諮詢與教育支援，精準回答各類常見問題。",
+        "url": "https://cagoooo.github.io/smes/",
+        "icon": "MessageSquareText",
+        "category": "communication",
+        "previewUrl": "/previews/tool_59.webp",
+        "detailedDescription": "「小智鈴 AI 客服系統」是專為教育場域開發的智慧交談機器人。結合先進的語言模型，它能自動學習學校行政、教學資源及常見 QA 資料，透過自然流暢的對話提供即時反饋。不僅減輕行政人員負擔，也提供親師生隨時隨地獲取資訊的便利管道。",
+        "tags": [
+            "AI 客服",
+            "智慧對話",
+            "即時支援",
+            "24/7",
+            "行政自動化",
+            "教育科技"
+        ]
+    },
+    {
+        "id": 60,
+        "title": "專屬創意 3D 畫廊",
+        "description": "沈浸式 3D 互動畫廊體驗，在星空宇宙背景中展覽你的專屬創意作品，支援雲端同步、多主題背景、圖片標籤篩選與個人化 3D 場景設定。",
+        "url": "https://cagoooo.github.io/3D/",
+        "icon": "Aperture",
+        "category": "interactive",
+        "previewUrl": "/previews/tool_60.webp",
+        "detailedDescription": "「專屬創意 3D 畫廊」是一款結合現代 WebGL 技術與雲端服務的沈浸式展覽平台。使用者可以將自己珍貴的相片、藝術作品或創意圖像，以立體旋轉卡片的方式呈現在宇宙星空之中，打造獨一無二的個人數位藝廊。支援多種 3D 場景主題（宇宙、森林、海洋等）、自訂旋轉速度與透視深度、圖片標籤智慧篩選，以及 Firebase 雲端同步功能，讓你的創意展覽可以隨時隨地分享給全世界。",
+        "tags": [
+            "3D",
+            "畫廊",
+            "創意展覽",
+            "沈浸式",
+            "個人化",
+            "雲端同步",
+            "WebGL",
+            "互動體驗"
+        ]
+    },
+    {
+        "id": 61,
+        "title": "英打打字超互動遊戲",
+        "description": "互動式英文打字學習遊戲，透過趣味關卡幫助學生提升英文打字速度與準確度，在遊戲中輕鬆掌握鍵盤位置。",
+        "detailedDescription": "「英打打字超互動遊戲」是一款專為提升英文打字能力而設計的互動平台。結合趣味遊戲元素與視覺回饋，讓枯燥的打字練習變得生動有趣。系統能記錄打字速度與正確率，適合師生在課堂或課後進行打字挑戰，有效幫助學生建立肌肉記憶並增強英文輸入熟悉度。",
+        "url": "https://cagoooo.github.io/typeEN/",
+        "icon": "Keyboard",
+        "category": "language",
+        "previewUrl": "/previews/tool_61.webp",
+        "tags": [
+            "打字",
+            "英文",
+            "鍵盤",
+            "練習",
+            "互動",
+            "遊戲",
+            "輸入法",
+            "教育"
+        ]
+    },
+    {
+        "id": 62,
+        "title": "桃園市龍潭區石門國民小學114學年度親職教育日",
+        "description": "親職教育日（家長日）活動資訊分享與線上互動平台，旨在加強學校與家庭的聯繫，共同關注孩子的成長。包含活動議程、教育宣導與親師溝通資源。",
+        "detailedDescription": "一年一度的石門國小親職教育日（家長日）是學校與家長建立深厚連結的重要時刻。本平台整合了114學年度活動的精華資訊，包括校務報告、親職講座、各班級經營計畫，以及多樣化的教育宣導資源。家長可隨時隨地透過行動裝置掌握核心內容，與學校攜手為孩子打造優質的學習環境。",
+        "url": "https://cagoooo.github.io/114_Parent/",
+        "icon": "Users",
+        "category": "communication",
+        "previewUrl": "/previews/tool_62.webp",
+        "tags": [
+            "桃園市",
+            "石門國小",
+            "親職教育日",
+            "114學年度",
+            "學校活動",
+            "互動資訊",
+            "教育宣導",
+            "家長日",
+            "親師溝通"
+        ]
+    },
+    {
+        "id": 63,
+        "title": "Email 帳密記憶遊樂園",
+        "description": "旨在幫助使用者安全且趣味地記憶 Email 帳號與密碼組合的互動式遊樂園。透過遊戲化記憶法，讓登入資訊的管理不再枯燥，並提升資安意識。",
+        "detailedDescription": "「Email 帳密記憶遊樂園」是一款結合遊樂園情境與記憶心理學的數位工具。使用者可以透過趣味的遊樂設施場景，將複雜的 Email 與密碼組合轉化為生動的記憶掛鉤。系統提供多種記憶挑戰模式、資安強度評估，並支援個人化場景自訂，讓你在歡樂的氛圍中輕鬆掌握資訊安全，守護數位資產。",
+        "url": "https://cagoooo.github.io/email/",
+        "icon": "Gamepad2",
+        "category": "interactive",
+        "previewUrl": "/previews/tool_63.webp",
+        "tags": [
+            "Email",
+            "帳號密碼",
+            "記憶遊樂園",
+            "資安意識",
+            "互動遊戲",
+            "密碼安全",
+            "趣味學習"
+        ]
+    },
+    {
+        "id": 64,
+        "title": "簡譜節拍節奏大師",
+        "description": "學習簡譜與節奏的互動學習工具，幫助初學者輕鬆掌握音樂節拍與旋律。",
+        "detailedDescription": "「簡譜節拍節奏大師」是一款專為音樂初學者設計的互動式學習平台。透過視覺化的簡譜呈現與動態節拍器，讓使用者能夠直觀地感受節奏的長短與音樂的律動。系統內建多種基本節奏型態與互動練習，不僅適合音樂課堂教學，也為想學習基礎樂理的使用者提供了一個輕鬆有趣的自學管道。",
+        "url": "https://cagoooo.github.io/music/",
+        "icon": "Music",
+        "category": "teaching",
+        "previewUrl": "/previews/tool_64.webp",
+        "tags": [
+            "音樂",
+            "簡譜",
+            "節拍",
+            "節奏",
+            "樂理",
+            "互動學習"
+        ]
+    },
+    {
+        "id": 65,
+        "title": "AI 影片創作與教學整合資源",
+        "description": "整合 Grok 與 Canva 的 AI 影片創作指南，協助教師與創作者輕鬆製作專業級教學影片與微電影。",
+        "url": "https://cagoooo.github.io/Grok-Canva/",
+        "icon": "Clapperboard",
+        "category": "teaching",
+        "previewUrl": "/previews/tool_65.webp",
+        "tags": [
+            "AI",
+            "影片創作",
+            "教學",
+            "Canva",
+            "Grok"
+        ]
+    },
+    {
+        "id": 66,
+        "title": "Sora AI 旅遊全記錄教學網",
+        "description": "探索 Sora AI 與旅遊記錄的完美結合，掌握如何利用 AI 技術捕捉、編輯並分享您的旅遊點滴，打造個人專屬的高質感全記錄教學平台。",
+        "detailedDescription": "「Sora AI 旅遊全記錄教學網」是一個專為旅遊愛好者與創作者設計的 AI 教學資源庫。本平台深入探討 OpenAI Sora 技術在旅遊影片創作上的應用，從初步的提示詞撰寫到後期的高細節生成。使用者將學會如何將零散的旅遊素材，轉化為具備電影質感的全記錄短片，並透過 AI 工具優化敘事節奏與視覺呈現，讓每一段旅程都能以最動人的方式被銘記。",
+        "url": "https://cagoooo.github.io/Sora/",
+        "icon": "Plane",
+        "category": "teaching",
+        "previewUrl": "/previews/tool_66.webp",
+        "ogPreviewUrl": "/previews/tool_66_og.webp",
+        "tags": [
+            "Sora AI",
+            "旅遊記錄",
+            "AI 影片",
+            "教學資源",
+            "生活記錄",
+            "影像創作",
+            "OpenAI"
+        ]
+    },
+    {
+        "id": 67,
+        "title": "國語演說比賽訓練平台 (pro版)",
+        "description": "專為國語演說比賽設計的專業訓練平台，提供全方位的技巧培訓、各類講稿庫與實戰模擬演練，助力學生在賽場上自信發揮，奪取佳績。",
+        "detailedDescription": "「國語演說比賽訓練平台 (pro版)」是一套完整的競賽培訓解決方案。平台內建專業演說技巧教學單元，包含語調訓練、儀態指導、起承轉合架構分析，並提供針對各級比賽設計的精選講稿參考包。透過互動式的訓練介面與AI輔助評核，讓學生能針對弱點進行精確強化，是教師指導與學生自查的最佳利器，協助每一位演說者從『敢說』進化到『會說』與『善說』。",
+        "url": "https://cagoooo.github.io/speech/",
+        "icon": "MicVocal",
+        "category": "language",
+        "previewUrl": "/previews/tool_67.webp",
+        "ogPreviewUrl": "/previews/tool_67_og.webp",
+        "tags": [
+            "國語演說",
+            "比賽培訓",
+            "口語表達",
+            "專業版",
+            "講稿庫",
+            "教育科技",
+            "實戰模擬"
+        ]
+    },
+    {
+        "id": 68,
+        "title": "手作課程照片影片作品上傳平台",
+        "description": "專為手作課程設計的作品展示與分享平台，支援高畫質相片與影片上傳，讓每件精心創作的作品都能完美呈現。",
+        "detailedDescription": "「手作課程照片影片作品上傳平台」是為創意手作者與教學課程量身打造的數位作品集。該平台簡化了作品記錄流程，讓學習者能輕鬆上傳陶藝、編織、木工等手作成果的照片與短影音。內建作品展示牆與類別管理功能，便於學生整理個人學習歷程，同時也讓教師能即時給予回饋。精緻的視覺介面確保每一份創作都能以最專業的姿態呈現在社群與教學社群中。",
+        "url": "https://cagoooo.github.io/files/",
+        "icon": "Images",
+        "category": "utilities",
+        "previewUrl": "/previews/tool_68.webp",
+        "ogPreviewUrl": "/previews/tool_68_og.webp",
+        "tags": [
+            "手作課程",
+            "作品上傳",
+            "照片影片",
+            "學習歷程",
+            "數位作品集",
+            "創意教學",
+            "課程紀錄"
         ]
     }
 ]
