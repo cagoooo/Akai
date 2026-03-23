@@ -1154,5 +1154,26 @@
             "休閒",
             "熱帶叢林"
         ]
+    },
+    {
+        "id": 70,
+        "title": "中文注音打字遊戲 (pro版)",
+        "description": "進階版中文注音打字練習遊戲，提供更豐富有趣的打字挑戰，全面提升中文輸入速度與準確度。",
+        "detailedDescription": "「中文注音打字遊戲 (pro版)」是一款專為提升中文注音輸入能力而設計的進階互動平台。結合趣味遊戲元素與豐富的打字關卡，讓枯燥的打字練習變得生動有趣。系統能記錄打字速度與正確率，幫助學生建立肌肉記憶並增強注音符號的熟悉度，是學習中文輸入法的絕佳輔助工具。",
+        "url": "https://cagoooo.github.io/typeCC/",
+        "icon": "Keyboard",
+        "category": "language",
+        "previewUrl": "/previews/tool_70.webp",
+        "ogPreviewUrl": "/previews/tool_70_og.webp",
+        "tags": [
+            "打字",
+            "中文",
+            "注音",
+            "練習",
+            "進階",
+            "遊戲",
+            "輸入法",
+            "教育"
+        ]
     }
 ]
