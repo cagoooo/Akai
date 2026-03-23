@@ -1175,5 +1175,26 @@
             "輸入法",
             "教育"
         ]
+    },
+    {
+        "id": 71,
+        "title": "成語填空大挑戰",
+        "description": "專為提升成語能力設計的互動填空遊戲，透過趣味挑戰強化辭彙運用與文學素養。",
+        "detailedDescription": "「成語填空大挑戰」是一款結合教育與趣味的互動學習平台。精選上千句常用成語，設計多樣化的填空關卡，讓學習者在遊戲中自然掌握成語的意涵與用法。系統提供即時回饋與詳盡解析，協助學生建立深厚的國語文基礎，是提升辭彙量與寫作能力的絕佳輔助工具。",
+        "url": "https://cagoooo.github.io/typeTC/",
+        "icon": "SpellCheck",
+        "category": "language",
+        "previewUrl": "/previews/tool_71.webp",
+        "ogPreviewUrl": "/previews/tool_71_og.webp",
+        "tags": [
+            "成語",
+            "填空",
+            "國語",
+            "學習",
+            "遊戲",
+            "辭彙",
+            "教育科技",
+            "互動"
+        ]
     }
 ]
