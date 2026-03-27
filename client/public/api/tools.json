@@ -1236,5 +1236,25 @@
             "教學助理",
             "國小"
         ]
+    },
+    {
+        "id": 74,
+        "title": "2026 親職日場地配置圖",
+        "description": "提供 2026 親職日的完整場地配置與動線規劃進度，協助親師快速掌握活動空間分布，讓年度盛事進行更順暢。",
+        "detailedDescription": "「2026 親職日場地配置圖」是專為親職教育日活動設計的即時資訊平台。透過清晰的視覺化地圖，完整呈現各攤位、教室與公共設施的精確位置，並提供建議參觀動線。無論是家長尋找班級位置，或是工作人員協調場地支援，都能在平台上即時獲取最新配置快照，大幅提升大型活動的引導效率與親師互動品質。",
+        "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/academic/2026%E8%A6%AA%E8%81%B7%E6%97%A5%E5%A0%B4%E5%9C%B0%E9%85%8D%E7%BD%AE",
+        "icon": "Map",
+        "category": "communication",
+        "previewUrl": "/previews/tool_74.webp",
+        "ogPreviewUrl": "/previews/tool_74_og.webp",
+        "tags": [
+            "2026",
+            "親職日",
+            "場地配置",
+            "校園地圖",
+            "活動規劃",
+            "親師溝通",
+            "即時更新"
+        ]
     }
 ]

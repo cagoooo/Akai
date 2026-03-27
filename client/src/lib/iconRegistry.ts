@@ -109,6 +109,7 @@ import {
     Dot,                // ui/input-otp
     ArrowLeft,          // ui/carousel
     ArrowRight,         // ui/carousel
+    Map,
     Loader2,            // ui/charts
 } from "lucide-react";
 
@@ -164,6 +165,7 @@ export const iconRegistry: Record<string, LucideIcon> = {
     Calendar,
     Library,
     ScanFace,
+    Map,
 
     // 其他圖標
     Share2,

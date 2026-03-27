@@ -1,6 +1,6 @@
 # 教育科技創新專區 - 阿凱老師
 
-![Version](https://img.shields.io/badge/version-3.5.0-brightgreen.svg)
+![Version](https://img.shields.io/badge/version-3.5.1-brightgreen.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-20.x-green.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.6.3-blue.svg)
@@ -37,6 +37,7 @@
 | 🎮 蜂類配對消消樂 | 寓教於樂的教育遊戲 | bee.smes.tyc.edu.tw |
 | ✍️ 點「石」成金 (評語優化) | 學生評語優化工具 | LINE Bot |
 | 📊 國小期中考成績篩選工具 | 協助教師快速分析與篩選期中考成績 | cagoooo.github.io/filter/ |
+| 🗺️ 2026 親職日場地配置圖 | 提供親職日完整場地配置與動線規劃 | sites.google.com/mail2.smes.tyc.edu.tw/academic/2026%E8%A6%AA%E8%81%B7%E6%97%A5%E5%A0%B4%E5%9C%B0%E9%85%8D%E7%BD%AE |
 
 ---
 
