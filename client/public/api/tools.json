@@ -1216,5 +1216,25 @@
             "智慧化",
             "表單產出"
         ]
+    },
+    {
+        "id": 73,
+        "title": "國小期中考成績篩選工具",
+        "description": "專為國小教師設計的期中考成績分析助手，輕鬆篩選分佈情況。",
+        "detailedDescription": "「國小期中考成績篩選工具」是專為教學第一線開發的實用工具。面對大量期中考成績，教師可透過本工具快速完成各級分段的篩選，並自動產生成績分佈趨勢。系統支援彈性的篩選條件，能精準鎖定需要補救教學或進階指導的學生名單，大幅節省人工比對時間，是學期末成績結算與分析的最佳利器。",
+        "url": "https://cagoooo.github.io/filter/",
+        "icon": "LineChart",
+        "category": "utilities",
+        "previewUrl": "/previews/tool_73.webp",
+        "ogPreviewUrl": "/previews/tool_73_og.webp",
+        "tags": [
+            "成績",
+            "篩選",
+            "分析",
+            "期中考",
+            "行政效率",
+            "教學助理",
+            "國小"
+        ]
     }
 ]

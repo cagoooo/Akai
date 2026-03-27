@@ -1,6 +1,6 @@
 # 教育科技創新專區 - 阿凱老師
 
-![Version](https://img.shields.io/badge/version-3.4.9-brightgreen.svg)
+![Version](https://img.shields.io/badge/version-3.5.0-brightgreen.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-20.x-green.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.6.3-blue.svg)
@@ -36,7 +36,7 @@
 | 📱 QRCode批次產生器 | 便捷的QR碼批量生成工具 | qrcode.smes.tyc.edu.tw |
 | 🎮 蜂類配對消消樂 | 寓教於樂的教育遊戲 | bee.smes.tyc.edu.tw |
 | ✍️ 點「石」成金 (評語優化) | 學生評語優化工具 | LINE Bot |
-| 📚 12年教案有14 | 教案資源分享平台 | LINE 官方帳號 |
+| 📊 國小期中考成績篩選工具 | 協助教師快速分析與篩選期中考成績 | cagoooo.github.io/filter/ |
 
 ---
 
