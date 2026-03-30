@@ -186,10 +186,10 @@ export const AdvancedSearch = forwardRef<HTMLInputElement, AdvancedSearchProps>(
                         </p>
                     </div>
 
-                    {/* 排序選項 (手機版雙排，桌機版單排) */}
-                    <div className="w-full sm:w-auto bg-gray-200 rounded-xl p-1 shrink-0">
-                        <div className="grid grid-cols-2 sm:flex sm:items-center gap-1 sm:gap-1.5 w-full">
-                            <div className="hidden sm:flex items-center justify-center pl-1 sm:pl-2 shrink-0">
+                    {/* 排序選項 (彈性雙排，視窗寬度足夠才單排) */}
+                    <div className="w-full 2xl:w-auto bg-gray-200 rounded-xl p-1 shrink-0">
+                        <div className="grid grid-cols-2 2xl:flex 2xl:items-center gap-1.5 w-full">
+                            <div className="hidden 2xl:flex items-center justify-center pl-2 shrink-0">
                                 <ArrowUpDown className="w-5 h-5 text-gray-700" />
                             </div>
                             {sortOptions.map((opt) => (

@@ -1256,5 +1256,45 @@
             "親師溝通",
             "即時更新"
         ]
+    },
+    {
+        "id": 75,
+        "title": "影片&PDF批次轉圖片",
+        "description": "將影片與 PDF 檔案批次轉換為圖片，快速擷取所需畫面，大幅提升工作與備課效率",
+        "detailedDescription": "「影片&PDF批次轉圖片」是一款專為教學與行政工作設計的實用轉檔工具。老師們經常需要從教學影片中擷取重點畫面，或是從多頁的 PDF 教案中匯出單頁圖片作為課程素材。本工具提供直覺的操作介面，支援將常見的影片格式及 PDF 檔案進行批次處理，一鍵快速轉換為高品質圖片。無論是製作簡報、編寫教材或整理記錄，都能為您省去繁瑣的手動截圖時間，讓備課與行政作業更加得心應手。",
+        "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E5%BD%B1%E7%89%87pdf%E8%BD%89%E5%9C%96%E7%89%87?authuser=0",
+        "icon": "Images",
+        "category": "utilities",
+        "previewUrl": "/previews/tool_75.webp",
+        "ogPreviewUrl": "/previews/tool_75_og.webp",
+        "tags": [
+            "轉檔",
+            "影片轉圖",
+            "PDF轉圖",
+            "批次處理",
+            "教學工具",
+            "行政效率",
+            "圖片擷取"
+        ]
+    },
+    {
+        "id": 76,
+        "title": "WebSlide Pro 簡報播放器",
+        "description": "專業流暢的網頁版簡報播放器，支援多種互動功能，無需安裝軟體即可隨時隨地開啟完美簡報。",
+        "detailedDescription": "「WebSlide Pro 簡報播放器」是一套專為現代教學與專業報告打造的線上簡報展示工具。打破傳統軟體的限制，只要有瀏覽器，就能流暢展示具有動態效果與豐富媒體內容的簡報檔案。系統具備直覺的控制介面、雷射筆標記，以及全螢幕高畫質播放功能，讓演講者能毫無阻礙地專注於內容傳遞。無論是教室授課、線上研討會還是跨校交流，它都能提供穩定且引人入勝的簡報體驗，讓每一個知識點都完美呈現。",
+        "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/webslide-%E7%B0%A1%E5%A0%B1%E6%92%AD%E6%94%BE%E5%99%A8?authuser=0",
+        "icon": "Presentation",
+        "category": "teaching",
+        "previewUrl": "/previews/tool_76.webp",
+        "ogPreviewUrl": "/previews/tool_76_og.webp",
+        "tags": [
+            "簡報",
+            "播放器",
+            "教學工具",
+            "WebSlide",
+            "展示",
+            "線上簡報",
+            "報告"
+        ]
     }
 ]
