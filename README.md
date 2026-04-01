@@ -1,6 +1,6 @@
 # 教育科技創新專區 - 阿凱老師
 
-![Version](https://img.shields.io/badge/version-3.5.1-brightgreen.svg)
+![Version](https://img.shields.io/badge/version-3.5.3-brightgreen.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-20.x-green.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.6.3-blue.svg)
@@ -143,6 +143,7 @@ H:\Akai\
 - **導覽教學** - 內建互動式網站導覽功能 (Driver.js)
 - **SEO 優化** - 完整的 meta 標籤與 Schema.org 結構化數據
 - **PWA 支援** - 可安裝至手機桌面
+- **🔗 快速標籤連結** - URL 參數驅動篩選（`?category=games`、`?tag=AI`、`?q=關鍵字`），分享連結自動套用並捲動至結果
 
 ### ⚙️ 後端功能
 
