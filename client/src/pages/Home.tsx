@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, lazy, Suspense, useEffect } from "react";
+import { useState, useMemo, useRef, lazy, Suspense, useEffect, useCallback } from "react";
 import { m as motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from "@tanstack/react-query";
 import { ToolCard } from "@/components/ToolCard";
@@ -27,19 +27,92 @@ import { tools as allTools } from "@/lib/data";
 import { PullToRefresh } from "@/components/PullToRefresh";
 import { MobileSidebarDrawer } from "@/components/MobileSidebarDrawer";
 
+// ─── URL Query String 工具函數 ───────────────────────────────────────────────
+/** 從當前 URL 讀取篩選參數（不依賴 wouter，直接操作 window.location） */
+function readUrlFilters() {
+  const params = new URLSearchParams(window.location.search);
+  return {
+    category: params.get('category') || null,
+    tags: params.get('tag') ? params.get('tag')!.split(',').filter(Boolean) : [],
+    query: params.get('q') || '',
+    favorites: params.get('favorites') === '1',
+  };
+}
+
+/** 將篩選狀態寫回 URL（replaceState 不產生瀏覽歷史） */
+function writeUrlFilters({
+  category,
+  tags,
+  query,
+  favorites,
+}: {
+  category: string | null;
+  tags: string[];
+  query: string;
+  favorites: boolean;
+}) {
+  const params = new URLSearchParams();
+  if (category) params.set('category', category);
+  if (tags.length > 0) params.set('tag', tags.join(','));
+  if (query) params.set('q', query);
+  if (favorites) params.set('favorites', '1');
+  const search = params.toString();
+  const newUrl = window.location.pathname + (search ? '?' + search : '');
+  window.history.replaceState(null, '', newUrl);
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 export function Home() {
   const { startTour } = useTour();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [showFavorites, setShowFavorites] = useState(false);
+
+  // 從 URL 讀取初始篩選狀態（只在 mount 時執行一次）
+  const initialFilters = useMemo(() => readUrlFilters(), []);
+
+  const [searchQuery, setSearchQuery] = useState(initialFilters.query);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(initialFilters.category);
+  const [showFavorites, setShowFavorites] = useState(initialFilters.favorites);
   const [isRecentCollapsed, setIsRecentCollapsed] = useState(true);
   const [showShortcutsDialog, setShowShortcutsDialog] = useState(false);
   const [showWishingWell, setShowWishingWell] = useState(false);
   const [selectedToolIndex, setSelectedToolIndex] = useState(0);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>(initialFilters.tags);
   const [showSecondaryContent, setShowSecondaryContent] = useState(false);
   const [showFullList, setShowFullList] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  /** 捲動至工具卡片區塊（帶有適當偏移避免被 sticky header 遮擋） */
+  const scrollToToolsGrid = useCallback((delay = 300) => {
+    setTimeout(() => {
+      const toolsGrid = document.querySelector('[data-tour="tools-grid"]');
+      if (toolsGrid) {
+        toolsGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, delay);
+  }, []);
+
+  // 當篩選 state 改變時，同步更新 URL（雙向綁定）
+  useEffect(() => {
+    writeUrlFilters({
+      category: selectedCategory,
+      tags: selectedTags,
+      query: searchQuery,
+      favorites: showFavorites,
+    });
+  }, [selectedCategory, selectedTags, searchQuery, showFavorites]);
+
+  // 若頁面初始帶有篩選參數，自動捲動到工具卡片區
+  useEffect(() => {
+    const hasInitialFilter =
+      initialFilters.category ||
+      initialFilters.tags.length > 0 ||
+      initialFilters.query ||
+      initialFilters.favorites;
+    if (hasInitialFilter) {
+      scrollToToolsGrid(500);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   // 處理強制下拉更新
   const handleRefresh = async () => {
@@ -228,17 +301,21 @@ export function Home() {
   };
 
   // 分頁邏輯：初始顯示 4 個工具（配合首屏優化策略）
-  const [visibleCount, setVisibleCount] = useState(4);
+  // 若初始 URL 帶有篩選條件，預設顯示更多（避免分享連結進來只看到 4 個）
+  const initialVisibleCount = (initialFilters.category || initialFilters.tags.length > 0 || initialFilters.query || initialFilters.favorites) ? 16 : 4;
+  const [visibleCount, setVisibleCount] = useState(initialVisibleCount);
   const incrementVisible = () => setVisibleCount(prev => prev + 12);
   // 取得當前可見的工具 (根據分段渲染邏輯)
   const visibleTools = useMemo(() => {
     const baseList = sortedTools || [];
     // 關鍵優化：首屏僅渲染前 4 張卡片，極速完成 Hydration
-    if (!showFullList && !selectedCategory && !searchQuery && !showFavorites) {
+    // 若有任何篩選條件（包含 tags），跳過此限制
+    const hasAnyFilter = selectedCategory || searchQuery || showFavorites || selectedTags.length > 0;
+    if (!showFullList && !hasAnyFilter) {
       return baseList.slice(0, 4);
     }
     return baseList.slice(0, visibleCount);
-  }, [sortedTools, visibleCount, showFullList, selectedCategory, searchQuery, showFavorites]);
+  }, [sortedTools, visibleCount, showFullList, selectedCategory, searchQuery, showFavorites, selectedTags]);
 
   // 延遲注入大型 SEO 結構化數據，避免阻塞首屏 Hydration
   useEffect(() => {
