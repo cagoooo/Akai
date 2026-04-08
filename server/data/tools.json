@@ -1177,6 +1177,127 @@
         ]
     },
     {
+        "id": 71,
+        "title": "成語填空大挑戰",
+        "description": "專為提升成語能力設計的互動填空遊戲，透過趣味挑戰強化辭彙運用與文學素養。",
+        "detailedDescription": "「成語填空大挑戰」是一款結合教育與趣味的互動學習平台。精選上千句常用成語，設計多樣化的填空關卡，讓學習者在遊戲中自然掌握成語的意涵與用法。系統提供即時回饋與詳盡解析，協助學生建立深厚的國語文基礎，是提升辭彙量與寫作能力的絕佳輔助工具。",
+        "url": "https://cagoooo.github.io/typeTC/",
+        "icon": "SpellCheck",
+        "category": "language",
+        "previewUrl": "/previews/tool_71.webp",
+        "ogPreviewUrl": "/previews/tool_71_og.webp",
+        "tags": [
+            "成語",
+            "填空",
+            "國語",
+            "學習",
+            "遊戲",
+            "辭彙",
+            "教育科技",
+            "互動"
+        ]
+    },
+    {
+        "id": 72,
+        "title": "動支及黏存單自動產生系統",
+        "description": "智慧化的經費動支與黏存單自動產生平台，簡化繁瑣的行政核銷流程，只需輸入基本資訊即可快速產出標準格式表單，大幅提升行政作業效率與精確度。",
+        "detailedDescription": "「動支及黏存單自動產生系統」是專為學校行政人員與教師設計的智慧化核銷工具。面對複雜的經費動支與黏存單填寫流程，本系統提供直覺的資料輸入介面，能自動計算總額並依據規範產出符合標準格式的 PDF 表單。無論是日常辦公用品採購還是專案活動經費報支，都能透過自動化生成功能，省下大量手寫與排版時間，確保報帳資料的正確性與專業感。",
+        "url": "https://cagoooo.github.io/budget/",
+        "icon": "Calculator",
+        "category": "utilities",
+        "previewUrl": "/previews/tool_72.webp",
+        "ogPreviewUrl": "/previews/tool_72_og.webp",
+        "tags": [
+            "動支單",
+            "黏存單",
+            "經費核銷",
+            "自動生成",
+            "行政效率",
+            "智慧化",
+            "表單產出"
+        ]
+    },
+    {
+        "id": 73,
+        "title": "國小期中考成績篩選工具",
+        "description": "專為國小教師設計的期中考成績分析助手，輕鬆篩選分佈情況。",
+        "detailedDescription": "「國小期中考成績篩選工具」是專為教學第一線開發的實用工具。面對大量期中考成績，教師可透過本工具快速完成各級分段的篩選，並自動產生成績分佈趨勢。系統支援彈性的篩選條件，能精準鎖定需要補救教學或進階指導的學生名單，大幅節省人工比對時間，是學期末成績結算與分析的最佳利器。",
+        "url": "https://cagoooo.github.io/filter/",
+        "icon": "LineChart",
+        "category": "utilities",
+        "previewUrl": "/previews/tool_73.webp",
+        "ogPreviewUrl": "/previews/tool_73_og.webp",
+        "tags": [
+            "成績",
+            "篩選",
+            "分析",
+            "期中考",
+            "行政效率",
+            "教學助理",
+            "國小"
+        ]
+    },
+    {
+        "id": 74,
+        "title": "2026 親職日場地配置圖",
+        "description": "提供 2026 親職日的完整場地配置與動線規劃進度，協助親師快速掌握活動空間分布，讓年度盛事進行更順暢。",
+        "detailedDescription": "「2026 親職日場地配置圖」是專為親職教育日活動設計的即時資訊平台。透過清晰的視覺化地圖，完整呈現各攤位、教室與公共設施的精確位置，並提供建議參觀動線。無論是家長尋找班級位置，或是工作人員協調場地支援，都能在平台上即時獲取最新配置快照，大幅提升大型活動的引導效率與親師互動品質。",
+        "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/academic/2026%E8%A6%AA%E8%81%B7%E6%97%A5%E5%A0%B4%E5%9C%B0%E9%85%8D%E7%BD%AE",
+        "icon": "Map",
+        "category": "communication",
+        "previewUrl": "/previews/tool_74.webp",
+        "ogPreviewUrl": "/previews/tool_74_og.webp",
+        "tags": [
+            "2026",
+            "親職日",
+            "場地配置",
+            "校園地圖",
+            "活動規劃",
+            "親師溝通",
+            "即時更新"
+        ]
+    },
+    {
+        "id": 75,
+        "title": "影片&PDF批次轉圖片",
+        "description": "將影片與 PDF 檔案批次轉換為圖片，快速擷取所需畫面，大幅提升工作與備課效率",
+        "detailedDescription": "「影片&PDF批次轉圖片」是一款專為教學與行政工作設計的實用轉檔工具。老師們經常需要從教學影片中擷取重點畫面，或是從多頁的 PDF 教案中匯出單頁圖片作為課程素材。本工具提供直覺的操作介面，支援將常見的影片格式及 PDF 檔案進行批次處理，一鍵快速轉換為高品質圖片。無論是製作簡報、編寫教材或整理記錄，都能為您省去繁瑣的手動截圖時間，讓備課與行政作業更加得心應手。",
+        "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E5%BD%B1%E7%89%87pdf%E8%BD%89%E5%9C%96%E7%89%87?authuser=0",
+        "icon": "Images",
+        "category": "utilities",
+        "previewUrl": "/previews/tool_75.webp",
+        "ogPreviewUrl": "/previews/tool_75_og.webp",
+        "tags": [
+            "轉檔",
+            "影片轉圖",
+            "PDF轉圖",
+            "批次處理",
+            "教學工具",
+            "行政效率",
+            "圖片擷取"
+        ]
+    },
+    {
+        "id": 76,
+        "title": "WebSlide Pro 簡報播放器",
+        "description": "專業流暢的網頁版簡報播放器，支援多種互動功能，無需安裝軟體即可隨時隨地開啟完美簡報。",
+        "detailedDescription": "「WebSlide Pro 簡報播放器」是一套專為現代教學與專業報告打造的線上簡報展示工具。打破傳統軟體的限制，只要有瀏覽器，就能流暢展示具有動態效果與豐富媒體內容的簡報檔案。系統具備直覺的控制介面、雷射筆標記，以及全螢幕高畫質播放功能，讓演講者能毫無阻礙地專注於內容傳遞。無論是教室授課、線上研討會還是跨校交流，它都能提供穩定且引人入勝的簡報體驗，讓每一個知識點都完美呈現。",
+        "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/webslide-%E7%B0%A1%E5%A0%B1%E6%92%AD%E6%94%BE%E5%99%A8?authuser=0",
+        "icon": "Presentation",
+        "category": "teaching",
+        "previewUrl": "/previews/tool_76.webp",
+        "ogPreviewUrl": "/previews/tool_76_og.webp",
+        "tags": [
+            "簡報",
+            "播放器",
+            "教學工具",
+            "WebSlide",
+            "展示",
+            "線上簡報",
+            "報告"
+        ]
+    },
+    {
         "id": 77,
         "title": "石門國小雙語教育宣導網站",
         "description": "石門國小雙語教育宣導專屬平台，整合雙語課程介紹、英語學習資源與校園國際化推廣資訊，讓師生與家長輕鬆掌握學校雙語教育發展方向。",
