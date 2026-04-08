@@ -71,4 +71,12 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+
+  <!-- 雙語教育 - 石門國小雙語教育宣導網站 -->
+  <url>
+    <loc>https://english.smes.tyc.edu.tw/</loc>
+    <lastmod>2026-04-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
