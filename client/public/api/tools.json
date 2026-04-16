@@ -1380,5 +1380,23 @@
             "教務系統",
             "協作平台"
         ]
+    },
+    {
+        "id": 81,
+        "title": "國小資訊科技教學駕駛艙入口網",
+        "description": "集大成的資訊科技教學導航，整合國小資科教育核心資源，為老師打造的全方位數位教學儀表板。",
+        "url": "https://cagoooo.github.io/it-cockpit/",
+        "icon": "LayoutDashboard",
+        "category": "teaching",
+        "previewUrl": "/previews/tool_81.webp",
+        "ogPreviewUrl": "/previews/tool_81_og.webp",
+        "tags": [
+            "資訊科技",
+            "教學入口",
+            "儀表板",
+            "國小教育",
+            "工具整合",
+            "駕駛艙"
+        ]
     }
 ]
