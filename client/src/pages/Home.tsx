@@ -73,7 +73,10 @@ export function Home() {
   const [showFavorites, setShowFavorites] = useState(initialFilters.favorites);
   const [isRecentCollapsed, setIsRecentCollapsed] = useState(true);
   const [showShortcutsDialog, setShowShortcutsDialog] = useState(false);
-  const [showWishingWell, setShowWishingWell] = useState(false);
+  const [showWishingWell, setShowWishingWell] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('wish') === '1';
+  });
   const [selectedToolIndex, setSelectedToolIndex] = useState(0);
   const [selectedTags, setSelectedTags] = useState<string[]>(initialFilters.tags);
   const [showSecondaryContent, setShowSecondaryContent] = useState(false);
@@ -99,6 +102,17 @@ export function Home() {
       favorites: showFavorites,
     });
   }, [selectedCategory, selectedTags, searchQuery, showFavorites]);
+
+  // 從 URL 開啟許願池後，移除 wish 參數避免重複觸發
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('wish')) {
+      params.delete('wish');
+      const search = params.toString();
+      const newUrl = window.location.pathname + (search ? '?' + search : '');
+      window.history.replaceState(null, '', newUrl);
+    }
+  }, []);
 
   // 若頁面初始帶有篩選參數，自動捲動到工具卡片區
   useEffect(() => {

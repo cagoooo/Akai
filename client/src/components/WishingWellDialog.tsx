@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Star, Wand2, Send, Loader2 } from "lucide-react";
+import { Star, Wand2, Send, Loader2, Link2, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { submitWish, type WishType } from "@/lib/wishingService";
 import { m as motion, AnimatePresence } from 'framer-motion';
@@ -23,6 +23,18 @@ export function WishingWellDialog({ open, onOpenChange }: WishingWellDialogProps
     const [hoverRating, setHoverRating] = useState(0);
     const [content, setContent] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [linkCopied, setLinkCopied] = useState(false);
+
+    const handleCopyLink = () => {
+        const url = `${window.location.origin}${window.location.pathname}?wish=1`;
+        navigator.clipboard.writeText(url);
+        setLinkCopied(true);
+        toast({
+            title: "已複製連結 🔗",
+            description: "許願池專屬連結已複製到剪貼簿，可以分享給其他人囉！",
+        });
+        setTimeout(() => setLinkCopied(false), 2000);
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -89,10 +101,21 @@ export function WishingWellDialog({ open, onOpenChange }: WishingWellDialogProps
                 <div className="absolute bottom-0 left-0 w-40 h-40 bg-pink-500/10 rounded-full blur-3xl -z-10 -translate-x-1/2 translate-y-1/2" />
 
                 <DialogHeader className="mb-4">
-                    <DialogTitle className="flex items-center gap-3 text-2xl font-bold bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent">
-                        <Wand2 className="w-6 h-6 text-indigo-500 animate-pulse" />
-                        阿凱老師的許願池
-                    </DialogTitle>
+                    <div className="flex items-center justify-between">
+                        <DialogTitle className="flex items-center gap-3 text-2xl font-bold bg-gradient-to-r from-indigo-600 to-pink-500 bg-clip-text text-transparent">
+                            <Wand2 className="w-6 h-6 text-indigo-500 animate-pulse" />
+                            阿凱老師的許願池
+                        </DialogTitle>
+                        <button
+                            type="button"
+                            onClick={handleCopyLink}
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition-colors mr-6"
+                            title="複製許願池專屬連結"
+                        >
+                            {linkCopied ? <Check className="w-3.5 h-3.5" /> : <Link2 className="w-3.5 h-3.5" />}
+                            {linkCopied ? "已複製" : "分享連結"}
+                        </button>
+                    </div>
                     <DialogDescription className="text-slate-600 text-base">
                         有想到的教學工具點子？還是想給我們一點鼓勵與建議呢？
                         歡迎留下您的心聲！
