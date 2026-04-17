@@ -2,7 +2,7 @@
 
 ## 🎯 當前版本狀態
 - **當前版本**: `v3.5.7`
-- **最後更新狀態**: 部署 3.5.7 版本，新增許願池專屬分享連結功能。
+- **最後更新狀態**: 修復全部 40 個 TypeScript 編譯錯誤，`tsc --noEmit` 零錯誤通過。
 
 
 ## 📌 完成功能總覽
@@ -10,6 +10,11 @@
 ### `v3.5.7` (最新)
 - **許願池分享連結**：新增 `?wish=1` URL 參數支援，開啟網址即自動彈出許願池對話框。
 - **複製連結按鈕**：許願池對話框內新增「分享連結」按鈕，一鍵複製專屬連結方便分享。
+- **TypeScript 型別健全化**：修復全部 40 個 `tsc` 編譯錯誤（跨 12 個檔案），達成零錯誤編譯。
+  - 新增 4 個型別宣告檔：`analytics.ts`、`heatmap.js.d.ts`、`amp.d.ts`、`compression.d.ts`。
+  - 修正 `DiagnosticsDashboard` 17 個屬性存取錯誤（新增 `SystemInfo` / `DbHealth` 介面）。
+  - 移除 `SeoAnalyticsDashboard` 已棄用的 TanStack Query v5 `onError` 回呼（9 個錯誤）。
+  - 修正 `SocialPreviewImage` 缺少 `interactive` 分類、`reviewService` 型別不匹配等。
 
 ### `v3.5.6`
 - **版本同步**：全面更新 `README.md`、`CHANGELOG.md`、`PROGRESS.md`、`USER_GUIDE.md` 至 v3.5.6。
@@ -247,6 +252,7 @@
 | 圖片自動壓縮與轉檔 (WebP) | v3.2.1 | `compress-images.mjs` 腳本 + `npm run optimize:images` 指令 |
 | 進階複合搜尋與標籤過濾 | v3.5.3 | `AdvancedSearch.tsx` 多標籤篩選 + URL Query String 雙向同步 |
 | 許願池分享連結 | v3.5.7 | `?wish=1` URL 參數 + 對話框內「分享連結」按鈕 |
+| TypeScript 型別健全化 | v3.5.7 | 新增 4 個 `.d.ts` 宣告檔 + 修正 12 個檔案共 40 個型別錯誤 |
 
 ---
 
@@ -266,14 +272,8 @@
 - **預期效益**：零人工維護工具可用率，平台可信度大幅提升。
 - **難度**：⭐⭐ 中等 ｜ **工時**：1～2 天
 
-#### 3. TypeScript 型別健全化 (Type Safety Cleanup)
-- **現況**：`tsc --noEmit` 有 6+ 個錯誤，包括 `@/types/analytics` 模組缺失、`heatmap.js` 無型別宣告、`AnalyticsDashboard.tsx` 隱式 any 等。
-- **做法**：
-  - 建立 `client/src/types/analytics.d.ts` 定義 `VisitorStats`、`ToolUsageStat` 介面。
-  - 新增 `client/src/types/heatmap.d.ts`（`declare module 'heatmap.js'`）。
-  - 修正 `DiagnosticsDashboard.tsx` 的 `systemInfo` 型別定義。
-- **預期效益**：CI 類型檢查通過，避免潛在 runtime 錯誤，開發體驗更順暢。
-- **難度**：⭐ 簡單 ｜ **工時**：半天
+#### ~~3. TypeScript 型別健全化~~ ✅ 已完成 (v3.5.7)
+- 修復 40 個編譯錯誤（跨 12 檔），`tsc --noEmit` 零錯誤通過。
 
 ---
 
@@ -400,8 +400,8 @@
 
 | 問題 | 優先級 | 說明 | 對應檔案 |
 |------|--------|------|----------|
-| TypeScript 型別錯誤 | 🔴 高 | `@/types/analytics` 模組缺失，6+ 個 `tsc` 編譯錯誤 | `AnalyticsDashboard.tsx`、`DiagnosticsDashboard.tsx` |
-| heatmap.js 型別宣告 | 🟡 中 | 缺少 `.d.ts` 宣告檔，IDE 無法提供智慧提示 | `AnalyticsDashboard.tsx:149` |
+| ~~TypeScript 型別錯誤~~ | ✅ 已修復 | 40 個錯誤全數修復，零錯誤通過 | `client/src/types/` 新增 4 個宣告檔 |
+| ~~heatmap.js 型別宣告~~ | ✅ 已修復 | 新增完整 `.d.ts` 宣告檔含介面定義 | `client/src/types/heatmap.js.d.ts` |
 | Firestore 規則過度開放 | 🟡 中 | `visitorStats` 和 `toolUsageStats` 為 `read/write: true`，可能被惡意灌水 | `firestore.rules` |
 | IP 地理定位 HTTPS 不支援 | 🟡 中 | `ip-api.com` 僅支援 HTTP，應改用 `ipinfo.io` (50k/月免費) | `VisitorCounter.tsx` |
 | 儀表板假數據殘留 | 🟢 低 | 部分統計卡片（本週流量等）使用硬編碼假數據 | `AnalyticsDashboard.tsx` |
@@ -413,7 +413,7 @@
 
 ```
 第 1 週 ─── P0 快速收穫
-  ├─ Day 1     : #3 TypeScript 型別健全化（半天即可完成）
+  ├─ Day 1     : #3 TypeScript 型別健全化 ✅ 已完成
   ├─ Day 1-2   : #2 死鏈自動巡檢 GitHub Actions
   └─ Day 3-5   : #1 收藏雲端同步（Firebase Auth 已就緒）
 
