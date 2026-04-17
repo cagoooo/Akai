@@ -95,7 +95,7 @@ export async function apiClient<T>(
 // 清理過期的緩存數據
 setInterval(() => {
   const now = Date.now();
-  for (const [key, value] of cache.entries()) {
+  for (const [key, value] of Array.from(cache.entries())) {
     if (now - value.timestamp > 300000) { // 5 分鐘後自動清理
       cache.delete(key);
     }

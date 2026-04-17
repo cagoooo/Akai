@@ -343,11 +343,8 @@ async function updateToolRating(
                 },
             };
 
-            await updateDoc(ratingRef, newData).catch(() => {
-                // 如果文檔不存在，使用 setDoc
-                const { setDoc } = require('firebase/firestore');
-                return setDoc(ratingRef, newData);
-            });
+            const { setDoc } = await import('firebase/firestore');
+            await setDoc(ratingRef, newData);
         }
     } catch (error) {
         console.error('更新評分統計失敗:', error);

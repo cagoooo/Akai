@@ -6,14 +6,15 @@ interface SocialPreviewImageProps {
   onGenerate?: (dataUrl: string) => void;
 }
 
-const categoryGradients = {
+const categoryGradients: Record<string, readonly [string, string]> = {
   communication: ["#EFF6FF", "#3B82F6"],
   teaching: ["#ECFDF5", "#10B981"],
   language: ["#F5F3FF", "#8B5CF6"],
   reading: ["#FEF9C3", "#F59E0B"],
   utilities: ["#F3F4F6", "#6B7280"],
   games: ["#FDF2F8", "#EC4899"],
-} as const;
+  interactive: ["#ECFEFF", "#06B6D4"],
+};
 
 export function SocialPreviewImage({ tool, onGenerate }: SocialPreviewImageProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);

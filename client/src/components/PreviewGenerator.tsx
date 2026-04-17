@@ -180,7 +180,7 @@ export function PreviewGenerator({ tool, customization, onLoad }: PreviewGenerat
         textAnchor="middle"
         dominantBaseline="middle"
         role="heading"
-        aria-level="2"
+        aria-level={2}
       >
         {tool.title}
       </text>

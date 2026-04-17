@@ -81,28 +81,14 @@ export function SeoAnalyticsDashboard() {
 
   const { data: reports = [], isLoading: isLoadingReports, error: reportsError } = useQuery<SeoReport[]>({
     queryKey: ["/api/seo/reports"],
-    refetchInterval: 30000, // Refresh every 30 seconds
+    refetchInterval: 30000,
     retry: 3,
-    onError: () => {
-      toast({
-        variant: "destructive",
-        title: "載入失敗",
-        description: "無法載入 SEO 報告，請稍後再試",
-      });
-    },
   });
 
   const { data: keywords = [], isLoading: isLoadingKeywords, error: keywordsError } = useQuery<KeywordRanking[]>({
     queryKey: ["/api/seo/keywords"],
-    refetchInterval: 30000, // Refresh every 30 seconds
+    refetchInterval: 30000,
     retry: 3,
-    onError: () => {
-      toast({
-        variant: "destructive",
-        title: "載入失敗",
-        description: "無法載入關鍵字排名，請稍後再試",
-      });
-    },
   });
 
   if (isLoadingReports || isLoadingKeywords) {

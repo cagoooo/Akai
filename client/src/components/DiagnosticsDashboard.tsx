@@ -44,6 +44,22 @@ interface SystemMetric {
   timestamp: string;
 }
 
+interface SystemInfo {
+  platform?: string;
+  nodeVersion?: string;
+  environment?: string;
+  memoryUsage?: { heapUsed: number; heapTotal: number };
+  uptime?: number;
+}
+
+interface DbHealth {
+  status?: string;
+  databaseType?: string;
+  responseTime?: string;
+  version?: string;
+  timestamp?: string;
+}
+
 // 擴展接口來處理 API 返回的額外屬性
 interface ApiResponse<T> extends Array<T> {
   _cached?: boolean;
@@ -67,15 +83,15 @@ export function DiagnosticsDashboard() {
   });
   
   // 系統信息
-  const { data: systemInfo, isLoading: isLoadingSystemInfo } = useQuery({
+  const { data: systemInfo, isLoading: isLoadingSystemInfo } = useQuery<SystemInfo>({
     queryKey: ["/api/diagnostics/system-info"],
-    refetchInterval: 10000, // 每10秒刷新一次
+    refetchInterval: 10000,
   });
-  
+
   // 數據庫健康狀態
-  const { data: dbHealth, isLoading: isLoadingDbHealth } = useQuery({
+  const { data: dbHealth, isLoading: isLoadingDbHealth } = useQuery<DbHealth>({
     queryKey: ["/api/diagnostics/db-health"],
-    refetchInterval: 10000, // 每10秒刷新一次
+    refetchInterval: 10000,
   });
 
   if (isLoadingLogs || isLoadingMetrics || isLoadingSystemInfo || isLoadingDbHealth) {

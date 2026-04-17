@@ -9,7 +9,7 @@ import { Languages } from "lucide-react";
 import { useTranslation, languages, type Language } from "@/lib/translation";
 
 export function LanguageSelector() {
-  const { currentLanguage, setLanguage } = useTranslation();
+  const { language: currentLanguage, setLanguage } = useTranslation();
 
   return (
     <DropdownMenu>

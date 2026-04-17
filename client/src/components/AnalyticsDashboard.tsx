@@ -781,7 +781,7 @@ export function AnalyticsDashboard() {
                     }}
                     height={400}
                     options={{
-                      onClick: async (_event, elements) => {
+                      onClick: async (_event: unknown, elements: Array<{ index: number }>) => {
                         if (elements && elements.length > 0) {
                           const index = elements[0].index;
                           const toolId = toolStats?.[index]?.toolId;

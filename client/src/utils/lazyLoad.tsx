@@ -46,7 +46,7 @@ export function useLazyLoad<T>(importFunc: () => Promise<{ default: T }>) {
  * @param ErrorComponent 错误时显示的组件
  * @returns 延迟加载的视图组件
  */
-export function createLazyView<P = {}>(
+export function createLazyView<P extends Record<string, unknown> = Record<string, never>>(
   importFunc: () => Promise<{ default: React.ComponentType<P> }>,
   LoadingComponent: React.ComponentType = () => <div>Loading...</div>,
   ErrorComponent: React.ComponentType<{ error: Error }> = ({ error }) => <div>Error: {error.message}</div>
