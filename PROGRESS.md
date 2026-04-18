@@ -2,7 +2,7 @@
 
 ## 🎯 當前版本狀態
 - **當前版本**: `v3.5.7`
-- **最後更新狀態**: 修復全部 40 個 TypeScript 編譯錯誤，`tsc --noEmit` 零錯誤通過。
+- **最後更新狀態**: 新增根域名跳轉、修復 40 個 TypeScript 編譯錯誤、全面更新未來發展藍圖。
 
 
 ## 📌 完成功能總覽
@@ -15,6 +15,9 @@
   - 修正 `DiagnosticsDashboard` 17 個屬性存取錯誤（新增 `SystemInfo` / `DbHealth` 介面）。
   - 移除 `SeoAnalyticsDashboard` 已棄用的 TanStack Query v5 `onError` 回呼（9 個錯誤）。
   - 修正 `SocialPreviewImage` 缺少 `interactive` 分類、`reviewService` 型別不匹配等。
+- **根域名跳轉**：在 `cagoooo.github.io` 倉庫新增 `index.html`，訪問根域名自動導向 `/Akai/`。
+  - 三重跳轉保險：`meta refresh` + `window.location.replace()` + 手動連結。
+  - 含 Open Graph 社交分享 meta 標籤。
 
 ### `v3.5.6`
 - **版本同步**：全面更新 `README.md`、`CHANGELOG.md`、`PROGRESS.md`、`USER_GUIDE.md` 至 v3.5.6。
@@ -236,8 +239,8 @@
 
 ## 🔄 未來發展藍圖與進階優化建議
 
-> **最後審核日期**：2026-04-17  
-> **審核基準**：根據 v3.5.7 完整程式碼庫分析，交叉比對已完成功能後重新整理。
+> **最後審核日期**：2026-04-18  
+> **審核基準**：根據 v3.5.7 完整程式碼庫深度審計（含安全、SEO、效能、無障礙共 50+ 項檢查），交叉比對已完成功能後重新整理。
 
 ### ✅ 已完成項目（從舊版建議中移除）
 
@@ -253,43 +256,73 @@
 | 進階複合搜尋與標籤過濾 | v3.5.3 | `AdvancedSearch.tsx` 多標籤篩選 + URL Query String 雙向同步 |
 | 許願池分享連結 | v3.5.7 | `?wish=1` URL 參數 + 對話框內「分享連結」按鈕 |
 | TypeScript 型別健全化 | v3.5.7 | 新增 4 個 `.d.ts` 宣告檔 + 修正 12 個檔案共 40 個型別錯誤 |
+| 根域名跳轉 | v3.5.7 | `cagoooo.github.io` → `/Akai/` 自動導向（三重保險） |
 
 ---
 
 ### 🔴 P0：高優先 — 立即可動手（1～2 週）
 
-#### 1. 收藏雲端同步 (Cloud Favorites Sync)
+#### 1. 🔒 Firestore 安全規則修補 (Security Rules Hardening)
+- **現況**：`firestore.rules` 中 `visitorStats` 和 `toolUsageStats` 為 `read/write: true`，任何人可竄改統計數據；`errorLogs` 的 `create: true` 也可被惡意灌水。
+- **做法**：
+  - `visitorStats`：`read: true`（公開讀取）、`write` 限縮為僅 Cloud Functions 或已驗證使用者才能寫入。
+  - `toolUsageStats`：同上，並透過 Callable Cloud Function 做伺服器端 increment（附速率限制：每 IP 每 10 秒最多 1 次）。
+  - `errorLogs`：限制 `create` 需已驗證 + payload < 5KB。
+- **對應檔案**：`firestore.rules`、`functions/src/index.ts`（新增 incrementToolClick callable）
+- **預期效益**：堵住數據被灌水/竄改的漏洞，確保分析數據可信。
+- **難度**：⭐⭐ 中等 ｜ **工時**：1.5 天
+
+#### 2. 收藏雲端同步 (Cloud Favorites Sync)
 - **現況**：收藏功能仰賴 `useFavorites.ts` 寫入 LocalStorage，換瀏覽器或清快取即遺失。
 - **做法**：已有 Firebase Auth (`useAuth.ts`) 與 Google 登入；只需在登入後將 LocalStorage 的 favorites 陣列寫入 Firestore `userFavorites/{uid}` 集合，並在每次 mount 時雙向合併。
 - **注意**：未登入使用者仍維持 LocalStorage 運作，登入後自動合併不覆蓋。
+- **對應檔案**：`useFavorites.ts`（改寫雙源合併邏輯）、`firestore.rules`（新增 `userFavorites` 集合規則）
 - **預期效益**：解決老師們最常反映的「換電腦收藏不見」痛點，提升黏著度。
 - **難度**：⭐⭐ 中等 ｜ **工時**：2～3 天
 
-#### 2. 死鏈自動巡檢系統 (Link Health Monitor)
+#### 3. 死鏈自動巡檢系統 (Link Health Monitor)
 - **現況**：81 個外部工具 URL 全靠人工確認，一旦工具下架或搬遷，使用者點擊會撲空。
 - **做法**：建立 GitHub Actions 排程 (weekly cron)，以 Node.js 腳本讀取 `tools.json` 逐一 HEAD 請求，將 4xx/5xx/timeout 結果寫成 Issue 或推送 LINE Messaging API 通知。
 - **加分項**：在 `/admin` 儀表板新增「連結健康」區塊，紅/黃/綠燈顯示各工具可用性。
+- **對應檔案**：新增 `.github/workflows/link-check.yml`、新增 `scripts/check-links.mjs`
 - **預期效益**：零人工維護工具可用率，平台可信度大幅提升。
 - **難度**：⭐⭐ 中等 ｜ **工時**：1～2 天
 
-#### ~~3. TypeScript 型別健全化~~ ✅ 已完成 (v3.5.7)
+#### ~~4. TypeScript 型別健全化~~ ✅ 已完成 (v3.5.7)
 - 修復 40 個編譯錯誤（跨 12 檔），`tsc --noEmit` 零錯誤通過。
+
+#### ~~5. 根域名跳轉~~ ✅ 已完成 (v3.5.7)
+- `cagoooo.github.io` 自動導向 `/Akai/`，三重保險跳轉。
 
 ---
 
 ### 🟡 P1：中優先 — 體驗顯著升級（2～4 週）
 
-#### 4. 深色模式 (Dark Mode)
+#### 6. SEO 強化三連擊 (SEO Triple Enhancement)
+- **現況**：
+  - `sitemap.xml` 只有 9 個 URL，81 個工具詳情頁完全未列入，搜尋引擎幾乎爬不到。
+  - `robots.txt` 中的 Sitemap URL 指向 `akai-e693f.web.app` 而非 `cagoooo.github.io/Akai`。
+  - `StructuredData.tsx` 缺少個別工具的 Product Schema 和麵包屑 (Breadcrumb) Schema。
+- **做法**：
+  - **Sitemap 動態生成**：在 `npm run build` 後執行 `scripts/generate-sitemap.mjs`，從 `tools.json` 讀取所有工具 ID 生成完整 sitemap。
+  - **robots.txt 修正**：改為環境感知，部署時注入正確域名。
+  - **Schema 擴展**：在 `ToolDetail.tsx` 加入 `Product` + `AggregateRating` + `BreadcrumbList` JSON-LD。
+- **對應檔案**：`sitemap.xml`、`robots.txt`、`StructuredData.tsx`、新增 `scripts/generate-sitemap.mjs`
+- **預期效益**：Google 可索引全部 81 個工具頁面，搜尋曝光率大幅提升。
+- **難度**：⭐⭐ 中等 ｜ **工時**：2～3 天
+
+#### 7. 深色模式 (Dark Mode)
 - **現況**：全站統一淺色模式 (v3.5.6 已清洗)，但教師在投影或夜間使用有視覺疲勞。
 - **做法**：Tailwind 已支援 `dark:` 前綴；在 `<html>` 加 `class="dark"` 切換。需處理：
   - 卡片 (`ToolCard.tsx`) 背景、邊框、文字顏色
   - 對話框 (`Dialog`) 背景半透明度
   - 漸層按鈕在深色下的對比度
   - 使用 `localStorage` 記住偏好 + `prefers-color-scheme` 跟隨系統
+- **對應檔案**：`tailwind.config.ts`、50+ 組件的 `className`
 - **預期效益**：降低教師在暗環境使用的視覺負擔，提升專業感。
 - **難度**：⭐⭐⭐ 較難（全站 50+ 組件需逐一調色）｜ **工時**：4～5 天
 
-#### 5. 萬能指令面板 (Command Palette / CMD+K)
+#### 8. 萬能指令面板 (Command Palette / CMD+K)
 - **現況**：已有 `KeyboardShortcutsDialog.tsx` 與 `useKeyboardShortcuts.ts`，但 `Ctrl+K` 只觸發搜尋聚焦。
 - **做法**：建立 `CommandPalette.tsx` 組件，支援：
   - `搜尋工具名稱` → 直接跳轉
@@ -298,42 +331,56 @@
   - `tag: AI工具` → 套用篩選
   - 模糊匹配 + 鍵盤上下選取 + Enter 確認
 - **技術**：可用 `cmdk` 套件（<5KB gzip）或基於現有 Radix `Command` 組件。
+- **對應檔案**：新增 `CommandPalette.tsx`、修改 `useKeyboardShortcuts.ts`
 - **預期效益**：進階使用者（資訊組長等）效率翻倍，提升平台專業度。
 - **難度**：⭐⭐ 中等 ｜ **工時**：2～3 天
 
-#### 6. 許願池語意分析與優先級標記 (Wish Semantic Analysis)
+#### 9. 許願池語意分析與優先級標記 (Wish Semantic Analysis)
 - **現況**：`WishingWellAdmin.tsx` 只能依時間序列讀取，管理者需逐條人工判斷。
 - **做法**：
   - 在 Cloud Functions 的 `onWishCreated` 觸發器中，呼叫 Gemini API 對 `content` 做三分類：「🔧 功能需求」、「🐛 問題回報」、「💖 鼓勵感謝」。
   - 自動寫入 Firestore `wishingWell/{id}.aiLabel` 欄位。
   - 管理後台支援按標籤篩選 + 優先級排序。
+- **對應檔案**：`functions/src/index.ts`、`WishingWellAdmin.tsx`
 - **預期效益**：管理者 10 秒掌握全局，不再遺漏緊急回報。
 - **難度**：⭐⭐ 中等 ｜ **工時**：2 天
 
-#### 7. 工具使用時長追蹤 (Dwell Time Analytics)
+#### 10. 工具使用時長追蹤 (Dwell Time Analytics)
 - **現況**：`useToolTracking.ts` 只記錄點擊次數，無法區分「點了一下就關」和「深度使用 10 分鐘」。
 - **做法**：
   - 在 `ToolDetail.tsx` mount 時記錄 `startTime`，unmount 或 `visibilitychange` 時計算停留秒數。
   - 寫入 Firestore `toolUsageStats/{toolId}.totalDwellSeconds` 累計。
   - 儀表板新增「平均使用時長 Top 10」圖表。
+- **對應檔案**：`useToolTracking.ts`、`ToolDetail.tsx`、`AnalyticsDashboard.tsx`
 - **預期效益**：區分真正好用的工具 vs. 只是好奇點進去的工具，數據更有參考價值。
+- **難度**：⭐⭐ 中等 ｜ **工時**：2 天
+
+#### 11. 儀表板日期範圍篩選 (Dashboard Date Filter)
+- **現況**：`AnalyticsDashboard.tsx` 只顯示全時間統計，無法看特定區間的趨勢變化。
+- **做法**：
+  - 新增 DateRangePicker（使用已安裝的 `react-day-picker`）。
+  - 依 `timestamp` 欄位篩選 Firestore 查詢：`where('timestamp', '>=', startDate)`。
+  - 支援快捷選項：「最近 7 天」「本月」「自訂範圍」。
+- **對應檔案**：`AnalyticsDashboard.tsx`
+- **預期效益**：管理者可追蹤短期趨勢（例如新工具上線後的流量變化）。
 - **難度**：⭐⭐ 中等 ｜ **工時**：2 天
 
 ---
 
-### 🟢 P2：低優先 — 長期價值投資（1～2 個月）
+### 🟢 P2：中期投資 — AI 深度整合與社群功能（1～2 個月）
 
-#### 8. AI 語意搜尋與 RAG 推薦 (Semantic Search)
+#### 12. AI 語意搜尋與 RAG 推薦 (Semantic Search)
 - **現況**：`SearchBar.tsx` 採純文字 `includes()` 比對 title + description，無法理解語意。
 - **做法**：
   - 用 Gemini Embedding API 將 81 個工具的 `detailedDescription` 預先向量化，存為靜態 JSON。
   - 使用者搜尋時，將查詢轉為向量，在前端做餘弦相似度排序（81 筆資料量可前端計算）。
   - 搜尋結果附加「AI 推薦理由」氣泡。
 - **搜尋範例**：輸入「我想讓學生分組比賽」→ 推薦遊戲類 + 互動類工具，即使 title 中沒有「比賽」二字。
+- **對應檔案**：新增 `scripts/generate-embeddings.mjs`、修改 `SearchBar.tsx`
 - **預期效益**：搜尋命中率從關鍵字匹配提升至語意理解層級。
 - **難度**：⭐⭐⭐ 較難 ｜ **工時**：1 週
 
-#### 9. AI 智慧教案生成助手 (Lesson Plan Generator)
+#### 13. AI 智慧教案生成助手 (Lesson Plan Generator)
 - **現況**：教師需自行從 81 個工具中挑選搭配，缺乏引導。
 - **做法**：
   - 建立 `LessonPlanWizard.tsx` 精靈介面：第一步選年級+科目，第二步輸入教學目標。
@@ -342,7 +389,7 @@
 - **預期效益**：大幅降低教師備課壓力，提升平台從「工具集」到「教學助手」的定位。
 - **難度**：⭐⭐⭐⭐ 困難 ｜ **工時**：1～2 週
 
-#### 10. 教師共創平台 (Teacher-Generated Content)
+#### 14. 教師共創平台 (Teacher-Generated Content)
 - **現況**：所有工具由阿凱老師一人維護新增。
 - **做法**：
   - 新增「推薦工具」表單（類似許願池但欄位更結構化：工具名稱、URL、分類、適用年級、使用心得）。
@@ -351,7 +398,7 @@
 - **預期效益**：從單人維護轉型為社群共建，工具庫成長速度倍增。
 - **難度**：⭐⭐⭐ 較難 ｜ **工時**：1 週
 
-#### 11. 工具聯動分析 (Cross-Tool Usage Patterns)
+#### 15. 工具聯動分析 (Cross-Tool Usage Patterns)
 - **現況**：`AnalyticsDashboard.tsx` 只看單一工具的點擊量，無法看出工具間的關聯。
 - **做法**：
   - 在 `useToolTracking.ts` 記錄每次 session 內點擊的工具序列。
@@ -364,12 +411,41 @@
 
 ### 🔵 P3：探索性 — 平台演進方向（2～3 個月）
 
-#### 12. 多語系支援 (i18n)
+#### 16. 無障礙合規強化 (WCAG 2.1 AA)
+- **現況**（本次審計發現 7 項具體缺陷）：
+  - `ToolCard.tsx`：卡片缺少 `role="article"` 和 `aria-label`，螢幕閱讀器無法辨識卡片結構。
+  - `SearchBar.tsx`：搜尋結果數量更新時無 `aria-live` 動態播報，輸入框缺少 `aria-label`。
+  - `MobileSidebarDrawer.tsx`：滑動手勢未尊重 `prefers-reduced-motion` 使用者偏好。
+  - 全站缺少「跳至主要內容 (Skip to Content)」快捷連結。
+- **做法**：
+  - `ToolCard.tsx` 加 `role="article"` + `aria-label={tool.title}`。
+  - `SearchBar.tsx` 加 `<div role="status" aria-live="polite">`。
+  - 在 `App.tsx` 頂部加 `<a href="#main-content" className="sr-only focus:not-sr-only">跳至主要內容</a>`。
+  - `MobileSidebarDrawer.tsx` 偵測 `prefers-reduced-motion` 時停用 Framer Motion 動畫。
+  - 全站跑 axe-core 自動掃描，修復所有 Critical/Serious 等級問題。
+- **對應檔案**：`ToolCard.tsx`、`SearchBar.tsx`、`App.tsx`、`MobileSidebarDrawer.tsx`
+- **預期效益**：達到教育部數位無障礙標準，服務特殊需求教師。
+- **難度**：⭐⭐ 中等 ｜ **工時**：3～4 天
+
+#### 17. 全域錯誤處理與生產監控 (Error Monitoring)
+- **現況**（本次審計發現 4 項缺陷）：
+  - `ErrorBoundary.tsx` 僅 `console.log`，錯誤未寫入 Firestore `errorLogs`。
+  - 無全域 `unhandledrejection` 攔截，非同步錯誤靜默失敗。
+  - 所有錯誤等級相同，無分類處理（致命 vs. 可恢復 vs. 資訊性）。
+- **做法**：
+  - `ErrorBoundary.tsx` 的 `componentDidCatch` 加入 `logErrorToFirestore()` 呼叫。
+  - `main.tsx` 加入 `window.addEventListener('unhandledrejection', handler)`。
+  - 建立錯誤分級：CRITICAL（auth / data loss）→ 彈出全螢幕警告；RECOVERABLE（網路逾時）→ 自動重試 3 次；INFORMATIONAL（缺圖）→ 僅記錄。
+- **對應檔案**：`ErrorBoundary.tsx`、`main.tsx`
+- **預期效益**：管理者即時掌握線上異常，縮短問題解決時間。
+- **難度**：⭐⭐ 中等 ｜ **工時**：2 天
+
+#### 18. 多語系支援 (i18n)
 - **現況**：`LanguageSelector.tsx` 已有 UI 框架但尚未實作實際翻譯邏輯。
 - **做法**：導入 `react-i18next`，優先支援英文 (en) 與日文 (ja)，讓台灣教育工具也能走向國際。
 - **難度**：⭐⭐⭐ 較難 ｜ **工時**：1～2 週
 
-#### 13. 離線教案模式 (Offline Teaching Mode)
+#### 19. 離線教案模式 (Offline Teaching Mode)
 - **現況**：PWA 已有 Service Worker 快取，但僅快取靜態資源；工具本身皆為外部連結，離線時無法使用。
 - **做法**：
   - 精選 5～10 個純前端工具（如注音練習、拼圖等），允許 Service Worker 預快取其完整 HTML/JS。
@@ -377,16 +453,7 @@
 - **預期效益**：偏鄉或網路不穩教室也能使用核心教學工具。
 - **難度**：⭐⭐⭐⭐ 困難 ｜ **工時**：1～2 週
 
-#### 14. 進階無障礙合規 (WCAG 2.1 AA)
-- **現況**：`AccessibilityMenu.tsx` 提供字體大小、高對比、減少動態等選項，但部分組件缺少 ARIA 標籤。
-- **做法**：
-  - 全站跑 axe-core 自動掃描，修復所有 Critical/Serious 等級問題。
-  - 確保所有浮動按鈕（許願池、快捷鍵、回到頂部）都有 `aria-label`。
-  - 確保 Tab 鍵可完整走訪所有互動元素。
-- **預期效益**：達到教育部數位無障礙標準，服務特殊需求教師。
-- **難度**：⭐⭐ 中等 ｜ **工時**：3～4 天
-
-#### 15. 數據備份與災難恢復 (Data Backup)
+#### 20. 數據備份與災難恢復 (Data Backup)
 - **現況**：Firestore 資料（訪客統計、評論、許願池）無定期備份機制。
 - **做法**：
   - 利用 Firebase Extensions 或 Cloud Functions 排程，每日自動匯出 Firestore 至 Cloud Storage。
@@ -402,35 +469,43 @@
 |------|--------|------|----------|
 | ~~TypeScript 型別錯誤~~ | ✅ 已修復 | 40 個錯誤全數修復，零錯誤通過 | `client/src/types/` 新增 4 個宣告檔 |
 | ~~heatmap.js 型別宣告~~ | ✅ 已修復 | 新增完整 `.d.ts` 宣告檔含介面定義 | `client/src/types/heatmap.js.d.ts` |
-| Firestore 規則過度開放 | 🟡 中 | `visitorStats` 和 `toolUsageStats` 為 `read/write: true`，可能被惡意灌水 | `firestore.rules` |
+| Firestore 規則過度開放 | 🔴 高 | `visitorStats` 和 `toolUsageStats` 為 `read/write: true`，可被惡意灌水（→ P0 #1） | `firestore.rules` |
 | IP 地理定位 HTTPS 不支援 | 🟡 中 | `ip-api.com` 僅支援 HTTP，應改用 `ipinfo.io` (50k/月免費) | `VisitorCounter.tsx` |
-| 儀表板假數據殘留 | 🟢 低 | 部分統計卡片（本週流量等）使用硬編碼假數據 | `AnalyticsDashboard.tsx` |
-| `FUTURE_DEVELOPMENT.md` 內容過時 | 🟢 低 | 仍停留在 v2.25.0 描述，多項建議已完成但未標記 | `FUTURE_DEVELOPMENT.md` |
+| sitemap.xml 僅 9 個 URL | 🟡 中 | 81 個工具詳情頁未列入 sitemap（→ P1 #6） | `client/public/sitemap.xml` |
+| robots.txt 域名不一致 | 🟡 中 | 指向 `akai-e693f.web.app` 而非 `cagoooo.github.io`（→ P1 #6） | `client/public/robots.txt` |
+| 儀表板假數據殘留 | 🟡 中 | `getLocalToolStats()` 讀取從未寫入的 localStorage key，永遠回傳空陣列 | `AnalyticsDashboard.tsx` |
+| ErrorBoundary 不寫 Firestore | 🟡 中 | 線上錯誤僅 `console.log`，管理者無法感知（→ P3 #17） | `ErrorBoundary.tsx` |
+| 無 unhandledrejection 攔截 | 🟡 中 | 非同步錯誤靜默失敗（→ P3 #17） | `main.tsx` |
+| `FUTURE_DEVELOPMENT.md` 過時 | 🟢 低 | 仍停留在 v2.25.0 描述，多項建議已完成但未標記 | `FUTURE_DEVELOPMENT.md` |
 
 ---
 
 ### 📅 建議開發時程表
 
 ```
-第 1 週 ─── P0 快速收穫
-  ├─ Day 1     : #3 TypeScript 型別健全化 ✅ 已完成
-  ├─ Day 1-2   : #2 死鏈自動巡檢 GitHub Actions
-  └─ Day 3-5   : #1 收藏雲端同步（Firebase Auth 已就緒）
+第 1 週 ─── P0 安全與基礎
+  ├─ Day 1     : #4 TypeScript 型別健全化 ✅ 已完成
+  ├─ Day 1     : #5 根域名跳轉 ✅ 已完成
+  ├─ Day 1-2   : #1 Firestore 安全規則修補（堵住數據灌水漏洞）
+  ├─ Day 2-3   : #3 死鏈自動巡檢 GitHub Actions
+  └─ Day 3-5   : #2 收藏雲端同步（Firebase Auth 已就緒）
 
-第 2-3 週 ── P1 體驗升級
-  ├─ Day 6-7   : #5 萬能指令面板 (CMD+K)
-  ├─ Day 8-9   : #6 許願池 AI 語意分析
-  ├─ Day 10-11 : #7 工具使用時長追蹤
-  └─ Day 12-16 : #4 深色模式（全站組件調色）
+第 2-3 週 ── P1 SEO + 體驗升級
+  ├─ Day 6-8   : #6 SEO 強化三連擊（sitemap + robots + Schema）
+  ├─ Day 9-10  : #8 萬能指令面板 (CMD+K)
+  ├─ Day 11-12 : #9 許願池 AI 語意分析
+  ├─ Day 13-14 : #10 工具使用時長追蹤 + #11 儀表板日期篩選
+  └─ Day 15-19 : #7 深色模式（全站 50+ 組件調色）
 
 第 4-6 週 ── P2 AI 深度整合
-  ├─ Week 4    : #8 AI 語意搜尋
-  ├─ Week 5    : #9 AI 教案生成助手
-  └─ Week 6    : #10 教師共創平台 + #11 工具聯動分析
+  ├─ Week 4    : #12 AI 語意搜尋
+  ├─ Week 5    : #13 AI 教案生成助手
+  └─ Week 6    : #14 教師共創平台 + #15 工具聯動分析
 
 第 7-10 週 ─ P3 平台演進
-  ├─ Week 7-8  : #12 多語系 + #13 離線教案模式
-  └─ Week 9-10 : #14 無障礙合規 + #15 數據備份
+  ├─ Week 7    : #16 無障礙合規強化 + #17 全域錯誤處理
+  ├─ Week 8-9  : #18 多語系 + #19 離線教案模式
+  └─ Week 10   : #20 數據備份與災難恢復
 ```
 
 ---
