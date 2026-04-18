@@ -1,38 +1,40 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    // 訪客統計 - 所有人可讀寫（用於匿名訪客計數）
+
+    // 訪客統計 - 所有人可讀，僅認證用戶可寫
     match /visitorStats/{docId} {
       allow read: if true;
-      allow write: if true;
+      allow write: if request.auth != null;
     }
-    
-    // 工具使用統計 - 所有人可讀寫（用於追蹤工具點擊）
+
+    // 工具使用統計 - 所有人可讀，僅認證用戶可寫
     match /toolUsageStats/{toolId} {
       allow read: if true;
-      allow write: if true;
+      allow write: if request.auth != null;
     }
-    
-    // 錯誤日誌 - 所有人可寫（用於前端錯誤回報），僅認證用戶可讀
+
+    // 錯誤日誌 - 認證用戶可建立（內容欄位限制 5000 字元），認證用戶可讀/更新/刪除
     match /errorLogs/{logId} {
-      allow create: if true;
+      allow create: if request.auth != null
+        && request.resource.data.content is string
+        && request.resource.data.content.size() < 5000;
       allow read, update, delete: if request.auth != null;
     }
-    
+
     // 成就系統 - 所有人可讀，僅認證用戶可寫
     match /achievements/{achievementId} {
       allow read: if true;
       allow write: if request.auth != null;
     }
-    
+
     // 用戶成就 - 需要認證
     match /userAchievements/{docId} {
       allow read, write: if request.auth != null;
     }
-    
+
     // ==================== 評論功能 ====================
-    
+
     // 工具評論 - 所有人可讀，認證用戶可寫
     match /toolReviews/{reviewId} {
       // 所有人可讀
@@ -46,21 +48,27 @@ service cloud.firestore {
       );
       allow delete: if request.auth != null && request.auth.uid == resource.data.userId;
     }
-    
+
     // 工具評分統計 - 所有人可讀，系統可寫
     match /toolRatings/{toolId} {
       allow read: if true;
       allow write: if request.auth != null;
     }
-    
+
     // ==================== 許願池 ====================
-    
+
     match /wishingWell/{wishId} {
-      // 所有人都可以提交新許願
+      // 所有人都可以提交新許願（匿名提交）
       allow create: if true;
       // 只有登入者（管理員）可以讀取、更新、刪除
-      // 注意：實測建議確認 request.auth.uid 是否在管理員清單中
       allow read, update, delete: if request.auth != null;
+    }
+
+    // ==================== 用戶收藏 ====================
+
+    // 用戶收藏 - 只有本人可讀寫自己的收藏
+    match /userFavorites/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
     }
   }
 }

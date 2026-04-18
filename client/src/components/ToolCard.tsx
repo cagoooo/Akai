@@ -252,8 +252,8 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
         )}
         onClick={handleClick}
         tabIndex={isLoading ? -1 : 0}
-        role={isLoading ? "presentation" : "button"}
-        aria-label={isLoading ? undefined : `開啟 ${tool.title} 工具詳細資訊`}
+        role="article"
+        aria-label={tool.title}
       >
         <CardContent className="p-4 sm:p-5 min-h-[460px] h-full flex flex-col">
           {/* 頂部：圖標 + 收藏 + 詳情 + 分類 */}

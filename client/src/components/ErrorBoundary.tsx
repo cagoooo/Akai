@@ -38,6 +38,28 @@ export class ErrorBoundary extends Component<Props, State> {
 
         // 記錄錯誤到控制台
         console.error('ErrorBoundary caught an error:', error, errorInfo);
+
+        // 記錄錯誤到 Firestore
+        this.logErrorToFirestore(error, errorInfo);
+    }
+
+    private async logErrorToFirestore(error: Error, errorInfo: ErrorInfo) {
+        try {
+            const { db, isFirebaseAvailable } = await import('@/lib/firebase');
+            if (!isFirebaseAvailable() || !db) return;
+            const { collection, addDoc } = await import('firebase/firestore');
+            await addDoc(collection(db, 'errorLogs'), {
+                message: error.message,
+                stack: error.stack?.substring(0, 2000),
+                componentStack: errorInfo.componentStack?.substring(0, 2000),
+                url: window.location.href,
+                userAgent: navigator.userAgent,
+                timestamp: new Date().toISOString(),
+                level: 'error',
+            });
+        } catch (e) {
+            // Silently fail - don't create error loops
+        }
     }
 
     private handleRetry = () => {

@@ -169,6 +169,75 @@ export function OrganizationSchema() {
     );
 }
 
+// 工具詳情頁結構化數據 (SoftwareApplication + BreadcrumbList)
+interface ToolDetailSchemaProps {
+    tool: {
+        title: string;
+        description: string;
+        url: string;
+        category: string;
+    };
+}
+
+export function ToolDetailSchema({ tool }: ToolDetailSchemaProps) {
+    const siteUrl = 'https://cagoooo.github.io/Akai';
+
+    const softwareSchema = {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": tool.title,
+        "description": tool.description,
+        "url": tool.url,
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "TWD"
+        },
+        "author": {
+            "@type": "Person",
+            "name": "阿凱老師"
+        }
+    };
+
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "首頁",
+                "item": siteUrl
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": tool.category,
+                "item": `${siteUrl}?category=${tool.category}`
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": tool.title,
+                "item": tool.url
+            }
+        ]
+    };
+
+    return (
+        <Helmet>
+            <script type="application/ld+json">
+                {JSON.stringify(softwareSchema)}
+            </script>
+            <script type="application/ld+json">
+                {JSON.stringify(breadcrumbSchema)}
+            </script>
+        </Helmet>
+    );
+}
+
 // 所有工具的結構化數據 (優化後：合併為單一 ItemList 避免 48 個腳本注入，並使用 useMemo 避免重複計算)
 import { tools } from '@/lib/data';
 import { useMemo } from 'react';

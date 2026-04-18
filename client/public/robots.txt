@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://akai-e693f.web.app/sitemap.xml
+Sitemap: https://cagoooo.github.io/Akai/sitemap.xml
 
 # Crawl-delay suggestion
 Crawl-delay: 1

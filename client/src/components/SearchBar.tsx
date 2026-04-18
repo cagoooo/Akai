@@ -35,6 +35,7 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
                         placeholder="搜尋工具名稱或描述..."
                         value={searchQuery}
                         onChange={(e) => onSearchChange(e.target.value)}
+                        aria-label="搜尋教育工具名稱或描述"
                         className="pl-11 pr-10 h-12 text-base font-medium bg-white border-2 border-orange-200 rounded-xl shadow-sm focus:border-orange-400 focus:ring-2 focus:ring-orange-200 placeholder:text-gray-400 transition-all duration-200"
                     />
 
@@ -45,6 +46,7 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
                             size="icon"
                             className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 text-gray-400 hover:text-orange-500 hover:bg-orange-100 rounded-lg"
                             onClick={() => onSearchChange('')}
+                            aria-label="清除搜尋"
                         >
                             <X className="h-4 w-4" />
                         </Button>
@@ -53,7 +55,7 @@ export const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
 
                 {/* 搜尋結果提示 */}
                 {searchQuery && (
-                    <div className="flex items-center gap-2 px-1">
+                    <div className="flex items-center gap-2 px-1" role="status" aria-live="polite" aria-atomic="true">
                         <Sparkles className="w-4 h-4 text-orange-500" />
                         <p className="text-sm text-gray-600">
                             找到 <span className="font-bold text-orange-600">{resultCount}</span> 個工具

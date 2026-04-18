@@ -1,4 +1,5 @@
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
+import { onCall, HttpsError } from "firebase-functions/v2/https";
 import * as admin from "firebase-admin";
 import axios from "axios";
 
@@ -138,4 +139,32 @@ export const onWishCreated = onDocumentCreated("wishingWell/{docId}", async (eve
     } catch (error: any) {
         console.error("Failed to send LINE Flex notification:", JSON.stringify(error.response?.data) || error.message);
     }
+});
+
+/**
+ * 可呼叫的 Cloud Function：原子性地遞增工具點擊次數
+ * 接受 { toolId: number }，更新 toolUsageStats/{toolId} 的 totalClicks 與 lastClickedAt
+ */
+export const incrementToolClick = onCall(async (request) => {
+    const toolId = request.data?.toolId;
+
+    // 驗證 toolId 為 1~200 之間的數字
+    if (typeof toolId !== "number" || !Number.isInteger(toolId) || toolId < 1 || toolId > 200) {
+        throw new HttpsError(
+            "invalid-argument",
+            "toolId must be an integer between 1 and 200."
+        );
+    }
+
+    const docRef = admin.firestore().collection("toolUsageStats").doc(String(toolId));
+
+    await docRef.set(
+        {
+            totalClicks: admin.firestore.FieldValue.increment(1),
+            lastClickedAt: admin.firestore.FieldValue.serverTimestamp(),
+        },
+        { merge: true }
+    );
+
+    return { success: true, toolId };
 });
