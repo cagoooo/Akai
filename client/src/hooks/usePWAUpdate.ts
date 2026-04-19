@@ -48,10 +48,14 @@ export function usePWAUpdate() {
         };
     }, []);
 
-    // 監聽 Service Worker 更新
+    // 監聽 Service Worker 更新 + 定期主動檢查新版本
     useEffect(() => {
         if ('serviceWorker' in navigator) {
+            let registrationRef: ServiceWorkerRegistration | null = null;
+
             navigator.serviceWorker.ready.then(registration => {
+                registrationRef = registration;
+
                 registration.addEventListener('updatefound', () => {
                     const newWorker = registration.installing;
                     if (newWorker) {
@@ -72,6 +76,30 @@ export function usePWAUpdate() {
                     setState(prev => ({ ...prev, isUpdateAvailable: true }));
                 }
             });
+
+            // 🔄 每 30 分鐘主動檢查一次新版本（長時間開著分頁的老師也能收到更新）
+            const checkInterval = setInterval(() => {
+                if (registrationRef && !document.hidden) {
+                    console.log('🔄 [PWA] Periodic update check...');
+                    registrationRef.update().catch(err => {
+                        console.warn('[PWA] Update check failed:', err);
+                    });
+                }
+            }, 30 * 60 * 1000); // 30 分鐘
+
+            // 📱 分頁重新取得焦點時也檢查（從背景切回前台）
+            const handleVisibilityChange = () => {
+                if (!document.hidden && registrationRef) {
+                    console.log('🔄 [PWA] Tab visible, checking for updates...');
+                    registrationRef.update().catch(() => { });
+                }
+            };
+            document.addEventListener('visibilitychange', handleVisibilityChange);
+
+            return () => {
+                clearInterval(checkInterval);
+                document.removeEventListener('visibilitychange', handleVisibilityChange);
+            };
         }
     }, []);
 
