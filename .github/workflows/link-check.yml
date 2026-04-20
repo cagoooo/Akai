@@ -1,4 +1,4 @@
-name: "\U0001F517 Weekly Link Health Check"
+name: "🔗 Weekly Link Health Check"
 
 on:
   schedule:
@@ -23,18 +23,43 @@ jobs:
         with:
           node-version: 20
 
-      - name: Run link checker
+      - name: Run link checker (capture output + exit code)
         id: linkcheck
-        run: node scripts/check-links.mjs
-        continue-on-error: true
+        run: |
+          set +e
+          node scripts/check-links.mjs > link-report.md 2>&1
+          echo "exit_code=$?" >> $GITHUB_OUTPUT
+          # 印出完整報告到 Actions log 方便除錯
+          cat link-report.md
+          # 不讓步驟本身 fail，我們會依 exit_code 判斷後續動作
+          exit 0
+
+      - name: Ensure "maintenance" label exists
+        if: steps.linkcheck.outputs.exit_code != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh label create "maintenance" \
+            --description "平台維護相關議題" \
+            --color "d4c5f9" \
+            2>/dev/null || echo "Label already exists, skipping."
 
       - name: Create GitHub Issue on failure
-        if: steps.linkcheck.outcome == 'failure'
+        if: steps.linkcheck.outputs.exit_code != '0'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          BODY=$(node scripts/check-links.mjs 2>&1 || true)
           gh issue create \
-            --title "🔗 Dead Link Report $(date +%Y-%m-%d)" \
-            --body "$BODY" \
+            --title "🔗 死連結報告 $(date +%Y-%m-%d)" \
+            --body-file link-report.md \
             --label "maintenance"
+
+      - name: Report success
+        if: steps.linkcheck.outputs.exit_code == '0'
+        run: echo "✅ 所有連結均正常運作！"
+
+      - name: Fail job if links broken (for status visibility)
+        if: steps.linkcheck.outputs.exit_code != '0'
+        run: |
+          echo "❌ 偵測到死連結，Issue 已建立。"
+          exit 1
