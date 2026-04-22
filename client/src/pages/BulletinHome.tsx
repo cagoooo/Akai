@@ -78,8 +78,21 @@ export function BulletinHome() {
   const [showWishingWellFromShortcut, setShowWishingWellFromShortcut] = useState(false);
   const [selectedToolIndex, setSelectedToolIndex] = useState(0);
 
-  // 從 ?wish=1 URL 自動開啟許願池（相容 v3.5.7 功能）
+  // 自動開啟許願池對話框：支援三種觸發來源
+  // 1. sessionStorage 'openWishOnLoad' 旗標（由 /wish/ 靜態頁設定，避免 URL 跳轉）
+  // 2. ?wish=1 query string（相容舊分享連結 / 手動輸入）
+  // 3. 使用者手動點開（另外處理）
   useEffect(() => {
+    // 優先讀 sessionStorage 旗標（新式，無 URL 跳轉）
+    try {
+      if (sessionStorage.getItem('openWishOnLoad') === '1') {
+        sessionStorage.removeItem('openWishOnLoad');
+        setShowWishingWellFromShortcut(true);
+        return;
+      }
+    } catch { /* 私密模式可能阻擋 sessionStorage */ }
+
+    // 舊版相容：?wish=1 query string
     const params = new URLSearchParams(window.location.search);
     if (params.get('wish') === '1') {
       setShowWishingWellFromShortcut(true);

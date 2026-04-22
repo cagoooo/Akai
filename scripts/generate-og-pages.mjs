@@ -158,7 +158,19 @@ function generateToolPageHtml(tool) {
  */
 function generateWishPageHtml() {
   const pageUrl = `${SITE_URL}/wish/`;
-  const imageUrl = `${SITE_URL}/wish-preview.png`;
+
+  // 從 version.json 讀 cacheVersion，讓 og:image URL 每次部署都變
+  // → 避免 FB/LINE/Twitter 因自己的 CDN 快取仍顯示舊圖
+  let imgVer = Date.now().toString(36);
+  try {
+    const versionPath = path.resolve(__dirname, '../client/public/version.json');
+    if (fs.existsSync(versionPath)) {
+      const v = JSON.parse(fs.readFileSync(versionPath, 'utf-8'));
+      imgVer = v.cacheVersion || v.version || imgVer;
+    }
+  } catch { /* fallback to timestamp */ }
+
+  const imageUrl = `${SITE_URL}/wish-preview.png?v=${encodeURIComponent(imgVer)}`;
   const title = '阿凱老師的許願池｜教育工具許願、使用回饋';
   const description = '想到什麼教學工具點子？給阿凱老師一點鼓勵或建議？歡迎在許願池投下你的便利貼 ✨';
 
@@ -214,7 +226,10 @@ function generateWishPageHtml() {
       var ua = navigator.userAgent || '';
       var isSocialBot = /facebookexternalhit|Facebot|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Slackbot|Discordbot|Pinterest|Googlebot|bingbot|YandexBot|LineBot|Line-Networking/i.test(ua);
       if (!isSocialBot) {
-        window.location.replace('/Akai/?wish=1');
+        // 使用 sessionStorage 傳遞「請開啟許願池對話框」的信號，
+        // 避免用 ?wish=1 query string 需要載入後再清除（會造成三次 URL 變動）
+        try { sessionStorage.setItem('openWishOnLoad', '1'); } catch (e) {}
+        window.location.replace('/Akai/');
       }
     })();
   </script>

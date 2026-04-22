@@ -52,7 +52,9 @@
 
       // 動態預載 API
       createLink('preload', 'api/tools.json', null, null, 'fetch');
-      createLink('preload', 'api/teacher.json', null, null, 'fetch');
+      // teacher.json 僅在舊版 TeacherIntro 組件用到，新版 BulletinHome 不再即時載入；
+      // 保留 prefetch 但降為低優先（避免未使用的 preload 警告）
+      createLink('prefetch', 'api/teacher.json');
     })();
   </script>
 

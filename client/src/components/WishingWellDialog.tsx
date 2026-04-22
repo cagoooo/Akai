@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { useToast } from "@/hooks/use-toast";
 import { submitWish, type WishType } from "@/lib/wishingService";
 import { m as motion, AnimatePresence } from "framer-motion";
@@ -112,6 +113,14 @@ export function WishingWellDialog({ open, onOpenChange }: WishingWellDialogProps
                     fontFamily: tokens.font.tc,
                 }}
             >
+                {/* 無障礙：視覺隱藏但保留螢幕閱讀器可讀的標題與描述 */}
+                <VisuallyHidden.Root>
+                    <DialogTitle>阿凱老師的許願池</DialogTitle>
+                    <DialogDescription>
+                        有想到的教學工具點子？還是想給我們一點鼓勵與建議呢？歡迎留下您的心聲！
+                    </DialogDescription>
+                </VisuallyHidden.Root>
+
                 {/* 便利貼容器 */}
                 <div
                     style={{
