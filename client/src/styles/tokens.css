@@ -207,6 +207,13 @@ html, body {
     gap: 14px !important;
   }
 
+  /* Footer 三欄便利貼改單欄堆疊 */
+  .bulletin-footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+    max-width: 320px !important;
+  }
+
   /* 分類篩選按鈕：變緊湊 */
   .bulletin-category-filter button {
     padding: 7px 12px !important;

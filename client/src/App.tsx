@@ -38,6 +38,18 @@ import { useToast } from "@/hooks/use-toast";
 const basePath = import.meta.env.BASE_URL || '/';
 
 /**
+ * 條件式 Footer：
+ * - 在 BulletinHome (/) 隱藏全站 Footer（因該頁有自己的 cork 風格 BulletinFooter）
+ * - 其他路由 (/classic /tool/:id /admin) 仍顯示預設 Footer
+ */
+function ConditionalFooter() {
+  const [location] = useLocation();
+  // BulletinHome 路徑為 '/'
+  if (location === '/' || location === '') return null;
+  return <Footer />;
+}
+
+/**
  * ✅ 核心 LCP 優化骨架：
  * 包含真實 h1 文字（而非純骨架），讓 Lighthouse 能立即識別到大型文字元素為 LCP。
  * TooltipProvider lazy 加載期間，此骨架提供有意義的 FCP + LCP 內容。
@@ -180,7 +192,7 @@ function App() {
                     </Suspense>
                   </PageTransition>
                   <Suspense fallback={null}>
-                    <Footer />
+                    <ConditionalFooter />
                   </Suspense>
                 </div>
               </Router>
