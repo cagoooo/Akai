@@ -72,13 +72,15 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0 }: Props) {
         padding: '16px 16px 22px',
         boxShadow:
           '0 3px 5px rgba(0,0,0,.18), 0 16px 26px -8px rgba(0,0,0,.28), 0 30px 50px -20px rgba(0,0,0,.22)',
+        // 透過 CSS 變數讓 media query 可以覆寫（手機版減半/歸零傾斜角）
+        ['--tilt' as string]: `${tilt}deg`,
         transform: `rotate(${tilt}deg)`,
         border: '1px solid #d8d4c8',
         display: 'flex',
         flexDirection: 'column',
         gap: 10,
         transition: 'transform .25s ease',
-      }}
+      } as React.CSSProperties}
     >
       <Pin color={pinColor} size={22} style={{ top: -11, left: '50%', marginLeft: -11, zIndex: 10 }} />
 

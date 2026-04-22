@@ -81,47 +81,255 @@
   z-index: 5;
 }
 
-/* ── 響應式斷點 ── */
-@media (max-width: 1024px) {
-  .bulletin-hero { grid-template-columns: 1fr !important; }
-  .bulletin-hero > div:last-child { justify-self: start !important; }
+/* ─────────────────────────────────────────
+   響應式斷點
+   1200px+ : 桌機全版 (預設)
+   1024px  : 小筆電 / iPad 橫向
+   768px   : 平板直向
+   480px   : 手機
+   380px   : 小手機 (SE 等)
+   ───────────────────────────────────────── */
+
+/* 防止卡片傾斜造成水平滾動條 */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
-@media (max-width: 768px) {
+/* ── 1024px 以下：Hero 改單欄 + 工具網格密度提升 ── */
+@media (max-width: 1024px) {
+  .bulletin-hero {
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+  }
+  .bulletin-hero > div:last-child {
+    justify-self: center !important;
+  }
+  .bulletin-tool-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+    padding: 20px 40px 50px !important;
+    gap: 24px !important;
+  }
+  .bulletin-sections-grid {
+    padding: 20px 40px 30px !important;
+    gap: 32px !important;
+  }
   .bulletin-header,
   .bulletin-hero,
   .bulletin-category-filter,
   .bulletin-searchbar,
-  .bulletin-footer {
-    padding-left: 20px !important;
-    padding-right: 20px !important;
+  .bulletin-footer,
+  .bulletin-favorite-toggle {
+    padding-left: 40px !important;
+    padding-right: 40px !important;
   }
-  .bulletin-hero { padding-top: 20px !important; padding-bottom: 20px !important; }
-  .bulletin-hero h2 { font-size: 26px !important; }
-  .bulletin-hero > div:last-child { transform: scale(.85); transform-origin: left top; }
+}
 
-  .bulletin-sections-grid {
-    grid-template-columns: 1fr !important;
+/* ── 768px 以下：平板直向 / 大手機 ── */
+@media (max-width: 768px) {
+  /* 縮小全站 padding */
+  .bulletin-header,
+  .bulletin-hero,
+  .bulletin-category-filter,
+  .bulletin-searchbar,
+  .bulletin-footer,
+  .bulletin-favorite-toggle {
     padding-left: 20px !important;
     padding-right: 20px !important;
-    gap: 32px !important;
   }
-  .bulletin-tool-grid {
+
+  /* Hero 調整 */
+  .bulletin-hero {
+    padding-top: 20px !important;
+    padding-bottom: 30px !important;
+    gap: 24px !important;
+  }
+  .bulletin-hero h1 {
+    font-size: 36px !important;
+    line-height: 1.1 !important;
+  }
+  .bulletin-hero h1 span[style*="right: -28px"] {
+    right: -22px !important;
+    font-size: 24px !important;
+  }
+  .bulletin-hero p {
+    font-size: 14px !important;
+    padding: 12px 14px !important;
+  }
+
+  /* Akai 拍立得縮小且置中 */
+  .bulletin-akai-polaroid {
+    max-width: 240px !important;
+    margin: 0 auto !important;
+  }
+  .bulletin-akai-polaroid > div[style*="aspect-ratio"],
+  .bulletin-akai-polaroid > div > div[style*="width: 240px"] {
+    width: 200px !important;
+  }
+  /* 對話泡泡移到拍立得上方避免被切掉 */
+  .bulletin-akai-polaroid > div:first-child {
+    top: -18px !important;
+    left: -20px !important;
+  }
+
+  /* 排行榜 + 許願池：改單欄堆疊 */
+  .bulletin-sections-grid {
     grid-template-columns: 1fr !important;
     padding: 20px !important;
     gap: 32px !important;
   }
+
+  /* Header：標題變小 + 膠帶移到下方 */
+  .bulletin-header {
+    padding-top: 40px !important;
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+  }
+  .bulletin-header h1 {
+    font-size: 22px !important;
+  }
+
+  /* 工具網格：維持 2 欄（拍立得卡小一點也 OK） */
+  .bulletin-tool-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    padding: 16px 20px 40px !important;
+    gap: 20px !important;
+  }
+
+  /* 卡片傾斜度減半（手機小，過大傾斜易跑版） */
+  .bulletin-tool-card {
+    transform: rotate(calc(var(--tilt, 0deg) * 0.5)) !important;
+  }
+
+  /* 許願池內部網格 */
+  .bulletin-wish-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  /* 分類篩選按鈕：變緊湊 */
+  .bulletin-category-filter button {
+    padding: 7px 12px !important;
+    font-size: 12px !important;
+  }
+
+  /* 搜尋列 */
+  .bulletin-searchbar input {
+    font-size: 14px !important;
+  }
 }
 
+/* ── 480px 以下：手機直向 ── */
 @media (max-width: 480px) {
-  .bulletin-header h1 { font-size: 22px !important; }
+  /* 縮小內邊距到極限 */
+  .bulletin-header,
+  .bulletin-hero,
+  .bulletin-category-filter,
+  .bulletin-searchbar,
+  .bulletin-footer,
+  .bulletin-favorite-toggle {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+
+  .bulletin-sections-grid {
+    padding: 16px 14px !important;
+    gap: 28px !important;
+  }
+
+  /* Hero 大字再縮 */
+  .bulletin-hero h1 {
+    font-size: 30px !important;
+  }
+  .bulletin-hero p {
+    font-size: 13.5px !important;
+    line-height: 1.6 !important;
+  }
+  /* 隱藏對話泡泡（太佔空間） */
+  .bulletin-akai-polaroid > div:first-child {
+    display: none !important;
+  }
+  /* 拍立得再縮小 */
+  .bulletin-akai-polaroid {
+    max-width: 200px !important;
+  }
+  .bulletin-akai-polaroid > div[style*="aspect-ratio"],
+  .bulletin-akai-polaroid > div > div[style*="width: 240px"] {
+    width: 170px !important;
+  }
+
+  /* Header：隱藏 E2 公佈欄膠帶（空間不足） */
+  .bulletin-header > :last-child {
+    display: none !important;
+  }
+  .bulletin-header h1 {
+    font-size: 20px !important;
+  }
+  /* 校徽縮小 */
+  .bulletin-header > div > div:first-child {
+    width: 52px !important;
+    height: 52px !important;
+  }
+
+  /* 工具網格：改單欄（拍立得完整呈現，不切字） */
+  .bulletin-tool-grid {
+    grid-template-columns: 1fr !important;
+    padding: 14px 24px 40px !important;
+    gap: 26px !important;
+  }
+
+  /* Hero 按鈕：全寬 */
+  .bulletin-hero-actions {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .bulletin-hero-actions button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* Footer */
+  .bulletin-footer {
+    padding-top: 30px !important;
+    padding-bottom: 40px !important;
+  }
 }
 
-/* 尊重使用者的 reduced motion 偏好 */
+/* ── 380px 以下：超小手機 ── */
+@media (max-width: 380px) {
+  .bulletin-hero h1 {
+    font-size: 26px !important;
+  }
+  .bulletin-tool-card {
+    /* 完全不傾斜，避免跑版 */
+    transform: rotate(0deg) !important;
+  }
+}
+
+/* ── 觸控裝置：停用懸浮動畫（避免卡片卡住 sticky hover 狀態） ── */
+@media (hover: none) {
+  .sticker-card:hover {
+    transform: rotate(var(--tilt, 0deg)) !important;
+    box-shadow: 0 3px 5px rgba(0,0,0,.18),
+                0 16px 26px -8px rgba(0,0,0,.28),
+                0 30px 50px -20px rgba(0,0,0,.22) !important;
+  }
+  /* 改用 :active 回饋 */
+  .sticker-card:active {
+    transform: scale(.98) !important;
+  }
+}
+
+/* ── 尊重使用者的 reduced motion 偏好 ── */
 @media (prefers-reduced-motion: reduce) {
   .sticker-card,
   .sticker-card:hover {
     transition: none !important;
     transform: none !important;
+  }
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

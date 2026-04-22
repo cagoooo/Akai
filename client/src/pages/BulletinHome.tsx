@@ -17,6 +17,7 @@ import { useFavorites } from '@/hooks/useFavorites';
 import { useRecentTools } from '@/hooks/useRecentTools';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useSortOptions } from '@/hooks/useSortOptions';
+import { useToolClickStats } from '@/hooks/useToolClickStats';
 import { useToast } from '@/hooks/use-toast';
 
 import { BulletinBoard } from '@/components/bulletin/BulletinBoard';
@@ -93,6 +94,7 @@ export function BulletinHome() {
   const { favorites, toggleFavorite } = useFavorites();
   const { addToRecent } = useRecentTools();
   const { currentSort, sortTools } = useSortOptions();
+  const { clicksById } = useToolClickStats();
 
   // URL 雙向同步
   useEffect(() => {
@@ -118,18 +120,28 @@ export function BulletinHome() {
     staleTime: 300000,
   });
 
+  // 將 Firestore 即時點擊數合併進 tools 陣列（每張卡片的 👆 顯示才能即時更新）
+  const toolsWithStats = useMemo(() => {
+    if (!toolsData) return [];
+    if (clicksById.size === 0) return toolsData;
+    return toolsData.map((tool) => ({
+      ...tool,
+      totalClicks: clicksById.get(tool.id) ?? tool.totalClicks ?? 0,
+    }));
+  }, [toolsData, clicksById]);
+
   // 計算各分類工具數量
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = {};
-    toolsData?.forEach((tool) => {
+    toolsWithStats.forEach((tool) => {
       counts[tool.category] = (counts[tool.category] || 0) + 1;
     });
     return counts;
-  }, [toolsData]);
+  }, [toolsWithStats]);
 
-  // 篩選
+  // 篩選（使用含 Firestore 點擊數的 toolsWithStats）
   const filteredTools = useMemo(() => {
-    let result = toolsData || [];
+    let result = toolsWithStats;
     if (showFavorites) result = result.filter((t) => favorites.includes(t.id));
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
@@ -142,7 +154,7 @@ export function BulletinHome() {
     }
     if (selectedCategory) result = result.filter((t) => t.category === selectedCategory);
     return result;
-  }, [toolsData, searchQuery, selectedCategory, showFavorites, favorites]);
+  }, [toolsWithStats, searchQuery, selectedCategory, showFavorites, favorites]);
 
   const sortedTools = useMemo(() => sortTools(filteredTools), [filteredTools, sortTools, currentSort]);
 
@@ -185,7 +197,7 @@ export function BulletinHome() {
           padding: '20px 60px 30px',
         }}
       >
-        <BulletinLeaderboard tools={toolsData || []} />
+        <BulletinLeaderboard tools={toolsWithStats} />
         <BulletinWishPool />
       </div>
 
@@ -195,7 +207,7 @@ export function BulletinHome() {
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         resultCount={filteredTools.length}
-        totalCount={toolsData?.length || 0}
+        totalCount={toolsWithStats.length}
       />
 
       {/* 分類篩選 + 我的收藏切換 */}

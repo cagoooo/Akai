@@ -19,7 +19,12 @@ export function BulletinHeader() {
       className="bulletin-header"
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
-        <div
+        <a
+          href="https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="前往石門國小官方網站（另開新視窗）"
+          title="前往石門國小官方網站"
           style={{
             width: 64,
             height: 64,
@@ -31,6 +36,17 @@ export function BulletinHeader() {
             overflow: 'hidden',
             boxShadow: '0 3px 8px rgba(0,0,0,.25)',
             flexShrink: 0,
+            cursor: 'pointer',
+            transition: 'transform .2s ease, box-shadow .2s ease',
+            textDecoration: 'none',
+          }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLAnchorElement).style.transform = 'scale(1.08) rotate(-3deg)';
+            (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 5px 14px rgba(0,0,0,.35)';
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLAnchorElement).style.transform = 'scale(1) rotate(0deg)';
+            (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 3px 8px rgba(0,0,0,.25)';
           }}
         >
           <img
@@ -41,7 +57,7 @@ export function BulletinHeader() {
               (e.currentTarget as HTMLImageElement).style.display = 'none';
             }}
           />
-        </div>
+        </a>
 
         <div>
           <h1

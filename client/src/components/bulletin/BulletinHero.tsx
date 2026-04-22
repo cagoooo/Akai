@@ -88,7 +88,10 @@ export function BulletinHero() {
         </p>
 
         {/* 行動按鈕 */}
-        <div style={{ marginTop: 24, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+        <div
+          className="bulletin-hero-actions"
+          style={{ marginTop: 24, display: 'flex', gap: 12, flexWrap: 'wrap' }}
+        >
           <button
             type="button"
             onClick={() =>
@@ -295,8 +298,13 @@ function AkaiPolaroid() {
         </div>
       </div>
 
-      {/* 校徽徽章 */}
-      <div
+      {/* 校徽徽章（連結至石門國小官網） */}
+      <a
+        href="https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="前往石門國小官方網站（另開新視窗）"
+        title="前往石門國小官方網站"
         style={{
           position: 'absolute',
           bottom: -24,
@@ -310,6 +318,16 @@ function AkaiPolaroid() {
           padding: 4,
           transform: 'rotate(-8deg)',
           zIndex: 5,
+          cursor: 'pointer',
+          textDecoration: 'none',
+          transition: 'transform .25s ease',
+          display: 'block',
+        }}
+        onMouseEnter={(e) => {
+          (e.currentTarget as HTMLAnchorElement).style.transform = 'rotate(0deg) scale(1.1)';
+        }}
+        onMouseLeave={(e) => {
+          (e.currentTarget as HTMLAnchorElement).style.transform = 'rotate(-8deg) scale(1)';
         }}
       >
         <Pin
@@ -325,7 +343,7 @@ function AkaiPolaroid() {
             (e.currentTarget as HTMLImageElement).style.display = 'none';
           }}
         />
-      </div>
+      </a>
     </div>
   );
 }

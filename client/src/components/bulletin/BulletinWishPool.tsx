@@ -90,7 +90,7 @@ export function BulletinWishPool() {
         </div>
       </button>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+      <div className="bulletin-wish-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
         {SAMPLE_WISHES.map((w, i) => (
           <div
             key={i}
