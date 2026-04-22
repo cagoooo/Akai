@@ -21,6 +21,9 @@
   --accent: #ea8a3e;          /* warm ochre = 校徽嫩芽色 */
   --accent-deep: #c66a20;
   --accent-soft: #fef3e7;
+  --olive: #7a8c3a;           /* 橄欖綠（Hero 主題色） */
+  --olive-deep: #5a6a28;
+  --olive-soft: #e8edd0;
 
   /* ── Sticky-note colors (post-it) ─────── */
   --note-yellow: #fff3a8;
@@ -169,7 +172,7 @@ html, body {
     font-size: 14px !important;
     padding: 14px 16px !important;
     border-left: none !important;
-    border-top: 4px solid var(--accent) !important;
+    border-top: 4px solid var(--olive) !important;
     text-align: center !important;
     margin-left: auto !important;
     margin-right: auto !important;

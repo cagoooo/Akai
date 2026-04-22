@@ -54,7 +54,7 @@ export function BulletinHero() {
           <span style={{ position: 'relative', display: 'inline-block' }}>
             <span
               style={{
-                background: `linear-gradient(transparent 55%, ${tokens.accent} 55%, ${tokens.accent} 88%, transparent 88%)`,
+                background: `linear-gradient(transparent 55%, ${tokens.olive} 55%, ${tokens.olive} 88%, transparent 88%)`,
                 padding: '0 6px',
               }}
             >
@@ -84,7 +84,7 @@ export function BulletinHero() {
             maxWidth: 520,
             background: 'rgba(255,255,255,.88)',
             padding: '14px 18px',
-            borderLeft: `4px solid ${tokens.accent}`,
+            borderLeft: `4px solid ${tokens.olive}`,
             fontFamily: tokens.font.tc,
           }}
         >

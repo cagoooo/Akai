@@ -19,6 +19,10 @@ export const tokens = {
   accent: '#ea8a3e',
   accentDeep: '#c66a20',
   accentSoft: '#fef3e7',
+  // 橄欖綠（Hero 主題色）— 與 cork 軟木塞底色搭配更協調
+  olive: '#7a8c3a',
+  oliveDeep: '#5a6a28',
+  oliveSoft: '#e8edd0',
 
   // Sticky-note colors
   note: {
