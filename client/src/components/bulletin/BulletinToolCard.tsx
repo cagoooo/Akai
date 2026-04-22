@@ -103,6 +103,10 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0 }: Props) {
               src={previewSrc}
               alt={tool.title}
               loading="lazy"
+              decoding="async"
+              fetchPriority="low"
+              width={400}
+              height={320}
               style={{
                 width: '100%',
                 height: '100%',
