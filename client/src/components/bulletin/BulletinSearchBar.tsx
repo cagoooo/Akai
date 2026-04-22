@@ -19,6 +19,7 @@ export const BulletinSearchBar = forwardRef<HTMLInputElement, Props>(function Bu
   return (
     <section
       className="bulletin-searchbar"
+      data-tour="search-bar"
       style={{ padding: '0 60px 20px' }}
     >
       <div style={{ marginBottom: 12 }}>

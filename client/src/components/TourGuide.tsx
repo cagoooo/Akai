@@ -4,8 +4,6 @@ import "driver.js/dist/driver.css";
 import "./tour-guide.css"; // 導入我們自定義的樣式
 import { soundManager } from "@/lib/soundManager";
 import { m as motion } from 'framer-motion';
-import { Info, Lightbulb, HelpCircle } from "lucide-react";
-import { Button } from "./ui/button";
 import { useToast } from "@/hooks/use-toast";
 
 // 建立全局事件發射器，用於外部觸發導覽開始
@@ -129,10 +127,55 @@ export function TourGuide({ onComplete }: TourGuideProps) {
       },
       steps: [
         {
-          element: '[data-tour="teacher-intro"]',
+          element: '[data-tour="bulletin-hero"]',
           popover: {
-            title: "教師介紹 👨‍🏫",
-            description: "這裡介紹阿凱老師的個人資訊和專業背景，幫助您更深入了解老師的教育理念和專業優勢。點擊頭像可查看詳細介紹。",
+            title: "📌 歡迎來到公佈欄",
+            description: "這裡是阿凱老師的 E2 公佈欄 —— 一張一張釘上教學工具的地方！所有功能都依老師實際使用場景設計，希望能為你的教學省下寶貴時間。",
+            side: "bottom",
+            align: 'center',
+          }
+        },
+        {
+          element: '[data-tour="visitor-counter"]',
+          popover: {
+            title: "👀 訪客計數器",
+            description: "即時顯示有多少老師拜訪過公佈欄。每到新的里程碑（100/500/1,000…）會有小驚喜，旁邊的進度條會告訴你距離下個里程碑還差多少。",
+            side: "bottom",
+            align: 'start',
+          }
+        },
+        {
+          element: '[data-tour="tool-rankings"]',
+          popover: {
+            title: "🏆 本週 TOP 5 排行榜",
+            description: "Firestore 即時排行榜！每次有人點擊工具，這裡會立刻 +1。想看看其他老師都在用哪些寶藏工具，就看這裡。",
+            side: "right",
+            align: 'start',
+          }
+        },
+        {
+          element: '[data-tour="wish-pool"]',
+          popover: {
+            title: "🪄 許願池",
+            description: "有想到很棒的教學工具點子？或是想給阿凱老師鼓勵/建議？歡迎在許願池留下便利貼！支援匿名、免登入，送出後會直接推播到阿凱老師的 LINE。",
+            side: "left",
+            align: 'start',
+          }
+        },
+        {
+          element: '[data-tour="search-bar"]',
+          popover: {
+            title: "🔎 搜尋工具",
+            description: "找不到想要的工具？直接搜尋工具名稱、描述或標籤。支援同時多關鍵字，按 Ctrl+K 也能快速開啟喔！",
+            side: "bottom",
+            align: 'start',
+          }
+        },
+        {
+          element: '[data-tour="category-filter"]',
+          popover: {
+            title: "🏷️ 分類標籤",
+            description: "依分類快速篩選工具：實用工具 / 教育遊戲 / 教學設計 / 語文寫作 等。點選後畫面會自動捲動到下方結果區，也可以「只看我的收藏」過濾。",
             side: "bottom",
             align: 'start',
           }
@@ -140,27 +183,17 @@ export function TourGuide({ onComplete }: TourGuideProps) {
         {
           element: '[data-tour="tools-grid"]',
           popover: {
-            title: "教育工具集 🛠️",
-            description: "這是我們精心設計的教育工具集合，涵蓋溝通、閱讀、語言等多種類型。每個工具卡片上都有詳細說明和使用方式。點擊任一卡片即可開始使用！",
-            side: "left",
-            align: 'start',
+            title: "📸 拍立得工具卡",
+            description: "每張拍立得卡片都是一個教育工具。點 💖 加入收藏（會雲端同步）、點「開啟 →」直接使用工具。點卡片圖片則進入詳細介紹 + 使用者評論。",
+            side: "top",
+            align: 'center',
           }
         },
         {
-          element: '[data-tour="tool-rankings"]',
           popover: {
-            title: "工具排行榜 🏆",
-            description: "即時顯示最受歡迎的教育工具排名！第一名的工具會有特殊標記，您可以看到每個工具的使用次數和排名變化。這裡還有專門的排行榜教學功能。",
-            side: "left",
-            align: 'start',
-          }
-        },
-
-        {
-          popover: {
-            title: "🎉 恭喜完成導覽！",
-            description: "感謝您完成網站導覽！現在您已經了解了平台的主要功能，可以開始探索和使用各種教育工具了。如果之後需要再次查看導覽，可以點擊「網站導覽」按鈕。祝您使用愉快！",
-            doneBtnText: "開始使用",
+            title: "🎉 導覽完成！",
+            description: "感謝你完成公佈欄導覽！別忘了右下角還有「回頂部」小按鈕，畫面右下也會有 PWA 自動更新提示。有任何建議都歡迎用許願池告訴阿凱老師～",
+            doneBtnText: "開始探索 →",
           }
         }
       ],
@@ -265,100 +298,192 @@ export function TourGuide({ onComplete }: TourGuideProps) {
 
   return (
     <div className="tour-guide-container">
-      {/* 導覽提示彈窗 */}
+      {/* 導覽提示彈窗 — cork 便利貼風格 */}
       {isVisible && !hasCompletedTour && (
         <motion.div
           className="tour-prompt"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          initial={{ opacity: 0, y: 30, rotate: -4 }}
+          animate={{ opacity: 1, y: 0, rotate: -2 }}
+          exit={{ opacity: 0, y: 30, rotate: -4 }}
+          transition={{ duration: 0.5, type: 'spring', stiffness: 120 }}
           style={{
             position: 'fixed',
-            bottom: '20px',
+            bottom: '94px',
             right: '20px',
-            zIndex: 1000,
-            backgroundColor: 'white',
-            padding: '16px',
-            borderRadius: '12px',
-            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
-            width: '280px',
-            border: '2px solid #0891b2',
+            zIndex: 50,
+            background: '#fff27a',
+            padding: '18px 18px 14px',
+            borderRadius: '6px',
+            boxShadow: '4px 4px 0 rgba(0,0,0,.25), 0 14px 28px -6px rgba(0,0,0,.3)',
+            width: '290px',
+            border: '2.5px solid #1a1a1a',
+            fontFamily: "'Noto Sans TC', 'Microsoft JhengHei', sans-serif",
           }}
         >
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            marginBottom: '12px',
-            gap: '8px',
-            borderBottom: '1px solid rgba(8, 145, 178, 0.2)',
-            paddingBottom: '8px'
-          }}>
-            <Info size={24} color="#0891b2" />
-            <h3 style={{
-              margin: 0,
-              color: '#0891b2',
-              fontSize: '18px',
-              fontWeight: 'bold'
-            }}>
-              歡迎使用教育平台！
-            </h3>
+          {/* 紅色圖釘 */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              top: '-11px',
+              left: '50%',
+              marginLeft: '-11px',
+              width: '22px',
+              height: '22px',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle at 30% 30%, #ff6b6b, #dc2626 55%, #5a0a0a)',
+              boxShadow: '0 2px 4px rgba(0,0,0,.35), inset -1px -2px 3px rgba(0,0,0,.25)',
+            }}
+          >
+            <div
+              style={{
+                position: 'absolute',
+                top: '35%',
+                left: '35%',
+                width: '20%',
+                height: '20%',
+                borderRadius: '50%',
+                background: 'rgba(255,255,255,.85)',
+              }}
+            />
           </div>
-          <p style={{
-            margin: '0 0 16px 0',
-            fontSize: '14px',
-            color: '#333',
-            lineHeight: 1.5
-          }}>
-            想要了解平台的主要功能嗎？跟隨我們的導覽，快速掌握所有重要特性！
+
+          {/* 小標籤線 */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+            <div style={{ height: 2, width: 24, background: '#4a3a20' }} />
+            <span
+              style={{
+                fontSize: 12,
+                fontWeight: 800,
+                color: '#4a3a20',
+                letterSpacing: '0.1em',
+              }}
+            >
+              NEW · 新手導覽
+            </span>
+          </div>
+
+          <h3
+            style={{
+              margin: 0,
+              color: '#1a1a1a',
+              fontSize: '20px',
+              fontWeight: 900,
+              lineHeight: 1.3,
+            }}
+          >
+            <span
+              style={{
+                background: 'linear-gradient(transparent 55%, #7a8c3a 55%, #7a8c3a 88%, transparent 88%)',
+                padding: '0 4px',
+              }}
+            >
+              第一次來嗎？
+            </span>
+          </h3>
+
+          <p
+            style={{
+              margin: '10px 0 14px',
+              fontSize: '13.5px',
+              color: '#2a2a2a',
+              lineHeight: 1.65,
+              fontWeight: 500,
+            }}
+          >
+            30 秒快速導覽，認識許願池、排行榜、拍立得工具卡 等所有公佈欄功能 📌
           </p>
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <Button
+
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button
+              type="button"
               onClick={startTour}
-              className="bg-cyan-600 hover:bg-cyan-700 gap-2"
+              style={{
+                background: '#ea8a3e',
+                color: '#fff',
+                border: '2.5px solid #1a1a1a',
+                padding: '8px 16px',
+                borderRadius: 8,
+                fontSize: 13,
+                fontWeight: 900,
+                cursor: 'pointer',
+                fontFamily: 'inherit',
+                boxShadow: '3px 3px 0 rgba(0,0,0,.35)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                transition: 'transform .15s ease, box-shadow .15s ease',
+              }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget;
+                el.style.transform = 'translate(-2px,-2px)';
+                el.style.boxShadow = '5px 5px 0 rgba(0,0,0,.4)';
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget;
+                el.style.transform = '';
+                el.style.boxShadow = '3px 3px 0 rgba(0,0,0,.35)';
+              }}
             >
-              <Lightbulb size={16} />
-              開始導覽
-            </Button>
-            <Button
-              variant="outline"
+              ✨ 開始導覽
+            </button>
+            <button
+              type="button"
               onClick={dismissTour}
-              className="border-cyan-600 text-cyan-600 hover:bg-cyan-50"
+              style={{
+                background: '#fefdfa',
+                color: '#1a1a1a',
+                border: '2.5px solid #1a1a1a',
+                padding: '8px 14px',
+                borderRadius: 8,
+                fontSize: 13,
+                fontWeight: 700,
+                cursor: 'pointer',
+                fontFamily: 'inherit',
+                boxShadow: '2px 2px 0 rgba(0,0,0,.22)',
+              }}
             >
-              稍後再說
-            </Button>
+              稍後
+            </button>
           </div>
         </motion.div>
       )}
 
-      {/* 固定位置的導覽按鈕 */}
+      {/* 固定位置的導覽按鈕（完成後顯示）— cork 風格 */}
       {hasCompletedTour && (
-        <motion.div
+        <motion.button
+          type="button"
           className="fixed-tour-button"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
+          onClick={startTour}
+          aria-label="重新開始網站導覽"
+          title="重新開始網站導覽"
+          initial={{ opacity: 0, scale: 0.8, rotate: -6 }}
+          animate={{ opacity: 1, scale: 1, rotate: -3 }}
+          whileHover={{ scale: 1.05, rotate: 0 }}
+          whileTap={{ scale: 0.95 }}
           transition={{ delay: 0.5 }}
           style={{
             position: 'fixed',
-            bottom: '80px',
+            bottom: '94px',
             right: '20px',
-            zIndex: 50
+            zIndex: 40,
+            background: '#fff27a',
+            color: '#1a1a1a',
+            border: '2.5px solid #1a1a1a',
+            padding: '8px 14px',
+            borderRadius: 8,
+            fontSize: 13,
+            fontWeight: 800,
+            cursor: 'pointer',
+            fontFamily: "'Noto Sans TC', sans-serif",
+            boxShadow: '3px 3px 0 rgba(0,0,0,.25)',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 6,
           }}
         >
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Button
-              onClick={startTour}
-              variant="default"
-              size="sm"
-              className="bg-cyan-600 hover:bg-cyan-700 gap-2 shadow-lg"
-            >
-              <HelpCircle size={16} />
-              <span>網站導覽</span>
-            </Button>
-          </motion.div>
-        </motion.div>
+          📌 網站導覽
+        </motion.button>
       )}
     </div>
   );

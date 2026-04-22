@@ -20,6 +20,7 @@ export function BulletinCategoryFilter({ selected, onChange, categoryCounts }: P
   return (
     <section
       className="bulletin-category-filter"
+      data-tour="category-filter"
       style={{
         padding: '10px 60px 20px',
       }}

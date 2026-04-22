@@ -15,6 +15,7 @@ export function BulletinHero() {
   return (
     <section
       className="bulletin-hero"
+      data-tour="bulletin-hero"
       style={{
         position: 'relative',
         padding: '30px 60px 50px',

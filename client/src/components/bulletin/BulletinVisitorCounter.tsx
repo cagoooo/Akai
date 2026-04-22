@@ -143,6 +143,7 @@ export function BulletinVisitorCounter() {
   return (
     <div
       className="bulletin-visitor-counter sticker-card"
+      data-tour="visitor-counter"
       style={{
         position: 'relative',
         background: tokens.note.yellow,

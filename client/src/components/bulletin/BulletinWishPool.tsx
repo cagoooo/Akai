@@ -25,7 +25,7 @@ export function BulletinWishPool() {
   const tilts = [-3, 2, -1.5, 1.2];
 
   return (
-    <div>
+    <div data-tour="wish-pool">
       <div style={{ marginBottom: 20, display: 'flex', alignItems: 'center', gap: 14 }}>
         <Tape color={tokens.note.green} angle={2} width={180}>
           <span style={{ fontSize: 14 }}>🪄 許願池 · WISHES</span>

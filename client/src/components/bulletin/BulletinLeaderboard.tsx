@@ -54,7 +54,7 @@ export function BulletinLeaderboard({ tools }: Props) {
   const tilts = [-2, 1.5, -1, 2.5, -1.5];
 
   return (
-    <div>
+    <div data-tour="tool-rankings">
       <div style={{ marginBottom: 20 }}>
         <Tape color={tokens.note.orange} angle={-2} width={180}>
           <span style={{ fontSize: 14 }}>🏆 本週 TOP 5 · RANKING</span>
