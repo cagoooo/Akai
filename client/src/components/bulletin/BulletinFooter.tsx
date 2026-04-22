@@ -237,17 +237,6 @@ export function BulletinFooter() {
             </a>
           </span>
           <span style={{ opacity: 0.6 }}>·</span>
-          <span
-            style={{
-              whiteSpace: 'nowrap',
-              fontFamily: tokens.font.tc,
-              color: tokens.ink,
-              fontWeight: 700,
-            }}
-          >
-            阿凱老師
-          </span>
-          <span style={{ opacity: 0.6 }}>·</span>
           <a
             href={SCHOOL_MAPS_URL}
             target="_blank"
