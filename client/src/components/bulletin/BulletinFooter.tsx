@@ -88,16 +88,44 @@ export function BulletinFooter() {
           </div>
         </FooterNote>
 
-        {/* 學校連結 */}
+        {/* 學校連結（含石門國小校徽） */}
         <FooterNote bg={tokens.note.blue} tilt={1} pinIndex={1} href={SCHOOL_URL}>
-          <div style={{ fontSize: 12, color: tokens.muted2, marginBottom: 6, letterSpacing: '0.1em' }}>
+          <div style={{ fontSize: 12, color: tokens.muted2, marginBottom: 8, letterSpacing: '0.1em' }}>
             🏫 SCHOOL
           </div>
-          <div style={{ fontSize: 15, fontWeight: 800, color: tokens.ink, lineHeight: 1.4 }}>
-            石門國小
-          </div>
-          <div style={{ fontSize: 11, color: tokens.navy, marginTop: 4, textDecoration: 'underline' }}>
-            前往官方網站 →
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            {/* 石門國小校徽 */}
+            <div
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: '50%',
+                background: tokens.paper,
+                border: `2px solid ${tokens.ink}`,
+                boxShadow: '2px 2px 0 rgba(0,0,0,.2)',
+                display: 'grid',
+                placeItems: 'center',
+                overflow: 'hidden',
+                flexShrink: 0,
+              }}
+            >
+              <img
+                src={`${import.meta.env.BASE_URL}assets/school-logo.png`}
+                alt="石門國小校徽"
+                style={{ width: '80%', height: '80%', objectFit: 'contain' }}
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).style.display = 'none';
+                }}
+              />
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 15, fontWeight: 800, color: tokens.ink, lineHeight: 1.3 }}>
+                石門國小
+              </div>
+              <div style={{ fontSize: 11, color: tokens.navy, marginTop: 2, textDecoration: 'underline' }}>
+                前往官方網站 →
+              </div>
+            </div>
           </div>
         </FooterNote>
 
