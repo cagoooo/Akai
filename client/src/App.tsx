@@ -14,7 +14,9 @@ import { BulletinHome } from "@/pages/BulletinHome";
 import { Home as ClassicHome } from "@/pages/Home";
 
 // 延遲載入次要路由元件與彈窗元件
-const ToolDetail = lazy(() => import("@/pages/ToolDetail").then(module => ({ default: module.ToolDetail })));
+// BulletinToolDetail 為 cork 風格詳情頁；舊版 ToolDetail 保留於 /tool-classic/:id
+const ToolDetail = lazy(() => import("@/pages/BulletinToolDetail").then(module => ({ default: module.BulletinToolDetail })));
+const ClassicToolDetail = lazy(() => import("@/pages/ToolDetail").then(module => ({ default: module.ToolDetail })));
 const AdminAuth = lazy(() => import("@/components/AdminAuth").then(module => ({ default: module.AdminAuth })));
 const TriviaDialog = lazy(() => import("@/components/TriviaDialog").then(module => ({ default: module.TriviaDialog })));
 const PWAUpdatePrompt = lazy(() => import("@/components/PWAUpdatePrompt").then(module => ({ default: module.PWAUpdatePrompt })));
@@ -44,8 +46,9 @@ const basePath = import.meta.env.BASE_URL || '/';
  */
 function ConditionalFooter() {
   const [location] = useLocation();
-  // BulletinHome 路徑為 '/'
+  // BulletinHome ('/') 與 BulletinToolDetail ('/tool/:id') 皆已有整合版 BulletinFooter
   if (location === '/' || location === '') return null;
+  if (location.startsWith('/tool/')) return null;
   return <Footer />;
 }
 
@@ -184,6 +187,9 @@ function App() {
                         </Route>
                         <Route path="/tool/:id">
                           <ToolDetail />
+                        </Route>
+                        <Route path="/tool-classic/:id">
+                          <ClassicToolDetail />
                         </Route>
                         <Route path="/admin">
                           <AdminAuth />

@@ -1,13 +1,13 @@
 import type { ReactNode } from 'react';
 import { tokens } from '@/design/tokens';
+import { BulletinBackToTop } from './BulletinBackToTop';
 
 interface Props {
   children: ReactNode;
 }
 
 /**
- * 公佈欄外框容器：軟木塞背景 + 上下木條
- * 內容交由 Home.tsx 組裝（因為需要與現有 state、hooks 連動）
+ * 公佈欄外框容器：軟木塞背景 + 上下木條 + 回到頂部按鈕
  */
 export function BulletinBoard({ children }: Props) {
   return (
@@ -26,6 +26,7 @@ export function BulletinBoard({ children }: Props) {
       <WoodStrip position="top" />
       <WoodStrip position="bottom" />
       {children}
+      <BulletinBackToTop />
     </div>
   );
 }

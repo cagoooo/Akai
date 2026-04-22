@@ -3,6 +3,8 @@ import { Tape } from '@/components/primitives/Tape';
 import { Pin } from '@/components/primitives/Pin';
 import { tokens } from '@/design/tokens';
 import { getToolEmoji, normalizeUrl } from './toolAdapter';
+import { useToolTracking } from '@/hooks/useToolTracking';
+import { useRecentTools } from '@/hooks/useRecentTools';
 import type { EducationalTool } from '@/lib/data';
 
 interface Props {
@@ -14,12 +16,33 @@ interface Props {
  * 直接從傳入的 tools（已在 BulletinHome 合併 Firestore 即時點擊數）排序取前五名
  */
 export function BulletinLeaderboard({ tools }: Props) {
+  const { trackToolUsage } = useToolTracking();
+  const { addToRecent } = useRecentTools();
+
   const top5 = useMemo(() => {
     return [...tools]
       .filter((t) => (t.totalClicks ?? 0) > 0)
       .sort((a, b) => (b.totalClicks ?? 0) - (a.totalClicks ?? 0))
       .slice(0, 5);
   }, [tools]);
+
+  /**
+   * 處理排行榜卡片點擊：
+   * 1. 追蹤到 Firestore（totalClicks +1，onSnapshot 會即時推回首頁）
+   * 2. 加入「最近使用」歷史
+   * 3. 開新分頁
+   */
+  const handleRankingClick = (e: React.MouseEvent, tool: EducationalTool) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // 先開新分頁（避免部分瀏覽器因 await 失去使用者手勢而擋掉彈窗）
+    const openUrl = normalizeUrl(tool.url);
+    const newWin = window.open(openUrl, '_blank', 'noopener,noreferrer');
+    if (newWin) newWin.opener = null;
+    // 背景追蹤
+    addToRecent(tool.id);
+    trackToolUsage(tool.id).catch((err) => console.error('追蹤失敗:', err));
+  };
 
   const colors = [
     tokens.note.yellow,
@@ -64,6 +87,7 @@ export function BulletinLeaderboard({ tools }: Props) {
               href={normalizeUrl(tool.url)}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={(e) => handleRankingClick(e, tool)}
               className="sticker-card"
               aria-label={`排名第 ${i + 1} 名：${tool.title}，${tool.totalClicks ?? 0} 次點擊`}
               style={{

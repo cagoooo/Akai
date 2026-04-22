@@ -348,6 +348,85 @@ html, body {
   }
 }
 
+/* ── ToolDetail cork 頁面 RWD ── */
+@media (max-width: 1024px) {
+  .bulletin-detail-hero {
+    grid-template-columns: 1fr !important;
+    padding: 20px 40px 30px !important;
+  }
+  .bulletin-detail-nav,
+  .bulletin-detail-breadcrumb,
+  .bulletin-related {
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+  }
+  .bulletin-detail-reviews {
+    margin-left: 40px !important;
+    margin-right: 40px !important;
+  }
+  .bulletin-detail-stats {
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .bulletin-detail-hero {
+    padding: 20px !important;
+    gap: 24px !important;
+  }
+  .bulletin-detail-hero h1 {
+    font-size: 28px !important;
+  }
+  .bulletin-detail-nav,
+  .bulletin-detail-breadcrumb,
+  .bulletin-related {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  .bulletin-detail-reviews {
+    margin-left: 20px !important;
+    margin-right: 20px !important;
+    padding: 18px 20px !important;
+  }
+  .bulletin-detail-stats {
+    padding: 10px 20px 20px !important;
+    gap: 14px !important;
+  }
+  .bulletin-detail-actions {
+    flex-direction: column !important;
+  }
+  .bulletin-detail-actions button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  .bulletin-related-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+  }
+
+  /* 回到頂部按鈕：手機版縮小避免擋按鈕 */
+  .bulletin-back-to-top {
+    width: 46px !important;
+    height: 46px !important;
+    right: 14px !important;
+    bottom: 20px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .bulletin-detail-hero h1 {
+    font-size: 24px !important;
+  }
+  .bulletin-related-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .bulletin-detail-breadcrumb {
+    font-size: 12px !important;
+    line-height: 1.8 !important;
+  }
+}
+
 /* ── 380px 以下：超小手機 ── */
 @media (max-width: 380px) {
   .bulletin-hero h1 {
