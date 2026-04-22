@@ -10,7 +10,7 @@
  * 保留功能：雲端收藏同步、PWA 自動更新、鍵盤快捷鍵、搜尋、分類篩選、排序、URL 同步、許願池（LINE Bot）
  */
 
-import { useState, useMemo, useEffect, useRef, lazy, Suspense } from 'react';
+import { useState, useMemo, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import type { EducationalTool } from '@/lib/data';
 import { useFavorites } from '@/hooks/useFavorites';
@@ -195,6 +195,34 @@ export function BulletinHome() {
   // 收藏切換按鈕（公佈欄版）
   const favoriteCount = favorites.length;
 
+  // 點擊分類 / 收藏切換時，自動捲動到工具網格區
+  // 尊重 prefers-reduced-motion
+  const scrollToGrid = useCallback(() => {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const target = document.querySelector('[data-tour="tools-grid"]');
+    if (!target) return;
+    // 延遲一點讓 React 重新渲染後再捲動，避免捲到不穩定的位置
+    setTimeout(() => {
+      target.scrollIntoView({
+        behavior: prefersReduced ? 'auto' : 'smooth',
+        block: 'start',
+      });
+    }, 120);
+  }, []);
+
+  const handleCategoryChange = useCallback(
+    (cat: string | null) => {
+      setSelectedCategory(cat);
+      scrollToGrid();
+    },
+    [scrollToGrid]
+  );
+
+  const handleFavoritesToggle = useCallback(() => {
+    setShowFavorites((prev) => !prev);
+    scrollToGrid();
+  }, [scrollToGrid]);
+
   return (
     <BulletinBoard>
       <BulletinHeader />
@@ -226,14 +254,14 @@ export function BulletinHome() {
       {/* 分類篩選 + 我的收藏切換 */}
       <BulletinCategoryFilter
         selected={selectedCategory}
-        onChange={setSelectedCategory}
+        onChange={handleCategoryChange}
         categoryCounts={categoryCounts}
       />
 
       <div style={{ padding: '0 60px 10px' }} className="bulletin-favorite-toggle">
         <button
           type="button"
-          onClick={() => setShowFavorites(!showFavorites)}
+          onClick={handleFavoritesToggle}
           aria-pressed={showFavorites}
           style={{
             display: 'inline-flex',

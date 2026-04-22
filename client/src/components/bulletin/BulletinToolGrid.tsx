@@ -43,6 +43,8 @@ export function BulletinToolGrid({ tools }: Props) {
         gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
         gap: 28,
         padding: '20px 60px 60px',
+        // 捲動對齊時保留上方呼吸空間，避免被固定在頂部的木條貼邊
+        scrollMarginTop: 40,
       }}
       data-tour="tools-grid"
     >
