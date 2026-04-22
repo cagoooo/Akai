@@ -5,6 +5,7 @@
  */
 
 import { usePWAUpdate } from '@/hooks/usePWAUpdate';
+import { useVersionCheck } from '@/hooks/useVersionCheck';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Download, RefreshCw, Sparkles, Wifi, WifiOff, X } from 'lucide-react';
@@ -16,13 +17,20 @@ const AUTO_UPDATE_COUNTDOWN = 3;
 
 export function PWAUpdatePrompt() {
     const {
-        isUpdateAvailable,
+        isUpdateAvailable: swUpdateAvailable,
         isOffline,
         isInstallable,
         updateApp,
         installApp,
         dismissUpdate,
     } = usePWAUpdate();
+
+    // 獨立的 version.json 輪詢（15 分鐘一次），作為 SW updatefound 的備援通道
+    const { hasNewVersion, latestVersion } = useVersionCheck({ intervalMs: 15 * 60 * 1000 });
+
+    // 任一通道偵測到新版本就觸發更新流程（SW 事件 OR version.json 輪詢）
+    const isUpdateAvailable = swUpdateAvailable || hasNewVersion;
+
     const [shouldShowAfterDelay, setShouldShowAfterDelay] = useState(false);
     const [autoUpdateCountdown, setAutoUpdateCountdown] = useState<number | null>(null);
     const [isAutoUpdateCancelled, setIsAutoUpdateCancelled] = useState(false);
@@ -136,6 +144,11 @@ export function PWAUpdatePrompt() {
                                 <div className="flex-1">
                                     <h4 className="font-bold mb-1 text-indigo-900">
                                         ✨ 新版本已就緒！
+                                        {latestVersion && (
+                                            <span className="ml-2 inline-block px-1.5 py-0.5 text-[10px] font-mono font-normal text-indigo-700 bg-indigo-100 rounded">
+                                                v{latestVersion.version}
+                                            </span>
+                                        )}
                                     </h4>
                                     <p className="text-sm text-indigo-700/80 mb-3">
                                         {autoUpdateCountdown !== null && autoUpdateCountdown > 0 ? (

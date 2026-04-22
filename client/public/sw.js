@@ -7,7 +7,7 @@
  * - Stale While Revalidate: 圖片
  */
 
-const CACHE_VERSION = 'v3.4.8-dual-cache';
+const CACHE_VERSION = 'v3.6.0-f47e249-202604221112';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
 const ASSETS_ARCHIVE = 'assets-archive-v1';
@@ -47,12 +47,13 @@ const CACHE_STRATEGIES = {
     /\.ico$/,
     /\/previews\//,
   ],
-  // 需要跳過的請求
+  // 需要跳過的請求（完全不經 SW，直接交給瀏覽器 + network）
   skip: [
     /firestore\.googleapis\.com/,
     /firebase/,
     /googleapis\.com/,
     /chrome-extension/,
+    /\/version\.json$/, // version.json 必須永遠走網路，否則無法偵測新版
   ],
 };
 
