@@ -3,6 +3,7 @@ import { Tape } from '@/components/primitives/Tape';
 import { Pin } from '@/components/primitives/Pin';
 
 const SCHOOL_URL = 'https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5';
+const SCHOOL_MAPS_URL = 'https://maps.app.goo.gl/D9hqL2eakDLC8ko46';
 
 /**
  * 公佈欄頁尾（整合版）：
@@ -120,7 +121,7 @@ export function BulletinFooter() {
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: 15, fontWeight: 800, color: tokens.ink, lineHeight: 1.3 }}>
-                石門國小
+                桃園市石門國小
               </div>
               <div style={{ fontSize: 11, color: tokens.navy, marginTop: 2, textDecoration: 'underline' }}>
                 前往官方網站 →
@@ -200,44 +201,78 @@ export function BulletinFooter() {
           />
         </a>
 
-        {/* 版權文字 */}
+        {/* 版權文字：每段包 nowrap 讓 flex-wrap 只在分隔點斷行，避免「All rights reserved.」被切斷 */}
         <div
           style={{
             fontSize: 12.5,
             color: tokens.muted2,
             fontFamily: tokens.font.en,
             letterSpacing: '0.03em',
-            lineHeight: 1.6,
+            lineHeight: 1.8,
             textAlign: 'center',
             fontWeight: 600,
             textShadow: '0 1px 0 rgba(255,255,255,.3)',
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '4px 10px',
           }}
         >
-          © {year}{' '}
-          <a
-            href={SCHOOL_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <span style={{ whiteSpace: 'nowrap' }}>
+            © {year}{' '}
+            <a
+              href={SCHOOL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: tokens.ink,
+                textDecoration: 'none',
+                fontWeight: 800,
+                background: `linear-gradient(transparent 65%, ${tokens.accent}66 65%, ${tokens.accent}66 90%, transparent 90%)`,
+                padding: '0 4px',
+              }}
+            >
+              教育科技創新專區
+            </a>
+          </span>
+          <span style={{ opacity: 0.6 }}>·</span>
+          <span
             style={{
+              whiteSpace: 'nowrap',
+              fontFamily: tokens.font.tc,
               color: tokens.ink,
-              textDecoration: 'none',
-              fontWeight: 800,
-              background: `linear-gradient(transparent 65%, ${tokens.accent}66 65%, ${tokens.accent}66 90%, transparent 90%)`,
-              padding: '0 4px',
+              fontWeight: 700,
             }}
           >
-            教育科技創新專區
-          </a>
-          <span style={{ margin: '0 8px', opacity: 0.6 }}>·</span>
-          <span style={{ fontFamily: tokens.font.tc, color: tokens.ink, fontWeight: 700 }}>
             阿凱老師
           </span>
-          <span style={{ margin: '0 8px', opacity: 0.6 }}>·</span>
-          <span style={{ fontFamily: tokens.font.tc, color: tokens.ink, fontWeight: 700 }}>
-            石門國小
+          <span style={{ opacity: 0.6 }}>·</span>
+          <a
+            href={SCHOOL_MAPS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="在 Google Maps 查看桃園市石門國小位置（另開新視窗）"
+            title="在 Google Maps 查看學校位置"
+            style={{
+              whiteSpace: 'nowrap',
+              fontFamily: tokens.font.tc,
+              color: tokens.ink,
+              fontWeight: 700,
+              textDecoration: 'none',
+              borderBottom: `1.5px solid ${tokens.navy}`,
+              paddingBottom: 1,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 3,
+            }}
+          >
+            📍 桃園市石門國小
+          </a>
+          <span style={{ opacity: 0.6 }}>·</span>
+          <span style={{ whiteSpace: 'nowrap', color: tokens.muted2 }}>
+            All rights reserved.
           </span>
-          <span style={{ margin: '0 8px', opacity: 0.6 }}>·</span>
-          <span style={{ color: tokens.muted2 }}>All rights reserved.</span>
         </div>
       </div>
     </footer>

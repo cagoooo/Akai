@@ -248,16 +248,25 @@ html, body {
     max-width: 320px !important;
   }
 
-  /* Footer 版權列手機版微調 */
+  /* Footer 版權列手機版微調：favicon 置頂、文字自動換行 */
   .bulletin-footer-copyright {
-    gap: 10px !important;
     flex-direction: column !important;
+    gap: 12px !important;
   }
   .bulletin-footer-copyright > div {
     font-size: 12px !important;
+    line-height: 1.9 !important;
+    gap: 3px 8px !important;
   }
-  .bulletin-footer-copyright > div span[style*="margin: 0 8px"] {
-    margin: 0 4px !important;
+}
+
+/* 更小手機：隱藏視覺噪音分隔點，讓文字段落之間單純靠 gap 呼吸 */
+@media (max-width: 420px) {
+  .bulletin-footer-copyright > div > span[style*="opacity: 0.6"] {
+    display: none !important;
+  }
+  .bulletin-footer-copyright > div {
+    gap: 4px 12px !important;
   }
 
   /* 分類篩選按鈕：變緊湊 */
