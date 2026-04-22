@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Tape } from '@/components/primitives/Tape';
 import { Pin } from '@/components/primitives/Pin';
 import { tokens } from '@/design/tokens';
@@ -9,19 +9,109 @@ interface Props {
   tools: EducationalTool[];
 }
 
+interface FirestoreRanking {
+  toolId: number;
+  totalClicks: number;
+}
+
 /**
  * 🏆 本週 TOP 5 便利貼排行榜
- * 從傳入的工具陣列依 totalClicks 排序取前五名
+ * 串接 Firestore `toolUsageStats` 集合即時資料（與既有 ToolRankings.tsx 相同來源）
+ * 本地 fallback：讀取 localStorage cache，再退至 tools.totalClicks
  */
 export function BulletinLeaderboard({ tools }: Props) {
-  const top5 = useMemo(() => {
-    return [...tools]
-      .filter((t) => (t.totalClicks ?? 0) > 0)
-      .sort((a, b) => (b.totalClicks ?? 0) - (a.totalClicks ?? 0))
-      .slice(0, 5);
-  }, [tools]);
+  const [firestoreRankings, setFirestoreRankings] = useState<FirestoreRanking[] | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const colors = [tokens.note.yellow, tokens.note.blue, tokens.note.pink, tokens.note.green, tokens.note.orange];
+  // Firestore 即時訂閱
+  useEffect(() => {
+    let unsubscribe: (() => void) | undefined;
+
+    (async () => {
+      try {
+        const { db, isFirebaseAvailable } = await import('@/lib/firebase');
+        const { collection, onSnapshot, orderBy, query, limit } = await import(
+          'firebase/firestore'
+        );
+
+        if (isFirebaseAvailable() && db) {
+          unsubscribe = onSnapshot(
+            query(collection(db, 'toolUsageStats'), orderBy('totalClicks', 'desc'), limit(10)),
+            (snapshot) => {
+              const stats: FirestoreRanking[] = [];
+              snapshot.forEach((doc) => {
+                const data = doc.data();
+                if (typeof data.toolId === 'number' && typeof data.totalClicks === 'number') {
+                  stats.push({ toolId: data.toolId, totalClicks: data.totalClicks });
+                }
+              });
+              setFirestoreRankings(stats);
+              setIsLoading(false);
+              // 本地快取供離線使用
+              try {
+                localStorage.setItem('localToolsRankings', JSON.stringify(stats));
+              } catch { /* ignore quota error */ }
+            },
+            (err) => {
+              console.warn('[BulletinLeaderboard] Firestore 監聽失敗，改用本地快取:', err);
+              loadFromCache();
+            }
+          );
+          return;
+        }
+
+        loadFromCache();
+      } catch (err) {
+        console.warn('[BulletinLeaderboard] Firebase 初始化失敗:', err);
+        loadFromCache();
+      }
+    })();
+
+    function loadFromCache() {
+      try {
+        const cached = localStorage.getItem('localToolsRankings');
+        if (cached) {
+          setFirestoreRankings(JSON.parse(cached));
+        } else {
+          setFirestoreRankings([]);
+        }
+      } catch {
+        setFirestoreRankings([]);
+      }
+      setIsLoading(false);
+    }
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, []);
+
+  // 合併 Firestore 排行 + 工具 metadata
+  const top5 = useMemo(() => {
+    if (!firestoreRankings || firestoreRankings.length === 0) {
+      // fallback 到 tools.totalClicks（若靜態資料有 seed 值）
+      return [...tools]
+        .filter((t) => (t.totalClicks ?? 0) > 0)
+        .sort((a, b) => (b.totalClicks ?? 0) - (a.totalClicks ?? 0))
+        .slice(0, 5)
+        .map((t) => ({ tool: t, clicks: t.totalClicks ?? 0 }));
+    }
+
+    const merged: Array<{ tool: EducationalTool; clicks: number }> = [];
+    for (const ranking of firestoreRankings) {
+      const tool = tools.find((t) => t.id === ranking.toolId);
+      if (tool) merged.push({ tool, clicks: ranking.totalClicks });
+    }
+    return merged.slice(0, 5);
+  }, [firestoreRankings, tools]);
+
+  const colors = [
+    tokens.note.yellow,
+    tokens.note.blue,
+    tokens.note.pink,
+    tokens.note.green,
+    tokens.note.orange,
+  ];
   const tilts = [-2, 1.5, -1, 2.5, -1.5];
 
   return (
@@ -32,7 +122,22 @@ export function BulletinLeaderboard({ tools }: Props) {
         </Tape>
       </div>
 
-      {top5.length === 0 ? (
+      {isLoading ? (
+        <div
+          style={{
+            background: 'rgba(255,255,255,.9)',
+            border: '2px dashed #8b7356',
+            borderRadius: 12,
+            padding: 20,
+            textAlign: 'center',
+            color: tokens.muted,
+            fontSize: 13,
+            fontStyle: 'italic',
+          }}
+        >
+          📡 正在連線到公佈欄資料庫…
+        </div>
+      ) : top5.length === 0 ? (
         <div
           style={{
             background: 'rgba(255,255,255,.9)',
@@ -44,14 +149,21 @@ export function BulletinLeaderboard({ tools }: Props) {
             fontSize: 13,
           }}
         >
-          還沒有足夠的使用數據 📊
+          還沒有足夠的使用數據 📊<br />
+          <span style={{ fontSize: 11, opacity: 0.7 }}>
+            多點幾次工具，排行榜就會長出來囉！
+          </span>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {top5.map((tool, i) => (
-            <div
+          {top5.map(({ tool, clicks }, i) => (
+            <a
               key={tool.id}
+              href={tool.url}
+              target="_blank"
+              rel="noopener noreferrer"
               className="sticker-card"
+              aria-label={`排名第 ${i + 1} 名：${tool.title}，${clicks} 次點擊`}
               style={{
                 background: colors[i],
                 padding: '12px 16px',
@@ -62,9 +174,16 @@ export function BulletinLeaderboard({ tools }: Props) {
                 display: 'flex',
                 alignItems: 'center',
                 gap: 14,
+                textDecoration: 'none',
+                color: 'inherit',
+                cursor: 'pointer',
               }}
             >
-              <Pin color={tokens.pin[i % tokens.pin.length]} size={14} style={{ top: -7, left: 14 }} />
+              <Pin
+                color={tokens.pin[i % tokens.pin.length]}
+                size={14}
+                style={{ top: -7, left: 14 }}
+              />
               <div
                 style={{
                   fontFamily: tokens.font.en,
@@ -100,10 +219,10 @@ export function BulletinLeaderboard({ tools }: Props) {
                     marginTop: 2,
                   }}
                 >
-                  👆 {(tool.totalClicks ?? 0).toLocaleString()} clicks
+                  👆 {clicks.toLocaleString()} clicks
                 </div>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       )}
