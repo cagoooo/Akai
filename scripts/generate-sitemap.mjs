@@ -21,6 +21,14 @@ urls.push({
     priority: '1.0',
 });
 
+// 許願池分享頁（供社群爬蟲抓取 OG 預覽）
+urls.push({
+    loc: `${SITE_URL}/wish/`,
+    lastmod: TODAY,
+    changefreq: 'monthly',
+    priority: '0.9',
+});
+
 // Tool detail pages
 for (const tool of tools) {
     urls.push({

@@ -29,12 +29,19 @@ export function WishingWellDialog({ open, onOpenChange }: WishingWellDialogProps
     const [linkCopied, setLinkCopied] = useState(false);
 
     const handleCopyLink = () => {
-        const url = `${window.location.origin}${window.location.pathname}?wish=1`;
+        // 使用 /wish/ 靜態頁面當分享連結，讓 FB / LINE / Twitter 爬蟲抓到許願池專屬的 OG 預覽圖
+        // 一般使用者訪問會被 JS 自動重導回 /Akai/?wish=1 觸發對話框
+        // 開發環境下 fallback 到 ?wish=1（因為 /wish/ 只在 production build 時才生成）
+        const isProd = window.location.hostname.includes('github.io');
+        const base = import.meta.env.BASE_URL || '/';
+        const url = isProd
+            ? `${window.location.origin}${base}wish/`
+            : `${window.location.origin}${window.location.pathname}?wish=1`;
         navigator.clipboard.writeText(url);
         setLinkCopied(true);
         toast({
             title: "已複製連結 🔗",
-            description: "許願池專屬連結已複製到剪貼簿，可以分享給其他人囉！",
+            description: "許願池專屬連結已複製到剪貼簿，分享到 LINE/FB 時會顯示精美預覽圖！",
         });
         setTimeout(() => setLinkCopied(false), 2000);
     };
