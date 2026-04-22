@@ -37,6 +37,12 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0 }: Props) {
   const isFav = isFavorite(tool.id);
   const totalClicks = tool.totalClicks ?? 0;
 
+  // 處理 previewUrl：從 '/previews/tool_1.webp' 轉為 BASE_URL + 'previews/tool_1.webp'
+  // 以便在 GitHub Pages 子路徑 (/Akai/) 下也能正確載入
+  const previewSrc = tool.previewUrl
+    ? `${import.meta.env.BASE_URL}previews/${tool.previewUrl.split('/').pop()}`
+    : null;
+
   const handleToggleFav = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
@@ -76,7 +82,7 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0 }: Props) {
     >
       <Pin color={pinColor} size={22} style={{ top: -11, left: '50%', marginLeft: -11, zIndex: 10 }} />
 
-      {/* 照片區（icon 或 預覽圖） */}
+      {/* 照片區（預覽圖優先，無圖時退回 emoji + icon） */}
       <Link href={`/tool/${tool.id}`}>
         <a
           style={{
@@ -90,15 +96,38 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0 }: Props) {
             cursor: 'pointer',
           }}
         >
-          {tool.previewUrl ? (
+          {previewSrc ? (
             <img
-              src={tool.previewUrl}
+              src={previewSrc}
               alt={tool.title}
               loading="lazy"
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                display: 'block',
+              }}
+              onError={(e) => {
+                // 預覽圖載入失敗 → 退回顯示 emoji
+                const img = e.currentTarget;
+                const parent = img.parentElement;
+                if (!parent) return;
+                img.style.display = 'none';
+                const fallback = document.createElement('div');
+                fallback.style.fontSize = '64px';
+                fallback.textContent = emoji;
+                parent.insertBefore(fallback, img);
+              }}
             />
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 4,
+              }}
+            >
               <div style={{ fontSize: 64 }}>{emoji}</div>
               {tool.icon && (
                 <div style={{ color: C.fg, opacity: 0.7 }}>
@@ -107,11 +136,15 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0 }: Props) {
               )}
             </div>
           )}
-          <div style={{ position: 'absolute', top: -2, left: -4 }}>
+
+          {/* 分類膠帶（絕對定位，不管有沒有預覽圖都在左上角） */}
+          <div style={{ position: 'absolute', top: -2, left: -4, zIndex: 3 }}>
             <Tape color={shade(C.bg, -15)} angle={-18} width={80}>
               <span style={{ fontSize: 10, color: C.fg }}>{categoryLabel}</span>
             </Tape>
           </div>
+
+          {/* 右下角閃星星（預覽圖上也要可見，加陰影） */}
           <div
             style={{
               position: 'absolute',
@@ -119,11 +152,14 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0 }: Props) {
               right: 8,
               fontSize: 20,
               animation: 'float1 3s ease-in-out infinite',
+              filter: previewSrc ? 'drop-shadow(0 2px 4px rgba(0,0,0,.5))' : 'none',
+              zIndex: 3,
               ['--r' as string]: `${tilt * 2}deg`,
             } as React.CSSProperties}
           >
             ✨
           </div>
+
           <Stamp trigger={stampTrigger}>OPENED</Stamp>
         </a>
       </Link>
