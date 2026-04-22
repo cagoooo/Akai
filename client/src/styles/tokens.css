@@ -179,6 +179,27 @@ html, body {
     justify-content: center !important;
   }
 
+  /* 訪客計數器手機版：數字列 + 進度條改直向堆疊 */
+  .bulletin-hero-counter-wrap {
+    display: flex;
+    justify-content: center;
+  }
+  .bulletin-visitor-counter {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    width: 100% !important;
+    max-width: 360px !important;
+    transform: rotate(0deg) !important;
+    padding: 12px 14px !important;
+  }
+  .bulletin-visitor-counter > div:first-of-type {
+    justify-content: center !important;
+  }
+  .bulletin-visitor-progress {
+    width: 100% !important;
+  }
+
   /* Header 手機版置中 */
   .bulletin-header {
     justify-content: center !important;

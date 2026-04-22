@@ -1,6 +1,11 @@
+import { Suspense, lazy } from 'react';
 import { tokens } from '@/design/tokens';
 import { Tape } from '@/components/primitives/Tape';
 import { Pin } from '@/components/primitives/Pin';
+
+const BulletinVisitorCounter = lazy(() =>
+  import('./BulletinVisitorCounter').then((m) => ({ default: m.BulletinVisitorCounter }))
+);
 
 /**
  * Hero 區：公告膠帶 + 大標（含螢光筆底色）+ 白色半透明介紹區 + 阿凱老師拍立得
@@ -86,6 +91,26 @@ export function BulletinHero() {
           81 個老師做的免費工具，一張一張釘在公佈欄上。
           從課堂互動、評語優化到行政自動化都有，想看哪個就點哪個，想許願就直接寫便利貼 🪄
         </p>
+
+        {/* 訪客計數器（Firestore 即時） */}
+        <div style={{ marginTop: 20 }} className="bulletin-hero-counter-wrap">
+          <Suspense
+            fallback={
+              <div
+                style={{
+                  height: 72,
+                  background: 'rgba(255,255,255,.5)',
+                  borderRadius: 10,
+                  border: '2px dashed rgba(74,58,32,.3)',
+                  maxWidth: 520,
+                }}
+                aria-hidden="true"
+              />
+            }
+          >
+            <BulletinVisitorCounter />
+          </Suspense>
+        </div>
 
         {/* 行動按鈕 */}
         <div
