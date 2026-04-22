@@ -2,6 +2,30 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.0] - 2026-04-21
+### ✨ 大版本更新：E2 公佈欄首頁
+- **全新視覺語彙**：軟木塞底 + 木框 + 拍立得工具卡 + 便利貼排行榜 + 膠帶標題
+- **保留所有既有功能**：雲端收藏同步、PWA 自動更新、鍵盤快捷鍵、搜尋、分類篩選、URL 同步、許願池 (LINE Bot 推播) 完整保留
+- **新增路由 `/classic`**：保留舊版首頁供對比與備援
+- **新增 `BulletinHome.tsx`**：整合層，連接真實 81 個工具 + Firestore 即時排行榜
+- **RWD 完整支援**：1024px / 768px / 480px 三段斷點
+- **尊重 `prefers-reduced-motion`**：停用卡片動畫
+- **無障礙強化**：ToolCard `role="article"` + `aria-label`，搜尋結果 `aria-live` 播報
+
+### 📂 新增檔案
+- `client/public/assets/Akai.png`、`school-logo.png` - 素材
+- `client/src/styles/tokens.css`、`keyframes.css` - 設計 tokens 與動畫
+- `client/src/design/tokens.ts` - TypeScript 版 tokens（含 interactive 分類）
+- `client/src/components/primitives/` - Pin / Tape / Stamp / HeartBurst / shade
+- `client/src/components/bulletin/` - 9 個整合元件 + toolAdapter
+- `client/src/pages/BulletinHome.tsx` - 新首頁整合層
+
+### 🔧 修改檔案
+- `client/src/App.tsx` - `/` 改為 BulletinHome、新增 `/classic`
+- `client/src/main.tsx` - 匯入 tokens.css / keyframes.css
+- `client/index.html` - 載入 Noto Sans TC + Plus Jakarta Sans
+- `README.md` / `package.json` - 版本同步 v3.6.0
+
 ## [3.5.8] - 2026-04-19
 ### ✨ 新增
 - **PWA 自動更新**：新版本偵測後 3 秒自動套用，不再需要使用者手動點擊。

@@ -9,7 +9,9 @@ import { LazyMotion } from "framer-motion";
 const loadFramerFeatures = () => import("./framerFeatures").then(res => res.default);
 
 // 直接 import 首頁 (首屏必須載入)
-import { Home } from "@/pages/Home";
+// 改為 E2 公佈欄版首頁（BulletinHome），舊版 Home 保留於 /classic 以便對比
+import { BulletinHome } from "@/pages/BulletinHome";
+import { Home as ClassicHome } from "@/pages/Home";
 
 // 延遲載入次要路由元件與彈窗元件
 const ToolDetail = lazy(() => import("@/pages/ToolDetail").then(module => ({ default: module.ToolDetail })));
@@ -163,7 +165,10 @@ function App() {
                     <Suspense fallback={<PageSkeleton />}>
                       <Switch>
                         <Route path="/">
-                          <Home />
+                          <BulletinHome />
+                        </Route>
+                        <Route path="/classic">
+                          <ClassicHome />
                         </Route>
                         <Route path="/tool/:id">
                           <ToolDetail />

@@ -1,0 +1,28 @@
+/* Keyframes for sticker interactions
+ * Used by: HeartBurst, Stamp, ToolCard sparkles
+ */
+
+@keyframes heartUp {
+  0%   { transform: translate(-50%, -50%) scale(.3); opacity: 0; }
+  20%  { opacity: 1; transform: translate(calc(-50% + var(--x) * .4), calc(-50% - 20px)) scale(1.2) rotate(var(--rot)); }
+  100% { transform: translate(calc(-50% + var(--x)), calc(-50% - 140px)) scale(.8) rotate(var(--rot)); opacity: 0; }
+}
+
+@keyframes stampIn {
+  0%   { transform: translate(-50%, -50%) scale(3) rotate(-22deg); opacity: 0; }
+  40%  { transform: translate(-50%, -50%) scale(0.85) rotate(-14deg); opacity: .95; }
+  55%  { transform: translate(-50%, -50%) scale(1.05) rotate(-14deg); }
+  70%  { transform: translate(-50%, -50%) scale(0.95) rotate(-14deg); opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.1) rotate(-14deg); }
+}
+
+@keyframes float1 {
+  0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+  50%      { transform: translateY(-6px) rotate(var(--r, 0deg)); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(var(--r, 0deg)); }
+  25%      { transform: rotate(calc(var(--r, 0deg) + 1.5deg)); }
+  75%      { transform: rotate(calc(var(--r, 0deg) - 1.5deg)); }
+}
