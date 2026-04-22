@@ -3,183 +3,342 @@
 /**
  * 產生「阿凱老師的許願池」專屬 OG 社群分享預覽圖
  *
- * 產出：client/public/wish-preview.png（1200×630，適合 FB / LINE / Twitter 分享）
+ * 產出：client/public/wish-preview.png（1200×630）
  *
- * 設計：cork 公佈欄風格 + 黃色許願便利貼 + 阿凱老師頭像
- * 以 SVG 繪製後用 sharp 轉 PNG，無需任何手動繪圖工具。
+ * 改用 @napi-rs/canvas + 明確載入精簡 Noto Sans TC 字型，
+ * 100% 不依賴系統字型，跨平台渲染一致（Windows / Linux CI 都能正確顯示中文）。
  */
 
-import { writeFileSync, readFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import sharp from 'sharp';
+import { createCanvas, loadImage, GlobalFonts } from '@napi-rs/canvas';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const OUTPUT = resolve(ROOT, 'client', 'public', 'wish-preview.png');
 const FAVICON_PATH = resolve(ROOT, 'client', 'public', 'favicon.png');
+const FONT_PATH = resolve(__dirname, 'fonts', 'NotoSansTC-WishSubset.ttf');
 
-// 把 favicon.png 轉成 base64 供 SVG 內嵌（若存在）
-let faviconDataUrl = '';
-if (existsSync(FAVICON_PATH)) {
-  const favBuf = readFileSync(FAVICON_PATH);
-  faviconDataUrl = `data:image/png;base64,${favBuf.toString('base64')}`;
+// ── 註冊字型 ─────────────────────────────────────
+if (!existsSync(FONT_PATH)) {
+  console.error(`❌ 找不到字型檔：${FONT_PATH}`);
+  console.error(`   請先執行 node scripts/subset-wish-font.mjs 產生精簡字型`);
+  process.exit(1);
 }
+GlobalFonts.registerFromPath(FONT_PATH, 'NotoSansTC');
 
 const W = 1200;
 const H = 630;
+const canvas = createCanvas(W, H);
+const ctx = canvas.getContext('2d');
 
-const svg = `
-<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
-  <defs>
-    <!-- Cork 軟木塞底紋（小圓點 pattern） -->
-    <pattern id="cork-dots" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
-      <circle cx="15" cy="20" r="1.5" fill="rgba(110,80,50,.35)"/>
-      <circle cx="45" cy="40" r="1.3" fill="rgba(140,95,55,.30)"/>
-      <circle cx="30" cy="55" r="1.1" fill="rgba(90,60,30,.28)"/>
-      <circle cx="5" cy="50" r="1.2" fill="rgba(130,90,50,.32)"/>
-    </pattern>
+// ── 配色 ──────────────────────────────────────────
+const C = {
+  cork: '#c99a6c',
+  wood: '#7c4f2a',
+  woodDark: '#6b4220',
+  woodLight: '#8a5a32',
+  paper: '#fefdfa',
+  ink: '#1a1a1a',
+  inkSoft: '#4a3a20',
+  muted: '#8b7356',
+  accent: '#ea8a3e',
+  red: '#dc2626',
+  noteYellow: '#fff27a',
+  noteYellowMid: '#ffd966',
+  notePink: '#ffd4d9',
+  noteBlue: '#c8e6ff',
+  noteGreen: '#d4f4c7',
+  pinRed: '#dc2626',
+  pinBlue: '#2563eb',
+  pinGreen: '#16a34a',
+  pinYellow: '#eab308',
+};
 
-    <!-- 便利貼漸層（微微立體感） -->
-    <linearGradient id="stickyYellow" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fff27a"/>
-      <stop offset="100%" stop-color="#ffd966"/>
-    </linearGradient>
+// ── 小工具：圓角矩形 ────────────────────────────────
+function roundRect(x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
 
-    <!-- 便利貼投影 -->
-    <filter id="noteShadow" x="-10%" y="-10%" width="120%" height="120%">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="8"/>
-      <feOffset dx="4" dy="6" result="offsetblur"/>
-      <feComponentTransfer><feFuncA type="linear" slope="0.35"/></feComponentTransfer>
-      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
+// ── 小工具：陰影的便利貼矩形 ────────────────────────
+function drawStickyNote(x, y, w, h, bg, rotate, pinColor, radius = 4) {
+  ctx.save();
+  ctx.translate(x + w / 2, y + h / 2);
+  ctx.rotate((rotate * Math.PI) / 180);
+  ctx.translate(-w / 2, -h / 2);
 
-    <!-- 木框紋路 -->
-    <pattern id="wood" x="0" y="0" width="80" height="18" patternUnits="userSpaceOnUse">
-      <rect width="80" height="18" fill="#7c4f2a"/>
-      <rect width="2" height="18" x="40" fill="#6b4220"/>
-      <rect width="2" height="18" x="78" fill="#8a5a32"/>
-    </pattern>
-  </defs>
+  // 陰影
+  ctx.shadowColor = 'rgba(0,0,0,.28)';
+  ctx.shadowBlur = 12;
+  ctx.shadowOffsetX = 4;
+  ctx.shadowOffsetY = 6;
+  ctx.fillStyle = bg;
+  roundRect(0, 0, w, h, radius);
+  ctx.fill();
+  ctx.shadowColor = 'transparent';
 
-  <!-- 背景：Cork 底色 -->
-  <rect width="${W}" height="${H}" fill="#c99a6c"/>
-  <rect width="${W}" height="${H}" fill="url(#cork-dots)"/>
+  // 圖釘（便利貼頂部中央）
+  if (pinColor) {
+    const cx = w / 2;
+    const cy = -8;
+    const pr = 9;
+    const grad = ctx.createRadialGradient(cx - 2, cy - 2, 1, cx, cy, pr);
+    grad.addColorStop(0, '#ffffff');
+    grad.addColorStop(0.4, pinColor);
+    grad.addColorStop(1, '#000000');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(cx, cy, pr, 0, Math.PI * 2);
+    ctx.fill();
+    // 白色高光
+    ctx.fillStyle = 'rgba(255,255,255,.75)';
+    ctx.beginPath();
+    ctx.arc(cx - 3, cy - 3, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
 
-  <!-- 頂部木框 -->
-  <rect x="0" y="0" width="${W}" height="22" fill="url(#wood)"/>
-  <!-- 底部木框 -->
-  <rect x="0" y="${H - 22}" width="${W}" height="22" fill="url(#wood)"/>
+  ctx.restore();
+}
 
-  <!-- 左側主便利貼（傾斜 -3°，許願池標題） -->
-  <g transform="translate(90 140) rotate(-3)" filter="url(#noteShadow)">
-    <rect x="0" y="0" width="580" height="420" fill="url(#stickyYellow)" rx="4"/>
-    <!-- 紅色圖釘 -->
-    <g transform="translate(290 -12)">
-      <circle cx="0" cy="0" r="16" fill="url(#stickyYellow)"/>
-      <circle cx="0" cy="0" r="14" fill="#dc2626"/>
-      <circle cx="-4" cy="-4" r="3" fill="rgba(255,255,255,.7)"/>
-    </g>
+// ── 小工具：在旋轉座標系裡繪製文字 ──────────────────
+function drawRotatedText(text, cx, cy, rotate, fillFn) {
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate((rotate * Math.PI) / 180);
+  ctx.translate(-cx, -cy);
+  fillFn();
+  ctx.restore();
+}
 
-    <!-- 標題：🪄 阿凱老師的許願池 -->
-    <text x="40" y="90" font-family="'Noto Sans TC', 'Microsoft JhengHei', sans-serif"
-          font-size="56" font-weight="900" fill="#1a1a1a">🪄 阿凱老師的</text>
-    <text x="40" y="170" font-family="'Noto Sans TC', 'Microsoft JhengHei', sans-serif"
-          font-size="80" font-weight="900" fill="#1a1a1a">許願池</text>
+// ========== 開始繪製 ==========
 
-    <!-- 橘色螢光筆底色強調 -->
-    <rect x="36" y="190" width="360" height="22" fill="#ea8a3e" opacity="0.65"/>
-    <text x="40" y="210" font-family="'Noto Sans TC', sans-serif"
-          font-size="22" font-weight="700" fill="#1a1a1a">教育工具許願 · 使用回饋</text>
+// 背景：Cork 底色
+ctx.fillStyle = C.cork;
+ctx.fillRect(0, 0, W, H);
 
-    <!-- 分隔線 -->
-    <line x1="40" y1="245" x2="540" y2="245" stroke="#8b7356" stroke-width="2" stroke-dasharray="6 4"/>
+// Cork 小圓點紋理
+ctx.save();
+const dotColors = [
+  { color: 'rgba(110,80,50,.35)', size: 1.5 },
+  { color: 'rgba(140,95,55,.30)', size: 1.3 },
+  { color: 'rgba(90,60,30,.28)', size: 1.1 },
+  { color: 'rgba(130,90,50,.32)', size: 1.2 },
+];
+for (let y = 0; y < H; y += 40) {
+  for (let x = 0; x < W; x += 40) {
+    const d = dotColors[(x * 7 + y * 11) % dotColors.length];
+    ctx.fillStyle = d.color;
+    ctx.beginPath();
+    ctx.arc(x + ((y * 3) % 40), y + ((x * 5) % 40), d.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+ctx.restore();
 
-    <!-- 介紹文字 -->
-    <text x="40" y="285" font-family="'Noto Sans TC', sans-serif"
-          font-size="22" font-weight="600" fill="#4a3a20">有想到的教學工具點子？</text>
-    <text x="40" y="318" font-family="'Noto Sans TC', sans-serif"
-          font-size="22" font-weight="600" fill="#4a3a20">想給我們一點鼓勵或建議？</text>
+// 上下木框
+const drawWoodStrip = (y) => {
+  ctx.fillStyle = C.wood;
+  ctx.fillRect(0, y, W, 22);
+  for (let x = 0; x < W; x += 40) {
+    ctx.fillStyle = C.woodDark;
+    ctx.fillRect(x, y, 2, 22);
+    if (x + 38 < W) {
+      ctx.fillStyle = C.woodLight;
+      ctx.fillRect(x + 38, y, 2, 22);
+    }
+  }
+};
+drawWoodStrip(0);
+drawWoodStrip(H - 22);
 
-    <!-- CTA -->
-    <rect x="36" y="350" width="200" height="48" rx="10" fill="#ea8a3e" stroke="#1a1a1a" stroke-width="3"/>
-    <text x="136" y="382" text-anchor="middle"
-          font-family="'Noto Sans TC', sans-serif" font-size="22"
-          font-weight="900" fill="#ffffff">📮 投入許願池</text>
-  </g>
+// ── 左側主便利貼（黃色，旋轉 -3°）────────────────
+const mainX = 90, mainY = 140, mainW = 580, mainH = 420;
+drawStickyNote(mainX, mainY, mainW, mainH, C.noteYellow, -3, C.pinRed);
 
-  <!-- 右側裝飾便利貼 1：粉色「夢幻教具」 -->
-  <g transform="translate(750 100) rotate(4)" filter="url(#noteShadow)">
-    <rect x="0" y="0" width="320" height="130" fill="#ffd4d9" rx="4"/>
-    <g transform="translate(160 -10)">
-      <circle cx="0" cy="0" r="12" fill="#2563eb"/>
-      <circle cx="-3" cy="-3" r="2.5" fill="rgba(255,255,255,.7)"/>
-    </g>
-    <text x="30" y="50" font-family="'Noto Sans TC', sans-serif"
-          font-size="22" font-weight="800" fill="#1a1a1a">✨ 夢幻教具</text>
-    <text x="30" y="85" font-family="'Noto Sans TC', sans-serif"
-          font-size="16" font-weight="600" fill="#4a3a20">希望有...的工具！</text>
-    <text x="30" y="110" font-family="'Noto Sans TC', sans-serif"
-          font-size="14" font-style="italic" fill="#8b7356">— 小陳老師</text>
-  </g>
+// 在旋轉座標系下繪製主便利貼文字
+ctx.save();
+ctx.translate(mainX + mainW / 2, mainY + mainH / 2);
+ctx.rotate((-3 * Math.PI) / 180);
+ctx.translate(-mainW / 2, -mainH / 2);
 
-  <!-- 右側裝飾便利貼 2：藍色「感謝鼓勵」 -->
-  <g transform="translate(800 250) rotate(-2)" filter="url(#noteShadow)">
-    <rect x="0" y="0" width="310" height="130" fill="#c8e6ff" rx="4"/>
-    <g transform="translate(155 -10)">
-      <circle cx="0" cy="0" r="12" fill="#16a34a"/>
-      <circle cx="-3" cy="-3" r="2.5" fill="rgba(255,255,255,.7)"/>
-    </g>
-    <text x="30" y="50" font-family="'Noto Sans TC', sans-serif"
-          font-size="22" font-weight="800" fill="#1a1a1a">💖 感謝鼓勵</text>
-    <text x="30" y="85" font-family="'Noto Sans TC', sans-serif"
-          font-size="16" font-weight="600" fill="#4a3a20">點石成金救了我！</text>
-    <text x="30" y="110" font-family="'Noto Sans TC', sans-serif"
-          font-size="14" font-style="italic" fill="#8b7356">— 靜芳老師</text>
-  </g>
+// 標題 行1：🪄 阿凱老師的（用內嵌 emoji SVG / unicode）
+ctx.fillStyle = C.ink;
+ctx.font = '900 56px "NotoSansTC"';
+ctx.textBaseline = 'alphabetic';
+// 畫 emoji 當圖示（用 unicode，會走 fallback emoji 字型；若失敗則不影響主視覺）
+ctx.font = '900 56px "NotoSansTC"';
+ctx.fillText('🪄', 40, 90);
+ctx.fillText('阿凱老師的', 110, 90);
 
-  <!-- 右側裝飾便利貼 3：綠色「錯誤回報」 -->
-  <g transform="translate(780 405) rotate(3)" filter="url(#noteShadow)">
-    <rect x="0" y="0" width="330" height="110" fill="#d4f4c7" rx="4"/>
-    <g transform="translate(165 -10)">
-      <circle cx="0" cy="0" r="12" fill="#eab308"/>
-      <circle cx="-3" cy="-3" r="2.5" fill="rgba(255,255,255,.7)"/>
-    </g>
-    <text x="30" y="50" font-family="'Noto Sans TC', sans-serif"
-          font-size="22" font-weight="800" fill="#1a1a1a">🐛 問題回報</text>
-    <text x="30" y="82" font-family="'Noto Sans TC', sans-serif"
-          font-size="15" font-weight="600" fill="#4a3a20">第 X 按鈕點不動...</text>
-  </g>
+// 標題 行2：許願池（大字）
+ctx.font = '900 80px "NotoSansTC"';
+ctx.fillText('許願池', 40, 172);
 
-  <!-- 左下 favicon（阿凱老師頭像徽章） -->
-  ${faviconDataUrl ? `
-  <g transform="translate(130 530)">
-    <circle cx="0" cy="0" r="36" fill="#fefdfa" stroke="#1a1a1a" stroke-width="3"/>
-    <image href="${faviconDataUrl}" x="-28" y="-28" width="56" height="56"/>
-  </g>
-  <text x="180" y="523" font-family="'Noto Sans TC', sans-serif"
-        font-size="18" font-weight="700" fill="#1a1a1a">阿凱老師 · 教育科技創新專區</text>
-  <text x="180" y="548" font-family="'Noto Sans TC', sans-serif"
-        font-size="13" font-weight="600" fill="#4a3a20">桃園市石門國小 · cagoooo.github.io/Akai</text>
-  ` : `
-  <text x="130" y="540" font-family="'Noto Sans TC', sans-serif"
-        font-size="18" font-weight="700" fill="#1a1a1a">阿凱老師 · 教育科技創新專區</text>
-  `}
+// 橘色螢光筆底色（覆在副標下方）
+ctx.fillStyle = C.accent;
+ctx.globalAlpha = 0.65;
+ctx.fillRect(36, 190, 360, 22);
+ctx.globalAlpha = 1.0;
 
-  <!-- 右下網址標籤 -->
-  <g transform="translate(930 560)">
-    <rect x="0" y="0" width="200" height="38" rx="19" fill="#1a1a1a"/>
-    <text x="100" y="25" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif"
-          font-size="14" font-weight="800" fill="#ffffff">Akai/wish →</text>
-  </g>
-</svg>
-`.trim();
+// 副標：教育工具許願 · 使用回饋
+ctx.fillStyle = C.ink;
+ctx.font = '700 22px "NotoSansTC"';
+ctx.fillText('教育工具許願 · 使用回饋', 40, 210);
 
-// SVG → PNG 轉換（1200×630）
-await sharp(Buffer.from(svg))
-  .png({ compressionLevel: 9, quality: 95 })
-  .toFile(OUTPUT);
+// 虛線分隔線
+ctx.strokeStyle = C.muted;
+ctx.lineWidth = 2;
+ctx.setLineDash([6, 4]);
+ctx.beginPath();
+ctx.moveTo(40, 245);
+ctx.lineTo(540, 245);
+ctx.stroke();
+ctx.setLineDash([]);
 
-console.log(`\n✨ 許願池 OG 預覽圖已生成`);
+// 介紹文字
+ctx.fillStyle = C.inkSoft;
+ctx.font = '600 22px "NotoSansTC"';
+ctx.fillText('有想到的教學工具點子？', 40, 285);
+ctx.fillText('想給我們一點鼓勵或建議？', 40, 318);
+
+// CTA 按鈕：橘底 + 黑邊
+ctx.fillStyle = C.accent;
+roundRect(36, 350, 240, 52, 10);
+ctx.fill();
+ctx.strokeStyle = C.ink;
+ctx.lineWidth = 3;
+roundRect(36, 350, 240, 52, 10);
+ctx.stroke();
+
+ctx.fillStyle = '#ffffff';
+ctx.font = '900 22px "NotoSansTC"';
+ctx.textAlign = 'center';
+ctx.fillText('📮 投入許願池', 156, 384);
+ctx.textAlign = 'left';
+
+ctx.restore();
+
+// ── 右側便利貼 1：粉色 夢幻教具（旋轉 4°） ──────
+{
+  const nx = 750, ny = 100, nw = 320, nh = 130;
+  drawStickyNote(nx, ny, nw, nh, C.notePink, 4, C.pinBlue);
+  ctx.save();
+  ctx.translate(nx + nw / 2, ny + nh / 2);
+  ctx.rotate((4 * Math.PI) / 180);
+  ctx.translate(-nw / 2, -nh / 2);
+
+  ctx.fillStyle = C.ink;
+  ctx.font = '800 22px "NotoSansTC"';
+  ctx.fillText('✨ 夢幻教具', 20, 45);
+  ctx.fillStyle = C.inkSoft;
+  ctx.font = '600 16px "NotoSansTC"';
+  ctx.fillText('希望有...的工具！', 20, 78);
+  ctx.fillStyle = C.muted;
+  ctx.font = 'italic 14px "NotoSansTC"';
+  ctx.fillText('— 小陳老師', 20, 105);
+
+  ctx.restore();
+}
+
+// ── 右側便利貼 2：藍色 感謝鼓勵（旋轉 -2°） ─────
+{
+  const nx = 800, ny = 250, nw = 310, nh = 130;
+  drawStickyNote(nx, ny, nw, nh, C.noteBlue, -2, C.pinGreen);
+  ctx.save();
+  ctx.translate(nx + nw / 2, ny + nh / 2);
+  ctx.rotate((-2 * Math.PI) / 180);
+  ctx.translate(-nw / 2, -nh / 2);
+
+  ctx.fillStyle = C.ink;
+  ctx.font = '800 22px "NotoSansTC"';
+  ctx.fillText('💖 感謝鼓勵', 20, 45);
+  ctx.fillStyle = C.inkSoft;
+  ctx.font = '600 16px "NotoSansTC"';
+  ctx.fillText('點石成金救了我！', 20, 78);
+  ctx.fillStyle = C.muted;
+  ctx.font = 'italic 14px "NotoSansTC"';
+  ctx.fillText('— 靜芳老師', 20, 105);
+
+  ctx.restore();
+}
+
+// ── 右側便利貼 3：綠色 問題回報（旋轉 3°） ──────
+{
+  const nx = 780, ny = 405, nw = 330, nh = 110;
+  drawStickyNote(nx, ny, nw, nh, C.noteGreen, 3, C.pinYellow);
+  ctx.save();
+  ctx.translate(nx + nw / 2, ny + nh / 2);
+  ctx.rotate((3 * Math.PI) / 180);
+  ctx.translate(-nw / 2, -nh / 2);
+
+  ctx.fillStyle = C.ink;
+  ctx.font = '800 22px "NotoSansTC"';
+  ctx.fillText('🐛 問題回報', 20, 45);
+  ctx.fillStyle = C.inkSoft;
+  ctx.font = '600 15px "NotoSansTC"';
+  ctx.fillText('第 X 按鈕點不動...', 20, 78);
+
+  ctx.restore();
+}
+
+// ── 左下：阿凱頭像 + 署名 ─────────────────────────
+const avatarX = 130, avatarY = 565;
+// 外圈
+ctx.fillStyle = C.paper;
+ctx.beginPath();
+ctx.arc(avatarX, avatarY, 28, 0, Math.PI * 2);
+ctx.fill();
+ctx.strokeStyle = C.ink;
+ctx.lineWidth = 3;
+ctx.beginPath();
+ctx.arc(avatarX, avatarY, 28, 0, Math.PI * 2);
+ctx.stroke();
+
+// 載入並繪製 favicon 當頭像
+if (existsSync(FAVICON_PATH)) {
+  const favicon = await loadImage(FAVICON_PATH);
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(avatarX, avatarY, 24, 0, Math.PI * 2);
+  ctx.clip();
+  ctx.drawImage(favicon, avatarX - 24, avatarY - 24, 48, 48);
+  ctx.restore();
+}
+
+// 右側署名
+ctx.fillStyle = C.ink;
+ctx.font = '700 18px "NotoSansTC"';
+ctx.fillText('阿凱老師 · 教育科技創新專區', 170, 562);
+ctx.fillStyle = C.inkSoft;
+ctx.font = '600 13px "NotoSansTC"';
+ctx.fillText('桃園市石門國小 · cagoooo.github.io/Akai', 170, 583);
+
+// ── 右下：網址膠囊 ────────────────────────────────
+ctx.fillStyle = C.ink;
+roundRect(930, 555, 200, 38, 19);
+ctx.fill();
+ctx.fillStyle = '#ffffff';
+ctx.font = '800 14px "NotoSansTC"';
+ctx.textAlign = 'center';
+ctx.fillText('Akai/wish →', 1030, 580);
+ctx.textAlign = 'left';
+
+// ── 輸出 PNG ─────────────────────────────────────
+const buffer = canvas.toBuffer('image/png');
+writeFileSync(OUTPUT, buffer);
+
+console.log(`\n✨ 許願池 OG 預覽圖已生成（canvas 渲染）`);
 console.log(`   尺寸：${W} × ${H}`);
+console.log(`   檔案：${(buffer.length / 1024).toFixed(1)} KB`);
 console.log(`   輸出：${OUTPUT}\n`);

@@ -30,3 +30,6 @@ sqlite/
 # Security
 service-account.json
 .env
+
+# 字型原始檔（完整 TTF 過大，精簡版已 commit 於 scripts/fonts/NotoSansTC-WishSubset.ttf）
+scripts/fonts/NotoSansTC-Bold.ttf
