@@ -83,38 +83,102 @@ export function BulletinFooter() {
         </FooterNote>
       </div>
 
-      {/* 底部版權 */}
+      {/* 底部版權（含阿凱 favicon + 高對比配色） */}
       <div
         style={{
-          textAlign: 'center',
-          fontSize: 12,
-          color: tokens.muted,
-          fontFamily: tokens.font.en,
-          letterSpacing: '0.05em',
-          paddingTop: 16,
-          borderTop: '1px dashed rgba(74,58,32,.3)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 12,
           maxWidth: 900,
           margin: '0 auto',
+          paddingTop: 20,
+          borderTop: '1px dashed rgba(74,58,32,.35)',
+          flexWrap: 'wrap',
         }}
+        className="bulletin-footer-copyright"
       >
-        © {year}{' '}
+        {/* 阿凱老師專屬 favicon */}
         <a
-          href={SCHOOL_URL}
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/"
+          aria-label="回到首頁"
+          title="回到首頁"
           style={{
-            color: tokens.muted2,
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 36,
+            height: 36,
+            borderRadius: '50%',
+            background: tokens.paper,
+            border: `2px solid ${tokens.ink}`,
+            boxShadow: '2px 2px 0 rgba(0,0,0,.25)',
+            overflow: 'hidden',
+            flexShrink: 0,
+            transition: 'transform .2s ease',
             textDecoration: 'none',
-            fontWeight: 700,
-            borderBottom: `1px solid ${tokens.accent}`,
+          }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLAnchorElement).style.transform = 'rotate(-8deg) scale(1.1)';
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLAnchorElement).style.transform = 'rotate(0deg) scale(1)';
           }}
         >
-          教育科技創新專區
+          <img
+            src={`${import.meta.env.BASE_URL}favicon.png`}
+            alt="阿凱老師教育科技創新專區"
+            style={{ width: '78%', height: '78%', objectFit: 'contain' }}
+            onError={(e) => {
+              // favicon.png 不存在時退回 favicon-32x32.png
+              const img = e.currentTarget;
+              if (!img.dataset.fallback) {
+                img.dataset.fallback = '1';
+                img.src = `${import.meta.env.BASE_URL}favicon-32x32.png`;
+              }
+            }}
+          />
         </a>
-        {' '}·{' '}
-        <span style={{ fontFamily: tokens.font.tc }}>阿凱老師 · 石門國小</span>
-        {' '}·{' '}
-        All rights reserved.
+
+        {/* 版權文字 */}
+        <div
+          style={{
+            fontSize: 12.5,
+            color: tokens.muted2,
+            fontFamily: tokens.font.en,
+            letterSpacing: '0.03em',
+            lineHeight: 1.6,
+            textAlign: 'center',
+            fontWeight: 600,
+            textShadow: '0 1px 0 rgba(255,255,255,.3)',
+          }}
+        >
+          © {year}{' '}
+          <a
+            href={SCHOOL_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              color: tokens.ink,
+              textDecoration: 'none',
+              fontWeight: 800,
+              background: `linear-gradient(transparent 65%, ${tokens.accent}66 65%, ${tokens.accent}66 90%, transparent 90%)`,
+              padding: '0 4px',
+            }}
+          >
+            教育科技創新專區
+          </a>
+          <span style={{ margin: '0 8px', opacity: 0.6 }}>·</span>
+          <span style={{ fontFamily: tokens.font.tc, color: tokens.ink, fontWeight: 700 }}>
+            阿凱老師
+          </span>
+          <span style={{ margin: '0 8px', opacity: 0.6 }}>·</span>
+          <span style={{ fontFamily: tokens.font.tc, color: tokens.ink, fontWeight: 700 }}>
+            石門國小
+          </span>
+          <span style={{ margin: '0 8px', opacity: 0.6 }}>·</span>
+          <span style={{ color: tokens.muted2 }}>All rights reserved.</span>
+        </div>
       </div>
     </footer>
   );
