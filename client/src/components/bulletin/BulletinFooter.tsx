@@ -43,16 +43,48 @@ export function BulletinFooter() {
           alignItems: 'stretch',
         }}
       >
-        {/* 製作者署名 */}
+        {/* 製作者署名（含阿凱 favicon 頭像） */}
         <FooterNote bg={tokens.note.pink} tilt={-1.5} pinIndex={0}>
-          <div style={{ fontSize: 12, color: tokens.muted2, marginBottom: 6, letterSpacing: '0.1em' }}>
+          <div style={{ fontSize: 12, color: tokens.muted2, marginBottom: 8, letterSpacing: '0.1em' }}>
             ✍️ MAKER
           </div>
-          <div style={{ fontSize: 15, fontWeight: 800, color: tokens.ink, lineHeight: 1.4 }}>
-            阿凱老師
-          </div>
-          <div style={{ fontSize: 11, color: tokens.muted2, marginTop: 4 }}>
-            教育科技創新
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            {/* 阿凱 favicon 頭像 */}
+            <div
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: '50%',
+                background: tokens.paper,
+                border: `2px solid ${tokens.ink}`,
+                boxShadow: '2px 2px 0 rgba(0,0,0,.2)',
+                display: 'grid',
+                placeItems: 'center',
+                overflow: 'hidden',
+                flexShrink: 0,
+              }}
+            >
+              <img
+                src={`${import.meta.env.BASE_URL}favicon.png`}
+                alt="阿凱老師頭像"
+                style={{ width: '80%', height: '80%', objectFit: 'contain' }}
+                onError={(e) => {
+                  const img = e.currentTarget;
+                  if (!img.dataset.fallback) {
+                    img.dataset.fallback = '1';
+                    img.src = `${import.meta.env.BASE_URL}favicon-32x32.png`;
+                  }
+                }}
+              />
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 15, fontWeight: 800, color: tokens.ink, lineHeight: 1.3 }}>
+                阿凱老師
+              </div>
+              <div style={{ fontSize: 11, color: tokens.muted2, marginTop: 2 }}>
+                教育科技創新
+              </div>
+            </div>
           </div>
         </FooterNote>
 
