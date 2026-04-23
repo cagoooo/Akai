@@ -55,6 +55,25 @@
       // teacher.json 僅在舊版 TeacherIntro 組件用到，新版 BulletinHome 不再即時載入；
       // 保留 prefetch 但降為低優先（避免未使用的 preload 警告）
       createLink('prefetch', 'api/teacher.json');
+
+      // 🚀 首屏圖片預載：前 6 張工具預覽圖
+      // 使用 preload (as=image) 讓瀏覽器在 HTML 解析時就開始下載，顯著提升首次訪問體感
+      // 比 prefetch 優先級更高，適合當前頁面必然會用到的資源
+      var preloadImage = function (path) {
+        var link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'image';
+        link.type = 'image/webp';
+        link.href = base + path;
+        // 首屏前 3 張設為最高優先度
+        head.appendChild(link);
+      };
+      preloadImage('previews/tool_1.webp');
+      preloadImage('previews/tool_2.webp');
+      preloadImage('previews/tool_3.webp');
+      preloadImage('previews/tool_4.webp');
+      preloadImage('previews/tool_5.webp');
+      preloadImage('previews/tool_6.webp');
     })();
   </script>
 
@@ -76,9 +95,7 @@
   <!-- E2 公佈欄字體 (Noto Sans TC + Plus Jakarta Sans) -->
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
 
-  <!-- Prefetch 關鍵資源 - 預先獲取首屏圖片 -->
-  <link rel="prefetch" as="image" href="./previews/tool_1.webp" />
-  <link rel="prefetch" as="image" href="./previews/tool_2.webp" />
+  <!-- 首屏圖片預載由上方動態 script 處理（會自動套用正確 base path） -->
 
   <!-- 關鍵 CSS 內聯與字體防閃爍 -->
   <style>

@@ -7,7 +7,7 @@
  * - Stale While Revalidate: 圖片
  */
 
-const CACHE_VERSION = 'v3.6.0-75e834f-202604221127';
+const CACHE_VERSION = 'v3.6.0-07e5f4d-202604240749';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
 const ASSETS_ARCHIVE = 'assets-archive-v1';
@@ -27,6 +27,22 @@ const PRECACHE_ASSETS = [
   `${BASE_PATH}manifest.json`,
   `${BASE_PATH}api/tools.json`,
   `${BASE_PATH}api/teacher.json`,
+];
+
+// 🚀 首屏圖片預快取（存入 IMAGE_CACHE 持久快取，不受 CACHE_VERSION 更新影響）
+// 覆蓋前 6 張工具預覽圖，讓回訪使用者即使離線也能看到首屏內容
+const PRECACHE_IMAGES = [
+  `${BASE_PATH}previews/tool_1.webp`,
+  `${BASE_PATH}previews/tool_2.webp`,
+  `${BASE_PATH}previews/tool_3.webp`,
+  `${BASE_PATH}previews/tool_4.webp`,
+  `${BASE_PATH}previews/tool_5.webp`,
+  `${BASE_PATH}previews/tool_6.webp`,
+  // Hero 區的阿凱拍立得 + 校徽
+  `${BASE_PATH}assets/Akai.png`,
+  `${BASE_PATH}assets/school-logo.png`,
+  // favicon（MAKER 便利貼用）
+  `${BASE_PATH}favicon.png`,
 ];
 
 // 快取策略判斷
@@ -89,19 +105,34 @@ self.addEventListener('install', (event) => {
   console.log('[SW] 安裝中...', CACHE_VERSION);
 
   event.waitUntil(
-    caches.open(STATIC_CACHE)
-      .then((cache) => {
-        // 使用 Promise.allSettled 避免單一失敗導致全部失敗
-        return Promise.allSettled(
-          PRECACHE_ASSETS.map(url =>
-            cache.add(url).catch(err => {
-              console.warn(`[SW] 無法預快取: ${url}`, err);
+    Promise.all([
+      // 1. 預快取核心資源到 STATIC_CACHE
+      caches.open(STATIC_CACHE).then((cache) =>
+        Promise.allSettled(
+          PRECACHE_ASSETS.map((url) =>
+            cache.add(url).catch((err) => {
+              console.warn(`[SW] 無法預快取靜態資源: ${url}`, err);
             })
           )
-        );
-      })
+        )
+      ),
+      // 2. 🚀 預快取首屏圖片到 IMAGE_CACHE（持久、版本無關）
+      // 用 Promise.allSettled 讓單張失敗不影響其他，而且整體不等太久（最多 5 秒）
+      Promise.race([
+        caches.open(IMAGE_CACHE).then((cache) =>
+          Promise.allSettled(
+            PRECACHE_IMAGES.map((url) =>
+              cache.add(url).catch((err) => {
+                console.warn(`[SW] 無法預快取首屏圖: ${url}`, err);
+              })
+            )
+          )
+        ),
+        new Promise((resolve) => setTimeout(resolve, 5000)),
+      ]),
+    ])
       .then(() => {
-        console.log('[SW] 預快取完成');
+        console.log('[SW] 預快取完成（靜態 + 首屏圖）');
         return self.skipWaiting();
       })
   );
