@@ -2,6 +2,62 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.1] - 2026-04-24 — E2 公佈欄精修版
+### ✨ 新增功能
+- **訪客計數器 (cork 風格)**：Hero 區黃色便利貼橫幅，Firestore 即時訂閱、里程碑進度條。
+- **回頂部按鈕**：圓形米白色底座 + 紅圖釘，捲動 >500px 淡入，RWD 手機版縮小。
+- **SW 版本管理機制**：`bump-sw-version.mjs` 自動注入版本 + `useVersionCheck` 每 15 分鐘輪詢 `version.json`。
+- **許願池社群分享**：專屬 cork 風格 OG 預覽圖（1200×630）+ `/wish/` 靜態分享頁。
+- **首屏圖片預載**：index.html 動態 preload 前 6 張 + SW install 時預快取。
+- **分類/收藏自動捲動**：點擊後平滑捲動至工具網格，提升 UX。
+- **Google Maps 學校連結**：footer 校徽點擊連到 Google Maps。
+
+### 🎨 視覺精修（E2 cork 風格深化）
+- **Hero 區**：手機版置中對齊、螢光筆色改為橄欖綠、加入完整阿凱拍立得（對話泡泡 + APPROVED 印章）。
+- **ToolDetail 全新 cork 化**：`/tool/:id` 詳情頁重寫，大拍立得 + 分類膠帶 + 星評 + 統計便利貼。
+- **Footer 大整合**：移除重複的白色條 footer，改為統一 cork 風格含 MAKER / SCHOOL / VERSION 三張便利貼（都含 favicon / 校徽頭像）。
+- **排行榜卡片**：點擊追蹤 bug 修復（原先純 `<a>` 沒呼叫 trackToolUsage）+ Firestore 即時排行即時 +1。
+- **拍立得卡片顯示真實預覽圖**：修正 GitHub Pages 子路徑下的圖片路徑。
+- **許願池 OG 圖 v2**：全面重製為精緻版（緞帶徽章 + 雙層字級 + 橄欖綠 highlight + 底部 attribution bar）。
+
+### 🔤 字型系統
+- **Canvas + Noto Sans TC subset**：OG 預覽圖 100% 自家字型渲染，跨平台一致。
+- **subset-font 精簡**：完整 TTF 12 MB → 精簡版 177 KB（1.5%）。
+- **新增 skill**：`og-social-preview-zh` 記錄完整流程。
+
+### ♿ 無障礙與 UX 品質
+- **Dialog a11y 警告修復**：補回 `DialogTitle` / `DialogDescription`（用 `VisuallyHidden`）。
+- **`/wish/` 跳轉優化**：URL 從 `wish=1 query` 改用 `sessionStorage` 旗標，URL 只跳一次不再三跳。
+- **搜尋結果 aria-live**：動態播報結果數。
+- **ToolCard**：`role="article"` + 動態 `aria-label`。
+- **移除未使用的 teacher.json preload 警告**。
+
+### ⚡ 效能與快取
+- **IMAGE_CACHE 獨立持久快取**：不受 `CACHE_VERSION` 更新影響，每次發版不再重抓圖。
+- **SW 預快取首屏 9 個資源**：`tool_1~6.webp`、`Akai.png`、`school-logo.png`、`favicon.png`。
+- **點擊數即時同步**：`useToolClickStats` 共用 hook，81 張卡片共用一個 Firestore 訂閱。
+- **RWD 五段斷點精修**：1200 / 1024 / 768 / 480 / 380，觸控裝置停用 sticky hover。
+
+### 🎯 網站導覽升級
+- **導覽站點**：3 站 → 8 站，完整對應新佈局。
+- **導覽 popover 視覺**：青色 Dialog → cork 黃色便利貼（紅圖釘 + 橄欖綠螢光筆 + 橘色 CTA）。
+- **完成後按鈕**：傾斜黃色便利貼「📌 網站導覽」。
+
+### 🔧 Bug 修復
+- **死鏈巡檢 workflow**：加瀏覽器 User-Agent + 反爬蟲網站白名單（padlet.com、claude.ai 等）。
+- **TypeScript 型別錯誤**：40 個全修（新增 4 個 .d.ts）。
+- **Firestore 安全規則**：`visitorStats` / `toolUsageStats` 寫入限縮為認證用戶。
+- **Hero 配色**：「教學點子」改為橄欖綠螢光筆（符合設計師原檔）。
+
+### 📁 新增檔案概覽
+- `scripts/bump-sw-version.mjs`、`scripts/generate-wish-preview.mjs`、`scripts/subset-wish-font.mjs`、`scripts/check-links.mjs`
+- `scripts/fonts/NotoSansTC-WishSubset.ttf`（精簡字型）
+- `client/public/wish-preview.png`、`client/public/version.json`
+- `client/src/hooks/useVersionCheck.ts`、`useToolClickStats.ts`
+- `client/src/pages/BulletinToolDetail.tsx`
+- `client/src/components/bulletin/BulletinBackToTop.tsx`、`BulletinVisitorCounter.tsx`
+- `.github/workflows/link-check.yml`
+
 ## [3.6.0] - 2026-04-21
 ### ✨ 大版本更新：E2 公佈欄首頁
 - **全新視覺語彙**：軟木塞底 + 木框 + 拍立得工具卡 + 便利貼排行榜 + 膠帶標題
