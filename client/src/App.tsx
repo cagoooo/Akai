@@ -58,25 +58,81 @@ function ConditionalFooter() {
  * TooltipProvider lazy 加載期間，此骨架提供有意義的 FCP + LCP 內容。
  */
 function PageSkeleton() {
+  // cork 風格的 LCP 骨架：保留真實大 h1 讓 Lighthouse 抓到，但換成 E2 便利貼主題
   return (
-    <div className="min-h-screen bg-background">
-      <main className="container mx-auto px-3 sm:px-6 py-4 sm:py-6 md:py-8">
-        {/* ✅ 真實 h1：讓 Lighthouse 捕捉到大文字作為 LCP 元素，而非 placeholder */}
-        <header className="relative overflow-hidden mb-4 sm:mb-6 p-5 sm:p-6 md:p-8 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 shadow-lg">
-          <div className="relative z-10 text-center">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white tracking-tight mb-2 sm:mb-3">
-              ✨ 教育科技創新專區 ✨
+    <div className="cork-bg min-h-screen" style={{ paddingTop: 18, fontFamily: "'Noto Sans TC', sans-serif" }}>
+      <main className="container mx-auto px-4 sm:px-8 py-10">
+        {/* ✅ 真實 h1：Lighthouse 的 LCP 元素（cork 風） */}
+        <section
+          className="mb-8 p-8 sm:p-12 relative"
+          style={{
+            background: '#fff27a',
+            border: '2.5px solid #1a1a1a',
+            borderRadius: 6,
+            boxShadow: '4px 4px 0 rgba(0,0,0,.25), 0 14px 24px -6px rgba(0,0,0,.25)',
+            transform: 'rotate(-1deg)',
+            maxWidth: 880,
+            margin: '0 auto 32px',
+          }}
+        >
+          {/* 紅色立體圖釘 */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              top: -12,
+              left: '50%',
+              marginLeft: -12,
+              width: 24,
+              height: 24,
+              borderRadius: '50%',
+              background: 'radial-gradient(circle at 30% 30%, #ffffff, #dc2626 55%, #000000)',
+              boxShadow: '0 2px 5px rgba(0,0,0,.35), inset -1px -2px 3px rgba(0,0,0,.25)',
+              zIndex: 2,
+            }}
+          />
+          <div className="text-center">
+            <h1
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mb-3"
+              style={{ color: '#1a1a1a', letterSpacing: '0.02em', lineHeight: 1.2 }}
+            >
+              ✨{' '}
+              <span
+                style={{
+                  background:
+                    'linear-gradient(transparent 55%, #7a8c3a 55%, #7a8c3a 88%, transparent 88%)',
+                  padding: '0 6px',
+                }}
+              >
+                教育科技創新專區
+              </span>{' '}
+              ✨
             </h1>
-            <p className="text-sm sm:text-base md:text-lg text-white/80 font-medium max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base md:text-lg font-medium" style={{ color: '#4a3a20' }}>
               探索阿凱老師開發的教育工具，為您的教學增添創新的可能
             </p>
           </div>
-        </header>
+        </section>
 
-        {/* 工具卡片骨架 */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-48 rounded-lg" />
+        {/* 工具卡片骨架（cork 紙張風） */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl mx-auto">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div
+              key={i}
+              style={{
+                background: '#fefdfa',
+                border: '1px solid #d8d4c8',
+                borderRadius: 4,
+                padding: 14,
+                transform: `rotate(${(i - 1) * 1.5}deg)`,
+                boxShadow: '3px 3px 5px rgba(0,0,0,.15), 0 10px 18px -6px rgba(0,0,0,.2)',
+                opacity: 0.85,
+              }}
+            >
+              <Skeleton className="h-36 rounded-none mb-3" />
+              <Skeleton className="h-4 w-2/3 mb-2" />
+              <Skeleton className="h-3 w-1/2" />
+            </div>
           ))}
         </div>
       </main>

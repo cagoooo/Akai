@@ -32,8 +32,46 @@ interface LoadingScreenProps {
 
 export function LoadingScreen({ message = "載入中" }: LoadingScreenProps) {
   return (
-    <div className="min-h-[300px] flex items-center justify-center p-4">
-      <p className="text-sm text-muted-foreground">{message}</p>
+    <div className="min-h-[300px] flex flex-col items-center justify-center p-6 gap-4">
+      {/* cork 便利貼小動畫 */}
+      <div
+        aria-hidden="true"
+        style={{
+          width: 64,
+          height: 64,
+          background: '#fff27a',
+          border: '2px solid #1a1a1a',
+          borderRadius: 4,
+          display: 'grid',
+          placeItems: 'center',
+          fontSize: 28,
+          boxShadow: '3px 3px 0 rgba(0,0,0,.22)',
+          transformOrigin: '50% 0',
+          animation: 'akai-wobble-mini 2s cubic-bezier(.36,0,.66,-0.56) infinite',
+        }}
+      >
+        📌
+      </div>
+      <p
+        style={{
+          fontSize: 13,
+          fontWeight: 700,
+          color: '#4a3a20',
+          fontFamily: "'Noto Sans TC', sans-serif",
+          letterSpacing: '0.05em',
+        }}
+      >
+        {message}…
+      </p>
+      <style>{`
+        @keyframes akai-wobble-mini {
+          0%, 100% { transform: rotate(-4deg); }
+          50%      { transform: rotate(4deg); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          [aria-hidden="true"] { animation: none !important; }
+        }
+      `}</style>
     </div>
   );
 }
