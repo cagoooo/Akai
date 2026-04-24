@@ -2,6 +2,7 @@ import { Suspense, lazy } from 'react';
 import { tokens } from '@/design/tokens';
 import { Tape } from '@/components/primitives/Tape';
 import { Pin } from '@/components/primitives/Pin';
+import { useVersionCheck } from '@/hooks/useVersionCheck';
 
 const BulletinVisitorCounter = lazy(() =>
   import('./BulletinVisitorCounter').then((m) => ({ default: m.BulletinVisitorCounter }))
@@ -12,6 +13,10 @@ const BulletinVisitorCounter = lazy(() =>
  * 配色完全依照設計師原檔：主文字黑色、關鍵詞用橘色螢光筆 highlight、介紹區白底提升對比
  */
 export function BulletinHero() {
+  // 動態讀取當前版本（顯示在雙膠帶的 NEW 膠帶上）
+  const { localVersion } = useVersionCheck({ intervalMs: 60 * 60 * 1000 });
+  const displayVersion = localVersion?.version ? `v${localVersion.version}` : 'v3.6.1';
+
   return (
     <section
       className="bulletin-hero"
@@ -33,7 +38,7 @@ export function BulletinHero() {
             <span style={{ fontSize: 13 }}>📢 BULLETIN · Spring 2026</span>
           </Tape>
           <Tape color={tokens.note.pink} angle={3} width={130}>
-            <span style={{ fontSize: 12 }}>✨ NEW v3.6.0</span>
+            <span style={{ fontSize: 12 }}>✨ NEW {displayVersion}</span>
           </Tape>
         </div>
 

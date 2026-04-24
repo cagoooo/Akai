@@ -1,13 +1,14 @@
 import type { ReactNode } from 'react';
 import { tokens } from '@/design/tokens';
 import { BulletinBackToTop } from './BulletinBackToTop';
+import { BulletinAdminEntry } from './BulletinAdminEntry';
 
 interface Props {
   children: ReactNode;
 }
 
 /**
- * 公佈欄外框容器：軟木塞背景 + 上下木條 + 回到頂部按鈕
+ * 公佈欄外框容器：軟木塞背景 + 上下木條 + 回到頂部按鈕 + 隱藏後台入口
  */
 export function BulletinBoard({ children }: Props) {
   return (
@@ -27,6 +28,7 @@ export function BulletinBoard({ children }: Props) {
       <WoodStrip position="bottom" />
       {children}
       <BulletinBackToTop />
+      <BulletinAdminEntry />
     </div>
   );
 }

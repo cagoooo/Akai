@@ -1,6 +1,7 @@
 import { tokens } from '@/design/tokens';
 import { Tape } from '@/components/primitives/Tape';
 import { Pin } from '@/components/primitives/Pin';
+import { useVersionCheck } from '@/hooks/useVersionCheck';
 
 const SCHOOL_URL = 'https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5';
 const SCHOOL_MAPS_URL = 'https://maps.app.goo.gl/D9hqL2eakDLC8ko46';
@@ -14,6 +15,11 @@ const SCHOOL_MAPS_URL = 'https://maps.app.goo.gl/D9hqL2eakDLC8ko46';
  */
 export function BulletinFooter() {
   const year = new Date().getFullYear();
+
+  // 從 version.json 動態讀取當前版本（每次 build 會自動更新）
+  // 短輪詢 1 小時一次即可（version 很少變動），避免浪費請求
+  const { localVersion } = useVersionCheck({ intervalMs: 60 * 60 * 1000 });
+  const displayVersion = localVersion?.version ? `v${localVersion.version}` : 'v3.6.1';
 
   return (
     <footer
@@ -136,7 +142,7 @@ export function BulletinFooter() {
             ✨ VERSION
           </div>
           <div style={{ fontSize: 15, fontWeight: 800, color: tokens.ink, lineHeight: 1.4, fontFamily: tokens.font.en }}>
-            v3.6.0
+            {displayVersion}
           </div>
           <div style={{ fontSize: 11, color: tokens.muted2, marginTop: 4 }}>
             E2 公佈欄版
