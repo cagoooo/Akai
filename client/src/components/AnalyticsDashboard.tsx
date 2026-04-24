@@ -224,46 +224,89 @@ export function AnalyticsDashboard() {
   const toolChartData = prepareToolChartData();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      {/* 頂部導覽列 */}
-      <header className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 text-white">
+    <div className="cork-bg min-h-screen" style={{ fontFamily: "'Noto Sans TC', sans-serif", paddingTop: 18 }}>
+      {/* 上方木條（cork 風格） */}
+      <div
+        style={{
+          position: 'fixed',
+          top: 0, left: 0, right: 0, height: 18, zIndex: 30, pointerEvents: 'none',
+          background: 'repeating-linear-gradient(90deg, #7c4f2a, #7c4f2a 40px, #6b4220 40px, #6b4220 42px, #8a5a32 42px, #8a5a32 90px, #6b4220 90px, #6b4220 92px)',
+          boxShadow: 'inset 0 -2px 4px rgba(0,0,0,.3), 0 2px 6px rgba(0,0,0,.2)',
+        }}
+      />
+
+      {/* 頂部導覽列 — cork 深色紙板風 */}
+      <header style={{ background: 'rgba(26,15,5,.88)', color: '#fff', borderBottom: '3px solid #1a1a1a' }}>
         <div className="container mx-auto px-3 sm:px-6 py-3 sm:py-6">
           {/* 手機端：緊湊佈局 */}
           <div className="flex items-center justify-between gap-2">
-            {/* 返回首頁 */}
+            {/* 返回首頁 — cork 白底按鈕 */}
             <Link
               href="/"
-              className="flex items-center gap-1 px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors shrink-0"
+              className="flex items-center gap-1 px-3 py-2 shrink-0"
+              style={{
+                background: '#fefdfa',
+                color: '#1a1a1a',
+                border: '2px solid #1a1a1a',
+                borderRadius: 8,
+                fontSize: 13,
+                fontWeight: 800,
+                boxShadow: '2px 2px 0 rgba(0,0,0,.35)',
+              }}
             >
               <ArrowLeft className="w-4 h-4" />
-              <span className="hidden sm:inline text-sm">返回首頁</span>
+              <span className="hidden sm:inline">返回首頁</span>
             </Link>
 
-            {/* 標題 */}
+            {/* 標題 — cork 膠帶風 */}
             <div className="flex-1 min-w-0 mx-2 sm:mx-4">
-              <h1 className="text-base sm:text-2xl md:text-3xl font-bold flex items-center gap-1 sm:gap-2 truncate">
-                <span className="hidden sm:inline">📊</span>
-                <span className="truncate">分析儀表板</span>
-                {/* 即時連線狀態指示器 */}
+              <h1 className="text-base sm:text-2xl md:text-3xl font-bold flex items-center gap-2 truncate" style={{ letterSpacing: '0.03em' }}>
+                <span style={{ fontSize: '1.2em' }}>📊</span>
+                <span className="truncate" style={{
+                  background: 'linear-gradient(transparent 55%, #ea8a3e 55%, #ea8a3e 88%, transparent 88%)',
+                  padding: '0 4px',
+                }}>
+                  分析儀表板
+                </span>
                 {isRealtime && (
-                  <span className="flex items-center gap-1 text-[10px] sm:text-sm font-normal bg-green-500/20 px-1.5 sm:px-2 py-0.5 rounded-full shrink-0">
-                    <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full animate-pulse"></span>
-                    <span className="text-green-200 hidden sm:inline">即時</span>
+                  <span
+                    className="flex items-center gap-1 text-[10px] sm:text-xs font-bold shrink-0"
+                    style={{
+                      background: '#d4f4c7',
+                      color: '#1a1a1a',
+                      padding: '3px 8px',
+                      borderRadius: 3,
+                      border: '1.5px solid #1a1a1a',
+                      boxShadow: '1px 1px 0 rgba(0,0,0,.25)',
+                      transform: 'rotate(-2deg)',
+                    }}
+                  >
+                    <span className="w-1.5 h-1.5 bg-green-600 rounded-full animate-pulse"></span>
+                    即時
                   </span>
                 )}
               </h1>
               {lastUpdated && (
-                <p className="text-white/60 text-[10px] sm:text-sm mt-0.5 truncate hidden sm:block">
+                <p className="text-white/60 text-[10px] sm:text-sm mt-1 truncate hidden sm:block">
                   最後更新: {lastUpdated.toLocaleTimeString('zh-TW')}
                 </p>
               )}
             </div>
 
-            {/* 導出按鈕 */}
+            {/* 導出按鈕 — cork 橘色 */}
             <div className="relative group shrink-0">
               <Button
                 size="sm"
-                className="bg-white/20 hover:bg-white/30 border-0 px-2 sm:px-3"
+                style={{
+                  background: '#ea8a3e',
+                  color: '#fff',
+                  border: '2px solid #1a1a1a',
+                  borderRadius: 8,
+                  fontSize: 13,
+                  fontWeight: 800,
+                  boxShadow: '2px 2px 0 rgba(0,0,0,.35)',
+                  padding: '6px 12px',
+                }}
               >
                 <Download className="h-4 w-4" />
                 <span className="hidden sm:inline ml-2">下載</span>
@@ -399,80 +442,60 @@ export function AnalyticsDashboard() {
         </div>
       </header>
 
-      <main className="container mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6">
-        {/* 統計卡片 */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          <Card className="bg-white shadow-sm hover:shadow-md transition-shadow border-0">
-            <CardContent className="p-4 sm:p-5 flex items-center justify-between">
-              <div className="min-w-0">
-                <p className="text-muted-foreground text-xs sm:text-sm">總訪問量</p>
-                <h3 className="text-xl sm:text-2xl font-bold truncate">{visitorStats?.totalVisits || 0}</h3>
-                <p className="text-xs sm:text-sm text-green-600">+5.2% 比上週</p>
-              </div>
-              <Users className="h-10 w-10 sm:h-12 sm:w-12 text-blue-500 bg-blue-100 p-2 sm:p-2.5 rounded-full shrink-0" />
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white shadow-sm hover:shadow-md transition-shadow border-0">
-            <CardContent className="p-4 sm:p-5 flex items-center justify-between">
-              <div className="min-w-0">
-                <p className="text-muted-foreground text-xs sm:text-sm">本週流量</p>
-                <h3 className="text-xl sm:text-2xl font-bold">1,204</h3>
-                <p className="text-xs sm:text-sm text-red-600">-1.8% 比上週</p>
-              </div>
-              <TrendingUp className="h-10 w-10 sm:h-12 sm:w-12 text-orange-500 bg-orange-100 p-2 sm:p-2.5 rounded-full shrink-0" />
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white shadow-sm hover:shadow-md transition-shadow border-0">
-            <CardContent className="p-4 sm:p-5 flex items-center justify-between">
-              <div className="min-w-0">
-                <p className="text-muted-foreground text-xs sm:text-sm">平均停留</p>
-                <h3 className="text-xl sm:text-2xl font-bold">3m 24s</h3>
-                <p className="text-xs sm:text-sm text-green-600">+12% 比上週</p>
-              </div>
-              <Clock className="h-10 w-10 sm:h-12 sm:w-12 text-green-500 bg-green-100 p-2 sm:p-2.5 rounded-full shrink-0" />
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white shadow-sm hover:shadow-md transition-shadow border-0">
-            <CardContent className="p-4 sm:p-5 flex items-center justify-between">
-              <div className="min-w-0">
-                <p className="text-muted-foreground text-xs sm:text-sm">跳出率</p>
-                <h3 className="text-xl sm:text-2xl font-bold">28.5%</h3>
-                <p className="text-xs sm:text-sm text-green-600">-3.2% 比上週</p>
-              </div>
-              <MousePointer className="h-10 w-10 sm:h-12 sm:w-12 text-purple-500 bg-purple-100 p-2 sm:p-2.5 rounded-full shrink-0" />
-            </CardContent>
-          </Card>
+      <main className="container mx-auto px-3 sm:px-6 py-6 sm:py-8 space-y-4 sm:space-y-6">
+        {/* 統計便利貼 — cork 風四色 */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+          <StickyStatCard
+            color="#fff27a" tilt={-1.8} pinColor="#dc2626"
+            label="總訪問量" value={(visitorStats?.totalVisits || 0).toLocaleString()}
+            icon={<Users className="h-6 w-6 sm:h-7 sm:w-7" />} delta="+5.2% 比上週" deltaColor="#16a34a"
+          />
+          <StickyStatCard
+            color="#ffd4d9" tilt={1.2} pinColor="#2563eb"
+            label="本週流量" value="1,204"
+            icon={<TrendingUp className="h-6 w-6 sm:h-7 sm:w-7" />} delta="-1.8% 比上週" deltaColor="#dc2626"
+          />
+          <StickyStatCard
+            color="#d4f4c7" tilt={-1.4} pinColor="#eab308"
+            label="平均停留" value="3m 24s"
+            icon={<Clock className="h-6 w-6 sm:h-7 sm:w-7" />} delta="+12% 比上週" deltaColor="#16a34a"
+          />
+          <StickyStatCard
+            color="#c8e6ff" tilt={1.6} pinColor="#c026d3"
+            label="跳出率" value="28.5%"
+            icon={<MousePointer className="h-6 w-6 sm:h-7 sm:w-7" />} delta="-3.2% 比上週" deltaColor="#16a34a"
+          />
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid grid-cols-3 sm:grid-cols-6 mb-4 bg-white/80 p-0.5 sm:p-1 rounded-lg w-full h-auto">
-            <TabsTrigger value="overview" className="text-[10px] sm:text-sm px-1 sm:px-3 py-1.5 sm:py-2 data-[state=active]:bg-indigo-600 data-[state=active]:text-white flex flex-col sm:flex-row items-center gap-0.5 sm:gap-2">
-              <Activity className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-              <span className="leading-tight">總覽</span>
-            </TabsTrigger>
-            <TabsTrigger value="visitors" className="text-[10px] sm:text-sm px-1 sm:px-3 py-1.5 sm:py-2 data-[state=active]:bg-indigo-600 data-[state=active]:text-white flex flex-col sm:flex-row items-center gap-0.5 sm:gap-2">
-              <Eye className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-              <span className="leading-tight">訪問</span>
-            </TabsTrigger>
-            <TabsTrigger value="tools" className="text-[10px] sm:text-sm px-1 sm:px-3 py-1.5 sm:py-2 data-[state=active]:bg-indigo-600 data-[state=active]:text-white flex flex-col sm:flex-row items-center gap-0.5 sm:gap-2">
-              <BarChart2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-              <span className="leading-tight">工具</span>
-            </TabsTrigger>
-            <TabsTrigger value="heatmap" className="text-[10px] sm:text-sm px-1 sm:px-3 py-1.5 sm:py-2 data-[state=active]:bg-indigo-600 data-[state=active]:text-white flex flex-col sm:flex-row items-center gap-0.5 sm:gap-2">
-              <PieChartIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-              <span className="leading-tight">熱力</span>
-            </TabsTrigger>
-            <TabsTrigger value="calendar" className="text-[10px] sm:text-sm px-1 sm:px-3 py-1.5 sm:py-2 data-[state=active]:bg-indigo-600 data-[state=active]:text-white flex flex-col sm:flex-row items-center gap-0.5 sm:gap-2">
-              <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-              <span className="leading-tight">日曆</span>
-            </TabsTrigger>
-            <TabsTrigger value="wishes" className="text-[10px] sm:text-sm px-1 sm:px-3 py-1.5 sm:py-2 data-[state=active]:bg-indigo-600 data-[state=active]:text-white flex flex-col sm:flex-row items-center gap-0.5 sm:gap-2">
-              <span className="text-sm">✨</span>
-              <span className="leading-tight">許願池</span>
-            </TabsTrigger>
+          <TabsList
+            className="grid grid-cols-3 sm:grid-cols-6 mb-4 w-full h-auto gap-1.5 sm:gap-2"
+            style={{
+              background: 'rgba(255,255,255,.55)',
+              padding: 6,
+              border: '2px solid #1a1a1a',
+              borderRadius: 10,
+              boxShadow: '3px 3px 0 rgba(0,0,0,.18)',
+            }}
+          >
+            {[
+              { value: 'overview', icon: <Activity className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: '總覽' },
+              { value: 'visitors', icon: <Eye className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: '訪問' },
+              { value: 'tools', icon: <BarChart2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: '工具' },
+              { value: 'heatmap', icon: <PieChartIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: '熱力' },
+              { value: 'calendar', icon: <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: '日曆' },
+              { value: 'wishes', icon: <span className="text-sm">✨</span>, label: '許願池' },
+            ].map(tab => (
+              <TabsTrigger
+                key={tab.value}
+                value={tab.value}
+                className="text-[11px] sm:text-sm px-2 sm:px-3 py-2 flex flex-col sm:flex-row items-center gap-0.5 sm:gap-2 font-bold text-slate-700 rounded-lg border-2 border-transparent transition-all data-[state=active]:bg-[#7a8c3a] data-[state=active]:text-white data-[state=active]:border-[#1a1a1a] data-[state=active]:shadow-[3px_3px_0_rgba(0,0,0,0.3)]"
+                style={{ fontFamily: "'Noto Sans TC', sans-serif" }}
+              >
+                {tab.icon}
+                <span className="leading-tight">{tab.label}</span>
+              </TabsTrigger>
+            ))}
           </TabsList>
 
           <TabsContent value="overview" className="space-y-4">
@@ -1237,5 +1260,93 @@ export function AnalyticsDashboard() {
         </Tabs>
       </main>
     </div >
+  );
+}
+
+// ── cork 風格統計便利貼（後台儀表板 4 張卡用） ───────────────
+interface StickyStatCardProps {
+  color: string;        // 便利貼底色
+  tilt: number;         // 傾斜角度
+  pinColor: string;     // 圖釘顏色
+  label: string;        // 標題（如「總訪問量」）
+  value: string;        // 主數字
+  icon: React.ReactNode;
+  delta: string;        // 比較文字
+  deltaColor: string;   // 比較文字顏色
+}
+
+function StickyStatCard({ color, tilt, pinColor, label, value, icon, delta, deltaColor }: StickyStatCardProps) {
+  return (
+    <div
+      className="sticker-card"
+      style={{
+        position: 'relative',
+        background: color,
+        padding: '16px 18px 14px',
+        borderRadius: 6,
+        border: '2px solid #1a1a1a',
+        boxShadow: '3px 3px 0 rgba(0,0,0,.22), 0 10px 20px -6px rgba(0,0,0,.22)',
+        transform: `rotate(${tilt}deg)`,
+        fontFamily: "'Noto Sans TC', sans-serif",
+      }}
+    >
+      {/* 頂部立體圖釘 */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: -8,
+          left: '50%',
+          marginLeft: -8,
+          width: 16,
+          height: 16,
+          borderRadius: '50%',
+          background: `radial-gradient(circle at 30% 30%, #ffffff, ${pinColor} 55%, #000000)`,
+          boxShadow: '0 2px 4px rgba(0,0,0,.35), inset -1px -1px 2px rgba(0,0,0,.3)',
+          zIndex: 2,
+        }}
+      >
+        <div
+          style={{
+            position: 'absolute',
+            top: '30%',
+            left: '30%',
+            width: '22%',
+            height: '22%',
+            borderRadius: '50%',
+            background: 'rgba(255,255,255,.8)',
+          }}
+        />
+      </div>
+
+      <div className="flex items-center justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <p className="text-xs sm:text-sm font-bold mb-1" style={{ color: '#4a3a20', letterSpacing: '0.03em' }}>
+            {label}
+          </p>
+          <h3 className="text-2xl sm:text-3xl font-black truncate" style={{ color: '#1a1a1a', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+            {value}
+          </h3>
+          <p className="text-xs sm:text-sm mt-1 font-bold" style={{ color: deltaColor }}>
+            {delta}
+          </p>
+        </div>
+        {/* icon 框 */}
+        <div
+          className="shrink-0 grid place-items-center"
+          style={{
+            width: 48,
+            height: 48,
+            background: 'rgba(255,255,255,.7)',
+            border: '2px solid #1a1a1a',
+            borderRadius: '50%',
+            color: '#1a1a1a',
+            boxShadow: '2px 2px 0 rgba(0,0,0,.2)',
+          }}
+        >
+          {icon}
+        </div>
+      </div>
+    </div>
   );
 }
