@@ -1,1445 +1,1468 @@
 [
-    {
-        "id": 1,
-        "title": "線上即時客服",
-        "description": "提供即時的線上教育支援和諮詢服務，協助解決學習過程中的問題",
-        "url": "https://doc.smes.tyc.edu.tw/shared/A4uyH5OdHI",
-        "icon": "MessageCircle",
-        "category": "communication",
-        "previewUrl": "/previews/tool_1.webp",
-        "tags": [
-            "客服",
-            "即時通訊",
-            "問答",
-            "支援"
-        ]
-    },
-    {
-        "id": 2,
-        "title": "行政業務協調系統",
-        "description": "便捷的行政業務協調平台，提升校園行政工作效率",
-        "url": "https://cagoooo.github.io/staff/",
-        "icon": "ClipboardList",
-        "category": "utilities",
-        "previewUrl": "/previews/tool_2.webp",
-        "tags": [
-            "行政",
-            "協調",
-            "校務",
-            "管理"
-        ]
-    },
-    {
-        "id": 3,
-        "title": "學生即時投票系統",
-        "description": "即時收集學生意見的投票平台，提升課堂互動性與參與度",
-        "url": "https://cagoooo.github.io/vote/",
-        "icon": "Vote",
-        "category": "interactive",
-        "previewUrl": "/previews/tool_3.webp",
-        "tags": [
-            "投票",
-            "互動",
-            "課堂",
-            "即時",
-            "民主"
-        ]
-    },
-    {
-        "id": 4,
-        "title": "PIRLS閱讀理解生成",
-        "description": "專業的閱讀理解評估工具，幫助提升學生的閱讀能力",
-        "url": "https://pirlss.smes.tyc.edu.tw/",
-        "icon": "Book",
-        "category": "reading",
-        "previewUrl": "/previews/tool_4.webp",
-        "tags": [
-            "PIRLS",
-            "閱讀理解",
-            "評估",
-            "生成",
-            "AI"
-        ]
-    },
-    {
-        "id": 5,
-        "title": "校園點餐系統",
-        "description": "便捷的校園點餐平台，讓師生輕鬆訂購午餐",
-        "url": "https://cagoooo.github.io/vendor/",
-        "icon": "Utensils",
-        "category": "utilities",
-        "previewUrl": "/previews/tool_5.webp",
-        "tags": [
-            "點餐",
-            "午餐",
-            "訂餐",
-            "校園",
-            "便利"
-        ]
-    },
-    {
-        "id": 6,
-        "title": "蜂類配對消消樂",
-        "description": "寓教於樂的教育遊戲，通過趣味性的方式學習蜂類知識",
-        "url": "https://cagoooo.github.io/bee/",
-        "icon": "Gamepad2",
-        "category": "games",
-        "previewUrl": "/previews/tool_6.webp",
-        "tags": [
-            "遊戲",
-            "蜜蜂",
-            "配對",
-            "消消樂",
-            "自然"
-        ]
-    },
-    {
-        "id": 7,
-        "title": "點「石」成金🐝(評語優化)",
-        "description": "創新的學生評語優化工具，協助教師撰寫更正向、積極且個人化的學生評語",
-        "url": "https://line.me/R/ti/p/@733oiboa?oat_content=url&ts=05120012",
-        "icon": "MessageSquare",
-        "category": "teaching",
-        "previewUrl": "/previews/tool_7.webp",
-        "tags": [
-            "評語",
-            "AI",
-            "LINE",
-            "正向",
-            "學生"
-        ]
-    },
-    {
-        "id": 8,
-        "title": "12年教案有14",
-        "description": "豐富的教案資源分享平台，提供多元化的教學素材和靈感",
-        "url": "https://lin.ee/pCqnVhT",
-        "icon": "Files",
-        "category": "teaching",
-        "previewUrl": "/previews/tool_8.webp",
-        "tags": [
-            "教案",
-            "十二年國教",
-            "課綱",
-            "資源",
-            "分享"
-        ]
-    },
-    {
-        "id": 9,
-        "title": "超級瑪莉歐冒險",
-        "description": "經典遊戲風格的教育遊戲，結合趣味與學習的互動體驗",
-        "url": "https://cagoooo.github.io/mario-game/",
-        "icon": "Gamepad2",
-        "category": "games",
-        "previewUrl": "/previews/tool_9.webp",
-        "tags": [
-            "遊戲",
-            "瑪莉歐",
-            "冒險",
-            "跳躍",
-            "經典"
-        ]
-    },
-    {
-        "id": 10,
-        "title": "班級小管家",
-        "description": "便捷的班級管理工具，協助教師輕鬆管理班級事務",
-        "url": "https://cagoooo.github.io/class/",
-        "icon": "Users",
-        "category": "utilities",
-        "previewUrl": "/previews/tool_10.webp",
-        "tags": [
-            "班級",
-            "管理",
-            "導師",
-            "學生",
-            "事務"
-        ]
-    },
-    {
-        "id": 11,
-        "title": "剛好學：課堂互動so easy",
-        "description": "即時課堂互動平台，讓教學更加生動有趣",
-        "url": "https://cagoooo.github.io/Akailao/",
-        "icon": "GraduationCap",
-        "category": "teaching",
-        "previewUrl": "/previews/tool_11.webp",
-        "tags": [
-            "互動",
-            "課堂",
-            "即時",
-            "教學",
-            "問答"
-        ]
-    },
-    {
-        "id": 12,
-        "title": "PIRLS閱讀理解網",
-        "description": "完整的 PIRLS 閱讀理解資源平台",
-        "url": "https://read.smes.tyc.edu.tw/smes/PIRLS/",
-        "icon": "BookOpen",
-        "category": "reading",
-        "previewUrl": "/previews/tool_12.webp",
-        "tags": [
-            "PIRLS",
-            "閱讀",
-            "理解",
-            "資源",
-            "評量"
-        ]
-    },
-    {
-        "id": 13,
-        "title": "5W1H 靈感發射器 🚀",
-        "description": "創意思維激發工具，協助發想教學內容",
-        "url": "https://5w1h.smes.tyc.edu.tw/",
-        "icon": "Rocket",
-        "category": "teaching",
-        "previewUrl": "/previews/tool_13.webp",
-        "tags": [
-            "5W1H",
-            "創意",
-            "靈感",
-            "思維",
-            "發想"
-        ]
-    },
-    {
-        "id": 14,
-        "title": "點亮詩意~『早安長輩圖產生器』",
-        "description": "輕鬆製作溫馨的早安問候圖片",
-        "url": "https://poet.smes.tyc.edu.tw/",
-        "icon": "Image",
-        "category": "utilities",
-        "previewUrl": "/previews/tool_14.webp",
-        "tags": [
-            "長輩圖",
-            "早安",
-            "圖片",
-            "問候",
-            "詩詞"
-        ]
-    },
-    {
-        "id": 15,
-        "title": "社群領域會議報告產出平台",
-        "description": "快速產生會議報告的協作工具",
-        "url": "https://report.smes.tyc.edu.tw/",
-        "icon": "FileText",
-        "category": "utilities",
-        "previewUrl": "/previews/tool_15.webp",
-        "tags": [
-            "會議",
-            "報告",
-            "社群",
-            "記錄",
-            "產出"
-        ]
-    },
-    {
-        "id": 16,
-        "title": "親師溝通小幫手",
-        "description": "促進親師溝通的便捷平台",
-        "url": "https://talk.smes.tyc.edu.tw/",
-        "icon": "MessageSquare",
-        "category": "communication",
-        "previewUrl": "/previews/tool_16.webp",
-        "tags": [
-            "親師",
-            "溝通",
-            "家長",
-            "聯絡",
-            "通知"
-        ]
-    },
-    {
-        "id": 17,
-        "title": "單一抽籤系統",
-        "description": "簡單快速的單一抽籤工具",
-        "url": "https://www.smes.tyc.edu.tw/smes_html/gogogo.html",
-        "icon": "Ticket",
-        "category": "utilities",
-        "previewUrl": "/previews/tool_17.webp",
-        "tags": [
-            "抽籤",
-            "隨機",
-            "點名",
-            "簡單",
-            "快速"
-        ]
-    },
-    {
-        "id": 18,
-        "title": "大量抽籤系統",
-        "description": "支援大量抽籤的進階工具",
-        "url": "https://www.smes.tyc.edu.tw/smes_html/random.html",
-        "icon": "Shuffle",
-        "category": "utilities",
-        "previewUrl": "/previews/tool_18.webp",
-        "tags": [
-            "抽籤",
-            "隨機",
-            "大量",
-            "分組",
-            "進階"
-        ]
-    },
-    {
-        "id": 19,
-        "title": "設計自己的專屬客服",
-        "description": "自訂專屬的智能客服系統",
-        "url": "https://doc.smes.tyc.edu.tw/",
-        "icon": "Bot",
-        "category": "utilities",
-        "previewUrl": "/previews/tool_19.webp",
-        "tags": [
-            "客服",
-            "AI",
-            "機器人",
-            "自訂",
-            "智能"
-        ]
-    },
-    {
-        "id": 20,
-        "title": "英打練習",
-        "description": "英文打字練習工具，提升打字速度與準確度",
-        "url": "https://www.smes.tyc.edu.tw/smes_html/typeEN.html",
-        "icon": "Keyboard",
-        "category": "language",
-        "previewUrl": "/previews/tool_20.webp",
-        "tags": [
-            "打字",
-            "英文",
-            "練習",
-            "鍵盤",
-            "速度"
-        ]
-    },
-    {
-        "id": 21,
-        "title": "中打練習",
-        "description": "中文打字練習工具，提升中文輸入能力",
-        "url": "https://www.smes.tyc.edu.tw/smes_html/typeCC.html",
-        "icon": "Keyboard",
-        "category": "language",
-        "previewUrl": "/previews/tool_21.webp",
-        "tags": [
-            "打字",
-            "中文",
-            "練習",
-            "注音",
-            "輸入法"
-        ]
-    },
-    {
-        "id": 22,
-        "title": "成語中打練習",
-        "description": "透過成語練習中文打字，邊打邊學成語",
-        "url": "https://www.smes.tyc.edu.tw/smes_html/typeTC.html",
-        "icon": "Languages",
-        "category": "language",
-        "previewUrl": "/previews/preview_typing_v2.webp",
-        "tags": [
-            "打字",
-            "成語",
-            "中文",
-            "學習",
-            "國語"
-        ]
-    },
-    {
-        "id": 23,
-        "title": "點石成金蜂🐝 評語優化網頁版",
-        "description": "網頁版學生評語優化工具，輕鬆產出正向評語",
-        "url": "https://cagoooo.github.io/comments/",
-        "icon": "Sparkles",
-        "category": "teaching",
-        "previewUrl": "/previews/preview_feedback_v2.webp",
-        "tags": [
-            "評語",
-            "AI",
-            "正向",
-            "學生",
-            "網頁版"
-        ]
-    },
-    {
-        "id": 24,
-        "title": "教師午會記錄報告站",
-        "description": "教師午會紀錄與報告分享平台",
-        "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/114teacher/",
-        "icon": "ClipboardCheck",
-        "category": "utilities",
-        "previewUrl": "/previews/preview_admin_v2.webp",
-        "tags": [
-            "午會",
-            "記錄",
-            "教師",
-            "報告",
-            "行政"
-        ]
-    },
-    {
-        "id": 25,
-        "title": "國語演說培訓班",
-        "description": "國語演說練習與培訓工具",
-        "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E5%9C%8B%E8%AA%9E%E6%BC%94%E8%AA%AA%E7%B7%B4%E7%BF%92%E5%B0%8F%E5%B7%A5%E5%85%B7?authuser=0",
-        "icon": "Mic",
-        "category": "language",
-        "previewUrl": "/previews/preview_language_v2.webp",
-        "tags": [
-            "演說",
-            "國語",
-            "口說",
-            "培訓",
-            "比賽"
-        ]
-    },
-    {
-        "id": 26,
-        "title": "九九乘法表練習器",
-        "description": "互動式九九乘法表練習工具",
-        "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E4%B9%9D%E4%B9%9D%E4%B9%98%E6%B3%95%E8%A1%A8%E7%B7%B4%E7%BF%92%E5%99%A8?authuser=0",
-        "icon": "Calculator",
-        "category": "teaching",
-        "previewUrl": "/previews/preview_teaching_v2.webp",
-        "tags": [
-            "數學",
-            "乘法",
-            "九九",
-            "練習",
-            "計算"
-        ]
-    },
-    {
-        "id": 27,
-        "title": "⬅️好用小工具(許願池)",
-        "description": "各種好用的教學小工具集合與許願池",
-        "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/",
-        "icon": "Wrench",
-        "category": "utilities",
-        "previewUrl": "/previews/preview_utility_v2.webp",
-        "tags": [
-            "工具",
-            "集合",
-            "許願",
-            "小工具",
-            "瑞士刀"
-        ]
-    },
-    {
-        "id": 28,
-        "title": "瑪莉歐風格平台跳躍遊戲",
-        "description": "經典瑪莉歐風格的平台跳躍遊戲",
-        "url": "https://www.smes.tyc.edu.tw/smes_html/mariojump.html",
-        "icon": "Gamepad2",
-        "category": "games",
-        "previewUrl": "/previews/preview_platformer_v2.webp",
-        "tags": [
-            "遊戲",
-            "瑪莉歐",
-            "跳躍",
-            "平台",
-            "經典"
-        ]
-    },
-    {
-        "id": 29,
-        "title": "太陽系探索者",
-        "description": "3D 太陽系探索互動學習工具",
-        "url": "https://www.smes.tyc.edu.tw/smes_html/3d-space.html",
-        "icon": "Globe",
-        "category": "teaching",
-        "previewUrl": "/previews/preview_space_v2.webp",
-        "tags": [
-            "太陽系",
-            "3D",
-            "太空",
-            "行星",
-            "自然"
-        ]
-    },
-    {
-        "id": 30,
-        "title": "小遊戲大集合",
-        "description": "多款趣味小遊戲合集",
-        "url": "https://www.smes.tyc.edu.tw/smes_html/little_games/",
-        "icon": "Dice5",
-        "category": "games",
-        "previewUrl": "/previews/preview_game_v2.webp",
-        "tags": [
-            "遊戲",
-            "合集",
-            "趣味",
-            "休閒",
-            "多款"
-        ]
-    },
-    {
-        "id": 31,
-        "title": "互動遊戲抓抓樂",
-        "description": "趣味夾娃娃機互動遊戲",
-        "url": "https://www.smes.tyc.edu.tw/claw-machine-game.html",
-        "icon": "Gift",
-        "category": "games",
-        "previewUrl": "/previews/preview_claw_machine.webp",
-        "tags": [
-            "遊戲",
-            "夾娃娃",
-            "互動",
-            "趣味",
-            "獎品"
-        ]
-    },
-    {
-        "id": 32,
-        "title": "遊戲觸屏碰碰碰",
-        "description": "觸屏互動碰撞遊戲",
-        "url": "https://www.smes.tyc.edu.tw/smes_html/touch.html",
-        "icon": "Hand",
-        "category": "games",
-        "previewUrl": "/previews/preview_touch_collision.webp",
-        "tags": [
-            "遊戲",
-            "觸屏",
-            "碰撞",
-            "互動",
-            "觸控"
-        ]
-    },
-    {
-        "id": 33,
-        "title": "讓聲音具現化吧！",
-        "description": "聲音視覺化互動體驗",
-        "url": "https://www.smes.tyc.edu.tw/smes_html/sound.html",
-        "icon": "AudioWaveform",
-        "category": "games",
-        "previewUrl": "/previews/preview_music_v2.webp",
-        "tags": [
-            "聲音",
-            "視覺化",
-            "互動",
-            "音樂",
-            "波形"
-        ]
-    },
-    {
-        "id": 34,
-        "title": "互動式影像聲音遊戲區",
-        "description": "結合影像與聲音的互動遊戲",
-        "url": "https://www.smes.tyc.edu.tw/smes_html/go.html",
-        "icon": "Play",
-        "category": "games",
-        "previewUrl": "/previews/preview_interactive_av.webp",
-        "tags": [
-            "遊戲",
-            "影像",
-            "聲音",
-            "互動",
-            "多媒體"
-        ]
-    },
-    {
-        "id": 35,
-        "title": "觸屏點點塗鴉區",
-        "description": "觸屏塗鴉創作工具",
-        "url": "https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2856",
-        "icon": "Palette",
-        "category": "games",
-        "previewUrl": "/previews/preview_touch_doodle.webp",
-        "tags": [
-            "塗鴉",
-            "觸屏",
-            "繪畫",
-            "創作",
-            "藝術"
-        ]
-    },
-    {
-        "id": 36,
-        "title": "貪食蛇互動遊戲",
-        "description": "經典貪食蛇遊戲",
-        "url": "https://www.smes.tyc.edu.tw/smes_html/snake_game.html",
-        "icon": "Gamepad2",
-        "category": "games",
-        "previewUrl": "/previews/preview_snake_game.webp",
-        "tags": [
-            "遊戲",
-            "貪食蛇",
-            "經典",
-            "休閒",
-            "懷舊"
-        ]
-    },
-    {
-        "id": 37,
-        "title": "聲波擴散360小遊戲",
-        "description": "聲波視覺化互動遊戲",
-        "url": "https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2863",
-        "icon": "Waves",
-        "category": "games",
-        "previewUrl": "/previews/preview_sound_wave.webp",
-        "tags": [
-            "遊戲",
-            "聲波",
-            "視覺化",
-            "360",
-            "互動"
-        ]
-    },
-    {
-        "id": 38,
-        "title": "聲音互動小遊戲",
-        "description": "透過聲音控制的互動遊戲",
-        "url": "https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2859",
-        "icon": "Volume2",
-        "category": "games",
-        "previewUrl": "/previews/preview_sound_control.webp",
-        "tags": [
-            "遊戲",
-            "聲音",
-            "控制",
-            "互動",
-            "麥克風"
-        ]
-    },
-    {
-        "id": 39,
-        "title": "孔明神算：心靈感應預言魔術",
-        "description": "神奇的心靈感應預言魔術遊戲",
-        "url": "https://claude.ai/public/artifacts/982f7b1c-8302-4112-a05f-342ad24bd421",
-        "icon": "Wand2",
-        "category": "games",
-        "previewUrl": "/previews/preview_magic_v2.webp",
-        "tags": [
-            "魔術",
-            "預言",
-            "心靈感應",
-            "神奇",
-            "表演"
-        ]
-    },
-    {
-        "id": 40,
-        "title": "Padlet行政宣導動態牆",
-        "description": "即時更新的行政宣導公告牆，方便資訊傳達",
-        "url": "https://padlet.com/2104340/padlet-rl3l5wi9wmebku2k",
-        "icon": "LayoutDashboard",
-        "category": "utilities",
-        "previewUrl": "/previews/preview_padlet_wall.webp",
-        "tags": [
-            "Padlet",
-            "公告",
-            "行政",
-            "宣導",
-            "動態牆"
-        ]
-    },
-    {
-        "id": 41,
-        "title": "吉他彈唱🎸點歌系統🎵",
-        "description": "互動式吉他彈唱點歌平台，輕鬆點選喜愛的歌曲",
-        "url": "https://cagoooo.github.io/song/",
-        "icon": "Music",
-        "category": "interactive",
-        "previewUrl": "/previews/preview_guitar_song.webp",
-        "tags": [
-            "音樂",
-            "吉他",
-            "點歌",
-            "彈唱",
-            "歌曲"
-        ]
-    },
-    {
-        "id": 42,
-        "title": "兒童臉部隱私保護工具",
-        "description": "保護兒童照片隱私，自動模糊處理臉部",
-        "url": "https://cagoooo.github.io/child-face-privacy/",
-        "icon": "ShieldCheck",
-        "category": "utilities",
-        "previewUrl": "/previews/preview_privacy_v2.webp",
-        "tags": [
-            "隱私",
-            "兒童",
-            "模糊",
-            "臉部",
-            "保護"
-        ]
-    },
-    {
-        "id": 43,
-        "title": "課程計畫英文轉寫小精靈",
-        "description": "上傳中文課程計畫 (PDF, DOCX)，轉寫小精靈將自動翻譯並整理成 Markdown 表格",
-        "url": "https://bilingual.smes.tyc.edu.tw/",
-        "icon": "Languages",
-        "category": "language",
-        "previewUrl": "/previews/preview_bilingual_translator.webp",
-        "tags": [
-            "翻譯",
-            "雙語",
-            "課程計畫",
-            "Markdown",
-            "PDF"
-        ]
-    },
-    {
-        "id": 44,
-        "title": "數學加減法練習器",
-        "description": "互動式數學加減法練習工具，幫助學生熟練基礎運算能力",
-        "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E6%95%B8%E5%AD%B8%E5%8A%A0%E6%B8%9B%E6%B3%95%E7%B7%B4%E7%BF%92%E5%99%A8",
-        "icon": "Calculator",
-        "category": "teaching",
-        "previewUrl": "/previews/tool_44.webp",
-        "tags": [
-            "數學",
-            "加法",
-            "減法",
-            "練習",
-            "基礎運算"
-        ]
-    },
-    {
-        "id": 45,
-        "title": "文字雲即時互動",
-        "description": "即時協作的文字雲互動平台，讓參與者同步輸入關鍵詞，動態生成視覺化文字雲，適合課堂腦力激盪、意見收集與互動教學",
-        "url": "https://cagoooo.github.io/cloud",
-        "icon": "Cloud",
-        "category": "interactive",
-        "previewUrl": "/previews/tool_45.webp",
-        "tags": [
-            "文字雲",
-            "即時互動",
-            "協作",
-            "腦力激盪",
-            "視覺化",
-            "課堂互動"
-        ]
-    },
-    {
-        "id": 46,
-        "title": "禮堂預約系統",
-        "description": "高效便捷的禮堂預約平台，即時查看場地空檔，簡化行政申請流程，讓校園空間管理更透明、更輕鬆",
-        "url": "https://cagoooo.github.io/schedule/",
-        "icon": "CalendarCheck",
-        "category": "utilities",
-        "previewUrl": "/previews/tool_46.webp",
-        "tags": [
-            "預約",
-            "禮堂",
-            "校務",
-            "管理",
-            "行政",
-            "場地"
-        ]
-    },
-    {
-        "id": 47,
-        "title": "學生肖像使用授權同意書線上簽名",
-        "description": "提供便捷的線上簽署平台，讓家長能快速完成學生肖像使用授權，簡化紙本作業流程，確保資訊安全與效率",
-        "url": "https://cagoooo.github.io/signature/",
-        "icon": "FileSignature",
-        "category": "utilities",
-        "previewUrl": "/previews/tool_47.webp",
-        "tags": [
-            "線上簽名",
-            "肖像授權",
-            "行政",
-            "無紙化",
-            "安全",
-            "效率"
-        ]
-    },
-    {
-        "id": 48,
-        "title": "動態表單自動回報系統",
-        "description": "智慧化的表單管理平台，支援動態欄位設計與自動化回報機制，大幅提升行政作業效率，讓資料收集與追蹤更加便捷且精準",
-        "url": "https://cagoooo.github.io/form/",
-        "icon": "FileInput",
-        "category": "utilities",
-        "previewUrl": "/previews/tool_48.webp",
-        "tags": [
-            "表單",
-            "自動回報",
-            "行政",
-            "資料收集",
-            "效率",
-            "智慧化"
-        ]
-    },
-    {
-        "id": 49,
-        "title": "教務處寶藏庫",
-        "description": "教務處精心彙整的豐富資源平台，集結課程計畫、評量工具、教學表單及行政公告等寶貴資料，是教師備課與行政作業的最佳後盾",
-        "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/academic/",
-        "icon": "FolderOpen",
-        "category": "teaching",
-        "previewUrl": "/previews/tool_49.webp",
-        "tags": [
-            "教務",
-            "資源庫",
-            "課程計畫",
-            "評量",
-            "行政",
-            "表單"
-        ]
-    },
-    {
-        "id": 50,
-        "title": "童趣學園",
-        "description": "專為兒童設計的快樂學習探索樂園，集合了豐富有趣的互動遊戲與多元學習資源，啟發孩子的好奇心，讓學習變得像遊戲一樣好玩，陪伴孩子在歡樂中茁壯成長。",
-        "url": "https://cagoooo.github.io/kids/",
-        "icon": "Baby",
-        "category": "games",
-        "previewUrl": "/previews/kids-zone-preview.webp",
-        "tags": [
-            "兒童",
-            "遊戲",
-            "學習",
-            "探索",
-            "樂園",
-            "互動"
-        ]
-    },
-    {
-        "id": 51,
-        "title": "自動排課系統",
-        "description": "智能化的自動排課系統協助學校快速生成課表最佳化資源分配解決排課難題。",
-        "url": "https://cagoooo.github.io/course/",
-        "icon": "Calendar",
-        "category": "utilities",
-        "previewUrl": "/previews/auto-schedule-preview.webp",
-        "detailedDescription": "這是一款專為學校行政人員與教師設計的智慧排課系統。透過先進的演算技術自動處理複雜的課程衝突、教師身分、教室空間與時段限制，讓原本需要數週的人力排課作業，在幾分鐘內即可初步完成，大幅提升校務運作效率。",
-        "tags": [
-            "排課",
-            "自動化",
-            "課表",
-            "行政",
-            "效率"
-        ]
-    },
-    {
-        "id": 52,
-        "title": "創價・教育 EXPO 線上選課",
-        "description": "專為創價・教育 EXPO 打造的線上選課平台提供流暢的課程探索與即時報名體驗讓學習參與更簡單。",
-        "url": "https://cagoooo.github.io/soka/",
-        "icon": "Library",
-        "category": "interactive",
-        "previewUrl": "/previews/expo-soka-preview.webp",
-        "detailedDescription": "創價・教育 EXPO 線上選課系統是一個整合式的教育資源平台。使用者可以透過直觀的介面瀏覽博覽會中的各大領域課程，從科學技術到人文藝術一應俱全。系統支援即時選課、報名狀態追蹤以及個人化的課程清單管理，是博覽會參與者的數位導覽小幫手。",
-        "tags": [
-            "創價",
-            "教育 EXPO",
-            "線上選課",
-            "課程選擇",
-            "互動體驗"
-        ]
-    },
-    {
-        "id": 53,
-        "title": "智慧校園報修系統",
-        "description": "專為校園打造的智慧報修平台簡化修繕申請流程讓校園維護更加即時與透明。",
-        "url": "https://cagoooo.github.io/repair/",
-        "icon": "Tool",
-        "category": "utilities",
-        "previewUrl": "/previews/repair-preview.webp",
-        "detailedDescription": "智慧校園報修系統旨在提供師生一個便捷、透明的報修門面。使用者只需透過手機或電腦即可快速提交維護需求並即時追蹤處理進度。行政單位則能有效管理各項報修案件最佳化修繕人力派送確保校園設施始終保持在最佳狀態。",
-        "tags": [
-            "報修",
-            "校務",
-            "修繕",
-            "管理",
-            "效率"
-        ]
-    },
-    {
-        "id": 54,
-        "title": "臉盲教師救星 - 識生學坊",
-        "description": "專為教師設計的學生辨識訓練工坊透過遊戲化測驗強化對學生面孔的記憶。",
-        "url": "https://cagoooo.github.io/recognize/",
-        "icon": "ScanFace",
-        "category": "teaching",
-        "previewUrl": "/previews/recognize_preview.webp",
-        "detailedDescription": "識生學坊是一款專為教師打造的輔助工具，特別針對「臉盲」或需要快速記住大量學生面孔的需求。系統支援自定義班級名單與照片匯入，讓記憶訓練更貼近實際教學場景。",
-        "tags": [
-            "臉盲",
-            "學生辨識",
-            "記憶訓練",
-            "師生互動",
-            "教學輔助"
-        ]
-    },
-    {
-        "id": 55,
-        "title": "ㄅㄆㄇ注音大挑戰",
-        "description": "專為兒童設計的注音學習挑戰透過趣味互動讓孩子輕鬆掌握ㄅㄆㄇ。",
-        "url": "https://cagoooo.github.io/zhuyin/",
-        "icon": "Languages",
-        "category": "language",
-        "previewUrl": "/previews/zhuyin_preview.webp",
-        "detailedDescription": "「ㄅㄆㄇ注音大挑戰」是一款針對幼童與初學學童所開發的注音學習輔助工具。透過豐富的視覺回饋與漸進式的設計，不但能提升孩子對注音符號的辨識能力，還能有效增加學習動機，是家長與教師的好幫手。",
-        "tags": [
-            "注音",
-            "ㄅㄆㄇ",
-            "國語",
-            "幼童",
-            "拼音"
-        ]
-    },
-    {
-        "id": 56,
-        "title": "元宵猜燈謎闖關遊戲",
-        "description": "充滿節慶氣氛的元宵猜燈謎互動遊戲，讓學生在趣味闖關中學習傳統文化。",
-        "url": "https://cagoooo.github.io/lantern/",
-        "icon": "Lightbulb",
-        "category": "games",
-        "previewUrl": "/previews/preview_lantern_festival.webp",
-        "detailedDescription": "「元宵猜燈謎闖關遊戲」是一款結合傳統節慶與互動學習的教育遊戲。玩家透過解開一道道趣味燈謎來推進關卡，不僅能親身體驗元宵節的濃厚氛圍，還能從中學習各種字面意義與文化典故。適合教師在課堂上與學生進行節慶主題互動。",
-        "tags": [
-            "元宵節",
-            "猜燈謎",
-            "傳統文化",
-            "遊戲",
-            "節慶",
-            "教育"
-        ]
-    },
-    {
-        "id": 57,
-        "title": "選擇障礙專用 - 餐廳命運轉盤",
-        "description": "為選擇障礙打造的餐廳抽籤工具，幫助你迅速決定今天要吃什麼美食！",
-        "url": "https://cagoooo.github.io/food/",
-        "icon": "Utensils",
-        "category": "utilities",
-        "previewUrl": "/previews/preview_food_wheel.webp",
-        "detailedDescription": "每次到了用餐時間總是不知道該吃什麼嗎？「餐廳命運轉盤」專為有選擇困難症的你設計，只需輕鬆一點，讓轉盤為你決定今天的美味餐點！",
-        "tags": [
-            "餐廳",
-            "抽籤",
-            "轉盤",
-            "美食",
-            "選擇障礙"
-        ]
-    },
-    {
-        "id": 58,
-        "title": "教師數位備課教案小幫手",
-        "description": "專為老師設計的 AI 數位備課工具，能快速生成優質教案與教學活動設計，大幅節省行政與備課時間。",
-        "detailedDescription": "「教師數位備課教案小幫手」專為解決老師繁忙的備課壓力而生。結合先進 AI 技術，只需輸入單元名稱或教學目標，即可自動產出結構完整的教案草稿、創新的教學活動設計以及多元的評量建議。支援符合 108 課綱的核心素養導向設計，是老師進行數位教學轉型、提升備課品質的最佳夥伴。",
-        "url": "https://cagoooo.github.io/prepare/",
-        "icon": "Wand2",
-        "category": "teaching",
-        "previewUrl": "/previews/tool_58.webp",
-        "tags": [
-            "AI",
-            "備課",
-            "教案生成",
-            "教學設計",
-            "數位轉型",
-            "效率工具",
-            "108課綱"
-        ]
-    },
-    {
-        "id": 59,
-        "title": "小智鈴 AI 客服系統",
-        "description": "智慧型 AI 客服助理，提供 24/7 全天候即時諮詢與教育支援，精準回答各類常見問題。",
-        "url": "https://cagoooo.github.io/smes/",
-        "icon": "MessageSquareText",
-        "category": "communication",
-        "previewUrl": "/previews/tool_59.webp",
-        "detailedDescription": "「小智鈴 AI 客服系統」是專為教育場域開發的智慧交談機器人。結合先進的語言模型，它能自動學習學校行政、教學資源及常見 QA 資料，透過自然流暢的對話提供即時反饋。不僅減輕行政人員負擔，也提供親師生隨時隨地獲取資訊的便利管道。",
-        "tags": [
-            "AI 客服",
-            "智慧對話",
-            "即時支援",
-            "24/7",
-            "行政自動化",
-            "教育科技"
-        ]
-    },
-    {
-        "id": 60,
-        "title": "專屬創意 3D 畫廊",
-        "description": "沈浸式 3D 互動畫廊體驗，在星空宇宙背景中展覽你的專屬創意作品，支援雲端同步、多主題背景、圖片標籤篩選與個人化 3D 場景設定。",
-        "url": "https://cagoooo.github.io/3D/",
-        "icon": "Aperture",
-        "category": "interactive",
-        "previewUrl": "/previews/tool_60.webp",
-        "detailedDescription": "「專屬創意 3D 畫廊」是一款結合現代 WebGL 技術與雲端服務的沈浸式展覽平台。使用者可以將自己珍貴的相片、藝術作品或創意圖像，以立體旋轉卡片的方式呈現在宇宙星空之中，打造獨一無二的個人數位藝廊。支援多種 3D 場景主題（宇宙、森林、海洋等）、自訂旋轉速度與透視深度、圖片標籤智慧篩選，以及 Firebase 雲端同步功能，讓你的創意展覽可以隨時隨地分享給全世界。",
-        "tags": [
-            "3D",
-            "畫廊",
-            "創意展覽",
-            "沈浸式",
-            "個人化",
-            "雲端同步",
-            "WebGL",
-            "互動體驗"
-        ]
-    },
-    {
-        "id": 61,
-        "title": "英打打字超互動遊戲",
-        "description": "互動式英文打字學習遊戲，透過趣味關卡幫助學生提升英文打字速度與準確度，在遊戲中輕鬆掌握鍵盤位置。",
-        "detailedDescription": "「英打打字超互動遊戲」是一款專為提升英文打字能力而設計的互動平台。結合趣味遊戲元素與視覺回饋，讓枯燥的打字練習變得生動有趣。系統能記錄打字速度與正確率，適合師生在課堂或課後進行打字挑戰，有效幫助學生建立肌肉記憶並增強英文輸入熟悉度。",
-        "url": "https://cagoooo.github.io/typeEN/",
-        "icon": "Keyboard",
-        "category": "language",
-        "previewUrl": "/previews/tool_61.webp",
-        "tags": [
-            "打字",
-            "英文",
-            "鍵盤",
-            "練習",
-            "互動",
-            "遊戲",
-            "輸入法",
-            "教育"
-        ]
-    },
-    {
-        "id": 62,
-        "title": "桃園市龍潭區石門國民小學114學年度親職教育日",
-        "description": "親職教育日（家長日）活動資訊分享與線上互動平台，旨在加強學校與家庭的聯繫，共同關注孩子的成長。包含活動議程、教育宣導與親師溝通資源。",
-        "detailedDescription": "一年一度的石門國小親職教育日（家長日）是學校與家長建立深厚連結的重要時刻。本平台整合了114學年度活動的精華資訊，包括校務報告、親職講座、各班級經營計畫，以及多樣化的教育宣導資源。家長可隨時隨地透過行動裝置掌握核心內容，與學校攜手為孩子打造優質的學習環境。",
-        "url": "https://cagoooo.github.io/114_Parent/",
-        "icon": "Users",
-        "category": "communication",
-        "previewUrl": "/previews/tool_62.webp",
-        "tags": [
-            "桃園市",
-            "石門國小",
-            "親職教育日",
-            "114學年度",
-            "學校活動",
-            "互動資訊",
-            "教育宣導",
-            "家長日",
-            "親師溝通"
-        ]
-    },
-    {
-        "id": 63,
-        "title": "Email 帳密記憶遊樂園",
-        "description": "旨在幫助使用者安全且趣味地記憶 Email 帳號與密碼組合的互動式遊樂園。透過遊戲化記憶法，讓登入資訊的管理不再枯燥，並提升資安意識。",
-        "detailedDescription": "「Email 帳密記憶遊樂園」是一款結合遊樂園情境與記憶心理學的數位工具。使用者可以透過趣味的遊樂設施場景，將複雜的 Email 與密碼組合轉化為生動的記憶掛鉤。系統提供多種記憶挑戰模式、資安強度評估，並支援個人化場景自訂，讓你在歡樂的氛圍中輕鬆掌握資訊安全，守護數位資產。",
-        "url": "https://cagoooo.github.io/email/",
-        "icon": "Gamepad2",
-        "category": "interactive",
-        "previewUrl": "/previews/tool_63.webp",
-        "tags": [
-            "Email",
-            "帳號密碼",
-            "記憶遊樂園",
-            "資安意識",
-            "互動遊戲",
-            "密碼安全",
-            "趣味學習"
-        ]
-    },
-    {
-        "id": 64,
-        "title": "簡譜節拍節奏大師",
-        "description": "學習簡譜與節奏的互動學習工具，幫助初學者輕鬆掌握音樂節拍與旋律。",
-        "detailedDescription": "「簡譜節拍節奏大師」是一款專為音樂初學者設計的互動式學習平台。透過視覺化的簡譜呈現與動態節拍器，讓使用者能夠直觀地感受節奏的長短與音樂的律動。系統內建多種基本節奏型態與互動練習，不僅適合音樂課堂教學，也為想學習基礎樂理的使用者提供了一個輕鬆有趣的自學管道。",
-        "url": "https://cagoooo.github.io/music/",
-        "icon": "Music",
-        "category": "teaching",
-        "previewUrl": "/previews/tool_64.webp",
-        "tags": [
-            "音樂",
-            "簡譜",
-            "節拍",
-            "節奏",
-            "樂理",
-            "互動學習"
-        ]
-    },
-    {
-        "id": 65,
-        "title": "AI 影片創作與教學整合資源",
-        "description": "整合 Grok 與 Canva 的 AI 影片創作指南，協助教師與創作者輕鬆製作專業級教學影片與微電影。",
-        "url": "https://cagoooo.github.io/Grok-Canva/",
-        "icon": "Clapperboard",
-        "category": "teaching",
-        "previewUrl": "/previews/tool_65.webp",
-        "tags": [
-            "AI",
-            "影片創作",
-            "教學",
-            "Canva",
-            "Grok"
-        ]
-    },
-    {
-        "id": 66,
-        "title": "Sora AI 旅遊全記錄教學網",
-        "description": "探索 Sora AI 與旅遊記錄的完美結合，掌握如何利用 AI 技術捕捉、編輯並分享您的旅遊點滴，打造個人專屬的高質感全記錄教學平台。",
-        "detailedDescription": "「Sora AI 旅遊全記錄教學網」是一個專為旅遊愛好者與創作者設計的 AI 教學資源庫。本平台深入探討 OpenAI Sora 技術在旅遊影片創作上的應用，從初步的提示詞撰寫到後期的高細節生成。使用者將學會如何將零散的旅遊素材，轉化為具備電影質感的全記錄短片，並透過 AI 工具優化敘事節奏與視覺呈現，讓每一段旅程都能以最動人的方式被銘記。",
-        "url": "https://cagoooo.github.io/Sora/",
-        "icon": "Plane",
-        "category": "teaching",
-        "previewUrl": "/previews/tool_66.webp",
-        "ogPreviewUrl": "/previews/tool_66_og.webp",
-        "tags": [
-            "Sora AI",
-            "旅遊記錄",
-            "AI 影片",
-            "教學資源",
-            "生活記錄",
-            "影像創作",
-            "OpenAI"
-        ]
-    },
-    {
-        "id": 67,
-        "title": "國語演說比賽訓練平台 (pro版)",
-        "description": "專為國語演說比賽設計的專業訓練平台，提供全方位的技巧培訓、各類講稿庫與實戰模擬演練，助力學生在賽場上自信發揮，奪取佳績。",
-        "detailedDescription": "「國語演說比賽訓練平台 (pro版)」是一套完整的競賽培訓解決方案。平台內建專業演說技巧教學單元，包含語調訓練、儀態指導、起承轉合架構分析，並提供針對各級比賽設計的精選講稿參考包。透過互動式的訓練介面與AI輔助評核，讓學生能針對弱點進行精確強化，是教師指導與學生自查的最佳利器，協助每一位演說者從『敢說』進化到『會說』與『善說』。",
-        "url": "https://cagoooo.github.io/speech/",
-        "icon": "MicVocal",
-        "category": "language",
-        "previewUrl": "/previews/tool_67.webp",
-        "ogPreviewUrl": "/previews/tool_67_og.webp",
-        "tags": [
-            "國語演說",
-            "比賽培訓",
-            "口語表達",
-            "專業版",
-            "講稿庫",
-            "教育科技",
-            "實戰模擬"
-        ]
-    },
-    {
-        "id": 68,
-        "title": "手作課程照片影片作品上傳平台",
-        "description": "專為手作課程設計的作品展示與分享平台，支援高畫質相片與影片上傳，讓每件精心創作的作品都能完美呈現。",
-        "detailedDescription": "「手作課程照片影片作品上傳平台」是為創意手作者與教學課程量身打造的數位作品集。該平台簡化了作品記錄流程，讓學習者能輕鬆上傳陶藝、編織、木工等手作成果的照片與短影音。內建作品展示牆與類別管理功能，便於學生整理個人學習歷程，同時也讓教師能即時給予回饋。精緻的視覺介面確保每一份創作都能以最專業的姿態呈現在社群與教學社群中。",
-        "url": "https://cagoooo.github.io/files/",
-        "icon": "Images",
-        "category": "utilities",
-        "previewUrl": "/previews/tool_68.webp",
-        "ogPreviewUrl": "/previews/tool_68_og.webp",
-        "tags": [
-            "手作課程",
-            "作品上傳",
-            "照片影片",
-            "學習歷程",
-            "數位作品集",
-            "創意教學",
-            "課程紀錄"
-        ]
-    },
-    {
-        "id": 69,
-        "title": "猴子丟香蕉-投擲大戰爭",
-        "description": "是一款充滿趣味與挑戰的互動投擲遊戲！玩家將化身為靈活的小猴子，在熱帶叢林中展開一場香蕉大戰。",
-        "detailedDescription": "「猴子丟香蕉-投擲大戰爭」將帶領你進入一段充滿歡笑與冒險的旅程。在茂密的熱帶雨林中，你將扮演一隻可愛的小猴子，與夥伴們展開一場別開生面的香蕉競技。遊戲結合了真實的物理拋物線運算與可愛的卡通視覺風格，玩家需要考慮力道與角度，在多樣化的場景中命中目標。無論是單人練習精準度，還是與朋友比拼分數，這款遊戲都能為你帶來滿滿的互動樂趣與成就感。",
-        "url": "https://cagoooo.github.io/monkey/",
-        "icon": "Gamepad2",
-        "category": "games",
-        "previewUrl": "/previews/tool_69.webp",
-        "ogPreviewUrl": "/previews/tool_69_og.webp",
-        "tags": [
-            "遊戲",
-            "猴子",
-            "香蕉",
-            "投擲",
-            "互動",
-            "物理",
-            "休閒",
-            "熱帶叢林"
-        ]
-    },
-    {
-        "id": 70,
-        "title": "中文注音打字遊戲 (pro版)",
-        "description": "進階版中文注音打字練習遊戲，提供更豐富有趣的打字挑戰，全面提升中文輸入速度與準確度。",
-        "detailedDescription": "「中文注音打字遊戲 (pro版)」是一款專為提升中文注音輸入能力而設計的進階互動平台。結合趣味遊戲元素與豐富的打字關卡，讓枯燥的打字練習變得生動有趣。系統能記錄打字速度與正確率，幫助學生建立肌肉記憶並增強注音符號的熟悉度，是學習中文輸入法的絕佳輔助工具。",
-        "url": "https://cagoooo.github.io/typeCC/",
-        "icon": "Keyboard",
-        "category": "language",
-        "previewUrl": "/previews/tool_70.webp",
-        "ogPreviewUrl": "/previews/tool_70_og.webp",
-        "tags": [
-            "打字",
-            "中文",
-            "注音",
-            "練習",
-            "進階",
-            "遊戲",
-            "輸入法",
-            "教育"
-        ]
-    },
-    {
-        "id": 71,
-        "title": "成語填空大挑戰",
-        "description": "專為提升成語能力設計的互動填空遊戲，透過趣味挑戰強化辭彙運用與文學素養。",
-        "detailedDescription": "「成語填空大挑戰」是一款結合教育與趣味的互動學習平台。精選上千句常用成語，設計多樣化的填空關卡，讓學習者在遊戲中自然掌握成語的意涵與用法。系統提供即時回饋與詳盡解析，協助學生建立深厚的國語文基礎，是提升辭彙量與寫作能力的絕佳輔助工具。",
-        "url": "https://cagoooo.github.io/typeTC/",
-        "icon": "SpellCheck",
-        "category": "language",
-        "previewUrl": "/previews/tool_71.webp",
-        "ogPreviewUrl": "/previews/tool_71_og.webp",
-        "tags": [
-            "成語",
-            "填空",
-            "國語",
-            "學習",
-            "遊戲",
-            "辭彙",
-            "教育科技",
-            "互動"
-        ]
-    },
-    {
-        "id": 72,
-        "title": "動支及黏存單自動產生系統",
-        "description": "智慧化的經費動支與黏存單自動產生平台，簡化繁瑣的行政核銷流程，只需輸入基本資訊即可快速產出標準格式表單，大幅提升行政作業效率與精確度。",
-        "detailedDescription": "「動支及黏存單自動產生系統」是專為學校行政人員與教師設計的智慧化核銷工具。面對複雜的經費動支與黏存單填寫流程，本系統提供直覺的資料輸入介面，能自動計算總額並依據規範產出符合標準格式的 PDF 表單。無論是日常辦公用品採購還是專案活動經費報支，都能透過自動化生成功能，省下大量手寫與排版時間，確保報帳資料的正確性與專業感。",
-        "url": "https://cagoooo.github.io/budget/",
-        "icon": "Calculator",
-        "category": "utilities",
-        "previewUrl": "/previews/tool_72.webp",
-        "ogPreviewUrl": "/previews/tool_72_og.webp",
-        "tags": [
-            "動支單",
-            "黏存單",
-            "經費核銷",
-            "自動生成",
-            "行政效率",
-            "智慧化",
-            "表單產出"
-        ]
-    },
-    {
-        "id": 73,
-        "title": "國小期中考成績篩選工具",
-        "description": "專為國小教師設計的期中考成績分析助手，輕鬆篩選分佈情況。",
-        "detailedDescription": "「國小期中考成績篩選工具」是專為教學第一線開發的實用工具。面對大量期中考成績，教師可透過本工具快速完成各級分段的篩選，並自動產生成績分佈趨勢。系統支援彈性的篩選條件，能精準鎖定需要補救教學或進階指導的學生名單，大幅節省人工比對時間，是學期末成績結算與分析的最佳利器。",
-        "url": "https://cagoooo.github.io/filter/",
-        "icon": "LineChart",
-        "category": "utilities",
-        "previewUrl": "/previews/tool_73.webp",
-        "ogPreviewUrl": "/previews/tool_73_og.webp",
-        "tags": [
-            "成績",
-            "篩選",
-            "分析",
-            "期中考",
-            "行政效率",
-            "教學助理",
-            "國小"
-        ]
-    },
-    {
-        "id": 74,
-        "title": "2026 親職日場地配置圖",
-        "description": "提供 2026 親職日的完整場地配置與動線規劃進度，協助親師快速掌握活動空間分布，讓年度盛事進行更順暢。",
-        "detailedDescription": "「2026 親職日場地配置圖」是專為親職教育日活動設計的即時資訊平台。透過清晰的視覺化地圖，完整呈現各攤位、教室與公共設施的精確位置，並提供建議參觀動線。無論是家長尋找班級位置，或是工作人員協調場地支援，都能在平台上即時獲取最新配置快照，大幅提升大型活動的引導效率與親師互動品質。",
-        "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/academic/2026%E8%A6%AA%E8%81%B7%E6%97%A5%E5%A0%B4%E5%9C%B0%E9%85%8D%E7%BD%AE",
-        "icon": "Map",
-        "category": "communication",
-        "previewUrl": "/previews/tool_74.webp",
-        "ogPreviewUrl": "/previews/tool_74_og.webp",
-        "tags": [
-            "2026",
-            "親職日",
-            "場地配置",
-            "校園地圖",
-            "活動規劃",
-            "親師溝通",
-            "即時更新"
-        ]
-    },
-    {
-        "id": 75,
-        "title": "影片&PDF批次轉圖片",
-        "description": "將影片與 PDF 檔案批次轉換為圖片，快速擷取所需畫面，大幅提升工作與備課效率",
-        "detailedDescription": "「影片&PDF批次轉圖片」是一款專為教學與行政工作設計的實用轉檔工具。老師們經常需要從教學影片中擷取重點畫面，或是從多頁的 PDF 教案中匯出單頁圖片作為課程素材。本工具提供直覺的操作介面，支援將常見的影片格式及 PDF 檔案進行批次處理，一鍵快速轉換為高品質圖片。無論是製作簡報、編寫教材或整理記錄，都能為您省去繁瑣的手動截圖時間，讓備課與行政作業更加得心應手。",
-        "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E5%BD%B1%E7%89%87pdf%E8%BD%89%E5%9C%96%E7%89%87?authuser=0",
-        "icon": "Images",
-        "category": "utilities",
-        "previewUrl": "/previews/tool_75.webp",
-        "ogPreviewUrl": "/previews/tool_75_og.webp",
-        "tags": [
-            "轉檔",
-            "影片轉圖",
-            "PDF轉圖",
-            "批次處理",
-            "教學工具",
-            "行政效率",
-            "圖片擷取"
-        ]
-    },
-    {
-        "id": 76,
-        "title": "WebSlide Pro 簡報播放器",
-        "description": "專業流暢的網頁版簡報播放器，支援多種互動功能，無需安裝軟體即可隨時隨地開啟完美簡報。",
-        "detailedDescription": "「WebSlide Pro 簡報播放器」是一套專為現代教學與專業報告打造的線上簡報展示工具。打破傳統軟體的限制，只要有瀏覽器，就能流暢展示具有動態效果與豐富媒體內容的簡報檔案。系統具備直覺的控制介面、雷射筆標記，以及全螢幕高畫質播放功能，讓演講者能毫無阻礙地專注於內容傳遞。無論是教室授課、線上研討會還是跨校交流，它都能提供穩定且引人入勝的簡報體驗，讓每一個知識點都完美呈現。",
-        "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/webslide-%E7%B0%A1%E5%A0%B1%E6%92%AD%E6%94%BE%E5%99%A8?authuser=0",
-        "icon": "Presentation",
-        "category": "teaching",
-        "previewUrl": "/previews/tool_76.webp",
-        "ogPreviewUrl": "/previews/tool_76_og.webp",
-        "tags": [
-            "簡報",
-            "播放器",
-            "教學工具",
-            "WebSlide",
-            "展示",
-            "線上簡報",
-            "報告"
-        ]
-    },
-    {
-        "id": 77,
-        "title": "石門國小雙語教育宣導網站",
-        "description": "石門國小雙語教育宣導專屬平台，整合雙語課程介紹、英語學習資源與校園國際化推廣資訊，讓師生與家長輕鬆掌握學校雙語教育發展方向。",
-        "detailedDescription": "「石門國小雙語教育宣導網站」是石門國小積極推動雙語教育政策的重要數位窗口。本站整合了雙語課程規劃、英語沉浸教學理念介紹、校內雙語學習成果展示，以及各項英語學習資源連結。透過豐富的圖文內容與互動資訊，讓家長了解學校雙語推動現況，讓學生感受語言學習的樂趣，共同迎接國際化教育的全新未來。",
-        "url": "https://english.smes.tyc.edu.tw/",
-        "icon": "Globe",
-        "category": "language",
-        "previewUrl": "/previews/tool_77.webp",
-        "ogPreviewUrl": "/previews/tool_77_og.webp",
-        "tags": [
-            "雙語教育",
-            "英語學習",
-            "石門國小",
-            "國際化",
-            "雙語課程",
-            "英語沉浸",
-            "校園英語",
-            "語言學習",
-            "教育推廣"
-        ]
-    },
-    {
-        "id": 78,
-        "title": "桃園市115學年度國小課程計畫AI審查工具",
-        "description": "專為國小課程計畫審閱設計的 AI 輔助工具，能自動比對計畫內容並給予審查建議，大幅節省行政與教務端審查的時間，提升計畫品質。",
-        "detailedDescription": "「桃園市115學年度國小課程計畫AI審查工具」結合最新的 AI 自然語言處理技術，針對校訂課程、領域課程等各項計畫進行自動化審閱。系統能依據桃園市課程審查指標，快速揪出缺漏、邏輯不一致之處，並提供具體的修正建議。此工具不僅能減輕審查委員的工作負擔，還能協助學校教務處與撰寫教師檢核課程計畫的完整性與適法性，是推動校園課程發展的最佳智慧助手。",
-        "url": "https://cagoooo.github.io/curriculum/",
-        "icon": "ClipboardCheck",
-        "category": "utilities",
-        "previewUrl": "/previews/tool_78.webp",
-        "ogPreviewUrl": "/previews/tool_78_og.webp",
-        "tags": [
-            "課程計畫",
-            "AI審查",
-            "教務",
-            "行政工具",
-            "115學年度",
-            "桃園市",
-            "智慧輔助",
-            "計畫審閱"
-        ]
-    },
-    {
-        "id": 79,
-        "title": "漢語新解",
-        "description": "以 AI 為驅動的創意漢語詮釋工具，用幽默、諷刺與機智的視角為你解讀日常詞彙的「新意」，讓語言學習更有趣，讓漢字充滿新生命！",
-        "detailedDescription": "「漢語新解」是一款充滿創意與趣味的 AI 語言工具，打破傳統辭典的嚴肅框架，以幽默、諷刺與機智的方式，重新詮釋你熟悉的中文詞彙。只需輸入一個詞語，系統便會運用 AI 的語言理解能力，為其生成令人眼睛一亮的「新解」——或一語道破現代生活的荒謬，或以文字遊戲揭示詞語背後的隱喻，或用輕鬆詼諧的方式引發你對語言的全新思考。無論是課堂上的語文趣味延伸，還是私下對文字藝術的探索，「漢語新解」都能讓你在笑聲中，對漢語產生更深、更富創意的理解與熱愛。",
-        "url": "https://cagoooo.github.io/words/",
-        "icon": "Languages",
-        "category": "language",
-        "previewUrl": "/previews/tool_79.webp",
-        "ogPreviewUrl": "/previews/tool_79_og.webp",
-        "tags": [
-            "漢語",
-            "文字遊戲",
-            "AI創意",
-            "幽默詮釋",
-            "語言學習",
-            "國語文",
-            "趣味語文",
-            "詞彙新解"
-        ]
-    },
-    {
-        "id": 80,
-        "title": "114石小教師會議報告集合站 (下學期)",
-        "description": "專為 114 學年度下學期設計的石門國小教師會議報告彙整平台。集中管理各式會議記錄、行政宣導與進度回報，提升行政溝通效率。",
-        "detailedDescription": "「114石小教師會議報告集合站 (下學期)」是石門國小為全體教職員量身打造的會議與行政資源整合平台。透過此平台，教師可以隨時存取最新的午會記錄、研習簡報及行政宣導事項。匯集了下學期所有重要的會議動態，並提供線上報告查詢、共編文件連結與教學輔助資源下載，確保校園資訊傳達的即時性與透明度，讓行政流程更順暢，教學專業發展更穩健。",
-        "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/114teacher-2/",
-        "icon": "ClipboardCheck",
-        "category": "utilities",
-        "previewUrl": "/previews/tool_80.webp",
-        "ogPreviewUrl": "/previews/tool_80_og.webp",
-        "tags": [
-            "會議記錄",
-            "行政報告",
-            "教師資源",
-            "石門國小",
-            "114學年度",
-            "教務系統",
-            "協作平台"
-        ]
-    },
-    {
-        "id": 81,
-        "title": "國小資訊科技教學駕駛艙入口網",
-        "description": "集大成的資訊科技教學導航，整合國小資科教育核心資源，為老師打造的全方位數位教學儀表板。",
-        "url": "https://cagoooo.github.io/it-cockpit/",
-        "icon": "LayoutDashboard",
-        "category": "teaching",
-        "previewUrl": "/previews/tool_81.webp",
-        "ogPreviewUrl": "/previews/tool_81_og.webp",
-        "tags": [
-            "資訊科技",
-            "教學入口",
-            "儀表板",
-            "國小教育",
-            "工具整合",
-            "駕駛艙"
-        ]
-    },
-    {
-        "id": 82,
-        "title": "教室資訊設備盤點系統",
-        "description": "高效率的校園資訊設備盤點平台，支援逐間教室清查電腦、投影機、網路設備等 IT 資產，即時統計盤點進度與設備狀態，讓學校資產管理透明化、數位化。",
-        "detailedDescription": "「教室資訊設備盤點系統」是專為學校資訊組與行政人員設計的智慧盤點工具。透過直覺的操作介面，人員可逐間教室勾選與核對電腦、投影機、AV 擴大機、網路交換器等各類資訊設備，系統自動彙整盤點結果並產生統計報表。即時的完成率儀表板讓管理者掌握全校盤點進度，並可標記異常、遺失或待修設備，取代傳統紙本作業，大幅提升資產清查效率與準確度，是校園數位轉型的重要利器。",
-        "url": "https://cagoooo.github.io/smes-inventory/",
-        "icon": "ClipboardList",
-        "category": "utilities",
-        "previewUrl": "/previews/tool_82.webp",
-        "ogPreviewUrl": "/previews/tool_82_og.webp",
-        "tags": [
-            "設備盤點",
-            "資產管理",
-            "資訊設備",
-            "行政效率",
-            "校園數位化",
-            "IT管理",
-            "智慧盤點",
-            "數位轉型"
-        ]
-    },
-    {
-        "id": 83,
-        "title": "本土語分班配對系統",
-        "description": "智慧化的本土語分班配對工具，依學生語言志願（台語、客語、原住民族語等）自動完成跨班配對與分班作業，讓行政流程省時省力，落實多元文化語言教育。",
-        "detailedDescription": "「本土語分班配對系統」是專為學校本土語課程行政需求打造的智慧配對平台。面對全校學生複雜多元的語言志願（閩南語、客家語、原住民族語、新住民語等），本系統能自動彙整學生的語言選填資料，依照各語言組別人數進行最佳分班配對，並列出清晰的分班結果報表。行政人員無需人工比對，系統自動避免衝突並均衡各班人數，大幅縮短本土語分班所需的作業時間，確保每位學生都能順暢地進入所選語言的課程，是推動台灣多元文化語言教育的重要數位工具。",
-        "url": "https://cagoooo.github.io/local/",
-        "icon": "Languages",
-        "category": "utilities",
-        "previewUrl": "/previews/tool_83.webp",
-        "ogPreviewUrl": "/previews/tool_83_og.webp",
-        "tags": [
-            "本土語",
-            "分班配對",
-            "台語",
-            "客語",
-            "原住民族語",
-            "多元文化",
-            "語言教育",
-            "行政效率",
-            "自動配對"
-        ]
-    }
+  {
+    "id": 1,
+    "title": "線上即時客服",
+    "description": "提供即時的線上教育支援和諮詢服務，協助解決學習過程中的問題",
+    "url": "https://doc.smes.tyc.edu.tw/shared/A4uyH5OdHI",
+    "icon": "MessageCircle",
+    "category": "communication",
+    "previewUrl": "/previews/tool_1.webp",
+    "tags": [
+      "客服",
+      "即時通訊",
+      "問答",
+      "支援"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "行政業務協調系統",
+    "description": "便捷的行政業務協調平台，提升校園行政工作效率",
+    "url": "https://cagoooo.github.io/staff/",
+    "icon": "ClipboardList",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_2.webp",
+    "tags": [
+      "行政",
+      "協調",
+      "校務",
+      "管理"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "學生即時投票系統",
+    "description": "即時收集學生意見的投票平台，提升課堂互動性與參與度",
+    "url": "https://cagoooo.github.io/vote/",
+    "icon": "Vote",
+    "category": "interactive",
+    "previewUrl": "/previews/tool_3.webp",
+    "tags": [
+      "投票",
+      "互動",
+      "課堂",
+      "即時",
+      "民主"
+    ]
+  },
+  {
+    "id": 4,
+    "title": "PIRLS閱讀理解生成",
+    "description": "專業的閱讀理解評估工具，幫助提升學生的閱讀能力",
+    "url": "https://pirlss.smes.tyc.edu.tw/",
+    "icon": "Book",
+    "category": "reading",
+    "previewUrl": "/previews/tool_4.webp",
+    "tags": [
+      "PIRLS",
+      "閱讀理解",
+      "評估",
+      "生成",
+      "AI"
+    ]
+  },
+  {
+    "id": 5,
+    "title": "校園點餐系統",
+    "description": "便捷的校園點餐平台，讓師生輕鬆訂購午餐",
+    "url": "https://cagoooo.github.io/vendor/",
+    "icon": "Utensils",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_5.webp",
+    "tags": [
+      "點餐",
+      "午餐",
+      "訂餐",
+      "校園",
+      "便利"
+    ]
+  },
+  {
+    "id": 6,
+    "title": "蜂類配對消消樂",
+    "description": "寓教於樂的教育遊戲，通過趣味性的方式學習蜂類知識",
+    "url": "https://cagoooo.github.io/bee/",
+    "icon": "Gamepad2",
+    "category": "games",
+    "previewUrl": "/previews/tool_6.webp",
+    "tags": [
+      "遊戲",
+      "蜜蜂",
+      "配對",
+      "消消樂",
+      "自然"
+    ]
+  },
+  {
+    "id": 7,
+    "title": "點「石」成金🐝(評語優化)",
+    "description": "創新的學生評語優化工具，協助教師撰寫更正向、積極且個人化的學生評語",
+    "url": "https://line.me/R/ti/p/@733oiboa?oat_content=url&ts=05120012",
+    "icon": "MessageSquare",
+    "category": "teaching",
+    "previewUrl": "/previews/tool_7.webp",
+    "tags": [
+      "評語",
+      "AI",
+      "LINE",
+      "正向",
+      "學生"
+    ]
+  },
+  {
+    "id": 8,
+    "title": "12年教案有14",
+    "description": "豐富的教案資源分享平台，提供多元化的教學素材和靈感",
+    "url": "https://lin.ee/pCqnVhT",
+    "icon": "Files",
+    "category": "teaching",
+    "previewUrl": "/previews/tool_8.webp",
+    "tags": [
+      "教案",
+      "十二年國教",
+      "課綱",
+      "資源",
+      "分享"
+    ]
+  },
+  {
+    "id": 9,
+    "title": "超級瑪莉歐冒險",
+    "description": "經典遊戲風格的教育遊戲，結合趣味與學習的互動體驗",
+    "url": "https://cagoooo.github.io/mario-game/",
+    "icon": "Gamepad2",
+    "category": "games",
+    "previewUrl": "/previews/tool_9.webp",
+    "tags": [
+      "遊戲",
+      "瑪莉歐",
+      "冒險",
+      "跳躍",
+      "經典"
+    ]
+  },
+  {
+    "id": 10,
+    "title": "班級小管家",
+    "description": "便捷的班級管理工具，協助教師輕鬆管理班級事務",
+    "url": "https://cagoooo.github.io/class/",
+    "icon": "Users",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_10.webp",
+    "tags": [
+      "班級",
+      "管理",
+      "導師",
+      "學生",
+      "事務"
+    ]
+  },
+  {
+    "id": 11,
+    "title": "剛好學：課堂互動so easy",
+    "description": "即時課堂互動平台，讓教學更加生動有趣",
+    "url": "https://cagoooo.github.io/Akailao/",
+    "icon": "GraduationCap",
+    "category": "teaching",
+    "previewUrl": "/previews/tool_11.webp",
+    "tags": [
+      "互動",
+      "課堂",
+      "即時",
+      "教學",
+      "問答"
+    ]
+  },
+  {
+    "id": 12,
+    "title": "PIRLS閱讀理解網",
+    "description": "完整的 PIRLS 閱讀理解資源平台",
+    "url": "https://read.smes.tyc.edu.tw/smes/PIRLS/",
+    "icon": "BookOpen",
+    "category": "reading",
+    "previewUrl": "/previews/tool_12.webp",
+    "tags": [
+      "PIRLS",
+      "閱讀",
+      "理解",
+      "資源",
+      "評量"
+    ]
+  },
+  {
+    "id": 13,
+    "title": "5W1H 靈感發射器 🚀",
+    "description": "創意思維激發工具，協助發想教學內容",
+    "url": "https://5w1h.smes.tyc.edu.tw/",
+    "icon": "Rocket",
+    "category": "teaching",
+    "previewUrl": "/previews/tool_13.webp",
+    "tags": [
+      "5W1H",
+      "創意",
+      "靈感",
+      "思維",
+      "發想"
+    ]
+  },
+  {
+    "id": 14,
+    "title": "點亮詩意~『早安長輩圖產生器』",
+    "description": "輕鬆製作溫馨的早安問候圖片",
+    "url": "https://poet.smes.tyc.edu.tw/",
+    "icon": "Image",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_14.webp",
+    "tags": [
+      "長輩圖",
+      "早安",
+      "圖片",
+      "問候",
+      "詩詞"
+    ]
+  },
+  {
+    "id": 15,
+    "title": "社群領域會議報告產出平台",
+    "description": "快速產生會議報告的協作工具",
+    "url": "https://report.smes.tyc.edu.tw/",
+    "icon": "FileText",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_15.webp",
+    "tags": [
+      "會議",
+      "報告",
+      "社群",
+      "記錄",
+      "產出"
+    ]
+  },
+  {
+    "id": 16,
+    "title": "親師溝通小幫手",
+    "description": "促進親師溝通的便捷平台",
+    "url": "https://talk.smes.tyc.edu.tw/",
+    "icon": "MessageSquare",
+    "category": "communication",
+    "previewUrl": "/previews/tool_16.webp",
+    "tags": [
+      "親師",
+      "溝通",
+      "家長",
+      "聯絡",
+      "通知"
+    ]
+  },
+  {
+    "id": 17,
+    "title": "單一抽籤系統",
+    "description": "簡單快速的單一抽籤工具",
+    "url": "https://www.smes.tyc.edu.tw/smes_html/gogogo.html",
+    "icon": "Ticket",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_17.webp",
+    "tags": [
+      "抽籤",
+      "隨機",
+      "點名",
+      "簡單",
+      "快速"
+    ]
+  },
+  {
+    "id": 18,
+    "title": "大量抽籤系統",
+    "description": "支援大量抽籤的進階工具",
+    "url": "https://www.smes.tyc.edu.tw/smes_html/random.html",
+    "icon": "Shuffle",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_18.webp",
+    "tags": [
+      "抽籤",
+      "隨機",
+      "大量",
+      "分組",
+      "進階"
+    ]
+  },
+  {
+    "id": 19,
+    "title": "設計自己的專屬客服",
+    "description": "自訂專屬的智能客服系統",
+    "url": "https://doc.smes.tyc.edu.tw/",
+    "icon": "Bot",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_19.webp",
+    "tags": [
+      "客服",
+      "AI",
+      "機器人",
+      "自訂",
+      "智能"
+    ]
+  },
+  {
+    "id": 20,
+    "title": "英打練習",
+    "description": "英文打字練習工具，提升打字速度與準確度",
+    "url": "https://www.smes.tyc.edu.tw/smes_html/typeEN.html",
+    "icon": "Keyboard",
+    "category": "language",
+    "previewUrl": "/previews/tool_20.webp",
+    "tags": [
+      "打字",
+      "英文",
+      "練習",
+      "鍵盤",
+      "速度"
+    ]
+  },
+  {
+    "id": 21,
+    "title": "中打練習",
+    "description": "中文打字練習工具，提升中文輸入能力",
+    "url": "https://www.smes.tyc.edu.tw/smes_html/typeCC.html",
+    "icon": "Keyboard",
+    "category": "language",
+    "previewUrl": "/previews/tool_21.webp",
+    "tags": [
+      "打字",
+      "中文",
+      "練習",
+      "注音",
+      "輸入法"
+    ]
+  },
+  {
+    "id": 22,
+    "title": "成語中打練習",
+    "description": "透過成語練習中文打字，邊打邊學成語",
+    "url": "https://www.smes.tyc.edu.tw/smes_html/typeTC.html",
+    "icon": "Languages",
+    "category": "language",
+    "previewUrl": "/previews/preview_typing_v2.webp",
+    "tags": [
+      "打字",
+      "成語",
+      "中文",
+      "學習",
+      "國語"
+    ]
+  },
+  {
+    "id": 23,
+    "title": "點石成金蜂🐝 評語優化網頁版",
+    "description": "網頁版學生評語優化工具，輕鬆產出正向評語",
+    "url": "https://cagoooo.github.io/comments/",
+    "icon": "Sparkles",
+    "category": "teaching",
+    "previewUrl": "/previews/preview_feedback_v2.webp",
+    "tags": [
+      "評語",
+      "AI",
+      "正向",
+      "學生",
+      "網頁版"
+    ]
+  },
+  {
+    "id": 24,
+    "title": "教師午會記錄報告站",
+    "description": "教師午會紀錄與報告分享平台",
+    "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/114teacher/",
+    "icon": "ClipboardCheck",
+    "category": "utilities",
+    "previewUrl": "/previews/preview_admin_v2.webp",
+    "tags": [
+      "午會",
+      "記錄",
+      "教師",
+      "報告",
+      "行政"
+    ]
+  },
+  {
+    "id": 25,
+    "title": "國語演說培訓班",
+    "description": "國語演說練習與培訓工具",
+    "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E5%9C%8B%E8%AA%9E%E6%BC%94%E8%AA%AA%E7%B7%B4%E7%BF%92%E5%B0%8F%E5%B7%A5%E5%85%B7?authuser=0",
+    "icon": "Mic",
+    "category": "language",
+    "previewUrl": "/previews/preview_language_v2.webp",
+    "tags": [
+      "演說",
+      "國語",
+      "口說",
+      "培訓",
+      "比賽"
+    ]
+  },
+  {
+    "id": 26,
+    "title": "九九乘法表練習器",
+    "description": "互動式九九乘法表練習工具",
+    "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E4%B9%9D%E4%B9%9D%E4%B9%98%E6%B3%95%E8%A1%A8%E7%B7%B4%E7%BF%92%E5%99%A8?authuser=0",
+    "icon": "Calculator",
+    "category": "teaching",
+    "previewUrl": "/previews/preview_teaching_v2.webp",
+    "tags": [
+      "數學",
+      "乘法",
+      "九九",
+      "練習",
+      "計算"
+    ]
+  },
+  {
+    "id": 27,
+    "title": "⬅️好用小工具(許願池)",
+    "description": "各種好用的教學小工具集合與許願池",
+    "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/",
+    "icon": "Wrench",
+    "category": "utilities",
+    "previewUrl": "/previews/preview_utility_v2.webp",
+    "tags": [
+      "工具",
+      "集合",
+      "許願",
+      "小工具",
+      "瑞士刀"
+    ]
+  },
+  {
+    "id": 28,
+    "title": "瑪莉歐風格平台跳躍遊戲",
+    "description": "經典瑪莉歐風格的平台跳躍遊戲",
+    "url": "https://www.smes.tyc.edu.tw/smes_html/mariojump.html",
+    "icon": "Gamepad2",
+    "category": "games",
+    "previewUrl": "/previews/preview_platformer_v2.webp",
+    "tags": [
+      "遊戲",
+      "瑪莉歐",
+      "跳躍",
+      "平台",
+      "經典"
+    ]
+  },
+  {
+    "id": 29,
+    "title": "太陽系探索者",
+    "description": "3D 太陽系探索互動學習工具",
+    "url": "https://www.smes.tyc.edu.tw/smes_html/3d-space.html",
+    "icon": "Globe",
+    "category": "teaching",
+    "previewUrl": "/previews/preview_space_v2.webp",
+    "tags": [
+      "太陽系",
+      "3D",
+      "太空",
+      "行星",
+      "自然"
+    ]
+  },
+  {
+    "id": 30,
+    "title": "小遊戲大集合",
+    "description": "多款趣味小遊戲合集",
+    "url": "https://www.smes.tyc.edu.tw/smes_html/little_games/",
+    "icon": "Dice5",
+    "category": "games",
+    "previewUrl": "/previews/preview_game_v2.webp",
+    "tags": [
+      "遊戲",
+      "合集",
+      "趣味",
+      "休閒",
+      "多款"
+    ]
+  },
+  {
+    "id": 31,
+    "title": "互動遊戲抓抓樂",
+    "description": "趣味夾娃娃機互動遊戲",
+    "url": "https://www.smes.tyc.edu.tw/claw-machine-game.html",
+    "icon": "Gift",
+    "category": "games",
+    "previewUrl": "/previews/preview_claw_machine.webp",
+    "tags": [
+      "遊戲",
+      "夾娃娃",
+      "互動",
+      "趣味",
+      "獎品"
+    ]
+  },
+  {
+    "id": 32,
+    "title": "遊戲觸屏碰碰碰",
+    "description": "觸屏互動碰撞遊戲",
+    "url": "https://www.smes.tyc.edu.tw/smes_html/touch.html",
+    "icon": "Hand",
+    "category": "games",
+    "previewUrl": "/previews/preview_touch_collision.webp",
+    "tags": [
+      "遊戲",
+      "觸屏",
+      "碰撞",
+      "互動",
+      "觸控"
+    ]
+  },
+  {
+    "id": 33,
+    "title": "讓聲音具現化吧！",
+    "description": "聲音視覺化互動體驗",
+    "url": "https://www.smes.tyc.edu.tw/smes_html/sound.html",
+    "icon": "AudioWaveform",
+    "category": "games",
+    "previewUrl": "/previews/preview_music_v2.webp",
+    "tags": [
+      "聲音",
+      "視覺化",
+      "互動",
+      "音樂",
+      "波形"
+    ]
+  },
+  {
+    "id": 34,
+    "title": "互動式影像聲音遊戲區",
+    "description": "結合影像與聲音的互動遊戲",
+    "url": "https://www.smes.tyc.edu.tw/smes_html/go.html",
+    "icon": "Play",
+    "category": "games",
+    "previewUrl": "/previews/preview_interactive_av.webp",
+    "tags": [
+      "遊戲",
+      "影像",
+      "聲音",
+      "互動",
+      "多媒體"
+    ]
+  },
+  {
+    "id": 35,
+    "title": "觸屏點點塗鴉區",
+    "description": "觸屏塗鴉創作工具",
+    "url": "https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2856",
+    "icon": "Palette",
+    "category": "games",
+    "previewUrl": "/previews/preview_touch_doodle.webp",
+    "tags": [
+      "塗鴉",
+      "觸屏",
+      "繪畫",
+      "創作",
+      "藝術"
+    ]
+  },
+  {
+    "id": 36,
+    "title": "貪食蛇互動遊戲",
+    "description": "經典貪食蛇遊戲",
+    "url": "https://www.smes.tyc.edu.tw/smes_html/snake_game.html",
+    "icon": "Gamepad2",
+    "category": "games",
+    "previewUrl": "/previews/preview_snake_game.webp",
+    "tags": [
+      "遊戲",
+      "貪食蛇",
+      "經典",
+      "休閒",
+      "懷舊"
+    ]
+  },
+  {
+    "id": 37,
+    "title": "聲波擴散360小遊戲",
+    "description": "聲波視覺化互動遊戲",
+    "url": "https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2863",
+    "icon": "Waves",
+    "category": "games",
+    "previewUrl": "/previews/preview_sound_wave.webp",
+    "tags": [
+      "遊戲",
+      "聲波",
+      "視覺化",
+      "360",
+      "互動"
+    ]
+  },
+  {
+    "id": 38,
+    "title": "聲音互動小遊戲",
+    "description": "透過聲音控制的互動遊戲",
+    "url": "https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2859",
+    "icon": "Volume2",
+    "category": "games",
+    "previewUrl": "/previews/preview_sound_control.webp",
+    "tags": [
+      "遊戲",
+      "聲音",
+      "控制",
+      "互動",
+      "麥克風"
+    ]
+  },
+  {
+    "id": 39,
+    "title": "孔明神算：心靈感應預言魔術",
+    "description": "神奇的心靈感應預言魔術遊戲",
+    "url": "https://claude.ai/public/artifacts/982f7b1c-8302-4112-a05f-342ad24bd421",
+    "icon": "Wand2",
+    "category": "games",
+    "previewUrl": "/previews/preview_magic_v2.webp",
+    "tags": [
+      "魔術",
+      "預言",
+      "心靈感應",
+      "神奇",
+      "表演"
+    ]
+  },
+  {
+    "id": 40,
+    "title": "Padlet行政宣導動態牆",
+    "description": "即時更新的行政宣導公告牆，方便資訊傳達",
+    "url": "https://padlet.com/2104340/padlet-rl3l5wi9wmebku2k",
+    "icon": "LayoutDashboard",
+    "category": "utilities",
+    "previewUrl": "/previews/preview_padlet_wall.webp",
+    "tags": [
+      "Padlet",
+      "公告",
+      "行政",
+      "宣導",
+      "動態牆"
+    ]
+  },
+  {
+    "id": 41,
+    "title": "吉他彈唱🎸點歌系統🎵",
+    "description": "互動式吉他彈唱點歌平台，輕鬆點選喜愛的歌曲",
+    "url": "https://cagoooo.github.io/song/",
+    "icon": "Music",
+    "category": "interactive",
+    "previewUrl": "/previews/preview_guitar_song.webp",
+    "tags": [
+      "音樂",
+      "吉他",
+      "點歌",
+      "彈唱",
+      "歌曲"
+    ]
+  },
+  {
+    "id": 42,
+    "title": "兒童臉部隱私保護工具",
+    "description": "保護兒童照片隱私，自動模糊處理臉部",
+    "url": "https://cagoooo.github.io/child-face-privacy/",
+    "icon": "ShieldCheck",
+    "category": "utilities",
+    "previewUrl": "/previews/preview_privacy_v2.webp",
+    "tags": [
+      "隱私",
+      "兒童",
+      "模糊",
+      "臉部",
+      "保護"
+    ]
+  },
+  {
+    "id": 43,
+    "title": "課程計畫英文轉寫小精靈",
+    "description": "上傳中文課程計畫 (PDF, DOCX)，轉寫小精靈將自動翻譯並整理成 Markdown 表格",
+    "url": "https://bilingual.smes.tyc.edu.tw/",
+    "icon": "Languages",
+    "category": "language",
+    "previewUrl": "/previews/preview_bilingual_translator.webp",
+    "tags": [
+      "翻譯",
+      "雙語",
+      "課程計畫",
+      "Markdown",
+      "PDF"
+    ]
+  },
+  {
+    "id": 44,
+    "title": "數學加減法練習器",
+    "description": "互動式數學加減法練習工具，幫助學生熟練基礎運算能力",
+    "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E6%95%B8%E5%AD%B8%E5%8A%A0%E6%B8%9B%E6%B3%95%E7%B7%B4%E7%BF%92%E5%99%A8",
+    "icon": "Calculator",
+    "category": "teaching",
+    "previewUrl": "/previews/tool_44.webp",
+    "tags": [
+      "數學",
+      "加法",
+      "減法",
+      "練習",
+      "基礎運算"
+    ]
+  },
+  {
+    "id": 45,
+    "title": "文字雲即時互動",
+    "description": "即時協作的文字雲互動平台，讓參與者同步輸入關鍵詞，動態生成視覺化文字雲，適合課堂腦力激盪、意見收集與互動教學",
+    "url": "https://cagoooo.github.io/cloud",
+    "icon": "Cloud",
+    "category": "interactive",
+    "previewUrl": "/previews/tool_45.webp",
+    "tags": [
+      "文字雲",
+      "即時互動",
+      "協作",
+      "腦力激盪",
+      "視覺化",
+      "課堂互動"
+    ]
+  },
+  {
+    "id": 46,
+    "title": "禮堂預約系統",
+    "description": "高效便捷的禮堂預約平台，即時查看場地空檔，簡化行政申請流程，讓校園空間管理更透明、更輕鬆",
+    "url": "https://cagoooo.github.io/schedule/",
+    "icon": "CalendarCheck",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_46.webp",
+    "tags": [
+      "預約",
+      "禮堂",
+      "校務",
+      "管理",
+      "行政",
+      "場地"
+    ]
+  },
+  {
+    "id": 47,
+    "title": "學生肖像使用授權同意書線上簽名",
+    "description": "提供便捷的線上簽署平台，讓家長能快速完成學生肖像使用授權，簡化紙本作業流程，確保資訊安全與效率",
+    "url": "https://cagoooo.github.io/signature/",
+    "icon": "FileSignature",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_47.webp",
+    "tags": [
+      "線上簽名",
+      "肖像授權",
+      "行政",
+      "無紙化",
+      "安全",
+      "效率"
+    ]
+  },
+  {
+    "id": 48,
+    "title": "動態表單自動回報系統",
+    "description": "智慧化的表單管理平台，支援動態欄位設計與自動化回報機制，大幅提升行政作業效率，讓資料收集與追蹤更加便捷且精準",
+    "url": "https://cagoooo.github.io/form/",
+    "icon": "FileInput",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_48.webp",
+    "tags": [
+      "表單",
+      "自動回報",
+      "行政",
+      "資料收集",
+      "效率",
+      "智慧化"
+    ]
+  },
+  {
+    "id": 49,
+    "title": "教務處寶藏庫",
+    "description": "教務處精心彙整的豐富資源平台，集結課程計畫、評量工具、教學表單及行政公告等寶貴資料，是教師備課與行政作業的最佳後盾",
+    "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/academic/",
+    "icon": "FolderOpen",
+    "category": "teaching",
+    "previewUrl": "/previews/tool_49.webp",
+    "tags": [
+      "教務",
+      "資源庫",
+      "課程計畫",
+      "評量",
+      "行政",
+      "表單"
+    ]
+  },
+  {
+    "id": 50,
+    "title": "童趣學園",
+    "description": "專為兒童設計的快樂學習探索樂園，集合了豐富有趣的互動遊戲與多元學習資源，啟發孩子的好奇心，讓學習變得像遊戲一樣好玩，陪伴孩子在歡樂中茁壯成長。",
+    "url": "https://cagoooo.github.io/kids/",
+    "icon": "Baby",
+    "category": "games",
+    "previewUrl": "/previews/kids-zone-preview.webp",
+    "tags": [
+      "兒童",
+      "遊戲",
+      "學習",
+      "探索",
+      "樂園",
+      "互動"
+    ]
+  },
+  {
+    "id": 51,
+    "title": "自動排課系統",
+    "description": "智能化的自動排課系統協助學校快速生成課表最佳化資源分配解決排課難題。",
+    "url": "https://cagoooo.github.io/course/",
+    "icon": "Calendar",
+    "category": "utilities",
+    "previewUrl": "/previews/auto-schedule-preview.webp",
+    "detailedDescription": "這是一款專為學校行政人員與教師設計的智慧排課系統。透過先進的演算技術自動處理複雜的課程衝突、教師身分、教室空間與時段限制，讓原本需要數週的人力排課作業，在幾分鐘內即可初步完成，大幅提升校務運作效率。",
+    "tags": [
+      "排課",
+      "自動化",
+      "課表",
+      "行政",
+      "效率"
+    ]
+  },
+  {
+    "id": 52,
+    "title": "創價・教育 EXPO 線上選課",
+    "description": "專為創價・教育 EXPO 打造的線上選課平台提供流暢的課程探索與即時報名體驗讓學習參與更簡單。",
+    "url": "https://cagoooo.github.io/soka/",
+    "icon": "Library",
+    "category": "interactive",
+    "previewUrl": "/previews/expo-soka-preview.webp",
+    "detailedDescription": "創價・教育 EXPO 線上選課系統是一個整合式的教育資源平台。使用者可以透過直觀的介面瀏覽博覽會中的各大領域課程，從科學技術到人文藝術一應俱全。系統支援即時選課、報名狀態追蹤以及個人化的課程清單管理，是博覽會參與者的數位導覽小幫手。",
+    "tags": [
+      "創價",
+      "教育 EXPO",
+      "線上選課",
+      "課程選擇",
+      "互動體驗"
+    ]
+  },
+  {
+    "id": 53,
+    "title": "智慧校園報修系統",
+    "description": "專為校園打造的智慧報修平台簡化修繕申請流程讓校園維護更加即時與透明。",
+    "url": "https://cagoooo.github.io/repair/",
+    "icon": "Tool",
+    "category": "utilities",
+    "previewUrl": "/previews/repair-preview.webp",
+    "detailedDescription": "智慧校園報修系統旨在提供師生一個便捷、透明的報修門面。使用者只需透過手機或電腦即可快速提交維護需求並即時追蹤處理進度。行政單位則能有效管理各項報修案件最佳化修繕人力派送確保校園設施始終保持在最佳狀態。",
+    "tags": [
+      "報修",
+      "校務",
+      "修繕",
+      "管理",
+      "效率"
+    ]
+  },
+  {
+    "id": 54,
+    "title": "臉盲教師救星 - 識生學坊",
+    "description": "專為教師設計的學生辨識訓練工坊透過遊戲化測驗強化對學生面孔的記憶。",
+    "url": "https://cagoooo.github.io/recognize/",
+    "icon": "ScanFace",
+    "category": "teaching",
+    "previewUrl": "/previews/recognize_preview.webp",
+    "detailedDescription": "識生學坊是一款專為教師打造的輔助工具，特別針對「臉盲」或需要快速記住大量學生面孔的需求。系統支援自定義班級名單與照片匯入，讓記憶訓練更貼近實際教學場景。",
+    "tags": [
+      "臉盲",
+      "學生辨識",
+      "記憶訓練",
+      "師生互動",
+      "教學輔助"
+    ]
+  },
+  {
+    "id": 55,
+    "title": "ㄅㄆㄇ注音大挑戰",
+    "description": "專為兒童設計的注音學習挑戰透過趣味互動讓孩子輕鬆掌握ㄅㄆㄇ。",
+    "url": "https://cagoooo.github.io/zhuyin/",
+    "icon": "Languages",
+    "category": "language",
+    "previewUrl": "/previews/zhuyin_preview.webp",
+    "detailedDescription": "「ㄅㄆㄇ注音大挑戰」是一款針對幼童與初學學童所開發的注音學習輔助工具。透過豐富的視覺回饋與漸進式的設計，不但能提升孩子對注音符號的辨識能力，還能有效增加學習動機，是家長與教師的好幫手。",
+    "tags": [
+      "注音",
+      "ㄅㄆㄇ",
+      "國語",
+      "幼童",
+      "拼音"
+    ]
+  },
+  {
+    "id": 56,
+    "title": "元宵猜燈謎闖關遊戲",
+    "description": "充滿節慶氣氛的元宵猜燈謎互動遊戲，讓學生在趣味闖關中學習傳統文化。",
+    "url": "https://cagoooo.github.io/lantern/",
+    "icon": "Lightbulb",
+    "category": "games",
+    "previewUrl": "/previews/preview_lantern_festival.webp",
+    "detailedDescription": "「元宵猜燈謎闖關遊戲」是一款結合傳統節慶與互動學習的教育遊戲。玩家透過解開一道道趣味燈謎來推進關卡，不僅能親身體驗元宵節的濃厚氛圍，還能從中學習各種字面意義與文化典故。適合教師在課堂上與學生進行節慶主題互動。",
+    "tags": [
+      "元宵節",
+      "猜燈謎",
+      "傳統文化",
+      "遊戲",
+      "節慶",
+      "教育"
+    ]
+  },
+  {
+    "id": 57,
+    "title": "選擇障礙專用 - 餐廳命運轉盤",
+    "description": "為選擇障礙打造的餐廳抽籤工具，幫助你迅速決定今天要吃什麼美食！",
+    "url": "https://cagoooo.github.io/food/",
+    "icon": "Utensils",
+    "category": "utilities",
+    "previewUrl": "/previews/preview_food_wheel.webp",
+    "detailedDescription": "每次到了用餐時間總是不知道該吃什麼嗎？「餐廳命運轉盤」專為有選擇困難症的你設計，只需輕鬆一點，讓轉盤為你決定今天的美味餐點！",
+    "tags": [
+      "餐廳",
+      "抽籤",
+      "轉盤",
+      "美食",
+      "選擇障礙"
+    ]
+  },
+  {
+    "id": 58,
+    "title": "教師數位備課教案小幫手",
+    "description": "專為老師設計的 AI 數位備課工具，能快速生成優質教案與教學活動設計，大幅節省行政與備課時間。",
+    "detailedDescription": "「教師數位備課教案小幫手」專為解決老師繁忙的備課壓力而生。結合先進 AI 技術，只需輸入單元名稱或教學目標，即可自動產出結構完整的教案草稿、創新的教學活動設計以及多元的評量建議。支援符合 108 課綱的核心素養導向設計，是老師進行數位教學轉型、提升備課品質的最佳夥伴。",
+    "url": "https://cagoooo.github.io/prepare/",
+    "icon": "Wand2",
+    "category": "teaching",
+    "previewUrl": "/previews/tool_58.webp",
+    "tags": [
+      "AI",
+      "備課",
+      "教案生成",
+      "教學設計",
+      "數位轉型",
+      "效率工具",
+      "108課綱"
+    ]
+  },
+  {
+    "id": 59,
+    "title": "小智鈴 AI 客服系統",
+    "description": "智慧型 AI 客服助理，提供 24/7 全天候即時諮詢與教育支援，精準回答各類常見問題。",
+    "url": "https://cagoooo.github.io/smes/",
+    "icon": "MessageSquareText",
+    "category": "communication",
+    "previewUrl": "/previews/tool_59.webp",
+    "detailedDescription": "「小智鈴 AI 客服系統」是專為教育場域開發的智慧交談機器人。結合先進的語言模型，它能自動學習學校行政、教學資源及常見 QA 資料，透過自然流暢的對話提供即時反饋。不僅減輕行政人員負擔，也提供親師生隨時隨地獲取資訊的便利管道。",
+    "tags": [
+      "AI 客服",
+      "智慧對話",
+      "即時支援",
+      "24/7",
+      "行政自動化",
+      "教育科技"
+    ]
+  },
+  {
+    "id": 60,
+    "title": "專屬創意 3D 畫廊",
+    "description": "沈浸式 3D 互動畫廊體驗，在星空宇宙背景中展覽你的專屬創意作品，支援雲端同步、多主題背景、圖片標籤篩選與個人化 3D 場景設定。",
+    "url": "https://cagoooo.github.io/3D/",
+    "icon": "Aperture",
+    "category": "interactive",
+    "previewUrl": "/previews/tool_60.webp",
+    "detailedDescription": "「專屬創意 3D 畫廊」是一款結合現代 WebGL 技術與雲端服務的沈浸式展覽平台。使用者可以將自己珍貴的相片、藝術作品或創意圖像，以立體旋轉卡片的方式呈現在宇宙星空之中，打造獨一無二的個人數位藝廊。支援多種 3D 場景主題（宇宙、森林、海洋等）、自訂旋轉速度與透視深度、圖片標籤智慧篩選，以及 Firebase 雲端同步功能，讓你的創意展覽可以隨時隨地分享給全世界。",
+    "tags": [
+      "3D",
+      "畫廊",
+      "創意展覽",
+      "沈浸式",
+      "個人化",
+      "雲端同步",
+      "WebGL",
+      "互動體驗"
+    ]
+  },
+  {
+    "id": 61,
+    "title": "英打打字超互動遊戲",
+    "description": "互動式英文打字學習遊戲，透過趣味關卡幫助學生提升英文打字速度與準確度，在遊戲中輕鬆掌握鍵盤位置。",
+    "detailedDescription": "「英打打字超互動遊戲」是一款專為提升英文打字能力而設計的互動平台。結合趣味遊戲元素與視覺回饋，讓枯燥的打字練習變得生動有趣。系統能記錄打字速度與正確率，適合師生在課堂或課後進行打字挑戰，有效幫助學生建立肌肉記憶並增強英文輸入熟悉度。",
+    "url": "https://cagoooo.github.io/typeEN/",
+    "icon": "Keyboard",
+    "category": "language",
+    "previewUrl": "/previews/tool_61.webp",
+    "tags": [
+      "打字",
+      "英文",
+      "鍵盤",
+      "練習",
+      "互動",
+      "遊戲",
+      "輸入法",
+      "教育"
+    ]
+  },
+  {
+    "id": 62,
+    "title": "桃園市龍潭區石門國民小學114學年度親職教育日",
+    "description": "親職教育日（家長日）活動資訊分享與線上互動平台，旨在加強學校與家庭的聯繫，共同關注孩子的成長。包含活動議程、教育宣導與親師溝通資源。",
+    "detailedDescription": "一年一度的石門國小親職教育日（家長日）是學校與家長建立深厚連結的重要時刻。本平台整合了114學年度活動的精華資訊，包括校務報告、親職講座、各班級經營計畫，以及多樣化的教育宣導資源。家長可隨時隨地透過行動裝置掌握核心內容，與學校攜手為孩子打造優質的學習環境。",
+    "url": "https://cagoooo.github.io/114_Parent/",
+    "icon": "Users",
+    "category": "communication",
+    "previewUrl": "/previews/tool_62.webp",
+    "tags": [
+      "桃園市",
+      "石門國小",
+      "親職教育日",
+      "114學年度",
+      "學校活動",
+      "互動資訊",
+      "教育宣導",
+      "家長日",
+      "親師溝通"
+    ]
+  },
+  {
+    "id": 63,
+    "title": "Email 帳密記憶遊樂園",
+    "description": "旨在幫助使用者安全且趣味地記憶 Email 帳號與密碼組合的互動式遊樂園。透過遊戲化記憶法，讓登入資訊的管理不再枯燥，並提升資安意識。",
+    "detailedDescription": "「Email 帳密記憶遊樂園」是一款結合遊樂園情境與記憶心理學的數位工具。使用者可以透過趣味的遊樂設施場景，將複雜的 Email 與密碼組合轉化為生動的記憶掛鉤。系統提供多種記憶挑戰模式、資安強度評估，並支援個人化場景自訂，讓你在歡樂的氛圍中輕鬆掌握資訊安全，守護數位資產。",
+    "url": "https://cagoooo.github.io/email/",
+    "icon": "Gamepad2",
+    "category": "interactive",
+    "previewUrl": "/previews/tool_63.webp",
+    "tags": [
+      "Email",
+      "帳號密碼",
+      "記憶遊樂園",
+      "資安意識",
+      "互動遊戲",
+      "密碼安全",
+      "趣味學習"
+    ]
+  },
+  {
+    "id": 64,
+    "title": "簡譜節拍節奏大師",
+    "description": "學習簡譜與節奏的互動學習工具，幫助初學者輕鬆掌握音樂節拍與旋律。",
+    "detailedDescription": "「簡譜節拍節奏大師」是一款專為音樂初學者設計的互動式學習平台。透過視覺化的簡譜呈現與動態節拍器，讓使用者能夠直觀地感受節奏的長短與音樂的律動。系統內建多種基本節奏型態與互動練習，不僅適合音樂課堂教學，也為想學習基礎樂理的使用者提供了一個輕鬆有趣的自學管道。",
+    "url": "https://cagoooo.github.io/music/",
+    "icon": "Music",
+    "category": "teaching",
+    "previewUrl": "/previews/tool_64.webp",
+    "tags": [
+      "音樂",
+      "簡譜",
+      "節拍",
+      "節奏",
+      "樂理",
+      "互動學習"
+    ]
+  },
+  {
+    "id": 65,
+    "title": "AI 影片創作與教學整合資源",
+    "description": "整合 Grok 與 Canva 的 AI 影片創作指南，協助教師與創作者輕鬆製作專業級教學影片與微電影。",
+    "url": "https://cagoooo.github.io/Grok-Canva/",
+    "icon": "Clapperboard",
+    "category": "teaching",
+    "previewUrl": "/previews/tool_65.webp",
+    "tags": [
+      "AI",
+      "影片創作",
+      "教學",
+      "Canva",
+      "Grok"
+    ]
+  },
+  {
+    "id": 66,
+    "title": "Sora AI 旅遊全記錄教學網",
+    "description": "探索 Sora AI 與旅遊記錄的完美結合，掌握如何利用 AI 技術捕捉、編輯並分享您的旅遊點滴，打造個人專屬的高質感全記錄教學平台。",
+    "detailedDescription": "「Sora AI 旅遊全記錄教學網」是一個專為旅遊愛好者與創作者設計的 AI 教學資源庫。本平台深入探討 OpenAI Sora 技術在旅遊影片創作上的應用，從初步的提示詞撰寫到後期的高細節生成。使用者將學會如何將零散的旅遊素材，轉化為具備電影質感的全記錄短片，並透過 AI 工具優化敘事節奏與視覺呈現，讓每一段旅程都能以最動人的方式被銘記。",
+    "url": "https://cagoooo.github.io/Sora/",
+    "icon": "Plane",
+    "category": "teaching",
+    "previewUrl": "/previews/tool_66.webp",
+    "ogPreviewUrl": "/previews/tool_66_og.webp",
+    "tags": [
+      "Sora AI",
+      "旅遊記錄",
+      "AI 影片",
+      "教學資源",
+      "生活記錄",
+      "影像創作",
+      "OpenAI"
+    ]
+  },
+  {
+    "id": 67,
+    "title": "國語演說比賽訓練平台 (pro版)",
+    "description": "專為國語演說比賽設計的專業訓練平台，提供全方位的技巧培訓、各類講稿庫與實戰模擬演練，助力學生在賽場上自信發揮，奪取佳績。",
+    "detailedDescription": "「國語演說比賽訓練平台 (pro版)」是一套完整的競賽培訓解決方案。平台內建專業演說技巧教學單元，包含語調訓練、儀態指導、起承轉合架構分析，並提供針對各級比賽設計的精選講稿參考包。透過互動式的訓練介面與AI輔助評核，讓學生能針對弱點進行精確強化，是教師指導與學生自查的最佳利器，協助每一位演說者從『敢說』進化到『會說』與『善說』。",
+    "url": "https://cagoooo.github.io/speech/",
+    "icon": "MicVocal",
+    "category": "language",
+    "previewUrl": "/previews/tool_67.webp",
+    "ogPreviewUrl": "/previews/tool_67_og.webp",
+    "tags": [
+      "國語演說",
+      "比賽培訓",
+      "口語表達",
+      "專業版",
+      "講稿庫",
+      "教育科技",
+      "實戰模擬"
+    ]
+  },
+  {
+    "id": 68,
+    "title": "手作課程照片影片作品上傳平台",
+    "description": "專為手作課程設計的作品展示與分享平台，支援高畫質相片與影片上傳，讓每件精心創作的作品都能完美呈現。",
+    "detailedDescription": "「手作課程照片影片作品上傳平台」是為創意手作者與教學課程量身打造的數位作品集。該平台簡化了作品記錄流程，讓學習者能輕鬆上傳陶藝、編織、木工等手作成果的照片與短影音。內建作品展示牆與類別管理功能，便於學生整理個人學習歷程，同時也讓教師能即時給予回饋。精緻的視覺介面確保每一份創作都能以最專業的姿態呈現在社群與教學社群中。",
+    "url": "https://cagoooo.github.io/files/",
+    "icon": "Images",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_68.webp",
+    "ogPreviewUrl": "/previews/tool_68_og.webp",
+    "tags": [
+      "手作課程",
+      "作品上傳",
+      "照片影片",
+      "學習歷程",
+      "數位作品集",
+      "創意教學",
+      "課程紀錄"
+    ]
+  },
+  {
+    "id": 69,
+    "title": "猴子丟香蕉-投擲大戰爭",
+    "description": "是一款充滿趣味與挑戰的互動投擲遊戲！玩家將化身為靈活的小猴子，在熱帶叢林中展開一場香蕉大戰。",
+    "detailedDescription": "「猴子丟香蕉-投擲大戰爭」將帶領你進入一段充滿歡笑與冒險的旅程。在茂密的熱帶雨林中，你將扮演一隻可愛的小猴子，與夥伴們展開一場別開生面的香蕉競技。遊戲結合了真實的物理拋物線運算與可愛的卡通視覺風格，玩家需要考慮力道與角度，在多樣化的場景中命中目標。無論是單人練習精準度，還是與朋友比拼分數，這款遊戲都能為你帶來滿滿的互動樂趣與成就感。",
+    "url": "https://cagoooo.github.io/monkey/",
+    "icon": "Gamepad2",
+    "category": "games",
+    "previewUrl": "/previews/tool_69.webp",
+    "ogPreviewUrl": "/previews/tool_69_og.webp",
+    "tags": [
+      "遊戲",
+      "猴子",
+      "香蕉",
+      "投擲",
+      "互動",
+      "物理",
+      "休閒",
+      "熱帶叢林"
+    ]
+  },
+  {
+    "id": 70,
+    "title": "中文注音打字遊戲 (pro版)",
+    "description": "進階版中文注音打字練習遊戲，提供更豐富有趣的打字挑戰，全面提升中文輸入速度與準確度。",
+    "detailedDescription": "「中文注音打字遊戲 (pro版)」是一款專為提升中文注音輸入能力而設計的進階互動平台。結合趣味遊戲元素與豐富的打字關卡，讓枯燥的打字練習變得生動有趣。系統能記錄打字速度與正確率，幫助學生建立肌肉記憶並增強注音符號的熟悉度，是學習中文輸入法的絕佳輔助工具。",
+    "url": "https://cagoooo.github.io/typeCC/",
+    "icon": "Keyboard",
+    "category": "language",
+    "previewUrl": "/previews/tool_70.webp",
+    "ogPreviewUrl": "/previews/tool_70_og.webp",
+    "tags": [
+      "打字",
+      "中文",
+      "注音",
+      "練習",
+      "進階",
+      "遊戲",
+      "輸入法",
+      "教育"
+    ]
+  },
+  {
+    "id": 71,
+    "title": "成語填空大挑戰",
+    "description": "專為提升成語能力設計的互動填空遊戲，透過趣味挑戰強化辭彙運用與文學素養。",
+    "detailedDescription": "「成語填空大挑戰」是一款結合教育與趣味的互動學習平台。精選上千句常用成語，設計多樣化的填空關卡，讓學習者在遊戲中自然掌握成語的意涵與用法。系統提供即時回饋與詳盡解析，協助學生建立深厚的國語文基礎，是提升辭彙量與寫作能力的絕佳輔助工具。",
+    "url": "https://cagoooo.github.io/typeTC/",
+    "icon": "SpellCheck",
+    "category": "language",
+    "previewUrl": "/previews/tool_71.webp",
+    "ogPreviewUrl": "/previews/tool_71_og.webp",
+    "tags": [
+      "成語",
+      "填空",
+      "國語",
+      "學習",
+      "遊戲",
+      "辭彙",
+      "教育科技",
+      "互動"
+    ]
+  },
+  {
+    "id": 72,
+    "title": "動支及黏存單自動產生系統",
+    "description": "智慧化的經費動支與黏存單自動產生平台，簡化繁瑣的行政核銷流程，只需輸入基本資訊即可快速產出標準格式表單，大幅提升行政作業效率與精確度。",
+    "detailedDescription": "「動支及黏存單自動產生系統」是專為學校行政人員與教師設計的智慧化核銷工具。面對複雜的經費動支與黏存單填寫流程，本系統提供直覺的資料輸入介面，能自動計算總額並依據規範產出符合標準格式的 PDF 表單。無論是日常辦公用品採購還是專案活動經費報支，都能透過自動化生成功能，省下大量手寫與排版時間，確保報帳資料的正確性與專業感。",
+    "url": "https://cagoooo.github.io/budget/",
+    "icon": "Calculator",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_72.webp",
+    "ogPreviewUrl": "/previews/tool_72_og.webp",
+    "tags": [
+      "動支單",
+      "黏存單",
+      "經費核銷",
+      "自動生成",
+      "行政效率",
+      "智慧化",
+      "表單產出"
+    ]
+  },
+  {
+    "id": 73,
+    "title": "國小期中考成績篩選工具",
+    "description": "專為國小教師設計的期中考成績分析助手，輕鬆篩選分佈情況。",
+    "detailedDescription": "「國小期中考成績篩選工具」是專為教學第一線開發的實用工具。面對大量期中考成績，教師可透過本工具快速完成各級分段的篩選，並自動產生成績分佈趨勢。系統支援彈性的篩選條件，能精準鎖定需要補救教學或進階指導的學生名單，大幅節省人工比對時間，是學期末成績結算與分析的最佳利器。",
+    "url": "https://cagoooo.github.io/filter/",
+    "icon": "LineChart",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_73.webp",
+    "ogPreviewUrl": "/previews/tool_73_og.webp",
+    "tags": [
+      "成績",
+      "篩選",
+      "分析",
+      "期中考",
+      "行政效率",
+      "教學助理",
+      "國小"
+    ]
+  },
+  {
+    "id": 74,
+    "title": "2026 親職日場地配置圖",
+    "description": "提供 2026 親職日的完整場地配置與動線規劃進度，協助親師快速掌握活動空間分布，讓年度盛事進行更順暢。",
+    "detailedDescription": "「2026 親職日場地配置圖」是專為親職教育日活動設計的即時資訊平台。透過清晰的視覺化地圖，完整呈現各攤位、教室與公共設施的精確位置，並提供建議參觀動線。無論是家長尋找班級位置，或是工作人員協調場地支援，都能在平台上即時獲取最新配置快照，大幅提升大型活動的引導效率與親師互動品質。",
+    "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/academic/2026%E8%A6%AA%E8%81%B7%E6%97%A5%E5%A0%B4%E5%9C%B0%E9%85%8D%E7%BD%AE",
+    "icon": "Map",
+    "category": "communication",
+    "previewUrl": "/previews/tool_74.webp",
+    "ogPreviewUrl": "/previews/tool_74_og.webp",
+    "tags": [
+      "2026",
+      "親職日",
+      "場地配置",
+      "校園地圖",
+      "活動規劃",
+      "親師溝通",
+      "即時更新"
+    ]
+  },
+  {
+    "id": 75,
+    "title": "影片&PDF批次轉圖片",
+    "description": "將影片與 PDF 檔案批次轉換為圖片，快速擷取所需畫面，大幅提升工作與備課效率",
+    "detailedDescription": "「影片&PDF批次轉圖片」是一款專為教學與行政工作設計的實用轉檔工具。老師們經常需要從教學影片中擷取重點畫面，或是從多頁的 PDF 教案中匯出單頁圖片作為課程素材。本工具提供直覺的操作介面，支援將常見的影片格式及 PDF 檔案進行批次處理，一鍵快速轉換為高品質圖片。無論是製作簡報、編寫教材或整理記錄，都能為您省去繁瑣的手動截圖時間，讓備課與行政作業更加得心應手。",
+    "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E5%BD%B1%E7%89%87pdf%E8%BD%89%E5%9C%96%E7%89%87?authuser=0",
+    "icon": "Images",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_75.webp",
+    "ogPreviewUrl": "/previews/tool_75_og.webp",
+    "tags": [
+      "轉檔",
+      "影片轉圖",
+      "PDF轉圖",
+      "批次處理",
+      "教學工具",
+      "行政效率",
+      "圖片擷取"
+    ]
+  },
+  {
+    "id": 76,
+    "title": "WebSlide Pro 簡報播放器",
+    "description": "專業流暢的網頁版簡報播放器，支援多種互動功能，無需安裝軟體即可隨時隨地開啟完美簡報。",
+    "detailedDescription": "「WebSlide Pro 簡報播放器」是一套專為現代教學與專業報告打造的線上簡報展示工具。打破傳統軟體的限制，只要有瀏覽器，就能流暢展示具有動態效果與豐富媒體內容的簡報檔案。系統具備直覺的控制介面、雷射筆標記，以及全螢幕高畫質播放功能，讓演講者能毫無阻礙地專注於內容傳遞。無論是教室授課、線上研討會還是跨校交流，它都能提供穩定且引人入勝的簡報體驗，讓每一個知識點都完美呈現。",
+    "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/webslide-%E7%B0%A1%E5%A0%B1%E6%92%AD%E6%94%BE%E5%99%A8?authuser=0",
+    "icon": "Presentation",
+    "category": "teaching",
+    "previewUrl": "/previews/tool_76.webp",
+    "ogPreviewUrl": "/previews/tool_76_og.webp",
+    "tags": [
+      "簡報",
+      "播放器",
+      "教學工具",
+      "WebSlide",
+      "展示",
+      "線上簡報",
+      "報告"
+    ]
+  },
+  {
+    "id": 77,
+    "title": "石門國小雙語教育宣導網站",
+    "description": "石門國小雙語教育宣導專屬平台，整合雙語課程介紹、英語學習資源與校園國際化推廣資訊，讓師生與家長輕鬆掌握學校雙語教育發展方向。",
+    "detailedDescription": "「石門國小雙語教育宣導網站」是石門國小積極推動雙語教育政策的重要數位窗口。本站整合了雙語課程規劃、英語沉浸教學理念介紹、校內雙語學習成果展示，以及各項英語學習資源連結。透過豐富的圖文內容與互動資訊，讓家長了解學校雙語推動現況，讓學生感受語言學習的樂趣，共同迎接國際化教育的全新未來。",
+    "url": "https://english.smes.tyc.edu.tw/",
+    "icon": "Globe",
+    "category": "language",
+    "previewUrl": "/previews/tool_77.webp",
+    "ogPreviewUrl": "/previews/tool_77_og.webp",
+    "tags": [
+      "雙語教育",
+      "英語學習",
+      "石門國小",
+      "國際化",
+      "雙語課程",
+      "英語沉浸",
+      "校園英語",
+      "語言學習",
+      "教育推廣"
+    ]
+  },
+  {
+    "id": 78,
+    "title": "桃園市115學年度國小課程計畫AI審查工具",
+    "description": "專為國小課程計畫審閱設計的 AI 輔助工具，能自動比對計畫內容並給予審查建議，大幅節省行政與教務端審查的時間，提升計畫品質。",
+    "detailedDescription": "「桃園市115學年度國小課程計畫AI審查工具」結合最新的 AI 自然語言處理技術，針對校訂課程、領域課程等各項計畫進行自動化審閱。系統能依據桃園市課程審查指標，快速揪出缺漏、邏輯不一致之處，並提供具體的修正建議。此工具不僅能減輕審查委員的工作負擔，還能協助學校教務處與撰寫教師檢核課程計畫的完整性與適法性，是推動校園課程發展的最佳智慧助手。",
+    "url": "https://cagoooo.github.io/curriculum/",
+    "icon": "ClipboardCheck",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_78.webp",
+    "ogPreviewUrl": "/previews/tool_78_og.webp",
+    "tags": [
+      "課程計畫",
+      "AI審查",
+      "教務",
+      "行政工具",
+      "115學年度",
+      "桃園市",
+      "智慧輔助",
+      "計畫審閱"
+    ]
+  },
+  {
+    "id": 79,
+    "title": "漢語新解",
+    "description": "以 AI 為驅動的創意漢語詮釋工具，用幽默、諷刺與機智的視角為你解讀日常詞彙的「新意」，讓語言學習更有趣，讓漢字充滿新生命！",
+    "detailedDescription": "「漢語新解」是一款充滿創意與趣味的 AI 語言工具，打破傳統辭典的嚴肅框架，以幽默、諷刺與機智的方式，重新詮釋你熟悉的中文詞彙。只需輸入一個詞語，系統便會運用 AI 的語言理解能力，為其生成令人眼睛一亮的「新解」——或一語道破現代生活的荒謬，或以文字遊戲揭示詞語背後的隱喻，或用輕鬆詼諧的方式引發你對語言的全新思考。無論是課堂上的語文趣味延伸，還是私下對文字藝術的探索，「漢語新解」都能讓你在笑聲中，對漢語產生更深、更富創意的理解與熱愛。",
+    "url": "https://cagoooo.github.io/words/",
+    "icon": "Languages",
+    "category": "language",
+    "previewUrl": "/previews/tool_79.webp",
+    "ogPreviewUrl": "/previews/tool_79_og.webp",
+    "tags": [
+      "漢語",
+      "文字遊戲",
+      "AI創意",
+      "幽默詮釋",
+      "語言學習",
+      "國語文",
+      "趣味語文",
+      "詞彙新解"
+    ]
+  },
+  {
+    "id": 80,
+    "title": "114石小教師會議報告集合站 (下學期)",
+    "description": "專為 114 學年度下學期設計的石門國小教師會議報告彙整平台。集中管理各式會議記錄、行政宣導與進度回報，提升行政溝通效率。",
+    "detailedDescription": "「114石小教師會議報告集合站 (下學期)」是石門國小為全體教職員量身打造的會議與行政資源整合平台。透過此平台，教師可以隨時存取最新的午會記錄、研習簡報及行政宣導事項。匯集了下學期所有重要的會議動態，並提供線上報告查詢、共編文件連結與教學輔助資源下載，確保校園資訊傳達的即時性與透明度，讓行政流程更順暢，教學專業發展更穩健。",
+    "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/114teacher-2/",
+    "icon": "ClipboardCheck",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_80.webp",
+    "ogPreviewUrl": "/previews/tool_80_og.webp",
+    "tags": [
+      "會議記錄",
+      "行政報告",
+      "教師資源",
+      "石門國小",
+      "114學年度",
+      "教務系統",
+      "協作平台"
+    ]
+  },
+  {
+    "id": 81,
+    "title": "國小資訊科技教學駕駛艙入口網",
+    "description": "集大成的資訊科技教學導航，整合國小資科教育核心資源，為老師打造的全方位數位教學儀表板。",
+    "url": "https://cagoooo.github.io/it-cockpit/",
+    "icon": "LayoutDashboard",
+    "category": "teaching",
+    "previewUrl": "/previews/tool_81.webp",
+    "ogPreviewUrl": "/previews/tool_81_og.webp",
+    "tags": [
+      "資訊科技",
+      "教學入口",
+      "儀表板",
+      "國小教育",
+      "工具整合",
+      "駕駛艙"
+    ]
+  },
+  {
+    "id": 82,
+    "title": "教室資訊設備盤點系統",
+    "description": "高效率的校園資訊設備盤點平台，支援逐間教室清查電腦、投影機、網路設備等 IT 資產，即時統計盤點進度與設備狀態，讓學校資產管理透明化、數位化。",
+    "detailedDescription": "「教室資訊設備盤點系統」是專為學校資訊組與行政人員設計的智慧盤點工具。透過直覺的操作介面，人員可逐間教室勾選與核對電腦、投影機、AV 擴大機、網路交換器等各類資訊設備，系統自動彙整盤點結果並產生統計報表。即時的完成率儀表板讓管理者掌握全校盤點進度，並可標記異常、遺失或待修設備，取代傳統紙本作業，大幅提升資產清查效率與準確度，是校園數位轉型的重要利器。",
+    "url": "https://cagoooo.github.io/smes-inventory/",
+    "icon": "ClipboardList",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_82.webp",
+    "ogPreviewUrl": "/previews/tool_82_og.webp",
+    "tags": [
+      "設備盤點",
+      "資產管理",
+      "資訊設備",
+      "行政效率",
+      "校園數位化",
+      "IT管理",
+      "智慧盤點",
+      "數位轉型"
+    ]
+  },
+  {
+    "id": 83,
+    "title": "本土語分班配對系統",
+    "description": "智慧化的本土語分班配對工具，依學生語言志願（台語、客語、原住民族語等）自動完成跨班配對與分班作業，讓行政流程省時省力，落實多元文化語言教育。",
+    "detailedDescription": "「本土語分班配對系統」是專為學校本土語課程行政需求打造的智慧配對平台。面對全校學生複雜多元的語言志願（閩南語、客家語、原住民族語、新住民語等），本系統能自動彙整學生的語言選填資料，依照各語言組別人數進行最佳分班配對，並列出清晰的分班結果報表。行政人員無需人工比對，系統自動避免衝突並均衡各班人數，大幅縮短本土語分班所需的作業時間，確保每位學生都能順暢地進入所選語言的課程，是推動台灣多元文化語言教育的重要數位工具。",
+    "url": "https://cagoooo.github.io/local/",
+    "icon": "Languages",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_83.webp",
+    "ogPreviewUrl": "/previews/tool_83_og.webp",
+    "tags": [
+      "本土語",
+      "分班配對",
+      "台語",
+      "客語",
+      "原住民族語",
+      "多元文化",
+      "語言教育",
+      "行政效率",
+      "自動配對"
+    ]
+  },
+  {
+    "id": 84,
+    "title": "會議記錄自動產出平台 (Pro版)",
+    "description": "專為校務會議、教學研討設計的 AI 會議記錄小幫手。錄音上傳後自動轉寫逐字稿、智慧摘要重點與行動事項，並一鍵匯出 Word / PDF，讓繁瑣的會議紀錄從此省下大半時間。",
+    "detailedDescription": "「會議記錄自動產出平台 Pro 版」是阿凱老師專為第一線教師與行政同仁打造的 AI 會議記錄神器。使用者只需上傳音訊或錄音檔，系統即可呼叫高精度語音辨識模型完成即時逐字稿轉寫，並自動標註發言者。AI 會依照會議流程產出「會議摘要」「決議事項」「待辦行動」「出席名單」等結構化欄位，使用者可直接修潤並一鍵匯出 Word / PDF / 純文字格式，完美符合學校公文與校務會議紀錄需求。Pro 版額外提供多種樣板（領域會議、導師會議、校務會議等）、自訂欄位、與 LINE 推播提醒等進階功能，大幅減輕教師行政負擔，讓寶貴時間回歸教學本身。",
+    "url": "https://cagoooo.github.io/domain-meeting-go/",
+    "icon": "ClipboardCheck",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_84.webp",
+    "ogPreviewUrl": "/previews/tool_84_og.webp",
+    "tags": [
+      "會議記錄",
+      "AI 轉寫",
+      "自動摘要",
+      "領域會議",
+      "導師會議",
+      "校務會議",
+      "行政效率",
+      "語音辨識",
+      "Word 匯出",
+      "PDF 匯出"
+    ]
+  }
 ]
