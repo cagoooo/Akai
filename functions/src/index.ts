@@ -10,6 +10,49 @@ admin.initializeApp();
 const LINE_CHANNEL_ACCESS_TOKEN = process.env.LINE_NOTIFY_TOKEN;
 const LINE_ADMIN_USER_ID = process.env.LINE_ADMIN_USER_ID;
 
+// 對外公開站點（供 LINE 卡片裡的「打開查看」按鈕用）
+const SITE_BASE = "https://cagoooo.github.io/Akai";
+
+// ────────────────────────────────────────────────────────────
+// 共用：把任意 Flex Message bubble 推給管理員
+// ────────────────────────────────────────────────────────────
+async function pushFlexToAdmin(altText: string, bubble: any, contextLabel: string) {
+    if (!LINE_CHANNEL_ACCESS_TOKEN || !LINE_ADMIN_USER_ID) {
+        console.error(`[${contextLabel}] 尚未配置 LINE_NOTIFY_TOKEN 或 LINE_ADMIN_USER_ID，無法發送通知。`);
+        return;
+    }
+
+    const payload = {
+        to: LINE_ADMIN_USER_ID.trim(),
+        messages: [
+            {
+                type: "flex",
+                altText,
+                contents: bubble,
+            },
+        ],
+    };
+
+    try {
+        await axios.post(
+            "https://api.line.me/v2/bot/message/push",
+            payload,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${LINE_CHANNEL_ACCESS_TOKEN.trim()}`,
+                },
+            }
+        );
+        console.log(`[${contextLabel}] LINE Flex Notification sent successfully.`);
+    } catch (error: any) {
+        console.error(
+            `[${contextLabel}] Failed to send LINE Flex notification:`,
+            JSON.stringify(error.response?.data) || error.message
+        );
+    }
+}
+
 /**
  * 監聽 wishingWell 集合中的新增文件
  * 當有新的許願/回饋寫入時，透過 LINE 官方帳號傳送「卡片格式」通知給管理員
@@ -27,12 +70,6 @@ export const onWishCreated = onDocumentCreated("wishingWell/{docId}", async (eve
     const typeColor = typeValue === "suggestion" ? "#00B900" : "#FF9900"; // 建議用綠綠的，評分用橘黃的
     const content = data.content || "(無內容)";
     const rating = data.rating;
-
-    // 檢查必備變數
-    if (!LINE_CHANNEL_ACCESS_TOKEN || !LINE_ADMIN_USER_ID) {
-        console.error("尚未配置 LINE_NOTIFY_TOKEN 或 LINE_ADMIN_USER_ID，無法發送通知。");
-        return;
-    }
 
     // --- 構建 Flex Message 的 Body 區塊 ---
     const bodyContents: any[] = [
@@ -84,61 +121,165 @@ export const onWishCreated = onDocumentCreated("wishingWell/{docId}", async (eve
         }
     );
 
-    // --- 組裝最終的 Flex Message payload ---
-    const messagePayload = {
-        to: LINE_ADMIN_USER_ID.trim(),
-        messages: [
-            {
-                type: "flex",
-                altText: `收到來自「許願池」的新回饋：${typeLabel}`,
-                contents: {
-                    type: "bubble",
-                    styles: {
-                        header: {
-                            backgroundColor: "#27BDBE" // 統一的青色標題背景
-                        }
-                    },
-                    header: {
-                        type: "box",
-                        layout: "vertical",
-                        contents: [
-                            {
-                                type: "text",
-                                text: "✨ 許願池新回饋 ✨",
-                                color: "#FFFFFF",
-                                weight: "bold",
-                                size: "lg",
-                                align: "center"
-                            }
-                        ]
-                    },
-                    body: {
-                        type: "box",
-                        layout: "vertical",
-                        spacing: "sm",
-                        contents: bodyContents
-                    }
-                }
-            }
-        ]
+    const bubble = {
+        type: "bubble",
+        styles: { header: { backgroundColor: "#27BDBE" } },
+        header: {
+            type: "box",
+            layout: "vertical",
+            contents: [
+                {
+                    type: "text",
+                    text: "✨ 許願池新回饋 ✨",
+                    color: "#FFFFFF",
+                    weight: "bold",
+                    size: "lg",
+                    align: "center",
+                },
+            ],
+        },
+        body: {
+            type: "box",
+            layout: "vertical",
+            spacing: "sm",
+            contents: bodyContents,
+        },
     };
 
-    try {
-        // 發送 POST 請求至 LINE Messaging API
-        await axios.post(
-            "https://api.line.me/v2/bot/message/push",
-            messagePayload,
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${LINE_CHANNEL_ACCESS_TOKEN.trim()}`,
+    await pushFlexToAdmin(
+        `收到來自「許願池」的新回饋：${typeLabel}`,
+        bubble,
+        `wish:${event.params.docId}`
+    );
+});
+
+/**
+ * 監聽 toolReviews 集合中的新增文件
+ * 當教師對工具發表評論時，推播「工具評論卡片」給管理員
+ */
+export const onReviewCreated = onDocumentCreated("toolReviews/{docId}", async (event) => {
+    const snapshot = event.data;
+    if (!snapshot) return;
+
+    const data = snapshot.data();
+    const toolId = data.toolId;
+    const toolTitle = data.toolTitle || `工具 #${toolId}`;
+    const userName = data.userName || "匿名使用者";
+    const userPhoto = data.userPhoto || null;
+    const ratingNum = typeof data.rating === "number" ? Math.max(1, Math.min(5, data.rating)) : 0;
+    const comment = data.comment || "(無內容)";
+
+    const starText = "⭐".repeat(ratingNum) + "☆".repeat(5 - ratingNum);
+    const toolUrl = `${SITE_BASE}/?tool=${toolId}`;
+
+    // ── Body：工具名稱 / 評論者 / 星等 / 評論內容 ──────────
+    const bodyContents: any[] = [
+        {
+            type: "box",
+            layout: "horizontal",
+            contents: [
+                { type: "text", text: "🛠️ 工具", color: "#8c8c8c", size: "sm", flex: 3 },
+                { type: "text", text: toolTitle, color: "#111111", size: "sm", wrap: true, flex: 7, weight: "bold" },
+            ],
+            margin: "md",
+        },
+        {
+            type: "box",
+            layout: "horizontal",
+            contents: [
+                { type: "text", text: "👤 教師", color: "#8c8c8c", size: "sm", flex: 3 },
+                { type: "text", text: userName, color: "#111111", size: "sm", wrap: true, flex: 7, weight: "bold" },
+            ],
+            margin: "md",
+        },
+        {
+            type: "box",
+            layout: "horizontal",
+            contents: [
+                { type: "text", text: "🌟 評分", color: "#8c8c8c", size: "sm", flex: 3 },
+                {
+                    type: "text",
+                    text: `${starText}  (${ratingNum}/5)`,
+                    color: "#ffb81c",
+                    size: "sm",
+                    wrap: true,
+                    flex: 7,
+                    weight: "bold",
                 },
-            }
-        );
-        console.log(`LINE Flex Notification sent successfully for wish ID: ${event.params.docId}`);
-    } catch (error: any) {
-        console.error("Failed to send LINE Flex notification:", JSON.stringify(error.response?.data) || error.message);
+            ],
+            margin: "md",
+        },
+        { type: "separator", margin: "lg" },
+        {
+            type: "box",
+            layout: "vertical",
+            contents: [
+                { type: "text", text: "💬 評論內容：", color: "#8c8c8c", size: "sm", margin: "md" },
+                { type: "text", text: comment, wrap: true, color: "#111111", size: "md", margin: "sm" },
+            ],
+        },
+    ];
+
+    // ── Bubble：青色頭部 + 大頭照（可選） + 「打開查看」按鈕 ──────────
+    const bubble: any = {
+        type: "bubble",
+        styles: { header: { backgroundColor: "#7a8c3a" } }, // cork 橄欖綠，與站台一致
+        header: {
+            type: "box",
+            layout: "vertical",
+            contents: [
+                {
+                    type: "text",
+                    text: "📝 工具收到新評論",
+                    color: "#FFFFFF",
+                    weight: "bold",
+                    size: "lg",
+                    align: "center",
+                },
+            ],
+        },
+        body: {
+            type: "box",
+            layout: "vertical",
+            spacing: "sm",
+            contents: bodyContents,
+        },
+        footer: {
+            type: "box",
+            layout: "vertical",
+            spacing: "sm",
+            contents: [
+                {
+                    type: "button",
+                    style: "primary",
+                    color: "#ea8a3e", // cork 橘
+                    height: "sm",
+                    action: {
+                        type: "uri",
+                        label: "打開工具頁面",
+                        uri: toolUrl,
+                    },
+                },
+            ],
+        },
+    };
+
+    // 如果使用者有頭像，加入 hero 區塊
+    if (userPhoto && /^https:\/\//.test(userPhoto)) {
+        bubble.hero = {
+            type: "image",
+            url: userPhoto,
+            size: "sm",
+            aspectMode: "cover",
+            aspectRatio: "1:1",
+        };
     }
+
+    await pushFlexToAdmin(
+        `「${toolTitle}」收到 ${userName} 的 ${ratingNum} 星評論`,
+        bubble,
+        `review:${event.params.docId}`
+    );
 });
 
 /**

@@ -17,9 +17,11 @@ import { cn } from '@/lib/utils';
 
 interface ReviewListProps {
     toolId: number;
+    /** 工具標題（會傳入 ReviewForm，用於 LINE 通知顯示） */
+    toolTitle?: string;
 }
 
-export function ReviewList({ toolId }: ReviewListProps) {
+export function ReviewList({ toolId, toolTitle }: ReviewListProps) {
     // 排序 Hook
     const { sortOption, setSortOption, sortReviews } = useReviewSort();
 
@@ -70,7 +72,7 @@ export function ReviewList({ toolId }: ReviewListProps) {
             </Card>
 
             {/* 評論表單 */}
-            <ReviewForm toolId={toolId} onReviewSubmitted={refetchReviews} />
+            <ReviewForm toolId={toolId} toolTitle={toolTitle} onReviewSubmitted={refetchReviews} />
 
             {/* 排序選項 */}
             {reviews && reviews.length > 1 && (

@@ -721,7 +721,7 @@ export function ToolDetail() {
 
                     {/* 評論區塊 */}
                     <motion.section variants={itemVariants}>
-                        <ReviewList toolId={tool.id} />
+                        <ReviewList toolId={tool.id} toolTitle={tool.title} />
                     </motion.section>
 
                     {/* 相關推薦 */}

@@ -16,10 +16,12 @@ import { LogIn, Send, AlertCircle } from 'lucide-react';
 
 interface ReviewFormProps {
     toolId: number;
+    /** 工具標題（會寫入評論文件，供 Cloud Function 推播 LINE 通知時使用） */
+    toolTitle?: string;
     onReviewSubmitted?: () => void;
 }
 
-export function ReviewForm({ toolId, onReviewSubmitted }: ReviewFormProps) {
+export function ReviewForm({ toolId, toolTitle, onReviewSubmitted }: ReviewFormProps) {
     const { user, isAuthenticated, signIn, loading: authLoading } = useAuth();
     const { toast } = useToast();
     const queryClient = useQueryClient();
@@ -67,7 +69,7 @@ export function ReviewForm({ toolId, onReviewSubmitted }: ReviewFormProps) {
 
         setSubmitting(true);
         try {
-            const reviewId = await addReview(toolId, user, rating, comment);
+            const reviewId = await addReview(toolId, user, rating, comment, toolTitle);
 
             if (reviewId) {
                 toast({

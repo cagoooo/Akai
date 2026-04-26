@@ -64,12 +64,16 @@ const RATINGS_COLLECTION = 'toolRatings';
 
 /**
  * 新增評論
+ *
+ * 注意：toolTitle 是可選但強烈建議填入 — Cloud Function `onReviewCreated`
+ *       會用此欄位組 LINE 通知標題，缺少時只會顯示「工具 #ID」。
  */
 export async function addReview(
     toolId: number,
     user: User,
     rating: number,
-    comment: string
+    comment: string,
+    toolTitle?: string
 ): Promise<string | null> {
     if (!isFirebaseAvailable() || !db) {
         console.warn('Firebase 不可用，無法新增評論');
@@ -79,6 +83,7 @@ export async function addReview(
     try {
         const reviewData = {
             toolId,
+            toolTitle: toolTitle || `工具 #${toolId}`,
             userId: user.uid,
             userName: user.displayName || '匿名用戶',
             userPhoto: user.photoURL || null,

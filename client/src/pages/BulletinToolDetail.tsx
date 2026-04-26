@@ -743,7 +743,7 @@ export function BulletinToolDetail() {
               <span style={{ fontSize: 13 }}>💬 使用者評論 · REVIEWS</span>
             </Tape>
           </div>
-          <ReviewList toolId={tool.id} />
+          <ReviewList toolId={tool.id} toolTitle={tool.title} />
         </section>
 
         {/* 相關推薦 */}
