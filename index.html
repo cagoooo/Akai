@@ -48,6 +48,15 @@
   }</style>
 
   <meta charset="UTF-8" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=__GA_MEASUREMENT_ID__"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', '__GA_MEASUREMENT_ID__');
+  </script>
   <!-- 動態設定 base URL -->
   <script>
     (function () {
@@ -88,7 +97,28 @@
 
       // 動態預載 API
       createLink('preload', 'api/tools.json', null, null, 'fetch');
-      createLink('preload', 'api/teacher.json', null, null, 'fetch');
+      // teacher.json 僅在舊版 TeacherIntro 組件用到，新版 BulletinHome 不再即時載入；
+      // 保留 prefetch 但降為低優先（避免未使用的 preload 警告）
+      createLink('prefetch', 'api/teacher.json');
+
+      // 🚀 首屏圖片預載：前 6 張工具預覽圖
+      // 使用 preload (as=image) 讓瀏覽器在 HTML 解析時就開始下載，顯著提升首次訪問體感
+      // 比 prefetch 優先級更高，適合當前頁面必然會用到的資源
+      var preloadImage = function (path) {
+        var link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'image';
+        link.type = 'image/webp';
+        link.href = base + path;
+        // 首屏前 3 張設為最高優先度
+        head.appendChild(link);
+      };
+      preloadImage('previews/tool_1.webp');
+      preloadImage('previews/tool_2.webp');
+      preloadImage('previews/tool_3.webp');
+      preloadImage('previews/tool_4.webp');
+      preloadImage('previews/tool_5.webp');
+      preloadImage('previews/tool_6.webp');
     })();
   </script>
 
@@ -107,9 +137,10 @@
     href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6fAZ9hiA.woff2" as="font"
     type="font/woff2" crossorigin />
 
-  <!-- Prefetch 關鍵資源 - 預先獲取首屏圖片 -->
-  <link rel="prefetch" as="image" href="./previews/tool_1.webp" />
-  <link rel="prefetch" as="image" href="./previews/tool_2.webp" />
+  <!-- E2 公佈欄字體 (Noto Sans TC + Plus Jakarta Sans) -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- 首屏圖片預載由上方動態 script 處理（會自動套用正確 base path） -->
 
   <!-- 關鍵 CSS 內聯與字體防閃爍 -->
   <style>
@@ -158,31 +189,81 @@
       font-family: var(--font-sans);
       margin: 0;
       min-height: 100vh;
-      background-color: #fafafa;
+      /* E2 cork 軟木塞背景（React mount 前 → 首屏不再白閃） */
+      background-color: #c99a6c;
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(110,80,50,.35) 1px, transparent 2px),
+        radial-gradient(circle at 70% 60%, rgba(140,95,55,.30) 1.5px, transparent 2.5px),
+        radial-gradient(circle at 45% 85%, rgba(90,60,30,.28) 1px, transparent 2px),
+        radial-gradient(circle at 85% 20%, rgba(130,90,50,.32) 1.2px, transparent 2px),
+        radial-gradient(circle at 15% 70%, rgba(100,70,40,.25) 1.8px, transparent 3px);
+      background-size: 60px 60px, 80px 80px, 55px 55px, 70px 70px, 90px 90px;
     }
 
-    /* 骨架屏預設顯示 */
+    /* 骨架屏預設顯示：cork 便利貼風載入 */
     #root:empty {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
+      gap: 18px;
+      position: relative;
     }
 
+    /* 便利貼載入動畫 — 黃色便利貼 + 紅圖釘 + 緩慢搖擺 */
+    #root:empty::before {
+      content: '📌';
+      width: 96px;
+      height: 96px;
+      background: #fff27a;
+      border: 2.5px solid #1a1a1a;
+      border-radius: 6px;
+      display: grid;
+      place-items: center;
+      font-size: 44px;
+      box-shadow: 4px 4px 0 rgba(0,0,0,.28), 0 14px 24px -4px rgba(0,0,0,.25);
+      /* 圖釘頂部視覺（便利貼上緣的小紅點用邊框模擬不方便，改用 transform-origin 搖擺） */
+      transform-origin: 50% 0;
+      animation: akai-wobble 2s cubic-bezier(.36,0,.66,-0.56) infinite;
+    }
+
+    /* 載入文字（Noto Sans TC 尚未載入時會 fallback，黑體也 OK） */
     #root:empty::after {
-      content: '';
-      width: 40px;
-      height: 40px;
-      border: 3px solid #e5e7eb;
-      border-top-color: #6366f1;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
+      content: '正在釘上公佈欄…';
+      font-family: 'Noto Sans TC', 'Microsoft JhengHei', 'PingFang TC', sans-serif;
+      font-weight: 800;
+      font-size: 15px;
+      color: #1a1a1a;
+      background: rgba(255, 253, 250, .88);
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 2px solid #1a1a1a;
+      box-shadow: 2px 2px 0 rgba(0,0,0,.2);
+      letter-spacing: 0.05em;
+      animation: akai-fade 1.6s ease-in-out infinite;
+    }
+
+    @keyframes akai-wobble {
+      0%, 100% { transform: rotate(-4deg) translateY(0); }
+      50%      { transform: rotate(4deg) translateY(-4px); }
+    }
+
+    @keyframes akai-fade {
+      0%, 100% { opacity: 0.7; }
+      50%      { opacity: 1; }
+    }
+
+    /* 尊重 reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      #root:empty::before,
+      #root:empty::after {
+        animation: none !important;
+      }
     }
 
     @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
+      to { transform: rotate(360deg); }
     }
   </style>
 
@@ -271,12 +352,13 @@
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://cagoooo.github.io/Akai/" />
-  <script type="module" crossorigin src="/assets/index-CXGZN8qG.js"></script>
+  <script type="module" crossorigin src="/assets/index-1-yK4G5L.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/vendor-react-CJhR42E5.js">
-  <link rel="modulepreload" crossorigin href="/assets/vendor-ui-KW9HTD7S.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor-ui--2rknC_a.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor-firebase-Blwp4SE_.js">
   <link rel="modulepreload" crossorigin href="/assets/vendor-utils-C4xBKWBT.js">
-  <link rel="modulepreload" crossorigin href="/assets/vendor-animation-DQN4t0mS.js">
-  <link rel="stylesheet" crossorigin href="/assets/index-DY4G9r2W.css">
+  <link rel="modulepreload" crossorigin href="/assets/vendor-animation-ClxbdzuJ.js">
+  <link rel="stylesheet" crossorigin href="/assets/index-Cpeg9eDg.css">
 </head>
 
 <body>

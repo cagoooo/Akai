@@ -7,11 +7,15 @@
  * - Stale While Revalidate: 圖片
  */
 
-const CACHE_VERSION = 'v3.2.7-dual-cache';
+const CACHE_VERSION = 'v3.6.4-a5dc5fc-202604261522';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
 const ASSETS_ARCHIVE = 'assets-archive-v1';
+// 🖼️ 圖片專用持久快取（不綁 CACHE_VERSION，避免每次發版都重抓所有預覽圖）
+// 命名規則：images-persistent-vN → 當圖片壓縮策略有大改時才手動 bump N
+const IMAGE_CACHE = 'images-persistent-v1';
 const MAX_ARCHIVED_ASSETS = 150; // 最多保留 150 個歷史 Chunk 組件
+const MAX_IMAGE_CACHE_ENTRIES = 400; // 圖片快取最多 400 張（81 工具 × 預覽 + 校徽/favicon/icon 等）
 
 // 獲取 base path (支援 GitHub Pages)
 const BASE_PATH = self.location.pathname.replace('sw.js', '');
@@ -23,6 +27,22 @@ const PRECACHE_ASSETS = [
   `${BASE_PATH}manifest.json`,
   `${BASE_PATH}api/tools.json`,
   `${BASE_PATH}api/teacher.json`,
+];
+
+// 🚀 首屏圖片預快取（存入 IMAGE_CACHE 持久快取，不受 CACHE_VERSION 更新影響）
+// 覆蓋前 6 張工具預覽圖，讓回訪使用者即使離線也能看到首屏內容
+const PRECACHE_IMAGES = [
+  `${BASE_PATH}previews/tool_1.webp`,
+  `${BASE_PATH}previews/tool_2.webp`,
+  `${BASE_PATH}previews/tool_3.webp`,
+  `${BASE_PATH}previews/tool_4.webp`,
+  `${BASE_PATH}previews/tool_5.webp`,
+  `${BASE_PATH}previews/tool_6.webp`,
+  // Hero 區的阿凱拍立得 + 校徽
+  `${BASE_PATH}assets/Akai.png`,
+  `${BASE_PATH}assets/school-logo.png`,
+  // favicon（MAKER 便利貼用）
+  `${BASE_PATH}favicon.png`,
 ];
 
 // 快取策略判斷
@@ -47,12 +67,13 @@ const CACHE_STRATEGIES = {
     /\.ico$/,
     /\/previews\//,
   ],
-  // 需要跳過的請求
+  // 需要跳過的請求（完全不經 SW，直接交給瀏覽器 + network）
   skip: [
     /firestore\.googleapis\.com/,
     /firebase/,
     /googleapis\.com/,
     /chrome-extension/,
+    /\/version\.json$/, // version.json 必須永遠走網路，否則無法偵測新版
   ],
 };
 
@@ -84,19 +105,34 @@ self.addEventListener('install', (event) => {
   console.log('[SW] 安裝中...', CACHE_VERSION);
 
   event.waitUntil(
-    caches.open(STATIC_CACHE)
-      .then((cache) => {
-        // 使用 Promise.allSettled 避免單一失敗導致全部失敗
-        return Promise.allSettled(
-          PRECACHE_ASSETS.map(url =>
-            cache.add(url).catch(err => {
-              console.warn(`[SW] 無法預快取: ${url}`, err);
+    Promise.all([
+      // 1. 預快取核心資源到 STATIC_CACHE
+      caches.open(STATIC_CACHE).then((cache) =>
+        Promise.allSettled(
+          PRECACHE_ASSETS.map((url) =>
+            cache.add(url).catch((err) => {
+              console.warn(`[SW] 無法預快取靜態資源: ${url}`, err);
             })
           )
-        );
-      })
+        )
+      ),
+      // 2. 🚀 預快取首屏圖片到 IMAGE_CACHE（持久、版本無關）
+      // 用 Promise.allSettled 讓單張失敗不影響其他，而且整體不等太久（最多 5 秒）
+      Promise.race([
+        caches.open(IMAGE_CACHE).then((cache) =>
+          Promise.allSettled(
+            PRECACHE_IMAGES.map((url) =>
+              cache.add(url).catch((err) => {
+                console.warn(`[SW] 無法預快取首屏圖: ${url}`, err);
+              })
+            )
+          )
+        ),
+        new Promise((resolve) => setTimeout(resolve, 5000)),
+      ]),
+    ])
       .then(() => {
-        console.log('[SW] 預快取完成');
+        console.log('[SW] 預快取完成（靜態 + 首屏圖）');
         return self.skipWaiting();
       })
   );
@@ -112,8 +148,13 @@ self.addEventListener('activate', (event) => {
 
       await Promise.all(
         keyList.map(async (key) => {
-          // 刪除舊版本的快取，但保留重要靜態資源
-          if (key !== STATIC_CACHE && key !== DYNAMIC_CACHE && key !== ASSETS_ARCHIVE) {
+          // 保留當前版本的 STATIC/DYNAMIC、ASSETS_ARCHIVE（歷史 JS chunk）、IMAGE_CACHE（持久圖片快取）
+          if (
+            key !== STATIC_CACHE &&
+            key !== DYNAMIC_CACHE &&
+            key !== ASSETS_ARCHIVE &&
+            key !== IMAGE_CACHE
+          ) {
             console.log('[SW] 處理舊快取:', key);
 
             // 若為舊的 static 快取，將當中的 /assets/ (含 Hash) 檔案備份至 ARCHIVE
@@ -267,19 +308,30 @@ async function networkFirst(request) {
 }
 
 /**
- * Stale While Revalidate 策略
- * 立即返回快取，同時在背景更新快取
+ * Stale While Revalidate 策略（圖片專用持久快取）
+ * - 圖片類請求全部寫入 IMAGE_CACHE，避免 CACHE_VERSION 更新時被清掉
+ * - 立即返回快取（秒開），背景靜默更新
+ * - 超過 MAX_IMAGE_CACHE_ENTRIES 時 LRU 式清掉最舊的
  */
 async function staleWhileRevalidate(request) {
-  const cache = await caches.open(DYNAMIC_CACHE);
+  // 判斷是否為圖片類型（含 /previews/）→ 使用持久 IMAGE_CACHE
+  const isImage =
+    /\.(png|jpg|jpeg|gif|webp|svg|ico)(\?.*)?$/i.test(request.url) ||
+    request.url.includes('/previews/');
+
+  const cacheName = isImage ? IMAGE_CACHE : DYNAMIC_CACHE;
+  const cache = await caches.open(cacheName);
   const cached = await cache.match(request);
 
   // 在背景更新快取
   const fetchPromise = fetch(request)
-    .then((networkResponse) => {
-      // 只快取完整的成功響應 (status 200)，跳過 206 Partial Response
+    .then(async (networkResponse) => {
       if (networkResponse.ok && networkResponse.status === 200) {
-        cache.put(request, networkResponse.clone());
+        await cache.put(request, networkResponse.clone());
+        // 只對 IMAGE_CACHE 做 LRU 清理（避免無限膨脹）
+        if (isImage) {
+          trimCache(cacheName, MAX_IMAGE_CACHE_ENTRIES).catch(() => { });
+        }
       }
       return networkResponse;
     })
@@ -288,8 +340,22 @@ async function staleWhileRevalidate(request) {
       return null;
     });
 
-  // 如果有快取就立即返回，否則等待網路
+  // 如果有快取就立即返回（秒開），否則等待網路
   return cached || fetchPromise;
+}
+
+/**
+ * LRU 式快取修剪：超過上限時刪除最舊的 key
+ * （Cache Storage API 沒有原生 LRU，這是近似實作：以插入順序當 LRU）
+ */
+async function trimCache(cacheName, maxEntries) {
+  const cache = await caches.open(cacheName);
+  const keys = await cache.keys();
+  if (keys.length > maxEntries) {
+    const toDelete = keys.slice(0, keys.length - maxEntries);
+    await Promise.all(toDelete.map((req) => cache.delete(req)));
+    console.log(`[SW] IMAGE_CACHE 已清理 ${toDelete.length} 個舊圖片`);
+  }
 }
 
 // ==================== 訊息處理 ====================
