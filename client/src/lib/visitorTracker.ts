@@ -105,6 +105,116 @@ async function incrementServerStat(category: 'device' | 'referrer' | 'geo', key:
   }
 }
 
+/**
+ * 一次性把這台瀏覽器的本地 visitorGeoStats / visitorDeviceStats /
+ * visitorReferrerStats 累計值，回填到 Firestore analytics/visitorContext。
+ *
+ * 設計：
+ *   - 用 localStorage flag `analyticsBackfilled` 防止同一台機器重複回填
+ *   - 每個 key 用 `increment(N)` 一次加 N（不是逐筆 N 次寫）
+ *   - 回傳被回填的「總筆數」與「失敗筆數」供 UI 顯示
+ *
+ * 注意：每位管理員的本地資料只代表他們自己的造訪歷史，這只是把僅存的
+ *      個別歷史拼起來，**無法**還原其他訪客的 context。
+ */
+export async function backfillLocalAnalytics(opts?: { force?: boolean }): Promise<{
+  ok: boolean;
+  reason?: string;
+  geoEntries: number;
+  deviceEntries: number;
+  referrerEntries: number;
+  totalAdded: number;
+}> {
+  const flag = localStorage.getItem('analyticsBackfilled');
+  if (flag === 'v1' && !opts?.force) {
+    return {
+      ok: false,
+      reason: '這台瀏覽器已回填過，避免重複加總。要強制再跑請傳 force: true',
+      geoEntries: 0,
+      deviceEntries: 0,
+      referrerEntries: 0,
+      totalAdded: 0,
+    };
+  }
+
+  // 確保有身份才能寫
+  try {
+    const { ensureSignedIn } = await import('@/lib/authService');
+    await ensureSignedIn();
+  } catch (err) {
+    console.warn('[backfillLocalAnalytics] ensureSignedIn 失敗:', err);
+  }
+
+  const result = { geoEntries: 0, deviceEntries: 0, referrerEntries: 0, totalAdded: 0 };
+
+  const writeBatch = async (
+    category: 'device' | 'referrer' | 'geo',
+    fieldName: 'deviceStats' | 'referrerStats' | 'geoStats',
+    data: Record<string, number>
+  ) => {
+    const validEntries = Object.entries(data).filter(([k, v]) => k && typeof v === 'number' && v > 0);
+    if (validEntries.length === 0) return 0;
+    try {
+      const { db, isFirebaseAvailable } = await import('@/lib/firebase');
+      if (!isFirebaseAvailable() || !db) return 0;
+      const { doc, setDoc, increment, serverTimestamp } = await import('firebase/firestore');
+      const ref = doc(db, 'analytics', 'visitorContext');
+      // 一次把這個 category 所有 key 寫進 nested map（每個 key 用 increment(N)）
+      const nested: Record<string, any> = {};
+      for (const [k, v] of validEntries) nested[k] = increment(v);
+      await setDoc(
+        ref,
+        { [fieldName]: nested, lastUpdatedAt: serverTimestamp() },
+        { merge: true }
+      );
+      const sum = validEntries.reduce((s, [, v]) => s + v, 0);
+      console.log(`[backfillLocalAnalytics] ${category}: ${validEntries.length} 個 key, 共 ${sum} 筆`);
+      return sum;
+    } catch (err) {
+      console.warn(`[backfillLocalAnalytics] ${category} 寫入失敗:`, err);
+      return 0;
+    }
+  };
+
+  // 1. Device
+  try {
+    const data: Record<string, number> = JSON.parse(
+      localStorage.getItem('visitorDeviceStats') || '{}'
+    );
+    const sum = await writeBatch('device', 'deviceStats', data);
+    result.deviceEntries = sum;
+    result.totalAdded += sum;
+  } catch (err) { console.warn('device 解析失敗:', err); }
+
+  // 2. Referrer
+  try {
+    const data: Record<string, number> = JSON.parse(
+      localStorage.getItem('visitorReferrerStats') || '{}'
+    );
+    const sum = await writeBatch('referrer', 'referrerStats', data);
+    result.referrerEntries = sum;
+    result.totalAdded += sum;
+  } catch (err) { console.warn('referrer 解析失敗:', err); }
+
+  // 3. Geo
+  try {
+    const data: Record<string, number> = JSON.parse(
+      localStorage.getItem('visitorGeoStats') || '{}'
+    );
+    const sum = await writeBatch('geo', 'geoStats', data);
+    result.geoEntries = sum;
+    result.totalAdded += sum;
+  } catch (err) { console.warn('geo 解析失敗:', err); }
+
+  // 設定旗標避免重複回填
+  try {
+    localStorage.setItem('analyticsBackfilled', 'v1');
+    localStorage.setItem('analyticsBackfilledAt', new Date().toISOString());
+  } catch { /* ignore */ }
+
+  return { ok: true, ...result };
+}
+
 async function trackVisitorContext(): Promise<void> {
   // 1. 裝置類型
   let deviceKey = 'desktop';

@@ -2,6 +2,31 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.6] - 2026-04-26 — 提供本地歷史回填工具（救回管理員自己這台的歷史）
+### 🗃️ 為什麼需要
+- v3.6.4 之前，所有訪客的 geo / device / referrer 只寫到他們自己瀏覽器的 localStorage
+- 其他訪客的歷史已永久遺失（我們無法存取陌生人的 localStorage）
+- **但管理員自己這台瀏覽器的 localStorage 還在** — 可以救回來
+
+### 🛠 新增功能
+- `lib/visitorTracker.ts` 新增 `backfillLocalAnalytics()` 函式
+  - 讀 localStorage 三類資料（geo / device / referrer）
+  - 每個 category 一次 `setDoc(merge: true)` + `increment(N)`，不是逐筆寫
+  - 用 `localStorage.analyticsBackfilled = 'v1'` 旗標防重複按
+  - 回傳 `{ totalAdded, geoEntries, deviceEntries, referrerEntries }` 供 UI 顯示
+- `AnalyticsDashboard` 新增 `BackfillLocalAnalyticsBar` 元件
+  - 位於儀表板頂部（日期篩選列上方）
+  - 偵測本地有資料時顯示橘色按鈕「📥 上傳本地歷史到 Firestore」
+  - 完成後變綠色「✅ 已回填」，並有「🔁 強制重跑」備援（含 confirm 對話）
+  - 沒有本地資料時自動隱藏
+
+### ⚠️ 限制（誠實說明）
+- 只能救回**管理員自己這台瀏覽器**的歷史
+- 過去其他訪客（1,213 人）的 context 仍是永久遺失，無法挽回
+- 從 v3.6.4 起新訪客會持續累積真實 context，未來不會再有此問題
+
+---
+
 ## [3.6.5] - 2026-04-26 — 修復「訪客追蹤只在首頁觸發」的隱性 bug
 ### 🐛 問題
 - v3.6.4 部署後，後台儀表板地理仍顯示 6 筆（localStorage fallback），設備卻只有 1 筆

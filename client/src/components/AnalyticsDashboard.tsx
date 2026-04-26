@@ -545,6 +545,9 @@ export function AnalyticsDashboard() {
       </header>
 
       <main className="container mx-auto px-3 sm:px-6 py-6 sm:py-8 space-y-4 sm:space-y-6">
+        {/* 一次性回填本地歷史到 Firestore */}
+        <BackfillLocalAnalyticsBar />
+
         {/* 日期範圍篩選列 */}
         <div
           className="flex flex-wrap items-center justify-between gap-3"
@@ -1508,6 +1511,137 @@ function StickyStatCard({ color, tilt, pinColor, label, value, icon, delta, delt
           {icon}
         </div>
       </div>
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────
+// 一次性回填本地歷史 → Firestore
+// 為了補救 v3.6.4 之前 context 只寫 localStorage 的歷史資料
+// ────────────────────────────────────────────────────────────
+function BackfillLocalAnalyticsBar() {
+  const [done, setDone] = useState<boolean>(() => localStorage.getItem('analyticsBackfilled') === 'v1');
+  const [running, setRunning] = useState(false);
+  const [result, setResult] = useState<string | null>(null);
+
+  // 統計本地有多少筆可上傳
+  const localPreview = useMemo(() => {
+    const sumMap = (key: string) => {
+      try {
+        const data = JSON.parse(localStorage.getItem(key) || '{}') as Record<string, number>;
+        return Object.values(data).reduce((s, v) => s + (typeof v === 'number' ? v : 0), 0);
+      } catch { return 0; }
+    };
+    return {
+      device: sumMap('visitorDeviceStats'),
+      referrer: sumMap('visitorReferrerStats'),
+      geo: sumMap('visitorGeoStats'),
+    };
+  }, []);
+
+  const totalLocal = localPreview.device + localPreview.referrer + localPreview.geo;
+
+  const handleBackfill = async (force = false) => {
+    if (running) return;
+    setRunning(true);
+    setResult(null);
+    try {
+      const { backfillLocalAnalytics } = await import('@/lib/visitorTracker');
+      const r = await backfillLocalAnalytics({ force });
+      if (!r.ok) {
+        setResult(`⚠️ ${r.reason}`);
+      } else {
+        setResult(
+          `✅ 已上傳 ${r.totalAdded} 筆（geo ${r.geoEntries} / device ${r.deviceEntries} / referrer ${r.referrerEntries}）— 重整後台即可看到`
+        );
+        setDone(true);
+      }
+    } catch (err) {
+      setResult(`❌ 失敗：${(err as Error).message || String(err)}`);
+    } finally {
+      setRunning(false);
+    }
+  };
+
+  // 沒有任何本地資料時不顯示
+  if (totalLocal === 0 && !result) return null;
+
+  return (
+    <div
+      style={{
+        background: done ? 'rgba(212,244,199,0.7)' : 'rgba(255,242,122,0.55)',
+        border: '2px dashed #1a1a1a',
+        borderRadius: 10,
+        padding: '10px 14px',
+        boxShadow: '2px 2px 0 rgba(0,0,0,.15)',
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        gap: 12,
+        fontFamily: "'Noto Sans TC', sans-serif",
+      }}
+    >
+      <span style={{ fontSize: 13, fontWeight: 800, color: '#1a1a1a' }}>
+        {done ? '✅ 本地歷史已回填' : '🗃️ 偵測到本地歷史尚未上傳'}
+      </span>
+      {!done && (
+        <span style={{ fontSize: 11, color: '#4a3a20' }}>
+          這台瀏覽器 localStorage 還有 <b>{totalLocal}</b> 筆 context（geo {localPreview.geo} / device {localPreview.device} / referrer {localPreview.referrer}）。
+          按下方按鈕一次性合併到 Firestore，後台就能反映回來。
+          <br />
+          <span style={{ color: '#7a8c3a', fontSize: 10 }}>
+            ⚠️ 註：v3.6.4 之前其他訪客的 context 沒寫過 server，這次只能救「你這台瀏覽器」累積的部分。
+          </span>
+        </span>
+      )}
+      <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
+        {!done && (
+          <button
+            onClick={() => handleBackfill(false)}
+            disabled={running}
+            style={{
+              background: '#ea8a3e',
+              color: '#fff',
+              border: '2px solid #1a1a1a',
+              borderRadius: 8,
+              padding: '6px 14px',
+              fontSize: 12,
+              fontWeight: 800,
+              cursor: running ? 'wait' : 'pointer',
+              boxShadow: '2px 2px 0 rgba(0,0,0,.25)',
+            }}
+          >
+            {running ? '上傳中…' : '📥 上傳本地歷史到 Firestore'}
+          </button>
+        )}
+        {done && (
+          <button
+            onClick={() => {
+              if (confirm('確定要強制再跑一次回填嗎？這會把本地數字「再加一次」到 Firestore，可能造成重複計算。')) {
+                handleBackfill(true);
+              }
+            }}
+            disabled={running}
+            style={{
+              background: '#fff',
+              color: '#1a1a1a',
+              border: '1.5px dashed #1a1a1a',
+              borderRadius: 8,
+              padding: '4px 10px',
+              fontSize: 11,
+              fontWeight: 700,
+              cursor: running ? 'wait' : 'pointer',
+            }}
+          >
+            🔁 強制重跑
+          </button>
+        )}
+      </div>
+      {result && (
+        <div style={{ width: '100%', fontSize: 11, color: '#4a3a20', marginTop: 4 }}>
+          {result}
+        </div>
+      )}
     </div>
   );
 }
