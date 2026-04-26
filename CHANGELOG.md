@@ -2,6 +2,51 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.8] - 2026-04-26 — 體驗強化三連擊：dailyClicks + 收藏跨裝置同步 + 新工具 CLI
+### 📊 #25 工具 dailyClicks 細分
+- `incrementToolClick` Cloud Function 新增 `dailyClicks.{YYYY-MM-DD}` map field
+  - 用 dot-notation `increment(1)` 原子寫入當日 + 累計
+  - `todayInTaipei()` 確保時區一致（與 dailySnapshot 同函式）
+- `dailySnapshot` 新增 `pruneOldDailyClicks()`：自動裁切超過 90 天的舊 key
+- `useToolClickStats` 新增 `dailyClicksById: Map<id, Record<date, count>>`
+  - 額外公開 `sumClicksInRange(daily, fromStr, toStr)` 工具函式
+- `AnalyticsDashboard`：
+  - 新 state `toolDailyClicks` + `toolTitles`（從 tools.json 載入）
+  - 新 `toolsInRange` useMemo：依日期範圍重算每個工具的點擊數
+  - 「總覽」分頁的 `prepareToolChartData` 用 toolsInRange + 真實工具標題
+  - 「工具」分頁 BarChart 同步改用 toolsInRange + 範圍標籤
+  - 卡片描述加上「期間內」文字 + 提示「dailyClicks 尚未累積」狀態
+
+### 🔄 #27 收藏 / 最近使用跨裝置同步
+- `useFavorites` 整套重寫：
+  - 改用 `user`（含匿名身份）而非 `isAuthenticated`，匿名也能雲端同步
+  - 新增 onSnapshot 訂閱 → 真正即時跨裝置同步（手機按收藏，桌面立即看到）
+  - `skipNextSnapshotRef` 防止「自己剛寫又被自己 onSnapshot 觸發」迴路
+  - `serverTimestamp` 寫入 updatedAt
+- `useRecentTools` 同樣升級：
+  - 從純 localStorage → 雙寫到 Firestore `userRecentTools/{uid}`
+  - mergeRecent 雲端優先、本地補缺、去重、限制 5 個
+  - 新增 onSnapshot 即時同步
+- `firestore.rules` 新增 `userRecentTools/{uid}` 規則（與 userFavorites 一致）
+
+### 🛠 #34 一鍵新工具 CLI（`npm run new-tool`）
+- 新增 `scripts/new-tool.mjs`（互動式 CLI，零新依賴 — 用 Node 內建 readline）
+- 流程：
+  1. 自動算下一個可用 ID
+  2. 互動提示：標題 / URL / 分類 picklist / icon picklist / 標籤
+  3. 若有 `GEMINI_API_KEY` 環境變數 → 自動生 description / detailedDescription（gemini-2.5-flash）
+  4. 用 Playwright 截 URL 螢幕 → sharp 縮為 1024×1024 → 存 webp
+  5. 寫入 `client/public/api/tools.json`（與 server 版若存在）
+  6. 自動呼叫 `generate-unified-og.mjs` 產 OG 圖
+  7. 印出後續 commit / build / deploy 指令
+- 加速版：`node scripts/new-tool.mjs --title "..." --url "..." --category utilities`
+- 新工具流程：5 分鐘 → 30 秒
+
+### 🧹 內部
+- 版本 3.6.7 → 3.6.8
+
+---
+
 ## [3.6.7] - 2026-04-26 — 救命級防護三連擊：Node 22 + 每日快照 + Sentry
 ### 🚀 1️⃣ Node.js 22 + Firebase 套件升級
 - `functions/package.json`：engines.node 20 → 22

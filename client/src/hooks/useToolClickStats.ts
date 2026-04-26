@@ -31,6 +31,12 @@ export interface ToolClickStats {
   clicksById: Map<number, number>;
   /** 以 toolId 為 key 的「最近 7 日新增點擊」 */
   deltas7d: Map<number, number>;
+  /**
+   * 以 toolId 為 key 的每日點擊細分（v3.6.8+）
+   * 內層 Record<'YYYY-MM-DD', number> 直接從 Firestore toolUsageStats/{id}.dailyClicks 取得
+   * 用途：儀表板日期 picker 連動工具圖表
+   */
+  dailyClicksById: Map<number, Record<string, number>>;
   /** 是否還在載入（首次訂閱） */
   isLoading: boolean;
   /** 是否已累積 ≥1 日歷史可信賴算 deltas7d */
@@ -121,6 +127,9 @@ function computeDeltas7d(
 export function useToolClickStats(): ToolClickStats {
   // 首次渲染直接用快取，避免先顯示 0 再閃一下才更新
   const [clicksById, setClicksById] = useState<Map<number, number>>(() => loadFromCache());
+  const [dailyClicksById, setDailyClicksById] = useState<Map<number, Record<string, number>>>(
+    () => new Map()
+  );
   const [snapshots, setSnapshots] = useState<DailySnapshot[]>(() => loadSnapshots());
   const [isLoading, setIsLoading] = useState(clicksById.size === 0);
 
@@ -143,15 +152,29 @@ export function useToolClickStats(): ToolClickStats {
           (snapshot) => {
             if (cancelled) return;
             const next = new Map<number, number>();
+            const nextDaily = new Map<number, Record<string, number>>();
             const cacheArr: Array<{ toolId: number; totalClicks: number }> = [];
             snapshot.forEach((doc) => {
               const data = doc.data();
               if (typeof data.toolId === 'number' && typeof data.totalClicks === 'number') {
                 next.set(data.toolId, data.totalClicks);
                 cacheArr.push({ toolId: data.toolId, totalClicks: data.totalClicks });
+                // 解析 dailyClicks（若存在）
+                if (data.dailyClicks && typeof data.dailyClicks === 'object') {
+                  const validDaily: Record<string, number> = {};
+                  for (const [k, v] of Object.entries(data.dailyClicks)) {
+                    if (/^\d{4}-\d{2}-\d{2}$/.test(k) && typeof v === 'number' && v > 0) {
+                      validDaily[k] = v;
+                    }
+                  }
+                  if (Object.keys(validDaily).length > 0) {
+                    nextDaily.set(data.toolId, validDaily);
+                  }
+                }
               }
             });
             setClicksById(next);
+            setDailyClicksById(nextDaily);
             setIsLoading(false);
             // 背景更新本地快取
             try {
@@ -195,5 +218,19 @@ export function useToolClickStats(): ToolClickStats {
     [clicksById, snapshots]
   );
 
-  return { clicksById, deltas7d, isLoading, hasDeltaHistory };
+  return { clicksById, dailyClicksById, deltas7d, isLoading, hasDeltaHistory };
+}
+
+/** 工具函式：算某個工具在指定日期區間內的點擊總和 */
+export function sumClicksInRange(
+  daily: Record<string, number> | undefined,
+  fromStr: string,
+  toStr: string
+): number {
+  if (!daily) return 0;
+  let sum = 0;
+  for (const [date, n] of Object.entries(daily)) {
+    if (date >= fromStr && date <= toStr) sum += n;
+  }
+  return sum;
 }

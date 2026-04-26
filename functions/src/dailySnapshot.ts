@@ -57,6 +57,43 @@ async function readAllDocs(collection: string): Promise<Record<string, any>> {
     return out;
 }
 
+/** 裁切 toolUsageStats 各 doc 中 dailyClicks 超過 90 天的舊 entry */
+async function pruneOldDailyClicks(): Promise<{ docsScanned: number; keysRemoved: number }> {
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - 90);
+    const fmt = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Taipei",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+    });
+    const cutoffStr = fmt.format(cutoffDate);
+
+    const snap = await admin.firestore().collection("toolUsageStats").get();
+    let docsScanned = 0;
+    let keysRemoved = 0;
+    const batch = admin.firestore().batch();
+
+    snap.forEach((doc) => {
+        docsScanned++;
+        const data = doc.data();
+        const dc = data.dailyClicks as Record<string, number> | undefined;
+        if (!dc) return;
+        const removeFields: Record<string, any> = {};
+        for (const dateKey of Object.keys(dc)) {
+            if (dateKey < cutoffStr) {
+                removeFields[`dailyClicks.${dateKey}`] = admin.firestore.FieldValue.delete();
+                keysRemoved++;
+            }
+        }
+        if (Object.keys(removeFields).length > 0) {
+            batch.update(doc.ref, removeFields);
+        }
+    });
+    if (keysRemoved > 0) await batch.commit();
+    return { docsScanned, keysRemoved };
+}
+
 /** 排程任務：每天 03:00 (Asia/Taipei) 跑一次 */
 export const dailySnapshot = onSchedule(
     {
@@ -125,6 +162,12 @@ export const dailySnapshot = onSchedule(
                 oldSnaps.forEach((d) => batch.delete(d.ref));
                 await batch.commit();
                 console.log(`[dailySnapshot] 🧹 已裁切 ${oldSnaps.size} 份超過 ${RETENTION_DAYS} 天的舊快照`);
+            }
+
+            // 4. 裁切 toolUsageStats.dailyClicks 中超過 90 天的舊 key
+            const prune = await pruneOldDailyClicks();
+            if (prune.keysRemoved > 0) {
+                console.log(`[dailySnapshot] 🧹 裁切 dailyClicks：掃描 ${prune.docsScanned} 個工具，移除 ${prune.keysRemoved} 個過期日期 key`);
             }
         } catch (err) {
             console.error("[dailySnapshot] 失敗：", err);

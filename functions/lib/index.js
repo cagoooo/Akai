@@ -253,9 +253,22 @@ exports.onReviewCreated = (0, firestore_1.onDocumentCreated)("toolReviews/{docId
     }
     await pushFlexToAdmin(`「${toolTitle}」收到 ${userName} 的 ${ratingNum} 星評論`, bubble, `review:${event.params.docId}`);
 });
+/** 取得 Asia/Taipei 當日 YYYY-MM-DD（與 dailySnapshot 一致） */
+function todayInTaipei() {
+    const fmt = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Taipei",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+    });
+    return fmt.format(new Date());
+}
 /**
  * 可呼叫的 Cloud Function：原子性地遞增工具點擊次數
- * 接受 { toolId: number }，更新 toolUsageStats/{toolId} 的 totalClicks 與 lastClickedAt
+ * 更新 toolUsageStats/{toolId}：
+ *   - totalClicks（累計）
+ *   - dailyClicks.{YYYY-MM-DD}（當日，供日期 picker 篩選用，v3.6.8+）
+ *   - lastClickedAt（最後點擊時間）
  */
 exports.incrementToolClick = (0, https_1.onCall)(async (request) => {
     const toolId = request.data?.toolId;
@@ -264,8 +277,10 @@ exports.incrementToolClick = (0, https_1.onCall)(async (request) => {
         throw new https_1.HttpsError("invalid-argument", "toolId must be an integer between 1 and 200.");
     }
     const docRef = admin.firestore().collection("toolUsageStats").doc(String(toolId));
+    const today = todayInTaipei();
     await docRef.set({
         totalClicks: admin.firestore.FieldValue.increment(1),
+        dailyClicks: { [today]: admin.firestore.FieldValue.increment(1) },
         lastClickedAt: admin.firestore.FieldValue.serverTimestamp(),
     }, { merge: true });
     return { success: true, toolId };

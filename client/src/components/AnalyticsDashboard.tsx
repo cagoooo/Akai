@@ -62,6 +62,12 @@ export function AnalyticsDashboard() {
 
   // 工具統計狀態
   const [toolStats, setToolStats] = useState<ToolUsageStat[]>([]);
+  // 工具每日點擊細分（v3.6.8+ 連動日期 picker）
+  const [toolDailyClicks, setToolDailyClicks] = useState<Map<number, Record<string, number>>>(
+    () => new Map()
+  );
+  // 工具標題快取（從 tools.json 載入，給圖表 label 用）
+  const [toolTitles, setToolTitles] = useState<Map<number, string>>(() => new Map());
 
   // 全站累計的 訪客 context（地理 / 裝置 / 來源），來自 Firestore analytics/visitorContext
   const [serverContext, setServerContext] = useState<{
@@ -69,6 +75,24 @@ export function AnalyticsDashboard() {
     deviceStats?: Record<string, number>;
     referrerStats?: Record<string, number>;
   }>({});
+
+  // 載入工具標題（給圖表 label 用）
+  useEffect(() => {
+    const baseUrl = (import.meta as any).env?.BASE_URL || '/';
+    fetch(`${baseUrl}api/tools.json`)
+      .then((r) => (r.ok ? r.json() : []))
+      .then((tools: any[]) => {
+        if (!Array.isArray(tools)) return;
+        const m = new Map<number, string>();
+        tools.forEach((t) => {
+          if (typeof t?.id === 'number' && typeof t?.title === 'string') {
+            m.set(t.id, t.title);
+          }
+        });
+        setToolTitles(m);
+      })
+      .catch(() => { /* 失敗就 fallback「工具 #ID」 */ });
+  }, []);
 
   // 訂閱 analytics/visitorContext（全站累計訪客 context）
   useEffect(() => {
@@ -138,21 +162,32 @@ export function AnalyticsDashboard() {
           }
         );
 
-        // 即時監聽工具統計
+        // 即時監聽工具統計（含 dailyClicks）
         unsubscribeTool = onSnapshot(
           query(collection(db, 'toolUsageStats'), orderBy('totalClicks', 'desc')),
           (snapshot) => {
             const stats: ToolUsageStat[] = [];
+            const daily = new Map<number, Record<string, number>>();
             snapshot.forEach((doc) => {
               const data = doc.data();
               stats.push({
                 toolId: data.toolId,
                 totalClicks: data.totalClicks
               });
+              if (data.dailyClicks && typeof data.dailyClicks === 'object') {
+                const valid: Record<string, number> = {};
+                for (const [k, v] of Object.entries(data.dailyClicks)) {
+                  if (/^\d{4}-\d{2}-\d{2}$/.test(k) && typeof v === 'number' && v > 0) {
+                    valid[k] = v;
+                  }
+                }
+                if (Object.keys(valid).length > 0) daily.set(data.toolId, valid);
+              }
             });
             setToolStats(stats);
+            setToolDailyClicks(daily);
             setLastUpdated(new Date());
-            console.log('🔧 工具統計已即時更新');
+            console.log('🔧 工具統計已即時更新（含 dailyClicks）');
           },
           (error) => {
             console.error('工具統計監聽失敗:', error);
@@ -277,15 +312,47 @@ export function AnalyticsDashboard() {
     return { total, avg, peak, days, prevTotal, deltaPct };
   }, [visitorStats?.dailyVisits, dateRange]);
 
-  const prepareToolChartData = () => {
-    if (!toolStats) return { labels: [], datasets: [] };
+  /**
+   * 取得工具在當前日期範圍內的點擊數（v3.6.8+）
+   * - 優先用 dailyClicks 細分（範圍篩選）
+   * - 落空就用 totalClicks 全期值（與舊行為一致）
+   */
+  const getToolClicksInRange = (toolId: number, totalClicks: number): number => {
+    const daily = toolDailyClicks.get(toolId);
+    if (!daily) return totalClicks; // 沒 dailyClicks 就用全期累計
+    const fromStr = toDateStr(dateRange.from);
+    const toStr = toDateStr(dateRange.to);
+    let sum = 0;
+    for (const [date, n] of Object.entries(daily)) {
+      if (date >= fromStr && date <= toStr) sum += n;
+    }
+    return sum;
+  };
 
+  /** 範圍內排序好的工具陣列（前 N 名熱門，依範圍內點擊數排序） */
+  const toolsInRange = useMemo(() => {
+    if (!toolStats) return [];
+    const enriched = toolStats.map((s) => ({
+      toolId: s.toolId,
+      totalClicks: s.totalClicks,
+      rangeClicks: getToolClicksInRange(s.toolId, s.totalClicks),
+      title: toolTitles.get(s.toolId) || `工具 #${s.toolId}`,
+    }));
+    return enriched
+      .filter((s) => s.rangeClicks > 0)
+      .sort((a, b) => b.rangeClicks - a.rangeClicks);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [toolStats, toolDailyClicks, toolTitles, dateRange]);
+
+  const prepareToolChartData = () => {
+    if (toolsInRange.length === 0) return { labels: [], datasets: [] };
+    const top10 = toolsInRange.slice(0, 10);
     return {
-      labels: toolStats.slice(0, 10).map(stat => `工具 ${stat.toolId}`),
+      labels: top10.map((s) => s.title.length > 14 ? s.title.slice(0, 14) + '…' : s.title),
       datasets: [
         {
-          label: '使用次數',
-          data: toolStats.slice(0, 10).map(stat => stat.totalClicks),
+          label: `使用次數（${dateRange.label}）`,
+          data: top10.map((s) => s.rangeClicks),
           backgroundColor: [
             'rgba(255, 99, 132, 0.7)',
             'rgba(54, 162, 235, 0.7)',
@@ -954,16 +1021,25 @@ export function AnalyticsDashboard() {
             <Card>
               <CardHeader>
                 <CardTitle>工具使用統計</CardTitle>
-                <CardDescription>最受歡迎工具及使用頻率</CardDescription>
+                <CardDescription>
+                  {dateRange.label} 內最受歡迎的工具
+                  {toolDailyClicks.size === 0 && (
+                    <span style={{ color: '#7a8c3a', marginLeft: 8, fontSize: 11 }}>
+                      （dailyClicks 尚未累積，先以全期數據顯示。新點擊會開始累積每日細分。）
+                    </span>
+                  )}
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                {toolStats && toolStats.length > 0 ? (
+                {toolsInRange.length > 0 ? (
                   <BarChart
                     data={{
-                      labels: toolStats.map(stat => `工具 ${stat.toolId}`),
+                      labels: toolsInRange.map((s) =>
+                        s.title.length > 16 ? s.title.slice(0, 16) + '…' : s.title
+                      ),
                       datasets: [{
-                        label: '使用次數',
-                        data: toolStats.map(stat => stat.totalClicks),
+                        label: `使用次數（${dateRange.label}）`,
+                        data: toolsInRange.map((s) => s.rangeClicks),
                         backgroundColor: 'rgba(99, 102, 241, 0.7)',
                         borderColor: 'rgb(99, 102, 241)',
                         borderWidth: 1
@@ -974,7 +1050,7 @@ export function AnalyticsDashboard() {
                       onClick: async (_event: unknown, elements: Array<{ index: number }>) => {
                         if (elements && elements.length > 0) {
                           const index = elements[0].index;
-                          const toolId = toolStats?.[index]?.toolId;
+                          const toolId = toolsInRange[index]?.toolId;
                           if (toolId) {
                             try {
                               const trackingModule = await import('@/hooks/useToolTracking');
