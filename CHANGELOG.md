@@ -2,6 +2,26 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.5] - 2026-04-26 — 修復「訪客追蹤只在首頁觸發」的隱性 bug
+### 🐛 問題
+- v3.6.4 部署後，後台儀表板地理仍顯示 6 筆（localStorage fallback），設備卻只有 1 筆
+- 原因：`BulletinVisitorCounter` 是負責寫入 Firestore 的元件，但它**只在 BulletinHome 渲染**
+- 訪客直接打開 `/admin`、`/tool/:id`、`/wish` 都不會觸發任何 Firestore 寫入
+- 加上 geo IP API 失敗時不寫 fallback key，導致 server geoStats 容易是空的
+
+### 🛠 修正
+- 新增 `client/src/lib/visitorTracker.ts` → `trackPageVisit()`：
+  - 把「節流 + ensureSignedIn + incrementVisitorCount + 三類 analytics」全部抽出
+  - 加上 `inFlight` + `alreadyRanThisLoad` 雙重 guard，同 SPA load 內絕不重複
+  - geo API 全失敗時改寫 `'unknown'` key（避免 server geoStats 永遠空著走 fallback）
+- `App.tsx` 開機 800ms 後呼叫 `trackPageVisit()`（取代舊的單純 ensureSignedIn）
+- `BulletinVisitorCounter` 完全瘦身為純顯示元件
+  - 移除節流、增量、ensureSignedIn、trackVisitorContext、incrementServerStat 三個函式
+  - 保留 onSnapshot 訂閱與里程碑顯示
+- 結果：不論落地頁是 `/`、`/admin`、`/tool/:id`、`/wish` 都會觸發完整追蹤
+
+---
+
 ## [3.6.4] - 2026-04-26 — 統計準確性大修補：評論 LINE 通知 + 全站訪客 context + 匿名認證
 ### 🔔 評論 LINE 通知修復
 - 問題：使用者提交工具評論成功，但管理員沒收到 LINE 通知

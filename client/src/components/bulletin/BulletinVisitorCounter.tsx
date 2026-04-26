@@ -1,5 +1,5 @@
 /**
- * BulletinVisitorCounter — E2 公佈欄風格訪客計數器
+ * BulletinVisitorCounter — E2 公佈欄風格訪客計數器（純顯示元件）
  *
  * 設計：一張橫向便利貼，含：
  * - 左側：眼睛 emoji + 大數字（動畫過渡）
@@ -7,13 +7,12 @@
  * - 右側：下一個里程碑進度（細條 + 進度）
  * - 頂部：藍色圖釘 + 右上膠帶裝飾
  *
- * 邏輯：完全重用既有 VisitorCounter 的增量/訂閱邏輯
- *  - 30 分鐘節流 + sessionStorage 防重複
- *  - onSnapshot 即時更新
- *  - 降級到 localStorage
+ * v3.6.5 起：所有「增加訪客數 / 累計 analytics」邏輯已抽到
+ *           lib/visitorTracker.ts → trackPageVisit()，由 App.tsx 開機時呼叫。
+ *           這個元件只剩 onSnapshot 訂閱顯示。
  */
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { animate, m as motion, useMotionValue, useTransform } from 'framer-motion';
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
@@ -22,124 +21,6 @@ interface VisitorStats {
   totalVisits: number;
   dailyVisits?: Record<string, number>;
   lastVisitAt?: string | null;
-}
-
-/**
- * 追蹤訪客 context（地理 / 裝置類型 / 來源）：
- *   - localStorage：保留為「這台瀏覽器自己的」歷史紀錄（離線降級用）
- *   - Firestore `analytics/visitorContext`：全站累計，後台儀表板讀這份
- *
- * 全程使用 HTTPS 端點（ipapi.co 免費版無需 token，每天 1000 req 額度足夠）
- */
-async function incrementServerStat(category: 'device' | 'referrer' | 'geo', key: string) {
-  if (!key) return;
-  try {
-    const { db, isFirebaseAvailable } = await import('@/lib/firebase');
-    if (!isFirebaseAvailable() || !db) return;
-    const { doc, setDoc, increment, serverTimestamp } = await import('firebase/firestore');
-    const fieldName =
-      category === 'device' ? 'deviceStats' : category === 'referrer' ? 'referrerStats' : 'geoStats';
-    const ref = doc(db, 'analytics', 'visitorContext');
-    // 用 setDoc + merge 處理「文件不存在」情境；nested map 中的 increment() sentinel 會被正確套用
-    await setDoc(
-      ref,
-      {
-        [fieldName]: { [key]: increment(1) },
-        lastUpdatedAt: serverTimestamp(),
-      },
-      { merge: true }
-    );
-  } catch (err) {
-    // 寫不到 Firestore 不致命，至少 localStorage 還在
-    console.warn(`[trackVisitorContext] Firestore ${category}/${key} 寫入失敗:`, err);
-  }
-}
-
-async function trackVisitorContext() {
-  // 1. 裝置類型
-  let deviceKey = 'desktop';
-  try {
-    const ua = navigator.userAgent;
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
-    const isTablet = /iPad|Android/i.test(ua) && !/Mobile/i.test(ua);
-    deviceKey = isTablet ? 'tablet' : isMobile ? 'mobile' : 'desktop';
-    const stats = JSON.parse(localStorage.getItem('visitorDeviceStats') || '{"desktop":0,"mobile":0,"tablet":0}');
-    stats[deviceKey] = (stats[deviceKey] || 0) + 1;
-    localStorage.setItem('visitorDeviceStats', JSON.stringify(stats));
-  } catch { /* ignore */ }
-  await incrementServerStat('device', deviceKey);
-
-  // 2. 來源 Referrer
-  let referrerKey = 'direct';
-  try {
-    const referrer = document.referrer;
-    if (referrer) {
-      const hostname = new URL(referrer).hostname.toLowerCase();
-      if (['google', 'bing', 'yahoo', 'baidu', 'duckduckgo'].some((s) => hostname.includes(s)))
-        referrerKey = 'search';
-      else if (['facebook', 'twitter', 'instagram', 'line.me', 't.co'].some((s) => hostname.includes(s)))
-        referrerKey = 'social';
-      else if (['mail.', 'gmail.'].some((s) => hostname.includes(s))) referrerKey = 'email';
-      else if (hostname === window.location.hostname) referrerKey = 'direct';
-      else referrerKey = 'external';
-    }
-    const stats = JSON.parse(
-      localStorage.getItem('visitorReferrerStats') ||
-        '{"direct":0,"search":0,"social":0,"email":0,"external":0}'
-    );
-    stats[referrerKey] = (stats[referrerKey] || 0) + 1;
-    localStorage.setItem('visitorReferrerStats', JSON.stringify(stats));
-  } catch { /* ignore */ }
-  await incrementServerStat('referrer', referrerKey);
-
-  // 3. 地理定位（HTTPS）
-  // 主：ipapi.co (1k/天免費，無需 token)
-  // 備：ipinfo.io (50k/月免費，無需 token)
-  try {
-    let geoData: { city?: string; region?: string; country_name?: string; country?: string } | null = null;
-    try {
-      const res = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(3000) });
-      if (res.ok) geoData = await res.json();
-    } catch { /* fallback below */ }
-
-    if (!geoData) {
-      const res2 = await fetch('https://ipinfo.io/json', { signal: AbortSignal.timeout(3000) });
-      if (res2.ok) {
-        const d = await res2.json();
-        geoData = { city: d.city, region: d.region, country_name: d.country, country: d.country };
-      }
-    }
-
-    if (geoData) {
-      const taiwanCityMap: Record<string, string> = {
-        Taipei: '台北市',
-        'New Taipei': '新北市',
-        Taichung: '台中市',
-        Kaohsiung: '高雄市',
-        Taoyuan: '桃園市',
-        Tainan: '台南市',
-        Hsinchu: '新竹',
-        Keelung: '基隆市',
-        Chiayi: '嘉義',
-        Yilan: '宜蘭',
-        Hualien: '花蓮',
-        Taitung: '台東',
-        TW: '台灣',
-        Taiwan: '台灣',
-      };
-      let location = geoData.city || geoData.region || geoData.country_name || geoData.country || '其他';
-      if (taiwanCityMap[location]) location = taiwanCityMap[location];
-
-      const stats = JSON.parse(localStorage.getItem('visitorGeoStats') || '{}');
-      stats[location] = (stats[location] || 0) + 1;
-      localStorage.setItem('visitorGeoStats', JSON.stringify(stats));
-      // Firestore 累計（key 是城市中文名）
-      await incrementServerStat('geo', location);
-      console.log('📍 地理定位成功 (HTTPS):', location);
-    }
-  } catch (e) {
-    console.warn('[BulletinVisitorCounter] 地理定位失敗:', e);
-  }
 }
 
 // 里程碑
@@ -161,8 +42,11 @@ export function BulletinVisitorCounter() {
   const [totalVisits, setTotalVisits] = useState(0);
   const [loading, setLoading] = useState(true);
   const [justUpdated, setJustUpdated] = useState(false);
-  const hasIncrementedRef = useRef(false);
 
+  // 注意：這個元件已不再負責「增加訪客數」與「累計 context」。
+  // 那些寫入工作已抽到 lib/visitorTracker.ts → trackPageVisit()，
+  // 並在 App.tsx 開機時呼叫一次（不論落地頁是哪一個都會被計入）。
+  // 本元件只負責訂閱 visitorStats/global 並顯示數字。
   useEffect(() => {
     let unsubscribe: (() => void) | undefined;
     let cancelled = false;
@@ -172,45 +56,6 @@ export function BulletinVisitorCounter() {
         const { db, isFirebaseAvailable } = await import('@/lib/firebase');
         const { doc, onSnapshot } = await import('firebase/firestore');
 
-        // 1. 防重複增量（與原 VisitorCounter 一致）
-        if (!hasIncrementedRef.current) {
-          hasIncrementedRef.current = true;
-          const sessionVisited = sessionStorage.getItem('sessionVisited');
-          const lastVisitTime = parseInt(localStorage.getItem('lastVisitTimestamp') || '0');
-          const today = new Date().toISOString().split('T')[0];
-          const lastVisitDate = localStorage.getItem('lastVisitDate') || '';
-          const currentTime = Date.now();
-          const MIN_VISIT_INTERVAL = 30 * 60 * 1000;
-
-          const shouldIncrement =
-            !sessionVisited ||
-            currentTime - lastVisitTime > MIN_VISIT_INTERVAL ||
-            lastVisitDate !== today;
-
-          sessionStorage.setItem('sessionVisited', 'true');
-
-          if (shouldIncrement) {
-            localStorage.setItem('lastVisitTimestamp', currentTime.toString());
-            localStorage.setItem('lastVisitDate', today);
-            // 確保有身份（未登入訪客自動匿名登入）才能寫 Firestore
-            try {
-              const { ensureSignedIn } = await import('@/lib/authService');
-              await ensureSignedIn();
-            } catch (err) {
-              console.warn('[BulletinVisitorCounter] ensureSignedIn 失敗:', err);
-            }
-            const { incrementVisitorCount } = await import('@/lib/firestoreService');
-            await incrementVisitorCount().catch((err) =>
-              console.warn('[BulletinVisitorCounter] 增量失敗:', err)
-            );
-            // 🌍 異步追蹤地理 / 裝置 / 來源（不影響主流程）
-            trackVisitorContext().catch((err) =>
-              console.warn('[BulletinVisitorCounter] context 追蹤失敗:', err)
-            );
-          }
-        }
-
-        // 2. 即時監聽
         if (isFirebaseAvailable() && db) {
           unsubscribe = onSnapshot(
             doc(db, 'visitorStats', 'global'),
@@ -226,7 +71,6 @@ export function BulletinVisitorCounter() {
                   return data.totalVisits;
                 });
                 setLoading(false);
-                // 本地快取供離線使用
                 try {
                   localStorage.setItem('totalVisits', String(data.totalVisits));
                 } catch { /* ignore */ }

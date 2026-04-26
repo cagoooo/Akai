@@ -39,12 +39,14 @@ import { useToast } from "@/hooks/use-toast";
 // 取得 base path - Vite 會在建置時注入 BASE_URL
 const basePath = import.meta.env.BASE_URL || '/';
 
-// 應用啟動時自動進行匿名身份建立（讓未登入訪客也能寫 Firestore 統計）
-// 動態 import 避免影響首屏載入
+// 應用啟動時自動進行：匿名身份建立 + 增加訪客數 + 累計 analytics（地理/裝置/來源）
+// 不論落地頁是 BulletinHome / /admin / /tool/:id / /wish 都會被記到，
+// 不再依賴 BulletinVisitorCounter 元件是否渲染。
+// 動態 import 避免影響首屏載入。
 if (typeof window !== 'undefined') {
   setTimeout(() => {
-    import('@/lib/authService').then(({ ensureSignedIn }) => {
-      ensureSignedIn().catch((err) => console.warn('[App] ensureSignedIn 失敗:', err));
+    import('@/lib/visitorTracker').then(({ trackPageVisit }) => {
+      trackPageVisit().catch((err) => console.warn('[App] trackPageVisit 失敗:', err));
     });
   }, 800); // 等首屏 LCP 過去再做
 }
