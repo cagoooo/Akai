@@ -107,7 +107,7 @@ export function BulletinHome() {
   const { favorites, toggleFavorite } = useFavorites();
   const { addToRecent } = useRecentTools();
   const { currentSort, sortTools } = useSortOptions();
-  const { clicksById } = useToolClickStats();
+  const { clicksById, deltas7d, hasDeltaHistory } = useToolClickStats();
 
   // URL 雙向同步
   useEffect(() => {
@@ -238,7 +238,11 @@ export function BulletinHome() {
           padding: '20px 60px 30px',
         }}
       >
-        <BulletinLeaderboard tools={toolsWithStats} />
+        <BulletinLeaderboard
+          tools={toolsWithStats}
+          deltas7d={deltas7d}
+          hasDeltaHistory={hasDeltaHistory}
+        />
         <BulletinWishPool />
       </div>
 

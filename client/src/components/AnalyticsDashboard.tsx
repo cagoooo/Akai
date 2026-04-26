@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BarChart, LineChart, PieChart } from "@/components/ui/charts";
@@ -12,6 +12,13 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "wouter";
 import type { VisitorStats, ToolUsageStat } from "@/types/analytics";
 import { WishingWellAdmin } from "@/components/admin/WishingWellAdmin";
+import {
+  DateRangePicker,
+  presetToRange,
+  filterDailyVisits,
+  toDateStr,
+  type DateRange,
+} from "@/components/admin/DateRangePicker";
 
 // 檢測是否為靜態部署環境
 const isStaticDeployment = () => {
@@ -23,6 +30,8 @@ const isStaticDeployment = () => {
 
 export function AnalyticsDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
+  // 日期範圍篩選（預設「最近 30 天」）
+  const [dateRange, setDateRange] = useState<DateRange>(() => presetToRange('last30'));
 
   const heatmapRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
@@ -171,28 +180,65 @@ export function AnalyticsDashboard() {
     }
   }, [heatmapRef, activeTab, visitorStats]);
 
-  // 準備圖表數據 (最近 30 天)
+  // 準備圖表數據（依日期範圍篩選）— 範圍內每日填滿（沒資料補 0），便於趨勢線連續
   const prepareVisitorChartData = () => {
-    if (!visitorStats?.dailyVisits) return { labels: [], datasets: [] };
-
-    const dailyVisits = visitorStats.dailyVisits as Record<string, number>;
-    const sortedDates = Object.keys(dailyVisits).sort();
-    // 顯示最近 30 天
-    const displayDates = sortedDates.slice(-30);
-
+    const dailyVisits = (visitorStats?.dailyVisits as Record<string, number>) || {};
+    const labels: string[] = [];
+    const data: number[] = [];
+    const cur = new Date(dateRange.from);
+    cur.setHours(0, 0, 0, 0);
+    const end = new Date(dateRange.to);
+    end.setHours(0, 0, 0, 0);
+    while (cur <= end) {
+      const ds = toDateStr(cur);
+      labels.push(ds);
+      data.push(dailyVisits[ds] || 0);
+      cur.setDate(cur.getDate() + 1);
+    }
     return {
-      labels: displayDates,
+      labels,
       datasets: [
         {
-          label: '每日訪問量',
-          data: displayDates.map(date => dailyVisits[date] || 0),
+          label: `每日訪問量（${dateRange.label}）`,
+          data,
           borderColor: 'rgb(99, 102, 241)',
           backgroundColor: 'rgba(99, 102, 241, 0.5)',
-          tension: 0.3
-        }
-      ]
+          tension: 0.3,
+        },
+      ],
     };
   };
+
+  // 範圍內統計摘要：總訪問、平均、峰值
+  const rangeStats = useMemo(() => {
+    const dailyVisits = (visitorStats?.dailyVisits as Record<string, number>) || {};
+    const entries = filterDailyVisits(dailyVisits, dateRange);
+    const total = entries.reduce((sum, [, n]) => sum + n, 0);
+    const days = Math.max(
+      1,
+      Math.round((dateRange.to.getTime() - dateRange.from.getTime()) / 86400000) + 1
+    );
+    const avg = total / days;
+    const peak = entries.reduce((m, [, n]) => Math.max(m, n), 0);
+    // 與「上一段同等長度的範圍」比較
+    const prevTo = new Date(dateRange.from);
+    prevTo.setDate(prevTo.getDate() - 1);
+    const prevFrom = new Date(prevTo);
+    prevFrom.setDate(prevFrom.getDate() - (days - 1));
+    const prevRange: DateRange = {
+      preset: 'custom',
+      from: prevFrom,
+      to: prevTo,
+      label: '前一段',
+    };
+    const prevTotal = filterDailyVisits(dailyVisits, prevRange).reduce(
+      (sum, [, n]) => sum + n,
+      0
+    );
+    const deltaPct =
+      prevTotal === 0 ? (total > 0 ? 100 : 0) : ((total - prevTotal) / prevTotal) * 100;
+    return { total, avg, peak, days, prevTotal, deltaPct };
+  }, [visitorStats?.dailyVisits, dateRange]);
 
   const prepareToolChartData = () => {
     if (!toolStats) return { labels: [], datasets: [] };
@@ -336,12 +382,24 @@ export function AnalyticsDashboard() {
                       const dailyVisits = visitorStats?.dailyVisits as Record<string, number> || {};
                       const sortedDates = Object.keys(dailyVisits).sort();
 
+                      // 依選擇的日期範圍篩選每日訪問
+                      const rangeFromStr = toDateStr(dateRange.from);
+                      const rangeToStr = toDateStr(dateRange.to);
+                      const inRangeDates = sortedDates.filter(
+                        (d) => d >= rangeFromStr && d <= rangeToStr
+                      );
+                      const rangeTotal = inRangeDates.reduce(
+                        (sum, d) => sum + (dailyVisits[d] || 0),
+                        0
+                      );
+
                       const reportData = [
                         ['教育科技創新專區 - 網站分析報告'], [''],
                         ['報告日期', dateStr], ['報告時間', timeStr],
-                        ['時間範圍', '最近 30 天'], [''],
-                        ['總訪問量', visitorStats?.totalVisits || 0],
-                        ['工具使用次數', totalClicks], ['工具總數', tools.length], [''],
+                        ['時間範圍', dateRange.label], ['範圍起', rangeFromStr], ['範圍迄', rangeToStr], [''],
+                        ['總訪問量（全期累計）', visitorStats?.totalVisits || 0],
+                        [`期間訪問量（${dateRange.label}）`, rangeTotal],
+                        ['工具使用次數（全期累計）', totalClicks], ['工具總數', tools.length], [''],
                         ['分類', '使用次數', '佔比'],
                         ...Object.entries(categoryStats).sort((a, b) => b[1] - a[1])
                           .map(([cat, count]) => [categoryLabels[cat] || cat, count, `${((count / totalClicks) * 100).toFixed(1)}%`]),
@@ -352,8 +410,8 @@ export function AnalyticsDashboard() {
                           return [i + 1, tool?.title || stat.toolId, categoryLabels[tool?.category || ''] || '', stat.totalClicks];
                         }) || []),
                         [''],
-                        ['日期', '訪問次數'],
-                        ...sortedDates.slice(-30).map(date => [date, dailyVisits[date] || 0]),
+                        [`日期（${dateRange.label}）`, '訪問次數'],
+                        ...inRangeDates.map(date => [date, dailyVisits[date] || 0]),
                       ];
 
                       const csvContent = reportData.map(row => row.join(',')).join('\n');
@@ -419,7 +477,14 @@ export function AnalyticsDashboard() {
 
                     const exportData = {
                       generatedAt: now.toISOString(),
-                      timeRange: '30d',
+                      timeRange: {
+                        label: dateRange.label,
+                        preset: dateRange.preset,
+                        from: toDateStr(dateRange.from),
+                        to: toDateStr(dateRange.to),
+                        days: rangeStats.days,
+                      },
+                      rangeStats,
                       visitorStats,
                       toolStats,
                       deviceStats: JSON.parse(localStorage.getItem('visitorDeviceStats') || '{}'),
@@ -443,27 +508,77 @@ export function AnalyticsDashboard() {
       </header>
 
       <main className="container mx-auto px-3 sm:px-6 py-6 sm:py-8 space-y-4 sm:space-y-6">
-        {/* 統計便利貼 — cork 風四色 */}
+        {/* 日期範圍篩選列 */}
+        <div
+          className="flex flex-wrap items-center justify-between gap-3"
+          style={{
+            background: 'rgba(255,255,255,.7)',
+            border: '2px solid #1a1a1a',
+            borderRadius: 10,
+            padding: '10px 14px',
+            boxShadow: '3px 3px 0 rgba(0,0,0,.18)',
+          }}
+        >
+          <div className="flex items-center gap-2">
+            <span style={{ fontSize: 13, fontWeight: 800, color: '#1a1a1a' }}>📅 顯示範圍</span>
+            <span
+              style={{
+                fontSize: 11,
+                color: '#7a8c3a',
+                background: '#f5f0d4',
+                padding: '2px 8px',
+                borderRadius: 10,
+                border: '1.5px solid #7a8c3a',
+                fontWeight: 700,
+              }}
+            >
+              {rangeStats.days} 天
+            </span>
+          </div>
+          <DateRangePicker value={dateRange} onChange={setDateRange} />
+        </div>
+
+        {/* 統計便利貼 — cork 風四色（已連動日期範圍） */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
           <StickyStatCard
-            color="#fff27a" tilt={-1.8} pinColor="#dc2626"
-            label="總訪問量" value={(visitorStats?.totalVisits || 0).toLocaleString()}
-            icon={<Users className="h-6 w-6 sm:h-7 sm:w-7" />} delta="+5.2% 比上週" deltaColor="#16a34a"
+            color="#fff27a"
+            tilt={-1.8}
+            pinColor="#dc2626"
+            label="總訪問量（全期）"
+            value={(visitorStats?.totalVisits || 0).toLocaleString()}
+            icon={<Users className="h-6 w-6 sm:h-7 sm:w-7" />}
+            delta={`累計到今天`}
+            deltaColor="#4a3a20"
           />
           <StickyStatCard
-            color="#ffd4d9" tilt={1.2} pinColor="#2563eb"
-            label="本週流量" value="1,204"
-            icon={<TrendingUp className="h-6 w-6 sm:h-7 sm:w-7" />} delta="-1.8% 比上週" deltaColor="#dc2626"
+            color="#ffd4d9"
+            tilt={1.2}
+            pinColor="#2563eb"
+            label={`期間流量（${dateRange.label}）`}
+            value={rangeStats.total.toLocaleString()}
+            icon={<TrendingUp className="h-6 w-6 sm:h-7 sm:w-7" />}
+            delta={`${rangeStats.deltaPct >= 0 ? '+' : ''}${rangeStats.deltaPct.toFixed(1)}% 比前一段`}
+            deltaColor={rangeStats.deltaPct >= 0 ? '#16a34a' : '#dc2626'}
           />
           <StickyStatCard
-            color="#d4f4c7" tilt={-1.4} pinColor="#eab308"
-            label="平均停留" value="3m 24s"
-            icon={<Clock className="h-6 w-6 sm:h-7 sm:w-7" />} delta="+12% 比上週" deltaColor="#16a34a"
+            color="#d4f4c7"
+            tilt={-1.4}
+            pinColor="#eab308"
+            label="期間日均"
+            value={rangeStats.avg.toFixed(1)}
+            icon={<Clock className="h-6 w-6 sm:h-7 sm:w-7" />}
+            delta={`共 ${rangeStats.days} 天`}
+            deltaColor="#4a3a20"
           />
           <StickyStatCard
-            color="#c8e6ff" tilt={1.6} pinColor="#c026d3"
-            label="跳出率" value="28.5%"
-            icon={<MousePointer className="h-6 w-6 sm:h-7 sm:w-7" />} delta="-3.2% 比上週" deltaColor="#16a34a"
+            color="#c8e6ff"
+            tilt={1.6}
+            pinColor="#c026d3"
+            label="期間單日峰值"
+            value={rangeStats.peak.toLocaleString()}
+            icon={<MousePointer className="h-6 w-6 sm:h-7 sm:w-7" />}
+            delta="範圍內單日最多訪問"
+            deltaColor="#4a3a20"
           />
         </div>
 
@@ -503,7 +618,7 @@ export function AnalyticsDashboard() {
               <CardHeader>
                 <CardTitle>訪問者趨勢</CardTitle>
                 <CardDescription>
-                  最近 30 天的每日訪問量
+                  {dateRange.label} 的每日訪問量（共 {rangeStats.days} 天，總計 {rangeStats.total.toLocaleString()} 次）
                 </CardDescription>
               </CardHeader>
               <CardContent>

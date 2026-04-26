@@ -2,6 +2,52 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.3] - 2026-04-26 — P0 體驗優化：HTTPS 修正 + OG 統一 + 排行榜徽章 + 儀表板日期
+### 🔒 #4 IP HTTPS 升級（visitor context tracking）
+- `BulletinVisitorCounter` 新增 `trackVisitorContext()`：
+  - **裝置統計**：UA 偵測 desktop/mobile/tablet → 寫入 `visitorDeviceStats`
+  - **來源分類**：referrer 解析 search/social/email/external/direct → `visitorReferrerStats`
+  - **地理定位**：HTTPS only — `ipapi.co` 為主、`ipinfo.io` fallback（皆 3 秒 timeout）
+  - 台灣城市英中映射（Taipei → 台北市 等），寫入 `visitorGeoStats`
+- 修正：避免 GH Pages（HTTPS）載入 HTTP 端點被瀏覽器擋掉
+
+### 🖼️ #23 統一 OG 圖模板
+- 新增 `scripts/generate-unified-og.mjs`：1200×630 cork 風 OG 圖批次生成器
+  - CLI：`node scripts/generate-unified-og.mjs [id|id1,id2,...]`
+  - 中央便利貼依分類自動換色（7 類）+ 立體圖釘
+  - **左側嵌入工具實際預覽圖（白邊拍立得框）**，取代 emoji（避免 Noto Sans TC 缺字 → 豆腐方塊）
+  - 底部署名列：阿凱頭像 + 「教育科技創新專區」+ URL 膠囊
+- **token-aware 換行**：`Pro` / `(Pro版)` / `EXPO` 等英數塊不再被切半，括號群組整段換行
+- 全 84 張 OG 圖一次重生 + 自動更新 `tools.json` 的 `ogPreviewUrl`
+
+### 🔥 #20 排行榜急上升徽章
+- `useToolClickStats.ts` 新增 7 日 delta 機制：
+  - 每次 onSnapshot 拉到新資料時，自動寫入「今日累計」快照到 `toolStatsSnapshots`
+  - 滾動保留最近 8 天快照（今天 + 7 天前），自動裁切舊資料
+  - 公開 `deltas7d: Map<id, number>`（今日累計 − 7 天前累計）+ `hasDeltaHistory` 旗標
+- `BulletinLeaderboard.tsx`：
+  - **金 / 銀 / 銅膠帶徽章**（前 3 名）：斜貼右上角，文字「🥇 冠軍 / 🥈 亞軍 / 🥉 季軍」
+  - **🔥 急上升徽章**：標記 7 日新增點擊最多的工具（≥3 點擊才顯示），左上角橘紅漸層 chip + 光暈
+  - 非 #1 急上升者：點擊數欄位旁加上「+N/週」小字提示
+
+### 📅 #7 儀表板日期篩選
+- 新增 `client/src/components/admin/DateRangePicker.tsx`：cork 風日期範圍選擇器
+  - 6 個快速選項：今天 / 最近 7、14、30 天 / 本月 / 上月
+  - 自訂範圍：兩個 `<input type="date">` + 「套用」按鈕
+  - 外部點擊自動關閉、active preset 高亮為橄欖綠
+- `AnalyticsDashboard.tsx` 全面接入：
+  - 4 張統計便利貼改用範圍計算：總訪問量 / 期間流量 / 期間日均 / 期間單日峰值
+  - 期間流量自動 vs.「前一段同等長度」比較 → 動態顯示 +/-% 與紅綠箭頭
+  - 趨勢線圖標題、CSV / JSON 匯出檔均寫入選定範圍
+  - 篩選列固定在頭部（cork 卡片 + 顯示天數膠囊）
+
+### 🧹 內部
+- 版本號 3.6.2 → 3.6.3，SW cacheVersion 同步更新
+- TypeScript 嚴格模式：全綠（含 4 個新檔）
+- Vite 生產建置：通過
+
+---
+
 ## [3.6.2] - 2026-04-25 — 後台 cork 化 + 智慧排序 + 新工具
 ### ✨ 新增工具
 - **#84 會議記錄自動產出平台 (Pro 版)**：AI 轉寫 + 自動摘要 + Word/PDF 匯出

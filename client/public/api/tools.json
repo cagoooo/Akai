@@ -12,7 +12,8 @@
       "即時通訊",
       "問答",
       "支援"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_1.webp"
   },
   {
     "id": 2,
@@ -27,7 +28,8 @@
       "協調",
       "校務",
       "管理"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_2.webp"
   },
   {
     "id": 3,
@@ -43,7 +45,8 @@
       "課堂",
       "即時",
       "民主"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_3.webp"
   },
   {
     "id": 4,
@@ -59,7 +62,8 @@
       "評估",
       "生成",
       "AI"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_4.webp"
   },
   {
     "id": 5,
@@ -75,7 +79,8 @@
       "訂餐",
       "校園",
       "便利"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_5.webp"
   },
   {
     "id": 6,
@@ -91,7 +96,8 @@
       "配對",
       "消消樂",
       "自然"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_6.webp"
   },
   {
     "id": 7,
@@ -107,7 +113,8 @@
       "LINE",
       "正向",
       "學生"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_7.webp"
   },
   {
     "id": 8,
@@ -123,7 +130,8 @@
       "課綱",
       "資源",
       "分享"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_8.webp"
   },
   {
     "id": 9,
@@ -139,7 +147,8 @@
       "冒險",
       "跳躍",
       "經典"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_9.webp"
   },
   {
     "id": 10,
@@ -155,7 +164,8 @@
       "導師",
       "學生",
       "事務"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_10.webp"
   },
   {
     "id": 11,
@@ -171,7 +181,8 @@
       "即時",
       "教學",
       "問答"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_11.webp"
   },
   {
     "id": 12,
@@ -187,7 +198,8 @@
       "理解",
       "資源",
       "評量"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_12.webp"
   },
   {
     "id": 13,
@@ -203,7 +215,8 @@
       "靈感",
       "思維",
       "發想"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_13.webp"
   },
   {
     "id": 14,
@@ -219,7 +232,8 @@
       "圖片",
       "問候",
       "詩詞"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_14.webp"
   },
   {
     "id": 15,
@@ -235,7 +249,8 @@
       "社群",
       "記錄",
       "產出"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_15.webp"
   },
   {
     "id": 16,
@@ -251,7 +266,8 @@
       "家長",
       "聯絡",
       "通知"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_16.webp"
   },
   {
     "id": 17,
@@ -267,7 +283,8 @@
       "點名",
       "簡單",
       "快速"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_17.webp"
   },
   {
     "id": 18,
@@ -283,7 +300,8 @@
       "大量",
       "分組",
       "進階"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_18.webp"
   },
   {
     "id": 19,
@@ -299,7 +317,8 @@
       "機器人",
       "自訂",
       "智能"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_19.webp"
   },
   {
     "id": 20,
@@ -315,7 +334,8 @@
       "練習",
       "鍵盤",
       "速度"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_20.webp"
   },
   {
     "id": 21,
@@ -331,7 +351,8 @@
       "練習",
       "注音",
       "輸入法"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_21.webp"
   },
   {
     "id": 22,
@@ -347,7 +368,8 @@
       "中文",
       "學習",
       "國語"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_22.webp"
   },
   {
     "id": 23,
@@ -363,7 +385,8 @@
       "正向",
       "學生",
       "網頁版"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_23.webp"
   },
   {
     "id": 24,
@@ -379,7 +402,8 @@
       "教師",
       "報告",
       "行政"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_24.webp"
   },
   {
     "id": 25,
@@ -395,7 +419,8 @@
       "口說",
       "培訓",
       "比賽"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_25.webp"
   },
   {
     "id": 26,
@@ -411,7 +436,8 @@
       "九九",
       "練習",
       "計算"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_26.webp"
   },
   {
     "id": 27,
@@ -427,7 +453,8 @@
       "許願",
       "小工具",
       "瑞士刀"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_27.webp"
   },
   {
     "id": 28,
@@ -443,7 +470,8 @@
       "跳躍",
       "平台",
       "經典"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_28.webp"
   },
   {
     "id": 29,
@@ -459,7 +487,8 @@
       "太空",
       "行星",
       "自然"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_29.webp"
   },
   {
     "id": 30,
@@ -475,7 +504,8 @@
       "趣味",
       "休閒",
       "多款"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_30.webp"
   },
   {
     "id": 31,
@@ -491,7 +521,8 @@
       "互動",
       "趣味",
       "獎品"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_31.webp"
   },
   {
     "id": 32,
@@ -507,7 +538,8 @@
       "碰撞",
       "互動",
       "觸控"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_32.webp"
   },
   {
     "id": 33,
@@ -523,7 +555,8 @@
       "互動",
       "音樂",
       "波形"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_33.webp"
   },
   {
     "id": 34,
@@ -539,7 +572,8 @@
       "聲音",
       "互動",
       "多媒體"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_34.webp"
   },
   {
     "id": 35,
@@ -555,7 +589,8 @@
       "繪畫",
       "創作",
       "藝術"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_35.webp"
   },
   {
     "id": 36,
@@ -571,7 +606,8 @@
       "經典",
       "休閒",
       "懷舊"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_36.webp"
   },
   {
     "id": 37,
@@ -587,7 +623,8 @@
       "視覺化",
       "360",
       "互動"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_37.webp"
   },
   {
     "id": 38,
@@ -603,7 +640,8 @@
       "控制",
       "互動",
       "麥克風"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_38.webp"
   },
   {
     "id": 39,
@@ -619,7 +657,8 @@
       "心靈感應",
       "神奇",
       "表演"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_39.webp"
   },
   {
     "id": 40,
@@ -635,7 +674,8 @@
       "行政",
       "宣導",
       "動態牆"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_40.webp"
   },
   {
     "id": 41,
@@ -651,7 +691,8 @@
       "點歌",
       "彈唱",
       "歌曲"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_41.webp"
   },
   {
     "id": 42,
@@ -667,7 +708,8 @@
       "模糊",
       "臉部",
       "保護"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_42.webp"
   },
   {
     "id": 43,
@@ -683,7 +725,8 @@
       "課程計畫",
       "Markdown",
       "PDF"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_43.webp"
   },
   {
     "id": 44,
@@ -699,7 +742,8 @@
       "減法",
       "練習",
       "基礎運算"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_44.webp"
   },
   {
     "id": 45,
@@ -716,7 +760,8 @@
       "腦力激盪",
       "視覺化",
       "課堂互動"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_45.webp"
   },
   {
     "id": 46,
@@ -733,7 +778,8 @@
       "管理",
       "行政",
       "場地"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_46.webp"
   },
   {
     "id": 47,
@@ -750,7 +796,8 @@
       "無紙化",
       "安全",
       "效率"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_47.webp"
   },
   {
     "id": 48,
@@ -767,7 +814,8 @@
       "資料收集",
       "效率",
       "智慧化"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_48.webp"
   },
   {
     "id": 49,
@@ -784,7 +832,8 @@
       "評量",
       "行政",
       "表單"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_49.webp"
   },
   {
     "id": 50,
@@ -801,7 +850,8 @@
       "探索",
       "樂園",
       "互動"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_50.webp"
   },
   {
     "id": 51,
@@ -818,7 +868,8 @@
       "課表",
       "行政",
       "效率"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_51.webp"
   },
   {
     "id": 52,
@@ -835,7 +886,8 @@
       "線上選課",
       "課程選擇",
       "互動體驗"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_52.webp"
   },
   {
     "id": 53,
@@ -852,7 +904,8 @@
       "修繕",
       "管理",
       "效率"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_53.webp"
   },
   {
     "id": 54,
@@ -869,7 +922,8 @@
       "記憶訓練",
       "師生互動",
       "教學輔助"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_54.webp"
   },
   {
     "id": 55,
@@ -886,7 +940,8 @@
       "國語",
       "幼童",
       "拼音"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_55.webp"
   },
   {
     "id": 56,
@@ -904,7 +959,8 @@
       "遊戲",
       "節慶",
       "教育"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_56.webp"
   },
   {
     "id": 57,
@@ -921,7 +977,8 @@
       "轉盤",
       "美食",
       "選擇障礙"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_57.webp"
   },
   {
     "id": 58,
@@ -940,7 +997,8 @@
       "數位轉型",
       "效率工具",
       "108課綱"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_58.webp"
   },
   {
     "id": 59,
@@ -958,7 +1016,8 @@
       "24/7",
       "行政自動化",
       "教育科技"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_59.webp"
   },
   {
     "id": 60,
@@ -978,7 +1037,8 @@
       "雲端同步",
       "WebGL",
       "互動體驗"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_60.webp"
   },
   {
     "id": 61,
@@ -998,7 +1058,8 @@
       "遊戲",
       "輸入法",
       "教育"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_61.webp"
   },
   {
     "id": 62,
@@ -1019,7 +1080,8 @@
       "教育宣導",
       "家長日",
       "親師溝通"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_62.webp"
   },
   {
     "id": 63,
@@ -1038,7 +1100,8 @@
       "互動遊戲",
       "密碼安全",
       "趣味學習"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_63.webp"
   },
   {
     "id": 64,
@@ -1056,7 +1119,8 @@
       "節奏",
       "樂理",
       "互動學習"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_64.webp"
   },
   {
     "id": 65,
@@ -1072,7 +1136,8 @@
       "教學",
       "Canva",
       "Grok"
-    ]
+    ],
+    "ogPreviewUrl": "/previews/og/tool_65.webp"
   },
   {
     "id": 66,
@@ -1083,7 +1148,7 @@
     "icon": "Plane",
     "category": "teaching",
     "previewUrl": "/previews/tool_66.webp",
-    "ogPreviewUrl": "/previews/tool_66_og.webp",
+    "ogPreviewUrl": "/previews/og/tool_66.webp",
     "tags": [
       "Sora AI",
       "旅遊記錄",
@@ -1103,7 +1168,7 @@
     "icon": "MicVocal",
     "category": "language",
     "previewUrl": "/previews/tool_67.webp",
-    "ogPreviewUrl": "/previews/tool_67_og.webp",
+    "ogPreviewUrl": "/previews/og/tool_67.webp",
     "tags": [
       "國語演說",
       "比賽培訓",
@@ -1123,7 +1188,7 @@
     "icon": "Images",
     "category": "utilities",
     "previewUrl": "/previews/tool_68.webp",
-    "ogPreviewUrl": "/previews/tool_68_og.webp",
+    "ogPreviewUrl": "/previews/og/tool_68.webp",
     "tags": [
       "手作課程",
       "作品上傳",
@@ -1143,7 +1208,7 @@
     "icon": "Gamepad2",
     "category": "games",
     "previewUrl": "/previews/tool_69.webp",
-    "ogPreviewUrl": "/previews/tool_69_og.webp",
+    "ogPreviewUrl": "/previews/og/tool_69.webp",
     "tags": [
       "遊戲",
       "猴子",
@@ -1164,7 +1229,7 @@
     "icon": "Keyboard",
     "category": "language",
     "previewUrl": "/previews/tool_70.webp",
-    "ogPreviewUrl": "/previews/tool_70_og.webp",
+    "ogPreviewUrl": "/previews/og/tool_70.webp",
     "tags": [
       "打字",
       "中文",
@@ -1185,7 +1250,7 @@
     "icon": "SpellCheck",
     "category": "language",
     "previewUrl": "/previews/tool_71.webp",
-    "ogPreviewUrl": "/previews/tool_71_og.webp",
+    "ogPreviewUrl": "/previews/og/tool_71.webp",
     "tags": [
       "成語",
       "填空",
@@ -1206,7 +1271,7 @@
     "icon": "Calculator",
     "category": "utilities",
     "previewUrl": "/previews/tool_72.webp",
-    "ogPreviewUrl": "/previews/tool_72_og.webp",
+    "ogPreviewUrl": "/previews/og/tool_72.webp",
     "tags": [
       "動支單",
       "黏存單",
@@ -1226,7 +1291,7 @@
     "icon": "LineChart",
     "category": "utilities",
     "previewUrl": "/previews/tool_73.webp",
-    "ogPreviewUrl": "/previews/tool_73_og.webp",
+    "ogPreviewUrl": "/previews/og/tool_73.webp",
     "tags": [
       "成績",
       "篩選",
@@ -1246,7 +1311,7 @@
     "icon": "Map",
     "category": "communication",
     "previewUrl": "/previews/tool_74.webp",
-    "ogPreviewUrl": "/previews/tool_74_og.webp",
+    "ogPreviewUrl": "/previews/og/tool_74.webp",
     "tags": [
       "2026",
       "親職日",
@@ -1266,7 +1331,7 @@
     "icon": "Images",
     "category": "utilities",
     "previewUrl": "/previews/tool_75.webp",
-    "ogPreviewUrl": "/previews/tool_75_og.webp",
+    "ogPreviewUrl": "/previews/og/tool_75.webp",
     "tags": [
       "轉檔",
       "影片轉圖",
@@ -1286,7 +1351,7 @@
     "icon": "Presentation",
     "category": "teaching",
     "previewUrl": "/previews/tool_76.webp",
-    "ogPreviewUrl": "/previews/tool_76_og.webp",
+    "ogPreviewUrl": "/previews/og/tool_76.webp",
     "tags": [
       "簡報",
       "播放器",
@@ -1306,7 +1371,7 @@
     "icon": "Globe",
     "category": "language",
     "previewUrl": "/previews/tool_77.webp",
-    "ogPreviewUrl": "/previews/tool_77_og.webp",
+    "ogPreviewUrl": "/previews/og/tool_77.webp",
     "tags": [
       "雙語教育",
       "英語學習",
@@ -1328,7 +1393,7 @@
     "icon": "ClipboardCheck",
     "category": "utilities",
     "previewUrl": "/previews/tool_78.webp",
-    "ogPreviewUrl": "/previews/tool_78_og.webp",
+    "ogPreviewUrl": "/previews/og/tool_78.webp",
     "tags": [
       "課程計畫",
       "AI審查",
@@ -1349,7 +1414,7 @@
     "icon": "Languages",
     "category": "language",
     "previewUrl": "/previews/tool_79.webp",
-    "ogPreviewUrl": "/previews/tool_79_og.webp",
+    "ogPreviewUrl": "/previews/og/tool_79.webp",
     "tags": [
       "漢語",
       "文字遊戲",
@@ -1370,7 +1435,7 @@
     "icon": "ClipboardCheck",
     "category": "utilities",
     "previewUrl": "/previews/tool_80.webp",
-    "ogPreviewUrl": "/previews/tool_80_og.webp",
+    "ogPreviewUrl": "/previews/og/tool_80.webp",
     "tags": [
       "會議記錄",
       "行政報告",
@@ -1389,7 +1454,7 @@
     "icon": "LayoutDashboard",
     "category": "teaching",
     "previewUrl": "/previews/tool_81.webp",
-    "ogPreviewUrl": "/previews/tool_81_og.webp",
+    "ogPreviewUrl": "/previews/og/tool_81.webp",
     "tags": [
       "資訊科技",
       "教學入口",
@@ -1408,7 +1473,7 @@
     "icon": "ClipboardList",
     "category": "utilities",
     "previewUrl": "/previews/tool_82.webp",
-    "ogPreviewUrl": "/previews/tool_82_og.webp",
+    "ogPreviewUrl": "/previews/og/tool_82.webp",
     "tags": [
       "設備盤點",
       "資產管理",
@@ -1429,7 +1494,7 @@
     "icon": "Languages",
     "category": "utilities",
     "previewUrl": "/previews/tool_83.webp",
-    "ogPreviewUrl": "/previews/tool_83_og.webp",
+    "ogPreviewUrl": "/previews/og/tool_83.webp",
     "tags": [
       "本土語",
       "分班配對",
@@ -1451,7 +1516,7 @@
     "icon": "ClipboardCheck",
     "category": "utilities",
     "previewUrl": "/previews/tool_84.webp",
-    "ogPreviewUrl": "/previews/tool_84_og.webp",
+    "ogPreviewUrl": "/previews/og/tool_84.webp",
     "tags": [
       "會議記錄",
       "AI 轉寫",

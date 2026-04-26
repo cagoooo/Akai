@@ -24,6 +24,98 @@ interface VisitorStats {
   lastVisitAt?: string | null;
 }
 
+/**
+ * 追蹤訪客 context（地理 / 裝置類型 / 來源），全部寫入 localStorage
+ * 給管理後台讀取統計使用。
+ * 全程使用 HTTPS 端點（ipapi.co 免費版無需 token，每天 1000 req 額度足夠）
+ */
+async function trackVisitorContext() {
+  // 1. 裝置類型
+  try {
+    const ua = navigator.userAgent;
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+    const isTablet = /iPad|Android/i.test(ua) && !/Mobile/i.test(ua);
+    const stats = JSON.parse(localStorage.getItem('visitorDeviceStats') || '{"desktop":0,"mobile":0,"tablet":0}');
+    if (isTablet) stats.tablet = (stats.tablet || 0) + 1;
+    else if (isMobile) stats.mobile = (stats.mobile || 0) + 1;
+    else stats.desktop = (stats.desktop || 0) + 1;
+    localStorage.setItem('visitorDeviceStats', JSON.stringify(stats));
+  } catch { /* ignore */ }
+
+  // 2. 來源 Referrer
+  try {
+    const referrer = document.referrer;
+    if (referrer) {
+      const stats = JSON.parse(
+        localStorage.getItem('visitorReferrerStats') ||
+          '{"direct":0,"search":0,"social":0,"email":0,"external":0}'
+      );
+      const hostname = new URL(referrer).hostname.toLowerCase();
+      let source = 'external';
+      if (['google', 'bing', 'yahoo', 'baidu', 'duckduckgo'].some((s) => hostname.includes(s))) source = 'search';
+      else if (['facebook', 'twitter', 'instagram', 'line.me', 't.co'].some((s) => hostname.includes(s))) source = 'social';
+      else if (['mail.', 'gmail.'].some((s) => hostname.includes(s))) source = 'email';
+      else if (hostname === window.location.hostname) source = 'direct';
+      stats[source] = (stats[source] || 0) + 1;
+      localStorage.setItem('visitorReferrerStats', JSON.stringify(stats));
+    } else {
+      const stats = JSON.parse(
+        localStorage.getItem('visitorReferrerStats') ||
+          '{"direct":0,"search":0,"social":0,"email":0,"external":0}'
+      );
+      stats.direct = (stats.direct || 0) + 1;
+      localStorage.setItem('visitorReferrerStats', JSON.stringify(stats));
+    }
+  } catch { /* ignore */ }
+
+  // 3. 地理定位（HTTPS）
+  // 主：ipapi.co (1k/天免費，無需 token)
+  // 備：ipinfo.io (50k/月免費，無需 token)
+  try {
+    let geoData: { city?: string; region?: string; country_name?: string; country?: string } | null = null;
+    try {
+      const res = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(3000) });
+      if (res.ok) geoData = await res.json();
+    } catch { /* fallback below */ }
+
+    if (!geoData) {
+      const res2 = await fetch('https://ipinfo.io/json', { signal: AbortSignal.timeout(3000) });
+      if (res2.ok) {
+        const d = await res2.json();
+        geoData = { city: d.city, region: d.region, country_name: d.country, country: d.country };
+      }
+    }
+
+    if (geoData) {
+      const taiwanCityMap: Record<string, string> = {
+        Taipei: '台北市',
+        'New Taipei': '新北市',
+        Taichung: '台中市',
+        Kaohsiung: '高雄市',
+        Taoyuan: '桃園市',
+        Tainan: '台南市',
+        Hsinchu: '新竹',
+        Keelung: '基隆市',
+        Chiayi: '嘉義',
+        Yilan: '宜蘭',
+        Hualien: '花蓮',
+        Taitung: '台東',
+        TW: '台灣',
+        Taiwan: '台灣',
+      };
+      let location = geoData.city || geoData.region || geoData.country_name || geoData.country || '其他';
+      if (taiwanCityMap[location]) location = taiwanCityMap[location];
+
+      const stats = JSON.parse(localStorage.getItem('visitorGeoStats') || '{}');
+      stats[location] = (stats[location] || 0) + 1;
+      localStorage.setItem('visitorGeoStats', JSON.stringify(stats));
+      console.log('📍 地理定位成功 (HTTPS):', location);
+    }
+  } catch (e) {
+    console.warn('[BulletinVisitorCounter] 地理定位失敗:', e);
+  }
+}
+
 // 里程碑
 const MILESTONES = [100, 500, 1000, 2000, 5000, 10000, 50000, 100000];
 
@@ -77,6 +169,10 @@ export function BulletinVisitorCounter() {
             const { incrementVisitorCount } = await import('@/lib/firestoreService');
             await incrementVisitorCount().catch((err) =>
               console.warn('[BulletinVisitorCounter] 增量失敗:', err)
+            );
+            // 🌍 異步追蹤地理 / 裝置 / 來源（不影響主流程）
+            trackVisitorContext().catch((err) =>
+              console.warn('[BulletinVisitorCounter] context 追蹤失敗:', err)
             );
           }
         }

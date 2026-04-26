@@ -1,13 +1,45 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.2`
-- **最後更新狀態**: 後台介面 cork 化、智慧排序預設熱門、新增工具 #84「會議記錄自動產出平台」。
+- **當前版本**: `v3.6.3`
+- **最後更新狀態**: 4 個 P0 體驗優化一次到位 — IP 地理 HTTPS 升級、統一 OG 模板、排行榜急上升徽章、儀表板日期篩選。
 
 
 ## 📌 完成功能總覽
 
-### `v3.6.2` (最新 · 後台 cork 化 + 智慧排序)
+### `v3.6.3` (最新 · P0 體驗優化套餐)
+
+**🔒 #4 IP HTTPS 升級**
+- `BulletinVisitorCounter` 新增 `trackVisitorContext()`：裝置 / 來源 / 地理三類追蹤一次到位
+- 地理定位走 HTTPS：`ipapi.co` 主、`ipinfo.io` fallback（皆 3 秒 timeout）
+- 台灣城市英中映射（Taipei → 台北市 等）
+- 修正：避免 GH Pages（HTTPS）載入 HTTP 端點被瀏覽器擋掉
+
+**🖼️ #23 統一 OG 圖模板**
+- 新增 `scripts/generate-unified-og.mjs`：1200×630 cork 風 OG 圖批次生成器
+- 中央便利貼依分類自動換色（7 類）+ 立體圖釘
+- **左側嵌入工具實際預覽圖**（拍立得白邊框）→ 取代 emoji，避免 Noto Sans TC 缺字
+- token-aware 換行：`Pro` / `(Pro版)` / `EXPO` 等英數塊不會被切半
+- 全 84 張 OG 圖一次重生 + 自動更新 `tools.json` 的 `ogPreviewUrl`
+
+**🔥 #20 排行榜急上升徽章**
+- `useToolClickStats.ts` 新增 7 日 delta 機制：每天自動寫入快照、滾動保留 8 天
+- 公開 `deltas7d: Map<id, number>` + `hasDeltaHistory` 旗標
+- BulletinLeaderboard 兩種徽章：
+  - **金 / 銀 / 銅膠帶**（前 3 名）：斜貼右上角
+  - **🔥 急上升 +N**（左上角橘紅 chip + 光暈）：標記 7 日新增點擊最多者，≥3 點擊才顯示
+- 非冠軍急上升者：點擊欄位旁加「+N/週」小字提示
+
+**📅 #7 儀表板日期篩選**
+- 新增 `client/src/components/admin/DateRangePicker.tsx`：cork 風日期選擇器
+  - 6 個快速選項：今天 / 最近 7、14、30 天 / 本月 / 上月
+  - 自訂範圍：兩個 `<input type="date">` + 套用按鈕
+  - 外部點擊自動關閉、active preset 高亮為橄欖綠
+- `AnalyticsDashboard` 4 張統計便利貼全部接入：總訪問量 / 期間流量 / 期間日均 / 期間單日峰值
+- 期間流量自動 vs.「前一段同等長度」比較 → 動態顯示 +/-% 與紅綠箭頭
+- 趨勢線標題、CSV / JSON 匯出檔均寫入選定範圍
+
+### `v3.6.2` (後台 cork 化 + 智慧排序)
 
 **🆕 新增工具**
 - **#84 會議記錄自動產出平台 (Pro 版)**：AI 轉寫 + 摘要 + Word/PDF 匯出
@@ -418,12 +450,9 @@
 - **預期效益**：首次訪問流量節省 50~70%，快速滾動體感更順
 - **難度**：⭐⭐ 中等 ｜ **工時**：1 天
 
-#### 4. 📊 IP 地理定位 HTTPS 升級
-- **現況**：`VisitorCounter.tsx` 仍用 `ip-api.com`（僅 HTTP），HTTPS 站點會被瀏覽器 block。
-- **做法**：改用 `ipinfo.io`（50k/月免費）或 `ipdata.co`（1.5k/天），皆支援 HTTPS。
-- **對應檔案**：`VisitorCounter.tsx`、`BulletinVisitorCounter.tsx`
-- **預期效益**：訪客地理分布資料完整率提升
-- **難度**：⭐ 簡單 ｜ **工時**：半天
+#### 4. 📊 IP 地理定位 HTTPS 升級 ✅ 已完成（v3.6.3）
+- ~~`VisitorCounter.tsx` 仍用 `ip-api.com`（僅 HTTP）~~ → 已改 `ipapi.co` 主 / `ipinfo.io` fallback（皆 HTTPS）
+- ~~做法：~~ → 已實作於 `BulletinVisitorCounter.trackVisitorContext()`，含裝置 / 來源 / 地理三類追蹤
 
 ---
 
@@ -450,15 +479,10 @@
 - **預期效益**：區分真正好用 vs 只是好奇，數據更可信
 - **難度**：⭐⭐ 中等 ｜ **工時**：2 天
 
-#### 7. 📅 儀表板日期範圍篩選
-- **現況**：`AnalyticsDashboard.tsx` 只顯示全時間統計，無法看特定區間趨勢。
-- **做法**：
-  - 新增 DateRangePicker（`react-day-picker` 已安裝）
-  - 依 `timestamp` 欄位篩選 Firestore 查詢
-  - 快捷選項：「最近 7 天」「本月」「上個月」「自訂範圍」
-- **對應檔案**：`AnalyticsDashboard.tsx`
-- **預期效益**：管理者可追蹤短期趨勢（新工具上線後流量變化）
-- **難度**：⭐⭐ 中等 ｜ **工時**：2 天
+#### 7. 📅 儀表板日期範圍篩選 ✅ 已完成（v3.6.3）
+- 新增 `client/src/components/admin/DateRangePicker.tsx`（cork 風自訂選擇器，無新增套件依賴）
+- 6 個快速選項：今天 / 最近 7、14、30 天 / 本月 / 上月，加自訂範圍
+- 4 張統計便利貼 + 趨勢線 + CSV/JSON 匯出全部接入
 
 #### 8. 🔍 AI 語意搜尋與 RAG 推薦
 - **現況**：`SearchBar.tsx` 純文字 `includes()` 比對，無法理解語意。
@@ -570,15 +594,10 @@
 - **預期效益**：新增工具從 5 分鐘 → 30 秒
 - **難度**：⭐⭐⭐ 較難 ｜ **工時**：3 天
 
-#### 20. 📊 排行榜「即時上升」徽章
-- **現況**：熱門排序已上線（v3.6.2），但無法看出「最近上升最快」的工具。
-- **做法**：
-  - 在 `useToolClickStats` 比對 7 天前後的點擊增幅
-  - 增幅 > 50% 的工具加上「🔥 急上升」徽章
-  - 排行榜便利貼前 3 名加金/銀/銅膠帶
-- **對應檔案**：`useToolClickStats.ts`、`BulletinLeaderboard.tsx`
-- **預期效益**：吸引使用者注意潛力工具，增加工具發現性
-- **難度**：⭐⭐ 中等 ｜ **工時**：1～2 天
+#### 20. 📊 排行榜「即時上升」徽章 ✅ 已完成（v3.6.3）
+- `useToolClickStats` 新增滾動 8 日快照 → `deltas7d` Map
+- 排行榜：前 3 名金/銀/銅膠帶 + 7 日新增最多者掛「🔥 急上升 +N」chip
+- 非冠軍急上升者：點擊欄旁加「+N/週」小字
 
 #### 21. 🎁 個人化工具推薦（基於收藏歷史）
 - **現況**：`RecommendedTools.tsx` 存在但邏輯簡單（隨機）。
@@ -601,16 +620,10 @@
 - **預期效益**：使用者黏著度大幅提升，老師持續回流
 - **難度**：⭐⭐⭐ 較難 ｜ **工時**：1 週
 
-#### 23. 🖼️ 統一工具圖生成模板（OG 圖標準化）
-- **現況**：tool_84 的圖跟其他工具圖風格不一致（有些是真實截圖、有些是手繪）。
-- **做法**：
-  - 建立 `scripts/generate-unified-og.mjs` 統一範本
-  - 所有工具的 OG 圖都改用該模板（cork 風 + 工具 emoji + 標題 + 分類膠帶）
-  - 一次性 batch 重新生成 84 張
-  - 之後新工具一律走此模板
-- **對應檔案**：新增 `scripts/generate-unified-og.mjs`
-- **預期效益**：所有工具分享預覽圖風格統一，品牌識別度大幅提升
-- **難度**：⭐⭐ 中等 ｜ **工時**：1 天
+#### 23. 🖼️ 統一工具圖生成模板（OG 圖標準化） ✅ 已完成（v3.6.3）
+- 新增 `scripts/generate-unified-og.mjs`（1200×630 cork 風 + 分類自動上色 + 拍立得預覽圖）
+- token-aware 換行，避免 `Pro` / `(Pro版)` 等英數塊被切半
+- 一次性 batch 重生 84 張 + 自動更新 `tools.json`
 
 ---
 
@@ -625,7 +638,7 @@
 | ~~ErrorBoundary 不寫 Firestore~~ | ✅ 已修復 | 寫入 `errorLogs`（v3.5.7） | `ErrorBoundary.tsx` |
 | ~~CACHE_VERSION 手動維護~~ | ✅ 已修復 | 自動 bump（v3.6.1） | `bump-sw-version.mjs` |
 | ~~雙 Footer 重複~~ | ✅ 已修復 | 整合為單一 cork 版（v3.6.1） | `App.tsx` |
-| IP 定位 HTTPS 不支援 | 🔴 高 | ip-api.com 僅 HTTP（→ P0 #4） | `VisitorCounter.tsx` |
+| ~~IP 定位 HTTPS 不支援~~ | ✅ 已修復 | 已改 ipapi.co + ipinfo.io fallback（v3.6.3） | `BulletinVisitorCounter.tsx` |
 | 儀表板假數據殘留 | 🟡 中 | `getLocalToolStats()` 讀取從未寫入的 key | `AnalyticsDashboard.tsx` |
 | 字型 subset 手動重跑 | 🟢 低 | OG 圖文字改時需手動 `npm run subset-wish-font` | `subset-wish-font.mjs` |
 | FUTURE_DEVELOPMENT.md 過時 | 🟢 低 | 仍停在 v2.25.0 | `FUTURE_DEVELOPMENT.md` |
