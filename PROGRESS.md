@@ -1,13 +1,62 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.3`
-- **最後更新狀態**: 4 個 P0 體驗優化一次到位 — IP 地理 HTTPS 升級、統一 OG 模板、排行榜急上升徽章、儀表板日期篩選。
-
+- **當前版本**: `v3.6.6`
+- **最後更新狀態**: 一週連發 4 版，徹底修好統計準確性 — 加上評論 LINE 通知、匿名認證、全站訪客追蹤、本地歷史回填工具。
 
 ## 📌 完成功能總覽
 
-### `v3.6.3` (最新 · P0 體驗優化套餐)
+### `v3.6.6` (最新 · 本地歷史回填工具)
+**🗃️ BackfillLocalAnalyticsBar 元件**
+- 偵測管理員 localStorage 還有未上傳的 context 時，於儀表板頂部顯示橘色提示框
+- 一鍵把本地 geo / device / referrer 三類用 `setDoc({merge: true}) + increment(N)` 合併到 Firestore
+- 防重複按按 + 強制重跑備援（含 confirm 警告）
+- 完成後變綠色「✅ 已回填」
+
+**為什麼需要**：v3.6.4 之前 context 只寫 localStorage，其他訪客的歷史已永久遺失，但管理員自己這台瀏覽器的 localStorage 還在 → 至少能救回那部分。
+
+---
+
+### `v3.6.5` (修復「訪客追蹤只在首頁觸發」隱性 bug)
+**🐛 問題**：v3.6.4 部署後，後台地理仍顯示 6（localStorage fallback），設備卻只有 1 → 代表寫入確實有跑但只有部分成功；而且後台直接造訪不會被計入。
+
+**🛠 修正**：
+- 新增 `client/src/lib/visitorTracker.ts` → `trackPageVisit()`
+  - 把節流 + ensureSignedIn + incrementVisitorCount + 三類 analytics **整套抽出**
+  - `inFlight` + `alreadyRanThisLoad` 雙重 guard，同 SPA load 內絕不重複
+  - geo API 全失敗時改寫 `'unknown'` key，避免 server geoStats 永遠空著
+- `App.tsx` 開機 800ms 後呼叫 `trackPageVisit()`（取代舊單純 ensureSignedIn）
+- `BulletinVisitorCounter` 完全瘦身為純顯示元件
+- 結果：不論落地頁是 `/`、`/admin`、`/tool/:id`、`/wish` 都會觸發完整追蹤
+
+---
+
+### `v3.6.4` (統計準確性大修補三連擊)
+**🔔 評論 LINE 通知修復**
+- 問題：使用者提交工具評論成功，但管理員沒收到 LINE 通知
+- 根因：`functions/src/index.ts` 只有 `onWishCreated`（許願池），`toolReviews` 完全沒對應監聽函式
+- 修正：新增 `onReviewCreated` Cloud Function（cork 橄欖綠卡片 + 教師頭像 + 「打開工具頁面」按鈕）
+- 抽出 `pushFlexToAdmin()` 共用 helper，wish 與 review 兩個 trigger 共用
+- 評論文件新增 `toolTitle` 欄位（從 ReviewForm/ReviewList/ToolDetail 透傳）
+- Cloud Functions 已部署 ✅
+
+**📊 儀表板地理/設備/來源「只看到 6 筆」修復**
+- 問題：總訪問量 1,218 但訪客 context 只顯示 6 筆 — 因為這三類資料只寫到每位訪客自己的 localStorage
+- 修正（雙寫策略）：
+  - `BulletinVisitorCounter.trackVisitorContext()` 新增 `incrementServerStat()` 寫入 Firestore `analytics/visitorContext`
+  - `AnalyticsDashboard` 訂閱 `analytics/visitorContext`，三個 getter 改為「優先 Firestore → 本地 fallback → 示意數據」
+  - `firestore.rules` 新增 `analytics/{docId}` 規則 + 已部署 ✅
+
+**🔐 匿名認證啟用：未登入訪客也能被計入統計**
+- 問題：rules 要求 `request.auth != null`，未 Google 登入的訪客寫入失敗 → totalVisits 1,218 全是登入用戶
+- 修正：
+  - `authService.ts` 新增 `ensureSignedIn()` + `markSignedOutThisSession()`
+  - `useAuth.isAuthenticated` 改為 `!!user && !user.isAnonymous`（匿名視為未登入，UI 仍提示登入才能評論）
+  - 透過 Identity Toolkit Admin API 自動啟用 Firebase Anonymous Auth ✅
+
+---
+
+### `v3.6.3` (P0 體驗優化套餐)
 
 **🔒 #4 IP HTTPS 升級**
 - `BulletinVisitorCounter` 新增 `trackVisitorContext()`：裝置 / 來源 / 地理三類追蹤一次到位
@@ -627,6 +676,147 @@
 
 ---
 
+### 🆕 v3.6.6 後新提案（從這次資料遺失事件學到的教訓）
+
+#### 24. 📸 Cloud Function 排程：每日快照 analytics 與 toolUsageStats（救命級別）
+- **背景**：上次差點再次遇到資料遺失。雖然 Firestore 本身穩定，但人為失誤（誤刪 doc、規則改錯）或 Firebase 災難都可能讓全站統計歸零。
+- **做法**：
+  - 用 `onSchedule('every day 03:00')` 定時觸發
+  - 把 `visitorStats/global` + `analytics/visitorContext` + 全部 `toolUsageStats` 文件序列化成 JSON
+  - 寫到 `analyticsSnapshots/{YYYY-MM-DD}` 文件（最多保留 90 天）
+  - 同時提供「📦 還原快照」按鈕（後台 admin 才看得到）
+- **進階**：每月一次完整匯出到 Cloud Storage（Firestore Daily Backup 的精簡版）
+- **對應檔案**：新增 `functions/src/dailySnapshot.ts`、`AnalyticsDashboard.tsx`
+- **預期效益**：再也不會丟資料、可以畫「歷史回溯曲線」（每張快照都是一個資料點）
+- **難度**：⭐⭐ 中等 ｜ **工時**：2 天 ｜ **優先度**：🔴 強烈建議優先做
+
+#### 25. 🧪 工具點擊也用 dailyClicks 細分（與儀表板日期 picker 連動）
+- **背景**：`toolUsageStats/{id}.totalClicks` 只有「累計總和」，無法回答「2026-04-15 這天哪個工具最熱」。儀表板日期 picker 已上線但工具圖表還是看全期。
+- **做法**：
+  - Firestore schema 改為 `toolUsageStats/{id}` 多一個 map 欄位 `dailyClicks: { 'YYYY-MM-DD': N }`
+  - `incrementToolClick` Cloud Function 同時 `increment(1)` 累計與當日
+  - `useToolClickStats` 公開 `dailyClicksById`（與 deltas7d 同等地位）
+  - `AnalyticsDashboard` 工具 BarChart 接入日期範圍 → 顯示「該範圍內」的點擊
+- **進階**：90 天前的 dailyClicks 自動裁切（同 30-day rolling window）
+- **對應檔案**：`functions/src/index.ts` (incrementToolClick)、`useToolClickStats.ts`、`AnalyticsDashboard.tsx`
+- **預期效益**：日期 picker 終於能影響工具圖表；可看「某天 LINE 推播後哪個工具暴增」
+- **難度**：⭐⭐⭐ 較難 ｜ **工時**：3 天
+
+#### 26. 🤖 LINE Bot 雙向互動（管理員直接在 LINE 回覆評論）
+- **背景**：`onReviewCreated` 已能推播評論到 LINE，但管理員只能看，要回應還得登入後台。如果直接在 LINE 上「回覆此評論」會超方便。
+- **做法**：
+  - 啟用 LINE Webhook（`messaging-api/webhook` Cloud Function）
+  - LINE Flex 卡片底部新增 `postback` 按鈕：「✉️ 回覆」
+  - 管理員按下 → LINE 跳出輸入框 → 文字送到 webhook → 寫入 `toolReviews/{id}/replies/{replyId}`
+  - 前端 `ReviewItem` 顯示「🌟 阿凱老師回覆：」
+- **進階**：「⭐ 標記重要」、「🚫 隱藏」按鈕直接在 LINE 操作
+- **對應檔案**：新增 `functions/src/lineWebhook.ts`、`ReviewItem.tsx`
+- **預期效益**：教師回覆速度從「打開電腦登後台」→「LINE 隨手回」
+- **難度**：⭐⭐⭐⭐ 困難 ｜ **工時**：1 週
+
+#### 27. 🎯 收藏與「最近使用」跨裝置同步（基於匿名 uid）
+- **背景**：v3.6.4 啟用匿名認證後，每位訪客都有穩定 uid（存在 IndexedDB），這是免費的「使用者識別」。目前收藏／最近使用還是純 localStorage，換裝置就消失。
+- **做法**：
+  - 新增 Firestore `userPreferences/{uid}` 文件
+  - `useFavorites` hook 改為「先讀 localStorage 即時顯示 → 背景同步 Firestore → onSnapshot 推回」
+  - `useRecentTools` 同模式
+  - 規則：`allow read, write: if request.auth.uid == userId`
+- **限制說明**：匿名 uid 與裝置綁定（清快取會失去），但同一台裝置內跨次造訪都穩定
+- **對應檔案**：`useFavorites.ts`、`useRecentTools.ts`、`firestore.rules`
+- **預期效益**：升級匿名認證的「免費收益」之一，讓收藏更可靠
+- **難度**：⭐⭐ 中等 ｜ **工時**：2 天
+
+#### 28. 🚨 Sentry 整合（錯誤監控 + 效能監控）
+- **背景**：上次「設備只有 1 筆」這種隱性 bug，要靠你眼尖才發現。如果有 Sentry，console.warn 全部會被收集，類似錯誤暴增時自動告警。
+- **做法**：
+  - `npm i @sentry/react`，在 `main.tsx` 初始化
+  - 設 `tracesSampleRate: 0.1` 跑 performance 抽樣
+  - `ErrorBoundary` 改寫：除了寫 Firestore `errorLogs`，也送 Sentry
+  - Source map 上傳設置（讓堆疊可讀）
+  - Sentry 免費額度：每月 5,000 errors + 10,000 transactions，足夠用
+- **進階**：Sentry Slack 整合，重大錯誤推播到 LINE
+- **對應檔案**：`main.tsx`、`ErrorBoundary.tsx`、新增 `.sentryclirc`
+- **預期效益**：再也不會「半年後才發現某個訪客瀏覽器特定情境會 crash」
+- **難度**：⭐⭐ 中等 ｜ **工時**：1 天 ｜ **優先度**：🔴 強烈建議
+
+#### 29. 📈 漏斗分析（首頁 → 工具卡 → 詳情 → 點擊外連 → 評論）
+- **背景**：現在只知道「有 1,219 訪客」「某工具被點 X 次」，但不知道從首頁到實際使用的轉換率。
+- **做法**：
+  - 在 5 個關鍵節點埋事件（寫到 Firestore `events/{evtId}` 或 GA4）：
+    - `home_view`、`tool_card_click`、`tool_detail_view`、`tool_external_open`、`review_submit`
+  - 後台新增「漏斗」分頁：5 階段 funnel chart + 各階段 conversion rate
+  - 每個工具還可以拉「個別漏斗」看哪個工具卡漏接最多
+- **資料量考量**：每天 5,000+ 寫入估算約 0.05 美金/月，可控
+- **對應檔案**：新增 `lib/analytics/events.ts`、`AnalyticsDashboard.tsx` 新分頁
+- **預期效益**：找出「點了卡卻沒進詳情」「進了詳情卻沒點外連」的卡點工具
+- **難度**：⭐⭐⭐ 較難 ｜ **工時**：1 週
+
+#### 30. 🔢 真實留存指標 DAU / WAU / MAU
+- **背景**：總訪問量是累計，不能反映「最近活躍」。教育平台尤其重要：學期初 vs 寒假可能差 10 倍。
+- **做法**：
+  - 利用既有匿名 uid，每次造訪寫 `userActivity/{uid}/{YYYY-MM-DD}` 文件（empty body）
+  - Cloud Function `onSchedule('0 4 * * *')` 每日清晨計算前一日：
+    - DAU = 昨天 unique uid 數
+    - WAU = 過去 7 天 unique uid 數
+    - MAU = 過去 30 天 unique uid 數
+  - 寫到 `analytics/retention` 文件，後台讀取顯示
+- **進階**：留存熱力圖（cohort retention chart） — 第 N 天回流率
+- **對應檔案**：新增 `functions/src/computeRetention.ts`、`AnalyticsDashboard.tsx`
+- **預期效益**：能跟學校報告「上學期 MAU 800 vs 這學期 1,200，成長 50%」
+- **難度**：⭐⭐⭐ 較難 ｜ **工時**：3 天
+
+#### 31. 🛡️ 評論垃圾話/廣告自動過濾（既然 LINE 通知已上線）
+- **背景**：v3.6.4 起每則評論都推 LINE，將來如有人灌水或貼廣告，會被洗版。趁人少趕快加防護。
+- **做法**：
+  - `onReviewCreated` 觸發時先呼叫 Gemini API 做四分類：
+    - `legit`、`spam`、`offensive`、`adult`
+  - 非 `legit` 的：寫入 `reviewsModeration/{id}` 待審，並先 hide（前端不顯示）
+  - LINE 通知改為「⚠️ 待審：可能是 spam」+ 「✅ 通過 / ❌ 拒絕」按鈕（接 Webhook）
+  - 連續 24h 同一 uid 投 5 則 → 自動暫停其評論能力（寫入 `bannedUsers`）
+- **對應檔案**：`functions/src/index.ts`、`firestore.rules`、`ReviewList.tsx`
+- **預期效益**：先發制人 — 在垃圾話成為問題前先治理
+- **難度**：⭐⭐⭐ 較難 ｜ **工時**：3 天
+
+#### 32. 🎨 拖拉式自定義儀表板小工具（Widget Customization）
+- **背景**：後台已是 cork 風便利貼，但版面寫死。不同管理員關心不同數字（你關心評論，校長關心訪問量）。
+- **做法**：
+  - 把每張 StickyStatCard 變成可拖拉 widget（用 `@dnd-kit/sortable`，2KB gzip）
+  - 提供 widget palette：訪問量 / 流量 / 評論待審數 / 工具點擊 TOP / 急上升 / 自訂 Firestore 查詢
+  - 排版方案存到 `userPreferences/{uid}.dashboardLayout`
+- **進階**：multi-dashboard（教學主任的儀表板 vs 資訊組長的儀表板）
+- **對應檔案**：`AnalyticsDashboard.tsx` 大重構、新增 `lib/dashboardWidgets.ts`
+- **預期效益**：每位管理員能聚焦自己的指標，不被無關數字干擾
+- **難度**：⭐⭐⭐⭐ 困難 ｜ **工時**：1 週
+
+#### 33. 🌃 智慧通知摘要（Daily Digest）取代洗版
+- **背景**：評論 + 許願池兩個 trigger 都會即時推 LINE，活躍時段可能訊息過密。
+- **做法**：
+  - 環境變數 `NOTIFICATION_MODE=instant|daily`
+  - `daily` 模式時改寫 `notificationsQueue/{id}` 文件（不立即推送）
+  - 排程 Cloud Function 每天 18:00 把當日所有事件組成一張「日報」Flex 卡片：
+    - 「今日評論 3 則 / 平均 4.5 ⭐」
+    - 「許願池 1 則新建議」
+    - 「最熱工具 #84 +25 點擊」
+  - 但「⭐ 1 星評分」「🚨 spam 警報」等仍走即時通道
+- **對應檔案**：`functions/src/dailyDigest.ts`、`onWishCreated/onReviewCreated` 改寫
+- **預期效益**：訊息少 80%，但更有結構；管理者每天 18:00 看一次就懂全局
+- **難度**：⭐⭐⭐ 較難 ｜ **工時**：3 天
+
+#### 34. 📦 一鍵新工具產生器（CLI + AI 描述生成）— 強化版 #19
+- **背景**：每次新增工具的流程現在是：手寫 generate-tool-XX.mjs → 跑生成圖 → 跑 OG 圖 → 改 tools.json → commit。整套流程要 5 分鐘以上。
+- **做法**：
+  - `npm run new-tool`（用 `prompts` 套件做互動 CLI）
+  - 提示輸入：標題、URL、分類、標籤
+  - **自動**：呼叫 Gemini 用 URL 抓網頁內容 → 生成 description + detailedDescription
+  - **自動**：跑 puppeteer screenshot 抓網頁截圖 → 處理為 1024×1024 卡片圖
+  - **自動**：跑 generate-unified-og.mjs 生 OG 圖
+  - **自動**：append 到 tools.json + 提示 commit message
+- **對應檔案**：新增 `scripts/new-tool.mjs`
+- **預期效益**：新增工具 5 分鐘 → 30 秒
+- **難度**：⭐⭐⭐ 較難 ｜ **工時**：3 天
+
+---
+
 ### 🔧 技術債務待處理 (Tech Debt)
 
 | 問題 | 狀態 | 說明 | 對應檔案 |
@@ -639,69 +829,102 @@
 | ~~CACHE_VERSION 手動維護~~ | ✅ 已修復 | 自動 bump（v3.6.1） | `bump-sw-version.mjs` |
 | ~~雙 Footer 重複~~ | ✅ 已修復 | 整合為單一 cork 版（v3.6.1） | `App.tsx` |
 | ~~IP 定位 HTTPS 不支援~~ | ✅ 已修復 | 已改 ipapi.co + ipinfo.io fallback（v3.6.3） | `BulletinVisitorCounter.tsx` |
+| ~~評論無 LINE 通知~~ | ✅ 已修復 | 新增 onReviewCreated（v3.6.4） | `functions/src/index.ts` |
+| ~~訪客 context 只寫本地~~ | ✅ 已修復 | 雙寫到 analytics/visitorContext（v3.6.4） | `BulletinVisitorCounter.tsx` |
+| ~~未登入訪客不被計入~~ | ✅ 已修復 | 啟用匿名認證（v3.6.4） | `authService.ts` + Firebase Console |
+| ~~訪客追蹤只在首頁觸發~~ | ✅ 已修復 | 抽出 trackPageVisit（v3.6.5） | `lib/visitorTracker.ts` + `App.tsx` |
+| Node.js 20 將停用 | 🔴 高 | Firebase 警告 2026-04-30 deprecate、10-30 完全停用 | `functions/package.json` engines |
+| firebase-functions 套件版本過舊 | 🔴 高 | Firebase 警告 breaking changes upgrade | `functions/package.json` |
+| 工具點擊只有 totalClicks 沒 dailyClicks | 🟡 中 | 儀表板日期 picker 無法影響工具圖表（→ 提案 #25） | `functions/src/index.ts`、`useToolClickStats.ts` |
+| 缺少 Sentry 錯誤監控 | 🟡 中 | 隱性 bug 只能靠肉眼發現（→ 提案 #28） | `main.tsx`、`ErrorBoundary.tsx` |
+| 缺少資料快照備份 | 🟡 中 | Firestore 災難或誤刪將永久遺失（→ 提案 #24） | 新增 `functions/src/dailySnapshot.ts` |
 | 儀表板假數據殘留 | 🟡 中 | `getLocalToolStats()` 讀取從未寫入的 key | `AnalyticsDashboard.tsx` |
 | 字型 subset 手動重跑 | 🟢 低 | OG 圖文字改時需手動 `npm run subset-wish-font` | `subset-wish-font.mjs` |
 | FUTURE_DEVELOPMENT.md 過時 | 🟢 低 | 仍停在 v2.25.0 | `FUTURE_DEVELOPMENT.md` |
 
 ---
 
-### 📅 建議開發時程表（v3.6.2 之後）
+### 📅 建議開發時程表（v3.6.6 之後）
 
 ```
-第 1 週 ──────── 立即收益（小投入大回報）
-  ├─ Day 1     : #4 IP HTTPS 升級（半天）
-  ├─ Day 1     : #23 統一 OG 圖模板（半天，順便修 tool_84 風格不一致）
-  ├─ Day 2-3   : #20 排行榜「急上升」徽章 + 金銀銅膠帶
-  └─ Day 4-5   : #7 儀表板日期範圍篩選
+第 1 週 ──────── 救命級防護（不能再丟資料了）
+  ├─ Day 1     : Node.js 20→22 升級 + firebase-functions 套件升級（半天）
+  ├─ Day 2-3   : #24 Cloud Function 每日快照 + 還原按鈕（救命級！）
+  └─ Day 4-5   : #28 Sentry 錯誤監控整合（讓隱性 bug 自動現形）
 
-第 2 週 ──────── UX 升級
-  ├─ Day 6-7   : #19 自動化新工具卡片產生器 CLI
-  ├─ Day 8-10  : #2 CMD+K 指令面板
-  └─ Day 11-12 : #3 方案 A 精準懶加載
+第 2 週 ──────── 統計準確性深化（接續 v3.6.4-6 的成果）
+  ├─ Day 6-8   : #25 工具點擊 dailyClicks + 儀表板日期 picker 連動
+  ├─ Day 9-10  : #27 收藏跨裝置同步（基於匿名 uid）
+  └─ Day 11-12 : #19/#34 新工具 CLI（3 天，未來新增工具 5 分鐘 → 30 秒）
 
-第 3-4 週 ── 視覺與內容
-  ├─ Day 13-16 : #1 深色模式（全站 cork 夜間版）
-  ├─ Day 17-18 : #5 許願池 AI 語意分析
-  └─ Day 19-22 : #6 使用時長 + #21 個人化推薦
+第 3 週 ──────── LINE 通知與防護升級
+  ├─ Day 13-15 : #31 評論垃圾話自動過濾（趁人少先設防護）
+  ├─ Day 16-18 : #33 智慧通知摘要（避免洗版）
+  └─ Day 19-20 : #1 深色模式（cork 夜間版）
 
-第 5-7 週 ── AI 深度整合
-  ├─ Week 5    : #8 AI 語意搜尋（Embedding API）
-  ├─ Week 6    : #9 每工具專屬 OG 圖 + #22 每週電子報
-  └─ Week 7    : #10 AI 教案生成助手
+第 4-5 週 ── 觀察與洞察工具
+  ├─ Day 21-23 : #30 真實留存指標 DAU/WAU/MAU
+  ├─ Day 24-26 : #29 漏斗分析（5 階段 funnel）
+  └─ Week 5    : #26 LINE Bot 雙向互動（1 週大工程）
 
-第 8-10 週 ── 社群與分析
-  ├─ Week 8    : #11 教師共創平台
-  ├─ Week 9    : #12 工具聯動分析 + #13 工具收藏集
-  └─ Week 10   : #16 數據備份
+第 6-8 週 ── 成長黑客 + 內容
+  ├─ Week 6    : #5 許願池 AI 分析 + #21 個人化推薦
+  ├─ Week 7    : #22 每週電子報 + #8 AI 語意搜尋
+  └─ Week 8    : #2 CMD+K 指令面板 + #32 自定義儀表板小工具
 
-第 11-13 週 ── 平台演進
-  ├─ Week 11   : #17 E2E 測試 + Lighthouse CI
-  ├─ Week 12   : #14 多語系
-  └─ Week 13   : #15 離線教案 + #18 評論審核
+第 9-12 週 ── 平台演進
+  ├─ Week 9    : #10 AI 教案生成助手
+  ├─ Week 10   : #11 教師共創平台
+  ├─ Week 11   : #12 工具聯動 Sankey + #13 工具收藏集
+  └─ Week 12   : #17 E2E 測試 + Lighthouse CI、#14 多語系
 ```
 
 ---
 
-### 🎯 下一步建議（按 CP 值排序）
+### 🎯 下一步建議（按 CP 值與「不做會出事」程度排序）
 
-**🟢 立即就做**（半天到 2 天可見效）
-- #4 IP HTTPS 升級（半天，解決訪客資料不完整）
-- #23 統一 OG 圖模板（半天，所有工具分享圖風格一致）
-- #20 排行榜急上升徽章（1-2 天，提升工具發現性）
-- #7 儀表板日期範圍篩選（2 天，管理後台馬上升級）
+**🚨 救命級（這週就做，不能拖）**
+- 升級 Node.js 22 + firebase-functions（**4/30 deprecate**，再不升會擋部署）
+- #24 每日快照備份（**避免再次資料災難**，2 天搞定）
+- #28 Sentry 整合（**讓隱性 bug 不再要靠肉眼發現**，1 天）
 
-**🟡 短期內做**（3 天到 1 週）
-- #19 新工具 CLI（3 天，未來新增工具從 5 分鐘 → 30 秒）
-- #2 CMD+K 指令面板（2-3 天，進階使用者愛用）
-- #3 真·懶加載（1 天，首次訪問體感大幅提升）
-- #21 個人化推薦（2 天，提升使用者發現性）
-- #1 深色模式（3-4 天，cork 夜間版會超好看）
+**🟢 短期高 CP（一週內，影響直接可見）**
+- #25 工具 dailyClicks 細分 + 日期 picker 連動（3 天，後台日期 picker 終於能影響工具圖表）
+- #27 收藏跨裝置同步（2 天，免費利用匿名 auth 收益）
+- #34 一鍵新工具 CLI（3 天，未來新增工具 5 分鐘 → 30 秒）
+- #31 評論垃圾話自動過濾（3 天，現在人少先設防護）
 
-**🔵 中期重點**（需要規劃但影響大）
-- #5 許願池 AI 分析（管理時間大降）
+**🟡 中期重點（影響大，需 1-2 週規劃）**
+- #29 漏斗分析（找出哪個工具卡漏接最多）
+- #30 DAU/WAU/MAU（能跟學校報告活躍度）
+- #33 智慧通知摘要（避免 LINE 洗版）
+- #5 許願池 AI 語意分析
+- #1 深色模式（cork 夜間版會超好看）
+
+**🔵 長期重點（需規劃，影響大）**
+- #26 LINE Bot 雙向（在 LINE 直接回評論）
 - #8 AI 語意搜尋（搜尋品質躍升）
-- #22 每週電子報（黏著度大幅提升）
 - #10 AI 教案生成助手（從工具集 → 教學助手）
-- #13 工具收藏集（社群新玩法）
+- #22 每週電子報（黏著度大幅提升）
+- #11 教師共創平台
+
+**🔮 探索性（時機到再做）**
+- #14 多語系
+- #15 離線教案模式
+- #32 自定義儀表板 widget（cool but not urgent）
+
+---
+
+### 💡 「下次不要再犯」清單（從 v3.6.4-6 學到的）
+
+每次新增 Firestore 集合或寫入路徑時，問自己這 5 個問題：
+
+1. **「會被多人寫入嗎？」** → 是 → 規則必須允許 `request.auth != null`（含匿名）+ 限縮欄位
+2. **「會跨裝置查嗎？」** → 是 → 絕對不能只寫 localStorage
+3. **「掉了會怎樣？」** → 重要 → 加進每日快照清單（→ #24）
+4. **「失敗會被發現嗎？」** → 不會 → 加 Sentry（→ #28）+ console.warn（已習慣）
+5. **「需要審計流程嗎？」** → 是 → 規則寫嚴格 + Cloud Function 校驗
+
+這 5 條規則寫進 README 或 CLAUDE.md 提醒未來的自己（與 AI 協作者）。
 
 ---
