@@ -39,6 +39,16 @@ import { useToast } from "@/hooks/use-toast";
 // 取得 base path - Vite 會在建置時注入 BASE_URL
 const basePath = import.meta.env.BASE_URL || '/';
 
+// 應用啟動時自動進行匿名身份建立（讓未登入訪客也能寫 Firestore 統計）
+// 動態 import 避免影響首屏載入
+if (typeof window !== 'undefined') {
+  setTimeout(() => {
+    import('@/lib/authService').then(({ ensureSignedIn }) => {
+      ensureSignedIn().catch((err) => console.warn('[App] ensureSignedIn 失敗:', err));
+    });
+  }, 800); // 等首屏 LCP 過去再做
+}
+
 /**
  * 條件式 Footer：
  * - 在 BulletinHome (/) 隱藏全站 Footer（因該頁有自己的 cork 風格 BulletinFooter）

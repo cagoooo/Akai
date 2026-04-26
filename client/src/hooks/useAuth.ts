@@ -9,7 +9,8 @@ import {
     signInWithGoogle,
     signOut,
     subscribeToAuthState,
-    getCurrentUser
+    getCurrentUser,
+    markSignedOutThisSession,
 } from '@/lib/authService';
 import { isAuthAvailable } from '@/lib/firebase';
 
@@ -67,6 +68,8 @@ export function useAuth(): UseAuthReturn {
     const logout = useCallback(async () => {
         setLoading(true);
         try {
+            // 記住「使用者本次 session 主動登出了」，避免立即被自動匿名登入
+            markSignedOutThisSession();
             await signOut();
             setIsAdmin(false);
         } finally {
@@ -74,10 +77,13 @@ export function useAuth(): UseAuthReturn {
         }
     }, []);
 
+    // 把匿名身份視為「未登入」（UI 仍顯示登入提示，避免顯示成空帳號發表評論）
+    const isAuthenticated = !!user && !user.isAnonymous;
+
     return {
         user,
         loading,
-        isAuthenticated: !!user,
+        isAuthenticated,
         isAdmin,
         signIn,
         logout,

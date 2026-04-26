@@ -192,6 +192,13 @@ export function BulletinVisitorCounter() {
           if (shouldIncrement) {
             localStorage.setItem('lastVisitTimestamp', currentTime.toString());
             localStorage.setItem('lastVisitDate', today);
+            // 確保有身份（未登入訪客自動匿名登入）才能寫 Firestore
+            try {
+              const { ensureSignedIn } = await import('@/lib/authService');
+              await ensureSignedIn();
+            } catch (err) {
+              console.warn('[BulletinVisitorCounter] ensureSignedIn 失敗:', err);
+            }
             const { incrementVisitorCount } = await import('@/lib/firestoreService');
             await incrementVisitorCount().catch((err) =>
               console.warn('[BulletinVisitorCounter] 增量失敗:', err)
