@@ -39,6 +39,10 @@ export function useAuth(): UseAuthReturn {
         // 訂閱認證狀態變化
         const unsubscribe = subscribeToAuthState(async (authUser) => {
             setUser(authUser);
+            // 同步通知 Sentry，讓錯誤事件能關聯到 uid
+            import('@/lib/sentry').then(({ setUser: setSentryUser }) => {
+                setSentryUser(authUser ? { id: authUser.uid, isAnonymous: authUser.isAnonymous } : null);
+            }).catch(() => { /* ignore */ });
             if (authUser) {
                 try {
                     const idTokenResult = await authUser.getIdTokenResult();

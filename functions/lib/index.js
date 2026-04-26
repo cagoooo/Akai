@@ -1,12 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.incrementToolClick = exports.onReviewCreated = exports.onWishCreated = void 0;
+exports.incrementToolClick = exports.onReviewCreated = exports.onWishCreated = exports.restoreFromSnapshot = exports.dailySnapshot = void 0;
 const firestore_1 = require("firebase-functions/v2/firestore");
 const https_1 = require("firebase-functions/v2/https");
 const admin = require("firebase-admin");
 const axios_1 = require("axios");
 // 初始化 Firebase Admin
 admin.initializeApp();
+// 排程備份功能（每日快照 + 還原）
+var dailySnapshot_1 = require("./dailySnapshot");
+Object.defineProperty(exports, "dailySnapshot", { enumerable: true, get: function () { return dailySnapshot_1.dailySnapshot; } });
+Object.defineProperty(exports, "restoreFromSnapshot", { enumerable: true, get: function () { return dailySnapshot_1.restoreFromSnapshot; } });
 // 從環境變數中取得 LINE 官方帳號的 Token 與推播對象 ID
 const LINE_CHANNEL_ACCESS_TOKEN = process.env.LINE_NOTIFY_TOKEN;
 const LINE_ADMIN_USER_ID = process.env.LINE_ADMIN_USER_ID;

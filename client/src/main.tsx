@@ -5,6 +5,10 @@ import "./index.css";
 import "./styles/tokens.css";
 import "./styles/keyframes.css";
 import { registerServiceWorker } from "./serviceWorkerRegistration"; // Added import
+import { initSentry, captureException } from "./lib/sentry";
+
+// 最早初始化 Sentry（必須在 createRoot 前）
+initSentry();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -12,9 +16,10 @@ createRoot(document.getElementById("root")!).render(
   </StrictMode>,
 );
 
-// 全域非同步錯誤攔截
+// 全域非同步錯誤攔截（Sentry 已自動接 + Firestore 記錄保留作為備援）
 window.addEventListener('unhandledrejection', async (event) => {
     console.error('Unhandled promise rejection:', event.reason);
+    captureException(event.reason, { source: 'unhandledrejection' });
     try {
         const { db, isFirebaseAvailable } = await import('./lib/firebase');
         if (!isFirebaseAvailable() || !db) return;

@@ -6,6 +6,9 @@ import axios from "axios";
 // 初始化 Firebase Admin
 admin.initializeApp();
 
+// 排程備份功能（每日快照 + 還原）
+export { dailySnapshot, restoreFromSnapshot } from "./dailySnapshot";
+
 // 從環境變數中取得 LINE 官方帳號的 Token 與推播對象 ID
 const LINE_CHANNEL_ACCESS_TOKEN = process.env.LINE_NOTIFY_TOKEN;
 const LINE_ADMIN_USER_ID = process.env.LINE_ADMIN_USER_ID;

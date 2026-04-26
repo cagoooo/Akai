@@ -39,7 +39,16 @@ export class ErrorBoundary extends Component<Props, State> {
         // 記錄錯誤到控制台
         console.error('ErrorBoundary caught an error:', error, errorInfo);
 
-        // 記錄錯誤到 Firestore
+        // 記錄錯誤到 Sentry（含完整 React component stack）
+        import('@/lib/sentry').then(({ captureException }) => {
+            captureException(error, {
+                source: 'ErrorBoundary',
+                componentStack: errorInfo.componentStack?.substring(0, 2000),
+                url: window.location.href,
+            });
+        }).catch(() => { /* Sentry 載入失敗不影響其他流程 */ });
+
+        // 記錄錯誤到 Firestore（既有 fallback 通道，雙保險）
         this.logErrorToFirestore(error, errorInfo);
     }
 

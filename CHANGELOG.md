@@ -2,6 +2,49 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.7] - 2026-04-26 — 救命級防護三連擊：Node 22 + 每日快照 + Sentry
+### 🚀 1️⃣ Node.js 22 + Firebase 套件升級
+- `functions/package.json`：engines.node 20 → 22
+- `firebase-functions` ^6.0.0 → ^7.0.0
+- `firebase-admin` ^12.0.0 → ^13.0.0（v13 主版號升級）
+- `axios` ^1.6.0 → ^1.7.0
+- `@types/node` ^18.0.0 → ^22.0.0
+- 全 5 個 functions 重新部署為 Node.js 22 (2nd Gen) ✅
+- 解除 Firebase 警告：原 Node 20 將於 2026-04-30 deprecate、10-30 停用
+
+### 📦 2️⃣ #24 每日 Firestore 快照（救命級備份）
+- 新增 `functions/src/dailySnapshot.ts`：
+  - `dailySnapshot`：`onSchedule('0 3 * * *', { timeZone: 'Asia/Taipei' })` 每天 03:00 觸發
+  - 序列化 `visitorStats` / `analytics` / `toolUsageStats` / `toolRatings` 全部文件 → 寫入 `analyticsSnapshots/{YYYY-MM-DD}`
+  - 自動裁切超過 90 天的舊快照
+  - `restoreFromSnapshot`：onCall function，admin claim 限制，`dryRun` 預設為 true 避免誤觸
+- `firestore.rules` 新增 `analyticsSnapshots/{date}` 規則（admin only）
+- `AnalyticsDashboard` 新增 `SnapshotManagementPanel` 元件
+  - 訂閱最近 30 份快照，列表顯示日期 + 各集合大小
+  - 「🧪 預演」+「↩ 還原」按鈕（含 confirm 警告）
+- Cloud Function 已部署 + Cloud Scheduler API 已啟用 ✅
+
+### 🚨 3️⃣ #28 Sentry 錯誤監控
+- `npm i @sentry/react`（v10）
+- 新增 `client/src/lib/sentry.ts`：
+  - `initSentry()`：在 main.tsx 最早呼叫
+  - DSN 從 `VITE_SENTRY_DSN` 讀取（沒設就 noop，本地開發也不送）
+  - tracesSampleRate 0.1 + replaysSessionSampleRate 0.05 + replaysOnErrorSampleRate 1.0
+  - `captureConsoleIntegration({ levels: ['error', 'warn'] })` — 抓隱性 bug 的關鍵
+  - 過濾 ResizeObserver loop、瀏覽器擴充錯誤等雜訊
+  - 移除 cookies 等可能 PII 的欄位
+- `ErrorBoundary` 改寫：catch 時雙寫 Sentry + Firestore（保留既有 fallback）
+- `useAuth`：每次 auth state change 同步呼叫 `setUser({ id: uid, isAnonymous })`
+  - 匿名身份標 `segment: 'anonymous'`，登入身份標 `'authenticated'`
+- `vite.config.ts` 注入 `VITE_APP_VERSION` 給 Sentry release tag
+- `.env.example` 補上 `VITE_SENTRY_DSN` 條目
+- ⚠️ 使用者需手動到 sentry.io 建立 React 專案、把 DSN 填入 `.env` 才會啟用
+
+### 🧹 內部
+- 版本 3.6.6 → 3.6.7
+
+---
+
 ## [3.6.6] - 2026-04-26 — 提供本地歷史回填工具（救回管理員自己這台的歷史）
 ### 🗃️ 為什麼需要
 - v3.6.4 之前，所有訪客的 geo / device / referrer 只寫到他們自己瀏覽器的 localStorage

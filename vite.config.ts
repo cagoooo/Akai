@@ -5,6 +5,7 @@ import path, { dirname } from "path";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 import { fileURLToPath } from "url";
 import { visualizer } from "rollup-plugin-visualizer";
+import { readFileSync } from "fs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -12,8 +13,18 @@ const __dirname = dirname(__filename);
 // GitHub Pages 需要設定 base path
 const isGitHubPages = process.env.GITHUB_ACTIONS === 'true';
 
+// 讀 package.json 的版本號，注入給 Sentry 等需要 release tag 的服務
+const pkgVersion = (() => {
+  try {
+    return JSON.parse(readFileSync(path.resolve(__dirname, 'package.json'), 'utf-8')).version as string;
+  } catch { return 'unknown'; }
+})();
+
 export default defineConfig({
   base: isGitHubPages ? '/Akai/' : '/',
+  define: {
+    'import.meta.env.VITE_APP_VERSION': JSON.stringify(pkgVersion),
+  },
   plugins: [
     react(),
     runtimeErrorOverlay(),

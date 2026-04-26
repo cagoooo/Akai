@@ -578,6 +578,9 @@ export function AnalyticsDashboard() {
           <DateRangePicker value={dateRange} onChange={setDateRange} />
         </div>
 
+        {/* 📦 每日快照備份管理（admin 才看得到） */}
+        <SnapshotManagementPanel />
+
         {/* 統計便利貼 — cork 風四色（已連動日期範圍） */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
           <StickyStatCard
@@ -1640,6 +1643,210 @@ function BackfillLocalAnalyticsBar() {
       {result && (
         <div style={{ width: '100%', fontSize: 11, color: '#4a3a20', marginTop: 4 }}>
           {result}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────
+// 📦 每日快照備份管理面板（admin 才看得到）
+// 由 dailySnapshot Cloud Function 每天 03:00 自動建立
+// ────────────────────────────────────────────────────────────
+function SnapshotManagementPanel() {
+  const [snapshots, setSnapshots] = useState<Array<{
+    id: string;
+    sizes: Record<string, number>;
+    capturedAt: string | null;
+  }>>([]);
+  const [loading, setLoading] = useState(true);
+  const [restoring, setRestoring] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+
+  // 訂閱 analyticsSnapshots 集合（admin 才有讀取權限）
+  useEffect(() => {
+    let unsub: (() => void) | undefined;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { db, isFirebaseAvailable } = await import('@/lib/firebase');
+        if (!isFirebaseAvailable() || !db) {
+          setLoading(false);
+          return;
+        }
+        const { collection, onSnapshot, query, orderBy, limit } = await import('firebase/firestore');
+        unsub = onSnapshot(
+          query(collection(db, 'analyticsSnapshots'), orderBy('__name__', 'desc'), limit(30)),
+          (snap) => {
+            if (cancelled) return;
+            const arr: typeof snapshots = [];
+            snap.forEach((doc) => {
+              const d = doc.data() as any;
+              arr.push({
+                id: doc.id,
+                sizes: d.sizes || {},
+                capturedAt: d.capturedAt?.toDate?.()?.toLocaleString('zh-TW') || null,
+              });
+            });
+            setSnapshots(arr);
+            setLoading(false);
+          },
+          (err) => {
+            console.warn('[SnapshotPanel] 讀取失敗（可能你不是 admin）:', err);
+            setLoading(false);
+          }
+        );
+      } catch (err) {
+        console.warn('[SnapshotPanel] 初始化失敗:', err);
+        setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+      if (unsub) unsub();
+    };
+  }, []);
+
+  const handleRestore = async (date: string, dryRun: boolean) => {
+    if (restoring) return;
+    if (!dryRun && !confirm(
+      `⚠️ 確定要從 ${date} 快照還原嗎？\n\n` +
+      `這會「覆寫」目前的 visitorStats / analytics / toolUsageStats / toolRatings。\n` +
+      `目前資料會被取代成 ${date} 那天的版本。\n\n` +
+      `若只是要預演，請按取消，改按「🧪 預演」。`
+    )) {
+      return;
+    }
+    setRestoring(true);
+    setMessage(null);
+    try {
+      const { httpsCallable, getFunctions } = await import('firebase/functions');
+      const firebaseApp = (await import('@/lib/firebase')).default;
+      if (!firebaseApp) throw new Error('Firebase app 未初始化');
+      const functions = getFunctions(firebaseApp);
+      const fn = httpsCallable(functions, 'restoreFromSnapshot');
+      const res: any = await fn({ date, dryRun });
+      setMessage(`${dryRun ? '🧪 預演' : '✅ 還原'}成功：${res.data?.message || ''}`);
+    } catch (err: any) {
+      setMessage(`❌ 失敗：${err.message || String(err)}`);
+    } finally {
+      setRestoring(false);
+    }
+  };
+
+  // 不是 admin 時不顯示（snapshots 永遠空陣列、且 loading 完）
+  if (!loading && snapshots.length === 0 && !message) return null;
+
+  return (
+    <div
+      style={{
+        background: 'rgba(255,255,255,.85)',
+        border: '2px solid #1a1a1a',
+        borderRadius: 10,
+        padding: '14px 16px',
+        boxShadow: '3px 3px 0 rgba(0,0,0,.18)',
+        fontFamily: "'Noto Sans TC', sans-serif",
+      }}
+    >
+      <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+        <div className="flex items-center gap-2">
+          <span style={{ fontSize: 14, fontWeight: 800 }}>📦 每日快照備份</span>
+          <span style={{
+            fontSize: 11,
+            color: '#7a8c3a',
+            background: '#f5f0d4',
+            padding: '2px 8px',
+            borderRadius: 10,
+            border: '1.5px solid #7a8c3a',
+            fontWeight: 700,
+          }}>
+            {snapshots.length} 份（最多保留 90 天）
+          </span>
+        </div>
+        <span style={{ fontSize: 11, color: '#666' }}>
+          每天 03:00 自動備份｜誤刪可一鍵還原
+        </span>
+      </div>
+
+      {loading ? (
+        <div style={{ fontSize: 12, color: '#666' }}>載入中…</div>
+      ) : snapshots.length === 0 ? (
+        <div style={{ fontSize: 12, color: '#666' }}>
+          暫無快照（部署後第一份會在隔天 03:00 建立）
+        </div>
+      ) : (
+        <div style={{ maxHeight: 200, overflowY: 'auto' }}>
+          <table style={{ width: '100%', fontSize: 12, borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ borderBottom: '1.5px dashed #1a1a1a' }}>
+                <th style={{ textAlign: 'left', padding: '4px 6px' }}>日期</th>
+                <th style={{ textAlign: 'right', padding: '4px 6px' }}>visitor</th>
+                <th style={{ textAlign: 'right', padding: '4px 6px' }}>analytics</th>
+                <th style={{ textAlign: 'right', padding: '4px 6px' }}>tools</th>
+                <th style={{ textAlign: 'right', padding: '4px 6px' }}>ratings</th>
+                <th style={{ textAlign: 'center', padding: '4px 6px' }}>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              {snapshots.map((s) => (
+                <tr key={s.id} style={{ borderBottom: '1px dotted #ccc' }}>
+                  <td style={{ padding: '4px 6px', fontWeight: 700 }}>{s.id}</td>
+                  <td style={{ padding: '4px 6px', textAlign: 'right' }}>{s.sizes.visitorStats ?? '-'}</td>
+                  <td style={{ padding: '4px 6px', textAlign: 'right' }}>{s.sizes.analytics ?? '-'}</td>
+                  <td style={{ padding: '4px 6px', textAlign: 'right' }}>{s.sizes.toolUsageStats ?? '-'}</td>
+                  <td style={{ padding: '4px 6px', textAlign: 'right' }}>{s.sizes.toolRatings ?? '-'}</td>
+                  <td style={{ padding: '4px 6px', textAlign: 'center' }}>
+                    <button
+                      onClick={() => handleRestore(s.id, true)}
+                      disabled={restoring}
+                      style={{
+                        padding: '2px 6px',
+                        fontSize: 10,
+                        marginRight: 4,
+                        border: '1px solid #1a1a1a',
+                        borderRadius: 4,
+                        background: '#fff',
+                        cursor: restoring ? 'wait' : 'pointer',
+                      }}
+                    >
+                      🧪 預演
+                    </button>
+                    <button
+                      onClick={() => handleRestore(s.id, false)}
+                      disabled={restoring}
+                      style={{
+                        padding: '2px 6px',
+                        fontSize: 10,
+                        border: '1px solid #c7302a',
+                        borderRadius: 4,
+                        background: '#fff',
+                        color: '#c7302a',
+                        fontWeight: 700,
+                        cursor: restoring ? 'wait' : 'pointer',
+                      }}
+                    >
+                      ↩ 還原
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {message && (
+        <div
+          style={{
+            marginTop: 8,
+            fontSize: 12,
+            padding: '6px 10px',
+            background: message.startsWith('❌') ? '#ffe4e4' : '#d4f4c7',
+            border: '1px solid #1a1a1a',
+            borderRadius: 6,
+          }}
+        >
+          {message}
         </div>
       )}
     </div>

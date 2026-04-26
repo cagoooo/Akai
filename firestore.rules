@@ -15,6 +15,12 @@ service cloud.firestore {
       allow write: if request.auth != null;
     }
 
+    // 每日快照備份 — 只有 admin custom claim 可讀／可寫（一般使用者完全看不到）
+    // dailySnapshot Cloud Function 走 admin SDK 不受 rules 限制
+    match /analyticsSnapshots/{date} {
+      allow read, write: if request.auth != null && request.auth.token.admin == true;
+    }
+
     // 工具使用統計 - 所有人可讀，僅認證用戶可寫
     match /toolUsageStats/{toolId} {
       allow read: if true;
