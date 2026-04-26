@@ -2,6 +2,50 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.2] - 2026-04-25 — 後台 cork 化 + 智慧排序 + 新工具
+### ✨ 新增工具
+- **#84 會議記錄自動產出平台 (Pro 版)**：AI 轉寫 + 自動摘要 + Word/PDF 匯出
+  - 含自動生成的卡片預覽圖（1024×1024）+ 社群分享圖（1200×630）
+  - 標籤：會議記錄 / AI 轉寫 / 自動摘要 / 領域會議 / 導師會議 / 校務會議 等
+
+### 🎨 後台介面 cork 化（重大升級）
+- **AdminAuth.tsx 全面重寫**：管理員登入頁 → 黃便利貼 + 紅圖釘 + 橄欖綠 highlight
+  - 三種狀態（載入中 / 無權限 / 登入頁）都改 cork 風
+  - 無權限頁：粉便利貼 + 🚫 emoji
+  - 已登入時：藍便利貼管理員資訊 + 紅邊登出按鈕
+- **AnalyticsDashboard 視覺層精修**：
+  - 紫紅藍漸層 → cork 軟木塞 + 木條
+  - 4 張統計卡片改為 cork 便利貼（黃/粉/綠/藍 + 立體圖釘 + 傾斜）
+  - Tabs active 態：indigo-600 → 橄欖綠
+  - 抽出 `StickyStatCard` 子元件供未來重用
+
+### 🪄 載入 UI 三層全 cork 化
+- **初始載入**（index.html pure CSS）：藍 spinner → cork 背景 + 黃便利貼搖擺
+- **PageSkeleton**（React Suspense）：紫紅漸層 → 大黃便利貼 + 紅圖釘 + 橄欖綠 highlight
+- **LoadingScreen**（元件級）：灰文字 → 小黃便利貼搖擺
+- 三層視覺語彙完全一致，從進站到完成無縫
+
+### 🛠️ 新增 cork 風隱藏後台入口
+- 左下角小黃便利貼 + 🔧 SVG 扳手 icon
+- 預設 opacity 0.42（低調）→ hover 時浮現旋轉 + 圖釘冒出
+- 對稱於右下「回頂部」按鈕
+
+### 🔢 動態數據顯示
+- **Hero 工具數量**：「81 個老師做的免費工具」→ 動態讀 `toolsWithStats.length`
+- **Footer 版本號** + **Hero NEW 膠帶**：寫死 v3.6.0 → `useVersionCheck` 動態讀 version.json
+- 新增工具 / 發新版時自動同步，不需手動改 tsx
+
+### 🔥 智慧排序預設改為「熱門」
+- 預設排序：random → popular（點擊數高 → 低）
+- 熱門排序資料源：localStorage → Firestore `tool.totalClicks`（即時推送）
+- 點擊任何工具 → 數字 +1 → 重新排序立即反映
+- 相同點擊數時，新工具（ID 大）排前面避免飄動
+
+### 📁 新增檔案
+- `client/src/components/bulletin/BulletinAdminEntry.tsx`
+- `scripts/generate-tool-84.mjs`、`scripts/add-tool-84.mjs`
+- `client/public/previews/tool_84.webp`、`tool_84_og.webp`
+
 ## [3.6.1] - 2026-04-24 — E2 公佈欄精修版
 ### ✨ 新增功能
 - **訪客計數器 (cork 風格)**：Hero 區黃色便利貼橫幅，Firestore 即時訂閱、里程碑進度條。
