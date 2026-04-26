@@ -3,7 +3,7 @@
  *
  * 整合策略：
  * - 複用所有現有 hooks（useFavorites、useRecentTools、useKeyboardShortcuts 等）
- * - 複用同一份 tools.json 資料來源（共 81 個工具）
+ * - 複用同一份 tools.json 資料來源（工具數量自動從 JSON 讀取）
  * - 同步篩選狀態至 URL（與舊版相容）
  * - 視覺層全面改為 Bulletin 系列元件
  *
@@ -226,7 +226,7 @@ export function BulletinHome() {
   return (
     <BulletinBoard>
       <BulletinHeader />
-      <BulletinHero />
+      <BulletinHero toolCount={toolsWithStats.length} />
 
       {/* 排行榜 + 許願池 */}
       <div

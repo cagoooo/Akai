@@ -12,10 +12,21 @@ const BulletinVisitorCounter = lazy(() =>
  * Hero 區：公告膠帶 + 大標（含螢光筆底色）+ 白色半透明介紹區 + 阿凱老師拍立得
  * 配色完全依照設計師原檔：主文字黑色、關鍵詞用橘色螢光筆 highlight、介紹區白底提升對比
  */
-export function BulletinHero() {
+interface BulletinHeroProps {
+  /** 當前工具總數，由父層傳入（避免寫死，會自動跟著 tools.json 更新） */
+  toolCount?: number;
+}
+
+export function BulletinHero({ toolCount }: BulletinHeroProps = {}) {
   // 動態讀取當前版本（顯示在雙膠帶的 NEW 膠帶上）
   const { localVersion } = useVersionCheck({ intervalMs: 60 * 60 * 1000 });
   const displayVersion = localVersion?.version ? `v${localVersion.version}` : 'v3.6.1';
+
+  // 工具數量：父層傳入優先，未傳時用近似值（避免 SSR / 首次渲染顯示 0）
+  // 數量取整到 5 的倍數附近（顯示「80+」「85+」更自然）
+  const displayCount = toolCount && toolCount > 0
+    ? `${toolCount}`
+    : '80+';
 
   return (
     <section
@@ -94,7 +105,7 @@ export function BulletinHero() {
             fontFamily: tokens.font.tc,
           }}
         >
-          81 個老師做的免費工具，一張一張釘在公佈欄上。
+          {displayCount} 個老師做的免費工具，一張一張釘在公佈欄上。
           從課堂互動、評語優化到行政自動化都有，想看哪個就點哪個，想許願就直接寫便利貼 🪄
         </p>
 
