@@ -15,10 +15,10 @@ interface SortConfig {
 }
 
 export const sortOptions: SortConfig[] = [
-    { option: 'random', label: '隨機', icon: '🎲' },
     { option: 'popular', label: '熱門', icon: '🔥' },
-    { option: 'name', label: '名稱', icon: '🔤' },
     { option: 'newest', label: '最新', icon: '✨' },
+    { option: 'name', label: '名稱', icon: '🔤' },
+    { option: 'random', label: '隨機', icon: '🎲' },
 ];
 
 // 從 LocalStorage 取得工具使用統計
@@ -53,7 +53,8 @@ function shuffleArray<T>(array: T[]): T[] {
 const sessionSeed = Math.random();
 
 export function useSortOptions() {
-    const [currentSort, setCurrentSort] = useState<SortOption>('random');
+    // 預設「熱門」排序（點擊數高 → 低），讓使用者第一眼看到最多人用的工具
+    const [currentSort, setCurrentSort] = useState<SortOption>('popular');
 
     // 排序工具列表
     const sortTools = useCallback((tools: EducationalTool[]): EducationalTool[] => {
@@ -61,8 +62,16 @@ export function useSortOptions() {
 
         switch (currentSort) {
             case 'popular': {
-                const stats = getToolStats();
-                return toolsCopy.sort((a, b) => (stats[b.id] || 0) - (stats[a.id] || 0));
+                // 優先讀工具物件上的 totalClicks（BulletinHome 已合併 Firestore 即時點擊數）
+                // 沒有則 fallback 到 localStorage 快取，再沒有則 0
+                const localStats = getToolStats();
+                const getClicks = (t: EducationalTool) => t.totalClicks ?? localStats[t.id] ?? 0;
+                return toolsCopy.sort((a, b) => {
+                    const diff = getClicks(b) - getClicks(a);
+                    if (diff !== 0) return diff;
+                    // 點擊數相同時，新工具排前面（ID 大的優先）
+                    return b.id - a.id;
+                });
             }
             case 'name':
                 return toolsCopy.sort((a, b) => a.title.localeCompare(b.title, 'zh-TW'));
