@@ -8,6 +8,13 @@ service cloud.firestore {
       allow write: if request.auth != null;
     }
 
+    // 訪客 context 全站累計（地理 / 裝置 / 來源 三類，與 totalVisits 對齊的全域統計）
+    // 所有人可讀（後台需要），認證用戶可寫（與 visitorStats 一致的存取模型）
+    match /analytics/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
     // 工具使用統計 - 所有人可讀，僅認證用戶可寫
     match /toolUsageStats/{toolId} {
       allow read: if true;

@@ -25,48 +25,72 @@ interface VisitorStats {
 }
 
 /**
- * 追蹤訪客 context（地理 / 裝置類型 / 來源），全部寫入 localStorage
- * 給管理後台讀取統計使用。
+ * 追蹤訪客 context（地理 / 裝置類型 / 來源）：
+ *   - localStorage：保留為「這台瀏覽器自己的」歷史紀錄（離線降級用）
+ *   - Firestore `analytics/visitorContext`：全站累計，後台儀表板讀這份
+ *
  * 全程使用 HTTPS 端點（ipapi.co 免費版無需 token，每天 1000 req 額度足夠）
  */
+async function incrementServerStat(category: 'device' | 'referrer' | 'geo', key: string) {
+  if (!key) return;
+  try {
+    const { db, isFirebaseAvailable } = await import('@/lib/firebase');
+    if (!isFirebaseAvailable() || !db) return;
+    const { doc, setDoc, increment, serverTimestamp } = await import('firebase/firestore');
+    const fieldName =
+      category === 'device' ? 'deviceStats' : category === 'referrer' ? 'referrerStats' : 'geoStats';
+    const ref = doc(db, 'analytics', 'visitorContext');
+    // 用 setDoc + merge 處理「文件不存在」情境；nested map 中的 increment() sentinel 會被正確套用
+    await setDoc(
+      ref,
+      {
+        [fieldName]: { [key]: increment(1) },
+        lastUpdatedAt: serverTimestamp(),
+      },
+      { merge: true }
+    );
+  } catch (err) {
+    // 寫不到 Firestore 不致命，至少 localStorage 還在
+    console.warn(`[trackVisitorContext] Firestore ${category}/${key} 寫入失敗:`, err);
+  }
+}
+
 async function trackVisitorContext() {
   // 1. 裝置類型
+  let deviceKey = 'desktop';
   try {
     const ua = navigator.userAgent;
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
     const isTablet = /iPad|Android/i.test(ua) && !/Mobile/i.test(ua);
+    deviceKey = isTablet ? 'tablet' : isMobile ? 'mobile' : 'desktop';
     const stats = JSON.parse(localStorage.getItem('visitorDeviceStats') || '{"desktop":0,"mobile":0,"tablet":0}');
-    if (isTablet) stats.tablet = (stats.tablet || 0) + 1;
-    else if (isMobile) stats.mobile = (stats.mobile || 0) + 1;
-    else stats.desktop = (stats.desktop || 0) + 1;
+    stats[deviceKey] = (stats[deviceKey] || 0) + 1;
     localStorage.setItem('visitorDeviceStats', JSON.stringify(stats));
   } catch { /* ignore */ }
+  await incrementServerStat('device', deviceKey);
 
   // 2. 來源 Referrer
+  let referrerKey = 'direct';
   try {
     const referrer = document.referrer;
     if (referrer) {
-      const stats = JSON.parse(
-        localStorage.getItem('visitorReferrerStats') ||
-          '{"direct":0,"search":0,"social":0,"email":0,"external":0}'
-      );
       const hostname = new URL(referrer).hostname.toLowerCase();
-      let source = 'external';
-      if (['google', 'bing', 'yahoo', 'baidu', 'duckduckgo'].some((s) => hostname.includes(s))) source = 'search';
-      else if (['facebook', 'twitter', 'instagram', 'line.me', 't.co'].some((s) => hostname.includes(s))) source = 'social';
-      else if (['mail.', 'gmail.'].some((s) => hostname.includes(s))) source = 'email';
-      else if (hostname === window.location.hostname) source = 'direct';
-      stats[source] = (stats[source] || 0) + 1;
-      localStorage.setItem('visitorReferrerStats', JSON.stringify(stats));
-    } else {
-      const stats = JSON.parse(
-        localStorage.getItem('visitorReferrerStats') ||
-          '{"direct":0,"search":0,"social":0,"email":0,"external":0}'
-      );
-      stats.direct = (stats.direct || 0) + 1;
-      localStorage.setItem('visitorReferrerStats', JSON.stringify(stats));
+      if (['google', 'bing', 'yahoo', 'baidu', 'duckduckgo'].some((s) => hostname.includes(s)))
+        referrerKey = 'search';
+      else if (['facebook', 'twitter', 'instagram', 'line.me', 't.co'].some((s) => hostname.includes(s)))
+        referrerKey = 'social';
+      else if (['mail.', 'gmail.'].some((s) => hostname.includes(s))) referrerKey = 'email';
+      else if (hostname === window.location.hostname) referrerKey = 'direct';
+      else referrerKey = 'external';
     }
+    const stats = JSON.parse(
+      localStorage.getItem('visitorReferrerStats') ||
+        '{"direct":0,"search":0,"social":0,"email":0,"external":0}'
+    );
+    stats[referrerKey] = (stats[referrerKey] || 0) + 1;
+    localStorage.setItem('visitorReferrerStats', JSON.stringify(stats));
   } catch { /* ignore */ }
+  await incrementServerStat('referrer', referrerKey);
 
   // 3. 地理定位（HTTPS）
   // 主：ipapi.co (1k/天免費，無需 token)
@@ -109,6 +133,8 @@ async function trackVisitorContext() {
       const stats = JSON.parse(localStorage.getItem('visitorGeoStats') || '{}');
       stats[location] = (stats[location] || 0) + 1;
       localStorage.setItem('visitorGeoStats', JSON.stringify(stats));
+      // Firestore 累計（key 是城市中文名）
+      await incrementServerStat('geo', location);
       console.log('📍 地理定位成功 (HTTPS):', location);
     }
   } catch (e) {

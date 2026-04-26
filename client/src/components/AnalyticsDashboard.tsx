@@ -63,6 +63,43 @@ export function AnalyticsDashboard() {
   // 工具統計狀態
   const [toolStats, setToolStats] = useState<ToolUsageStat[]>([]);
 
+  // 全站累計的 訪客 context（地理 / 裝置 / 來源），來自 Firestore analytics/visitorContext
+  const [serverContext, setServerContext] = useState<{
+    geoStats?: Record<string, number>;
+    deviceStats?: Record<string, number>;
+    referrerStats?: Record<string, number>;
+  }>({});
+
+  // 訂閱 analytics/visitorContext（全站累計訪客 context）
+  useEffect(() => {
+    let unsub: (() => void) | undefined;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { db, isFirebaseAvailable } = await import('@/lib/firebase');
+        if (!isFirebaseAvailable() || !db) return;
+        const { doc, onSnapshot } = await import('firebase/firestore');
+        unsub = onSnapshot(doc(db, 'analytics', 'visitorContext'), (snap) => {
+          if (cancelled) return;
+          if (snap.exists()) {
+            const d = snap.data() as any;
+            setServerContext({
+              geoStats: d.geoStats || {},
+              deviceStats: d.deviceStats || {},
+              referrerStats: d.referrerStats || {},
+            });
+          }
+        });
+      } catch (err) {
+        console.warn('[AnalyticsDashboard] visitorContext 訂閱失敗:', err);
+      }
+    })();
+    return () => {
+      cancelled = true;
+      if (unsub) unsub();
+    };
+  }, []);
+
   // 使用 Firebase onSnapshot 即時監聽
   useEffect(() => {
     let unsubscribeVisitor: (() => void) | undefined;
@@ -670,8 +707,11 @@ export function AnalyticsDashboard() {
                 </CardHeader>
                 <CardContent>
                   {(() => {
-                    // 從 LocalStorage 讀取真實的 referrer 追蹤數據
+                    // 優先用 Firestore 全站累計，本地 fallback
                     const getReferrerData = () => {
+                      const sv = serverContext.referrerStats || {};
+                      const hasServer = Object.values(sv).some((v) => (v as number) > 0);
+                      if (hasServer) return { direct: 0, search: 0, social: 0, email: 0, external: 0, ...sv };
                       try {
                         const data = localStorage.getItem('visitorReferrerStats');
                         if (data) return JSON.parse(data);
@@ -747,8 +787,11 @@ export function AnalyticsDashboard() {
                   <div>
                     <h3 className="text-lg font-medium mb-3">🗺️ 訪問者地理分布</h3>
                     {(() => {
-                      // 從 LocalStorage 獲取地理數據
+                      // 優先用 Firestore 全站累計，本地 fallback，再退回示意數據
                       const getGeoData = () => {
+                        const sv = serverContext.geoStats || {};
+                        const hasServer = Object.keys(sv).length > 0;
+                        if (hasServer) return sv;
                         try {
                           const data = localStorage.getItem('visitorGeoStats');
                           if (data) return JSON.parse(data);
@@ -811,8 +854,11 @@ export function AnalyticsDashboard() {
                   <div>
                     <h3 className="text-lg font-medium mb-3">📱 設備分析</h3>
                     {(() => {
-                      // 從 LocalStorage 獲取設備數據
+                      // 優先用 Firestore 全站累計，本地 fallback
                       const getDeviceData = () => {
+                        const sv = serverContext.deviceStats || {};
+                        const hasServer = Object.values(sv).some((v) => (v as number) > 0);
+                        if (hasServer) return { desktop: 0, mobile: 0, tablet: 0, ...sv };
                         try {
                           const data = localStorage.getItem('visitorDeviceStats');
                           if (data) return JSON.parse(data);
