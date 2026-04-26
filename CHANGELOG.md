@@ -2,6 +2,45 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.4] - 2026-04-26 — 統計準確性大修補：評論 LINE 通知 + 全站訪客 context + 匿名認證
+### 🔔 評論 LINE 通知修復
+- 問題：使用者提交工具評論成功，但管理員沒收到 LINE 通知
+- 根本原因：`functions/src/index.ts` 只有 `onWishCreated`（許願池），
+  `toolReviews` 集合的寫入沒有對應的監聽函式
+- 新增 `onReviewCreated` Cloud Function（cork 橄欖綠卡片 + 教師頭像 + 「打開工具頁面」按鈕）
+- 抽出 `pushFlexToAdmin()` 共用 helper，wish 與 review 兩個 trigger 共用
+- 評論文件新增 `toolTitle` 欄位（從 ReviewForm/ReviewList/ToolDetail 透傳）
+- Cloud Functions 已部署 ✅
+
+### 📊 儀表板地理/設備/來源「只看到 6 筆」修復
+- 問題：總訪問量 1,218 但訪客地理/設備/來源只顯示 6 筆
+- 根本原因：這三類資料只寫到每位訪客自己的 localStorage，
+  管理員打開儀表板時讀的是「自己這台瀏覽器」的 localStorage，
+  其他 1,212 位訪客的 context 從來沒上傳到伺服器
+- 修正（雙寫策略）：
+  - `BulletinVisitorCounter.trackVisitorContext()` 新增 `incrementServerStat()`
+    寫入 Firestore `analytics/visitorContext`（nested map + `increment(1)` sentinel）
+  - `AnalyticsDashboard` 訂閱 `analytics/visitorContext`，三個 getter 改為
+    「優先 Firestore → 本地 fallback → 示意數據」
+  - `firestore.rules` 新增 `analytics/{docId}` 規則（read=true / write=auth）
+  - 規則已部署 ✅
+
+### 🔐 匿名認證啟用：未登入訪客也能被計入統計
+- 問題：rules 要求 `request.auth != null`，未 Google 登入的訪客寫入失敗
+  → totalVisits 1,218 全是登入用戶，匿名訪客零貢獻
+- 修正：
+  - `authService.ts` 新增 `ensureSignedIn()` + `markSignedOutThisSession()`
+  - `App.tsx` 開機 800ms 後自動執行（不卡 LCP）
+  - `BulletinVisitorCounter` 寫 Firestore 前先 `await ensureSignedIn`
+  - `useAuth.isAuthenticated` 改為 `!!user && !user.isAnonymous`
+    （匿名視為未登入，UI 仍提示登入才能評論）
+  - 透過 Identity Toolkit Admin API 自動啟用 Firebase Anonymous Auth ✅
+
+### 🧹 內部
+- 版本 3.6.3 → 3.6.4，SW cacheVersion 同步更新
+
+---
+
 ## [3.6.3] - 2026-04-26 — P0 體驗優化：HTTPS 修正 + OG 統一 + 排行榜徽章 + 儀表板日期
 ### 🔒 #4 IP HTTPS 升級（visitor context tracking）
 - `BulletinVisitorCounter` 新增 `trackVisitorContext()`：
