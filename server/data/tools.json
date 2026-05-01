@@ -1426,5 +1426,28 @@
       "手眼協調",
       "瀏覽器遊戲"
     ]
+  },
+  {
+    "id": 86,
+    "title": "3D Q版貼圖生成器",
+    "description": "上傳一張自拍照，輸入主題與 24 個文字，AI 一鍵生成 4×6 共 24 張 3D Q 版公仔貼圖，下載即得 LINE 上架專用的 ZIP 包，老師、家長、學生都能秒做專屬貼圖。",
+    "detailedDescription": "「3D Q版貼圖生成器（TieTu 貼圖工作室）」是阿凱老師打造的免費 AI 貼圖製作神器。使用者只需上傳一張自拍照，輸入主題（如「馬年、太空人、黏土風」）與最多 24 句客製短語（每格 1〜8 字），系統便會呼叫 Google Gemini 2.5 Flash Image（Nano Banana Pro）多模態模型，自動生成一整組 4×6 共 24 張 3D 立體感的 Q 版公仔貼圖，並可一鍵下載成單張 PNG、24 張 ZIP，或 LINE 上架專用包（370×320 主圖 + 240×240 標籤 + 96×74 + README）。內建單張微調功能，可旋轉 ±15°、平移 ±15%、縮放 80–120% 即時預覽；歷史紀錄存於 IndexedDB（最近 5 次自動壓縮存檔），離開瀏覽器再回來也不會消失。前端整合 Cloudflare Turnstile 人機驗證，後端套用每分鐘 3 張、每日 30 張的合理限流，免費用、零安裝、不必綁卡，老師可以快速幫班級做專屬貼圖獎勵、家長可幫小孩做獨一無二的生日貼圖、學生則可把作品做成可分享的 LINE 個人原創貼圖上架包。",
+    "url": "https://cagoooo.github.io/TieTu/",
+    "icon": "Sparkles",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_86.webp",
+    "ogPreviewUrl": "/previews/og/tool_86.webp",
+    "tags": [
+      "AI 貼圖生成",
+      "3D Q版",
+      "LINE 貼圖",
+      "Gemini AI",
+      "自拍變貼圖",
+      "原創貼圖上架",
+      "親子創作",
+      "班級獎勵",
+      "個人化貼圖",
+      "免費工具"
+    ]
   }
 ]
