@@ -8,9 +8,9 @@
  */
 
 import { useParams, Link, useLocation } from 'wouter';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet-async';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { type EducationalTool } from '@/lib/data';
 import { getToolStats, trackToolUsage } from '@/lib/firestoreService';
@@ -231,11 +231,26 @@ export function BulletinToolDetail() {
   const { trackToolUsage: trackAchievement } = useAchievements();
 
   // 統計（Firestore）
+  const queryClient = useQueryClient();
   const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ['toolStats', toolId],
     queryFn: () => getToolStats(toolId),
     enabled: !!tool,
   });
+
+  // 每次進入詳情頁就 +1（同個 toolId 在此元件 instance 只算一次，避免 StrictMode double-mount 重複計數）
+  const lastTrackedToolId = useRef<number | null>(null);
+  useEffect(() => {
+    if (!tool || lastTrackedToolId.current === tool.id) return;
+    lastTrackedToolId.current = tool.id;
+
+    trackToolUsage(tool.id)
+      .then((updated) => {
+        // 樂觀更新：直接把回傳的最新統計塞進 React Query 快取，畫面立即顯示 +1
+        queryClient.setQueryData(['toolStats', tool.id], updated);
+      })
+      .catch((err) => console.error('追蹤工具使用失敗:', err));
+  }, [tool, queryClient]);
 
   if (toolsLoading) return <ToolDetailSkeleton />;
   if (!tool) return <NotFound />;
@@ -251,7 +266,7 @@ export function BulletinToolDetail() {
 
   // ── 行為函式 ─────────────────────────────────────
   const handleUseTool = () => {
-    trackToolUsage(tool.id).catch(console.error);
+    // 統計計數已在進入頁面時遞增（見上方 useEffect），這裡不再重複 +1
     addToRecent(tool.id);
     trackAchievement(tool.id, tool.category);
     setStampTrigger((t) => t + 1);
