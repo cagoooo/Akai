@@ -110,15 +110,18 @@ export function BulletinFooter() {
                 borderRadius: '50%',
                 background: tokens.paper,
                 border: `2px solid ${tokens.ink}`,
-                boxShadow: '2px 2px 0 rgba(0,0,0,.2)',
+                boxShadow: '2px 2px 0 rgba(0,0,0,.25), 0 3px 6px rgba(0,0,0,.15)',
                 display: 'grid',
                 placeItems: 'center',
                 overflow: 'hidden',
+                boxSizing: 'border-box',
+                padding: 2,
+                transform: 'rotate(-3deg)',
                 flexShrink: 0,
               }}
             >
               <SchoolLogo
-                style={{ width: '80%', height: '80%', objectFit: 'contain' }}
+                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
               />
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>

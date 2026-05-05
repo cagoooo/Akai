@@ -35,24 +35,27 @@ export function BulletinHeader() {
             display: 'grid',
             placeItems: 'center',
             overflow: 'hidden',
-            boxShadow: '0 3px 8px rgba(0,0,0,.25)',
+            boxSizing: 'border-box',
+            padding: 3,
+            boxShadow: '2px 2px 0 rgba(0,0,0,.3), 0 5px 10px rgba(0,0,0,.18)',
+            transform: 'rotate(-3deg)',
             flexShrink: 0,
             cursor: 'pointer',
             transition: 'transform .2s ease, box-shadow .2s ease',
             textDecoration: 'none',
           }}
           onMouseEnter={(e) => {
-            (e.currentTarget as HTMLAnchorElement).style.transform = 'scale(1.08) rotate(-3deg)';
-            (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 5px 14px rgba(0,0,0,.35)';
+            (e.currentTarget as HTMLAnchorElement).style.transform = 'scale(1.08) rotate(0deg)';
+            (e.currentTarget as HTMLAnchorElement).style.boxShadow = '3px 3px 0 rgba(0,0,0,.35), 0 8px 14px rgba(0,0,0,.25)';
           }}
           onMouseLeave={(e) => {
-            (e.currentTarget as HTMLAnchorElement).style.transform = 'scale(1) rotate(0deg)';
-            (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 3px 8px rgba(0,0,0,.25)';
+            (e.currentTarget as HTMLAnchorElement).style.transform = 'scale(1) rotate(-3deg)';
+            (e.currentTarget as HTMLAnchorElement).style.boxShadow = '2px 2px 0 rgba(0,0,0,.3), 0 5px 10px rgba(0,0,0,.18)';
           }}
         >
           <SchoolLogo
             eager
-            style={{ width: '84%', height: '84%', objectFit: 'contain' }}
+            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
           />
         </a>
 

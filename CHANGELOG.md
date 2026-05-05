@@ -2,6 +2,22 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.12] - 2026-05-05 — 校徽 polaroid 風格統一：Header / Footer 套用 Hero 的拍立得感
+### 🎨 視覺一致化
+使用者反映 Hero 區的校徽（76px 拍立得 polaroid 樣式）很好看，希望 Header 跟 Footer 也採用同樣質感。盤點三處差異後統一升級：
+
+- **填充率提升**：原本 Header `width: 84%` / Footer `width: 80%` 留太多白邊；改用 `padding + width: 100%` 模式（Header padding 3 / Footer padding 2），校徽圖案填到接近邊緣（91% / 89%），與 Hero 一致
+- **雙層陰影**：從單層 `0 3px 8px rgba(0,0,0,.25)` 升級為 `2px 2px 0 + 0 5px 10px` 的 polaroid 風格雙層陰影，增加紙張立體感
+- **微旋轉**：靜態套用 `transform: rotate(-3deg)`，呼應 Hero 校徽的 -8deg 拍立得感（Header 較含蓄、Footer 同樣 -3deg）
+- **hover 互動**：滑過時變回 `rotate(0deg)` + 放大 1.08x + 陰影更深，給使用者「轉正了」的回饋
+
+Hero 區校徽不動（本來就是基準參考）。
+
+### 🧹 內部
+- 版本 3.6.11 → 3.6.12
+
+---
+
 ## [3.6.11] - 2026-05-05 — 石門校徽跑版修正：picture 加 `display: contents`
 ### 🐛 修正：校徽變超小 / 偏移
 3.6.10 的 `<SchoolLogo>` 元件用 `<picture>` 包 WebP+PNG，但 Header 與 Footer 的容器都用了 `display: grid + placeItems: center`，原本 `<img>` 是 grid 直接子元素，現在中間多了一層 `<picture>`（預設 `display: inline`），導致：
