@@ -2,6 +2,27 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.13] - 2026-05-05 — 新增工具 #88：桃園市115學年度國中課程計畫AI審查工具
+### ✨ 新工具
+- **#88 桃園市115學年度國中課程計畫AI審查工具**（`https://cagoooo.github.io/JHScurriculum/`）
+  - 國小版（#78）的姊妹工具，針對國民中學課程計畫審查需求打造
+  - 上傳 PDF 後依教育局 40+ 審查標準逐項自動比對給建議
+  - 支援 Gemini / OpenAI 雙引擎切換、可自訂提示詞
+  - 涵蓋領域學習課程、彈性學習課程、特教班 / 藝才班 / 體育班
+  - 內建批次審查、Markdown 匯出、AI 修正稿、LINE 一鍵分享
+  - 分類 `utilities`、icon `ClipboardCheck`
+  - 標籤：課程計畫 / AI審查 / 國中 / 教務 / 行政工具 / 115學年度 / 桃園市 / 領域課程 / 彈性課程 / PDF審查
+
+### 🤖 自動化流程
+- Playwright 截圖 → sharp resize 1024×1024 webp → `/previews/tool_88.webp`（39.6 KB）
+- 跑 `generate-unified-og.mjs 88` → `/previews/og/tool_88.webp`（181 KB，社群分享專用）
+- 兩份 tools.json（client + server）同步寫入
+
+### 🧹 內部
+- 版本 3.6.12 → 3.6.13
+
+---
+
 ## [3.6.12] - 2026-05-05 — 校徽 polaroid 風格統一：Header / Footer 套用 Hero 的拍立得感
 ### 🎨 視覺一致化
 使用者反映 Hero 區的校徽（76px 拍立得 polaroid 樣式）很好看，希望 Header 跟 Footer 也採用同樣質感。盤點三處差異後統一升級：
