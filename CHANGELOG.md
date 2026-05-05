@@ -2,6 +2,36 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.15] - 2026-05-05 — 修正 #88 卡片預覽圖 + new-tool.mjs 自動清教學遮罩
+### 🎨 #88 卡片預覽圖重做
+使用者反映 #88 詳情頁拍立得內的截圖很醜（看起來像 PDF 上傳區、灰暗 + 教學遮罩擋住）。追查發現 JHScurriculum 網站第一屏其實有非常漂亮的綠色 hero 區（金色「課程計畫 AI 審查工具」大標題 + 4 個分類膠囊），但 Playwright 預設截圖會被 driver.js 的「步驟 1/5」教學對話框遮住。
+
+**修法**：截圖前先 `addInitScript` 設 `tyc_tut_done = '1'` 等 dismiss flag，讓 driver.js 不啟動，再截一次乾淨的 hero 區。新版 `tool_88.webp` 從 39 KB → 67 KB（內容更豐富）但視覺品質大幅提升。
+
+**連帶受惠**：`generate-unified-og.mjs` 會把卡片預覽圖嵌入 OG 圖左側 polaroid，所以 OG 社群分享圖 (`og/tool_88.webp`) 也自動跟著漂亮。
+
+### 🤖 `scripts/new-tool.mjs` 強化截圖邏輯（避免再踩同樣坑）
+根據 #88 經驗，把 `screenshotUrl` 函式升級：
+- viewport 從 1280×800 改為 1280×1280（避免 cover crop 切掉 hero）
+- 新增 `addInitScript` 預先設定常見 dismiss localStorage key（`tour_complete` / `onboarding_done` / `hasSeenTour` / `tyc_tut_done` 等 13 個常用 key）
+- 新增截圖前 `evaluate` 移除常見 popup overlay class（driver.js / Shepherd.js / intro.js / cookie banner / 自製公告）
+- 還原可能被遮罩鎖住的 `body.style.overflow`
+
+未來新增工具走 `npm run new-tool` 流程時，截圖會自動跳過教學遮罩、抓到網站真正的 hero 區。
+
+### 📝 同步更新 `~/.claude/skills/og-social-preview-zh`
+把這次踩到的坑寫進 OG skill：
+- 兩支腳本欄位錯配（v3.6.14 那個雷）
+- 截圖前必清教學遮罩、cookie banner（v3.6.15 這個雷）
+- 含 grep 網站 source 找 dismiss key 的指引
+
+下次跨專案做 OG 圖時不會再犯。
+
+### 🧹 內部
+- 版本 3.6.14 → 3.6.15
+
+---
+
 ## [3.6.14] - 2026-05-05 — 修正：社群分享 OG 圖指錯成卡片截圖（影響全部 88 張）
 ### 🐛 嚴重 Bug 修正：og:image 全部用錯
 使用者反映 FB 分享 #88 卡片時，預覽圖只是「網站截圖」很不專業。追查發現 `scripts/generate-og-pages.mjs:35` 的 `og:image` URL **只讀 `previewUrl`（卡片內截圖）**，**完全忽略 `tool.ogPreviewUrl`**——而 `tool.ogPreviewUrl` 才是 `generate-unified-og.mjs` 用 cork-board 公佈欄風格 + 便利貼大標 + 阿凱署名 + URL 膠囊精心設計過的 1200×630 社群分享圖。

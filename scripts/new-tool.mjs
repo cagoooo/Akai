@@ -150,13 +150,42 @@ async function screenshotUrl(url, outPath) {
   const browser = await chromium.launch({ headless: true });
   try {
     const ctx = await browser.newContext({
-      viewport: { width: 1280, height: 800 },
+      viewport: { width: 1280, height: 1280 },
       deviceScaleFactor: 2,
+    });
+    // 截圖前先設定常見「教學/公告/cookie」的已讀 flag，避免遮罩擋住 hero 區
+    // （這是 #88 踩過的雷：driver.js / shepherd.js / introjs / 自製 onboarding 都會擋畫面）
+    await ctx.addInitScript(() => {
+      try {
+        const dismissKeys = [
+          'tyc_tut_done', 'tyc_known_version', 'tyc_nokey_collapsed', 'tyc_notify',
+          'tour_complete', 'onboarding_done', 'hasSeenTour', 'tutorial_dismissed',
+          'cookie_accepted', 'announcement_dismissed', 'welcome_shown',
+        ];
+        dismissKeys.forEach(k => localStorage.setItem(k, '1'));
+      } catch (e) {}
     });
     const page = await ctx.newPage();
     await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
-    // 等 1 秒讓 transitions 結束
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(1500);
+    // 暴力移除常見的教學遮罩 / cookie banner / 公告 popup
+    await page.evaluate(() => {
+      const selectors = [
+        '.driver-popover', '.driver-overlay', '.driver-active-element',
+        '.shepherd-element', '.shepherd-modal-overlay-container',
+        '.introjs-overlay', '.introjs-helperLayer', '.introjs-tooltipReferenceLayer',
+        '#updateBanner', '#cookieBanner', '#announcement',
+        '[class*="cookie-banner"]', '[class*="cookie-consent"]',
+        '[class*="onboard"]', '[class*="tutorial"]', '[class*="tour-tooltip"]',
+      ];
+      selectors.forEach(s => document.querySelectorAll(s).forEach(el => el.remove()));
+      // 還原可能被鎖的滾動
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      document.body.classList.remove('driver-active', 'shepherd-active', 'modal-open');
+    });
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(500);
     const buf = await page.screenshot({ type: 'png', fullPage: false });
     // 處理為 1024×1024（cover crop）
     await sharp(buf)
