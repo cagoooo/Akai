@@ -13,7 +13,7 @@ interface SchoolLogoProps {
 export function SchoolLogo({ style, eager = false }: SchoolLogoProps) {
   const base = import.meta.env.BASE_URL;
   return (
-    <picture>
+    <picture style={{ display: 'contents' }}>
       <source type="image/webp" srcSet={`${base}assets/school-logo.webp`} />
       <img
         src={`${base}assets/school-logo.png`}

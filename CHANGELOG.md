@@ -2,6 +2,23 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.11] - 2026-05-05 — 石門校徽跑版修正：picture 加 `display: contents`
+### 🐛 修正：校徽變超小 / 偏移
+3.6.10 的 `<SchoolLogo>` 元件用 `<picture>` 包 WebP+PNG，但 Header 與 Footer 的容器都用了 `display: grid + placeItems: center`，原本 `<img>` 是 grid 直接子元素，現在中間多了一層 `<picture>`（預設 `display: inline`），導致：
+
+- grid 把 `<picture>` 當成 grid item 對齊，而非真正的 `<img>`
+- `<img>` 的 `width: 84%` / `width: 80%` 失去原本對 `<a>` 容器的百分比基準
+- 校徽看起來縮成超小一顆甚至偏移
+
+**修正方式**：`<picture>` 加 `style={{ display: 'contents' }}`，讓它從版面樹中消失，`<img>` 變回容器（`<a>` / `<div>`）的直接子元素，恢復 3.6.9 之前的渲染行為。
+
+`display: contents` 在所有現代瀏覽器（Chrome 65+ / Firefox 37+ / Safari 11.1+）都支援；對 a11y 沒影響，因為 `<picture>` 本身不帶語義（語義由內部 `<img>` 承載）。
+
+### 🧹 內部
+- 版本 3.6.10 → 3.6.11
+
+---
+
 ## [3.6.10] - 2026-05-05 — 石門校徽載入優化（3 MB → 17 KB，約 185 倍）
 ### ⚡ 校徽資源大瘦身
 使用者反映「石門 LOGO 每次都要讀取很久才出來」，追查發現原 PNG 是 **1971×1941、3.0 MB**，但實際顯示尺寸最大只有 76×76。
