@@ -2,6 +2,7 @@ import { tokens } from '@/design/tokens';
 import { Tape } from '@/components/primitives/Tape';
 import { Pin } from '@/components/primitives/Pin';
 import { useVersionCheck } from '@/hooks/useVersionCheck';
+import { SchoolLogo } from './SchoolLogo';
 
 const SCHOOL_URL = 'https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5';
 const SCHOOL_MAPS_URL = 'https://maps.app.goo.gl/D9hqL2eakDLC8ko46';
@@ -116,13 +117,8 @@ export function BulletinFooter() {
                 flexShrink: 0,
               }}
             >
-              <img
-                src={`${import.meta.env.BASE_URL}assets/school-logo.png`}
-                alt="石門國小校徽"
+              <SchoolLogo
                 style={{ width: '80%', height: '80%', objectFit: 'contain' }}
-                onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).style.display = 'none';
-                }}
               />
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>

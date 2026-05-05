@@ -3,6 +3,7 @@ import { tokens } from '@/design/tokens';
 import { Tape } from '@/components/primitives/Tape';
 import { Pin } from '@/components/primitives/Pin';
 import { useVersionCheck } from '@/hooks/useVersionCheck';
+import { SchoolLogo } from './SchoolLogo';
 
 const BulletinVisitorCounter = lazy(() =>
   import('./BulletinVisitorCounter').then((m) => ({ default: m.BulletinVisitorCounter }))
@@ -377,13 +378,9 @@ function AkaiPolaroid() {
           size={14}
           style={{ top: -7, left: '50%', marginLeft: -7, zIndex: 10 }}
         />
-        <img
-          src={`${import.meta.env.BASE_URL}assets/school-logo.png`}
-          alt="石門國小校徽"
+        <SchoolLogo
+          eager
           style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-          onError={(e) => {
-            (e.currentTarget as HTMLImageElement).style.display = 'none';
-          }}
         />
       </a>
     </div>

@@ -1,5 +1,6 @@
 import { tokens } from '@/design/tokens';
 import { Tape } from '@/components/primitives/Tape';
+import { SchoolLogo } from './SchoolLogo';
 
 /**
  * 公佈欄頁首：校徽 + 站名 + 副標
@@ -49,13 +50,9 @@ export function BulletinHeader() {
             (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 3px 8px rgba(0,0,0,.25)';
           }}
         >
-          <img
-            src={`${import.meta.env.BASE_URL}assets/school-logo.png`}
-            alt="石門國小校徽"
+          <SchoolLogo
+            eager
             style={{ width: '84%', height: '84%', objectFit: 'contain' }}
-            onError={(e) => {
-              (e.currentTarget as HTMLImageElement).style.display = 'none';
-            }}
           />
         </a>
 

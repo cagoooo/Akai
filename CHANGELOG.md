@@ -2,6 +2,27 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.10] - 2026-05-05 — 石門校徽載入優化（3 MB → 17 KB，約 185 倍）
+### ⚡ 校徽資源大瘦身
+使用者反映「石門 LOGO 每次都要讀取很久才出來」，追查發現原 PNG 是 **1971×1941、3.0 MB**，但實際顯示尺寸最大只有 76×76。
+
+- **重新縮圖**：sharp 縮至 256×256（3× retina 顯示也綽綽有餘）
+- **PNG 重壓**（含 palette 量化）：3.0 MB → 22 KB
+- **新增 WebP 版本**：alpha 通道保留、quality 88 → 17 KB
+- **新元件 `SchoolLogo`**（`client/src/components/bulletin/SchoolLogo.tsx`）：
+  - `<picture>` 包 WebP + PNG fallback，瀏覽器自動挑最佳格式
+  - `width={256} height={256}` 固定尺寸避免 CLS（版面位移）
+  - `decoding="async"` 不阻塞主執行緒
+  - `eager` prop：above-the-fold（Header / Hero）用 `loading="eager"` + `fetchPriority="high"` 優先載入；footer 用 `loading="lazy"` 延後載入
+- **3 處引用統一**：BulletinHeader、BulletinHero、BulletinFooter 全部改用 `<SchoolLogo>` 共用元件，省去重複 `<img onError>` 樣板碼
+
+預期效果：首屏載入時間少 1〜2 秒，慢速網路使用者徹底告別「校徽空轉」窘境。
+
+### 🧹 內部
+- 版本 3.6.9 → 3.6.10
+
+---
+
 ## [3.6.9] - 2026-05-05 — 卡片說明大升級：17 張 cagoooo.github.io 卡片補上完整介紹
 ### 📝 17 張自製工具卡片內容大改造
 針對 `tools.json` 中連到 `cagoooo.github.io/*` 但說明過於簡短（甚至像「便捷的 X 平台，提升 Y 效率」這種沒料空話）的卡片，逐一 WebFetch 實際網站內容並重寫：
