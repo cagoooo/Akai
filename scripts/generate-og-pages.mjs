@@ -32,9 +32,17 @@ function extractToolsFromJson() {
  */
 function generateToolPageHtml(tool) {
   const pageUrl = `${SITE_URL}/tool/${tool.id}`;
-  const imageUrl = tool.previewUrl
-    ? `${SITE_URL}${tool.previewUrl.startsWith('/') ? '' : '/'}${tool.previewUrl}`
+
+  // 優先用 ogPreviewUrl（1200×630 設計過的社群分享圖）
+  // 沒有才 fallback 到 previewUrl（1024×1024 卡片預覽截圖）
+  // 都沒有才用 apple-touch-icon.png
+  const ogPath = tool.ogPreviewUrl || tool.previewUrl;
+  const imageUrl = ogPath
+    ? `${SITE_URL}${ogPath.startsWith('/') ? '' : '/'}${ogPath}`
     : `${SITE_URL}/apple-touch-icon.png`;
+  const isUnifiedOg = !!tool.ogPreviewUrl;
+  const imgWidth = isUnifiedOg ? 1200 : 1024;
+  const imgHeight = isUnifiedOg ? 630 : 1024;
 
   const fullTitle = `${tool.title} - 阿凱老師教育工具`;
 
@@ -57,8 +65,8 @@ function generateToolPageHtml(tool) {
   <meta property="og:title" content="${fullTitle}">
   <meta property="og:description" content="${tool.description}">
   <meta property="og:image" content="${imageUrl}">
-  <meta property="og:image:width" content="1024">
-  <meta property="og:image:height" content="1024">
+  <meta property="og:image:width" content="${imgWidth}">
+  <meta property="og:image:height" content="${imgHeight}">
   <meta property="og:site_name" content="教育科技創新專區">
   <meta property="og:locale" content="zh_TW">
   

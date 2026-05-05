@@ -2,6 +2,30 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.14] - 2026-05-05 — 修正：社群分享 OG 圖指錯成卡片截圖（影響全部 88 張）
+### 🐛 嚴重 Bug 修正：og:image 全部用錯
+使用者反映 FB 分享 #88 卡片時，預覽圖只是「網站截圖」很不專業。追查發現 `scripts/generate-og-pages.mjs:35` 的 `og:image` URL **只讀 `previewUrl`（卡片內截圖）**，**完全忽略 `tool.ogPreviewUrl`**——而 `tool.ogPreviewUrl` 才是 `generate-unified-og.mjs` 用 cork-board 公佈欄風格 + 便利貼大標 + 阿凱署名 + URL 膠囊精心設計過的 1200×630 社群分享圖。
+
+也就是說：**過去所有從 FB / LINE / Twitter / Slack 分享 88 張卡片連結時，看到的都是隨便的截圖，而不是漂亮的設計圖**。
+
+### 🔧 修正內容
+- `generate-og-pages.mjs:35` 邏輯改為「優先讀 `ogPreviewUrl`，沒有才 fallback 到 `previewUrl`」
+- `og:image:width` / `og:image:height` 改為條件式：用 ogPreviewUrl 時 1200×630，fallback 時 1024×1024
+- `og:image:secure_url`（LINE 用）跟 `twitter:image` 同步修正
+
+build 後 88 張 `tool/N/index.html` 全部重新產生正確的 OG meta tag。
+
+### 📣 使用者操作建議
+社群平台會快取 OG 圖數天才更新。要立刻看到新版可用：
+- **Facebook**：[Sharing Debugger](https://developers.facebook.com/tools/debug/) 貼網址按「再次抓取」
+- **LINE**：等 1〜3 天會自動更新（無公開 debugger）
+- **Twitter / X**：[Card Validator](https://cards-dev.twitter.com/validator) 貼網址預覽
+
+### 🧹 內部
+- 版本 3.6.13 → 3.6.14
+
+---
+
 ## [3.6.13] - 2026-05-05 — 新增工具 #88：桃園市115學年度國中課程計畫AI審查工具
 ### ✨ 新工具
 - **#88 桃園市115學年度國中課程計畫AI審查工具**（`https://cagoooo.github.io/JHScurriculum/`）
