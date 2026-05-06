@@ -94,39 +94,45 @@ export function BulletinWishPool() {
         {SAMPLE_WISHES.map((w, i) => (
           <div
             key={i}
-            className="sticker-card"
             style={{
-              background: colors[i % colors.length],
-              padding: 14,
-              boxShadow: '0 2px 3px rgba(0,0,0,.12), 4px 4px 0 rgba(0,0,0,.2)',
-              transform: `rotate(${tilts[i % tilts.length]}deg)`,
               position: 'relative',
-              minHeight: 100,
-              clipPath: 'polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%)',
+              transform: `rotate(${tilts[i % tilts.length]}deg)`,
+              paddingTop: 8,
             }}
           >
-            <Pin color={tokens.pin[i % tokens.pin.length]} size={14} style={{ top: -7, right: 12 }} />
             <div
+              className="sticker-card"
               style={{
-                fontSize: 13,
-                lineHeight: 1.5,
-                color: '#1a1a1a',
-                fontFamily: tokens.font.tc,
+                background: colors[i % colors.length],
+                padding: 14,
+                boxShadow: '0 2px 3px rgba(0,0,0,.12), 4px 4px 0 rgba(0,0,0,.2)',
+                minHeight: 100,
+                clipPath: 'polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%)',
               }}
             >
-              「{w.text}」
+              <div
+                style={{
+                  fontSize: 13,
+                  lineHeight: 1.5,
+                  color: '#1a1a1a',
+                  fontFamily: tokens.font.tc,
+                }}
+              >
+                「{w.text}」
+              </div>
+              <div
+                style={{
+                  fontSize: 11,
+                  color: '#4a3a20',
+                  marginTop: 8,
+                  fontStyle: 'italic',
+                  fontFamily: tokens.font.tc,
+                }}
+              >
+                — {w.name}
+              </div>
             </div>
-            <div
-              style={{
-                fontSize: 11,
-                color: '#4a3a20',
-                marginTop: 8,
-                fontStyle: 'italic',
-                fontFamily: tokens.font.tc,
-              }}
-            >
-              — {w.name}
-            </div>
+            <Pin color={tokens.pin[i % tokens.pin.length]} size={14} style={{ top: 1, right: 12 }} />
           </div>
         ))}
       </div>

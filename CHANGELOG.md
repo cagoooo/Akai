@@ -2,6 +2,19 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.16] - 2026-05-06 — 修正許願池便利貼大頭針被截掉
+### 🎨 BulletinWishPool 圖釘截角修正
+使用者反映許願池四張示範便利貼右上角的紅/藍/綠/黃大頭針都被截掉一半。
+
+**根因**：[BulletinWishPool.tsx](client/src/components/bulletin/BulletinWishPool.tsx) 的 `.sticker-card` 用 `clip-path: polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%)` 做右下折角效果，但 clip-path 同時也會把超出卡片上邊緣的元素切掉。Pin 是用 `top: -7` 騎在卡片頂端，整顆圓被 clip 切到只剩下半。
+
+**修法**：把卡片包進外層 wrapper：
+- 外層 wrapper：接管 `position: relative` + `rotate` + `paddingTop: 8` 預留圖釘空間，**不套 clip-path**
+- 內層 `.sticker-card`：只保留 clip-path（折角效果不變）
+- Pin：移到 wrapper 直接子層、卡片之外，`top: 1` 讓圖釘正好騎在卡片上緣
+
+四顆大頭針現在都完整顯示，視覺一致。
+
 ## [3.6.15] - 2026-05-05 — 修正 #88 卡片預覽圖 + new-tool.mjs 自動清教學遮罩
 ### 🎨 #88 卡片預覽圖重做
 使用者反映 #88 詳情頁拍立得內的截圖很醜（看起來像 PDF 上傳區、灰暗 + 教學遮罩擋住）。追查發現 JHScurriculum 網站第一屏其實有非常漂亮的綠色 hero 區（金色「課程計畫 AI 審查工具」大標題 + 4 個分類膠囊），但 Playwright 預設截圖會被 driver.js 的「步驟 1/5」教學對話框遮住。
