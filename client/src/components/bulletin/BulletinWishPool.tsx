@@ -20,6 +20,7 @@ const SAMPLE_WISHES = [
  */
 export function BulletinWishPool() {
   const [open, setOpen] = useState(false);
+  const [hoverIdx, setHoverIdx] = useState<number | null>(null);
 
   const colors = [tokens.note.yellow, tokens.note.blue, tokens.note.pink, tokens.note.green];
   const tilts = [-3, 2, -1.5, 1.2];
@@ -91,50 +92,60 @@ export function BulletinWishPool() {
       </button>
 
       <div className="bulletin-wish-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-        {SAMPLE_WISHES.map((w, i) => (
-          <div
-            key={i}
-            style={{
-              position: 'relative',
-              transform: `rotate(${tilts[i % tilts.length]}deg)`,
-              paddingTop: 8,
-            }}
-          >
+        {SAMPLE_WISHES.map((w, i) => {
+          const tilt = tilts[i % tilts.length];
+          const isHover = hoverIdx === i;
+          return (
             <div
-              className="sticker-card"
+              key={i}
+              onMouseEnter={() => setHoverIdx(i)}
+              onMouseLeave={() => setHoverIdx(null)}
               style={{
-                background: colors[i % colors.length],
-                padding: 14,
-                boxShadow: '0 2px 3px rgba(0,0,0,.12), 4px 4px 0 rgba(0,0,0,.2)',
-                minHeight: 100,
-                clipPath: 'polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%)',
+                position: 'relative',
+                transform: isHover ? 'rotate(0deg) translateY(-8px)' : `rotate(${tilt}deg)`,
+                transition: 'transform .35s cubic-bezier(.34,1.56,.64,1)',
+                paddingTop: 8,
+                zIndex: isHover ? 5 : 'auto',
               }}
             >
               <div
                 style={{
-                  fontSize: 13,
-                  lineHeight: 1.5,
-                  color: '#1a1a1a',
-                  fontFamily: tokens.font.tc,
+                  background: colors[i % colors.length],
+                  padding: 14,
+                  boxShadow: isHover
+                    ? '0 3px 2px rgba(0,0,0,.06), 0 18px 30px -10px rgba(0,0,0,.28), 0 40px 60px -30px rgba(0,0,0,.22)'
+                    : '0 2px 3px rgba(0,0,0,.12), 4px 4px 0 rgba(0,0,0,.2)',
+                  minHeight: 100,
+                  clipPath: 'polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%)',
+                  transition: 'box-shadow .35s',
                 }}
               >
-                「{w.text}」
+                <div
+                  style={{
+                    fontSize: 13,
+                    lineHeight: 1.5,
+                    color: '#1a1a1a',
+                    fontFamily: tokens.font.tc,
+                  }}
+                >
+                  「{w.text}」
+                </div>
+                <div
+                  style={{
+                    fontSize: 11,
+                    color: '#4a3a20',
+                    marginTop: 8,
+                    fontStyle: 'italic',
+                    fontFamily: tokens.font.tc,
+                  }}
+                >
+                  — {w.name}
+                </div>
               </div>
-              <div
-                style={{
-                  fontSize: 11,
-                  color: '#4a3a20',
-                  marginTop: 8,
-                  fontStyle: 'italic',
-                  fontFamily: tokens.font.tc,
-                }}
-              >
-                — {w.name}
-              </div>
+              <Pin color={tokens.pin[i % tokens.pin.length]} size={14} style={{ top: 1, right: 12 }} />
             </div>
-            <Pin color={tokens.pin[i % tokens.pin.length]} size={14} style={{ top: 1, right: 12 }} />
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {open && (

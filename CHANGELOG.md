@@ -2,6 +2,20 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.17] - 2026-05-06 — 許願池便利貼懸浮時大頭針同步飛起
+### 🎨 BulletinWishPool 圖釘跟著卡片一起浮動
+v3.6.16 修好圖釘截角後，發現滑鼠移過便利貼時卡片會「飛起來 -8px」但圖釘留在原地，看起來像圖釘脫節了。
+
+**根因**：[tokens.css:81](client/src/styles/tokens.css:81) 的全域 `.sticker-card:hover` 用 `transform !important` 把內層卡片往上推，但 v3.6.16 已經把 Pin 移到外層 wrapper（為了避開 clip-path 截角），所以 Pin 不在 transform 範圍內。
+
+**修法**：改用 React `useState` 在 wrapper 層管理 hover 狀態：
+- 移除內層 `className="sticker-card"`，避免全域 hover rule 跟 wrapper transform 疊加成 -16px
+- wrapper 接管整個浮動效果（rotate(0) + translateY(-8px) + z-index 5）
+- 內層卡片只保留 box-shadow 變化（陰影加深）
+- transition `cubic-bezier(.34,1.56,.64,1)` 帶有彈性回彈感，跟原本一致
+
+四顆大頭針現在會跟著便利貼一起飛起來，視覺連動。
+
 ## [3.6.16] - 2026-05-06 — 修正許願池便利貼大頭針被截掉
 ### 🎨 BulletinWishPool 圖釘截角修正
 使用者反映許願池四張示範便利貼右上角的紅/藍/綠/黃大頭針都被截掉一半。
