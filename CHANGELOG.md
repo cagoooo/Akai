@@ -2,6 +2,18 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.19] - 2026-05-08 — 新增工具 #90：繪本 → Google表單 一條龍工作坊
+### ✨ 新增 `cagoooo.github.io/storytell` 工具卡片
+阿凱老師打造的整合式 AI 教學工作坊（v0.6.7），把繪本變 Google 表單的六大步驟一條龍走完：Gemini 生圖 → Google Doc 整理 → 圖片轉換器 → Apps Script 產生 → 執行授權 → QR Code 派發。
+
+- **分類**：教學設計（teaching）
+- **icon**：BookOpen
+- **標籤**：繪本教學、Google 表單、AI 工作坊、Apps Script、Gemini AI、NotebookLM、閱讀理解、國小語文、QR Code 派發、免費工具
+- **卡片預覽圖**：`/previews/tool_90.webp`（Playwright 截工作坊主頁，捕到紫橘漸層 hero + 六大步驟導引）
+- **OG 社群分享圖**：`/previews/og/tool_90.webp`（綠色「教學設計」便利貼風格 + polaroid 預覽嵌入）
+
+加碼覆寫 `scripts/fonts/NotoSansTC-Bold.ttf`（從 noto-cjk repo 抓下，gitignored 不會 commit）。
+
 ## [3.6.17] - 2026-05-06 — 許願池便利貼懸浮時大頭針同步飛起
 ### 🎨 BulletinWishPool 圖釘跟著卡片一起浮動
 v3.6.16 修好圖釘截角後，發現滑鼠移過便利貼時卡片會「飛起來 -8px」但圖釘留在原地，看起來像圖釘脫節了。

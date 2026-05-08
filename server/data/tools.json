@@ -1593,5 +1593,28 @@
       "情境化回覆",
       "免費工具"
     ]
+  },
+  {
+    "id": 90,
+    "title": "繪本 → Google表單 一條龍工作坊",
+    "description": "阿凱老師打造的整合式 AI 教學工作坊，把 Gemini 生成的繪本圖文、Google Doc 整理、Apps Script 表單產生、QR Code 派發、NotebookLM 學習資源一條龍串成六步驟，5 分鐘把繪本變成可派發的互動表單。",
+    "detailedDescription": "「繪本→Google表單 一條龍工作坊」是阿凱老師為國小教師、繪本講師、語文與閱讀領域備課團隊打造的整合式 AI 教學工作坊平台（v0.6.7）。整套流程拆成六個清晰步驟，老師沿著工作坊頁面走完，繪本就能自動變成 Google 表單互動測驗：(1) 把 Gemini 產出的圖片與故事文字整理進 Google Doc，建議用「標題 1」分隔各頁；(2) Doc 同時做兩件事——「檔案 → 共用 → 發布到網路」並把共用權限設為「知道連結的任何人 → 檢視者」；(3) 透過內建圖片轉換器或第三方 picconvert 取出公開直接連結；(4) 在 Gemini Canvas 模式上傳 Doc，用提供的提示詞產生 Apps Script 表單程式碼；(5) 在 script.google.com 貼上程式碼、選擇函式、執行授權後從執行紀錄取得表單網址；(6) 用直接連結、QR Code 或嵌入 Google Classroom 派發給學生。支援 7 種題型、PWA 離線可用、BYOK（自帶 API Key 僅存本機瀏覽器）模式；視覺化編輯模式更可省去 Gemini Canvas 步驟，從圖片直接拼頁產出 Apps Script。加碼整合 Gemini TTS 表單發音、NotebookLM 自動生成學習指南／FAQ／Audio Overview／心智圖、A4 派發單列印、QR Code 工具等。適合班級閱讀理解測驗、繪本延伸活動、跨領域素養命題、閱讀社群共備、家長伴讀數位化、自製繪本教學包使用。免費、無需註冊、開瀏覽器即用。",
+    "url": "https://cagoooo.github.io/storytell/",
+    "icon": "BookOpen",
+    "category": "teaching",
+    "previewUrl": "/previews/tool_90.webp",
+    "ogPreviewUrl": "/previews/og/tool_90.webp",
+    "tags": [
+      "繪本教學",
+      "Google 表單",
+      "AI 工作坊",
+      "Apps Script",
+      "Gemini AI",
+      "NotebookLM",
+      "閱讀理解",
+      "國小語文",
+      "QR Code 派發",
+      "免費工具"
+    ]
   }
 ]
