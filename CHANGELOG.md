@@ -2,6 +2,24 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.21] - 2026-05-09 — tools.json fetch 加版本鎖定 cache-buster
+### 🐛 修正新工具卡片部署後使用者看不到的根本原因
+
+v3.6.20 部署完，`/tool/91`、`/tool/92` 路由顯示「找不到拍立得」— 不是 build 或 gh-pages 的問題，是 SPA 抓 `tools.json` 時沒帶 cache-buster 參數，被 GitHub Pages CDN 邊緣快取（`max-age=600`）卡住舊版（90 筆）。
+
+**對比根因**：[useVersionCheck.ts:54](client/src/hooks/useVersionCheck.ts:54) 抓 `version.json` 時用 `?t=${Date.now()}` 強制每次都新鮮，所以 footer 永遠顯示最新版號；但 5 個地方抓 `tools.json` 都直接 `${BASE_URL}api/tools.json`，CDN 邊緣節點就有 10 分鐘空窗。
+
+**修法**：在所有 `tools.json` fetch 統一加 `?v=${VITE_APP_VERSION}` 鎖定 bundle 版本：
+- [BulletinHome.tsx:121](client/src/pages/BulletinHome.tsx:121)
+- [BulletinToolDetail.tsx:216](client/src/pages/BulletinToolDetail.tsx:216)
+- [Home.tsx:228](client/src/pages/Home.tsx:228)
+- [ToolDetail.tsx:312](client/src/pages/ToolDetail.tsx:312)
+- [AnalyticsDashboard.tsx:82](client/src/components/AnalyticsDashboard.tsx:82)
+
+**為什麼用版本不用 timestamp**：版本鎖定可以讓同一版本內的 reload 共享 SW 與 CDN 快取（秒開），bump 版本時自然失效強制刷新。timestamp 每次都變，秒殺所有快取效益。SW 的 `networkFirst` 策略本來就會先打網路，主要受惠的是 GitHub Pages CDN 與 HTTP 層的 `Cache-Control` — 不同 URL → CDN 必須回源 → 拉到最新 `tools.json`。
+
+`VITE_APP_VERSION` 在 [vite.config.ts:26](vite.config.ts:26) 已從 `package.json` 自動注入，無須額外設定。
+
 ## [3.6.20] - 2026-05-09 — 新增工具 #91 點亮詩意 Pro / #92 5W1H 靈感發射器 PRO
 ### ✨ 同時新增兩張工具卡片
 

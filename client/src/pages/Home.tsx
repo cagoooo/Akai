@@ -225,7 +225,7 @@ export function Home() {
     queryKey: ['/api/tools'],
     queryFn: async () => {
       // 🚀 優先嘗試靜態路徑以命配 index.html 中的 Preload
-      const staticUrl = `${import.meta.env.BASE_URL}api/tools.json`;
+      const staticUrl = `${import.meta.env.BASE_URL}api/tools.json?v=${import.meta.env.VITE_APP_VERSION}`;
       try {
         const staticResponse = await fetch(staticUrl);
         if (staticResponse.ok) return await staticResponse.json() as EducationalTool[];

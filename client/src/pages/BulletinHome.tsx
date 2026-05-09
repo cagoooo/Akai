@@ -118,7 +118,7 @@ export function BulletinHome() {
   const { data: toolsData, isLoading } = useQuery({
     queryKey: ['/api/tools'],
     queryFn: async () => {
-      const staticUrl = `${import.meta.env.BASE_URL}api/tools.json`;
+      const staticUrl = `${import.meta.env.BASE_URL}api/tools.json?v=${import.meta.env.VITE_APP_VERSION}`;
       try {
         const staticResponse = await fetch(staticUrl);
         if (staticResponse.ok) return (await staticResponse.json()) as EducationalTool[];

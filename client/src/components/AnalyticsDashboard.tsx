@@ -79,7 +79,7 @@ export function AnalyticsDashboard() {
   // 載入工具標題（給圖表 label 用）
   useEffect(() => {
     const baseUrl = (import.meta as any).env?.BASE_URL || '/';
-    fetch(`${baseUrl}api/tools.json`)
+    fetch(`${baseUrl}api/tools.json?v=${(import.meta as any).env?.VITE_APP_VERSION || ''}`)
       .then((r) => (r.ok ? r.json() : []))
       .then((tools: any[]) => {
         if (!Array.isArray(tools)) return;
