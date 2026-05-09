@@ -2,6 +2,24 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.20] - 2026-05-09 — 新增工具 #91 點亮詩意 Pro / #92 5W1H 靈感發射器 PRO
+### ✨ 同時新增兩張工具卡片
+
+**工具 #91**：`cagoooo.github.io/PhotoPoet`「✨ 點亮詩意 Pro ✨早安長輩圖」
+- 上傳照片 → AI 生成繁體中文詩詞 → 一鍵產出可直傳 LINE 的早安長輩圖
+- **分類**：語文寫作（language） · **icon**：Feather
+- **標籤**：AI 詩詞、早安長輩圖、照片生成、繁體中文詩、語文創作、銀髮數位、節氣問候、詩文牆社群、Gemini AI、免費工具
+
+**工具 #92**：`cagoooo.github.io/Aura`「5W1H 靈感發射器 PRO版」
+- 桃園市石門國小資訊組打造，5W1H 結構化思考 + 評語優化「點石成金」+ 客製化專屬助手
+- **分類**：教學設計（teaching） · **icon**：Lightbulb
+- **標籤**：5W1H、創意思考、教學設計、評語優化、AI 助手、教師工具、思考框架、石門國小、Gemini AI、免費工具
+
+兩張卡片預覽圖（`/previews/tool_91.webp`、`tool_92.webp`）皆用 Playwright 截首頁 hero 後 sharp 處理為 1024×1024。OG 社群分享圖（`/previews/og/tool_*.webp`）走統一便利貼風格。
+
+### 🐛 修正 OG canvas 中 emoji 字元渲染為方框
+`generate-unified-og.mjs` 加入 `stripEmoji()` helper：在繪製標題與描述前去掉 NotoSansTC TTF 不支援的 Pictographic 字元（如 ✨ U+2728），避免 OG canvas 出現 □ 方框。卡片網頁端因有系統 emoji 字型 fallback，原樣保留 ✨ 不變動。
+
 ## [3.6.19] - 2026-05-08 — 新增工具 #90：繪本 → Google表單 一條龍工作坊
 ### ✨ 新增 `cagoooo.github.io/storytell` 工具卡片
 阿凱老師打造的整合式 AI 教學工作坊（v0.6.7），把繪本變 Google 表單的六大步驟一條龍走完：Gemini 生圖 → Google Doc 整理 → 圖片轉換器 → Apps Script 產生 → 執行授權 → QR Code 派發。

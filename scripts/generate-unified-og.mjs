@@ -151,6 +151,15 @@ function drawTape(ctx, cx, cy, w, color, rotate, text) {
   ctx.restore();
 }
 
+// 移除 NotoSansTC 不支援的 emoji / pictograph 字元（避免 OG 出現 □ 方框）
+function stripEmoji(text) {
+  if (!text) return text;
+  return text
+    .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2300}-\u{23FF}\u{FE0F}\u{200D}]/gu, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 // ── 字串截斷 ────────────────────────────────
 function truncate(text, ctx, maxWidth) {
   let str = text;
@@ -367,12 +376,12 @@ async function generateOG(tool, faviconImg) {
   ctx.fillStyle = C.ink;
   ctx.font = '900 48px "NotoSansTC"';
   ctx.textAlign = 'left';
-  drawWrappedText(ctx, tool.title, textX, 145, textMaxW, 60, 2);
+  drawWrappedText(ctx, stripEmoji(tool.title), textX, 145, textMaxW, 60, 2);
 
   // 描述（最多 3 行）
   ctx.fillStyle = C.inkMuted;
   ctx.font = '600 19px "NotoSansTC"';
-  drawWrappedText(ctx, tool.description, textX, 270, textMaxW, 30, 3);
+  drawWrappedText(ctx, stripEmoji(tool.description), textX, 270, textMaxW, 30, 3);
 
   // 底部彩線
   ctx.strokeStyle = cat.pin;
