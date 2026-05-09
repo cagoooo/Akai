@@ -1,1 +1,0 @@
-import"./vendor-firebase-Dw8_r0lt.js";import"./index-HCZ27nEZ.js";async function e(s,t){return console.warn("Firebase 不可用，無法提交許願"),null}async function u(s){return[]}async function i(s,t){return!1}async function r(s){return!1}export{r as d,u as g,e as s,i as u};
