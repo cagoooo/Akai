@@ -1685,5 +1685,28 @@
       "班聯會",
       "免費工具"
     ]
+  },
+  {
+    "id": 94,
+    "title": "封面串故事 · 音樂影片分鏡產生器",
+    "description": "阿凱老師打造的 AI 音樂影片分鏡擴寫工具，把 Suno / Gemini Veo / Runway 等平台做出來的 MV 拖進瀏覽器，AI 自動抓封面幀、幫你寫出後 15-30 秒的運鏡與故事分鏡 prompt，貼回影片平台繼續生成，最後在瀏覽器內 FFmpeg 串成一支完整短片。",
+    "detailedDescription": "「封面串故事 · 音樂影片分鏡產生器」是阿凱老師為國小高年級到國中的 AI 音樂創作課程量身打造的「MV 故事擴寫」工作坊式工具。學生先用 Suno / Gemini Veo / Runway 等 AI 平台做出第一段音樂影片後，把 MP4 / WebM / MOV 拖進本網站（檔案完全留在瀏覽器、不上傳伺服器），用時間軸挑出最能代表這首歌的封面那一幀按下載即可拿到 PNG 封面；接著勾選想要的影像風格（電影感、動畫、寫實、超現實等可複選），AI 會看著封面與可選歌詞、主角描述，自動為你寫出後續 15-30 秒、切成 4-6 段、每段約 5 秒的運鏡與故事分鏡 prompt，並附「複製中文 / Copy EN」雙語切換。每段下方都有「跳到 AI 平台產這段」紫粉按鈕，一鍵把該段 prompt 複製到剪貼簿並另開分頁到 Google Flow / Canva AI / 海螺 / Anijam / Runway / 可靈 / Pika / Meta AI 八選一，貼上就產畫面，超快。所有平台產出的 5 秒短片都拿回來後，回最下方「串接成完整短片」區塊多選上傳，瀏覽器內用 FFmpeg 直接合成 20-30 秒成品 MP4，免裝任何剪輯軟體、檔案絕不外流。適合國小 AI 影像創作課、國中藝術領域影音單元、跨領域素養課程的「AI 共創 MV」單元、暑期營隊媒體素養工作坊、教師增能研習實作。免費、無需註冊、不需 API Key、開瀏覽器即用，每人建議單堂課做 1-2 種風格就好。",
+    "url": "https://cagoooo.github.io/music-cover-storyboard/",
+    "icon": "Video",
+    "category": "interactive",
+    "previewUrl": "/previews/tool_94.webp",
+    "ogPreviewUrl": "/previews/og/tool_94.webp",
+    "tags": [
+      "AI 影片",
+      "MV 創作",
+      "分鏡腳本",
+      "影像敘事",
+      "Gemini Veo",
+      "Suno",
+      "Runway",
+      "FFmpeg 合成",
+      "媒體素養",
+      "免費工具"
+    ]
   }
 ]
