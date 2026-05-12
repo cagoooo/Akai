@@ -28,14 +28,16 @@ const BROWSER_HEADERS = {
   'Accept-Encoding': 'gzip, deflate, br',
 };
 
-// 已知有強反爬蟲機制（Cloudflare / Bot Protection）的網域。
-// 這些網站用瀏覽器打得開，但自動化請求會一律被擋，偵測到時標示為「需人工確認」而非真正失效。
+// 已知有強反爬蟲機制（Cloudflare / Bot Protection）或限制外部 IP 存取的網域。
+// 這些網站用瀏覽器（校內 / 一般使用者）打得開，但 GitHub Actions runner 的 IP 會一律被擋，
+// 偵測到時標示為「需人工確認」而非真正失效。
 const BOT_PROTECTED_DOMAINS = [
-  'padlet.com',       // Cloudflare 反爬蟲
-  'claude.ai',        // Anthropic bot detection
-  'notion.so',        // Notion 限制自動化訪問
-  'canva.com',        // Canva 限制
-  'figma.com',        // Figma bot detection
+  'padlet.com',                  // Cloudflare 反爬蟲
+  'claude.ai',                   // Anthropic bot detection
+  'notion.so',                   // Notion 限制自動化訪問
+  'canva.com',                   // Canva 限制
+  'figma.com',                   // Figma bot detection
+  'english.smes.tyc.edu.tw',     // 石門國小雙語站，限制外部 IP / 持續回 403
 ];
 
 function isBotProtected(url) {
