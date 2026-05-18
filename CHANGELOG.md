@@ -2,6 +2,22 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.25] - 2026-05-18 — 新增工具 #96 DFC 行動方案即時投票系統
+### ✨ 龍潭國小自治市選舉開票平台上架
+
+**工具 #96**：`cagoooo.github.io/Lungtan-DFC`「DFC 行動方案即時投票系統」
+
+- 為桃園市龍潭國民小學第 123 屆自治市小市長選舉量身打造的即時開票平台
+- 以 DFC（Design for Change，孩子改變世界）「行動方案」精神為主軸，候選人端出具體要為校園做的事讓全校投票
+- 前後台雙畫面：公開監票（投影用）+ 後台計票（教師唱票 +1）
+- 計票經 Firebase Firestore 同步寫入，公開畫面 0.5 秒內即時反映
+- **分類**：互動體驗（interactive） · **icon**：Heart
+- **標籤**：DFC 行動方案、龍潭國小、自治市選舉、第123屆、即時計票、公開監票、民主教育、Firebase 即時同步、校園選舉、免費工具
+
+### 🎨 新增主預覽圖與 OG 社群分享圖
+- `client/public/previews/tool_96.webp`（1024×1024，rose→orange→amber 漸層 + 投票箱與三張選票主視覺）
+- `client/public/previews/og/tool_96.webp`（1200×630，便利貼軟木板風格，自動由 `generate-unified-og.mjs` 生成）
+
 ## [3.6.21] - 2026-05-09 — tools.json fetch 加版本鎖定 cache-buster
 ### 🐛 修正新工具卡片部署後使用者看不到的根本原因
 
