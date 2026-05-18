@@ -159,7 +159,7 @@
 
 | # | 工具名稱 | 說明 | 連結 |
 |---|----------|------|------|
-| 1 | **線上即時客服** | 提供即時的線上教育支援和諮詢服務，協助解決學習過程中的問題 | [開啟工具](https://doc.smes.tyc.edu.tw/shared/A4uyH5OdHI) |
+| 1 | **線上即時客服** | 提供即時的線上教育支援和諮詢服務，協助解決學習過程中的問題 | [開啟工具](https://document-ai-companion-ipad4.replit.app/shared/A4uyH5OdHI) |
 | 16 | **親師溝通小幫手** | 促進親師溝通的便捷平台 | [開啟工具](https://talk.smes.tyc.edu.tw/) |
 | 74 | **2026 親職日場地配置圖** | 提供 2026 親職日的完整場地配置與動線規劃進度，協助親師快速掌握活動空間分布 | [開啟工具](https://sites.google.com/mail2.smes.tyc.edu.tw/academic/2026%E8%A6%AA%E8%81%B7%E6%97%A5%E5%A0%B4%E5%9C%B0%E9%85%8D%E7%BD%AE) |
 
@@ -218,7 +218,7 @@
 | 15 | **社群領域會議報告產出平台** | 快速產生會議報告的協作工具 | [開啟工具](https://report.smes.tyc.edu.tw/) |
 | 17 | **單一抽籤系統** | 簡單快速的單一抽籤工具 | [開啟工具](https://www.smes.tyc.edu.tw/smes_html/gogogo.html) |
 | 18 | **大量抽籤系統** | 支援大量抽籤的進階工具 | [開啟工具](https://www.smes.tyc.edu.tw/smes_html/random.html) |
-| 19 | **設計自己的專屬客服** | 自訂專屬的智能客服系統 | [開啟工具](https://doc.smes.tyc.edu.tw/) |
+| 19 | **設計自己的專屬客服** | 自訂專屬的智能客服系統 | [開啟工具](https://document-ai-companion-ipad4.replit.app/shared/A4uyH5OdHI) |
 | 24 | **教師午會記錄報告站** | 教師午會紀錄與報告分享平台 | [開啟工具](https://sites.google.com/mail2.smes.tyc.edu.tw/114teacher/) |
 | 27 | **⬅️好用小工具(許願池)** | 各種好用的教學小工具集合與許願池 | [開啟工具](https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/) |
 | 40 | **Padlet行政宣導動態牆** | 即時更新的行政宣導公告牆，方便資訊傳達 | [開啟工具](https://padlet.com/2104340/padlet-rl3l5wi9wmebku2k) |
