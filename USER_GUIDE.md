@@ -218,7 +218,7 @@
 | 15 | **社群領域會議報告產出平台** | 快速產生會議報告的協作工具 | [開啟工具](https://report.smes.tyc.edu.tw/) |
 | 17 | **單一抽籤系統** | 簡單快速的單一抽籤工具 | [開啟工具](https://www.smes.tyc.edu.tw/smes_html/gogogo.html) |
 | 18 | **大量抽籤系統** | 支援大量抽籤的進階工具 | [開啟工具](https://www.smes.tyc.edu.tw/smes_html/random.html) |
-| 19 | **設計自己的專屬客服** | 自訂專屬的智能客服系統 | [開啟工具](https://document-ai-companion-ipad4.replit.app/shared/A4uyH5OdHI) |
+| 19 | **設計自己的專屬客服** | 自訂專屬的智能客服系統 | [開啟工具](https://document-ai-companion-ipad4.replit.app/) |
 | 24 | **教師午會記錄報告站** | 教師午會紀錄與報告分享平台 | [開啟工具](https://sites.google.com/mail2.smes.tyc.edu.tw/114teacher/) |
 | 27 | **⬅️好用小工具(許願池)** | 各種好用的教學小工具集合與許願池 | [開啟工具](https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/) |
 | 40 | **Padlet行政宣導動態牆** | 即時更新的行政宣導公告牆，方便資訊傳達 | [開啟工具](https://padlet.com/2104340/padlet-rl3l5wi9wmebku2k) |
