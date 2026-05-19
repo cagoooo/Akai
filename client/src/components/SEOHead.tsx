@@ -12,20 +12,24 @@ interface SEOHeadProps {
     modifiedTime?: string;
 }
 
-const DEFAULT_TITLE = '教育科技創新專區 | Akai 阿凱老師';
-const DEFAULT_DESCRIPTION = '探索 8 種創新教育工具，提升教學效率與學生參與度。包含 AI 學生評語產生器、互動式投票系統、課堂計時工具等實用教育科技工具。';
+const DEFAULT_TITLE = '科技教育創新專區 · 阿凱老師｜90+ 款國小教育工具';
+const DEFAULT_DESCRIPTION = '阿凱老師（桃園市石門國小）親手打造的 90+ 款國小教育科技工具：課堂互動、AI 教案、閱讀評量、語文寫作、教育遊戲一站搞定，100% 免費無廣告，免註冊一鍵分享給學生。';
 const DEFAULT_KEYWORDS = [
     '教育科技',
     '教學工具',
-    'AI 教育',
-    '學生評語',
-    '課堂管理',
-    '互動投票',
+    '國小教育',
+    'AI 教案',
+    '課堂互動',
+    '閱讀評量',
+    '語文寫作',
+    '教育遊戲',
     '教師資源',
-    '數位學習'
+    '免費教育工具',
+    '阿凱老師',
+    '石門國小',
 ];
-const SITE_URL = 'https://akai-e693f.web.app';
-const DEFAULT_IMAGE = `${SITE_URL}/og-image.png`;
+const SITE_URL = 'https://cagoooo.github.io/Akai';
+const DEFAULT_IMAGE = `${SITE_URL}/og-preview-493d3dcc.png`;
 
 /**
  * SEO Head 元件
