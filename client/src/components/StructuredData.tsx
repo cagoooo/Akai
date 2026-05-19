@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-const SITE_URL = 'https://akai-e693f.web.app';
+const SITE_URL = 'https://cagoooo.github.io/Akai';
 
 /**
  * 結構化數據元件
@@ -12,10 +12,10 @@ export function WebsiteSchema() {
     const schema = {
         "@context": "https://schema.org",
         "@type": "WebSite",
-        "name": "教育科技創新專區",
-        "alternateName": "Akai 阿凱老師教育工具",
+        "name": "科技教育創新專區",
+        "alternateName": "阿凱老師 · 教育工具集",
         "url": SITE_URL,
-        "description": "探索創新教育工具，提升教學效率與學生參與度",
+        "description": "桃園市石門國小阿凱老師親手打造的 90+ 款國小教育科技工具，課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。",
         "inLanguage": "zh-TW",
         "publisher": {
             "@type": "Person",
