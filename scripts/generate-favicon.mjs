@@ -26,16 +26,14 @@ import { fileURLToPath } from 'node:url';
 import { createCanvas, GlobalFonts } from '@napi-rs/canvas';
 import sharp from 'sharp';
 import pngToIco from 'png-to-ico';
+import { ensureFonts } from './ensure-fonts.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const FONT_PATH = resolve(__dirname, 'fonts', 'NotoSansTC-Bold.ttf');
 const OUT_DIR = resolve(ROOT, 'client', 'public');
 
-if (!existsSync(FONT_PATH)) {
-  console.error(`❌ 找不到字型：${FONT_PATH}`);
-  process.exit(1);
-}
+await ensureFonts();
 GlobalFonts.registerFromPath(FONT_PATH, 'NotoSansTC');
 if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true });
 

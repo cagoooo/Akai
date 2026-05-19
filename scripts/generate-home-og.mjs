@@ -23,6 +23,7 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { createCanvas, loadImage, GlobalFonts } from '@napi-rs/canvas';
+import { ensureFonts } from './ensure-fonts.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -31,10 +32,7 @@ const TOOLS_JSON = resolve(ROOT, 'client', 'public', 'api', 'tools.json');
 const PUBLIC_DIR = resolve(ROOT, 'client', 'public');
 const STATS_JSON = resolve(PUBLIC_DIR, 'api', 'site-stats.json');
 
-if (!existsSync(FONT_PATH)) {
-  console.error(`❌ 找不到字型：${FONT_PATH}`);
-  process.exit(1);
-}
+await ensureFonts();
 GlobalFonts.registerFromPath(FONT_PATH, 'NotoSansTC');
 
 const C = {
