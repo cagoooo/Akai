@@ -675,13 +675,8 @@ async function main() {
     let miniGenerated = 0;
     for (const tool of tools) {
       if (tool.isInternal || SKIP_IDS.has(tool.id)) continue;
-      const slugBody = tool.title
-        .toLowerCase()
-        .replace(/[\s.,;:!?()（）「」『』、，。！？]/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-|-$/g, '')
-        .slice(0, 40);
-      const slug = `tool-${tool.id}-${slugBody}`;
+      // 純 ASCII slug — 與 miniPosts.ts 一致（避免中文 URL encode 問題）
+      const slug = `tool-${tool.id}`;
       const miniPost = {
         slug,
         title: `【30 秒看完】#${tool.id} ${tool.title}：適合誰用？怎麼開始？`,

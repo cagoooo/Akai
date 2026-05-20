@@ -53,25 +53,17 @@ const CATEGORY_COLOR_MAP: Record<string, BlogPost['coverColor']> = {
 };
 
 /**
- * 簡單轉 slug：去標點 + 空白變 -
- * 避免依賴 slugify lib，這個夠用
- */
-function makeSlug(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[\s.,;:!?()（）「」『』、，。！？]/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '')
-    .slice(0, 40);
-}
-
-/**
  * 為單一工具產生迷你 blog post
+ *
+ * slug 採用純 ASCII `tool-{id}` 簡潔模式：
+ *   - 之前用 `tool-{id}-{title-slug}` 含中文，GH Pages 雖支援但需 URL encode
+ *     → sitemap 寫 raw 中文 Google 抓不到、分享連結醜長
+ *   - 改純 ASCII 後：URL 短乾淨、SEO 友善、所有平台都認得
  */
 export function toolToMiniPost(tool: EducationalTool): BlogPost {
   const catLabel = CATEGORY_LABEL[tool.category] || tool.category;
   const catEmoji = CATEGORY_EMOJI[tool.category] || '🔖';
-  const slug = `tool-${tool.id}-${makeSlug(tool.title)}`;
+  const slug = `tool-${tool.id}`;
   const tags = tool.tags || [];
   const desc = tool.description || '';
   const detailed = tool.detailedDescription || '';

@@ -416,8 +416,9 @@ export async function getPostBySlugAsync(slug: string): Promise<BlogPost | undef
   // 先看手寫長文
   const hit = POSTS.find((p) => p.slug === slug);
   if (hit) return hit;
-  // 不是手寫 → 看是不是 mini blog（tool-{id}-...）
-  const match = slug.match(/^tool-(\d+)-/);
+  // 不是手寫 → 看是不是 mini blog（純 ASCII slug 改 tool-{id} 簡潔模式；
+  // 為兼容舊版含中文 slug，也接受 tool-{id}-... 的舊格式）
+  const match = slug.match(/^tool-(\d+)(?:-|$)/);
   if (!match) return undefined;
   const id = parseInt(match[1], 10);
   try {

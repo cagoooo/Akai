@@ -84,14 +84,9 @@ if (existsSync(postsPath)) {
 }
 
 // 自動產生的迷你 blog（一工具一篇 SEO landing）— 跟 miniPosts.ts SKIP_IDS 同邏輯
+// 純 ASCII slug 避免中文 URL encode 問題
 function makeMiniSlug(tool) {
-    const slugBody = tool.title
-        .toLowerCase()
-        .replace(/[\s.,;:!?()（）「」『』、，。！？]/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-|-$/g, '')
-        .slice(0, 40);
-    return `tool-${tool.id}-${slugBody}`;
+    return `tool-${tool.id}`;
 }
 const SKIP_IDS = new Set([81, 46, 10, 68, 3, 100]); // 同 miniPosts.ts
 let miniCount = 0;
