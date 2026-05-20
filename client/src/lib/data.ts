@@ -18,6 +18,12 @@ export interface EducationalTool {
    * - false / 未設 → 一般外部工具
    */
   isInternal?: boolean;
+  /**
+   * 工具加入日期（ISO 8601），由 new-tool.mjs 自動寫入。
+   * 用於前端「🆕 7 天內新增」徽章判斷。
+   * 既有 #1-#97 沒填這個欄位（無法回填真實日期），預設視為「非新工具」。
+   */
+  addedAt?: string;
 }
 
 export interface TeacherMood {

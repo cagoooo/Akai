@@ -18,6 +18,7 @@ import { Tape } from '@/components/primitives/Tape';
 import { BulletinHeader } from '@/components/bulletin/BulletinHeader';
 import { BulletinFooter } from '@/components/bulletin/BulletinFooter';
 import { PageHead } from '@/components/PageHead';
+import { trackEvent } from '@/lib/analytics';
 import { getCategoryLabel } from '@/components/bulletin/toolAdapter';
 
 export function BlogPost() {
@@ -37,10 +38,18 @@ export function BlogPost() {
     enabled: !!post,
   });
 
-  // scroll to top on slug change
+  // scroll to top + GA 上報 blog_read on slug change
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [params.slug]);
+    if (post) {
+      trackEvent('blog_read', {
+        slug: post.slug,
+        title: post.title,
+        related_tools: post.toolIds.join(','),
+        reading_minutes: post.readingMinutes,
+      });
+    }
+  }, [params.slug, post]);
 
   if (!post) {
     return (

@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -29,19 +29,20 @@ urls.push({
     priority: '0.9',
 });
 
-// Tool detail pages
+// Tool detail pages — 含 #100 工具索引神器（isInternal=true）
 for (const tool of tools) {
     urls.push({
         loc: `${SITE_URL}/tool/${tool.id}`,
-        lastmod: TODAY,
+        lastmod: tool.addedAt ? tool.addedAt.slice(0, 10) : TODAY,
         changefreq: 'monthly',
-        priority: '0.8',
+        priority: tool.isInternal ? '0.85' : '0.8', // 索引神器略高
     });
 }
 
-// External tool URLs
+// External tool URLs（指向工具實際運作的 GitHub Pages / Replit 等）
+// isInternal 工具不對外（沒 url 或 url 是內部路徑），跳過
 for (const tool of tools) {
-    if (tool.url) {
+    if (tool.url && !tool.isInternal && /^https?:\/\//.test(tool.url)) {
         urls.push({
             loc: tool.url,
             lastmod: TODAY,
@@ -50,6 +51,46 @@ for (const tool of tools) {
         });
     }
 }
+
+// Blog 教學情境長文 — 從 client/src/blog/posts.ts 解析
+const postsPath = resolve(__dirname, '../client/src/blog/posts.ts');
+if (existsSync(postsPath)) {
+    const postsSrc = readFileSync(postsPath, 'utf-8');
+    // 每個 BlogPost 物件用 regex 抓 slug + publishedAt
+    const blockRegex = /const\s+POST_\d+:\s*BlogPost\s*=\s*\{([\s\S]*?)\n\};/g;
+    let m;
+    const slugs = [];
+    while ((m = blockRegex.exec(postsSrc)) !== null) {
+        const slug = m[1].match(/slug:\s*'([^']+)'/)?.[1];
+        const publishedAt = m[1].match(/publishedAt:\s*'([^']+)'/)?.[1];
+        if (slug) slugs.push({ slug, publishedAt: publishedAt || TODAY });
+    }
+    // Blog 列表頁
+    urls.push({
+        loc: `${SITE_URL}/blog`,
+        lastmod: slugs[0]?.publishedAt || TODAY,
+        changefreq: 'weekly',
+        priority: '0.85',
+    });
+    // 各篇 blog post
+    for (const { slug, publishedAt } of slugs) {
+        urls.push({
+            loc: `${SITE_URL}/blog/${slug}`,
+            lastmod: publishedAt,
+            changefreq: 'monthly',
+            priority: '0.8',
+        });
+    }
+    console.log(`📖 Blog 條目：${slugs.length} 篇`);
+}
+
+// 熱門工具拼貼 OG 變體 landing
+urls.push({
+    loc: `${SITE_URL}/share/heatmap.html`,
+    lastmod: TODAY,
+    changefreq: 'weekly',
+    priority: '0.6',
+});
 
 // Generate XML
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -76,9 +117,21 @@ function escapeXml(str) {
         .replace(/'/g, '&apos;');
 }
 
-// Write sitemap.xml
+// Write sitemap.xml — 寫 public/（被 vite 帶進 dist）
 const outputPath = resolve(__dirname, '../client/public/sitemap.xml');
 writeFileSync(outputPath, xml, 'utf-8');
 
-console.log(`Sitemap generated: ${outputPath}`);
-console.log(`Total URLs: ${urls.length}`);
+// 順手檢查 robots.txt 是否有 Sitemap: 行
+const robotsPath = resolve(__dirname, '../client/public/robots.txt');
+if (existsSync(robotsPath)) {
+    let robots = readFileSync(robotsPath, 'utf-8');
+    const sitemapLine = `Sitemap: ${SITE_URL}/sitemap.xml`;
+    if (!robots.includes('Sitemap:')) {
+        robots = robots.trim() + '\n\n' + sitemapLine + '\n';
+        writeFileSync(robotsPath, robots, 'utf-8');
+        console.log('🤖 robots.txt 已補上 Sitemap: 指向');
+    }
+}
+
+console.log(`✅ Sitemap generated: ${outputPath}`);
+console.log(`📊 Total URLs: ${urls.length}`);

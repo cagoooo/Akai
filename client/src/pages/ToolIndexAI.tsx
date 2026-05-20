@@ -16,6 +16,7 @@ import { Link } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import Fuse, { type FuseResult, type FuseResultMatch } from 'fuse.js';
 import { PageHead } from '@/components/PageHead';
+import { trackEvent } from '@/lib/analytics';
 import type { EducationalTool } from '@/lib/data';
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
@@ -105,6 +106,19 @@ export function ToolIndexAI() {
     if (!fuse || !query.trim()) return [];
     return fuse.search(query, { limit: 5 });
   }, [fuse, query]);
+
+  // 搜尋上報（debounced 500ms 避免每打一個字都送一次）
+  useEffect(() => {
+    if (!query.trim()) return;
+    const handle = setTimeout(() => {
+      trackEvent('tool_index_search', {
+        query: query.slice(0, 100),
+        result_count: results.length,
+        top_match_id: results[0]?.item.id,
+      });
+    }, 500);
+    return () => clearTimeout(handle);
+  }, [query, results]);
 
   // 沒搜尋字時顯示熱門工具（最後 5 個工具當作「最新精選」）
   const fallbackPicks = useMemo(() => {

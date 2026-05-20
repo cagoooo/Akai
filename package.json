@@ -6,7 +6,7 @@
   "scripts": {
     "deploy": "gh-pages -d dist/public",
     "dev": "tsx server/index.ts",
-    "build": "node scripts/bump-sw-version.mjs && node scripts/sync-featured-from-firestore.mjs && node scripts/generate-favicon.mjs && node scripts/generate-home-og.mjs && node scripts/generate-home-og-heatmap.mjs && node scripts/sync-meta-from-stats.mjs && node scripts/generate-wish-preview.mjs && vite build && node scripts/generate-og-pages.mjs && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
+    "build": "node scripts/bump-sw-version.mjs && node scripts/sync-featured-from-firestore.mjs && node scripts/generate-favicon.mjs && node scripts/generate-home-og.mjs && node scripts/generate-home-og-heatmap.mjs && node scripts/sync-meta-from-stats.mjs && node scripts/generate-sitemap.mjs && node scripts/generate-wish-preview.mjs && vite build && node scripts/generate-og-pages.mjs && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
     "bump-sw": "node scripts/bump-sw-version.mjs",
     "new-tool": "node scripts/new-tool.mjs",
     "gen:favicon": "node scripts/generate-favicon.mjs",
@@ -104,6 +104,7 @@
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.0",
+    "web-vitals": "^5.2.0",
     "wouter": "^3.3.5",
     "ws": "^8.18.0",
     "zod": "^3.23.8"

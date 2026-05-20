@@ -10,6 +10,7 @@ import { OptimizedIcon } from '@/components/OptimizedIcons';
 import { useFavorites } from '@/hooks/useFavorites';
 import { useToolTracking } from '@/hooks/useToolTracking';
 import { getToolEmoji, getCategoryLabel, getCategoryKey, normalizeUrl } from './toolAdapter';
+import { trackEvent } from '@/lib/analytics';
 import type { EducationalTool } from '@/lib/data';
 
 interface Props {
@@ -37,6 +38,13 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0 }: Props) {
   const isFav = isFavorite(tool.id);
   const totalClicks = tool.totalClicks ?? 0;
 
+  // 「🆕 新工具」判斷：addedAt 在 7 天內為新；未設 addedAt 的歷史工具不算新
+  const isNew = (() => {
+    if (!tool.addedAt) return false;
+    const ageMs = Date.now() - new Date(tool.addedAt).getTime();
+    return ageMs >= 0 && ageMs < 7 * 24 * 60 * 60 * 1000;
+  })();
+
   // 處理 previewUrl：從 '/previews/tool_1.webp' 轉為 BASE_URL + 'previews/tool_1.webp'
   // 以便在 GitHub Pages 子路徑 (/Akai/) 下也能正確載入
   const previewSrc = tool.previewUrl
@@ -55,6 +63,13 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0 }: Props) {
     e.stopPropagation();
     setStampTrigger((t) => t + 1);
     trackToolUsage(tool.id);
+    // GA 事件上報：可在 GA Realtime / Events 看點擊路徑
+    trackEvent('tool_click', {
+      tool_id: tool.id,
+      tool_title: tool.title,
+      tool_category: tool.category,
+      source: 'home_grid',
+    });
     // 延遲 0.4 秒讓 OPENED 印章動畫有機會播放
     setTimeout(() => {
       window.open(normalizeUrl(tool.url), '_blank', 'noopener,noreferrer');
@@ -149,6 +164,35 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0 }: Props) {
               <span style={{ fontSize: 10, color: C.fg }}>{categoryLabel}</span>
             </Tape>
           </div>
+
+          {/* 🆕 新工具徽章（7 天內新增）— 右上角紅色 chip + 微動畫 */}
+          {isNew && (
+            <div
+              style={{
+                position: 'absolute',
+                top: 6,
+                right: 6,
+                zIndex: 4,
+                background: 'linear-gradient(135deg, #dc2626, #ef4444)',
+                color: '#fff',
+                fontSize: 10,
+                fontWeight: 900,
+                padding: '3px 8px',
+                borderRadius: 999,
+                border: '1.5px solid #1a1a1a',
+                boxShadow: '2px 2px 0 rgba(0,0,0,.28)',
+                fontFamily: tokens.font.tc,
+                letterSpacing: '0.05em',
+                transform: 'rotate(6deg)',
+                animation: 'float1 2.4s ease-in-out infinite',
+                pointerEvents: 'none',
+              }}
+              aria-label="新工具（7 天內加入）"
+              title="7 天內新增的工具"
+            >
+              🆕 NEW
+            </div>
+          )}
 
           {/* 右下角閃星星（預覽圖上也要可見，加陰影） */}
           <div

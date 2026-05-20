@@ -320,6 +320,7 @@ async function main() {
     previewUrl,
     ogPreviewUrl: '', // 由 generate-unified-og.mjs 補
     tags,
+    addedAt: new Date().toISOString(), // 用於前端「🆕 7 天內新增」徽章判斷
   };
 
   console.log('\n📦 即將寫入：');

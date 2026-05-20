@@ -38,4 +38,7 @@ window.addEventListener('unhandledrejection', async (event) => {
 // 延遲 Service Worker 註冊，確保不影響首屏 TBT
 window.addEventListener('load', () => {
   registerServiceWorker();
+  // 真實使用者效能監控（RUM）— 上報 LCP / INP / CLS / FCP / TTFB
+  // 同時送 GA (全量) + Firestore (25% 取樣)，不影響首屏 TBT
+  import('./lib/analytics').then((m) => m.initWebVitals()).catch(() => { /* noop */ });
 });
