@@ -1,12 +1,54 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.28` (本機/CI) · 工具總數 **97 個**（**破百倒數 3** 🚀）
-- **最後更新狀態**: P0 三件套上線 — (1) 首頁頂部「破百倒數 3」橘色便利貼 + 進度條，破百後自動切金色慶祝膠帶 7 天；(2) 工具地圖：圓餅圖分類分佈 + 點扇形跳分類；(3) OG heatmap 拼貼變體：分享 `/share/heatmap.html` 拿到 2×2 拍立得拼貼 OG，配合 build 自動同步機制。
+- **當前版本**: `v3.6.29` (本機/CI) · 工具總數 **98 個**（**破百倒數 2** 🚀；已預先把 #100 工具索引神器站位完成）
+- **最後更新狀態**: #100 工具索引神器（fuse.js fuzzy match 智能推薦）已上線 `/tool/100`；P1 三件套全部完成 — (a) tool OG 全 98 張用最新 cork 模板重生；(b) PageHead 元件取代三處重複 Helmet 寫法；(c) SVG favicon 向量化 + prefers-color-scheme 自動深淺模式。
 
 ## 📌 完成功能總覽
 
-### `v3.6.28` (最新 · P0 三件套：破百倒數 / 工具地圖 / OG heatmap)
+### `v3.6.29` (最新 · #100 工具索引神器 + P1 三件套)
+
+**🧭 #100 工具索引神器 — 智能推薦器**
+- 新頁面 `client/src/pages/ToolIndexAI.tsx` 掛在 `/tool/100`（在 `/tool/:id` 之前匹配）
+- **fuse.js fuzzy match** 加權邏輯：標題 ×3 / 標籤 ×2 / 描述 ×1 / 詳細介紹 ×0.5
+- 9 種範例 query chips：水的三態 / 閱讀理解 / 課堂破冰 / 學生票選 / AI 教案 / 注音練習 / 班級輔導 / 會議記錄 / 自我認識
+- 推薦卡片含：排名徽章、預覽圖、分類標籤、命中欄位 + 文字片段、匹配度百分比
+- 沒匹配 → 自動引導到許願池
+- Phase 2 預留：說明區直接寫明「未來會接 Gemini Embedding 做語意搜尋」
+- tools.json 加 #100 條目（`isInternal: true`，url 指向 `/Akai/tool/100`）
+- OG 圖 `previews/og/tool_100.webp` 由 generate-unified-og 產出
+- 順手修 new-tool.mjs：用「最小未使用 ID」算 nextId（之前是 max+1），避免 #100 站位後新增 #98/#99 跳號到 101
+
+**🖼 P1-A：tool OG 全量重跑**
+- 98 張個別工具 OG 用最新 `generate-unified-og.mjs` 模板重生
+- 與首頁 OG / #100 神器頁 cork 風格完全一致
+- 自動更新 tools.json 的 ogPreviewUrl 欄位
+
+**🧩 P1-B：PageHead 元件整合**
+- 新元件 `client/src/components/PageHead.tsx` 三模式：
+  - `mode="tool"` — 工具詳情頁，自動讀 ogPreviewUrl > previewUrl，補絕對 URL + cache version + og:image:secure_url（LINE 偏好）+ width/height
+  - `mode="custom"` — 自訂頁（ToolIndexAI 用）
+  - `mode="home"` — 首頁（讀 site-stats）
+- 取代三處重複的 Helmet 寫法：BulletinToolDetail / ToolDetail / ToolIndexAI
+- 砍掉 ~25 行重複 og meta 程式碼
+
+**🎨 P1-C：SVG favicon**
+- 新檔 `client/public/favicon.svg`：同 PNG 設計（cork + 黃便利貼 + 紅圖釘 + A 字）但向量化
+- 支援 `prefers-color-scheme: dark` → cork 自動變深、便利貼自動變橘黃
+- index.html link 順序：SVG → ICO → PNG（Chrome/FF/Edge/Safari 13+ 優先用 SVG）
+- 加進 manifest.json icons 陣列
+- High-DPI 螢幕（Retina / 4K）不再模糊
+
+**🚀 已部署上線**
+- Live `/tool/100`：https://cagoooo.github.io/Akai/tool/100/
+- Live favicon.svg：https://cagoooo.github.io/Akai/favicon.svg
+- Live #100 OG：https://cagoooo.github.io/Akai/previews/og/tool_100.webp
+- 線上 site-stats toolCount = 98（distance to 100 = 2）
+- GH Actions deploy 26146522032 success
+
+---
+
+### `v3.6.28` (P0 三件套：破百倒數 / 工具地圖 / OG heatmap)
 
 **🚀 破百倒數 banner（BulletinMilestone100）**
 - 插在首頁 Hero 上方，三狀態自動切換（讀 site-stats.milestones.tool100）：

@@ -2,6 +2,40 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.29] - 2026-05-20 — #100 工具索引神器 + P1 三件套
+
+### 🧭 新工具 #100 — 工具索引神器（智能推薦器）
+- 新頁面 `client/src/pages/ToolIndexAI.tsx` 掛 `/tool/100`
+- fuse.js fuzzy match 推薦：標題 ×3 / 標籤 ×2 / 描述 ×1 / 詳細介紹 ×0.5 加權
+- 9 種範例 query chips 一鍵試用
+- 推薦卡片含排名 / 預覽圖 / 分類膠帶 / 命中文字片段 / 匹配度百分比
+- 沒匹配 → 自動引導到許願池許願
+- Phase 2 預留：未來接 Gemini Embedding 做語意搜尋
+- tools.json 加 #100 條目，OG 圖已產出
+- `scripts/new-tool.mjs` 改用「最小未使用 ID」算 nextId，避免被 #100 站位後跳號到 101
+
+### 🖼 P1-A：tool OG 全量重跑（98 張）
+- 用最新 `generate-unified-og.mjs` 模板把 98 張個別 OG 全部重生
+- 與首頁 OG / #100 神器頁 cork 風格完全一致
+
+### 🧩 P1-B：PageHead 元件整合
+- 新元件 `client/src/components/PageHead.tsx` 三模式（home / tool / custom）
+- 自動補絕對 URL、cache version、og:image:secure_url（LINE）、width/height
+- 取代 BulletinToolDetail / ToolDetail / ToolIndexAI 三處重複 Helmet 寫法
+
+### 🎨 P1-C：SVG favicon
+- `client/public/favicon.svg`：向量版 cork + 便利貼 + A 字 + 紅圖釘
+- 支援 `prefers-color-scheme: dark` 自動變色
+- index.html link 順序：SVG → ICO → PNG
+- 加進 manifest.json icons 陣列
+
+### 🚀 部署
+- GH Actions deploy 26146522032 success
+- `/tool/100`、`favicon.svg`、`previews/og/tool_100.webp` 全 200 OK
+- 線上 toolCount = 98（破百倒數 2）
+
+---
+
 ## [3.6.28] - 2026-05-20 — P0 三件套：破百倒數 / 工具地圖 / OG heatmap
 
 ### 🚀 破百倒數 banner（BulletinMilestone100）
