@@ -396,6 +396,159 @@ function generateHeatmapPageHtml() {
 }
 
 /**
+ * 為每篇 blog post 產 static OG landing page（/blog/{slug}/index.html）
+ * 與 /blog 列表頁（/blog/index.html）
+ *
+ * - 社群爬蟲抓 → 拿到 blog 專屬 OG meta（含文章標題、摘要、相關工具）
+ * - 一般使用者 → JS redirect 回 SPA `/Akai/blog` 或 `/Akai/blog/{slug}`
+ *
+ * 為何要這樣做：GH Pages 是純靜態，SPA route /blog/* 一律走 404.html
+ * → 爬蟲讀不到對的 OG。產對應 index.html 在 dist/public/blog/{slug}/ 內，
+ * 爬蟲訪問時直接命中、拿到正確 meta。
+ */
+function generateBlogIndexHtml(posts) {
+  const pageUrl = `${SITE_URL}/blog`;
+  const title = '📖 教學情境部落格 · 阿凱老師教育工具集';
+  const description = `阿凱老師親手撰寫的工具使用情境長文 — ${posts.length} 篇文章，每篇講一個熱門工具如何解決真實教學現場的問題，含實測數字、學生回饋、配對推薦。`;
+
+  // 用最新一篇的 cover emoji 當 OG 圖（fallback 用主 OG）
+  let imageUrl = `${SITE_URL}/og-preview.png`;
+  try {
+    const statsPath = path.resolve(__dirname, '../client/public/api/site-stats.json');
+    if (fs.existsSync(statsPath)) {
+      const s = JSON.parse(fs.readFileSync(statsPath, 'utf-8'));
+      if (s.ogImageAbsolute) imageUrl = s.ogImageAbsolute;
+    }
+  } catch { /* fallback */ }
+
+  return `<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${title}</title>
+  <meta name="description" content="${description}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="${pageUrl}">
+  <meta property="og:title" content="${title}">
+  <meta property="og:description" content="${description}">
+  <meta property="og:image" content="${imageUrl}">
+  <meta property="og:site_name" content="科技教育創新專區">
+  <meta property="og:locale" content="zh_TW">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${title}">
+  <meta name="twitter:description" content="${description}">
+  <meta name="twitter:image" content="${imageUrl}">
+  <link rel="canonical" href="${pageUrl}">
+  <script>
+    (function() {
+      var ua = navigator.userAgent || '';
+      var isBot = /facebookexternalhit|Facebot|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Slackbot|Discordbot|Pinterest|Googlebot|bingbot|YandexBot|LineBot|Line-Networking/i.test(ua);
+      if (!isBot) window.location.replace('/Akai/blog');
+    })();
+  </script>
+  <style>body{font-family:'Noto Sans TC',-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#c99a6c;color:#1a1a1a;text-align:center}.card{background:#fff27a;padding:32px 36px;border-radius:6px;box-shadow:6px 6px 0 rgba(0,0,0,.22);transform:rotate(-1deg);max-width:500px}h1{margin:0 0 12px;font-size:28px;font-weight:900}a{display:inline-block;margin-top:18px;padding:11px 24px;background:#ea8a3e;color:#fff;text-decoration:none;border:2.5px solid #1a1a1a;border-radius:10px;font-weight:900;box-shadow:4px 4px 0 rgba(0,0,0,.4)}</style>
+</head>
+<body>
+  <div class="card">
+    <h1>📖 教學情境部落格</h1>
+    <p>${description}</p>
+    <a href="/Akai/blog">📚 前往看所有文章</a>
+  </div>
+</body>
+</html>`;
+}
+
+function generateBlogPostHtml(post) {
+  const pageUrl = `${SITE_URL}/blog/${post.slug}`;
+  const title = `${post.title} · 阿凱老師教學情境長文`;
+  const description = post.excerpt;
+  // OG 圖 — 用第一個相關工具的 ogPreviewUrl
+  let imageUrl = `${SITE_URL}/og-preview.png`;
+  if (post.toolIds && post.toolIds.length > 0) {
+    imageUrl = `${SITE_URL}/previews/og/tool_${post.toolIds[0]}.webp`;
+  }
+  const keywords = ['教學情境', '阿凱老師', '教育工具', ...(post.tags || [])].join(',');
+
+  return `<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${title}</title>
+  <meta name="description" content="${description}">
+  <meta name="keywords" content="${keywords}">
+  <meta name="author" content="阿凱老師">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="${pageUrl}">
+  <meta property="og:title" content="${title}">
+  <meta property="og:description" content="${description}">
+  <meta property="og:image" content="${imageUrl}">
+  <meta property="og:image:secure_url" content="${imageUrl}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="科技教育創新專區">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="阿凱老師">
+  <meta property="article:published_time" content="${post.publishedAt}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${title}">
+  <meta name="twitter:description" content="${description}">
+  <meta name="twitter:image" content="${imageUrl}">
+  <link rel="canonical" href="${pageUrl}">
+  <script>
+    (function() {
+      var ua = navigator.userAgent || '';
+      var isBot = /facebookexternalhit|Facebot|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Slackbot|Discordbot|Pinterest|Googlebot|bingbot|YandexBot|LineBot|Line-Networking/i.test(ua);
+      if (!isBot) window.location.replace('/Akai/blog/${post.slug}');
+    })();
+  </script>
+  <style>body{font-family:'Noto Sans TC',-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#c99a6c;color:#1a1a1a;text-align:center}.card{background:#fff27a;padding:32px 36px;border-radius:6px;box-shadow:6px 6px 0 rgba(0,0,0,.22);transform:rotate(-1deg);max-width:520px}h1{margin:0 0 12px;font-size:24px;font-weight:900;line-height:1.4}p{color:#4a3a20;line-height:1.65}a{display:inline-block;margin-top:18px;padding:11px 24px;background:#ea8a3e;color:#fff;text-decoration:none;border:2.5px solid #1a1a1a;border-radius:10px;font-weight:900;box-shadow:4px 4px 0 rgba(0,0,0,.4)}</style>
+</head>
+<body>
+  <div class="card">
+    <h1>${post.coverEmoji} ${post.title}</h1>
+    <p>${description}</p>
+    <a href="/Akai/blog/${post.slug}">📖 閱讀全文</a>
+  </div>
+</body>
+</html>`;
+}
+
+/**
+ * 從 client/src/blog/posts.ts 解析 POSTS 陣列
+ * 用簡單 regex（避免 import TS 在 Node ESM 不易）
+ */
+function extractBlogPosts() {
+  const postsPath = path.resolve(__dirname, '../client/src/blog/posts.ts');
+  if (!fs.existsSync(postsPath)) return [];
+  const src = fs.readFileSync(postsPath, 'utf-8');
+  // 抓所有 BlogPost 物件 — 用 slug / title / excerpt / publishedAt / toolIds / coverEmoji / tags
+  const posts = [];
+  const blockRegex = /const\s+POST_\d+:\s*BlogPost\s*=\s*\{([\s\S]*?)\n\};/g;
+  let m;
+  while ((m = blockRegex.exec(src)) !== null) {
+    const body = m[1];
+    const slug = body.match(/slug:\s*'([^']+)'/)?.[1];
+    const title = body.match(/title:\s*'([^']+)'/)?.[1]
+      ?? body.match(/title:\s*\n?\s*'([^']+)'/)?.[1];
+    const excerpt = body.match(/excerpt:\s*\n?\s*'([^']+)'/)?.[1]
+      ?? body.match(/excerpt:\s*'([^']+)'/)?.[1];
+    const publishedAt = body.match(/publishedAt:\s*'([^']+)'/)?.[1];
+    const toolIdsMatch = body.match(/toolIds:\s*\[([\d,\s]+)\]/);
+    const toolIds = toolIdsMatch ? toolIdsMatch[1].split(',').map((s) => parseInt(s.trim(), 10)).filter(Number.isFinite) : [];
+    const coverEmoji = body.match(/coverEmoji:\s*'([^']+)'/)?.[1] || '📖';
+    const tagsMatch = body.match(/tags:\s*\[([^\]]+)\]/);
+    const tags = tagsMatch ? tagsMatch[1].split(',').map((s) => s.trim().replace(/^'|'$/g, '')).filter(Boolean) : [];
+
+    if (slug && title) {
+      posts.push({ slug, title, excerpt: excerpt || '', publishedAt: publishedAt || '', toolIds, coverEmoji, tags });
+    }
+  }
+  return posts;
+}
+
+/**
  * 主函式
  */
 async function main() {
@@ -457,6 +610,24 @@ async function main() {
     console.log('  ✅ share/heatmap.html - 熱門工具拼貼 OG 變體頁面');
   } catch (error) {
     console.error('  ❌ share/heatmap.html 失敗:', error.message);
+    errorCount++;
+  }
+
+  // 生成 blog static OG landing pages
+  try {
+    const posts = extractBlogPosts();
+    const blogDir = path.resolve(__dirname, '../dist/public/blog');
+    if (!fs.existsSync(blogDir)) fs.mkdirSync(blogDir, { recursive: true });
+    fs.writeFileSync(path.join(blogDir, 'index.html'), generateBlogIndexHtml(posts), 'utf-8');
+    console.log(`  ✅ blog/index.html - 部落格列表 OG landing`);
+    for (const post of posts) {
+      const postDir = path.join(blogDir, post.slug);
+      if (!fs.existsSync(postDir)) fs.mkdirSync(postDir, { recursive: true });
+      fs.writeFileSync(path.join(postDir, 'index.html'), generateBlogPostHtml(post), 'utf-8');
+      console.log(`  ✅ blog/${post.slug}/index.html - ${post.title.slice(0, 30)}...`);
+    }
+  } catch (error) {
+    console.error(`  ❌ blog/* 失敗:`, error.message);
     errorCount++;
   }
 
