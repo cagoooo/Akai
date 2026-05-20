@@ -23,8 +23,10 @@ import { useToast } from '@/hooks/use-toast';
 import { BulletinBoard } from '@/components/bulletin/BulletinBoard';
 import { BulletinHeader } from '@/components/bulletin/BulletinHeader';
 import { BulletinHero } from '@/components/bulletin/BulletinHero';
+import { BulletinMilestone100 } from '@/components/bulletin/BulletinMilestone100';
 import { BulletinLeaderboard } from '@/components/bulletin/BulletinLeaderboard';
 import { BulletinWishPool } from '@/components/bulletin/BulletinWishPool';
+import { BulletinSiteStats } from '@/components/bulletin/BulletinSiteStats';
 import { BulletinSearchBar } from '@/components/bulletin/BulletinSearchBar';
 import { BulletinCategoryFilter } from '@/components/bulletin/BulletinCategoryFilter';
 import { BulletinToolGrid } from '@/components/bulletin/BulletinToolGrid';
@@ -226,16 +228,17 @@ export function BulletinHome() {
   return (
     <BulletinBoard>
       <BulletinHeader />
+      <BulletinMilestone100 onWishClick={() => setShowWishingWellFromShortcut(true)} />
       <BulletinHero toolCount={toolsWithStats.length} />
 
-      {/* 排行榜 + 許願池 */}
+      {/* 排行榜 + 工具地圖 + 許願池 */}
       <div
         className="bulletin-sections-grid"
         style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
           gap: 40,
-          padding: '20px 60px 30px',
+          padding: '20px 60px 12px',
         }}
       >
         <BulletinLeaderboard
@@ -244,6 +247,11 @@ export function BulletinHome() {
           hasDeltaHistory={hasDeltaHistory}
         />
         <BulletinWishPool />
+      </div>
+
+      {/* 工具地圖：分類分佈圓餅圖（site-stats.json） */}
+      <div style={{ padding: '0 60px 30px' }}>
+        <BulletinSiteStats onCategoryClick={(cat) => handleCategoryChange(cat)} />
       </div>
 
       {/* 搜尋 */}

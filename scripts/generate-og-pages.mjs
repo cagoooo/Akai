@@ -284,6 +284,118 @@ function generateWishPageHtml() {
 }
 
 /**
+ * 生成 heatmap OG 變體 landing page（/share/heatmap.html）
+ * - 社群爬蟲抓 → 拿到 heatmap 拼貼 OG 圖（含前 4 熱門工具拍立得）
+ * - 一般使用者 → JS redirect 到主頁
+ *
+ * 用途：當使用者想呈現「實際工具長相」而非單純數字時，分享這個 URL
+ */
+function generateHeatmapPageHtml() {
+  const pageUrl = `${SITE_URL}/share/heatmap.html`;
+
+  // 從 site-stats.json 讀 ogImageHeatmap（由 generate-home-og-heatmap.mjs 寫入）
+  let heatmapImageUrl = `${SITE_URL}/og-preview.png`;
+  let toolCount = 90;
+  try {
+    const statsPath = path.resolve(__dirname, '../client/public/api/site-stats.json');
+    if (fs.existsSync(statsPath)) {
+      const s = JSON.parse(fs.readFileSync(statsPath, 'utf-8'));
+      if (s.ogImageHeatmapAbsolute) heatmapImageUrl = s.ogImageHeatmapAbsolute;
+      if (s.toolCount) toolCount = s.toolCount;
+    }
+  } catch { /* fallback */ }
+
+  const displayCount = toolCount >= 100 ? `${Math.floor(toolCount / 10) * 10}+` : `${toolCount}`;
+  const title = `科技教育創新專區 · 阿凱老師｜${displayCount} 款國小教育工具熱門精選`;
+  const description = `來看阿凱老師親手打造的熱門 4 大教育工具拼貼預覽：MBTI 校園奇遇記、點亮詩意、PIRLS 閱讀理解生成站、教師回覆小幫手⋯⋯共 ${toolCount} 款免費教育工具，免註冊一鍵分享給學生。`;
+
+  return `<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>${title}</title>
+  <meta name="title" content="${title}">
+  <meta name="description" content="${description}">
+  <meta name="author" content="阿凱老師">
+  <meta name="keywords" content="教育科技,熱門教育工具,精選教育工具,國小教育,阿凱老師,石門國小,${toolCount} 款教育工具">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="${pageUrl}">
+  <meta property="og:title" content="${title}">
+  <meta property="og:description" content="${description}">
+  <meta property="og:image" content="${heatmapImageUrl}">
+  <meta property="og:image:secure_url" content="${heatmapImageUrl}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="阿凱老師熱門教育工具拼貼預覽">
+  <meta property="og:site_name" content="科技教育創新專區">
+  <meta property="og:locale" content="zh_TW">
+
+  <!-- Twitter / LINE -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="${pageUrl}">
+  <meta name="twitter:title" content="${title}">
+  <meta name="twitter:description" content="${description}">
+  <meta name="twitter:image" content="${heatmapImageUrl}">
+
+  <link rel="canonical" href="${SITE_URL}/">
+
+  <script>
+    (function() {
+      var ua = navigator.userAgent || '';
+      var isSocialBot = /facebookexternalhit|Facebot|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Slackbot|Discordbot|Pinterest|Googlebot|bingbot|YandexBot|LineBot|Line-Networking/i.test(ua);
+      if (!isSocialBot) {
+        // 一般使用者 → 主頁
+        window.location.replace('/Akai/');
+      }
+    })();
+  </script>
+
+  <style>
+    body {
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; margin: 0;
+      background: #c99a6c;
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(110,80,50,.35) 1px, transparent 2px),
+        radial-gradient(circle at 70% 60%, rgba(140,95,55,.30) 1.5px, transparent 2.5px);
+      background-size: 60px 60px, 80px 80px;
+      color: #1a1a1a;
+    }
+    .heatmap-card {
+      background: #fff27a;
+      padding: 36px 40px;
+      border-radius: 6px;
+      box-shadow: 0 4px 8px rgba(0,0,0,.15), 6px 6px 0 rgba(0,0,0,.22);
+      transform: rotate(-1.2deg);
+      max-width: 520px;
+      text-align: center;
+    }
+    h1 { margin: 0 0 12px; font-size: 28px; font-weight: 900; }
+    p { font-size: 15px; color: #4a3a20; line-height: 1.65; }
+    a {
+      display: inline-block; margin-top: 20px; padding: 12px 26px;
+      background: #ea8a3e; color: #fff; text-decoration: none;
+      border: 2.5px solid #1a1a1a; border-radius: 10px;
+      font-weight: 900; box-shadow: 4px 4px 0 rgba(0,0,0,.4);
+    }
+  </style>
+</head>
+<body>
+  <div class="heatmap-card">
+    <h1>🔥 ${displayCount} 款熱門教育工具</h1>
+    <p>${description}</p>
+    <a href="/Akai/">📚 前往主頁探索全部工具</a>
+  </div>
+</body>
+</html>`;
+}
+
+/**
  * 主函式
  */
 async function main() {
@@ -332,6 +444,19 @@ async function main() {
     console.log('  ✅ wish/index.html - 許願池專屬 OG 頁面');
   } catch (error) {
     console.error('  ❌ wish/index.html 失敗:', error.message);
+    errorCount++;
+  }
+
+  // 生成熱門工具拼貼 OG 變體頁面（/share/heatmap.html）
+  try {
+    const shareDir = path.resolve(__dirname, '../dist/public/share');
+    if (!fs.existsSync(shareDir)) {
+      fs.mkdirSync(shareDir, { recursive: true });
+    }
+    fs.writeFileSync(path.join(shareDir, 'heatmap.html'), generateHeatmapPageHtml(), 'utf-8');
+    console.log('  ✅ share/heatmap.html - 熱門工具拼貼 OG 變體頁面');
+  } catch (error) {
+    console.error('  ❌ share/heatmap.html 失敗:', error.message);
     errorCount++;
   }
 

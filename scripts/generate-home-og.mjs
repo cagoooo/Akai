@@ -386,10 +386,24 @@ async function main() {
   console.log(`\n✅ ${ogFilename} (${(pngBuffer.length / 1024).toFixed(0)} KB, 1200×630)`);
 
   // 2) 寫 site-stats.json 給前端 / 後續腳本讀
+  // milestones：保留歷史 — 第一次達到 100 / 150 / 200 時凍結 ISO 時間
+  let prevStats = {};
+  if (existsSync(STATS_JSON)) {
+    try { prevStats = JSON.parse(readFileSync(STATS_JSON, 'utf-8')); } catch { /* ignore */ }
+  }
+  const prevMilestones = prevStats.milestones || {};
+  const milestones = { ...prevMilestones };
+  for (const m of [100, 150, 200, 250, 300]) {
+    if (toolCount >= m && !milestones[`tool${m}`]) {
+      milestones[`tool${m}`] = new Date().toISOString();
+    }
+  }
+
   const stats = {
     toolCount,
     displayCount,
     categoryCounts,
+    milestones,
     ogImage: `/${ogFilename}`,
     ogImageAbsolute: `https://cagoooo.github.io/Akai/${ogFilename}`,
     generatedAt: new Date().toISOString(),
