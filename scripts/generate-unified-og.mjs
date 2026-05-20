@@ -30,7 +30,14 @@ const ROOT = resolve(__dirname, '..');
 const FONT_PATH = resolve(__dirname, 'fonts', 'NotoSansTC-Bold.ttf');
 const TOOLS_JSON = resolve(ROOT, 'client', 'public', 'api', 'tools.json');
 const OG_DIR = resolve(ROOT, 'client', 'public', 'previews', 'og');
-const FAVICON_PATH = resolve(ROOT, 'client', 'public', 'favicon.png');
+// 阿凱老師真人頭像（不是 favicon — favicon 是 cork+A 字品牌 logo）
+// fallback：teacher-avatar.png（新名稱）→ apple-touch-icon.png（舊照片同檔）→ favicon.png
+const AVATAR_CANDIDATES = [
+  resolve(ROOT, 'client', 'public', 'teacher-avatar.png'),
+  resolve(ROOT, 'client', 'public', 'apple-touch-icon.png'),
+  resolve(ROOT, 'client', 'public', 'favicon.png'),
+];
+const FAVICON_PATH = AVATAR_CANDIDATES.find((p) => existsSync(p)) || AVATAR_CANDIDATES[2];
 
 if (!existsSync(FONT_PATH)) {
   console.error(`❌ 找不到字型：${FONT_PATH}`);

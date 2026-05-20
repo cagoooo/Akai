@@ -362,11 +362,13 @@ async function generateOG(tools, featuredIds) {
   ctx.lineTo(W, barY);
   ctx.stroke();
 
-  // 載入 favicon 當頭像
-  const faviconPath = resolve(PUBLIC_DIR, 'icon-192.png');
+  // 載入阿凱老師真人頭像（不是 favicon — 那是品牌 logo）
   let faviconImg = null;
-  if (existsSync(faviconPath)) {
-    try { faviconImg = await loadImage(faviconPath); } catch { /* ignore */ }
+  for (const fname of ['teacher-avatar.png', 'apple-touch-icon.png', 'icon-192.png']) {
+    const p = resolve(PUBLIC_DIR, fname);
+    if (existsSync(p)) {
+      try { faviconImg = await loadImage(p); break; } catch { /* try next */ }
+    }
   }
 
   const avX = 50, avY = barY + 35;

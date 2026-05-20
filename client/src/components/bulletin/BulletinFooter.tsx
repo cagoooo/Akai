@@ -73,14 +73,15 @@ export function BulletinFooter() {
               }}
             >
               <img
-                src={`${import.meta.env.BASE_URL}favicon.png`}
+                src={`${import.meta.env.BASE_URL}teacher-avatar.png`}
                 alt="阿凱老師頭像"
-                style={{ width: '80%', height: '80%', objectFit: 'contain' }}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
                 onError={(e) => {
+                  // teacher-avatar.png 不存在時退回 apple-touch-icon（同檔不同名）
                   const img = e.currentTarget;
                   if (!img.dataset.fallback) {
                     img.dataset.fallback = '1';
-                    img.src = `${import.meta.env.BASE_URL}favicon-32x32.png`;
+                    img.src = `${import.meta.env.BASE_URL}apple-touch-icon.png`;
                   }
                 }}
               />
@@ -192,15 +193,15 @@ export function BulletinFooter() {
           }}
         >
           <img
-            src={`${import.meta.env.BASE_URL}favicon.png`}
+            src={`${import.meta.env.BASE_URL}teacher-avatar.png`}
             alt="阿凱老師教育科技創新專區"
-            style={{ width: '78%', height: '78%', objectFit: 'contain' }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
             onError={(e) => {
-              // favicon.png 不存在時退回 favicon-32x32.png
+              // teacher-avatar.png 不存在時退回 apple-touch-icon.png
               const img = e.currentTarget;
               if (!img.dataset.fallback) {
                 img.dataset.fallback = '1';
-                img.src = `${import.meta.env.BASE_URL}favicon-32x32.png`;
+                img.src = `${import.meta.env.BASE_URL}apple-touch-icon.png`;
               }
             }}
           />
