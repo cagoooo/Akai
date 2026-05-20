@@ -9,8 +9,15 @@ export interface EducationalTool {
   icon: string;
   category: ToolCategory;
   previewUrl?: string;
+  ogPreviewUrl?: string;         // 1200×630 社群分享 OG 圖（由 generate-unified-og.mjs 產出）
   tags?: string[];               // 標籤
   totalClicks?: number;          // 來自 API 的統計數據
+  /**
+   * 是否為「站內專屬工具」（如 #100 工具索引神器）。
+   * - true → 不計入工具總數、不參與 featuredTools 推薦、家族樹不顯示
+   * - false / 未設 → 一般外部工具
+   */
+  isInternal?: boolean;
 }
 
 export interface TeacherMood {

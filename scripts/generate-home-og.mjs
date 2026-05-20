@@ -360,7 +360,9 @@ async function generateOG(tools) {
 }
 
 async function main() {
-  const tools = JSON.parse(readFileSync(TOOLS_JSON, 'utf-8'));
+  const allTools = JSON.parse(readFileSync(TOOLS_JSON, 'utf-8'));
+  // 排除站位 / 內部專屬路由（如 #100 工具索引神器），讓 toolCount 反映「真正做了幾個常規工具」
+  const tools = allTools.filter((t) => !t.isInternal);
   const toolCount = tools.length;
   const categoryCounts = summarizeCategories(tools);
   const displayCount = toolCount >= 100 ? `${Math.floor(toolCount / 10) * 10}+` : `${toolCount}`;

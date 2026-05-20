@@ -427,7 +427,9 @@ async function readFeaturedIds() {
 }
 
 async function main() {
-  const tools = JSON.parse(readFileSync(TOOLS_JSON, 'utf-8'));
+  const allTools = JSON.parse(readFileSync(TOOLS_JSON, 'utf-8'));
+  // 排除 isInternal（#100 等站位）— 工具數與「真實工具」對齊
+  const tools = allTools.filter((t) => !t.isInternal);
   const featuredIds = await readFeaturedIds();
   console.log(`🎨 heatmap OG：精選 ${featuredIds.slice(0, 4).join(', ')}（共 ${tools.length} 款工具）\n`);
 

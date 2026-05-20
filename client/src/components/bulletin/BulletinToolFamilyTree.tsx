@@ -72,10 +72,13 @@ export function BulletinToolFamilyTree() {
   });
 
   // 構建分類 → 工具 mapping，並算徑向座標
+  // 排除 isInternal（#100 站位工具）— 家族樹只顯示「真實工具」
+  const externalTools = useMemo(() => (tools || []).filter((t) => !t.isInternal), [tools]);
+
   const categories = useMemo<CategoryNode[]>(() => {
-    if (!tools) return [];
+    if (externalTools.length === 0) return [];
     const groups = new Map<string, EducationalTool[]>();
-    for (const t of tools) {
+    for (const t of externalTools) {
       const k = t.category || 'utilities';
       if (!groups.has(k)) groups.set(k, []);
       groups.get(k)!.push(t);
@@ -104,7 +107,7 @@ export function BulletinToolFamilyTree() {
     }
   }, [categories]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const totalTools = tools?.length || 0;
+  const totalTools = externalTools.length;
 
   // 工具節點座標：圍繞分類節點同方向再延伸
   function toolPosition(cat: CategoryNode, toolIdx: number, total: number) {
