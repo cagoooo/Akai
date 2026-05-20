@@ -1,12 +1,48 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.32` (本機/CI) · 工具總數 **97 個**（**破百倒數 3** 🚀）
-- **最後更新狀態**: 立即可做 5 件套全部上線 — (1) 排行榜前 5 名 blog 覆蓋率 100%（新增 #68 / #3 兩篇）；(2) Web Vitals RUM 上報（GA 全量 + Firestore 25% 取樣）；(3) gtag 事件追蹤 tool_click / blog_read / tool_index_search 三處接點；(4) sitemap.xml 升級含 blog + tool/100 + 接入 build pipeline；(5) 「🆕 新工具」徽章（new-tool.mjs 自動寫 addedAt）。
+- **當前版本**: `v3.6.33` (本機/CI) · 工具總數 **97 個**（**破百倒數 3** 🚀）
+- **最後更新狀態**: SEO 基礎建設上線 — (1) Google Search Console 擁有權驗證檔部署（cagoooo.github.io/Akai/ 可被 GSC 監控）；(2) sitemap.xml 提交至 SC（204 URL）；(3) 修復 `/blog/` 無限循環白畫面 bug（redirect 沒 trailing slash 被 GH Pages 301 加 / 導致無限載入）。
 
 ## 📌 完成功能總覽
 
-### `v3.6.32` (最新 · 立即可做 5 件套：blog 擴充 / Web Vitals / gtag / sitemap / 🆕 徽章)
+### `v3.6.33` (最新 · SEO 上線 + blog redirect bug 修復)
+
+**🔐 Google Search Console 整合**
+- `client/public/googledb834a18ffe8f948.html`（53 bytes）部署到 GH Pages
+- SC 擁有權驗證通過 — 阿凱老師現在可以在 https://search.google.com/search-console 看：
+  - 哪些關鍵字讓老師搜到網站
+  - 真實 Core Web Vitals
+  - 索引涵蓋範圍
+  - 行動裝置可用性
+- sitemap.xml 已提交給 SC（204 URLs 含 97 工具 + 5 篇 blog + #100 索引神器 + 主要分頁）
+- robots.txt 含 `Sitemap:` 指向，Googlebot / Bingbot / Slurp / DuckDuckBot 都能自動找到
+
+**🐛 Hot-fix：blog landing 無限循環白畫面**
+- **問題**：打開 https://cagoooo.github.io/Akai/blog/ 一片空白卡在無限載入
+- **根因**：generate-og-pages.mjs 為 blog 產的 static landing 用 `window.location.replace('/Akai/blog')`（沒 trailing slash）→ GH Pages 看到目錄路徑沒 / 自動 301 加 / → 又載入同一個 landing HTML → 無限循環
+- **修法**：仿 tool/N/ 同款 `?redirect=` 模式：
+  - 舊：`replace('/Akai/blog')` ← 無限循環
+  - 新：`replace('/Akai/?redirect=' + encodeURIComponent('/Akai/blog'))` ✓
+- 流程改為：landing → 主頁帶 ?redirect → index.html 同步腳本 history.replaceState → wouter 接管 BlogList
+- 5 個 blog post landing 全部修正
+- 對比表：
+
+  | landing | redirect 方式 | 安全 |
+  |---|---|---|
+  | tool/N/ | `?redirect=path` | ✅ |
+  | wish/ | 跳 `/Akai/`（主頁） | ✅ |
+  | share/heatmap.html | 跳 `/Akai/` | ✅ |
+  | blog/* | ~~`/Akai/blog`~~ → `?redirect=` | ✅（修正後）|
+
+**🚀 部署紀錄**
+- `d6799f6` SC 驗證檔 → success (1m40s)
+- `869f8ff` blog redirect 修復 → success
+- 線上 `/blog/`、`/blog/:slug/`、`/sitemap.xml`、`googledb834a18ffe8f948.html` 全 200 OK
+
+---
+
+### `v3.6.32` (立即可做 5 件套：blog 擴充 / Web Vitals / gtag / sitemap / 🆕 徽章)
 
 **📖 #1 排行榜前 5 名 blog 全覆蓋**
 - 新增兩篇 blog post：

@@ -2,6 +2,26 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.33] - 2026-05-20 — SEO 上線 + blog redirect bug 修復
+
+### 🔐 Google Search Console 整合
+- 部署 `client/public/googledb834a18ffe8f948.html` 完成擁有權驗證
+- SC 資源 `https://cagoooo.github.io/Akai/` 已開通
+- sitemap.xml 提交（204 URL）
+- 後續可在 SC 看：關鍵字流量 / 真實 Web Vitals / 索引狀況 / 行動友善度
+
+### 🐛 Hot-fix：blog 無限循環白畫面
+- 問題：`/blog/` 一片空白卡在無限載入
+- 根因：blog landing 用 `replace('/Akai/blog')`（沒 trailing slash）→ GH Pages 301 加 / → 又載入同 landing → ♻️ 循環
+- 修法：改 `?redirect=` 模式（仿 tool/N/），讓 SPA 主頁的 redirect handler 接管
+- 影響 5 個 landing：/blog/ + /blog/:slug × 4 + 新加的 #68 / #3 兩篇
+- 部署後驗證：`/blog/`、`/blog/:slug/` 全 200 OK + 正確 SPA 載入
+
+### 🚀 部署
+- 2 次 deploy 全 success（d6799f6 SC 驗證 + 869f8ff bug 修復）
+
+---
+
 ## [3.6.32] - 2026-05-20 — 立即可做 5 件套：blog 擴充 / Web Vitals / gtag / sitemap / 🆕 徽章
 
 ### 📖 #1 新增兩篇 blog post（排行榜前 5 全覆蓋）
