@@ -2,6 +2,45 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.31] - 2026-05-20 — v3.6.30 hot-fix 三件套 + Favicon 語義分工
+
+### 🔢 修正 toolCount 計數（97 不是 98）
+- 使用者反映「只做了 97 個工具但主頁顯示 98」
+- 根因：#100 工具索引神器加進 tools.json 站位，計數時忘記用 isInternal 過濾
+- `EducationalTool` 型別加 `isInternal?: boolean` 欄位（語義固定）
+- `generate-home-og.mjs` / `generate-home-og-heatmap.mjs` 改用 `.filter(t => !t.isInternal)`
+- `BulletinToolFamilyTree` 排除 isInternal 工具
+- 修正後：toolCount=97 / 分類加總 6+30+10+3+17+18+13=97 / 破百倒數=3
+
+### 👨‍🏫 還原阿凱老師真人頭像
+- 使用者反映 Footer「MAKER」便利貼 / 版權區出現 A 字 logo 而非真人
+- 從 git (a84ac6f~1) 救出原始彩色花環真人頭像
+- 存成 `client/public/teacher-avatar.png`（與 favicon 語義分開）
+- BulletinFooter 兩處 + 三個 OG 圖生成器底部頭像位都改用 teacher-avatar
+- **設計約定確立**：
+  - `favicon.*` / `icon-*.png` / `maskable-*.png` → **品牌 logo**（cork + A 字），分頁 / PWA / Android
+  - `teacher-avatar.png` → **作者頭像**（彩色花環真人），Footer / OG attribution
+  - `apple-touch-icon.png` → fallback
+- 想換頭像時：覆蓋 teacher-avatar.png 即可全站更新
+
+### 🚦 Lighthouse 門檻調整務實基準
+- 首次實測：perf 🔴20 / a11y 🟡87 / best-practices 🟢100 / seo 🟡82
+- performance 設 0（CI 跑 Lighthouse 用 4× throttling，不反映真實使用者體驗）
+- 其他三項用「實測 -7%」防退步：a11y≥0.80、best-practices≥0.90、seo≥0.75
+- 後續 4 次 Lighthouse runs 全綠燈
+
+### 📖 Blog static OG landing pages
+- `generate-og-pages.mjs` 新增 generateBlogIndexHtml / generateBlogPostHtml
+- 為 /blog 與每篇 post 產 static landing（仿 wish/tool/share 模式）
+- 爬蟲拿到正確 OG meta + og:image（含相關工具的 og 圖）
+
+### 🚀 部署
+- 3 次 deploy 全 success（91d6867 / a1811a2 / daf1e14）
+- 線上 teacher-avatar.png 200 OK、blog/* OG landing 全活
+- toolCount = 97
+
+---
+
 ## [3.6.30] - 2026-05-20 — P2 五件套：家族樹 / Firestore sync / Lighthouse / 字型快取 / Blog
 
 ### 🌳 P2-1：工具家族樹（SVG 徑向樹）
