@@ -1,12 +1,57 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.6`
-- **最後更新狀態**: 一週連發 4 版，徹底修好統計準確性 — 加上評論 LINE 通知、匿名認證、全站訪客追蹤、本地歷史回填工具。
+- **當前版本**: `v3.6.26` (本機/CI) · 工具總數 **97 個**（即將破百）
+- **最後更新狀態**: favicon / OG 社群分享圖全面換新成 cork 軟木塞風（跟首頁 BulletinHome 視覺一致），meta 描述從「60+/8 種」更新到「90+ 款國小教育工具」，並建立**工具數自動同步機制**：未來新增工具時 build 會自動讀 tools.json 算實際數量、重生 OG 圖、把數字 / OG hash 同步進 index.html / manifest / SEOHead — 不再需要手動維護。
 
 ## 📌 完成功能總覽
 
-### `v3.6.6` (最新 · 本地歷史回填工具)
+### `v3.6.27` (最新 · 品牌視覺與 SEO 大翻修)
+**🎨 全新 favicon 全套（公佈欄圖釘風）**
+- 設計概念：cork 軟木塞 + 黃色便利貼 + 紅色立體圖釘 + 中央「A」字（Akai）
+- 與首頁 BulletinHome 軟木塞背景視覺完全呼應，辨識度遠高於原本的個人頭像照片
+- 一次輸出 **9 種尺寸**：`favicon-16/32/48.png`、`favicon.png` (192)、`apple-touch-icon.png` (180)、`icon-192.png`、`icon-512.png`、`maskable-icon-512.png`（Android 含 safe zone padding）、`favicon.ico` (multi-size 16/32/48)
+- 16px 版本特別處理：去掉軟木塞紋理點 & 圖釘陰影避免毛邊，「A」字加粗到 78% 比例確保可辨識
+- 腳本：`scripts/generate-favicon.mjs`，npm 別名 `npm run gen:favicon`
+
+**🖼️ 全新首頁 OG 社群分享圖（cork 三便利貼風）**
+- 1200×630 軟木塞公佈欄背景 + 上下木條
+- 中央主便利貼「科技教育創新專區」 + 紅色大字「**97 款教育工具**」（由 build 自動算）
+- 左上藍便利貼「開箱即用 / 免註冊 / 一鍵分享給學生」
+- 右上綠便利貼「100% 免費 / 無廣告 / 教師親手打造」
+- 底部 attribution bar：阿凱新 favicon 頭像 + 「桃園市龍潭區石門國小 · cagoooo.github.io/Akai」+ 橘色「立即探索 →」CTA
+- **檔名加 md5 hash**（如 `og-preview-333a5200.png`）強制 LINE / FB / CDN 重抓
+- 腳本：`scripts/generate-home-og.mjs`，npm 別名 `npm run gen:home-og`
+
+**📝 meta / SEO / Schema 全面對齊**
+- 把以下舊資訊全部清掉並換成 90+ 工具新描述：
+  - `client/index.html` × 5 處「60+」、`og:image` 路徑、`twitter:image`
+  - `client/public/manifest.json`：補齊 192/512/maskable 多尺寸 icon，theme-color 改 cork 色 `#c99a6c`
+  - `client/src/components/SEOHead.tsx`：DEFAULT_DESCRIPTION 從「8 種」改成「90+ 款」，SITE_URL 從 `akai-e693f.web.app` 改成 `cagoooo.github.io/Akai`
+  - `client/src/components/StructuredData.tsx`：同樣的 SITE_URL 修正
+  - `client/public/api/teacher.json` & `server/data/teacher.json`：教師簡介加上「桃園市石門國小資訊教師」與工具數
+  - `client/public/404.html`：title 對齊
+  - `README.md`：頂部副標 + 加上 `tools-90+` badge + 線上 Demo 連結
+- `index.html` Schema.org `EducationalOrganization` 補上 founder.affiliation（石門國小）+ 正確 logo / image URL
+
+**🔁 工具數自動同步機制（未來不再手動維護「N 款」）**
+- 新增 `client/public/api/site-stats.json` — 由 build 寫入工具總數、分類分佈、OG 圖檔名與絕對 URL
+- 三隻腳本接入 npm build pipeline：
+  1. **ensure-fonts.mjs** — CI 上自動從 `github.com/google/fonts` raw URL 下載 `NotoSansTC-Bold.ttf`（12MB，被 .gitignore 排除避免 repo 肥大），本地已有則跳過
+  2. **generate-home-og.mjs** — 讀 tools.json 算實際工具數 → 依數量決定顯示 "97" / "100+" / "110+" → 產 OG 圖 + 寫 site-stats.json
+  3. **sync-meta-from-stats.mjs** — 把 OG 圖檔名 hash + 顯示用工具數同步進 index.html / manifest / SEOHead / README / teacher.json（idempotent：值對的時候不動）
+- `package.json` build 鍊：`bump-sw → gen-favicon → gen-home-og → sync-meta → gen-wish-preview → vite build → gen-og-pages`
+- 未來只要 `npm run new-tool` 加新工具，下次 push 自動帶起新數字與新 OG 圖
+
+**🚀 已部署到 GitHub Pages**
+- Live：https://cagoooo.github.io/Akai/
+- 線上 OG：`https://cagoooo.github.io/Akai/og-preview-333a5200.png`（200 OK）
+- 線上 favicon：`https://cagoooo.github.io/Akai/favicon.ico`（200 OK）
+- GH Actions deploy run 26132632085 success
+
+---
+
+### `v3.6.6` (本地歷史回填工具)
 **🗃️ BackfillLocalAnalyticsBar 元件**
 - 偵測管理員 localStorage 還有未上傳的 context 時，於儀表板頂部顯示橘色提示框
 - 一鍵把本地 geo / device / referrer 三類用 `setDoc({merge: true}) + increment(N)` 合併到 Firestore

@@ -2,6 +2,43 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.27] - 2026-05-20 — 品牌視覺翻修：新 favicon / 新 OG 圖 / 工具數自動同步
+
+### 🎨 新 favicon 全套（公佈欄圖釘風，9 種尺寸）
+- 設計：cork 軟木塞 + 黃便利貼 + 紅圖釘 + 「A」字（Akai），與首頁 BulletinHome 完全呼應
+- 一鍵產出 `favicon.ico`（multi-size 16/32/48）、`favicon-16/32/48.png`、`favicon.png` (192)、`apple-touch-icon.png` (180)、`icon-192/512.png`、`maskable-icon-512.png`
+- 16px 版本去掉紋理 & 陰影、字體加大到 78%，確保 tab 上仍清楚
+
+### 🖼️ 新首頁 OG 社群分享圖（1200×630）
+- cork 軟木塞 + 三張便利貼（中央主標 / 左上「開箱即用」 / 右上「100% 免費」）
+- 主便利貼工具數量「**97 款**」由 build 從 tools.json 自動算入
+- 底部 attribution bar：阿凱頭像 + 「桃園市龍潭區石門國小」+ 「立即探索」CTA
+- 檔名加 md5 hash（如 `og-preview-333a5200.png`）防 LINE / FB / CDN 快取
+
+### 📝 meta / SEO 全面對齊（清掉「60+」「8 種」「akai-e693f.web.app」）
+- `client/index.html`：og:title / og:description / twitter:* / Schema.org `EducationalOrganization` / description / keywords / theme-color (`#c99a6c`)
+- `client/public/manifest.json`：補齊 192/512/maskable 多尺寸、改 cork 主題色、categories 標記 education
+- `client/src/components/SEOHead.tsx`：DEFAULT_DESCRIPTION、SITE_URL、DEFAULT_IMAGE、DEFAULT_KEYWORDS 全換
+- `client/src/components/StructuredData.tsx`：SITE_URL 從舊 firebase 換成 GitHub Pages
+- `client/public/api/teacher.json` & `server/data/teacher.json`：教師簡介加石門國小 + 工具數
+- `client/public/404.html`、`README.md`：標題副標對齊
+
+### 🔁 自動同步基礎建設
+- 新增 `client/public/api/site-stats.json`：build 寫入工具總數 / 分類分佈 / OG 圖路徑（供前端或腳本讀）
+- 新腳本三件套接入 `npm run build`：
+  - `scripts/ensure-fonts.mjs`：CI 自動從 google/fonts repo 下載 `NotoSansTC-Bold.ttf`（12MB VF font，被 .gitignore 排除避免 repo 肥大）
+  - `scripts/generate-favicon.mjs`：產 favicon 9 種尺寸
+  - `scripts/generate-home-og.mjs`：讀 tools.json 算工具數 → 產 OG 圖 + site-stats.json
+  - `scripts/sync-meta-from-stats.mjs`：把工具數與 OG hash 同步進 index.html / manifest / SEOHead / README（idempotent）
+- npm aliases：`npm run gen:favicon` / `npm run gen:home-og`
+
+### 🚀 部署
+- GH Actions deploy run 26132632085 success
+- Live：`https://cagoooo.github.io/Akai/`、OG 圖 200 OK、favicon 200 OK
+- 工具總數 **97/100**（再 3 個破百 🎉）
+
+---
+
 ## [3.6.26] - 2026-05-18 — 新增工具 #97 MBTI 校園奇遇記
 ### ✨ 故事化 MBTI + SEL 校園互動測驗上架
 
