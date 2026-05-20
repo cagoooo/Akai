@@ -383,8 +383,56 @@ const POST_3: BlogPost = {
 `,
 };
 
+/** 手寫長篇教學情境文（5 篇深度文章）— SEO landing 主力 */
 export const POSTS: BlogPost[] = [POST_81, POST_46, POST_10, POST_68, POST_3];
+
+/**
+ * 取得 post（含手寫長文 + 從 tools.json 自動生成的迷你 blog）。
+ * mini blog 在 runtime 才生成（避免 build 時 tools.json 變動沒同步進 posts.ts）。
+ */
+export async function getAllPostsAsync(): Promise<BlogPost[]> {
+  // 動態 fetch tools.json + 動態 import miniPosts（lazy）
+  try {
+    const base = import.meta.env.BASE_URL || '/';
+    const version = import.meta.env.VITE_APP_VERSION || Date.now();
+    const res = await fetch(`${base}api/tools.json?v=${version}`);
+    if (!res.ok) return POSTS;
+    const tools = await res.json();
+    const { generateMiniPosts } = await import('./miniPosts');
+    const miniPosts = generateMiniPosts(tools);
+    // 手寫長文排前面（優先曝光），mini blog 排後面
+    return [...POSTS, ...miniPosts];
+  } catch {
+    return POSTS;
+  }
+}
 
 export function getPostBySlug(slug: string): BlogPost | undefined {
   return POSTS.find((p) => p.slug === slug);
+}
+
+/** 同步 + 從快取 tools.json 抓 mini post（給 BlogPost 路由用） */
+export async function getPostBySlugAsync(slug: string): Promise<BlogPost | undefined> {
+  // 先看手寫長文
+  const hit = POSTS.find((p) => p.slug === slug);
+  if (hit) return hit;
+  // 不是手寫 → 看是不是 mini blog（tool-{id}-...）
+  const match = slug.match(/^tool-(\d+)-/);
+  if (!match) return undefined;
+  const id = parseInt(match[1], 10);
+  try {
+    const base = import.meta.env.BASE_URL || '/';
+    const version = import.meta.env.VITE_APP_VERSION || Date.now();
+    const res = await fetch(`${base}api/tools.json?v=${version}`);
+    if (!res.ok) return undefined;
+    const tools = await res.json();
+    const tool = tools.find((t: { id: number }) => t.id === id);
+    if (!tool) return undefined;
+    const { toolToMiniPost } = await import('./miniPosts');
+    const mini = toolToMiniPost(tool);
+    if (mini.slug !== slug) return undefined; // slug 不符 — 可能 tool title 被改過
+    return mini;
+  } catch {
+    return undefined;
+  }
 }

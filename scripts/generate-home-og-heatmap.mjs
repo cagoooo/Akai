@@ -399,6 +399,12 @@ async function generateOG(tools, featuredIds) {
   ctx.font = '600 12px "NotoSansTC"';
   ctx.fillText('桃園市石門國小 · cagoooo.github.io/Akai', 88, avY + 16);
 
+  // 最近更新浮水印
+  const updateLabel = new Date().toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit' });
+  ctx.fillStyle = 'rgba(255,255,255,.5)';
+  ctx.font = '600 10px "NotoSansTC"';
+  ctx.fillText(`📅 ${updateLabel} 更新`, 88, avY + 30);
+
   // 右側標籤
   ctx.fillStyle = '#fde047';
   roundRect(ctx, W - 220, barY + 18, 180, 32, 16);

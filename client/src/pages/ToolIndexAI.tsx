@@ -16,7 +16,7 @@ import { Link } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import Fuse, { type FuseResult, type FuseResultMatch } from 'fuse.js';
 import { PageHead } from '@/components/PageHead';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, logToolIndexQuery } from '@/lib/analytics';
 import type { EducationalTool } from '@/lib/data';
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
@@ -26,18 +26,9 @@ import { BulletinFooter } from '@/components/bulletin/BulletinFooter';
 import { getCategoryKey, getCategoryLabel, getToolEmoji } from '@/components/bulletin/toolAdapter';
 import { useSiteStats } from '@/hooks/useSiteStats';
 
-// 範例 query chips — 點一下就丟到搜尋框
-const EXAMPLE_QUERIES = [
-  '我下週要上水的三態',
-  '想做閱讀理解練習',
-  '課堂破冰活動',
-  '打分數工具',
-  '學生票選 / 投票',
-  'AI 教案產生器',
-  '注音練習',
-  '班級輔導 / 自我認識',
-  '會議記錄',
-];
+// 範例 query chips — 由 scripts/sync-popular-queries.mjs 從 Firestore 真實熱門搜尋詞自動同步
+// 沒 Firestore 認證時保留 fallback（手動 curate 的經典範例）
+import { POPULAR_QUERIES as EXAMPLE_QUERIES } from '@/data/popularQueries';
 
 // 從匹配結果產生「為什麼推薦」說明
 function buildReason(match: FuseResultMatch | undefined, tool: EducationalTool, query: string): string {
@@ -108,6 +99,7 @@ export function ToolIndexAI() {
   }, [fuse, query]);
 
   // 搜尋上報（debounced 500ms 避免每打一個字都送一次）
+  // 同時送 GA + Firestore（後者供 build-time 回灌熱門 query chips）
   useEffect(() => {
     if (!query.trim()) return;
     const handle = setTimeout(() => {
@@ -116,6 +108,7 @@ export function ToolIndexAI() {
         result_count: results.length,
         top_match_id: results[0]?.item.id,
       });
+      void logToolIndexQuery(query, results.length);
     }, 500);
     return () => clearTimeout(handle);
   }, [query, results]);

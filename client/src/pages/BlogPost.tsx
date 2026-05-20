@@ -6,12 +6,12 @@
  */
 
 import { Link, useParams } from 'wouter';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import type { EducationalTool } from '@/lib/data';
-import { getPostBySlug } from '@/blog/posts';
+import { getPostBySlug, getPostBySlugAsync, type BlogPost as BlogPostType } from '@/blog/posts';
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
 import { Tape } from '@/components/primitives/Tape';
@@ -23,7 +23,18 @@ import { getCategoryLabel } from '@/components/bulletin/toolAdapter';
 
 export function BlogPost() {
   const params = useParams<{ slug: string }>();
-  const post = getPostBySlug(params.slug);
+  // 先看手寫長文（同步）；若沒有再 async 載入 mini blog
+  const syncPost = getPostBySlug(params.slug);
+  const [asyncPost, setAsyncPost] = useState<BlogPostType | undefined>(undefined);
+  const [loadedAsync, setLoadedAsync] = useState(false);
+  useEffect(() => {
+    if (syncPost) { setLoadedAsync(true); return; }
+    getPostBySlugAsync(params.slug).then((p) => {
+      setAsyncPost(p);
+      setLoadedAsync(true);
+    });
+  }, [params.slug, syncPost]);
+  const post = syncPost || asyncPost;
 
   const { data: tools } = useQuery<EducationalTool[]>({
     queryKey: ['/api/tools'],
@@ -50,6 +61,18 @@ export function BlogPost() {
       });
     }
   }, [params.slug, post]);
+
+  // 還在 async 載入中 → 顯示 loading skeleton（避免 mini blog 還沒載完先閃顯 404）
+  if (!post && !loadedAsync) {
+    return (
+      <>
+        <BulletinHeader />
+        <div style={{ maxWidth: 600, margin: '40px auto', padding: 60, textAlign: 'center', color: tokens.muted2, fontFamily: tokens.font.tc, fontStyle: 'italic' }}>
+          📌 載入文章中…
+        </div>
+      </>
+    );
+  }
 
   if (!post) {
     return (

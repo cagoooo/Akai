@@ -8,6 +8,7 @@
  */
 
 import { AnalyticsDashboard } from "@/components/AnalyticsDashboard";
+import { AdminWebVitalsDashboard } from "@/components/AdminWebVitalsDashboard";
 import { useAuth } from "@/hooks/useAuth";
 import { useLocation, Link } from "wouter";
 import { tokens } from "@/design/tokens";
@@ -99,6 +100,7 @@ export function AdminAuth() {
                     </button>
                 </div>
                 <AnalyticsDashboard />
+                <AdminWebVitalsDashboard />
             </div>
         );
     }

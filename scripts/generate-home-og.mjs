@@ -346,6 +346,12 @@ async function generateOG(tools) {
   ctx.font = '600 14px "NotoSansTC"';
   ctx.fillText('桃園市龍潭區石門國小 · cagoooo.github.io/Akai', 105, avY + 18);
 
+  // 最近更新浮水印 — 讓 LINE/FB 分享出去看起來「站還活著」
+  const updateLabel = new Date().toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit' }).replace('/', '/');
+  ctx.fillStyle = 'rgba(255,255,255,.55)';
+  ctx.font = '600 11px "NotoSansTC"';
+  ctx.fillText(`📅 最近更新 ${updateLabel}`, 105, avY + 35);
+
   // 右：分類膠囊
   ctx.fillStyle = C.accent;
   roundRect(ctx, W - 290, barY + 18, 250, 42, 21);

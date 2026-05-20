@@ -80,12 +80,42 @@ function generateToolPageHtml(tool) {
   
   <!-- LINE -->
   <meta property="og:image:secure_url" content="${imageUrl}">
-  
+
   <!-- Robots -->
   <meta name="robots" content="index, follow">
-  
+
   <!-- Canonical -->
   <link rel="canonical" href="${pageUrl}">
+
+  <!-- Schema.org SoftwareApplication — Google rich snippets / 富片段 -->
+  <script type="application/ld+json">
+  ${JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: tool.title,
+    description: tool.description,
+    applicationCategory: 'EducationalApplication',
+    operatingSystem: 'Web Browser',
+    url: pageUrl,
+    image: imageUrl,
+    author: {
+      '@type': 'Person',
+      name: '阿凱老師',
+      affiliation: {
+        '@type': 'EducationalOrganization',
+        name: '桃園市龍潭區石門國民小學',
+      },
+    },
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'TWD',
+      availability: 'https://schema.org/InStock',
+    },
+    keywords: ['教育工具', tool.title, '阿凱老師', '石門國小', ...(tool.tags || [])].join(','),
+    inLanguage: 'zh-TW',
+  })}
+  </script>
   
   <!-- Redirect to SPA -->
   <script>
@@ -620,7 +650,7 @@ async function main() {
     errorCount++;
   }
 
-  // 生成 blog static OG landing pages
+  // 生成 blog static OG landing pages（手寫長文 5 篇）
   try {
     const posts = extractBlogPosts();
     const blogDir = path.resolve(__dirname, '../dist/public/blog');
@@ -635,6 +665,40 @@ async function main() {
     }
   } catch (error) {
     console.error(`  ❌ blog/* 失敗:`, error.message);
+    errorCount++;
+  }
+
+  // 生成迷你 blog OG landing pages（每工具一篇 SEO landing）
+  try {
+    const SKIP_IDS = new Set([81, 46, 10, 68, 3, 100]); // 同 miniPosts.ts
+    const blogDir = path.resolve(__dirname, '../dist/public/blog');
+    let miniGenerated = 0;
+    for (const tool of tools) {
+      if (tool.isInternal || SKIP_IDS.has(tool.id)) continue;
+      const slugBody = tool.title
+        .toLowerCase()
+        .replace(/[\s.,;:!?()（）「」『』、，。！？]/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '')
+        .slice(0, 40);
+      const slug = `tool-${tool.id}-${slugBody}`;
+      const miniPost = {
+        slug,
+        title: `【30 秒看完】#${tool.id} ${tool.title}：適合誰用？怎麼開始？`,
+        excerpt: (tool.description || '').slice(0, 100),
+        publishedAt: tool.addedAt || '2024-06-01',
+        toolIds: [tool.id],
+        coverEmoji: '🔖',
+        tags: tool.tags || [],
+      };
+      const postDir = path.join(blogDir, slug);
+      if (!fs.existsSync(postDir)) fs.mkdirSync(postDir, { recursive: true });
+      fs.writeFileSync(path.join(postDir, 'index.html'), generateBlogPostHtml(miniPost), 'utf-8');
+      miniGenerated++;
+    }
+    console.log(`  ✅ 迷你 blog OG landing: ${miniGenerated} 篇`);
+  } catch (error) {
+    console.error(`  ❌ 迷你 blog landing 失敗:`, error.message);
     errorCount++;
   }
 

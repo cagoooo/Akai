@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>科技教育創新專區 · 阿凱老師</title>
+    <link>https://cagoooo.github.io/Akai/</link>
+    <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
+    <description>阿凱老師（桃園市石門國小）親手打造的 97+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <language>zh-TW</language>
+    <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
+    <pubDate>Wed, 20 May 2026 00:00:00 GMT</pubDate>
+    <lastBuildDate>Wed, 20 May 2026 23:47:03 GMT</lastBuildDate>
+    <generator>scripts/generate-feed.mjs · v1</generator>
+    <ttl>180</ttl>
+    <image>
+      <url>https://cagoooo.github.io/Akai/icon-512.png</url>
+      <title>阿凱老師 · 教育工具集</title>
+      <link>https://cagoooo.github.io/Akai/</link>
+      <width>144</width>
+      <height>144</height>
+    </image>
+    <item>
+      <title>📖 教學情境：我用「教學駕駛艙入口網」帶 5 年級資訊課，學生不用記網址了</title>
+      <link>https://cagoooo.github.io/Akai/blog/cockpit-81-info-tech-class</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/cockpit-81-info-tech-class</guid>
+      <pubDate>Wed, 20 May 2026 00:00:00 GMT</pubDate>
+      <description>#81 國小資訊科技教學駕駛艙累計 555 點擊，是阿凱老師工具集的常勝軍。一個入口網把上課常用工具、簡報、學習單全收進去，學生 30 秒就能找到要用的東西。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：禮堂預約再也不用印紙本表單：#46 上線兩個月校內預約量翻 3 倍</title>
+      <link>https://cagoooo.github.io/Akai/blog/venue-46-no-more-paper-form</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/venue-46-no-more-paper-form</guid>
+      <pubDate>Wed, 20 May 2026 00:00:00 GMT</pubDate>
+      <description>#46 禮堂預約系統累計 136 點擊。一個簡單 Google Calendar 風格的預約介面，把過去紙本搶禮堂變成「上線秒搶」，還能自動避免衝突。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：導師日常神器：#10 班級小管家把點名、午餐統計、聯絡簿全整合</title>
+      <link>https://cagoooo.github.io/Akai/blog/class-helper-10-daily-routine</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/class-helper-10-daily-routine</guid>
+      <pubDate>Wed, 20 May 2026 00:00:00 GMT</pubDate>
+      <description>#10 班級小管家累計 126 點擊。導師工作有 80% 是重複行政（點名、午餐記錄、聯絡簿、生日提醒），這個工具一口氣全整理。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：手作課程「免印照片回家給家長簽」：#68 學生作品全雲端化的兩個月實測</title>
+      <link>https://cagoooo.github.io/Akai/blog/student-portfolio-68-handcraft-uploads</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/student-portfolio-68-handcraft-uploads</guid>
+      <pubDate>Wed, 20 May 2026 00:00:00 GMT</pubDate>
+      <description>#68 手作課程照片影片作品上傳平台累計 114 點擊，是排行榜第 4 名。手作課的學生作品終於不用拍照印出來夾在聯絡簿，學期末家長還能看到整套學習歷程。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：我用 #3 學生即時投票系統把「無聊提問」變「全班搶答」— 累計 84 場實戰心得</title>
+      <link>https://cagoooo.github.io/Akai/blog/live-vote-3-classroom-democracy</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/live-vote-3-classroom-democracy</guid>
+      <pubDate>Wed, 20 May 2026 00:00:00 GMT</pubDate>
+      <description>#3 學生即時投票系統累計 84 點擊，排行榜第 5。一個 QR Code 就把投影片問題變即時投票，學生再也不用「老師我不敢舉手」，連害羞的孩子都會玩。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>🆕 新工具：線上即時客服</title>
+      <link>https://cagoooo.github.io/Akai/tool/1</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/1</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>提供即時的線上教育支援和諮詢服務，協助解決學習過程中的問題</description>
+      <category>客服</category>
+      <category>即時通訊</category>
+      <category>問答</category>
+      <category>支援</category>
+    </item>
+    <item>
+      <title>🆕 新工具：行政業務協調系統</title>
+      <link>https://cagoooo.github.io/Akai/tool/2</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/2</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>阿凱老師打造的學校行政業務協調系統，整合共用日曆、跨部門行程管理與 LINE 推播提醒，讓教務、學務、總務、輔導各處室一站搞定協作排程。</description>
+      <category>行政</category>
+      <category>協調</category>
+      <category>校務</category>
+      <category>管理</category>
+    </item>
+    <item>
+      <title>🆕 新工具：學生即時投票系統</title>
+      <link>https://cagoooo.github.io/Akai/tool/3</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/3</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>阿凱老師打造的課堂即時投票系統，老師建立題目產生 QR Code，學生掃碼就能即時作答，搭配截圖白板標註工具，連投影片題目也能秒變互動題。</description>
+      <category>投票</category>
+      <category>互動</category>
+      <category>課堂</category>
+      <category>即時</category>
+      <category>民主</category>
+    </item>
+    <item>
+      <title>🆕 新工具：PIRLS閱讀理解生成</title>
+      <link>https://cagoooo.github.io/Akai/tool/4</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/4</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>專業的閱讀理解評估工具，幫助提升學生的閱讀能力</description>
+      <category>PIRLS</category>
+      <category>閱讀理解</category>
+      <category>評估</category>
+      <category>生成</category>
+      <category>AI</category>
+    </item>
+    <item>
+      <title>🆕 新工具：校園點餐系統</title>
+      <link>https://cagoooo.github.io/Akai/tool/5</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/5</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>阿凱老師打造的校慶園遊會點餐系統，各班攤位上線開菜單，買家手機點餐取號，廚房後台一鍵管理訂單，告別現場排隊吼價的混亂。</description>
+      <category>點餐</category>
+      <category>午餐</category>
+      <category>訂餐</category>
+      <category>校園</category>
+      <category>便利</category>
+    </item>
+    <item>
+      <title>🆕 新工具：蜂類配對消消樂</title>
+      <link>https://cagoooo.github.io/Akai/tool/6</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/6</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>阿凱老師打造的記憶配對消消樂遊戲，三種難度搭配注音、唐詩、英單、水果等六大主題包，老師改 JSON 就能新增主題，純靜態 PWA 離線可玩。</description>
+      <category>遊戲</category>
+      <category>蜜蜂</category>
+      <category>配對</category>
+      <category>消消樂</category>
+      <category>自然</category>
+    </item>
+    <item>
+      <title>🆕 新工具：點「石」成金🐝(評語優化)</title>
+      <link>https://cagoooo.github.io/Akai/tool/7</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/7</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>創新的學生評語優化工具，協助教師撰寫更正向、積極且個人化的學生評語</description>
+      <category>評語</category>
+      <category>AI</category>
+      <category>LINE</category>
+      <category>正向</category>
+      <category>學生</category>
+    </item>
+    <item>
+      <title>🆕 新工具：12年教案有14</title>
+      <link>https://cagoooo.github.io/Akai/tool/8</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/8</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>豐富的教案資源分享平台，提供多元化的教學素材和靈感</description>
+      <category>教案</category>
+      <category>十二年國教</category>
+      <category>課綱</category>
+      <category>資源</category>
+      <category>分享</category>
+    </item>
+    <item>
+      <title>🆕 新工具：超級瑪莉歐冒險</title>
+      <link>https://cagoooo.github.io/Akai/tool/9</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/9</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>阿凱老師打造的瀏覽器版超級瑪莉歐冒險遊戲，支援鍵盤＋觸控雙模式操作，內建關卡選擇、計分、金幣與成就系統，純前端開瀏覽器就能玩。</description>
+      <category>遊戲</category>
+      <category>瑪莉歐</category>
+      <category>冒險</category>
+      <category>跳躍</category>
+      <category>經典</category>
+    </item>
+    <item>
+      <title>🆕 新工具：班級小管家</title>
+      <link>https://cagoooo.github.io/Akai/tool/10</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/10</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>阿凱老師打造的班級小管家全方位課堂工具箱，整合學生名單、加扣分、抽籤分組、計時器、聯絡簿、作業檢查、考試監考共八大功能，多班級資料自動隔離。</description>
+      <category>班級</category>
+      <category>管理</category>
+      <category>導師</category>
+      <category>學生</category>
+      <category>事務</category>
+    </item>
+    <item>
+      <title>🆕 新工具：剛好學：課堂互動so easy</title>
+      <link>https://cagoooo.github.io/Akai/tool/11</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/11</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>阿凱老師與阿剛老師共同打造的剛好學課堂互動平台，13 種互動模式涵蓋投票、QA、閱讀測驗、繪圖題、文字雲、相片牆，學生掃 QR Code 就能加入。</description>
+      <category>互動</category>
+      <category>課堂</category>
+      <category>即時</category>
+      <category>教學</category>
+      <category>問答</category>
+    </item>
+    <item>
+      <title>🆕 新工具：PIRLS閱讀理解網</title>
+      <link>https://cagoooo.github.io/Akai/tool/12</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/12</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>完整的 PIRLS 閱讀理解資源平台</description>
+      <category>PIRLS</category>
+      <category>閱讀</category>
+      <category>理解</category>
+      <category>資源</category>
+      <category>評量</category>
+    </item>
+    <item>
+      <title>🆕 新工具：5W1H 靈感發射器 🚀</title>
+      <link>https://cagoooo.github.io/Akai/tool/13</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/13</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>創意思維激發工具，協助發想教學內容</description>
+      <category>5W1H</category>
+      <category>創意</category>
+      <category>靈感</category>
+      <category>思維</category>
+      <category>發想</category>
+    </item>
+    <item>
+      <title>🆕 新工具：點亮詩意~『早安長輩圖產生器』</title>
+      <link>https://cagoooo.github.io/Akai/tool/14</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/14</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>輕鬆製作溫馨的早安問候圖片</description>
+      <category>長輩圖</category>
+      <category>早安</category>
+      <category>圖片</category>
+      <category>問候</category>
+      <category>詩詞</category>
+    </item>
+    <item>
+      <title>🆕 新工具：社群領域會議報告產出平台</title>
+      <link>https://cagoooo.github.io/Akai/tool/15</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/15</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>快速產生會議報告的協作工具</description>
+      <category>會議</category>
+      <category>報告</category>
+      <category>社群</category>
+      <category>記錄</category>
+      <category>產出</category>
+    </item>
+    <item>
+      <title>🆕 新工具：親師溝通小幫手</title>
+      <link>https://cagoooo.github.io/Akai/tool/16</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/16</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>促進親師溝通的便捷平台</description>
+      <category>親師</category>
+      <category>溝通</category>
+      <category>家長</category>
+      <category>聯絡</category>
+      <category>通知</category>
+    </item>
+    <item>
+      <title>🆕 新工具：單一抽籤系統</title>
+      <link>https://cagoooo.github.io/Akai/tool/17</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/17</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>簡單快速的單一抽籤工具</description>
+      <category>抽籤</category>
+      <category>隨機</category>
+      <category>點名</category>
+      <category>簡單</category>
+      <category>快速</category>
+    </item>
+    <item>
+      <title>🆕 新工具：大量抽籤系統</title>
+      <link>https://cagoooo.github.io/Akai/tool/18</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/18</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>支援大量抽籤的進階工具</description>
+      <category>抽籤</category>
+      <category>隨機</category>
+      <category>大量</category>
+      <category>分組</category>
+      <category>進階</category>
+    </item>
+    <item>
+      <title>🆕 新工具：設計自己的專屬客服</title>
+      <link>https://cagoooo.github.io/Akai/tool/19</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/19</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>自訂專屬的智能客服系統</description>
+      <category>客服</category>
+      <category>AI</category>
+      <category>機器人</category>
+      <category>自訂</category>
+      <category>智能</category>
+    </item>
+    <item>
+      <title>🆕 新工具：英打練習</title>
+      <link>https://cagoooo.github.io/Akai/tool/20</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/20</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>英文打字練習工具，提升打字速度與準確度</description>
+      <category>打字</category>
+      <category>英文</category>
+      <category>練習</category>
+      <category>鍵盤</category>
+      <category>速度</category>
+    </item>
+    <item>
+      <title>🆕 新工具：中打練習</title>
+      <link>https://cagoooo.github.io/Akai/tool/21</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/21</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>中文打字練習工具，提升中文輸入能力</description>
+      <category>打字</category>
+      <category>中文</category>
+      <category>練習</category>
+      <category>注音</category>
+      <category>輸入法</category>
+    </item>
+    <item>
+      <title>🆕 新工具：成語中打練習</title>
+      <link>https://cagoooo.github.io/Akai/tool/22</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/22</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>透過成語練習中文打字，邊打邊學成語</description>
+      <category>打字</category>
+      <category>成語</category>
+      <category>中文</category>
+      <category>學習</category>
+      <category>國語</category>
+    </item>
+    <item>
+      <title>🆕 新工具：點石成金蜂🐝 評語優化網頁版</title>
+      <link>https://cagoooo.github.io/Akai/tool/23</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/23</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>阿凱老師打造的「點石成金蜂」教師評語生成應用，協助老師快速產出個人化、貼近學生特質的成績單評語，告別罐頭句子。</description>
+      <category>評語</category>
+      <category>AI</category>
+      <category>正向</category>
+      <category>學生</category>
+      <category>網頁版</category>
+    </item>
+    <item>
+      <title>🆕 新工具：教師午會記錄報告站</title>
+      <link>https://cagoooo.github.io/Akai/tool/24</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/24</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>教師午會紀錄與報告分享平台</description>
+      <category>午會</category>
+      <category>記錄</category>
+      <category>教師</category>
+      <category>報告</category>
+      <category>行政</category>
+    </item>
+    <item>
+      <title>🆕 新工具：國語演說培訓班</title>
+      <link>https://cagoooo.github.io/Akai/tool/25</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/25</guid>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
+      <description>國語演說練習與培訓工具</description>
+      <category>演說</category>
+      <category>國語</category>
+      <category>口說</category>
+      <category>培訓</category>
+      <category>比賽</category>
+    </item>
+  </channel>
+</rss>

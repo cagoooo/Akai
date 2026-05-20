@@ -89,6 +89,38 @@ export function PageHead(props: Props) {
     const image = resolveToolImage(tool, version);
     const keywords = ['教育工具', tool.title, '阿凱老師', '石門國小', ...(tool.tags || [])].join(',');
 
+    // Schema.org SoftwareApplication：讓 Google 搜尋結果出現星星評分 + 富片段
+    // applicationCategory 對應到 GoogleSearch 認可的 EducationalApplication
+    // offers price = 0 表示完全免費
+    const softwareSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: tool.title,
+      description: tool.description,
+      applicationCategory: 'EducationalApplication',
+      operatingSystem: 'Web Browser',
+      url,
+      image: image || undefined,
+      author: {
+        '@type': 'Person',
+        name: '阿凱老師',
+        affiliation: {
+          '@type': 'EducationalOrganization',
+          name: '桃園市龍潭區石門國民小學',
+        },
+      },
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'TWD',
+        availability: 'https://schema.org/InStock',
+      },
+      keywords: keywords,
+      inLanguage: 'zh-TW',
+      // 簡化的 aggregateRating — 統一給「目前無評分但活躍中」訊息，未來接 toolReviews 真實統計
+      // 暫不寫 aggregateRating（除非有真實評分，否則 Google 會降權處理）
+    };
+
     return (
       <Helmet>
         <title>{title}</title>
@@ -118,6 +150,11 @@ export function PageHead(props: Props) {
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         {image && <meta name="twitter:image" content={image} />}
+
+        {/* Schema.org SoftwareApplication — Google rich snippets */}
+        <script type="application/ld+json">
+          {JSON.stringify(softwareSchema)}
+        </script>
       </Helmet>
     );
   }

@@ -451,6 +451,12 @@ async function generateOG(tool, faviconImg) {
   ctx.font = '600 13px "NotoSansTC"';
   ctx.fillText('桃園市石門國小 · cagoooo.github.io/Akai', 102, avY + 17);
 
+  // 最近更新浮水印 — 讓 LINE/FB 分享看到站還活著
+  const updateLabel = new Date().toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit' });
+  ctx.fillStyle = 'rgba(255,255,255,.5)';
+  ctx.font = '600 11px "NotoSansTC"';
+  ctx.fillText(`📅 最近更新 ${updateLabel}`, 102, avY + 33);
+
   // 右：URL 膠囊
   ctx.fillStyle = C.accent;
   roundRect(ctx, W - 235, barY + 18, 195, 42, 21);

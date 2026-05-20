@@ -53,6 +53,49 @@ export function trackEvent(
   }
 }
 
+// ── Tool index 搜尋詞紀錄（Firestore，用於 build-time 回灌熱門 query） ────
+// 路徑：analytics/toolIndexQueries/{queryHash}
+//   { query, count, lastUsedAt, lastResultCount }
+// 為什麼用 hash 當 doc id？避免「不能含 / 等特殊字元」的 Firestore key 限制，且天然 deduplication
+
+function simpleHash(s: string): string {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+  return Math.abs(h).toString(36);
+}
+
+/**
+ * 記錄一筆 ToolIndexAI 搜尋詞到 Firestore，用 count 累加。
+ * 同 query 只算一次（簡單做法：用 hash 當 doc id，setDoc + merge increment）。
+ */
+export async function logToolIndexQuery(query: string, resultCount: number) {
+  if (!db) return;
+  const q = query.trim().slice(0, 80);
+  if (q.length < 2) return; // 太短不記
+  try {
+    const { doc: docRef, getDoc, setDoc: writeDoc, increment } = await import('firebase/firestore');
+    const ref = docRef(db, 'analytics', 'toolIndexQueries', 'queries', simpleHash(q));
+    const snap = await getDoc(ref);
+    if (snap.exists()) {
+      await writeDoc(ref, {
+        count: increment(1),
+        lastUsedAt: new Date().toISOString(),
+        lastResultCount: resultCount,
+      }, { merge: true });
+    } else {
+      await writeDoc(ref, {
+        query: q,
+        count: 1,
+        firstSeenAt: new Date().toISOString(),
+        lastUsedAt: new Date().toISOString(),
+        lastResultCount: resultCount,
+      });
+    }
+  } catch {
+    /* 失敗不打擾使用者 */
+  }
+}
+
 // ── Web Vitals RUM → Firestore ────────────────────────────────
 
 const SAMPLE_RATE = 0.25; // 只取樣 25%（控制 Firestore 寫入量，每月 < 50K 寫入）

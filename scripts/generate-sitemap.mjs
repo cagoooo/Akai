@@ -54,26 +54,25 @@ for (const tool of tools) {
 
 // Blog 教學情境長文 — 從 client/src/blog/posts.ts 解析
 const postsPath = resolve(__dirname, '../client/src/blog/posts.ts');
+const longformSlugs = [];
 if (existsSync(postsPath)) {
     const postsSrc = readFileSync(postsPath, 'utf-8');
-    // 每個 BlogPost 物件用 regex 抓 slug + publishedAt
     const blockRegex = /const\s+POST_\d+:\s*BlogPost\s*=\s*\{([\s\S]*?)\n\};/g;
     let m;
-    const slugs = [];
     while ((m = blockRegex.exec(postsSrc)) !== null) {
         const slug = m[1].match(/slug:\s*'([^']+)'/)?.[1];
         const publishedAt = m[1].match(/publishedAt:\s*'([^']+)'/)?.[1];
-        if (slug) slugs.push({ slug, publishedAt: publishedAt || TODAY });
+        if (slug) longformSlugs.push({ slug, publishedAt: publishedAt || TODAY });
     }
     // Blog 列表頁
     urls.push({
         loc: `${SITE_URL}/blog`,
-        lastmod: slugs[0]?.publishedAt || TODAY,
+        lastmod: longformSlugs[0]?.publishedAt || TODAY,
         changefreq: 'weekly',
         priority: '0.85',
     });
-    // 各篇 blog post
-    for (const { slug, publishedAt } of slugs) {
+    // 手寫長文
+    for (const { slug, publishedAt } of longformSlugs) {
         urls.push({
             loc: `${SITE_URL}/blog/${slug}`,
             lastmod: publishedAt,
@@ -81,8 +80,32 @@ if (existsSync(postsPath)) {
             priority: '0.8',
         });
     }
-    console.log(`📖 Blog 條目：${slugs.length} 篇`);
+    console.log(`📖 手寫長文：${longformSlugs.length} 篇`);
 }
+
+// 自動產生的迷你 blog（一工具一篇 SEO landing）— 跟 miniPosts.ts SKIP_IDS 同邏輯
+function makeMiniSlug(tool) {
+    const slugBody = tool.title
+        .toLowerCase()
+        .replace(/[\s.,;:!?()（）「」『』、，。！？]/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '')
+        .slice(0, 40);
+    return `tool-${tool.id}-${slugBody}`;
+}
+const SKIP_IDS = new Set([81, 46, 10, 68, 3, 100]); // 同 miniPosts.ts
+let miniCount = 0;
+for (const tool of tools) {
+    if (tool.isInternal || SKIP_IDS.has(tool.id)) continue;
+    urls.push({
+        loc: `${SITE_URL}/blog/${makeMiniSlug(tool)}`,
+        lastmod: tool.addedAt ? tool.addedAt.slice(0, 10) : TODAY,
+        changefreq: 'monthly',
+        priority: '0.65',
+    });
+    miniCount++;
+}
+console.log(`📝 迷你 blog（每工具一篇）：${miniCount} 篇`);
 
 // 熱門工具拼貼 OG 變體 landing
 urls.push({

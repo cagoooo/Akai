@@ -5,8 +5,9 @@
  * 文章來源：client/src/blog/posts.ts（內聯 markdown）
  */
 
+import { useEffect, useState } from 'react';
 import { Link } from 'wouter';
-import { POSTS } from '@/blog/posts';
+import { POSTS, getAllPostsAsync, type BlogPost } from '@/blog/posts';
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
 import { Tape } from '@/components/primitives/Tape';
@@ -33,7 +34,14 @@ const PIN_MAP: Record<string, string> = {
 };
 
 export function BlogList() {
-  const sortedPosts = [...POSTS].sort(
+  // 同步顯示手寫 5 篇，async 載入完再合併迷你 blog（92+ 個）
+  const [posts, setPosts] = useState<BlogPost[]>(POSTS);
+
+  useEffect(() => {
+    getAllPostsAsync().then((all) => setPosts(all)).catch(() => { /* 用 fallback POSTS 即可 */ });
+  }, []);
+
+  const sortedPosts = [...posts].sort(
     (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   );
 

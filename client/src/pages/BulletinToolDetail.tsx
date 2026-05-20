@@ -10,6 +10,7 @@
 import { useParams, Link, useLocation } from 'wouter';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { PageHead } from '@/components/PageHead';
+import { BulletinRelatedTools } from '@/components/bulletin/BulletinRelatedTools';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { type EducationalTool } from '@/lib/data';
@@ -755,8 +756,10 @@ export function BulletinToolDetail() {
           <ReviewList toolId={tool.id} toolTitle={tool.title} />
         </section>
 
-        {/* 相關推薦 */}
-        <RelatedTools currentTool={tool} tools={allTools || []} />
+        {/* 相關推薦 — cork 風格 + fuse.js 模糊比對找最相似的 3 個工具 */}
+        <div style={{ padding: '0 60px' }}>
+          <BulletinRelatedTools current={tool} allTools={allTools || []} limit={3} />
+        </div>
 
         <BulletinFooter />
       </BulletinBoard>
