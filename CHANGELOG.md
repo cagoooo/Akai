@@ -2,6 +2,47 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.30] - 2026-05-20 — P2 五件套：家族樹 / Firestore sync / Lighthouse / 字型快取 / Blog
+
+### 🌳 P2-1：工具家族樹（SVG 徑向樹）
+- 新 `BulletinToolFamilyTree`：根節點 + 7 大分類輻射 + 工具葉子
+- 點分類展開/收合、點葉子跳轉 /tool/:id、hover tooltip
+- 不引 D3，純 SVG + React（~250 行）
+- BulletinSiteStats 加 segmented control toggle「🥧 圓餅 / 🌳 家族樹」
+- 家族樹 lazy load，不拖累首屏
+
+### 🔄 P2-2：featuredTools.ts Firestore 自動同步
+- 新腳本 `scripts/sync-featured-from-firestore.mjs`
+- 讀 toolUsageStats top 5 → 重寫 featuredTools.ts
+- 實測 top 5：#81 (555) / #46 (136) / #10 (126) / #68 (114) / #3 (84)
+- 認證：本地 service-account.json，CI 用 FIREBASE_SERVICE_ACCOUNT (base64)
+- 沒設 → 跳過不 fail
+- npm alias `sync:featured`，接入 build pipeline
+
+### 🚦 P2-3：Lighthouse 分數閘門
+- THRESHOLDS：performance=0 (CI 不檢查) / a11y≥0.80 / best-practices≥0.90 / seo≥0.75
+- 未達標 → workflow 失敗 + step summary 表格
+- 首次實測：perf 🔴20 / a11y 🟡87 / best-practices 🟢100 / seo 🟡82
+
+### ⚡ P2-4：CI 字型快取
+- `actions/cache@v4` cache `scripts/fonts/NotoSansTC-Bold.ttf` (12MB)
+- key 用 ensure-fonts.mjs 雜湊
+- 預期 deploy -30s
+
+### 📖 P2-5：教學情境部落格
+- 3 篇種子長文：cockpit-81 / venue-46 / class-helper-10
+- 路由 /blog 列表 + /blog/:slug 內文（react-markdown + remark-gfm）
+- 首頁紫色便利貼 BulletinBlogEntry 顯示最新 3 篇
+- generate-og-pages.mjs 為 /blog 與每篇 post 產 static OG landing
+  → 社群爬蟲拿到正確 OG meta + og:image（含相關工具）
+
+### 🚀 部署
+- GH Actions deploy 26147560993 success (1m9s)
+- Live `/blog`、`/blog/:slug`、family tree toggle 全 200 OK
+- 線上 toolCount = 98
+
+---
+
 ## [3.6.29] - 2026-05-20 — #100 工具索引神器 + P1 三件套
 
 ### 🧭 新工具 #100 — 工具索引神器（智能推薦器）

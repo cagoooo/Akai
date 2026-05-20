@@ -1,12 +1,69 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.29` (本機/CI) · 工具總數 **98 個**（**破百倒數 2** 🚀；已預先把 #100 工具索引神器站位完成）
-- **最後更新狀態**: #100 工具索引神器（fuse.js fuzzy match 智能推薦）已上線 `/tool/100`；P1 三件套全部完成 — (a) tool OG 全 98 張用最新 cork 模板重生；(b) PageHead 元件取代三處重複 Helmet 寫法；(c) SVG favicon 向量化 + prefers-color-scheme 自動深淺模式。
+- **當前版本**: `v3.6.30` (本機/CI) · 工具總數 **98 個**（**破百倒數 2** 🚀）
+- **最後更新狀態**: P2 五件套全部完成 — (1) 工具家族樹（SVG 徑向樹，與圓餅圖 toggle 切換）；(2) Firestore 自動同步 featuredTools（實測 top 5：#81/46/10/68/3）；(3) Lighthouse CI 分數閘門（防退步）；(4) CI 字型快取（deploy 加速）；(5) 教學情境部落格（3 篇種子文章 + 路由 + static OG landing）。
 
 ## 📌 完成功能總覽
 
-### `v3.6.29` (最新 · #100 工具索引神器 + P1 三件套)
+### `v3.6.30` (最新 · P2 五件套：家族樹 / Firestore sync / Lighthouse / 字型快取 / Blog)
+
+**🌳 P2-1：工具家族樹（SVG 徑向樹）**
+- 新元件 `BulletinToolFamilyTree`（不引 D3，純 SVG 自畫）
+- 中心根節點「全部 N 個工具」 → 7 大分類往外輻射 → 工具葉子
+- 點分類圓圈展開 / 收合該分類的工具樹枝
+- 點工具葉子跳轉 /tool/:id
+- hover 顯示 #ID + 底部標題 tooltip
+- BulletinSiteStats 加 segmented control toggle「🥧 圓餅 / 🌳 家族樹」
+- 家族樹 lazy load 不影響首屏
+
+**🔄 P2-2：featuredTools.ts 從 Firestore 自動同步**
+- 新腳本 `sync-featured-from-firestore.mjs`
+- 讀 toolUsageStats top 5（排除 #100）→ 重寫 featuredTools.ts
+- **實測結果取代手動 curate**：#81 (555 clicks) → #46 (136) → #10 (126) → #68 (114) → #3 (84)
+- 認證：本地 service-account.json，CI 用 FIREBASE_SERVICE_ACCOUNT secret (base64)
+- 沒設認證 → 跳過不 fail
+- 接入 build pipeline + npm alias `sync:featured`
+
+**🚦 P2-3：Lighthouse 分數閘門（防退步）**
+- `.github/workflows/lighthouse.yml` 加 THRESHOLDS + 表格 step summary
+- 首次實測：perf 🔴20 / a11y 🟡87 / best-practices 🟢100 / seo 🟡82
+- 門檻調整為「實測 -7%」當基準：
+  - performance: 0（CI 環境差異大，建議用 RUM 觀察）
+  - accessibility ≥ 0.80
+  - best-practices ≥ 0.90
+  - seo ≥ 0.75
+- 未達標 → workflow 失敗 + 詳細表格報告
+- 未來實測穩定後可漸進提高門檻
+
+**⚡ P2-4：CI 字型快取**
+- `.github/workflows/deploy-pages.yml` 加 `actions/cache@v4`
+- path: `scripts/fonts/NotoSansTC-Bold.ttf` (12MB)
+- key: `${{ runner.os }}-notosanstc-${{ hashFiles('scripts/ensure-fonts.mjs') }}`
+- 首次寫入後，後續 deploy 跳過下載字型，預期 -30s
+
+**📖 P2-5：教學情境部落格**
+- 3 篇種子長文（每篇 4-6 分鐘）：
+  - `cockpit-81-info-tech-class`：「我用教學駕駛艙帶 5 年級資訊課」
+  - `venue-46-no-more-paper-form`：「禮堂預約不用印紙本表單」
+  - `class-helper-10-daily-routine`：「導師日常神器：班級小管家」
+- 含真實數據表格、學生 / 校長引言、配對工具推薦
+- 路由 `/blog`（列表）+ `/blog/:slug`（內文）
+- 內文 react-markdown + remark-gfm 渲染（GFM 表格 / blockquote）
+- 完整自訂 component 套 cork 風格
+- 首頁加紫色便利貼 `BulletinBlogEntry` 顯示最新 3 篇
+- **static OG landing pages**：generate-og-pages.mjs 為 /blog 與每篇 post 產獨立 HTML，社群爬蟲訪問拿到對的 OG meta（含相關工具 og:image），一般使用者 JS redirect 進 SPA
+
+**🚀 已部署上線**
+- Live `/blog`：https://cagoooo.github.io/Akai/blog/
+- Live blog 內文：https://cagoooo.github.io/Akai/blog/cockpit-81-info-tech-class/
+- Live blog OG meta：✅ og:title + og:image 都正確
+- 線上 toolCount = 98（破百倒數 2）
+- GH Actions deploy 26147560993 success (1m9s)
+
+---
+
+### `v3.6.29` (#100 工具索引神器 + P1 三件套)
 
 **🧭 #100 工具索引神器 — 智能推薦器**
 - 新頁面 `client/src/pages/ToolIndexAI.tsx` 掛在 `/tool/100`（在 `/tool/:id` 之前匹配）
