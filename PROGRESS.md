@@ -1,12 +1,58 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.26` (本機/CI) · 工具總數 **97 個**（即將破百）
-- **最後更新狀態**: favicon / OG 社群分享圖全面換新成 cork 軟木塞風（跟首頁 BulletinHome 視覺一致），meta 描述從「60+/8 種」更新到「90+ 款國小教育工具」，並建立**工具數自動同步機制**：未來新增工具時 build 會自動讀 tools.json 算實際數量、重生 OG 圖、把數字 / OG hash 同步進 index.html / manifest / SEOHead — 不再需要手動維護。
+- **當前版本**: `v3.6.28` (本機/CI) · 工具總數 **97 個**（**破百倒數 3** 🚀）
+- **最後更新狀態**: P0 三件套上線 — (1) 首頁頂部「破百倒數 3」橘色便利貼 + 進度條，破百後自動切金色慶祝膠帶 7 天；(2) 工具地圖：圓餅圖分類分佈 + 點扇形跳分類；(3) OG heatmap 拼貼變體：分享 `/share/heatmap.html` 拿到 2×2 拍立得拼貼 OG，配合 build 自動同步機制。
 
 ## 📌 完成功能總覽
 
-### `v3.6.27` (最新 · 品牌視覺與 SEO 大翻修)
+### `v3.6.28` (最新 · P0 三件套：破百倒數 / 工具地圖 / OG heatmap)
+
+**🚀 破百倒數 banner（BulletinMilestone100）**
+- 插在首頁 Hero 上方，三狀態自動切換（讀 site-stats.milestones.tool100）：
+  - N < 100：橘色便利貼 + 進度條（97/100, 97%）+ 「✨ 許願下一個」按鈕直接觸發既有許願池對話框
+  - 100 ≤ N，達成 < 7 天：金色 Tape「🎉 100 工具達成」+ 達成日期 + 連到 /tool/100「工具索引神器」
+  - 達成 ≥ 7 天：自動撤掉
+- 達成日期凍結在 `client/public/api/site-stats.json` `milestones.tool100`，第一次 N>=100 由 build 寫入後永不漂移
+- 100 號工具特別企劃方向：tool/100 將做「工具索引神器」— 智能推薦器，學生家長輸入需求 → 從 97 套工具中推薦最匹配的 N 個
+
+**📊 工具地圖（BulletinSiteStats + useSiteStats）**
+- 新元件讀 `/api/site-stats.json` 顯示：
+  - 大字：「97 款工具 · 7 大分類」
+  - 標籤：「最大宗 🛠️ 實用工具 (30)」
+  - recharts 圓餅圖（既裝依賴不增）+ 兩欄可點圖例
+- **點任一扇形或圖例 → 自動 setSelectedCategory + scroll 到工具網格**
+- 插在排行榜 / 許願池下方一整列（佔滿寬度）
+- 新 hook `useSiteStats` 用 react-query cache 15 分鐘
+
+**🔥 OG heatmap 拼貼變體**
+- 新腳本 `scripts/generate-home-og-heatmap.mjs`：
+  - 主視覺改為 2×2 拍立得拼貼（含分類膠帶 + #097 編號 + 標題）
+  - 左側保留標題 + 工具數縮小到副位 + 「立即探索 →」CTA
+  - 工具來源 `client/src/data/featuredTools.ts`（手動 curate ID 陣列）
+  - 預設精選：#97 MBTI / #91 點亮詩意 / #87 PIRLS / #89 教師回覆小幫手
+  - 檔名加 md5 hash（`og-preview-heatmap-5aaf02cd.png`）防 CDN/LINE/FB 快取
+- 新增 `/share/heatmap.html` landing page（仿 wish/index.html 模式）：
+  - 社群爬蟲（FB / LINE / Twitter / Bot UA）→ 拿到 heatmap OG meta
+  - 一般使用者 → JS 自動 redirect 回 /Akai/
+  - 用途：當分享者想呈現「實際工具長相」而非單純數字，分享這個 URL
+- 寫入 site-stats.ogImageHeatmap / ogImageHeatmapAbsolute 給 landing page 讀
+
+**🛠 build pipeline 升級**
+- `package.json` build 鏈：`bump-sw → favicon → home-og → home-og-heatmap → sync-meta → wish-preview → vite build → og-pages（含 share/heatmap.html）`
+- 新 npm aliases：
+  - `npm run gen:heatmap-og` — 只重生 heatmap（換 featured ID 後快速跑）
+  - `npm run gen:home-og` — 一鍵跑主 OG + heatmap + sync meta
+
+**🚀 已部署上線**
+- Live 主頁：https://cagoooo.github.io/Akai/（破百倒數 banner + 工具地圖可見）
+- Live heatmap landing：https://cagoooo.github.io/Akai/share/heatmap.html
+- Live site-stats API：https://cagoooo.github.io/Akai/api/site-stats.json
+- GH Actions deploy 26144767314 success
+
+---
+
+### `v3.6.27` (品牌視覺與 SEO 大翻修)
 **🎨 全新 favicon 全套（公佈欄圖釘風）**
 - 設計概念：cork 軟木塞 + 黃色便利貼 + 紅色立體圖釘 + 中央「A」字（Akai）
 - 與首頁 BulletinHome 軟木塞背景視覺完全呼應，辨識度遠高於原本的個人頭像照片

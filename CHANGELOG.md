@@ -2,6 +2,47 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.28] - 2026-05-20 — P0 三件套：破百倒數 / 工具地圖 / OG heatmap
+
+### 🚀 破百倒數 banner（BulletinMilestone100）
+- 首頁頂部新便利貼，三狀態自動切換：
+  - **N < 100**：橘色便利貼 + 進度條 `{current}/100` + 「✨ 許願下一個」按鈕（觸發既有許願池對話框）
+  - **100 ≤ N < 7 天**：金色 Tape「🎉 100 工具達成」+ 連到 `/tool/100`
+  - **達成 ≥ 7 天**：自動撤掉
+- 達成日期凍結於 `site-stats.json` `milestones.tool100`，build 第一次 N>=100 寫入後永不漂移
+- 100 號工具預期方向：智能工具推薦器（從 97 個工具中按需求推薦）
+
+### 📊 工具地圖（BulletinSiteStats + useSiteStats hook）
+- 新 hook `useSiteStats`：用 react-query 拉 `/api/site-stats.json`，cache 15 分鐘
+- 新元件 `BulletinSiteStats`：
+  - 顯示「N 款工具 · X 大分類 · 最大宗」大字
+  - recharts 圓餅圖 + 兩欄可點圖例
+  - **點扇形 / 圖例 → 自動篩選該分類 + scroll 到工具網格**
+- 配色與 BulletinLeaderboard / WishPool 一致（綠色便利貼 + 雙圖釘 + 微旋轉）
+
+### 🔥 OG heatmap 拼貼變體
+- 新腳本 `scripts/generate-home-og-heatmap.mjs`：
+  - 主視覺：左側標題 + 工具數縮小 + 右側 2×2 拍立得拼貼
+  - 工具來源 `client/src/data/featuredTools.ts`（手動 curate）
+  - 預設精選 #97 / #91 / #87 / #89，未來可改用 Firestore stats 自動排序
+  - 檔名加 md5 hash 防 CDN/LINE/FB 快取
+  - 寫入 site-stats.ogImageHeatmap 欄位
+- 新增 `/share/heatmap.html` landing page（仿 wish/index.html 模式）：
+  - 社群爬蟲抓 → 拿到 heatmap OG
+  - 一般使用者 → JS redirect 主頁
+  - 用途：分享想呈現「實際工具長相」的場合
+- 接入 `scripts/generate-og-pages.mjs`，build 時自動產出
+
+### 🛠 build pipeline
+- 新流程：`bump-sw → favicon → home-og → home-og-heatmap → sync-meta → wish-preview → vite build → og-pages`
+- 新 npm aliases：`gen:heatmap-og`、`gen:home-og` 更新成跑兩種 OG + sync
+
+### 🚀 部署
+- GH Actions deploy 26144767314 success
+- Live：主頁、`/share/heatmap.html`、`/api/site-stats.json`、`og-preview-heatmap-*.png` 全 200 OK
+
+---
+
 ## [3.6.27] - 2026-05-20 — 品牌視覺翻修：新 favicon / 新 OG 圖 / 工具數自動同步
 
 ### 🎨 新 favicon 全套（公佈欄圖釘風，9 種尺寸）
