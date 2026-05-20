@@ -9,7 +9,7 @@
 
 import { useParams, Link, useLocation } from 'wouter';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Helmet } from 'react-helmet-async';
+import { PageHead } from '@/components/PageHead';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { type EducationalTool } from '@/lib/data';
@@ -320,13 +320,7 @@ export function BulletinToolDetail() {
 
   return (
     <>
-      <Helmet>
-        <title>{tool.title} - 阿凱老師教育工具</title>
-        <meta name="description" content={tool.description} />
-        <meta property="og:title" content={`${tool.title} - 阿凱老師教育工具`} />
-        <meta property="og:description" content={tool.description} />
-        {previewSrc && <meta property="og:image" content={previewSrc} />}
-      </Helmet>
+      <PageHead mode="tool" tool={tool} />
 
       <BulletinBoard>
         {/* 頂部導覽列（cork 上的膠帶） */}

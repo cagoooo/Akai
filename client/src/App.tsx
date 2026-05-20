@@ -17,6 +17,8 @@ import { Home as ClassicHome } from "@/pages/Home";
 // BulletinToolDetail 為 cork 風格詳情頁；舊版 ToolDetail 保留於 /tool-classic/:id
 const ToolDetail = lazy(() => import("@/pages/BulletinToolDetail").then(module => ({ default: module.BulletinToolDetail })));
 const ClassicToolDetail = lazy(() => import("@/pages/ToolDetail").then(module => ({ default: module.ToolDetail })));
+// #100 工具索引神器 — 智能推薦器（內部專屬路由，要在 /tool/:id 之前匹配）
+const ToolIndexAI = lazy(() => import("@/pages/ToolIndexAI").then(module => ({ default: module.ToolIndexAI })));
 const AdminAuth = lazy(() => import("@/components/AdminAuth").then(module => ({ default: module.AdminAuth })));
 const TriviaDialog = lazy(() => import("@/components/TriviaDialog").then(module => ({ default: module.TriviaDialog })));
 const PWAUpdatePrompt = lazy(() => import("@/components/PWAUpdatePrompt").then(module => ({ default: module.PWAUpdatePrompt })));
@@ -252,6 +254,10 @@ function App() {
                         </Route>
                         <Route path="/classic">
                           <ClassicHome />
+                        </Route>
+                        {/* #100 工具索引神器：必須在 /tool/:id 之前匹配 */}
+                        <Route path="/tool/100">
+                          <ToolIndexAI />
                         </Route>
                         <Route path="/tool/:id">
                           <ToolDetail />

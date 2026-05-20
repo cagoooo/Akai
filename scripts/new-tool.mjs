@@ -249,8 +249,13 @@ async function main() {
     exit(1);
   }
   const tools = JSON.parse(readFileSync(TOOLS_JSON_CLIENT, 'utf-8'));
-  const nextId = Math.max(...tools.map((t) => t.id)) + 1;
-  console.log(`📋 目前 tools.json 共 ${tools.length} 個工具，下一個 ID = ${nextId}\n`);
+  // 找「最小未使用 ID」而非 Math.max + 1，避免被佔位的特殊 ID（如 #100 索引神器）卡住連續編號
+  const usedIds = new Set(tools.map((t) => t.id));
+  let nextId = 1;
+  while (usedIds.has(nextId)) nextId++;
+  const maxId = Math.max(...tools.map((t) => t.id));
+  console.log(`📋 目前 tools.json 共 ${tools.length} 個工具`);
+  console.log(`   下一個建議 ID = ${nextId}（最小未使用）；最大 ID = ${maxId}\n`);
 
   // 2. 互動輸入
   const id = parseInt(args.id || (await ask('工具 ID', String(nextId))), 10);

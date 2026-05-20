@@ -6,7 +6,7 @@
 
 import { useParams, Link, useLocation } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
-import { Helmet } from 'react-helmet-async';
+import { PageHead } from '@/components/PageHead';
 import { m as motion, AnimatePresence } from 'framer-motion';
 import { useMemo } from 'react';
 import {
@@ -434,14 +434,8 @@ export function ToolDetail() {
 
     return (
         <>
-            {/* SEO */}
-            <Helmet>
-                <title>{tool.title} - 阿凱老師教育工具</title>
-                <meta name="description" content={tool.description} />
-                <meta property="og:title" content={`${tool.title} - 阿凱老師教育工具`} />
-                <meta property="og:description" content={tool.description} />
-                {tool.previewUrl && <meta property="og:image" content={tool.previewUrl} />}
-            </Helmet>
+            {/* SEO — 統一走 PageHead，吃 ogPreviewUrl > previewUrl + 自動絕對 URL + cache busting */}
+            <PageHead mode="tool" tool={tool} />
 
             <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
                 {/* 頂部裝飾漸層 */}

@@ -1845,5 +1845,27 @@
       "互動故事",
       "免費工具"
     ]
+  },
+  {
+    "id": 100,
+    "title": "工具索引神器 · 智能推薦",
+    "description": "第 100 個工具是「為其他 99 個工具找路」的智能推薦器：用一句話描述你的教學情境（例：我下週要上水的三態），fuse.js 從標題 / 標籤 / 描述加權比對，挑出最匹配的 5 個工具組合。",
+    "detailedDescription": "破百慶祝特別企劃 — 把 100 款工具的索引交給 AI 模糊比對引擎。\n\n核心功能：\n• 即時 fuzzy match：使用者輸入需求 → 從 tools.json 加權比對（標題 ×3、標籤 ×2、描述 ×1）→ top 5 推薦\n• 匹配度百分比 + 命中原因（哪個欄位、哪段文字）\n• 9 種範例 query chips：水的三態 / 閱讀理解 / 課堂破冰 / 學生票選 / AI 教案 / 注音練習 / 班級輔導 / 會議記錄\n• 沒匹配 → 引導到許願池許願新工具\n\nPhase 2 規劃：接 Gemini Embedding 做語意搜尋，「我想讓學生開心」這類抽象描述也能找到對的工具。",
+    "url": "/Akai/tool/100",
+    "isInternal": true,
+    "icon": "Compass",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_100.webp",
+    "ogPreviewUrl": "/previews/og/tool_100.webp",
+    "tags": [
+      "工具索引",
+      "智能推薦",
+      "100 工具達成",
+      "AI 助手",
+      "破百慶祝",
+      "fuse.js",
+      "模糊比對",
+      "教學情境推薦"
+    ]
   }
 ]
