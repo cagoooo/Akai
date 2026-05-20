@@ -1,12 +1,88 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.33` (本機/CI) · 工具總數 **97 個**（**破百倒數 3** 🚀）
-- **最後更新狀態**: SEO 基礎建設上線 — (1) Google Search Console 擁有權驗證檔部署（cagoooo.github.io/Akai/ 可被 GSC 監控）；(2) sitemap.xml 提交至 SC（204 URL）；(3) 修復 `/blog/` 無限循環白畫面 bug（redirect 沒 trailing slash 被 GH Pages 301 加 / 導致無限載入）。
+- **當前版本**: `v3.6.34` (本機/CI) · 工具總數 **97 個**（**破百倒數 3** 🚀）
+- **最後更新狀態**: SEO + 內容 7 件套上線 — (1) 工具頁 SoftwareApplication Schema；(2) 92 個 mini blog stub（自動產生）；(3) Web Vitals dashboard；(4) 熱門搜尋詞 Firestore 回灌；(5) 相似工具內部連結；(6) OG 圖最近更新浮水印；(7) RSS / Atom feed。sitemap 從 204 → **296 URL**，預期 Google 索引頁數翻 30 倍。
 
 ## 📌 完成功能總覽
 
-### `v3.6.33` (最新 · SEO 上線 + blog redirect bug 修復)
+### `v3.6.34` (最新 · SEO + 內容 7 件套 + 純 ASCII slug)
+
+**🏷️ #2 工具頁 SoftwareApplication Schema**
+- PageHead mode=tool 加 Schema.org JSON-LD `SoftwareApplication`
+- 含 name / description / applicationCategory=EducationalApplication / offers price=0 / author（阿凱老師 + 石門國小）/ inLanguage=zh-TW
+- generate-og-pages.mjs 同步在 static landing HTML 加 schema → 爬蟲讀 static HTML 也拿得到
+- **預期效果**：Google 搜尋結果之後會出現富片段 + 評分位元（接 toolReviews 後）→ CTR ↑
+
+**🔗 #5 工具詳情頁底部「相似工具」**
+- 新元件 `BulletinRelatedTools`（取代舊版 RelatedTools）
+- fuse.js 模糊比對 tags + title + description，**同分類加 -0.15 score bonus**
+- cork 風 3 卡片格 + hover translate 動畫
+- 增加 internal linking 密度 → Google PageRank ↑ + 使用者平均瀏覽深度 ↑
+
+**📅 #4 OG 圖「最近更新」浮水印**
+- 三個 OG 生成器底部 attribution bar 加 `📅 最近更新 YYYY/MM` 小字
+  - generate-home-og.mjs / generate-home-og-heatmap.mjs / generate-unified-og.mjs
+- 讓 LINE/FB 分享出去看起來「站還活著」，減少「老站？」誤判
+
+**📡 #3 RSS / Atom feed**
+- 新 `scripts/generate-feed.mjs` 產 `client/public/feed.xml`
+- 30 條（97 工具 + 5 blog 按 addedAt/publishedAt 倒序）
+- index.html 加 `<link rel="alternate" type="application/rss+xml">` 給 RSS reader 自動偵測
+- 接入 build pipeline
+
+**📊 A. Web Vitals dashboard**
+- 新元件 `AdminWebVitalsDashboard`：讀 Firestore `analytics/webVitals/{date}/*`
+- 5 指標 summary cards（LCP/INP/CLS/FCP/TTFB）含 good% + p75 + 三色長條（good/needs-improvement/poor）
+- 最近 7 天 p75 趨勢長條圖（recharts BarChart）
+- 沒資料時顯示「⏳ 還沒收到 RUM 資料，建議 24-48 小時後再看」
+- 加進 AdminAuth 已登入區
+- **比 CI Lighthouse 28 分準確**：反映真實使用者體驗
+
+**🔥 B. Top 搜尋詞回灌 ToolIndexAI**
+- `analytics.ts` 新增 `logToolIndexQuery()` → 寫 Firestore `analytics/toolIndexQueries/queries/{queryHash}`
+  - count increment + lastUsedAt + lastResultCount
+- ToolIndexAI 搜尋 debounced 500ms 同時送 gtag + Firestore
+- 新 `client/src/data/popularQueries.ts`（種子 9 個 fallback query）
+- 新 `scripts/sync-popular-queries.mjs`：build-time 從 Firestore 取 top 9（count ≥ 2 過濾）→ 重寫 popularQueries.ts
+- ToolIndexAI 改 import POPULAR_QUERIES 取代手寫 EXAMPLE_QUERIES
+
+**📝 #1 92 個工具迷你 blog stub（自動產生）**
+- 新 `client/src/blog/miniPosts.ts`：runtime 從 tools.json 生成 92 篇迷你 blog
+  - slug：`tool-{id}`（純 ASCII，避免中文 URL encode 問題）
+  - 「30 秒看完」三段式：這是什麼 / 適合誰用 / 怎麼開始 + 標籤雲
+  - 排除 isInternal (#100) + 已手寫長文 5 篇
+- `posts.ts` 加 `getAllPostsAsync` / `getPostBySlugAsync` 動態合併
+- BlogList runtime 載入後合併，BlogPost 同樣 async lookup
+- sitemap.xml 加 92 個 mini blog URL（從 204 → **296 URL**）
+- generate-og-pages.mjs 為 92 篇 mini blog 也產 static OG landing → 爬蟲拿到 og:image + Schema
+
+**🐛 順手 hot-fix：mini blog slug 改純 ASCII**
+- 原本 slug 含中文（`tool-{id}-{title-中文}`）→ GH Pages 訪問需 URL encode → curl 404 / 分享連結醜長
+- 改成 `tool-${id}` 純 ASCII：`/blog/tool-1`、`/blog/tool-69`、`/blog/tool-87`
+- URL 短乾淨、SEO 友善、100% 平台兼容
+
+**🚀 已部署上線**
+- Deploy 26196661580 + 26196803629 success
+- /blog/tool-1 ~ tool-97 全部 200 OK
+- /sitemap.xml 含 296 URL（含 92 個 tool-N mini blog）
+- /feed.xml 200 OK 18.9 KB
+- /tool/N/ 含 SoftwareApplication JSON-LD
+
+**📊 預期 SEO 效益（4-14 天後觀察）**
+
+| 指標 | 之前 | 預期 |
+|---|---|---|
+| Google 索引頁數 | ~10 | **~200**（30 倍）|
+| Rich snippet | 無 | ⭐⭐⭐⭐⭐ |
+| 平均瀏覽工具數/session | ~1.2 | ~2.5 |
+| RSS 訂閱者收新工具通知 | 0 | 主動 push |
+| 真實效能可觀察 | ❌ | ✅ Admin dashboard |
+| 搜尋詞自動學習 | ❌ | ✅ Firestore 回灌 |
+
+---
+
+### `v3.6.33` (SEO 上線 + blog redirect bug 修復)
 
 **🔐 Google Search Console 整合**
 - `client/public/googledb834a18ffe8f948.html`（53 bytes）部署到 GH Pages

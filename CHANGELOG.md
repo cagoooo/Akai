@@ -2,6 +2,50 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.34] - 2026-05-21 — SEO + 內容 7 件套 + 純 ASCII slug
+
+### 🏷️ #2 工具頁 SoftwareApplication Schema
+- PageHead mode=tool 加 Schema.org JSON-LD
+- generate-og-pages.mjs static landing 同步加
+- 預期 Google rich snippet 啟用
+
+### 🔗 #5 相似工具內部連結
+- 新 BulletinRelatedTools（取代舊 RelatedTools）
+- fuse.js 比對 + 同分類 bonus
+- internal linking 密度提升
+
+### 📅 #4 OG 圖最近更新浮水印
+- 三個 OG 生成器底部加 `📅 最近更新 YYYY/MM`
+
+### 📡 #3 RSS / Atom feed
+- 新 generate-feed.mjs 產 /feed.xml（30 條）
+- index.html 加 `<link rel="alternate">`
+
+### 📊 A. Web Vitals dashboard
+- 新 AdminWebVitalsDashboard 讀 Firestore RUM 資料
+- 5 指標 summary + 7 天 p75 趨勢圖
+
+### 🔥 B. Top 搜尋詞 Firestore 回灌
+- analytics.ts logToolIndexQuery() 寫 Firestore
+- 新 sync-popular-queries.mjs build-time 同步 top 9
+- popularQueries.ts 取代手寫 EXAMPLE_QUERIES
+
+### 📝 #1 92 個 mini blog stub
+- 新 miniPosts.ts runtime 從 tools.json 自動生成
+- slug = `tool-{id}`（純 ASCII，避免中文 URL encode 問題）
+- sitemap.xml 從 204 → 296 URL
+- 92 篇 mini blog static OG landing
+
+### 🐛 Hot-fix
+- mini blog slug 從中文改純 ASCII（中文 GH Pages 需 URL encode 不便）
+
+### 🚀 部署
+- Deploy 26196661580 + 26196803629 success
+- 所有 tool-N mini blog 200 OK
+- /feed.xml + Schema.org 上線
+
+---
+
 ## [3.6.33] - 2026-05-20 — SEO 上線 + blog redirect bug 修復
 
 ### 🔐 Google Search Console 整合
