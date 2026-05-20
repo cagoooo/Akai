@@ -444,7 +444,11 @@ function generateBlogIndexHtml(posts) {
     (function() {
       var ua = navigator.userAgent || '';
       var isBot = /facebookexternalhit|Facebot|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Slackbot|Discordbot|Pinterest|Googlebot|bingbot|YandexBot|LineBot|Line-Networking/i.test(ua);
-      if (!isBot) window.location.replace('/Akai/blog');
+      // 不能直接 replace('/Akai/blog') — GH Pages 看到沒 trailing slash 的目錄會 301 加 /，
+      // 又載入同個 landing 造成無限循環。改走 /Akai/?redirect=... 讓主頁的 SPA 接管。
+      if (!isBot) {
+        window.location.replace('/Akai/?redirect=' + encodeURIComponent('/Akai/blog'));
+      }
     })();
   </script>
   <style>body{font-family:'Noto Sans TC',-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#c99a6c;color:#1a1a1a;text-align:center}.card{background:#fff27a;padding:32px 36px;border-radius:6px;box-shadow:6px 6px 0 rgba(0,0,0,.22);transform:rotate(-1deg);max-width:500px}h1{margin:0 0 12px;font-size:28px;font-weight:900}a{display:inline-block;margin-top:18px;padding:11px 24px;background:#ea8a3e;color:#fff;text-decoration:none;border:2.5px solid #1a1a1a;border-radius:10px;font-weight:900;box-shadow:4px 4px 0 rgba(0,0,0,.4)}</style>
@@ -500,7 +504,10 @@ function generateBlogPostHtml(post) {
     (function() {
       var ua = navigator.userAgent || '';
       var isBot = /facebookexternalhit|Facebot|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Slackbot|Discordbot|Pinterest|Googlebot|bingbot|YandexBot|LineBot|Line-Networking/i.test(ua);
-      if (!isBot) window.location.replace('/Akai/blog/${post.slug}');
+      // 同 blog 列表的修法：不能直接 replace 沒 trailing slash 的目錄路徑（無限循環）
+      if (!isBot) {
+        window.location.replace('/Akai/?redirect=' + encodeURIComponent('/Akai/blog/${post.slug}'));
+      }
     })();
   </script>
   <style>body{font-family:'Noto Sans TC',-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#c99a6c;color:#1a1a1a;text-align:center}.card{background:#fff27a;padding:32px 36px;border-radius:6px;box-shadow:6px 6px 0 rgba(0,0,0,.22);transform:rotate(-1deg);max-width:520px}h1{margin:0 0 12px;font-size:24px;font-weight:900;line-height:1.4}p{color:#4a3a20;line-height:1.65}a{display:inline-block;margin-top:18px;padding:11px 24px;background:#ea8a3e;color:#fff;text-decoration:none;border:2.5px solid #1a1a1a;border-radius:10px;font-weight:900;box-shadow:4px 4px 0 rgba(0,0,0,.4)}</style>
