@@ -1,19 +1,31 @@
 /**
  * Featured Tools — 用於 OG heatmap 與首頁焦點推薦
  *
- * 由 maintainer 手動 curate；未來可改為從 Firestore toolUsageStats 自動取 top 4。
- * 順序代表展示優先級（左上→右上→左下→右下）。
+ * ✨ 此檔由 `scripts/sync-featured-from-firestore.mjs` 自動同步：
+ *    讀 Firestore toolUsageStats 取 totalClicks top 5 → 寫入主推位；
+ *    不足或 fallback 用 tools.json 最後新增的工具補。
+ *
+ * ⚠️ 不要手動編輯 — 下次 sync 會覆蓋。
+ *    需要強推某工具：在 sync 腳本加 forcedIds，或直接調整 Firestore stats。
  *
  * 更新時機：
- *   - 新增工具且確認熱門時可換上來
- *   - 至少保證 4 個 ID 都存在於 client/public/api/tools.json
- *   - 若有 1 個 ID 不存在，build script 會自動 fallback 到列表中下一個有效 ID
+ *   - 本地：`npm run sync:featured`
+ *   - CI：deploy workflow 在有 FIREBASE_SERVICE_ACCOUNT secret 時自動跑
+ *
+ * 順序代表展示優先級（左上→右上→左下→右下，前 4 進 OG heatmap）。
  */
 export const FEATURED_TOOL_IDS: number[] = [
-  97, // MBTI 校園奇遇記（互動體驗）
-  91, // 點亮詩意 Pro 早安長輩圖（語文寫作）
-  87, // PIRLS 閱讀理解生成站 PRO（語文閱讀）
-  89, // 教師回覆小幫手 Pro（實用工具）
-  94, // 封面串故事 · 音樂影片分鏡產生器（fallback）
-  96, // DFC 行動方案即時投票系統（fallback）
+  81, // [主推] 國小資訊科技教學駕駛艙入口網
+  46, // [主推] 禮堂預約系統
+  10, // [主推] 班級小管家
+  68, // [主推] 手作課程照片影片作品上傳平台
+  3, // [主推] 學生即時投票系統
+  97, // [fallback] MBTI 校園奇遇記
+  96, // [fallback] DFC 行動方案即時投票系統
+  95, // [fallback] 桃園市115年語文競賽龍潭區複賽資訊站
+  94, // [fallback] 封面串故事 · 音樂影片分鏡產生器
+  93, // [fallback] 自治小市長-即時計票監票系統
+  92, // [fallback] 5W1H 靈感發射器 PRO版
 ];
+
+/** 自動產生：2026-05-20T07:11:33.015Z */

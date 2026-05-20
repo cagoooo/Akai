@@ -27,6 +27,7 @@ import { BulletinMilestone100 } from '@/components/bulletin/BulletinMilestone100
 import { BulletinLeaderboard } from '@/components/bulletin/BulletinLeaderboard';
 import { BulletinWishPool } from '@/components/bulletin/BulletinWishPool';
 import { BulletinSiteStats } from '@/components/bulletin/BulletinSiteStats';
+import { BulletinBlogEntry } from '@/components/bulletin/BulletinBlogEntry';
 import { BulletinSearchBar } from '@/components/bulletin/BulletinSearchBar';
 import { BulletinCategoryFilter } from '@/components/bulletin/BulletinCategoryFilter';
 import { BulletinToolGrid } from '@/components/bulletin/BulletinToolGrid';
@@ -249,9 +250,18 @@ export function BulletinHome() {
         <BulletinWishPool />
       </div>
 
-      {/* 工具地圖：分類分佈圓餅圖（site-stats.json） */}
-      <div style={{ padding: '0 60px 30px' }}>
+      {/* 工具地圖 + 教學情境長文 兩欄並排 */}
+      <div
+        className="bulletin-sections-grid"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1.4fr 1fr',
+          gap: 40,
+          padding: '0 60px 30px',
+        }}
+      >
         <BulletinSiteStats onCategoryClick={(cat) => handleCategoryChange(cat)} />
+        <BulletinBlogEntry />
       </div>
 
       {/* 搜尋 */}

@@ -19,6 +19,9 @@ const ToolDetail = lazy(() => import("@/pages/BulletinToolDetail").then(module =
 const ClassicToolDetail = lazy(() => import("@/pages/ToolDetail").then(module => ({ default: module.ToolDetail })));
 // #100 工具索引神器 — 智能推薦器（內部專屬路由，要在 /tool/:id 之前匹配）
 const ToolIndexAI = lazy(() => import("@/pages/ToolIndexAI").then(module => ({ default: module.ToolIndexAI })));
+// Blog（教學情境長文）
+const BlogList = lazy(() => import("@/pages/BlogList").then(module => ({ default: module.BlogList })));
+const BlogPost = lazy(() => import("@/pages/BlogPost").then(module => ({ default: module.BlogPost })));
 const AdminAuth = lazy(() => import("@/components/AdminAuth").then(module => ({ default: module.AdminAuth })));
 const TriviaDialog = lazy(() => import("@/components/TriviaDialog").then(module => ({ default: module.TriviaDialog })));
 const PWAUpdatePrompt = lazy(() => import("@/components/PWAUpdatePrompt").then(module => ({ default: module.PWAUpdatePrompt })));
@@ -267,6 +270,13 @@ function App() {
                         </Route>
                         <Route path="/admin">
                           <AdminAuth />
+                        </Route>
+                        {/* Blog 教學情境長文 */}
+                        <Route path="/blog">
+                          <BlogList />
+                        </Route>
+                        <Route path="/blog/:slug">
+                          <BlogPost />
                         </Route>
                       </Switch>
                     </Suspense>

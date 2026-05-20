@@ -9,11 +9,18 @@
  * 互動：點任一分類扇形 → 設定首頁 ?category=xxx 並 scroll 到工具網格
  */
 
-import { useMemo } from 'react';
+import { useMemo, useState, lazy, Suspense } from 'react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { useSiteStats } from '@/hooks/useSiteStats';
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
+
+// 樹視圖較重（含 tools.json fetch + SVG），lazy load 只在切到該 tab 才下載
+const BulletinToolFamilyTree = lazy(() =>
+  import('./BulletinToolFamilyTree').then((m) => ({ default: m.BulletinToolFamilyTree }))
+);
+
+type Mode = 'pie' | 'tree';
 
 const CATEGORY_LABEL: Record<string, string> = {
   communication: '溝通互動',
@@ -42,6 +49,7 @@ interface Props {
 
 export function BulletinSiteStats({ onCategoryClick }: Props) {
   const { data, isLoading } = useSiteStats();
+  const [mode, setMode] = useState<Mode>('pie');
 
   const chartData = useMemo(() => {
     if (!data?.categoryCounts) return [];
@@ -79,11 +87,11 @@ export function BulletinSiteStats({ onCategoryClick }: Props) {
       <Pin color="#16a34a" size={18} style={{ top: -9, left: 28, marginLeft: 0 }} />
       <Pin color="#16a34a" size={18} style={{ top: -9, right: 28 }} />
 
-      {/* 標題列 */}
+      {/* 標題列 + 視圖切換 toggle */}
       <div
         style={{
           display: 'flex',
-          alignItems: 'baseline',
+          alignItems: 'center',
           justifyContent: 'space-between',
           gap: 8,
           marginBottom: 6,
@@ -101,11 +109,45 @@ export function BulletinSiteStats({ onCategoryClick }: Props) {
               fontStyle: 'italic',
             }}
           >
-            點扇形跳到分類
+            {mode === 'pie' ? '點扇形跳到分類' : '點分類展開工具樹枝'}
           </span>
         </div>
-        <div style={{ fontSize: 12, color: tokens.muted2, fontFamily: tokens.font.en }}>
-          updated {data.generatedAt ? new Date(data.generatedAt).toLocaleDateString('zh-TW') : '—'}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {/* pie / tree 切換 segmented control */}
+          <div
+            role="tablist"
+            aria-label="切換視圖"
+            style={{
+              display: 'inline-flex',
+              border: `1.8px solid ${tokens.ink}`,
+              borderRadius: 999,
+              overflow: 'hidden',
+              background: '#fff',
+              boxShadow: '1.5px 1.5px 0 rgba(0,0,0,.18)',
+            }}
+          >
+            <button
+              type="button"
+              role="tab"
+              aria-selected={mode === 'pie'}
+              onClick={() => setMode('pie')}
+              style={toggleBtn(mode === 'pie')}
+            >
+              🥧 圓餅
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={mode === 'tree'}
+              onClick={() => setMode('tree')}
+              style={toggleBtn(mode === 'tree')}
+            >
+              🌳 家族樹
+            </button>
+          </div>
+          <div style={{ fontSize: 11, color: tokens.muted2, fontFamily: tokens.font.en }}>
+            updated {data.generatedAt ? new Date(data.generatedAt).toLocaleDateString('zh-TW') : '—'}
+          </div>
         </div>
       </div>
 
@@ -171,7 +213,18 @@ export function BulletinSiteStats({ onCategoryClick }: Props) {
         )}
       </div>
 
-      {/* 圓餅圖 + 圖例 */}
+      {/* 視圖區：圓餅 / 家族樹 切換 */}
+      {mode === 'tree' ? (
+        <Suspense
+          fallback={
+            <div style={{ textAlign: 'center', padding: 60, color: tokens.muted2, fontFamily: tokens.font.tc, fontStyle: 'italic' }}>
+              🌳 家族樹載入中...
+            </div>
+          }
+        >
+          <BulletinToolFamilyTree />
+        </Suspense>
+      ) : (
       <div
         style={{
           display: 'grid',
@@ -270,6 +323,21 @@ export function BulletinSiteStats({ onCategoryClick }: Props) {
           ))}
         </ul>
       </div>
+      )}
     </div>
   );
+}
+
+function toggleBtn(active: boolean): React.CSSProperties {
+  return {
+    padding: '5px 12px',
+    fontSize: 12,
+    fontFamily: 'inherit',
+    fontWeight: 800,
+    color: active ? '#fff' : '#1a1a1a',
+    background: active ? '#ea8a3e' : 'transparent',
+    border: 'none',
+    cursor: 'pointer',
+    transition: 'background 0.15s ease',
+  };
 }

@@ -30,6 +30,15 @@ jobs:
       - name: Install dependencies
         run: npm install --ignore-scripts
 
+      # 字型快取：avoid 每次 deploy 都下載 12MB NotoSansTC-Bold.ttf
+      # key 用 ensure-fonts.mjs 內容雜湊（內含字型 URL）— 換 URL 自動失效
+      - name: Cache NotoSansTC font
+        id: cache-fonts
+        uses: actions/cache@v4
+        with:
+          path: scripts/fonts/NotoSansTC-Bold.ttf
+          key: ${{ runner.os }}-notosanstc-${{ hashFiles('scripts/ensure-fonts.mjs') }}
+
       - name: Create .env file in project root
         run: |
           echo "VITE_FIREBASE_API_KEY=${{ secrets.VITE_FIREBASE_API_KEY }}" >> .env
