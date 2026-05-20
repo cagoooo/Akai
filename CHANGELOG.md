@@ -2,6 +2,48 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.32] - 2026-05-20 — 立即可做 5 件套：blog 擴充 / Web Vitals / gtag / sitemap / 🆕 徽章
+
+### 📖 #1 新增兩篇 blog post（排行榜前 5 全覆蓋）
+- `student-portfolio-68-handcraft-uploads` (#68 手作課程, 5 分鐘)
+  - 實測：拍照工時 8-12 分 → 0 分、列印 800 張 → 0 張
+- `live-vote-3-classroom-democracy` (#3 學生投票, 5 分鐘)
+  - 累計 84 場、12 所國小 + 3 所國中、參與率 92% vs 25%
+- 排行榜前 5 名 (#81/46/10/68/3) blog 覆蓋率 100%
+
+### 📊 #2 Web Vitals RUM
+- 新 `client/src/lib/analytics.ts` 整合 Web Vitals + gtag wrapper
+- 上報 LCP / INP / CLS / FCP / TTFB
+- GA 全量 + Firestore 25% 取樣（schema: `analytics/webVitals/{date}/{id}`）
+- main.tsx 在 load 事件後 dynamic import，不影響 TBT
+
+### 🏷 #3 gtag 事件追蹤
+- `trackEvent()` helper 包 noop fallback + dev console.debug
+- 三處接點：
+  - BulletinToolCard → `tool_click`
+  - BlogPost → `blog_read`
+  - ToolIndexAI → `tool_index_search`（debounced 500ms）
+
+### 🗺 #4 sitemap.xml 升級
+- 補上 /blog + /blog/:slug × 5 + /share/heatmap.html + /tool/100
+- 用 `tool.addedAt` 寫 `<lastmod>`
+- robots.txt 自動補 Sitemap: 指向
+- 接入 build pipeline（之前 generate-sitemap.mjs 沒在 npm run build 內跑）
+- 實測 202 個 URL
+
+### 🆕 #5「新工具」徽章
+- `EducationalTool` 型別加 `addedAt?: string`
+- new-tool.mjs 寫入時自動 addedAt = ISO 時間
+- BulletinToolCard 加 isNew 判斷（7 天內顯示紅色 NEW chip + float 動畫）
+- 既有 #1-#97 沒 addedAt 不算新
+
+### 🚀 部署
+- Deploy 26161382328 success
+- /sitemap.xml 35KB / 202 URLs / robots Sitemap: ✓
+- 兩篇新 blog post landing 200 OK
+
+---
+
 ## [3.6.31] - 2026-05-20 — v3.6.30 hot-fix 三件套 + Favicon 語義分工
 
 ### 🔢 修正 toolCount 計數（97 不是 98）

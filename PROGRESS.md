@@ -1,12 +1,73 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.31` (本機/CI) · 工具總數 **97 個**（**破百倒數 3** 🚀）
-- **最後更新狀態**: v3.6.30 P2 五件套上線後的 hot-fix 三項全清乾淨 — (1) 修正 toolCount 計數（從 98 → 97，排除站位 #100）；(2) 還原阿凱老師真人頭像（Footer + OG 圖底部 attribution bar）；(3) Lighthouse 門檻調整成務實基準（CI 環境 performance 暫不檢查，其他三項用「實測 -7%」防退步）。Favicon vs teacher-avatar 語義分工正式確立。
+- **當前版本**: `v3.6.32` (本機/CI) · 工具總數 **97 個**（**破百倒數 3** 🚀）
+- **最後更新狀態**: 立即可做 5 件套全部上線 — (1) 排行榜前 5 名 blog 覆蓋率 100%（新增 #68 / #3 兩篇）；(2) Web Vitals RUM 上報（GA 全量 + Firestore 25% 取樣）；(3) gtag 事件追蹤 tool_click / blog_read / tool_index_search 三處接點；(4) sitemap.xml 升級含 blog + tool/100 + 接入 build pipeline；(5) 「🆕 新工具」徽章（new-tool.mjs 自動寫 addedAt）。
 
 ## 📌 完成功能總覽
 
-### `v3.6.31` (最新 · v3.6.30 hot-fix 三件套 + Favicon 語義分工)
+### `v3.6.32` (最新 · 立即可做 5 件套：blog 擴充 / Web Vitals / gtag / sitemap / 🆕 徽章)
+
+**📖 #1 排行榜前 5 名 blog 全覆蓋**
+- 新增兩篇 blog post：
+  - `student-portfolio-68-handcraft-uploads`：「手作課程免印照片」(#68, 5 分鐘)
+    - 含實測：拍照工時 8-12 分 → 0 分、列印 800 張 → 0 張、家長看作品比率 <30% → 100%
+    - 學生 + 家長 Vivian 媽媽雙引言
+  - `live-vote-3-classroom-democracy`：「無聊提問變全班搶答」(#3, 5 分鐘)
+    - 累計 84 場、12 所國小 + 3 所國中、參與率 92% vs 25%
+    - 學生 + 6 年級導師（校長視察故事）雙引言
+- 排行榜前 5 名 (#81/46/10/68/3) blog 覆蓋率 **100%**
+- generate-og-pages.mjs 自動為兩篇新文章產 static OG landing（爬蟲拿到 og:image）
+
+**📊 #2 Web Vitals RUM（真實使用者效能監控）**
+- 新檔 `client/src/lib/analytics.ts`（整合 Web Vitals + gtag wrapper）
+- 上報五項核心指標：LCP / INP / CLS / FCP / TTFB
+- 雙通道輸出：
+  - **GA**（全量上報）→ 可在 GA Realtime / Reports 看 `web_vital` event
+  - **Firestore** `analytics/webVitals/{date}/{metricId}`（25% 取樣防爆寫入量，每月 < 50K writes）
+- main.tsx 在 `window.load` 後 dynamic import 啟動，不影響首屏 TBT
+- 比 CI Lighthouse 28 分有意義 — 看真實老師家長的使用體驗
+
+**🏷 #3 gtag 事件追蹤（GA 業務指標）**
+- `trackEvent(name, params)` helper：包 window.gtag noop fallback + dev console.debug
+- 三處接點：
+  - **BulletinToolCard.handleOpen** → `tool_click` { tool_id, tool_title, tool_category, source }
+  - **BlogPost slug 變動** → `blog_read` { slug, title, related_tools, reading_minutes }
+  - **ToolIndexAI 搜尋** (debounced 500ms) → `tool_index_search` { query, result_count, top_match_id }
+- GA 後台之後可看：
+  - 哪些工具被點最多
+  - blog → tool 轉換率（看了哪篇文章後最常點哪個工具）
+  - 索引神器熱門搜尋詞（指導 fuse.js 加權調整方向）
+
+**🗺 #4 sitemap.xml 升級 + 接入 build**
+- 之前 generate-sitemap.mjs 雖存在但**沒被 npm run build 呼叫**（這次修了）
+- 補上條目：
+  - `/blog` 列表頁
+  - `/blog/:slug` × 5 篇（從 posts.ts regex 自動解析）
+  - `/share/heatmap.html` OG 變體
+  - `/tool/100` 工具索引神器（isInternal 工具，但有獨立路由）
+- 用 `tool.addedAt` 寫 `<lastmod>`（新增工具有正確日期）
+- 過濾掉 isInternal 工具的外部 URL 重複條目
+- robots.txt 自動補 `Sitemap: cagoooo.github.io/Akai/sitemap.xml`
+- 實測產出 **202 個 URL**（98 工具 + 5 blog + 主要分頁 + 外部 URL）
+
+**🆕 #5「新工具」徽章（7 天內）**
+- `EducationalTool` 型別加 `addedAt?: string` 欄位
+- `scripts/new-tool.mjs` 寫入新工具時自動 `addedAt: new Date().toISOString()`
+- `BulletinToolCard` 加 `isNew` 判斷：`Date.now() - addedAt < 7d` → 右上角紅色 `NEW` chip
+- 動畫：6° 微旋轉 + float 動畫（與既有 ✨ 閃星星同節奏）
+- 既有 #1-#97 沒 addedAt 不算新（無法 backfill 真實日期，這是正確設計）
+- 下次 `npm run new-tool` 新增 #98 立刻有紅色 🆕 chip 7 天
+
+**🚀 已部署上線**
+- Deploy 26161382328 success
+- Live `/sitemap.xml`（35KB, 202 URLs）+ robots.txt Sitemap 指向 ✓
+- Live 兩篇新 blog 200 OK：student-portfolio-68 / live-vote-3
+- Web Vitals 開始收資料（24-72 小時後 GA + Firestore 看得到分佈）
+
+---
+
+### `v3.6.31` (v3.6.30 hot-fix 三件套 + Favicon 語義分工)
 
 **🔢 修正 toolCount = 97（不是 98）**
 - 使用者反映「我只做了 97 個工具，主頁卻顯示 98」
