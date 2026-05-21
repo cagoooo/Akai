@@ -28,4 +28,4 @@ export const FEATURED_TOOL_IDS: number[] = [
   92, // [fallback] 5W1H 靈感發射器 PRO版
 ];
 
-/** 自動產生：2026-05-21T22:49:58.081Z */
+/** 自動產生：2026-05-21T22:53:53.385Z */
