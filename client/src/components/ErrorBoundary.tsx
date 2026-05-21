@@ -30,8 +30,61 @@ export class ErrorBoundary extends Component<Props, State> {
         return { hasError: true, error, errorInfo: null };
     }
 
+    /**
+     * 判斷錯誤是不是「動態 import chunk 失敗」型別 — 這通常代表 vite build 後 chunk hash 變了，
+     * 但使用者瀏覽器持有舊版 SPA / SW cache。這不是 bug，是 PWA cache 不匹配，自動 reload 即可。
+     */
+    private static isChunkError(error: Error): boolean {
+        const msg = String(error?.message || '');
+        const stack = String(error?.stack || '');
+        return /Loading chunk|Failed to fetch dynamically imported module|ChunkLoadError|Importing a module script failed/i.test(
+            msg + ' ' + stack
+        );
+    }
+
+    /**
+     * 接住 chunk error → 強制清 SW + reload 一次。
+     * 用 sessionStorage 旗標防無限循環（reload 過一次後若還噴 chunk error，就改顯示一般錯誤畫面）
+     */
+    private async handleChunkError() {
+        const FLAG = 'akai-chunk-reload-attempted';
+        try {
+            if (sessionStorage.getItem(FLAG) === '1') {
+                console.warn('[ErrorBoundary] chunk error 已嘗試 reload 過，這次顯示一般錯誤畫面避免循環');
+                return; // 已試過就放棄自癒，讓 fallback UI 顯示
+            }
+            sessionStorage.setItem(FLAG, '1');
+        } catch { /* sessionStorage 不可用就直接 reload */ }
+
+        console.warn('[ErrorBoundary] 偵測到 chunk error，自動清 SW + reload');
+        try {
+            // 1. unregister 所有 SW
+            if ('serviceWorker' in navigator) {
+                const regs = await navigator.serviceWorker.getRegistrations();
+                for (const reg of regs) await reg.unregister();
+            }
+            // 2. 清所有 cache（強制 fresh）
+            if ('caches' in window) {
+                const keys = await caches.keys();
+                await Promise.all(keys.map((k) => caches.delete(k)));
+            }
+        } catch (e) {
+            console.warn('[ErrorBoundary] 清 SW/cache 失敗，直接 reload', e);
+        }
+        // 3. 強制 reload（不走 SW，從 server 拿最新）
+        window.location.reload();
+    }
+
     public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
         this.setState({ errorInfo });
+
+        // 🚀 chunk error 自癒：偵測到動態 import 失敗 → 自動清 SW + reload
+        // 這不是 bug，是 vite build 後 chunk hash 變了但瀏覽器卡舊版 SPA
+        if (ErrorBoundary.isChunkError(error)) {
+            console.warn('[ErrorBoundary] 偵測到 chunk error，啟動自癒流程', error.message);
+            void this.handleChunkError();
+            return; // 不繼續跑 Sentry / Firestore 紀錄（不算 bug）
+        }
 
         // 呼叫外部錯誤處理函式
         this.props.onError?.(error, errorInfo);
