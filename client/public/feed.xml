@@ -8,7 +8,7 @@
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
     <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Thu, 21 May 2026 03:35:44 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 21 May 2026 09:11:47 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -60,6 +60,51 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/speech-67-training-pro</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
       <description>#67 國語演說比賽訓練平台（Pro 版）累計 28 點擊。國小到高中的國語演說比賽每年三月開打，從鄉鎮初賽 → 縣賽 → 區賽 → 全國賽。這個工具用 AI 幫學生練稿、計時、模擬評審打分數。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#72 動支及黏存單自動產生系統：報帳從 1 小時變 5 分鐘的會計組救星</title>
+      <link>https://cagoooo.github.io/Akai/blog/expense-voucher-72-auto-generator</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/expense-voucher-72-auto-generator</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#72 動支及黏存單自動產生系統解決公立國小最痛的「報帳卡關」問題。一筆採購要黏單、要動支、要核章 — 老師花一整節空堂排版的時代結束了，輸入金額就自動產出 PDF。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#54 臉盲教師救星：開學兩週認識 60 個學生，從焦慮到淡定的識生練習法</title>
+      <link>https://cagoooo.github.io/Akai/blog/face-recognition-54-teacher-savior</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/face-recognition-54-teacher-savior</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#54 臉盲教師救星「識生學坊」用照片配對 + 分組記憶 + 自測小遊戲，幫新接班導師快速記住學生名字。新學年焦慮 → 兩週能叫出全班名字，連音樂老師、特教老師都在用。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#76 WebSlide Pro 簡報播放器：告別「換電腦字跑掉」的世紀痛點</title>
+      <link>https://cagoooo.github.io/Akai/blog/webslide-76-cross-device-presenter</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/webslide-76-cross-device-presenter</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#76 WebSlide Pro 簡報播放器解決公開課最大的恐懼 — 換到學校電腦字型跑掉、影片不能播、PPT 動畫亂跳。純網頁播放，只要有瀏覽器就能講。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#92 5W1H 靈感發射器 PRO：國小作文從「老師我寫不出來」到滔滔不絕的引導法</title>
+      <link>https://cagoooo.github.io/Akai/blog/inspire-92-5w1h-pro-writing</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/inspire-92-5w1h-pro-writing</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#92 5W1H 靈感發射器 PRO 版用 AI 對話式引導 + 圖卡輔助，把作文教學從「擠牙膏」變「打開水龍頭」。中年級寫作課實測，全班完成率從 60% 衝到 95%。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#82 教室資訊設備盤點系統：學期初一週的設備地獄，30 分鐘搞定的清單法</title>
+      <link>https://cagoooo.github.io/Akai/blog/inventory-82-classroom-equipment</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/inventory-82-classroom-equipment</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#82 教室資訊設備盤點系統用 QR code + 一鍵盤點 + 自動產報，把每學期初最痛的「全校設備清點」從一週濃縮到 30 分鐘。資訊組長必備。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
@@ -285,66 +330,6 @@
       <category>社群</category>
       <category>記錄</category>
       <category>產出</category>
-    </item>
-    <item>
-      <title>🆕 新工具：親師溝通小幫手</title>
-      <link>https://cagoooo.github.io/Akai/tool/16</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/16</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>促進親師溝通的便捷平台</description>
-      <category>親師</category>
-      <category>溝通</category>
-      <category>家長</category>
-      <category>聯絡</category>
-      <category>通知</category>
-    </item>
-    <item>
-      <title>🆕 新工具：單一抽籤系統</title>
-      <link>https://cagoooo.github.io/Akai/tool/17</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/17</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>簡單快速的單一抽籤工具</description>
-      <category>抽籤</category>
-      <category>隨機</category>
-      <category>點名</category>
-      <category>簡單</category>
-      <category>快速</category>
-    </item>
-    <item>
-      <title>🆕 新工具：大量抽籤系統</title>
-      <link>https://cagoooo.github.io/Akai/tool/18</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/18</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>支援大量抽籤的進階工具</description>
-      <category>抽籤</category>
-      <category>隨機</category>
-      <category>大量</category>
-      <category>分組</category>
-      <category>進階</category>
-    </item>
-    <item>
-      <title>🆕 新工具：設計自己的專屬客服</title>
-      <link>https://cagoooo.github.io/Akai/tool/19</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/19</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>自訂專屬的智能客服系統</description>
-      <category>客服</category>
-      <category>AI</category>
-      <category>機器人</category>
-      <category>自訂</category>
-      <category>智能</category>
-    </item>
-    <item>
-      <title>🆕 新工具：英打練習</title>
-      <link>https://cagoooo.github.io/Akai/tool/20</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/20</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>英文打字練習工具，提升打字速度與準確度</description>
-      <category>打字</category>
-      <category>英文</category>
-      <category>練習</category>
-      <category>鍵盤</category>
-      <category>速度</category>
     </item>
   </channel>
 </rss>

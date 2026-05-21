@@ -88,7 +88,7 @@ if (existsSync(postsPath)) {
 function makeMiniSlug(tool) {
     return `tool-${tool.id}`;
 }
-const SKIP_IDS = new Set([81, 46, 10, 68, 3, 100]); // 同 miniPosts.ts
+const SKIP_IDS = new Set([81, 46, 10, 68, 3, 100, 53, 7, 88, 67, 72, 54, 76, 92, 82]); // 同 miniPosts.ts（含 14 篇手寫長文 + 索引神器）
 let miniCount = 0;
 for (const tool of tools) {
     if (tool.isInternal || SKIP_IDS.has(tool.id)) continue;

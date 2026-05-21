@@ -19,7 +19,7 @@ import type { EducationalTool } from '@/lib/data';
 import type { BlogPost } from './posts';
 
 // 不要 mini blog 的工具 ID（已有手寫長文，避免重複）
-const SKIP_IDS = new Set([81, 46, 10, 68, 3, 100]); // 已手寫 5 篇 + 索引神器內部專屬
+const SKIP_IDS = new Set([81, 46, 10, 68, 3, 100, 53, 7, 88, 67, 72, 54, 76, 92, 82]); // 已手寫 14 篇 + 索引神器
 
 const CATEGORY_LABEL: Record<string, string> = {
   communication: '溝通互動',
