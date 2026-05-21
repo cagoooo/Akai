@@ -8,7 +8,7 @@
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
     <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Thu, 21 May 2026 11:36:56 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 21 May 2026 11:46:29 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -64,20 +64,20 @@
       <category>教學情境</category>
     </item>
     <item>
-      <title>📖 教學情境：#72 動支及黏存單自動產生系統：報帳從 1 小時變 5 分鐘的會計組救星</title>
+      <title>📖 教學情境：#72 動支及黏存單自動產生系統：拖廠商報價 PDF → PDF.js 自動解析品項數量單價 → 填入學校官方制式 Excel 範本</title>
       <link>https://cagoooo.github.io/Akai/blog/expense-voucher-72-auto-generator</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/expense-voucher-72-auto-generator</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#72 動支及黏存單自動產生系統解決公立國小最痛的「報帳卡關」問題。一筆採購要黏單、要動支、要核章 — 老師花一整節空堂排版的時代結束了，輸入金額就自動產出 PDF。</description>
+      <description>#72 不是「老師手鍵動支單」 — 是拖廠商報價 PDF → PDF.js 3.11 座標式擷取 + Tesseract.js OCR fallback → 自動填入石門國小現用 template.xlsx（含「預算內」「代收代辦」兩工作表）。教育部歲出政事別三碼代號內建，純瀏覽器零後端，PDF 不傳外部 server。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
     <item>
-      <title>📖 教學情境：#54 臉盲教師救星：開學兩週認識 60 個學生，從焦慮到淡定的識生練習法</title>
+      <title>📖 教學情境：#54 識生學坊：MediaPipe 離線臉部偵測 + Gemini Vision 記憶口訣 + 4 模式遊戲化特訓 + 班級攻略本兩階段比對</title>
       <link>https://cagoooo.github.io/Akai/blog/face-recognition-54-teacher-savior</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/face-recognition-54-teacher-savior</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#54 臉盲教師救星「識生學坊」用照片配對 + 分組記憶 + 自測小遊戲，幫新接班導師快速記住學生名字。新學年焦慮 → 兩週能叫出全班名字，連音樂老師、特教老師都在用。</description>
+      <description>#54「識生」= 認識學生，「學坊」= workshop 修練場。MediaPipe WebAssembly 端離線跑（不上傳第三方）+ Gemini Vision 自動產 3 個外觀特徵與口訣 + Combo 連擊 S+/S/A/B 評級 + 班級攻略本兩階段比對（fingerprint 粗篩 + Gemini 雙圖比對）。30 人班一次跑全套成本 NT$0.25-0.5，v3.14.0 活躍開發中。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
@@ -109,20 +109,20 @@
       <category>教學情境</category>
     </item>
     <item>
-      <title>📖 教學情境：#73 國小期中考成績篩選工具：3 分鐘找出班上 6 個需要關心的學生</title>
+      <title>📖 教學情境：#73 成績篩選系統：教務處挑前 X% 競賽選手 / 資優方案的全校工具（不是找退步學生！）</title>
       <link>https://cagoooo.github.io/Akai/blog/grade-filter-73-find-students-need-help</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/grade-filter-73-find-students-need-help</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#73 期中考成績篩選工具解決導師最頭痛的「考完試之後呢？」拉出弱勢科目 + 退步學生 + 高分群一張圖看完，期中考檢討會、親師懇談會、補救教學名單一次到位。</description>
+      <description>#73 不是「找退步學生需要關心」 — 是教務處用來篩選「**前 X% 或前 N 名優秀學生**」挑校內競賽選手、資優方案候選人的工具。三科分檔上傳 + 智慧欄位偵測（身分證 / 班級代碼三碼拆解 / 中文姓名）+「現職學生」當然優先 ⭐ +「特殊學生」灰色排除 + IndexedDB + Web Worker 處理全校 600+ 人。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
     <item>
-      <title>📖 教學情境：#51 自動排課系統：教務組長排課惡夢從一週變一小時的演算法救星</title>
+      <title>📖 教學情境：#51 SMES AI 智慧排課 v2.12：遺傳演算法 GA v3.1 + 混合修復突變 + Smart Seed + BFS 鏈式衝突解的石門國小客製神器</title>
       <link>https://cagoooo.github.io/Akai/blog/auto-schedule-51-curriculum-planner</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/auto-schedule-51-curriculum-planner</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#51 自動排課系統用 AI 演算法解決教務組長最頭痛的「全校課表打結」問題。輸入教師可用時段 + 排課規則，2 分鐘出整學期課表，衝堂為 0。</description>
+      <description>#51 不是 CSP 演算法 — 是「SMES AI 智慧排課系統 v2.12.0」用遺傳演算法 GA v3.1 + 混合修復突變（教師衝突修復 30% / 數學修復 17.5% / 國語修復 17.5% / 定向優化 21% / 隨機 14%）+ Smart Seed 種子 + BFS 鏈式衝突解。台灣國小規則寫死（週三下午全校停課、低年級只有週二全天）。127 單元測試 + 23 Firestore Rules 測試，CI 三 jobs。取代舊版 STC.EXE 桌機軟體。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
@@ -131,7 +131,7 @@
       <link>https://cagoooo.github.io/Akai/blog/teacher-reply-89-pro-parent-message</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/teacher-reply-89-pro-parent-message</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#89 教師回覆小幫手 Pro 版用 AI 草稿 + 情緒溫度調整 + 範例庫，把親師溝通最累的「想怎麼回」變成「改一改就送」。一週節省 5 小時，老師終於能準時下班。</description>
+      <description>#89 不是「情緒溫度計 + 三種口吻」 — 真實是 12 種情境分類（老師手選，不是 AI 判斷）+ 單一回覆 + 四種微調按鈕（再溫和 / 再正式 / 縮短 / 加細節）+ 對話截圖辨識（Gemini multimodal）。Next.js 15.2 + Genkit 1.8 + Gemini 2.5 Flash + Cloudflare Turnstile，Firestore 不存使用者輸入或回覆（隱私意識強）。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
