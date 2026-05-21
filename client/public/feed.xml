@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 97+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 98+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Wed, 20 May 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Thu, 21 May 2026 02:13:12 GMT</lastBuildDate>
+    <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+    <lastBuildDate>Thu, 21 May 2026 02:55:15 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,15 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>📖 教學情境：#100 工具索引神器升級 AI build log：從 fuse.js 字面比對到 Gemini 語意搜尋</title>
+      <link>https://cagoooo.github.io/Akai/blog/tool-100-gemini-embedding-build-log</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/tool-100-gemini-embedding-build-log</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>工具索引神器（#100）原本用 fuse.js 字面比對 — 「水的三態」找不到「自然科實驗」。升級 Gemini Embedding 語意搜尋後，連「我想讓害羞學生敢開口」這類抽象描述都能找到對的工具。完整 build log + 架構設計分享。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
     <item>
       <title>📖 教學情境：我用「教學駕駛艙入口網」帶 5 年級資訊課，學生不用記網址了</title>
       <link>https://cagoooo.github.io/Akai/blog/cockpit-81-info-tech-class</link>
@@ -348,18 +357,6 @@
       <category>教師</category>
       <category>報告</category>
       <category>行政</category>
-    </item>
-    <item>
-      <title>🆕 新工具：國語演說培訓班</title>
-      <link>https://cagoooo.github.io/Akai/tool/25</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/25</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>國語演說練習與培訓工具</description>
-      <category>演說</category>
-      <category>國語</category>
-      <category>口說</category>
-      <category>培訓</category>
-      <category>比賽</category>
     </item>
   </channel>
 </rss>
