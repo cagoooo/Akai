@@ -200,9 +200,9 @@ export function BlogList() {
             這些工具，我是這樣帶課的
           </h1>
           <p style={{ fontSize: 14, color: tokens.muted2, margin: 0, lineHeight: 1.6 }}>
-            共 <strong style={{ color: tokens.ink }}>{totalCount}</strong> 篇文章（
-            <strong style={{ color: tokens.red }}>{longformCount}</strong> 篇深度長文 +{' '}
-            <strong style={{ color: tokens.accent }}>{miniCount}</strong> 篇工具速覽）
+            共 <strong style={{ color: tokens.ink }}>{totalCount}</strong> 篇文章 ─{' '}
+            <strong style={{ color: tokens.red }}>📖 {longformCount} 篇教學心得</strong>（實戰長文）+{' '}
+            <strong style={{ color: tokens.accent }}>🔖 {miniCount} 篇工具介紹</strong>（30 秒速覽）
           </p>
         </div>
 
@@ -271,18 +271,19 @@ export function BlogList() {
               }}
             >
               {([
-                { key: 'all', label: `全部 ${totalCount}` },
-                { key: 'longform', label: `深度長文 ${longformCount}` },
-                { key: 'mini', label: `工具速覽 ${miniCount}` },
-              ] as { key: PostType; label: string }[]).map((opt) => (
+                { key: 'all', label: `全部 ${totalCount}`, hint: '所有文章（精選 + 工具介紹）' },
+                { key: 'longform', label: `📖 教學心得 ${longformCount}`, hint: '阿凱老師親手寫的長文：含實測數據、學生引言、配對推薦（5-8 分鐘）' },
+                { key: 'mini', label: `🔖 工具介紹 ${miniCount}`, hint: '每個工具一篇 30 秒看完：用途、適合誰用、怎麼開始（2 分鐘）' },
+              ] as { key: PostType; label: string; hint: string }[]).map((opt) => (
                 <button
                   key={opt.key}
                   type="button"
                   role="tab"
                   aria-selected={postType === opt.key}
+                  title={opt.hint}
                   onClick={() => setPostType(opt.key)}
                   style={{
-                    padding: '5px 12px',
+                    padding: '6px 14px',
                     fontSize: 12,
                     fontFamily: tokens.font.tc,
                     fontWeight: 800,
@@ -291,6 +292,7 @@ export function BlogList() {
                     border: 'none',
                     cursor: 'pointer',
                     transition: 'background 0.15s ease',
+                    whiteSpace: 'nowrap',
                   }}
                 >
                   {opt.label}
@@ -495,7 +497,7 @@ export function BlogList() {
                             boxShadow: '1.5px 1.5px 0 rgba(0,0,0,.22)',
                           }}
                         >
-                          深度長文
+                          📖 教學心得
                         </div>
                       )}
 
