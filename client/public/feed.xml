@@ -8,7 +8,7 @@
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
     <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Thu, 21 May 2026 14:57:51 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 21 May 2026 22:50:00 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -280,11 +280,11 @@
       <category>教學情境</category>
     </item>
     <item>
-      <title>📖 教學情境：#81 國小資訊科技教學駕駛艙：25 個駕駛艙 × 飛行儀表板入口，三到六年級完整資訊課程系統</title>
-      <link>https://cagoooo.github.io/Akai/blog/cockpit-81-info-tech-class</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/cockpit-81-info-tech-class</guid>
-      <pubDate>Wed, 20 May 2026 00:00:00 GMT</pubDate>
-      <description>#81 不是「入口連結牆」— 是阿凱用 5 週手刻 84 個 commits、純 vanilla JS 蓋出來的「飛行員儀表板 + 25 個獨立駕駛艙」課程系統，每單元含 NotebookLM 投影片 + YouTube 自學影片 + Canvas 關卡 + 評量題 + 演講簡報模式。</description>
+      <title>📖 教學情境：#17 創意抽籤系統：純前端 Tailwind + canvas-confetti 輸入名單一個一個抽 + 剩餘項目即時顯示（XOOPS VM 部署）</title>
+      <link>https://cagoooo.github.io/Akai/blog/draw-17-creative-lottery</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/draw-17-creative-lottery</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#17 真實名稱「創意抽籤系統」是阿凱用 Gemini Canvas 寫的純前端 + Tailwind + canvas-confetti 抽籤工具，部署在 XOOPS 校網 VM。輸入名單後一個一個抽出（不是一次全抽），剩餘項目即時顯示，每抽中觸發 confetti 撒花，可複製結果 + 重新開始。footer 寫「桃園市石門國小 資訊組 阿凱老師 設計」。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
