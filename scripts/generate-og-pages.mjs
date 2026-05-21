@@ -670,7 +670,7 @@ async function main() {
 
   // 生成迷你 blog OG landing pages（每工具一篇 SEO landing）
   try {
-    const SKIP_IDS = new Set([81, 46, 10, 68, 3, 100, 53, 7, 88, 67, 72, 54, 76, 92, 82]); // 同 miniPosts.ts（含 14 篇手寫長文 + 索引神器）
+    const SKIP_IDS = new Set([81, 46, 10, 68, 3, 100, 53, 7, 88, 67, 72, 54, 76, 92, 82, 73, 51, 89, 83, 11]); // 同 miniPosts.ts（含 19 篇手寫長文 + 索引神器）
     const blogDir = path.resolve(__dirname, '../dist/public/blog');
     let miniGenerated = 0;
     for (const tool of tools) {

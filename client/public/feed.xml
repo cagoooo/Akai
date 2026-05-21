@@ -8,7 +8,7 @@
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
     <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Thu, 21 May 2026 09:11:47 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 21 May 2026 09:23:48 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -105,6 +105,51 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/inventory-82-classroom-equipment</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
       <description>#82 教室資訊設備盤點系統用 QR code + 一鍵盤點 + 自動產報，把每學期初最痛的「全校設備清點」從一週濃縮到 30 分鐘。資訊組長必備。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#73 國小期中考成績篩選工具：3 分鐘找出班上 6 個需要關心的學生</title>
+      <link>https://cagoooo.github.io/Akai/blog/grade-filter-73-find-students-need-help</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/grade-filter-73-find-students-need-help</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#73 期中考成績篩選工具解決導師最頭痛的「考完試之後呢？」拉出弱勢科目 + 退步學生 + 高分群一張圖看完，期中考檢討會、親師懇談會、補救教學名單一次到位。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#51 自動排課系統：教務組長排課惡夢從一週變一小時的演算法救星</title>
+      <link>https://cagoooo.github.io/Akai/blog/auto-schedule-51-curriculum-planner</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/auto-schedule-51-curriculum-planner</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#51 自動排課系統用 AI 演算法解決教務組長最頭痛的「全校課表打結」問題。輸入教師可用時段 + 排課規則，2 分鐘出整學期課表，衝堂為 0。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#89 教師回覆小幫手 Pro：親師訊息 1 分鐘草稿出爐，再也不怕家長半夜傳訊</title>
+      <link>https://cagoooo.github.io/Akai/blog/teacher-reply-89-pro-parent-message</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/teacher-reply-89-pro-parent-message</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#89 教師回覆小幫手 Pro 版用 AI 草稿 + 情緒溫度調整 + 範例庫，把親師溝通最累的「想怎麼回」變成「改一改就送」。一週節省 5 小時，老師終於能準時下班。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#83 本土語分班配對系統：閩客原 3 個班分 9 組的演算法，本土語老師的救命稻草</title>
+      <link>https://cagoooo.github.io/Akai/blog/native-language-83-class-grouping</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/native-language-83-class-grouping</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#83 本土語分班配對系統解決國小本土語課最痛的「跨班混排」問題。輸入學生選課 + 本土語別 + 老師可用時段，5 分鐘出完美分組，再也不用手算到天亮。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#11 剛好學：課堂互動 so easy — 一個 QR 讓 30 個學生同時舉手的奇蹟</title>
+      <link>https://cagoooo.github.io/Akai/blog/classroom-interaction-11-easy</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/classroom-interaction-11-easy</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#11 剛好學課堂互動工具讓「老師問問題只有 3 個學生舉手」變成「30 個學生同時搶答」。投票、問答、文字雲、隨機點名一站到位，上完任何一堂課都有資料可看。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
@@ -270,66 +315,6 @@
       <category>導師</category>
       <category>學生</category>
       <category>事務</category>
-    </item>
-    <item>
-      <title>🆕 新工具：剛好學：課堂互動so easy</title>
-      <link>https://cagoooo.github.io/Akai/tool/11</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/11</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>阿凱老師與阿剛老師共同打造的剛好學課堂互動平台，13 種互動模式涵蓋投票、QA、閱讀測驗、繪圖題、文字雲、相片牆，學生掃 QR Code 就能加入。</description>
-      <category>互動</category>
-      <category>課堂</category>
-      <category>即時</category>
-      <category>教學</category>
-      <category>問答</category>
-    </item>
-    <item>
-      <title>🆕 新工具：PIRLS閱讀理解網</title>
-      <link>https://cagoooo.github.io/Akai/tool/12</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/12</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>完整的 PIRLS 閱讀理解資源平台</description>
-      <category>PIRLS</category>
-      <category>閱讀</category>
-      <category>理解</category>
-      <category>資源</category>
-      <category>評量</category>
-    </item>
-    <item>
-      <title>🆕 新工具：5W1H 靈感發射器 🚀</title>
-      <link>https://cagoooo.github.io/Akai/tool/13</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/13</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>創意思維激發工具，協助發想教學內容</description>
-      <category>5W1H</category>
-      <category>創意</category>
-      <category>靈感</category>
-      <category>思維</category>
-      <category>發想</category>
-    </item>
-    <item>
-      <title>🆕 新工具：點亮詩意~『早安長輩圖產生器』</title>
-      <link>https://cagoooo.github.io/Akai/tool/14</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/14</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>輕鬆製作溫馨的早安問候圖片</description>
-      <category>長輩圖</category>
-      <category>早安</category>
-      <category>圖片</category>
-      <category>問候</category>
-      <category>詩詞</category>
-    </item>
-    <item>
-      <title>🆕 新工具：社群領域會議報告產出平台</title>
-      <link>https://cagoooo.github.io/Akai/tool/15</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/15</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>快速產生會議報告的協作工具</description>
-      <category>會議</category>
-      <category>報告</category>
-      <category>社群</category>
-      <category>記錄</category>
-      <category>產出</category>
     </item>
   </channel>
 </rss>
