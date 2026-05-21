@@ -6,12 +6,12 @@
  */
 
 import { Link, useParams } from 'wouter';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import type { EducationalTool } from '@/lib/data';
-import { getPostBySlug, getPostBySlugAsync, type BlogPost as BlogPostType } from '@/blog/posts';
+import { POSTS, getPostBySlug, getPostBySlugAsync, type BlogPost as BlogPostType } from '@/blog/posts';
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
 import { Tape } from '@/components/primitives/Tape';
@@ -62,6 +62,29 @@ export function BlogPost() {
       });
     }
   }, [params.slug, post]);
+
+  // 閱讀進度（橘色條沿頂部隨滾動填滿）
+  const [readingProgress, setReadingProgress] = useState(0);
+  const progressRafRef = useRef<number | null>(null);
+  useEffect(() => {
+    const handler = () => {
+      if (progressRafRef.current !== null) return; // throttle by rAF
+      progressRafRef.current = requestAnimationFrame(() => {
+        progressRafRef.current = null;
+        const doc = document.documentElement;
+        const total = doc.scrollHeight - doc.clientHeight;
+        const current = window.scrollY;
+        const pct = total > 0 ? Math.min(100, Math.max(0, (current / total) * 100)) : 0;
+        setReadingProgress(pct);
+      });
+    };
+    window.addEventListener('scroll', handler, { passive: true });
+    handler();
+    return () => {
+      window.removeEventListener('scroll', handler);
+      if (progressRafRef.current !== null) cancelAnimationFrame(progressRafRef.current);
+    };
+  }, []);
 
   // 還在 async 載入中 → 顯示 loading skeleton（避免 mini blog 還沒載完先閃顯 404）
   if (!post && !loadedAsync) {
@@ -120,12 +143,29 @@ export function BlogPost() {
 
       <BulletinHeader />
 
+      {/* 閱讀進度條 — 固定在頂部，隨滾動 0-100% 增長 */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          height: 4,
+          width: `${readingProgress}%`,
+          background: `linear-gradient(90deg, ${tokens.accent}, ${tokens.red})`,
+          zIndex: 9998,
+          transition: 'width 0.05s linear',
+          boxShadow: '0 0 8px rgba(234, 138, 62, 0.55)',
+        }}
+      />
+
       <article
         style={{
-          // 內文閱讀寬度保持 720px（黃金閱讀寬度，太寬眼睛來回掃描累）
-          maxWidth: 720,
+          // 容器寬度 940 — 給 hero / 相關工具 / 結尾 CTA 用滿
+          // 內文段落自己再限寬 820（包在 .blog-content 內 max-width），仍保閱讀舒適
+          maxWidth: 940,
           margin: '0 auto',
-          padding: 'clamp(20px, 3vw, 36px) clamp(20px, 4vw, 40px) 60px',
+          padding: 'clamp(20px, 3vw, 40px) clamp(20px, 4vw, 48px) 80px',
           fontFamily: tokens.font.tc,
         }}
       >
@@ -146,22 +186,22 @@ export function BlogPost() {
           ← 回到部落格列表
         </Link>
 
-        {/* 標題區（大型便利貼） */}
+        {/* 標題區（大型便利貼）— 寬螢幕放大版 */}
         <header
           style={{
             position: 'relative',
             background: tokens.note.yellow,
             border: `2.5px solid ${tokens.ink}`,
-            borderRadius: 12,
-            padding: '32px 28px 24px',
-            boxShadow: '6px 7px 0 rgba(0,0,0,.22), 0 10px 22px -8px rgba(0,0,0,.18)',
+            borderRadius: 14,
+            padding: 'clamp(28px, 4vw, 44px) clamp(24px, 3.5vw, 40px) clamp(22px, 3vw, 32px)',
+            boxShadow: '7px 8px 0 rgba(0,0,0,.22), 0 14px 28px -8px rgba(0,0,0,.18)',
             transform: 'rotate(-0.5deg)',
-            marginBottom: 30,
+            marginBottom: 36,
           }}
         >
-          <Pin color={tokens.red} size={22} style={{ top: -12, left: '50%', marginLeft: -11 }} />
+          <Pin color={tokens.red} size={24} style={{ top: -13, left: '50%', marginLeft: -12 }} />
 
-          <div style={{ display: 'flex', gap: 8, marginBottom: 14, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: 8, marginBottom: 18, flexWrap: 'wrap' }}>
             {post.tags.slice(0, 4).map((tag) => (
               <Tape key={tag} color="#fde047" width={70} angle={-2} style={{ fontSize: 11 }}>
                 #{tag}
@@ -169,15 +209,16 @@ export function BlogPost() {
             ))}
           </div>
 
-          <div style={{ fontSize: 48, lineHeight: 1, marginBottom: 8 }}>{post.coverEmoji}</div>
+          <div style={{ fontSize: 'clamp(48px, 6vw, 64px)', lineHeight: 1, marginBottom: 12 }}>{post.coverEmoji}</div>
 
           <h1
             style={{
-              fontSize: 30,
+              fontSize: 'clamp(28px, 3.4vw, 40px)',
               fontWeight: 900,
               color: tokens.ink,
-              margin: '4px 0 12px',
-              lineHeight: 1.3,
+              margin: '4px 0 16px',
+              lineHeight: 1.28,
+              letterSpacing: '0.005em',
             }}
           >
             {post.title}
@@ -186,14 +227,14 @@ export function BlogPost() {
           <div
             style={{
               display: 'flex',
-              gap: 14,
+              gap: 18,
               fontSize: 13,
               color: tokens.muted2,
               fontWeight: 700,
               flexWrap: 'wrap',
               borderTop: `1.5px dashed ${tokens.ink}`,
-              paddingTop: 12,
-              marginTop: 8,
+              paddingTop: 14,
+              marginTop: 10,
             }}
           >
             <span>
@@ -204,12 +245,15 @@ export function BlogPost() {
           </div>
         </header>
 
-        {/* Markdown 內容 */}
+        {/* Markdown 內容 — paragraph 級別自己限寬 820 維持閱讀舒適 */}
         <div
           className="blog-content"
           style={{
-            fontSize: 16,
-            lineHeight: 1.85,
+            // 內文段落區自己限寬，居中（hero / 相關工具區會用滿容器 940）
+            maxWidth: 820,
+            margin: '0 auto',
+            fontSize: 'clamp(15px, 1.05vw, 17px)',
+            lineHeight: 1.9,
             color: tokens.ink,
           }}
         >
@@ -219,24 +263,34 @@ export function BlogPost() {
               h2: ({ children }) => (
                 <h2
                   style={{
-                    fontSize: 24,
+                    fontSize: 'clamp(22px, 2vw, 28px)',
                     fontWeight: 900,
                     color: tokens.ink,
-                    margin: '28px 0 12px',
-                    paddingBottom: 6,
+                    margin: '36px 0 14px',
+                    paddingBottom: 8,
                     borderBottom: `3px solid ${tokens.accent}`,
+                    letterSpacing: '0.005em',
                   }}
                 >
                   {children}
                 </h2>
               ),
               h3: ({ children }) => (
-                <h3 style={{ fontSize: 19, fontWeight: 900, color: tokens.ink, margin: '22px 0 8px' }}>
+                <h3 style={{
+                  fontSize: 'clamp(18px, 1.5vw, 21px)',
+                  fontWeight: 900,
+                  color: tokens.ink,
+                  margin: '26px 0 10px',
+                }}>
                   {children}
                 </h3>
               ),
               p: ({ children }) => (
-                <p style={{ margin: '0 0 14px', color: tokens.inkSoft, lineHeight: 1.85 }}>{children}</p>
+                <p style={{
+                  margin: '0 0 16px',
+                  color: tokens.inkSoft,
+                  lineHeight: 1.9,
+                }}>{children}</p>
               ),
               blockquote: ({ children }) => (
                 <blockquote
@@ -429,19 +483,97 @@ export function BlogPost() {
           </section>
         )}
 
+        {/* 上一篇 / 下一篇導航 — 只看手寫長文 POSTS（mini blog 太多不適合線性瀏覽） */}
+        {(() => {
+          // 找當前 post 在 POSTS 內的位置
+          const currentIdx = POSTS.findIndex((p) => p.slug === post.slug);
+          if (currentIdx === -1) return null; // mini blog 不顯示
+          const sortedPosts = [...POSTS].sort(
+            (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+          );
+          const sortedIdx = sortedPosts.findIndex((p) => p.slug === post.slug);
+          const prev = sortedPosts[sortedIdx + 1]; // 較舊
+          const next = sortedPosts[sortedIdx - 1]; // 較新
+          if (!prev && !next) return null;
+          return (
+            <nav
+              aria-label="文章導航"
+              style={{
+                marginTop: 40,
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+                gap: 16,
+              }}
+            >
+              {prev ? (
+                <Link
+                  href={`/blog/${prev.slug}`}
+                  style={{
+                    background: '#fff',
+                    border: `2.5px solid ${tokens.ink}`,
+                    borderRadius: 10,
+                    padding: '14px 18px',
+                    textDecoration: 'none',
+                    color: tokens.ink,
+                    boxShadow: '3px 3px 0 rgba(0,0,0,.16)',
+                    transition: 'transform 0.15s ease',
+                    display: 'block',
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = 'translate(-2px,-2px)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = 'translate(0,0)'; }}
+                >
+                  <div style={{ fontSize: 11, color: tokens.muted2, fontWeight: 700, marginBottom: 4 }}>
+                    ← 上一篇
+                  </div>
+                  <div style={{ fontSize: 14, fontWeight: 800, color: tokens.ink, lineHeight: 1.4 }}>
+                    {prev.coverEmoji} {prev.title}
+                  </div>
+                </Link>
+              ) : <div />}
+              {next ? (
+                <Link
+                  href={`/blog/${next.slug}`}
+                  style={{
+                    background: '#fff',
+                    border: `2.5px solid ${tokens.ink}`,
+                    borderRadius: 10,
+                    padding: '14px 18px',
+                    textDecoration: 'none',
+                    color: tokens.ink,
+                    boxShadow: '3px 3px 0 rgba(0,0,0,.16)',
+                    transition: 'transform 0.15s ease',
+                    textAlign: 'right',
+                    display: 'block',
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = 'translate(2px,-2px)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = 'translate(0,0)'; }}
+                >
+                  <div style={{ fontSize: 11, color: tokens.muted2, fontWeight: 700, marginBottom: 4 }}>
+                    下一篇 →
+                  </div>
+                  <div style={{ fontSize: 14, fontWeight: 800, color: tokens.ink, lineHeight: 1.4 }}>
+                    {next.coverEmoji} {next.title}
+                  </div>
+                </Link>
+              ) : <div />}
+            </nav>
+          );
+        })()}
+
         {/* 結尾 CTA */}
         <div
           style={{
             marginTop: 32,
-            padding: '16px 18px',
+            padding: '18px 22px',
             background: tokens.note.blue,
             border: `2px solid ${tokens.ink}`,
             borderRadius: 10,
             boxShadow: '3px 3px 0 rgba(0,0,0,.18)',
-            fontSize: 13,
+            fontSize: 14,
             color: tokens.muted2,
             textAlign: 'center',
             transform: 'rotate(0.5deg)',
+            lineHeight: 1.7,
           }}
         >
           覺得有用？<Link href="/blog" style={{ color: tokens.red, fontWeight: 800, textDecoration: 'underline' }}>看更多教學情境長文</Link>，或<Link href="/?wish=1" style={{ color: tokens.red, fontWeight: 800, textDecoration: 'underline' }}>到許願池</Link> 跟阿凱老師說你想看什麼工具教學。
