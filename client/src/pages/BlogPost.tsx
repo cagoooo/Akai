@@ -122,9 +122,10 @@ export function BlogPost() {
 
       <article
         style={{
+          // 內文閱讀寬度保持 720px（黃金閱讀寬度，太寬眼睛來回掃描累）
           maxWidth: 720,
           margin: '0 auto',
-          padding: '20px 28px 60px',
+          padding: 'clamp(20px, 3vw, 36px) clamp(20px, 4vw, 40px) 60px',
           fontFamily: tokens.font.tc,
         }}
       >

@@ -135,9 +135,9 @@ export function ToolIndexAI() {
 
       <div
         style={{
-          maxWidth: 980,
+          maxWidth: 1100,
           margin: '0 auto',
-          padding: '20px 28px 60px',
+          padding: 'clamp(20px, 3vw, 36px) clamp(20px, 3vw, 40px) 60px',
           fontFamily: tokens.font.tc,
         }}
       >

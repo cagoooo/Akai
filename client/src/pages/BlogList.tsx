@@ -172,10 +172,11 @@ export function BlogList() {
       <BulletinHeader />
 
       <div
+        className="bulletin-blog-list-container"
         style={{
-          maxWidth: 960,
+          maxWidth: 1320,
           margin: '0 auto',
-          padding: '20px 28px 60px',
+          padding: 'clamp(20px, 3vw, 36px) clamp(20px, 3vw, 40px) 60px',
           fontFamily: tokens.font.tc,
         }}
       >
@@ -420,8 +421,9 @@ export function BlogList() {
               margin: 0,
               padding: 0,
               display: 'grid',
+              // 卡片最小 300px，auto-fill 讓寬螢幕自動展 4-5 欄、平板 2-3 欄、手機 1 欄
               gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-              gap: 28,
+              gap: 'clamp(20px, 2vw, 32px)',
             }}
           >
             {filteredPosts.map((post, idx) => {
