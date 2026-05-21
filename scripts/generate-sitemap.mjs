@@ -88,7 +88,7 @@ if (existsSync(postsPath)) {
 function makeMiniSlug(tool) {
     return `tool-${tool.id}`;
 }
-const SKIP_IDS = new Set([81, 46, 10, 68, 3, 100, 53, 7, 88, 67, 72, 54, 76, 92, 82, 73, 51, 89, 83, 11, 87, 79, 97, 94, 41]); // 同 miniPosts.ts（含 24 篇手寫長文 + 索引神器）
+const SKIP_IDS = new Set([81, 46, 10, 68, 3, 100, 53, 7, 88, 67, 72, 54, 76, 92, 82, 73, 51, 89, 83, 11, 87, 79, 97, 94, 41, 24, 25, 26, 27, 44]); // 同 miniPosts.ts（含 29 篇手寫長文 + 索引神器）
 let miniCount = 0;
 for (const tool of tools) {
     if (tool.isInternal || SKIP_IDS.has(tool.id)) continue;

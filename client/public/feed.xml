@@ -8,7 +8,7 @@
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
     <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Thu, 21 May 2026 12:13:19 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 21 May 2026 14:48:10 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -199,6 +199,51 @@
       <category>教學情境</category>
     </item>
     <item>
+      <title>📖 教學情境：#24 校務會議紀錄報告站：把石門國小 114 學年度期末會議「致詞 + 處室報告 + 自治市長 + 提案討論」做成單頁互動 SPA</title>
+      <link>https://cagoooo.github.io/Akai/blog/meeting-24-end-semester-record</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/meeting-24-end-semester-record</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#24 真實名稱是「桃園市龍潭區石門國小 114 學年度上學期期末校務會議紀錄」— 用純 Tailwind + Noto Sans TC + Lucide 把整份會議紀錄做成 6 章節互動式 SPA，嵌進 Google Sites Embedded HTML。含張定貴校長致詞 / 家長會長致詞 / 自治市長潘宥睿致詞 / 教務處報告 / 學務處報告 / 提案討論 / 附件規約 / 下學期重要行事簡曆。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#25 國小國語演說特訓班（進階版）：Gemini 2.5 Flash + Lucide 的單檔入門練習工具（#67 Pro 版前身）</title>
+      <link>https://cagoooo.github.io/Akai/blog/speech-25-training-class-entry</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/speech-25-training-class-entry</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#25 真實名稱「國小國語演說特訓班（進階版）」是阿凱早期版 — 用 Gemini 2.5 Flash + Lucide 做的 55KB 單檔 HTML，嵌進 Google Sites Embedded HTML。題庫 + 「儲存並關閉」+「隨機題庫」按鈕，是 #67 Pro 版（5705 行 + Web Speech + 雷達圖 + 老師評分量表）的前身入門版。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#26 九九乘法大冒險：Web Audio + Tailwind + Lucide 純前端遊戲化練習（無 LLM 也能做好工具）</title>
+      <link>https://cagoooo.github.io/Akai/blog/multiplication-26-adventure</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/multiplication-26-adventure</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#26 真實名稱「九九乘法大冒險」是純前端遊戲化練習器 — Tailwind + Lucide + **Web Audio API**（OscillatorNode 合成音效）做的 25KB 單檔 HTML，嵌進 Google Sites。3 狀態反饋（答對了 / 哎呀答錯了 / 挑戰完成）+ 計分計時，**沒用 LLM** — 證明「好的教學工具不一定需要 AI」。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#27 ⬅️好用小工具（許願池）：swissknife 13 個 Google Sites Embedded 工具總入口（含 7 個 Akai 尚未收錄的隱藏作品）</title>
+      <link>https://cagoooo.github.io/Akai/blog/swissknife-27-tool-vault</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/swissknife-27-tool-vault</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#27 真實是 `sites.google.com/mail2.smes.tyc.edu.tw/swissknife/` — 阿凱所有「Gemini 寫 + Google Sites 嵌入」工具的總入口頁，共 13 個子頁工具。其中 6 個已在 Akai 100 個工具內（#5 #10 #25 #26 #44 #75 #76），**7 個是 Akai 尚未收錄的隱藏作品**（取餐叫號區 / 校園點餐後台 / 石小閱讀推動短影片 / Loilonote 題庫轉 Excel / HEIC 轉 JPG / TIFF 轉 PNG 等）。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#44 快樂數學小冒險：國小一年級 4 關卡（10 以內加減 + 20 以內加減）+ canvas-confetti 撒花獎勵的純前端遊戲</title>
+      <link>https://cagoooo.github.io/Akai/blog/math-adventure-44-grade-one</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/math-adventure-44-grade-one</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#44 真實名稱「快樂數學小冒險 | 國小一年級數學練習」是阿凱給**一年級**做的數學練習遊戲。4 個關卡（10 以內加法 / 10 以內減法 / 20 以內加法 / 20 以內減法）+ canvas-confetti 撒花獎勵 + 純 Tailwind + 26KB 單檔 HTML 嵌進 Google Sites。是 #26 九九乘法大冒險的低年級姊妹工具。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
       <title>📖 教學情境：#81 國小資訊科技教學駕駛艙：25 個駕駛艙 × 飛行儀表板入口，三到六年級完整資訊課程系統</title>
       <link>https://cagoooo.github.io/Akai/blog/cockpit-81-info-tech-class</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/cockpit-81-info-tech-class</guid>
@@ -242,64 +287,6 @@
       <description>#3 不只是「全班舉手投票」 — 是 4 種題型（單選 / 多選 / 是非 / 簡答 WordCloud）+ 4 碼房間代碼（字元集避開 0/O/1/I/L 給小學生）+ 匿名升級 Google 保留歷史題目 + 投影專用頁 /present/:id 含 QR 四檔大小 + confetti + 表情彈幕。Firestore onSnapshot + Cloud Functions 排程清理 + LINE Flex 通知管理員。</description>
       <category>blog</category>
       <category>教學情境</category>
-    </item>
-    <item>
-      <title>🆕 新工具：線上即時客服</title>
-      <link>https://cagoooo.github.io/Akai/tool/1</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/1</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>提供即時的線上教育支援和諮詢服務，協助解決學習過程中的問題</description>
-      <category>客服</category>
-      <category>即時通訊</category>
-      <category>問答</category>
-      <category>支援</category>
-    </item>
-    <item>
-      <title>🆕 新工具：行政業務協調系統</title>
-      <link>https://cagoooo.github.io/Akai/tool/2</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/2</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>阿凱老師打造的學校行政業務協調系統，整合共用日曆、跨部門行程管理與 LINE 推播提醒，讓教務、學務、總務、輔導各處室一站搞定協作排程。</description>
-      <category>行政</category>
-      <category>協調</category>
-      <category>校務</category>
-      <category>管理</category>
-    </item>
-    <item>
-      <title>🆕 新工具：學生即時投票系統</title>
-      <link>https://cagoooo.github.io/Akai/tool/3</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/3</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>阿凱老師打造的課堂即時投票系統，老師建立題目產生 QR Code，學生掃碼就能即時作答，搭配截圖白板標註工具，連投影片題目也能秒變互動題。</description>
-      <category>投票</category>
-      <category>互動</category>
-      <category>課堂</category>
-      <category>即時</category>
-      <category>民主</category>
-    </item>
-    <item>
-      <title>🆕 新工具：PIRLS閱讀理解生成</title>
-      <link>https://cagoooo.github.io/Akai/tool/4</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/4</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>專業的閱讀理解評估工具，幫助提升學生的閱讀能力</description>
-      <category>PIRLS</category>
-      <category>閱讀理解</category>
-      <category>評估</category>
-      <category>生成</category>
-      <category>AI</category>
-    </item>
-    <item>
-      <title>🆕 新工具：校園點餐系統</title>
-      <link>https://cagoooo.github.io/Akai/tool/5</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/5</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>阿凱老師打造的校慶園遊會點餐系統，各班攤位上線開菜單，買家手機點餐取號，廚房後台一鍵管理訂單，告別現場排隊吼價的混亂。</description>
-      <category>點餐</category>
-      <category>午餐</category>
-      <category>訂餐</category>
-      <category>校園</category>
-      <category>便利</category>
     </item>
   </channel>
 </rss>
