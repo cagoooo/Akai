@@ -8,7 +8,7 @@
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
     <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Thu, 21 May 2026 14:48:10 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 21 May 2026 14:53:20 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -244,47 +244,47 @@
       <category>教學情境</category>
     </item>
     <item>
+      <title>📖 教學情境：#49 教務處寶藏庫（academic 子站）：3 個子頁含 2026 英語歌唱比賽 G6 歌單 × 6 班 + 親職日配置 + 班級榮譽榜（含 1 個 Akai 隱藏作品）</title>
+      <link>https://cagoooo.github.io/Akai/blog/academic-49-treasure-trove</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/academic-49-treasure-trove</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#49 真實是 `sites.google.com/mail2.smes.tyc.edu.tw/academic/` 教務處子站，含 3 個子頁：「2026 英語歌唱比賽網站」（G6 6 首歌 × 601-606 6 班 = 36 組合）、「2026 親職日場地配置」（即 Akai #74）、「班級榮譽榜名單調查」（Akai 尚未收錄的隱藏作品）。純 Tailwind 嵌進 Google Sites Embedded HTML。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#74 1150328 親職日場地配置互動網：戶外籃球場 + 教室活動區 + 攤位展區 + 4 tab 切換的 SPA 場地圖</title>
+      <link>https://cagoooo.github.io/Akai/blog/parent-day-74-venue-map</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/parent-day-74-venue-map</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#74 真實標題「1150328 親職日場地配置互動網」（115/03/28 親職日專用）。Tailwind + Lucide 純前端 SPA，4 個 tab 切換（戶外班級區 / 1-3 年級教室區 / 攤位展區 / 其他區域），含戶外籃球場配置（4-6 年級與專區）+ 教室活動區（1-3 年級英語闖關）+ 攤位活動展區（石門國中升學輔導 / 性平教育展 / 家庭教育有獎徵答 / 星空計畫作品展示）。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#75 Slide Extractor 影片與 PDF 簡報擷取神器：PDF.js + jsPDF + JSZip + Firebase 設定流程的單檔擷取工具</title>
+      <link>https://cagoooo.github.io/Akai/blog/slide-extractor-75-video-pdf-images</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/slide-extractor-75-video-pdf-images</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#75 真實名稱「Slide Extractor - 影片與 PDF 簡報擷取神器」— 兩大模式（影片轉圖片 / PDF 轉圖片），用 PDF.js 抓 PDF 每頁渲染成圖、JSZip 打包下載、jsPDF 重新匯出、Firebase 設定流程（立即設定 / 取消 / 儲存並連線）。37,748 字元單檔 HTML 嵌進 Google Sites Embedded HTML。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#80 114 學年度下學期第 13 週教師會議互動平台：校長室 + 教務處（4 組長）+ 學務處（2 組長）的 SPA 會議報告</title>
+      <link>https://cagoooo.github.io/Akai/blog/meeting-80-spring-semester-week13</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/meeting-80-spring-semester-week13</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#80 真實標題「石門國小 114 學年度下學期第 13 週教師會議互動平台」— 跟 #24（上學期期末）同款架構但內容是下學期週次會議。校長室 + 教務處（教務主任 + 註冊組長 / 六年級畢業考時程 + 設備組長 + 資訊組長）+ 學務處（訓育組長 + 衛生組長 / 語文競賽打掃與病媒蚊防制）。52KB 純 Tailwind 單檔嵌進 Google Sites。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
       <title>📖 教學情境：#81 國小資訊科技教學駕駛艙：25 個駕駛艙 × 飛行儀表板入口，三到六年級完整資訊課程系統</title>
       <link>https://cagoooo.github.io/Akai/blog/cockpit-81-info-tech-class</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/cockpit-81-info-tech-class</guid>
       <pubDate>Wed, 20 May 2026 00:00:00 GMT</pubDate>
       <description>#81 不是「入口連結牆」— 是阿凱用 5 週手刻 84 個 commits、純 vanilla JS 蓋出來的「飛行員儀表板 + 25 個獨立駕駛艙」課程系統，每單元含 NotebookLM 投影片 + YouTube 自學影片 + Canvas 關卡 + 評量題 + 演講簡報模式。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#46 場地預約系統：禮堂只是招牌 — 骨子裡是 10 場地 × 學校節次 × LINE 三階段通知 × AI 衝突解析的中央調度系統</title>
-      <link>https://cagoooo.github.io/Akai/blog/venue-46-no-more-paper-form</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/venue-46-no-more-paper-form</guid>
-      <pubDate>Wed, 20 May 2026 00:00:00 GMT</pubDate>
-      <description>#46 不是只預約禮堂 — 是 10 個場地（禮堂、智慧教室、電腦教室、森林小屋、4 台 IPAD 平板車、校史室）統一調度。學校節次制（非半小時格）+ 沒有審核流程（任何人直接預約 + deviceId Rate Limit）+ LINE Flex Message 三階段通知 + Gemini AI 智慧衝突解析 + Gmail 風 30 秒 Undo + AI 學期報告。v2.50.6 累積 50+ 版的真實生產級系統。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#10 班級小管家：加扣分 × 抽籤 × 計時器 × 多班切換 × 考試監考的 31 模組單檔神器（沒有點名，純班級經營）</title>
-      <link>https://cagoooo.github.io/Akai/blog/class-helper-10-daily-routine</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/class-helper-10-daily-routine</guid>
-      <pubDate>Wed, 20 May 2026 00:00:00 GMT</pubDate>
-      <description>#10 不是「點名 + 行政記錄」工具 — 是阿凱純手寫 31 個 JS 模組、197 KB 單檔 classnew.html 的班級經營系統。加扣分系統 + 抽籤分組 + 計時器 + 考試監考 + 學期封存 + 多班級切換，Firebase + localStorage 雙層儲存，跨裝置 Google 同步。v3.1.6 累計 12 keys × 4 路徑同步稽核到 100%。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#68 學生手作作品集 v3.2：純 HTML 中繼導引頁 + 6 班 Drive 資料夾 + go.html 防手機 OS 攔截 Drive App 跳轉</title>
-      <link>https://cagoooo.github.io/Akai/blog/student-portfolio-68-handcraft-uploads</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/student-portfolio-68-handcraft-uploads</guid>
-      <pubDate>Wed, 20 May 2026 00:00:00 GMT</pubDate>
-      <description>#68 不是自建上傳平台 — 是給石門國小**六年級**手作課的精緻 Google Drive 中繼導引頁。6 張班級卡（601~606）對應 6 個硬編碼 Drive folder ID，學生用 \`@mail2.smes.tyc.edu.tw\` 學校信箱登入 → 自動跳該班 Drive 資料夾。\`go.html\` 中繼頁專門解決「手機 OS 攔截 drive.google.com 跳 Drive App」的踩雷。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#3 學生即時投票：4 題型 + 4 碼房間代碼避混淆 + 匿名升級 Google + 投影專用頁 + 表情彈幕的真實架構</title>
-      <link>https://cagoooo.github.io/Akai/blog/live-vote-3-classroom-democracy</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/live-vote-3-classroom-democracy</guid>
-      <pubDate>Wed, 20 May 2026 00:00:00 GMT</pubDate>
-      <description>#3 不只是「全班舉手投票」 — 是 4 種題型（單選 / 多選 / 是非 / 簡答 WordCloud）+ 4 碼房間代碼（字元集避開 0/O/1/I/L 給小學生）+ 匿名升級 Google 保留歷史題目 + 投影專用頁 /present/:id 含 QR 四檔大小 + confetti + 表情彈幕。Firestore onSnapshot + Cloud Functions 排程清理 + LINE Flex 通知管理員。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
