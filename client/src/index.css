@@ -290,3 +290,46 @@
   }
 }
 
+
+/* ============================================================
+   🗺️ 阿凱部署生態系 RWD（5 大平台便利貼）
+   ============================================================ */
+
+.bulletin-deployment-ecosystem {
+  box-sizing: border-box;
+}
+
+.bulletin-deployment-ecosystem h2 {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.deployment-grid {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+/* 手機端：縮 padding + 取消 rotate */
+@media (max-width: 640px) {
+  .bulletin-deployment-ecosystem {
+    transform: none !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+  .bulletin-deployment-wrapper {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  .deployment-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+  .deployment-grid > * {
+    transform: none !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .deployment-grid {
+    grid-template-columns: 1fr !important;
+  }
+}

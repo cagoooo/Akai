@@ -28,6 +28,7 @@ import { BulletinLeaderboard } from '@/components/bulletin/BulletinLeaderboard';
 import { BulletinWishPool } from '@/components/bulletin/BulletinWishPool';
 import { BulletinSiteStats } from '@/components/bulletin/BulletinSiteStats';
 import { BulletinBlogEntry } from '@/components/bulletin/BulletinBlogEntry';
+import { BulletinDeploymentEcosystem } from '@/components/bulletin/BulletinDeploymentEcosystem';
 import { BulletinSearchBar } from '@/components/bulletin/BulletinSearchBar';
 import { BulletinCategoryFilter } from '@/components/bulletin/BulletinCategoryFilter';
 import { BulletinToolGrid } from '@/components/bulletin/BulletinToolGrid';
@@ -262,6 +263,11 @@ export function BulletinHome() {
       >
         <BulletinSiteStats onCategoryClick={(cat) => handleCategoryChange(cat)} />
         <BulletinBlogEntry />
+      </div>
+
+      {/* 部署生態系全圖 — 5 大平台便利貼牆 */}
+      <div className="bulletin-deployment-wrapper" style={{ padding: '0 60px 30px' }}>
+        <BulletinDeploymentEcosystem />
       </div>
 
       {/* 搜尋 */}
