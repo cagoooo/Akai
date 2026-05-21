@@ -8,7 +8,7 @@
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
     <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Thu, 21 May 2026 11:27:26 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 21 May 2026 11:36:56 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -37,20 +37,20 @@
       <category>教學情境</category>
     </item>
     <item>
-      <title>📖 教學情境：期末打評語不用熬夜：#7 點石成金 AI 評語優化讓「上課常吵」變「展現旺盛求知慾」</title>
+      <title>📖 教學情境：#7 點石成金蜂：勾 450+ 成語標籤 → AI 同時生成 12 種風格段落 + 二階段微調 + 全校共享 API Key 的單向轉換神器</title>
       <link>https://cagoooo.github.io/Akai/blog/comment-7-ai-positive-language</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/comment-7-ai-positive-language</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#7 點石成金（評語優化）累計 37 點擊。每學期末老師最大痛點 — 對著 30 個學生打評語，寫到第 15 個就詞窮。這個工具用 AI 把您的直覺批評轉成正向表述，保留原意 + 適合家長閱讀。</description>
+      <description>#7 不是「直覺評語 → AI 優化」 — 真實流程是「老師從 450+ 成語詞庫勾學生特質標籤 → AI 把標籤串成段落」。12 種寫作風格同時並列生成（不是單一）、CommentAdjuster 二階段縮 / 擴 / 換說法 + 5 級語氣滑桿、全校共享 API Key（阿凱自掏腰包）、繁中強制條款源於 v2.6.2 簡體字事故。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
     <item>
-      <title>📖 教學情境：桃園 130+ 國中課程計畫一鍵 AI 審查：#88 工具讓教務組長期初省下 80 小時</title>
+      <title>📖 教學情境：#88 國中課程計畫 AI 審查：對應桃園市 0505 版審查文件 40+ 項次 × PDF.js 抽文字 × 6 道合規鐵則 × 🔍 / ✨ 雙模式 × LINE 通知</title>
       <link>https://cagoooo.github.io/Akai/blog/curriculum-88-ai-junior-high-review</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/curriculum-88-ai-junior-high-review</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#88 桃園市 115 學年度國中課程計畫 AI 審查工具累計 38 點擊。每年九月所有國中要交課程計畫給市府審查 — 過去人工逐份比對學科時數、課綱對應、特色課程，現在 AI 一份 30 秒看完。</description>
+      <description>#88 不是給教育局審查委員用的 — 是給校內備課老師「自我預審」避免被退件。上傳 PDF（PDF.js 抽文字）→ AI 比對教育局 0505 版審查文件 40+ 項次（0-1 到 7-11）→ 給 fix-box 修正建議。雙模式：🔍 審查 PDF / ✨ 產生合規計畫，6 道桃園市 115 國中合規鐵則寫進 system prompt。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
@@ -208,20 +208,20 @@
       <category>教學情境</category>
     </item>
     <item>
-      <title>📖 教學情境：禮堂預約再也不用印紙本表單：#46 上線兩個月校內預約量翻 3 倍</title>
+      <title>📖 教學情境：#46 場地預約系統：禮堂只是招牌 — 骨子裡是 10 場地 × 學校節次 × LINE 三階段通知 × AI 衝突解析的中央調度系統</title>
       <link>https://cagoooo.github.io/Akai/blog/venue-46-no-more-paper-form</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/venue-46-no-more-paper-form</guid>
       <pubDate>Wed, 20 May 2026 00:00:00 GMT</pubDate>
-      <description>#46 禮堂預約系統累計 136 點擊。一個簡單 Google Calendar 風格的預約介面，把過去紙本搶禮堂變成「上線秒搶」，還能自動避免衝突。</description>
+      <description>#46 不是只預約禮堂 — 是 10 個場地（禮堂、智慧教室、電腦教室、森林小屋、4 台 IPAD 平板車、校史室）統一調度。學校節次制（非半小時格）+ 沒有審核流程（任何人直接預約 + deviceId Rate Limit）+ LINE Flex Message 三階段通知 + Gemini AI 智慧衝突解析 + Gmail 風 30 秒 Undo + AI 學期報告。v2.50.6 累積 50+ 版的真實生產級系統。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
     <item>
-      <title>📖 教學情境：導師日常神器：#10 班級小管家把點名、午餐統計、聯絡簿全整合</title>
+      <title>📖 教學情境：#10 班級小管家：加扣分 × 抽籤 × 計時器 × 多班切換 × 考試監考的 31 模組單檔神器（沒有點名，純班級經營）</title>
       <link>https://cagoooo.github.io/Akai/blog/class-helper-10-daily-routine</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/class-helper-10-daily-routine</guid>
       <pubDate>Wed, 20 May 2026 00:00:00 GMT</pubDate>
-      <description>#10 班級小管家累計 126 點擊。導師工作有 80% 是重複行政（點名、午餐記錄、聯絡簿、生日提醒），這個工具一口氣全整理。</description>
+      <description>#10 不是「點名 + 行政記錄」工具 — 是阿凱純手寫 31 個 JS 模組、197 KB 單檔 classnew.html 的班級經營系統。加扣分系統 + 抽籤分組 + 計時器 + 考試監考 + 學期封存 + 多班級切換，Firebase + localStorage 雙層儲存，跨裝置 Google 同步。v3.1.6 累計 12 keys × 4 路徑同步稽核到 100%。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
@@ -235,11 +235,11 @@
       <category>教學情境</category>
     </item>
     <item>
-      <title>📖 教學情境：我用 #3 學生即時投票系統把「無聊提問」變「全班搶答」— 累計 84 場實戰心得</title>
+      <title>📖 教學情境：#3 學生即時投票：4 題型 + 4 碼房間代碼避混淆 + 匿名升級 Google + 投影專用頁 + 表情彈幕的真實架構</title>
       <link>https://cagoooo.github.io/Akai/blog/live-vote-3-classroom-democracy</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/live-vote-3-classroom-democracy</guid>
       <pubDate>Wed, 20 May 2026 00:00:00 GMT</pubDate>
-      <description>#3 學生即時投票系統累計 84 點擊，排行榜第 5。一個 QR Code 就把投影片問題變即時投票，學生再也不用「老師我不敢舉手」，連害羞的孩子都會玩。</description>
+      <description>#3 不只是「全班舉手投票」 — 是 4 種題型（單選 / 多選 / 是非 / 簡答 WordCloud）+ 4 碼房間代碼（字元集避開 0/O/1/I/L 給小學生）+ 匿名升級 Google 保留歷史題目 + 投影專用頁 /present/:id 含 QR 四檔大小 + confetti + 表情彈幕。Firestore onSnapshot + Cloud Functions 排程清理 + LINE Flex 通知管理員。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
