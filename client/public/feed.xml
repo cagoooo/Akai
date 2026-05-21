@@ -8,7 +8,7 @@
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
     <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Thu, 21 May 2026 02:55:15 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 21 May 2026 03:35:44 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -24,6 +24,42 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/tool-100-gemini-embedding-build-log</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
       <description>工具索引神器（#100）原本用 fuse.js 字面比對 — 「水的三態」找不到「自然科實驗」。升級 Gemini Embedding 語意搜尋後，連「我想讓害羞學生敢開口」這類抽象描述都能找到對的工具。完整 build log + 架構設計分享。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：校園報修不用走到學務處：#53 智慧校園報修系統三個月省下校工 60 小時</title>
+      <link>https://cagoooo.github.io/Akai/blog/repair-53-paperless-school-maintenance</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/repair-53-paperless-school-maintenance</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#53 智慧校園報修系統累計 75 點擊。從前老師發現燈管壞掉 / 廁所漏水 / 投影機沒訊號，要走到學務處填紙本報修單。現在用手機掃 QR Code 30 秒搞定，校工排程處理進度全自動。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：期末打評語不用熬夜：#7 點石成金 AI 評語優化讓「上課常吵」變「展現旺盛求知慾」</title>
+      <link>https://cagoooo.github.io/Akai/blog/comment-7-ai-positive-language</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/comment-7-ai-positive-language</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#7 點石成金（評語優化）累計 37 點擊。每學期末老師最大痛點 — 對著 30 個學生打評語，寫到第 15 個就詞窮。這個工具用 AI 把您的直覺批評轉成正向表述，保留原意 + 適合家長閱讀。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：桃園 130+ 國中課程計畫一鍵 AI 審查：#88 工具讓教務組長期初省下 80 小時</title>
+      <link>https://cagoooo.github.io/Akai/blog/curriculum-88-ai-junior-high-review</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/curriculum-88-ai-junior-high-review</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#88 桃園市 115 學年度國中課程計畫 AI 審查工具累計 38 點擊。每年九月所有國中要交課程計畫給市府審查 — 過去人工逐份比對學科時數、課綱對應、特色課程，現在 AI 一份 30 秒看完。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#67 國語演說比賽訓練 Pro：從鄉鎮初賽到全國總冠軍的 4 個月 AI 陪練紀錄</title>
+      <link>https://cagoooo.github.io/Akai/blog/speech-67-training-pro</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/speech-67-training-pro</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#67 國語演說比賽訓練平台（Pro 版）累計 28 點擊。國小到高中的國語演說比賽每年三月開打，從鄉鎮初賽 → 縣賽 → 區賽 → 全國賽。這個工具用 AI 幫學生練稿、計時、模擬評審打分數。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
@@ -309,54 +345,6 @@
       <category>練習</category>
       <category>鍵盤</category>
       <category>速度</category>
-    </item>
-    <item>
-      <title>🆕 新工具：中打練習</title>
-      <link>https://cagoooo.github.io/Akai/tool/21</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/21</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>中文打字練習工具，提升中文輸入能力</description>
-      <category>打字</category>
-      <category>中文</category>
-      <category>練習</category>
-      <category>注音</category>
-      <category>輸入法</category>
-    </item>
-    <item>
-      <title>🆕 新工具：成語中打練習</title>
-      <link>https://cagoooo.github.io/Akai/tool/22</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/22</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>透過成語練習中文打字，邊打邊學成語</description>
-      <category>打字</category>
-      <category>成語</category>
-      <category>中文</category>
-      <category>學習</category>
-      <category>國語</category>
-    </item>
-    <item>
-      <title>🆕 新工具：點石成金蜂🐝 評語優化網頁版</title>
-      <link>https://cagoooo.github.io/Akai/tool/23</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/23</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>阿凱老師打造的「點石成金蜂」教師評語生成應用，協助老師快速產出個人化、貼近學生特質的成績單評語，告別罐頭句子。</description>
-      <category>評語</category>
-      <category>AI</category>
-      <category>正向</category>
-      <category>學生</category>
-      <category>網頁版</category>
-    </item>
-    <item>
-      <title>🆕 新工具：教師午會記錄報告站</title>
-      <link>https://cagoooo.github.io/Akai/tool/24</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/24</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>教師午會紀錄與報告分享平台</description>
-      <category>午會</category>
-      <category>記錄</category>
-      <category>教師</category>
-      <category>報告</category>
-      <category>行政</category>
     </item>
   </channel>
 </rss>
