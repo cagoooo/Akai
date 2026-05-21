@@ -160,6 +160,7 @@ export function BlogPost() {
       />
 
       <article
+        className="blog-article"
         style={{
           // 容器寬度 940 — 給 hero / 相關工具 / 結尾 CTA 用滿
           // 內文段落自己再限寬 820（包在 .blog-content 內 max-width），仍保閱讀舒適
@@ -254,12 +255,14 @@ export function BlogPost() {
 
           <h1
             style={{
-              fontSize: 'clamp(28px, 3.4vw, 40px)',
+              fontSize: 'clamp(24px, 3.4vw, 40px)',
               fontWeight: 900,
               color: tokens.ink,
               margin: '4px 0 16px',
               lineHeight: 1.28,
               letterSpacing: '0.005em',
+              wordBreak: 'break-word',
+              overflowWrap: 'anywhere',
             }}
           >
             {post.title}

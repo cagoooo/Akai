@@ -199,3 +199,94 @@
     transition-duration: 0.001ms !important;
   }
 }
+/* ============================================================
+   📖 Blog RWD 修補（手機端最右側被卡掉的根治）
+   2026-05-21: 中英技術名詞 + inline code + URL 太長會撐版面
+   ============================================================ */
+
+/* article 容器禁止水平溢出 + 允許所有文字斷行 */
+.blog-article {
+  overflow-x: hidden;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* 標題 + 內文段落都允許斷字 */
+.blog-content h1,
+.blog-content h2,
+.blog-content h3,
+.blog-content h4,
+.blog-content p,
+.blog-content li,
+.blog-content blockquote,
+.blog-content strong,
+.blog-content em,
+.blog-content td,
+.blog-content th {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* inline code 暴力斷字（含 articleContent / API URL / @scope 套件名） */
+.blog-content code {
+  word-break: break-all !important;
+  overflow-wrap: anywhere !important;
+  white-space: normal !important;
+}
+
+/* table 容器強制可橫向捲動（已內建 overflowX:auto，加保險） */
+.blog-content > div:has(> table) {
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 手機端進一步縮 padding + 字級 */
+@media (max-width: 640px) {
+  .blog-article {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+  .blog-content {
+    font-size: 15px !important;
+    line-height: 1.8 !important;
+  }
+  .blog-content h2 {
+    font-size: 20px !important;
+    line-height: 1.4 !important;
+  }
+  .blog-content h3 {
+    font-size: 17px !important;
+    line-height: 1.4 !important;
+  }
+  .blog-content table {
+    font-size: 12px !important;
+  }
+  .blog-content th,
+  .blog-content td {
+    padding: 6px 8px !important;
+  }
+}
+
+/* ============================================================
+   📌 首頁 BulletinBlogEntry RWD（最右側文字被卡掉）
+   ============================================================ */
+
+.bulletin-blog-entry {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.bulletin-blog-entry h2 {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* 手機端：取消 rotate（避免四角溢出）+ 縮 padding */
+@media (max-width: 640px) {
+  .bulletin-blog-entry {
+    transform: none !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+}
+

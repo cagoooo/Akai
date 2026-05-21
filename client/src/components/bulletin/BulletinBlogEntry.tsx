@@ -25,6 +25,7 @@ export function BulletinBlogEntry() {
 
   return (
     <div
+      className="bulletin-blog-entry"
       style={{
         position: 'relative',
         background: tokens.note.purple,
@@ -34,6 +35,8 @@ export function BulletinBlogEntry() {
         boxShadow: '5px 6px 0 rgba(0,0,0,.2), 0 10px 22px -8px rgba(0,0,0,.18)',
         transform: 'rotate(-0.5deg)',
         fontFamily: tokens.font.tc,
+        boxSizing: 'border-box',
+        maxWidth: '100%',
       }}
     >
       <Pin color="#c026d3" size={18} style={{ top: -9, left: 28 }} />
@@ -107,20 +110,25 @@ export function BulletinBlogEntry() {
                 >
                   {post.coverEmoji}
                 </span>
-                <div style={{ minWidth: 0, flex: 1 }}>
+                <div style={{ minWidth: 0, flex: 1, overflow: 'hidden' }}>
                   <div
                     style={{
                       fontSize: 13,
                       fontWeight: 900,
                       color: tokens.ink,
+                      lineHeight: 1.4,
+                      // 2 行裁切（line-clamp）取代單行 nowrap，手機上比較不會切太兇
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
                       overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
+                      wordBreak: 'break-word',
+                      overflowWrap: 'anywhere',
                     }}
                   >
                     {post.title}
                   </div>
-                  <div style={{ fontSize: 11, color: tokens.muted2, fontFamily: tokens.font.en, marginTop: 2 }}>
+                  <div style={{ fontSize: 11, color: tokens.muted2, fontFamily: tokens.font.en, marginTop: 4 }}>
                     📖 {post.readingMinutes} 分鐘 · 關聯 {post.toolIds.length} 個工具
                   </div>
                 </div>
