@@ -18,6 +18,7 @@ import { Pin } from '@/components/primitives/Pin';
 import { Tape } from '@/components/primitives/Tape';
 import { BulletinHeader } from '@/components/bulletin/BulletinHeader';
 import { BulletinFooter } from '@/components/bulletin/BulletinFooter';
+import { BulletinBackToTop } from '@/components/bulletin/BulletinBackToTop';
 import { PageHead } from '@/components/PageHead';
 
 const COLOR_MAP: Record<string, string> = {
@@ -561,6 +562,7 @@ export function BlogList() {
       </div>
 
       <BulletinFooter />
+      <BulletinBackToTop />
     </>
   );
 }

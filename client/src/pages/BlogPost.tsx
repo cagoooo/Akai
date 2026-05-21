@@ -17,6 +17,7 @@ import { Pin } from '@/components/primitives/Pin';
 import { Tape } from '@/components/primitives/Tape';
 import { BulletinHeader } from '@/components/bulletin/BulletinHeader';
 import { BulletinFooter } from '@/components/bulletin/BulletinFooter';
+import { BulletinBackToTop } from '@/components/bulletin/BulletinBackToTop';
 import { PageHead } from '@/components/PageHead';
 import { trackEvent } from '@/lib/analytics';
 import { getCategoryLabel } from '@/components/bulletin/toolAdapter';
@@ -447,6 +448,7 @@ export function BlogPost() {
       </article>
 
       <BulletinFooter />
+      <BulletinBackToTop />
     </>
   );
 }
