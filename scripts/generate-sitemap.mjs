@@ -57,7 +57,7 @@ const postsPath = resolve(__dirname, '../client/src/blog/posts.ts');
 const longformSlugs = [];
 if (existsSync(postsPath)) {
     const postsSrc = readFileSync(postsPath, 'utf-8');
-    const blockRegex = /const\s+POST_\d+:\s*BlogPost\s*=\s*\{([\s\S]*?)\n\};/g;
+    const blockRegex = /const\s+POST_[A-Z0-9_]+:\s*BlogPost\s*=\s*\{([\s\S]*?)\n\};/g;
     let m;
     while ((m = blockRegex.exec(postsSrc)) !== null) {
         const slug = m[1].match(/slug:\s*'([^']+)'/)?.[1];

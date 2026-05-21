@@ -17,6 +17,7 @@ import { useQuery } from '@tanstack/react-query';
 import Fuse, { type FuseResult, type FuseResultMatch } from 'fuse.js';
 import { PageHead } from '@/components/PageHead';
 import { trackEvent, logToolIndexQuery } from '@/lib/analytics';
+import { isSemanticSearchAvailable, semanticSearch } from '@/lib/embeddingSearch';
 import type { EducationalTool } from '@/lib/data';
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
@@ -52,9 +53,21 @@ function buildReason(match: FuseResultMatch | undefined, tool: EducationalTool, 
   return `${label}相關`;
 }
 
+type SearchMode = 'fuzzy' | 'semantic';
+
 export function ToolIndexAI() {
   const { data: stats } = useSiteStats();
   const [query, setQuery] = useState('');
+  const [searchMode, setSearchMode] = useState<SearchMode>('fuzzy');
+  const [semanticAvailable, setSemanticAvailable] = useState(false);
+  const [semanticResults, setSemanticResults] = useState<FuseResult<EducationalTool>[] | null>(null);
+  const [semanticLoading, setSemanticLoading] = useState(false);
+  const [semanticError, setSemanticError] = useState<string | null>(null);
+
+  // 偵測語意搜尋是否可用（tool-embeddings.json 是否存在）
+  useEffect(() => {
+    void isSemanticSearchAvailable().then(setSemanticAvailable);
+  }, []);
 
   // 從 tools.json 抓所有工具
   const { data: tools, isLoading } = useQuery<EducationalTool[]>({
@@ -93,14 +106,57 @@ export function ToolIndexAI() {
     });
   }, [externalTools]);
 
-  // 即時搜尋 — query 變動就重算
-  const results: FuseResult<EducationalTool>[] = useMemo(() => {
+  // Fuzzy 即時搜尋（client-side fuse.js）
+  const fuzzyResults: FuseResult<EducationalTool>[] = useMemo(() => {
     if (!fuse || !query.trim()) return [];
     return fuse.search(query, { limit: 5 });
   }, [fuse, query]);
 
+  // 語意搜尋：query 變動 + semantic 模式 → debounced 800ms 呼叫 Cloud Function
+  useEffect(() => {
+    if (searchMode !== 'semantic' || !semanticAvailable || !query.trim()) {
+      setSemanticResults(null);
+      setSemanticError(null);
+      return;
+    }
+    setSemanticLoading(true);
+    setSemanticError(null);
+    const handle = setTimeout(async () => {
+      try {
+        const semantic = await semanticSearch(query, 5);
+        // 把 {toolId, score} 包裝成 FuseResult 型別讓 UI 共用渲染
+        const wrapped: FuseResult<EducationalTool>[] = semantic
+          .map((s) => {
+            const tool = externalTools.find((t) => t.id === s.toolId);
+            if (!tool) return null;
+            return {
+              item: tool,
+              refIndex: 0,
+              score: 1 - s.score, // FuseResult.score 越小越好；cosine 越大越好 → 反向
+              matches: [],
+            } as FuseResult<EducationalTool>;
+          })
+          .filter((x): x is FuseResult<EducationalTool> => x !== null);
+        setSemanticResults(wrapped);
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        console.warn('[ToolIndexAI] semantic search failed, fallback fuzzy', msg);
+        setSemanticError(msg);
+        setSemanticResults(null);
+      } finally {
+        setSemanticLoading(false);
+      }
+    }, 800);
+    return () => clearTimeout(handle);
+  }, [searchMode, semanticAvailable, query, externalTools]);
+
+  // 最終 results：semantic 優先 → fuzzy fallback
+  const results: FuseResult<EducationalTool>[] = useMemo(() => {
+    if (searchMode === 'semantic' && semanticResults) return semanticResults;
+    return fuzzyResults;
+  }, [searchMode, semanticResults, fuzzyResults]);
+
   // 搜尋上報（debounced 500ms 避免每打一個字都送一次）
-  // 同時送 GA + Firestore（後者供 build-time 回灌熱門 query chips）
   useEffect(() => {
     if (!query.trim()) return;
     const handle = setTimeout(() => {
@@ -108,11 +164,12 @@ export function ToolIndexAI() {
         query: query.slice(0, 100),
         result_count: results.length,
         top_match_id: results[0]?.item.id,
+        mode: searchMode,
       });
       void logToolIndexQuery(query, results.length);
     }, 500);
     return () => clearTimeout(handle);
-  }, [query, results]);
+  }, [query, results, searchMode]);
 
   // 沒搜尋字時顯示熱門工具（最後 5 個工具當作「最新精選」）
   const fallbackPicks = useMemo(() => {
@@ -213,7 +270,13 @@ export function ToolIndexAI() {
           </label>
           <input
             id="tool-index-query"
-            type="text"
+            type="search"
+            inputMode="search"
+            enterKeyHint="search"
+            autoCapitalize="off"
+            autoCorrect="off"
+            autoComplete="off"
+            spellCheck={false}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="例：我下週要上水的三態，需要互動式教材⋯⋯"
@@ -221,7 +284,7 @@ export function ToolIndexAI() {
             style={{
               width: '100%',
               padding: '14px 16px',
-              fontSize: 17,
+              fontSize: 17, // ≥16 防 iOS 縮放
               fontFamily: tokens.font.tc,
               fontWeight: 600,
               color: tokens.ink,
@@ -231,9 +294,79 @@ export function ToolIndexAI() {
               boxSizing: 'border-box',
               outline: 'none',
               boxShadow: 'inset 2px 2px 0 rgba(0,0,0,.08)',
+              WebkitAppearance: 'none',
             }}
             data-testid="tool-index-query"
           />
+
+          {/* 搜尋模式 toggle（語意搜尋 vs 字面比對） */}
+          {semanticAvailable && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 12, flexWrap: 'wrap' }}>
+              <span style={{ fontSize: 11, color: tokens.muted2, fontWeight: 800 }}>
+                🔍 搜尋模式
+              </span>
+              <div
+                role="tablist"
+                style={{
+                  display: 'inline-flex',
+                  border: `1.8px solid ${tokens.ink}`,
+                  borderRadius: 999,
+                  overflow: 'hidden',
+                  background: '#fff',
+                  boxShadow: '1.5px 1.5px 0 rgba(0,0,0,.14)',
+                }}
+              >
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={searchMode === 'fuzzy'}
+                  onClick={() => setSearchMode('fuzzy')}
+                  style={{
+                    padding: '5px 12px',
+                    fontSize: 12,
+                    fontFamily: tokens.font.tc,
+                    fontWeight: 800,
+                    color: searchMode === 'fuzzy' ? '#fff' : tokens.ink,
+                    background: searchMode === 'fuzzy' ? tokens.accent : 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'background 0.15s ease',
+                  }}
+                >
+                  ⚡ 字面比對
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={searchMode === 'semantic'}
+                  onClick={() => setSearchMode('semantic')}
+                  style={{
+                    padding: '5px 12px',
+                    fontSize: 12,
+                    fontFamily: tokens.font.tc,
+                    fontWeight: 800,
+                    color: searchMode === 'semantic' ? '#fff' : tokens.ink,
+                    background: searchMode === 'semantic' ? tokens.red : 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'background 0.15s ease',
+                  }}
+                >
+                  🧠 語意搜尋
+                  <span style={{ marginLeft: 4, fontSize: 9, padding: '1px 4px', background: 'rgba(255,255,255,.25)', borderRadius: 4, verticalAlign: 'middle' }}>
+                    BETA
+                  </span>
+                </button>
+              </div>
+              {searchMode === 'semantic' && (
+                <span style={{ fontSize: 11, color: tokens.muted2, fontStyle: 'italic' }}>
+                  {semanticLoading ? '⏳ Gemini 思考中…' :
+                   semanticError ? '⚠️ 語意搜尋失敗，改用字面比對' :
+                   '「我想讓害羞學生開口」這類抽象描述能找到對的工具'}
+                </span>
+              )}
+            </div>
+          )}
 
           {/* 範例 query chips */}
           <div style={{ marginTop: 12, display: 'flex', flexWrap: 'wrap', gap: 6 }}>

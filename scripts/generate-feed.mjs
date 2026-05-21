@@ -40,7 +40,7 @@ const tools = allTools.filter((t) => !t.isInternal);
 function extractPosts() {
   const src = readFileSync(POSTS_TS, 'utf-8');
   const posts = [];
-  const blockRegex = /const\s+POST_\d+:\s*BlogPost\s*=\s*\{([\s\S]*?)\n\};/g;
+  const blockRegex = /const\s+POST_[A-Z0-9_]+:\s*BlogPost\s*=\s*\{([\s\S]*?)\n\};/g;
   let m;
   while ((m = blockRegex.exec(src)) !== null) {
     const body = m[1];

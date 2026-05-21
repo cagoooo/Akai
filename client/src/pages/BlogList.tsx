@@ -224,14 +224,20 @@ export function BlogList() {
             </label>
             <input
               id="blog-search"
-              type="text"
+              type="search"
+              inputMode="search"
+              enterKeyHint="search"
+              autoCapitalize="off"
+              autoCorrect="off"
+              autoComplete="off"
+              spellCheck={false}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="例：閱讀理解、班級經營、AI 教案、學生投票⋯"
               style={{
                 width: '100%',
-                padding: '11px 14px',
-                fontSize: 15,
+                padding: '12px 14px',
+                fontSize: 16, // ⚠️ iOS 上 < 16px 會強制縮放 → 必須 ≥ 16
                 fontFamily: tokens.font.tc,
                 fontWeight: 600,
                 color: tokens.ink,
@@ -241,6 +247,7 @@ export function BlogList() {
                 boxSizing: 'border-box',
                 outline: 'none',
                 boxShadow: 'inset 2px 2px 0 rgba(0,0,0,.06)',
+                WebkitAppearance: 'none', // 拿掉 iOS Safari 預設 input 內陰影
               }}
               data-testid="blog-search-input"
             />

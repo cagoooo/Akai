@@ -25,6 +25,7 @@ const BlogPost = lazy(() => import("@/pages/BlogPost").then(module => ({ default
 const AdminAuth = lazy(() => import("@/components/AdminAuth").then(module => ({ default: module.AdminAuth })));
 const TriviaDialog = lazy(() => import("@/components/TriviaDialog").then(module => ({ default: module.TriviaDialog })));
 const PWAUpdatePrompt = lazy(() => import("@/components/PWAUpdatePrompt").then(module => ({ default: module.PWAUpdatePrompt })));
+const IosPwaInstallPrompt = lazy(() => import("@/components/IosPwaInstallPrompt").then(module => ({ default: module.IosPwaInstallPrompt })));
 const Footer = lazy(() => import("@/components/Footer").then(module => ({ default: module.Footer })));
 const Toaster = lazy(() => import("@/components/ui/toaster").then(module => ({ default: module.Toaster })));
 
@@ -312,6 +313,11 @@ function App() {
 
               <Suspense fallback={null}>
                 <PWAUpdatePrompt />
+              </Suspense>
+
+              {/* iOS Safari 加到主畫面引導（第二次訪問 + 非 standalone 才跳） */}
+              <Suspense fallback={null}>
+                <IosPwaInstallPrompt />
               </Suspense>
             </TourProvider>
           </TooltipProvider>

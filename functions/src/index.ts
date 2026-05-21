@@ -9,6 +9,11 @@ admin.initializeApp();
 // 排程備份功能（每日快照 + 還原）
 export { dailySnapshot, restoreFromSnapshot } from "./dailySnapshot";
 
+// 🆕 v3.6.36: Gemini Embedding 語意搜尋（給 #100 工具索引神器升級用）
+// 需要 Firebase Secret: GEMINI_API_KEY
+// 部署：firebase functions:secrets:set GEMINI_API_KEY && firebase deploy --only functions:embedQuery
+export { embedQuery } from "./embedQuery";
+
 // 從環境變數中取得 LINE 官方帳號的 Token 與推播對象 ID
 const LINE_CHANNEL_ACCESS_TOKEN = process.env.LINE_NOTIFY_TOKEN;
 const LINE_ADMIN_USER_ID = process.env.LINE_ADMIN_USER_ID;

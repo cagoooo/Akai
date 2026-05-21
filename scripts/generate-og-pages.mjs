@@ -562,7 +562,7 @@ function extractBlogPosts() {
   const src = fs.readFileSync(postsPath, 'utf-8');
   // 抓所有 BlogPost 物件 — 用 slug / title / excerpt / publishedAt / toolIds / coverEmoji / tags
   const posts = [];
-  const blockRegex = /const\s+POST_\d+:\s*BlogPost\s*=\s*\{([\s\S]*?)\n\};/g;
+  const blockRegex = /const\s+POST_[A-Z0-9_]+:\s*BlogPost\s*=\s*\{([\s\S]*?)\n\};/g;
   let m;
   while ((m = blockRegex.exec(src)) !== null) {
     const body = m[1];

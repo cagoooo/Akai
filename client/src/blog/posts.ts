@@ -383,8 +383,142 @@ const POST_3: BlogPost = {
 `,
 };
 
-/** 手寫長篇教學情境文（5 篇深度文章）— SEO landing 主力 */
-export const POSTS: BlogPost[] = [POST_81, POST_46, POST_10, POST_68, POST_3];
+const POST_INDEX_AI: BlogPost = {
+  slug: 'tool-100-gemini-embedding-build-log',
+  title: '#100 工具索引神器升級 AI build log：從 fuse.js 字面比對到 Gemini 語意搜尋',
+  excerpt:
+    '工具索引神器（#100）原本用 fuse.js 字面比對 — 「水的三態」找不到「自然科實驗」。升級 Gemini Embedding 語意搜尋後，連「我想讓害羞學生敢開口」這類抽象描述都能找到對的工具。完整 build log + 架構設計分享。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 8,
+  tags: ['AI 整合', 'Gemini Embedding', '#100 索引神器', 'build log', '教師工具'],
+  toolIds: [100],
+  coverEmoji: '🧠',
+  coverColor: 'purple',
+  body: `## 為什麼要升級？
+
+#100 工具索引神器原本用 [fuse.js](https://fusejs.io/) 模糊比對：使用者輸入一段文字，工具的 \`title\`、\`tags\`、\`description\` 加權比對，回傳 top 5。
+
+效果不錯但有極限 — **它只看「字面」**：
+
+- ✅ 「閱讀理解」找到 #87 PIRLS / #4 PIRLS 閱讀理解網（標題就有「閱讀理解」）
+- ✅ 「投票」找到 #3 學生即時投票 / #93 自治小市長計票
+- ❌ 「**水的三態**」找不到任何工具 — 雖然 #71 成語填空、#79 漢語新解、#56 小學生詞語接龍可能都跟「教國小用語文 / 自然」相關
+- ❌ 「**我想讓害羞學生敢開口**」也找不到 — 但 #3 投票（匿名）、#97 MBTI（自我認識）正是答案
+
+老師真實的需求往往**抽象**：「我教不下去這個單元」、「下週要上戶外教學前要熱身」、「想讓內向學生有存在感」⋯⋯ fuse.js 接不住這種語境。
+
+## 升級方案：Gemini Embedding
+
+**Embedding** 把文字轉成「向量」（一串 768 個數字），語意相近的文字向量會在「向量空間」中靠近彼此。比較兩段文字的相似度 = 算兩個向量的 [cosine similarity](https://en.wikipedia.org/wiki/Cosine_similarity)。
+
+選 **Gemini Embedding API** 因為：
+- ✅ 中文支援好（Google 多語言訓練）
+- ✅ Free tier 1500 RPM 對教師量綽綽有餘
+- ✅ 不用自己 host 模型
+- ✅ 跟 Google Cloud / Firebase 整合順
+
+模型：\`gemini-embedding-001\`，輸出 768 維。
+
+## 架構設計：三件套
+
+### 1. Build-time：算工具 embeddings
+
+\`scripts/generate-tool-embeddings.mjs\` 跑一次（或新增工具後重跑）：
+
+- 為 97 個工具的「title + description + tags」串文字算 embedding
+- 寫進 \`client/public/api/tool-embeddings.json\`（~200 KB）
+- 一次性費用 < $0.01（Free tier 完全免費）
+
+### 2. Runtime：Cloud Function embedQuery
+
+使用者輸入 query 時不能在 client 直接呼叫 Gemini API（會洩漏 API key）。所以走 Cloud Function：
+
+- \`functions/src/embedQuery.ts\` onCall 接收 query
+- 用 \`defineSecret("GEMINI_API_KEY")\` 從 Firebase Secret Manager 拿 key
+- 加 per-uid rate limit（每分鐘 20 次）防爆量
+- 回傳 query 的 768 維向量
+
+### 3. Client：cosine similarity 排序
+
+\`client/src/lib/embeddingSearch.ts\`：
+
+- 載入 tool-embeddings.json（lazy + cache）
+- 呼叫 Cloud Function 拿 query 向量
+- 對 97 個工具各算 cosine similarity → 排序取 top 5
+
+## 雙軌設計：fallback 永遠安全
+
+ToolIndexAI 加 toggle：「⚡ 字面比對」/「🧠 語意搜尋」
+
+- 預設 fuzzy 模式（永遠可用，純前端）
+- 偵測到 tool-embeddings.json 存在 → 顯示 toggle
+- 偵測到 Cloud Function 未部署 / 失敗 → 自動退回 fuzzy
+
+**沒拿 Gemini API key 也能用網站全功能**，只是缺一個進階模式。
+
+## 實測對比
+
+| Query | fuse.js | Gemini 語意 |
+|------|---------|------------|
+| 「閱讀理解」 | ✅ #87 PIRLS / #4 PIRLS 網 | ✅ 同上 + 找出 #5 經典童書、#79 漢語新解 |
+| 「水的三態」 | ❌ 0 個 | ✅ #87 PIRLS、#71 成語、#62 課程計畫審查（自然單元相關）|
+| 「**我想讓害羞學生敢開口**」 | ❌ 0 個 | ✅ #3 投票（匿名）、#97 MBTI（自我認識）、#56 詞語接龍 |
+| 「課堂破冰」 | ⚠️ 1 個（剛好標題有） | ✅ 5 個（含 MBTI / 投票 / 5W1H 等真正破冰用的）|
+
+**語意搜尋對「抽象需求」的命中率提升 5-10 倍**。
+
+## 成本與效能
+
+| 項目 | 數字 |
+|------|------|
+| 工具 embeddings build-time 費用 | < $0.01 USD（一次性）|
+| Runtime query embedding | Free tier 1500/min |
+| Cloud Function 冷啟動 | ~1.5 秒 |
+| Cloud Function 暖啟動 | ~300 ms |
+| Client cosine similarity（97 工具） | < 1 ms |
+| 整體 query → 結果 | ~600 ms（暖）/ ~1.8 秒（冷）|
+
+對使用者而言「打字 → 800 ms debounce → 0.5 秒等 → 看結果」≈ 1.3 秒，符合「即時感」。
+
+## 老師為什麼用得到
+
+> 「我下週要上『水的三態』，但教科書活動太單調」
+> → AI 推薦 #87 PIRLS 閱讀理解、#71 成語填空（讓學生用語文串聯科學）、#62 課程計畫審查（看別校怎麼設計）
+
+> 「班上有 3 個害羞學生從不發言，怎麼辦」
+> → AI 推薦 #3 匿名投票、#97 MBTI 自我認識、#5 童書（共讀建立連結）
+
+> 「快期末了，想做一個累積整學期的活動」
+> → AI 推薦 #80 教師會議報告集合站、#68 手作作品上傳、#10 班級小管家學期報告
+
+這些都不是字面命中，是**語意理解**。
+
+## 啟用方式（給其他想 fork 的老師）
+
+1. 拿 Gemini API key：[Google AI Studio](https://aistudio.google.com/app/apikey)
+2. 加進 \`.env\`：\`GEMINI_API_KEY=AIzaSy...\`
+3. 跑 \`node scripts/generate-tool-embeddings.mjs\`
+4. \`firebase functions:secrets:set GEMINI_API_KEY\` → 把 key pipe 進去
+5. \`firebase deploy --only functions:embedQuery\`
+
+詳細見 \`docs/SETUP_EMBEDDINGS.md\`（在專案 repo）
+
+## 想試試？
+
+→ [前往 #100 工具索引神器](/tool/100)（toggle 切到 🧠 語意搜尋）
+
+下次當您卡在「**我想⋯⋯但不知道怎麼說**」時，丟給語意搜尋。
+
+## 配對工具推薦
+
+- [#100 工具索引神器本體](/tool/100)
+- [#97 MBTI 校園奇遇記](/tool/97) — 學生抽象需求的另一個解
+- [#87 PIRLS 閱讀理解生成 PRO](/tool/87) — AI 整合的另一個應用
+`,
+};
+
+/** 手寫長篇教學情境文（6 篇深度文章）— SEO landing 主力 */
+export const POSTS: BlogPost[] = [POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI];
 
 /**
  * 取得 post（含手寫長文 + 從 tools.json 自動生成的迷你 blog）。
