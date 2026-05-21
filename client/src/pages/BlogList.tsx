@@ -58,22 +58,26 @@ function isLongform(post: BlogPost): boolean {
 }
 
 // ── URL 雙向同步 ─────────────────────────────────────
-function readFiltersFromUrl(): { q: string; cats: string[]; type: PostType } {
-  if (typeof window === 'undefined') return { q: '', cats: [], type: 'all' };
+// 分類 chip 改成單選（避免使用者點越多 AND 邏輯越篩越少）
+function readFiltersFromUrl(): { q: string; cat: string | null; type: PostType } {
+  if (typeof window === 'undefined') return { q: '', cat: null, type: 'all' };
   const params = new URLSearchParams(window.location.search);
   const typeRaw = params.get('type') || 'all';
+  // 兼容舊 ?cat=A,B 格式（只取第一個）
+  const catRaw = params.get('cat') || '';
+  const cat = catRaw.split(',').filter(Boolean)[0] || null;
   return {
     q: params.get('q') || '',
-    cats: params.get('cat') ? params.get('cat')!.split(',').filter(Boolean) : [],
+    cat,
     type: (['all', 'longform', 'mini'].includes(typeRaw) ? typeRaw : 'all') as PostType,
   };
 }
 
-function writeFiltersToUrl({ q, cats, type }: { q: string; cats: string[]; type: PostType }) {
+function writeFiltersToUrl({ q, cat, type }: { q: string; cat: string | null; type: PostType }) {
   if (typeof window === 'undefined') return;
   const params = new URLSearchParams();
   if (q) params.set('q', q);
-  if (cats.length > 0) params.set('cat', cats.join(','));
+  if (cat) params.set('cat', cat);
   if (type !== 'all') params.set('type', type);
   const search = params.toString();
   const newUrl = window.location.pathname + (search ? '?' + search : '');
@@ -84,7 +88,7 @@ export function BlogList() {
   const initial = useMemo(() => readFiltersFromUrl(), []);
   const [posts, setPosts] = useState<BlogPost[]>(POSTS);
   const [query, setQuery] = useState(initial.q);
-  const [selectedCats, setSelectedCats] = useState<string[]>(initial.cats);
+  const [selectedCat, setSelectedCat] = useState<string | null>(initial.cat);
   const [postType, setPostType] = useState<PostType>(initial.type);
 
   // async 載入完整 posts（合併手寫長文 + 迷你 blog）
@@ -94,8 +98,8 @@ export function BlogList() {
 
   // URL query sync
   useEffect(() => {
-    writeFiltersToUrl({ q: query, cats: selectedCats, type: postType });
-  }, [query, selectedCats, postType]);
+    writeFiltersToUrl({ q: query, cat: selectedCat, type: postType });
+  }, [query, selectedCat, postType]);
 
   // Fuse instance for fuzzy search
   const fuse = useMemo(() => {
@@ -121,11 +125,9 @@ export function BlogList() {
     if (postType === 'longform') result = result.filter(isLongform);
     else if (postType === 'mini') result = result.filter((p) => !isLongform(p));
 
-    // (2) category chip 多選（AND 邏輯：選的 chips 都要在該文 tags 內）
-    if (selectedCats.length > 0) {
-      result = result.filter((p) =>
-        selectedCats.every((cat) => p.tags.some((tag) => tag === cat))
-      );
+    // (2) category chip 單選（看該分類所有文章）
+    if (selectedCat) {
+      result = result.filter((p) => p.tags.some((tag) => tag === selectedCat));
     }
 
     // (3) fuzzy search（只在有 query 時）
@@ -144,20 +146,21 @@ export function BlogList() {
       );
     }
     return result;
-  }, [posts, postType, selectedCats, query, fuse]);
+  }, [posts, postType, selectedCat, query, fuse]);
 
   const totalCount = posts.length;
   const longformCount = posts.filter(isLongform).length;
   const miniCount = totalCount - longformCount;
-  const hasFilters = query.trim() || selectedCats.length > 0 || postType !== 'all';
+  const hasFilters = !!query.trim() || !!selectedCat || postType !== 'all';
 
+  // 單選邏輯：點同個分類 = 取消、點別的 = 切換
   const toggleCat = (cat: string) => {
-    setSelectedCats((prev) => (prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]));
+    setSelectedCat((prev) => (prev === cat ? null : cat));
   };
 
   const clearAllFilters = () => {
     setQuery('');
-    setSelectedCats([]);
+    setSelectedCat(null);
     setPostType('all');
   };
 
@@ -296,11 +299,14 @@ export function BlogList() {
             </div>
           </div>
 
-          {/* 分類 chip 多選 */}
+          {/* 分類 chip 單選（點同個 = 取消，點別的 = 切換） */}
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}>
             <span style={{ fontSize: 12, fontWeight: 800, color: tokens.muted2 }}>🏷 分類</span>
+            <span style={{ fontSize: 10, fontWeight: 600, color: tokens.muted2, fontStyle: 'italic' }}>
+              （點一個顯示該分類，再點同個取消）
+            </span>
             {CATEGORY_CHIPS.map((c) => {
-              const active = selectedCats.includes(c.key);
+              const active = selectedCat === c.key;
               return (
                 <button
                   key={c.key}
@@ -373,8 +379,8 @@ export function BlogList() {
                   · 搜尋「<strong style={{ color: tokens.ink }}>{query.trim()}</strong>」
                 </span>
               )}
-              {selectedCats.length > 0 && (
-                <span>· 分類：{selectedCats.join('、')}</span>
+              {selectedCat && (
+                <span>· 分類：{selectedCat}</span>
               )}
             </>
           ) : (
