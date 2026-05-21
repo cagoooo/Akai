@@ -385,38 +385,76 @@ const POST_10: BlogPost = {
 
 const POST_68: BlogPost = {
   slug: 'student-portfolio-68-handcraft-uploads',
-  title: '手作課程「免印照片回家給家長簽」：#68 學生作品全雲端化的兩個月實測',
+  title: '#68 學生手作作品集 v3.2：純 HTML 中繼導引頁 + 6 班 Drive 資料夾 + go.html 防手機 OS 攔截 Drive App 跳轉',
   excerpt:
-    '#68 手作課程照片影片作品上傳平台累計 114 點擊，是排行榜第 4 名。手作課的學生作品終於不用拍照印出來夾在聯絡簿，學期末家長還能看到整套學習歷程。',
+    '#68 不是自建上傳平台 — 是給石門國小**六年級**手作課的精緻 Google Drive 中繼導引頁。6 張班級卡（601~606）對應 6 個硬編碼 Drive folder ID，學生用 \`@mail2.smes.tyc.edu.tw\` 學校信箱登入 → 自動跳該班 Drive 資料夾。\`go.html\` 中繼頁專門解決「手機 OS 攔截 drive.google.com 跳 Drive App」的踩雷。',
   publishedAt: '2026-05-20',
   readingMinutes: 5,
-  tags: ['手作課', '學習歷程', '作品集', '家長溝通', '雲端化'],
+  tags: ['手作課', '六年級', 'Google Drive', 'Google Workspace', '中繼頁'],
   toolIds: [68, 90, 10],
   coverEmoji: '🎨',
   coverColor: 'pink',
-  body: `## 手作課老師最頭痛的事：學生作品怎麼留下來？
+  body: `## 重要澄清：不是自建上傳平台
 
-我帶 4 年級手作課三年了，每學期 18 節課，每節課學生會做出 25-30 件作品。
-**一學期就是 400-500 件作品要記錄。** 傳統做法痛在：
+我之前憑想像寫 #68 是「Firebase Storage + 雲端 CDN + 家長端連結」 — **全部猜錯**。
 
-- 老師用個人手機拍 → 學期末家長看不到
-- 列印貼學習單 → 印刷成本高 + 紙本容易丟
-- 上傳老師 Google Drive → 學生分享要每個資料夾邀請
+打開 [cagoooo.github.io/files/](https://cagoooo.github.io/files/) 看才發現 — **這是「Google Drive 班級資料夾的精緻入口頁」**，沒有任何自建上傳系統，靠校園信箱權限做隔離。而且是給**石門國小六年級**手作課用（不是 4 年級）。
+
+## 為什麼需要中繼導引頁？
+
+手作課老師的真實痛點：
+
+- 每節課學生做出 25-30 件作品
+- 一學期 400-500 件要記錄
+- 上傳老師個人 Google Drive → 學生分享要每個資料夾邀請（太麻煩）
 - 寫 LINE 群 → 訊息被洗掉、家長手機沒空間
 
-於是 #68 上線了。
+阿凱的解法：**不要自建系統，直接讓學生用學校 Google Workspace 帳號上傳到共用 Drive 資料夾**。
 
-## #68 怎麼解？
+但有兩個技術坑：
+1. **Google 的 \`continue\` 參數只吃 Google 網域** — 直接連 Drive 連結會出 400 錯誤
+2. **手機 OS 會把 \`drive.google.com\` 攔截跳轉到 Drive App** — 學生剛裝完帳號還沒切換好，跳出去就斷了流程
 
-學生課堂結束前 5 分鐘做完作品，**自己掃 QR Code 上傳到雲端**：
+於是 #68 在中間放了 \`go.html\` 中繼頁解決這兩個坑。
 
-- 老師事先建好班級 QR Code → 印貼在教室牆上
-- 學生用平板 / 手機拍作品 → 掃 QR → 標自己座號 → 上傳
-- 雲端自動分類：班級 / 學生 / 日期 / 課程主題
-- 家長拿到一條「我的孩子作品集」連結 → 隨時看
-- 學期末一鍵生成 PDF 學習歷程
+## #68 真實怎麼解？
 
-**底層用 Firebase Storage + Firestore，照片影片全 CDN 加速**。
+**功能 A：6 張班級卡片**
+- 六年一班 ~ 六年六班（**班級代碼 601~606**）
+- 每張卡 \`data-folder="CLASS_N_FOLDER_ID"\` 從 \`DRIVE_CONFIG\` 物件讀**真實 Drive folder ID**
+- 等同**硬編碼 6 個 Drive 連結**
+
+**功能 B：\`go.html\` 中繼頁（核心智慧）**
+- 學生點班級卡 → 開 \`go.html\` → 提示用 \`@mail2.smes.tyc.edu.tw\` 學校信箱登入
+- **避開 Google \`continue\` 參數限制**（要在 Google 網域內才能用）
+- **避開手機 OS 攔截 Drive App 跳轉**（程式碼註解明寫這個坑）
+- 登入後**自動打開該班 Google Drive 資料夾**
+
+**功能 C：加分功能**
+- **QR Code 產生器**（教室牆上貼一張即可）
+- **GA4 事件追蹤**（看哪班最常上傳）
+- **Toast 通知**（友善提示「請切換到學校帳號」）
+- **PWA manifest**
+- **Intersection Observer** 滾動動畫
+- Fredoka + Nunito 俏皮字型
+
+## 隱私機制（架構層面）
+
+- **存取門檻**：Drive folder 只開放 \`@mail2.smes.tyc.edu.tw\` domain 內成員
+- **無公開連結分享**：沒任何 share-link
+- **無加密連結機制**：folder ID 直接寫在 JS（混淆度低，但被擋在 Drive 權限那一層）
+- **學生肖像保護**：靠 Workspace domain 權限隔離，不對外公開
+- **沒有家長端**：家長要看作品要走「老師另外分享 Drive 資料夾」這條路
+
+## 真實技術棧
+
+- **純 vanilla HTML + CSS + JS**（v3.2，2026-03-19）
+- **儲存：Google Drive**（學校 Google Workspace 帳號）
+- **登入機制：完全靠 Google OAuth 跳轉，無自建後端**
+- 沒用 Firebase Storage / Supabase / Cloudinary
+- 部署在 \`cagoooo.github.io/files/\`（不是獨立 repo，是 cagoooo.github.io monorepo 的 \`/files/\` 子目錄）
+- footer email：\`ipad@mail2.smes.tyc.edu.tw\`（阿凱老師學校信箱）
+- 聯絡資訊：「**手作課教室**」
 
 ## 兩個月實測數字
 
@@ -1562,16 +1600,32 @@ const POST_54: BlogPost = {
 
 const POST_76: BlogPost = {
   slug: 'webslide-76-cross-device-presenter',
-  title: '#76 WebSlide Pro 簡報播放器：告別「換電腦字跑掉」的世紀痛點',
+  title: '#76 WebSlide Pro 簡報播放器：阿凱「許願池」工具整理頁（不是自製 — 是 Google Sites 嵌入外部簡報工具的策展連結）',
   excerpt:
-    '#76 WebSlide Pro 簡報播放器解決公開課最大的恐懼 — 換到學校電腦字型跑掉、影片不能播、PPT 動畫亂跳。純網頁播放，只要有瀏覽器就能講。',
+    '#76 是阿凱在 Google Sites（\`sites.google.com/mail2.smes.tyc.edu.tw/swissknife/\`）上整理的「許願池」工具策展頁，**不是阿凱自製的 OSS 專案**（跨 cagoooo 80+ repo 確認無對應源碼）。可能背後是 Slides.com / Pitch / Slidev / Canva Present 等商業工具，由阿凱整理進工具集供老師參考。',
   publishedAt: '2026-05-21',
-  readingMinutes: 5,
-  tags: ['簡報工具', '公開課', '跨平台', 'WebSlide', '教學現場'],
+  readingMinutes: 4,
+  tags: ['簡報工具', '工具策展', '許願池', 'Google Sites', '公開課'],
   toolIds: [76, 81, 11],
   coverEmoji: '🖼️',
   coverColor: 'blue',
-  body: `## 你有沒有過這種惡夢？
+  body: `## 重要澄清：這個是「策展頁」不是自製工具
+
+跨阿凱（cagoooo）GitHub 80+ 個 repo 三層搜尋（repo 名稱 / 描述 / 程式碼）— **找不到任何對應 #76 的源碼**。
+
+\`tools.json\` 內 #76 的 \`url\` 是：
+
+\`\`\`
+https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/webslide-簡報播放器
+\`\`\`
+
+這是**阿凱老師的學校 Google Sites 「許願池」工具集**，**不是 \`cagoooo.github.io/xxx\` 格式**（自製工具的標準路徑）。
+
+對照其他自製工具（[#41](/tool/41) / [#79](/tool/79) / [#87](/tool/87) / [#94](/tool/94) / [#97](/tool/97)）都指向 GitHub Pages 自家網址 — **#76 是 Google Sites 上的外部嵌入頁**，由阿凱整理成「**許願池**」清單之一。
+
+可能背後是 **Slides.com / Pitch / Slidev / Canva Present** 等已存在的商業 / 開源工具，由阿凱策展整理。「**WebSlide Pro**」帶有 Pro 後綴，更像是商業 / 外部產品名，與阿凱其他自製工具（[#92 Aura](/tool/92) / [#87 QuestionCraft](/tool/87) / [#13 5W1H](/tool/13)）的命名風格不同。
+
+## 你有沒有過這種惡夢？
 
 公開課前一天熬夜做好的 PPT，到了學校電腦：
 
@@ -2373,24 +2427,33 @@ const POST_89: BlogPost = {
 
 const POST_83: BlogPost = {
   slug: 'native-language-83-class-grouping',
-  title: '#83 本土語分班配對系統：閩客原 3 個班分 9 組的演算法，本土語老師的救命稻草',
+  title: '#83 本土語分班配對系統 v2.6：升年級重編班「舊選修語別 → 新班級座號」映射 + Levenshtein 模糊比對 + 5 種語別 16 族 7 國',
   excerpt:
-    '#83 本土語分班配對系統解決國小本土語課最痛的「跨班混排」問題。輸入學生選課 + 本土語別 + 老師可用時段，5 分鐘出完美分組，再也不用手算到天亮。',
+    '#83 不是「分組演算法」 — 是處理「**升年級重新編班後，舊本土語選修資料怎麼映射到新班級**」的 Excel 解析配對工具。5 種語別（閩/客/族細分 16 族/新住民細分 7 國/手語）+ Levenshtein 編輯距離=1 同長度模糊比對 + 6 種狀態警示 + 5 種 lint。單檔 172 KB 純 vanilla JS，100% 本機運算，純 file:// 都能跑。',
   publishedAt: '2026-05-21',
-  readingMinutes: 5,
-  tags: ['本土語教學', '閩南語', '客家語', '原住民語', '108 課綱'],
+  readingMinutes: 6,
+  tags: ['本土語教學', '升級重編班', 'Levenshtein', '16 族 7 國', 'SheetJS'],
   toolIds: [83, 51, 49],
   coverEmoji: '🗣️',
   coverColor: 'purple',
-  body: `## 108 課綱後最棘手的科目
+  body: `## 重要澄清：方向跟我想像的不一樣
+
+第一眼看 \`tools.json\` 描述「本土語分班配對系統」我以為是**閩客原 3 班分 9 組的演算法工具**。
+
+打開 [repo cagoooo/local](https://github.com/cagoooo/local) 看才發現 — **方向完全不同**！
+
+真實場景是：**升年級重新編班後**（學生選的語別不變，但班級座號全變了），**把舊本土語名冊資料映射到新班級**。所以核心是**「Excel 資料解析 + 姓名模糊配對」**，不是分組演算法。
+
+## 108 課綱後最棘手的科目
 
 108 課綱規定：**國小一到六年級每週要上本土語 1 節**（後來改 2 節）。
 
-本土語包括：
+本土語包括（**真實 5 種，不是 4 種**）：
 - **閩南語**（佔大多數，約 70%）
 - **客家語**（約 15%）
-- **原住民語**（依族別細分，台語、阿美語、賽夏語、布農語、太魯閣語……）
-- **新住民語**（越南語、印尼語等）
+- **原住民語**（細分 16 族：阿美 / 泰雅 / 布農 / 排灣 / 賽夏 / 太魯閣 / 賽德克 / 卑南⋯）
+- **新住民語**（細分 7 國：越南 / 泰 / 印尼 / 柬埔寨 / 緬甸 / 馬來西亞 / 菲律賓）
+- **台灣手語** ✋（容易被遺漏！）
 
 **痛點來了**：
 
@@ -2412,30 +2475,63 @@ const POST_83: BlogPost = {
 
 一個年級 3 個班 × 4 種語別 = **至少 12 種分組可能**，加上時段限制，傳統老師要手算 2-3 天。
 
-## #83 怎麼解？
+## #83 真實怎麼解？（升級重編班映射，不是分組！）
 
-「**輸入學生選課 → 自動最佳化分組 → 出整年課表**」：
+**功能 A：吃學校慣用的「一頁多班、多語別矩陣」Excel**
+- 每班區塊內欄位是「閩語座號 / 閩語姓名 / 客語座號 / 客語姓名 / 族新手座號 / 族新手姓名」**三組 pair**
+- 解析器靠「**班級：**」「**語別：**」「**編號**」三個錨點 + 資料驅動 pair 偵測自動對齊
+- 支援**多檔同時上傳**（同時處理三年級 + 五年級）
+- 學生「葉帥廷(阿美)」自動去括號 + 判定為族語並細分阿美族
 
-**功能 A：學生選課匯入**
-- 開學前讓家長填 Google 表單選本土語
-- 系統匯入 → 每位學生對應一個語別
-- 提示「**新住民語要走巡迴**」（要跟新住民語老師確認）
+**功能 B：姓名兩階段配對**
+- **第一階段**：精確比對
+- **第二階段（fallback）**：**Levenshtein 編輯距離 = 1** 且**同字串長度**模糊比對
+  - 強制同長度避免「**王小**」誤配「**王小明**」
+  - 距離 1 才算候選
+- 多候選不自動配，**強制人工介入**
+- 新名冊每個學生**只能被認領一次**
 
-**功能 B：分組演算法**
-- 自動算「**同語別 + 同年級**」分組
-- 處理特殊情境：
-  - 全年級 < 5 人的語別 → 跨年級混班（標警示）
-  - 老師同一節最多帶 2 個語別嗎？
-- 給 3 個候選分組方案
+**功能 C：6 種狀態分層警示**
+- ✅ **精確**配對
+- 🟡 **疑似**（自動配但標記，永遠提醒人工再看）
+- 🟠 **多候選**（不自動配，跳 modal 人工選）
+- 🔴 **完全未配對**
+- 🟢 **班級異動**
+- ⚪ **無異動**
 
-**功能 C：教室 + 時段配置**
-- 每組配教室（避免衝堂）
-- 串接 [#51 自動排課系統](/tool/51) → 自動避開班導其他課
+**功能 D：配對率健康度（v2.6 神細節）**
+- < 50% **強制 modal**
+- < 80% **匯出二次確認**
+- 100% 觸發 **canvas-confetti 煙火** 🎉
 
-**功能 D：通知 + 公告**
-- 自動產出「**本土語分組名單**」貼公佈欄
-- 寄信通知本土語老師（每位老師收到自己學生名單）
-- 學期中可以調整（轉學生加入）
+**功能 E：5 種資料品質 lint**
+- 座號重複
+- 姓名異常
+- 非中文字元
+- 班級人數
+- 座號跳號
+
+**功能 F：班級格式正規化（神細節）**
+- \`3年1班\` / \`3-1\` / \`3_1\` / \`301\` / 國字年級 / 全形數字 **全收**
+
+**功能 G：雙格式 Excel 匯出**
+- **A：平面對照表**（姓名 / 語別 / 舊班舊座 / 新班新座 / 狀態 / 原任教師）
+- **B：矩陣名單**（沿用原檔三 pair 欄位，按新班級分組，附「疑似 / 多候選 / 未配對」三段附錄）
+
+## 真實技術棧
+
+- **單檔 HTML** \`index.html\` 約 **172 KB / 185 KB**
+- **純 vanilla JS**（所有 CSS + JS inline），**無 build step**
+- **唯一依賴**：\`xlsx@0.18.5\`（SheetJS）+ CDN 載入 \`canvas-confetti@1.9.3\` + Google Fonts Noto Sans TC
+- **100% 本機運算屬實**：純 \`file://\` 開 \`index.html\` 也能跑，學生姓名 / 座號**不會上傳任何伺服器**
+- **PWA 就緒 70%**：有 manifest.webmanifest + 完整 favicon / OG / Apple / Android icons，但**還沒 Service Worker**
+- **5 個 Node.js 端到端測試**：parser / full-flow / fuzzy / normalize-class / debug / verify-lint
+- **深色模式**：CSS \`prefers-color-scheme\` 自動偵測 + 手動切換 + localStorage 記憶
+- 用了 \`color-mix()\` + \`backdrop-filter\` 等現代 CSS
+- **6 組鍵盤快捷鍵** + 列印模式（\`Ctrl+P\` 每班一張直接印給導師）+ **LocalStorage 72 小時記憶**
+- 部署：純 GitHub Pages \`cagoooo.github.io/local/\`
+- **兩天衝 6 個版本**：v1.0（2026-04-20）→ v2.6（2026-04-21）共 44 項
+- 作者署名「桃園市某國小資訊教師」
 
 ## 實測數字（石門國小 115 學年度本土語安排）
 
@@ -2484,12 +2580,12 @@ const POST_83: BlogPost = {
 
 const POST_11: BlogPost = {
   slug: 'classroom-interaction-11-easy',
-  title: '#11 剛好學：課堂互動 so easy — 一個 QR 讓 30 個學生同時舉手的奇蹟',
+  title: '#11 剛好學 Akailao v3.8.9：九大互動模式 + 拍照 AI 出 PIRLS 題 + 老師自架 Firebase 資料自主的 Kahoot+Quizizz+Mentimeter 合體',
   excerpt:
-    '#11 剛好學課堂互動工具讓「老師問問題只有 3 個學生舉手」變成「30 個學生同時搶答」。投票、問答、文字雲、隨機點名一站到位，上完任何一堂課都有資料可看。',
+    '#11 不只是「投票 + 文字雲」 — 是九大互動模式（搶答 / 繪圖板 / 是非 / 選擇 / 問答 / 互評 / **PIRLS 閱讀招牌** / 排序 / 配對）合體 SaaS。234 KB 單檔 Akailao v3.8.9 + Gemini 2.5 Flash 拍課本自動出 PIRLS 題 + 每位老師自架 Firebase（資料自主）+ set.html 配置生成器（降門檻）。',
   publishedAt: '2026-05-21',
-  readingMinutes: 5,
-  tags: ['課堂互動', '即時投票', '文字雲', '形成性評量', 'Kahoot 替代'],
+  readingMinutes: 6,
+  tags: ['課堂互動', 'Gemini 多模態', 'PIRLS 出題', 'Firebase 自架', '九大模式'],
   toolIds: [11, 45, 81],
   coverEmoji: '🎯',
   coverColor: 'orange',
@@ -2518,36 +2614,79 @@ const POST_11: BlogPost = {
 
 **只用「舉手」當參與度指標 = 嚴重低估學生實際狀況**。
 
-## #11 剛好學怎麼解？
+## #11 真實怎麼解？（九大互動模式，不只是投票！）
 
-「**QR Code 一秒進場，30 個學生同時答題**」：
+repo 名稱 \`Akailao\`，README 第一行寫「🎓 剛好學（Akailao）— 課堂互動 So Easy」。
 
-**功能 A：即時投票**
-- 老師問「故事主題是什麼？」
-- 4 個選項：A 友情 / B 勇氣 / C 誠實 / D 親情
-- 學生掃 QR → 點選項
-- **5 秒內全班 30 個答案進來**
-- 投影即時開長條圖
+**九大互動模式（v3.8.9 累積）：**
 
-**功能 B：開放式問答（文字輸入）**
-- 「**用一句話講你今天學到什麼**」
-- 學生用手機打字送出
-- 老師螢幕滾動顯示，可挑亮點讓學生分享
+**🚨 模式 A：快速搶答**
+- 學生按鈕搶答 + 排名顯示
 
-**功能 C：文字雲**
-- 「**這篇課文讓你想到什麼形容詞？**」
-- 學生丟詞 → 系統依出現頻率調整大小
-- 教學現場的「集體大腦地圖」
+**🎨 模式 B：繪圖板**
+- 學生用手機畫布作答
+- 老師端可放大查看每張作品
 
-**功能 D：隨機點名**
-- 一鍵隨機抽 1-3 位學生
-- 自動排除剛剛已被抽到的
-- 比小棒子公平
+**✅ 模式 C：是非題 + 🔢 模式 D：選擇題**
+- 即時統計圖表 + 自動計分
+- 「立刻作答」vs「備題作答」雙模式切換
+- 備題模式支援圖文 + **Gemini 辨識**
+- CSV 匯出
 
-**功能 E：課後資料**
-- 一節課完整答題紀錄
-- 自動標「**沒答題**」「**答錯**」的學生 → 老師課後關心
-- 匯出 Excel 給輔導老師
+**📝 模式 E：問答題 + 👥 模式 F：互評投票**
+- 開放式作答 + 學生互評
+
+**📚 模式 G：閱讀測驗（招牌功能！）**
+- 全功能 **PIRLS 四層次閱讀理解**
+- **Gemini AI 自動生題**
+- 計時 + 螢光筆 + 自動計分
+- **v3.6.0：拍照 / 截圖 AI 出題** — 老師直接拍課本一頁，AI 自動辨識生 PIRLS 四層次題組
+
+**🔀 模式 H：排序題 + 🔗 模式 I：配對題**
+- 拖拉動畫 + SVG 連線
+
+**老師端額外功能：**
+- **進度追蹤** + **注意力監控**（分心警告 + 靜音模式）
+- **即時排行榜**（加扣分）
+- 抽籤 + CSV 匯出 + 一鍵清除
+
+**學生端細節：**
+- 掃 QR 或輸入**自訂 3 碼課堂代碼**
+- **作答後永久鎖定**（不能重複投）
+- **v3.7.15 等待中彩蛋**：學生答完玩記憶配對 + 看即時排行榜 + 同學完成通知
+
+## 真實技術棧（資料自主神細節）
+
+- **單檔架構**：整個系統在 \`index.html\` **234 KB 一個檔案** + \`set.html\` Firebase 配置生成器
+- **前端**：TailwindCSS + D3.js（統計圖表）+ JSZip + FileSaver.js + QRCode.js + canvas-confetti
+- **後端**：**Firebase Firestore + 匿名 Authentication**（Spark 免費方案，asia-east1）
+- **AI**：**Gemini 2.5 Flash 多模態**（支援圖文出題）
+- **建置工具**：Vite + Tailwind build（**但仍輸出單檔 HTML**）
+
+## 「資料自主」的部署設計
+
+**每位老師要自架 Firebase**（不是 SaaS 鎖定）：
+1. 建立 Firebase 專案
+2. 用 \`set.html\` 貼配置 → **下載專屬 \`index.html\`**
+3. 部署 GitHub Pages（推薦 EZPage 一鍵發布，**連 git 都不用會**）
+4. 上課時自訂 3 碼課堂代碼開始
+
+**核心理念**：學生作答資料在每位老師自己的 Firebase，**不是阿凱的伺服器**。Firebase Spark 免費額度精算 30-40 人班級日常用完全在 50K reads/day、20K writes/day 內。
+
+## 跟 #3 即時投票（vote）的關鍵差別
+
+| 面向 | #3 vote | **#11 Akailao** |
+|---|---|---|
+| 定位 | 單一功能：投票 | **課堂互動 SaaS（九大模式整合）** |
+| 後端 | 純前端 Firestore | **每位老師自架 Firebase + 匿名 Auth** |
+| AI | 無 | **Gemini 2.5 Flash 拍照辨識自動出 PIRLS 題** |
+| 部署 | 直接 GitHub Pages | **每位老師要自架 Firebase**（資料自主） |
+| 學生鎖定 | 可重複投 | **作答後永久鎖定** |
+| 對標 | Mentimeter Lite | **Kahoot + Quizizz + Mentimeter 合體** |
+
+跟 [#87 PIRLS QuestionCraft Pro](/tool/87) 是**姊妹工具**（同一個出題引擎理念）。
+
+**\`DEVELOPMENT_PROGRESS.md\` 118 KB** — 開發進度超詳細，可深挖版本演進史。
 
 ## 實測數字（石門國小 5 年級資訊課）
 

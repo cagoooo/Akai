@@ -8,7 +8,7 @@
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
     <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Thu, 21 May 2026 11:46:29 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 21 May 2026 11:55:10 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -82,11 +82,11 @@
       <category>教學情境</category>
     </item>
     <item>
-      <title>📖 教學情境：#76 WebSlide Pro 簡報播放器：告別「換電腦字跑掉」的世紀痛點</title>
+      <title>📖 教學情境：#76 WebSlide Pro 簡報播放器：阿凱「許願池」工具整理頁（不是自製 — 是 Google Sites 嵌入外部簡報工具的策展連結）</title>
       <link>https://cagoooo.github.io/Akai/blog/webslide-76-cross-device-presenter</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/webslide-76-cross-device-presenter</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#76 WebSlide Pro 簡報播放器解決公開課最大的恐懼 — 換到學校電腦字型跑掉、影片不能播、PPT 動畫亂跳。純網頁播放，只要有瀏覽器就能講。</description>
+      <description>#76 是阿凱在 Google Sites（\`sites.google.com/mail2.smes.tyc.edu.tw/swissknife/\`）上整理的「許願池」工具策展頁，**不是阿凱自製的 OSS 專案**（跨 cagoooo 80+ repo 確認無對應源碼）。可能背後是 Slides.com / Pitch / Slidev / Canva Present 等商業工具，由阿凱整理進工具集供老師參考。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
@@ -136,20 +136,20 @@
       <category>教學情境</category>
     </item>
     <item>
-      <title>📖 教學情境：#83 本土語分班配對系統：閩客原 3 個班分 9 組的演算法，本土語老師的救命稻草</title>
+      <title>📖 教學情境：#83 本土語分班配對系統 v2.6：升年級重編班「舊選修語別 → 新班級座號」映射 + Levenshtein 模糊比對 + 5 種語別 16 族 7 國</title>
       <link>https://cagoooo.github.io/Akai/blog/native-language-83-class-grouping</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/native-language-83-class-grouping</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#83 本土語分班配對系統解決國小本土語課最痛的「跨班混排」問題。輸入學生選課 + 本土語別 + 老師可用時段，5 分鐘出完美分組，再也不用手算到天亮。</description>
+      <description>#83 不是「分組演算法」 — 是處理「**升年級重新編班後，舊本土語選修資料怎麼映射到新班級**」的 Excel 解析配對工具。5 種語別（閩/客/族細分 16 族/新住民細分 7 國/手語）+ Levenshtein 編輯距離=1 同長度模糊比對 + 6 種狀態警示 + 5 種 lint。單檔 172 KB 純 vanilla JS，100% 本機運算，純 file:// 都能跑。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
     <item>
-      <title>📖 教學情境：#11 剛好學：課堂互動 so easy — 一個 QR 讓 30 個學生同時舉手的奇蹟</title>
+      <title>📖 教學情境：#11 剛好學 Akailao v3.8.9：九大互動模式 + 拍照 AI 出 PIRLS 題 + 老師自架 Firebase 資料自主的 Kahoot+Quizizz+Mentimeter 合體</title>
       <link>https://cagoooo.github.io/Akai/blog/classroom-interaction-11-easy</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/classroom-interaction-11-easy</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#11 剛好學課堂互動工具讓「老師問問題只有 3 個學生舉手」變成「30 個學生同時搶答」。投票、問答、文字雲、隨機點名一站到位，上完任何一堂課都有資料可看。</description>
+      <description>#11 不只是「投票 + 文字雲」 — 是九大互動模式（搶答 / 繪圖板 / 是非 / 選擇 / 問答 / 互評 / **PIRLS 閱讀招牌** / 排序 / 配對）合體 SaaS。234 KB 單檔 Akailao v3.8.9 + Gemini 2.5 Flash 拍課本自動出 PIRLS 題 + 每位老師自架 Firebase（資料自主）+ set.html 配置生成器（降門檻）。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
@@ -226,11 +226,11 @@
       <category>教學情境</category>
     </item>
     <item>
-      <title>📖 教學情境：手作課程「免印照片回家給家長簽」：#68 學生作品全雲端化的兩個月實測</title>
+      <title>📖 教學情境：#68 學生手作作品集 v3.2：純 HTML 中繼導引頁 + 6 班 Drive 資料夾 + go.html 防手機 OS 攔截 Drive App 跳轉</title>
       <link>https://cagoooo.github.io/Akai/blog/student-portfolio-68-handcraft-uploads</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/student-portfolio-68-handcraft-uploads</guid>
       <pubDate>Wed, 20 May 2026 00:00:00 GMT</pubDate>
-      <description>#68 手作課程照片影片作品上傳平台累計 114 點擊，是排行榜第 4 名。手作課的學生作品終於不用拍照印出來夾在聯絡簿，學期末家長還能看到整套學習歷程。</description>
+      <description>#68 不是自建上傳平台 — 是給石門國小**六年級**手作課的精緻 Google Drive 中繼導引頁。6 張班級卡（601~606）對應 6 個硬編碼 Drive folder ID，學生用 \`@mail2.smes.tyc.edu.tw\` 學校信箱登入 → 自動跳該班 Drive 資料夾。\`go.html\` 中繼頁專門解決「手機 OS 攔截 drive.google.com 跳 Drive App」的踩雷。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
