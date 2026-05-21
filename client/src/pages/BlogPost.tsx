@@ -169,21 +169,62 @@ export function BlogPost() {
           fontFamily: tokens.font.tc,
         }}
       >
-        {/* 返回連結 */}
+        {/* 返回按鈕 — cork 黃便利貼風，明顯不被忽略 */}
         <Link
           href="/blog"
+          aria-label="回到部落格列表"
+          className="blog-back-button"
           style={{
             display: 'inline-flex',
             alignItems: 'center',
-            gap: 4,
-            color: tokens.muted2,
-            fontSize: 13,
-            fontWeight: 700,
+            gap: 10,
+            padding: '10px 18px 10px 14px',
+            background: tokens.note.yellow,
+            color: tokens.ink,
+            fontSize: 14,
+            fontWeight: 800,
+            fontFamily: tokens.font.tc,
             textDecoration: 'none',
-            marginBottom: 18,
+            border: `2.5px solid ${tokens.ink}`,
+            borderRadius: 999,
+            boxShadow: '4px 4px 0 rgba(0,0,0,.22), 0 6px 12px -4px rgba(0,0,0,.18)',
+            transform: 'rotate(-1.5deg)',
+            transition: 'transform 0.18s cubic-bezier(.4,1.4,.6,1), box-shadow 0.18s ease',
+            marginBottom: 28,
+            cursor: 'pointer',
+            position: 'relative',
+            // RWD: 手機上小一點
+            maxWidth: '100%',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'rotate(-2.5deg) translate(-3px, -2px)';
+            e.currentTarget.style.boxShadow = '6px 6px 0 rgba(0,0,0,.26), 0 8px 14px -4px rgba(0,0,0,.22)';
+            const arrow = e.currentTarget.querySelector('.back-arrow') as HTMLElement | null;
+            if (arrow) arrow.style.transform = 'translateX(-3px)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'rotate(-1.5deg)';
+            e.currentTarget.style.boxShadow = '4px 4px 0 rgba(0,0,0,.22), 0 6px 12px -4px rgba(0,0,0,.18)';
+            const arrow = e.currentTarget.querySelector('.back-arrow') as HTMLElement | null;
+            if (arrow) arrow.style.transform = 'translateX(0)';
           }}
         >
-          ← 回到部落格列表
+          <span
+            className="back-arrow"
+            style={{
+              fontSize: 18,
+              fontWeight: 900,
+              color: tokens.red,
+              lineHeight: 1,
+              transition: 'transform 0.18s ease',
+              display: 'inline-block',
+            }}
+            aria-hidden="true"
+          >
+            ←
+          </span>
+          <span>回到部落格列表</span>
+          <span style={{ fontSize: 16, marginLeft: -2 }} aria-hidden="true">📖</span>
         </Link>
 
         {/* 標題區（大型便利貼）— 寬螢幕放大版 */}
@@ -560,23 +601,89 @@ export function BlogPost() {
           );
         })()}
 
-        {/* 結尾 CTA */}
+        {/* 結尾 CTA — 兩顆明顯按鈕（取代純文字 inline link） */}
         <div
           style={{
-            marginTop: 32,
-            padding: '18px 22px',
+            marginTop: 36,
+            padding: 'clamp(20px, 3vw, 30px) clamp(20px, 3vw, 28px)',
             background: tokens.note.blue,
-            border: `2px solid ${tokens.ink}`,
-            borderRadius: 10,
-            boxShadow: '3px 3px 0 rgba(0,0,0,.18)',
-            fontSize: 14,
-            color: tokens.muted2,
+            border: `2.5px solid ${tokens.ink}`,
+            borderRadius: 12,
+            boxShadow: '5px 6px 0 rgba(0,0,0,.2)',
             textAlign: 'center',
             transform: 'rotate(0.5deg)',
-            lineHeight: 1.7,
           }}
         >
-          覺得有用？<Link href="/blog" style={{ color: tokens.red, fontWeight: 800, textDecoration: 'underline' }}>看更多教學情境長文</Link>，或<Link href="/?wish=1" style={{ color: tokens.red, fontWeight: 800, textDecoration: 'underline' }}>到許願池</Link> 跟阿凱老師說你想看什麼工具教學。
+          <div style={{ fontSize: 'clamp(15px, 1.3vw, 17px)', fontWeight: 800, color: tokens.ink, marginBottom: 16 }}>
+            🎯 看完這篇，接下來呢？
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              gap: 12,
+              justifyContent: 'center',
+              flexWrap: 'wrap',
+            }}
+          >
+            <Link
+              href="/blog"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '11px 22px',
+                background: tokens.accent,
+                color: '#fff',
+                fontSize: 14,
+                fontWeight: 800,
+                fontFamily: tokens.font.tc,
+                textDecoration: 'none',
+                border: `2.5px solid ${tokens.ink}`,
+                borderRadius: 999,
+                boxShadow: '3px 3px 0 rgba(0,0,0,.25)',
+                transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translate(-2px,-2px)';
+                e.currentTarget.style.boxShadow = '5px 5px 0 rgba(0,0,0,.28)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translate(0,0)';
+                e.currentTarget.style.boxShadow = '3px 3px 0 rgba(0,0,0,.25)';
+              }}
+            >
+              📖 看更多教學情境長文
+            </Link>
+            <Link
+              href="/?wish=1"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '11px 22px',
+                background: '#fff',
+                color: tokens.ink,
+                fontSize: 14,
+                fontWeight: 800,
+                fontFamily: tokens.font.tc,
+                textDecoration: 'none',
+                border: `2.5px solid ${tokens.ink}`,
+                borderRadius: 999,
+                boxShadow: '3px 3px 0 rgba(0,0,0,.22)',
+                transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translate(-2px,-2px)';
+                e.currentTarget.style.boxShadow = '5px 5px 0 rgba(0,0,0,.26)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translate(0,0)';
+                e.currentTarget.style.boxShadow = '3px 3px 0 rgba(0,0,0,.22)';
+              }}
+            >
+              ✨ 跟阿凱老師許願
+            </Link>
+          </div>
         </div>
       </article>
 
