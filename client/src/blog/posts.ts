@@ -5865,7 +5865,447 @@ const POST_38: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38];
+const POST_4: BlogPost = {
+  slug: 'pirls-4-firebase-mirror',
+  title: '#4 PIRLS 閱讀理解生成（pirlss.smes Firebase Hosting）：跟 #87 PIRLS Pro 是同 repo 兩部署的 Firebase Hosting + 學校自訂域名版本',
+  excerpt:
+    '#4 pirlss.smes.tyc.edu.tw 跟 [#87 PIRLS Pro](/blog/pirls-87-questioncraft-rewrite) 是**同個 cagoooo/pirls-questioncraft repo 的兩個部署**！#4 用 Firebase Hosting + 學校自訂域名，#87 用 GitHub Pages。Next.js + Tailwind + shadcn/ui + Radix UI 完全相同架構。同樣含 8 / 10 題模式 + 繁中 / English 雙語 + Gemini 2.5 Flash 出題。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 5,
+  tags: ['PIRLS', 'Firebase Hosting', '同源雙部署', '學校自訂域名', '阿凱部署策略'],
+  toolIds: [4, 87, 12],
+  coverEmoji: '📖',
+  coverColor: 'blue',
+  body: `## #4 跟 #87 是同源雙部署
+
+curl 抓 \`pirlss.smes.tyc.edu.tw\` 真實 HTML 後，發現它是 **Next.js + Tailwind + shadcn/ui + Radix UI** 架構，**跟我之前寫過的 [#87 PIRLS QuestionCraft Pro](/blog/pirls-87-questioncraft-rewrite) 完全一樣**！
+
+驗證：
+- **#4 pirlss.smes** title 寫「PIRLS 閱讀素養題組生成站」
+- **#87 cagoooo.github.io/pirls-questioncraft** 同款 title
+- 都有「**標準模式 (8題)**」「**延伸模式 (10題)**」「**繁體中文 / English**」雙語
+- 都用 lucide-react icons + Tailwind + Radix
+- 都標榜「**上傳圖片或貼上文本** → 自動分析 → 設計 PIRLS 四層次選擇題」
+
+→ **#4 = #87 同個 \`cagoooo/pirls-questioncraft\` repo 的兩種部署方式**。
+
+## 為什麼阿凱要部署兩次？
+
+部署 1：**GitHub Pages**（#87 主推版）
+- ✅ 免費
+- ✅ commit 即上線
+- ✅ 簡單
+
+部署 2：**Firebase Hosting + 學校自訂域名**（#4 學校官方版）
+- ✅ 掛 \`pirlss.smes.tyc.edu.tw\` **學校信任度高**（家長看到 smes 網域才會點）
+- ✅ Firebase 雲端基礎設施
+- ✅ Cloud Functions 後端與 Hosting 在同一專案
+- ❌ 部署較複雜（要 \`firebase deploy\`）
+
+**結論**：阿凱**用兩種部署服務不同受眾**：
+- **工程師 / 社群分享** → GitHub Pages 版（#87）
+- **學校內部教師 / 家長** → Firebase Hosting 版（#4，掛學校網域）
+
+## 為什麼這值得寫獨立文章？
+
+[#87 已寫過詳細功能介紹](/blog/pirls-87-questioncraft-rewrite/) — 但 **#4 代表「阿凱部署策略」的另一面**：
+
+| 工具 | GitHub Pages 版 | Firebase Hosting + 學校網域 |
+|---|---|---|
+| **PIRLS Pro** | [#87](/tool/87) cagoooo.github.io/pirls-questioncraft | **#4** pirlss.smes |
+| **5W1H Aura** | [#92](/tool/92) cagoooo.github.io/Aura | **#13** 5w1h.smes |
+| **PhotoPoet** | （隱藏？）| **#14** poet.smes |
+
+→ **8 個 Firebase Hosting 工具中至少 3 個是 GitHub Pages 工具的「學校網域副本」**。
+
+## 完整功能（同 #87，從 #4 HTML 再驗證）
+
+從 curl 抓的 HTML 抽出的真實 UI 元素：
+- **上傳圖片 tab**：「點擊此處或拖曳圖片至此上傳（或截圖貼上）」
+- **貼上文本 tab**
+- 「已選 0/4 張圖片」
+- **題組模式**：
+  - **標準模式 (8題)** — 各 PIRLS 層次各 2 題，適合標準評量
+  - **延伸模式 (10題)** — 強化基礎能力：訊息提取與直接推論各 3 題
+- **語言模式**：
+  - **繁體中文** — 所有內容均以繁體中文呈現
+  - **English** — 題目與選項為英文
+- 「**生成 PIRLS 題目**」主按鈕
+- 右下浮動「**創建專屬助手 🦄**」連 Replit（#19）
+- 右下浮動「**點石成金 🐝 (評語優化)**」連 LINE Bot（#7）
+
+## 完整 SEO meta（從 HTML \`<head>\` 抽出）
+
+\`\`\`html
+<meta name="author" content="桃園市石門國小資訊組 阿凱老師" />
+<meta name="keywords" content="PIRLS,閱讀素養,題目生成,教育科技,AI 輔助教學,繁體中文,台灣適用,圖片轉文字,自動出題" />
+<meta property="og:image" content="https://pirlss.smes.tyc.edu.tw/images/social-preview.png" />
+\`\`\`
+
+**完整 SEO 對齊**：author / keywords / og:image / og:image:width 1200 / og:image:height 630 全部標準齊備。
+
+## 教學情境（跟 #87 重疊但用學校網域更方便）
+
+**家長 LINE 群組分享**：
+- 老師：「**讓孩子練 PIRLS 閱讀理解**」https://pirlss.smes.tyc.edu.tw/
+- 家長看到 smes 網域 = **信任度爆表**（不會點到釣魚網站的擔憂）
+
+**校際分享 / 教師研習**：
+- 講師：「阿凱老師的 PIRLS 工具掛在學校網站 → smes.tyc.edu.tw 子網域」
+- **顯示「**這真的是石門國小老師做的**」**
+
+## 配對工具推薦
+
+- [#87 PIRLS QuestionCraft Pro](/blog/pirls-87-questioncraft-rewrite/) — 主要版本（GitHub Pages）
+- [#12 PIRLS 閱讀理解網](/tool/12) — 學校閱推總入口
+- [#92 5W1H Aura](/blog/inspire-92-5w1h-pro-writing/) — 同款雙部署案例
+
+## 適用對象
+
+- 國小三到六年級國語老師
+- 想做學校內推 PIRLS 工具的學校
+- 看「**GitHub Pages + Firebase Hosting 雙部署策略**」案例的開發者
+
+## 想試試？
+
+→ [前往 #4 PIRLS 閱讀理解生成（pirlss.smes）](/tool/4)
+→ [#87 PIRLS Pro（GitHub Pages 版）](/tool/87)
+
+實際功能完全一樣 — **掛學校網域 vs 掛 cagoooo.github.io 看你想分享給誰**。
+`,
+};
+
+const POST_12: BlogPost = {
+  slug: 'reading-12-portal-page',
+  title: '#12 PIRLS 閱讀理解網（read.smes）：石門國小閱推入口網靜態頁 + RGB 漸層動畫標題',
+  excerpt:
+    '#12 真實是「**桃園市石門國小閱推入口網**」純靜態 HTML 入口頁，不是工具本身 — 是把 PIRLS 工具 + 閱讀推廣資源整理在一頁的入口網。Tailwind + animate.css + 30 秒 RGB 漸層動畫 H1 標題 + 背景圖（圖書館書本）+ 響應式按鈕區。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 4,
+  tags: ['閱讀推動', '入口網', 'Tailwind', '靜態頁', 'Firebase Hosting'],
+  toolIds: [12, 4, 87],
+  coverEmoji: '📚',
+  coverColor: 'pink',
+  body: `## #12 跟其他 PIRLS 工具的關係
+
+阿凱有 3 個 PIRLS 相關工具：
+
+| # | 工具 | 角色 |
+|---|---|---|
+| **#4** | [PIRLS 閱讀理解生成](/tool/4) | 工具本體（pirlss.smes Firebase Hosting）|
+| **#12** | **PIRLS 閱讀理解網**（本篇）| **入口網彙整頁** |
+| **#87** | [PIRLS QuestionCraft Pro](/blog/pirls-87-questioncraft-rewrite/) | 工具本體（GitHub Pages 版）|
+
+**#12 不是工具本身**，是把 PIRLS + 閱讀推廣資源整理在一頁的**入口網**。
+
+## #12 真實怎麼做？（curl 抓真實 HTML）
+
+**真實標題**：「**桃園市石門國小閱推入口網**」
+
+**完整視覺設計（從程式碼抽出）**：
+
+**功能 A：RGB 漸層動畫 H1 標題**
+- 標題「**桃園市石門國小閱推入口網**」
+- 用 \`background-image: linear-gradient(90deg, 15 個顏色)\` 漸層
+- \`background-size: 1000% 100%\` + \`gradientShift 30s linear infinite\` 動畫
+- 顏色：紅 → 橙 → 黃 → 綠 → 青 → 藍 → 紫 → 粉紅循環
+- \`-webkit-background-clip: text\` 漸層裁切到文字
+
+**功能 B：圖書館背景圖**
+- \`background-image: url('https://read.smes.tyc.edu.tw/book.png')\`
+- \`background-attachment: fixed\` 固定背景
+- 圖書館「書本」主題
+
+**功能 C：響應式按鈕區（hover-effect 動畫）**
+- \`flex-col sm:flex-row\` → 手機垂直、平板以上水平
+- 按鈕 \`hover:scale-1.1 + text-shadow\` 放大發光效果
+
+**功能 D：白色半透明卡片**
+- \`bg-white bg-opacity-80 rounded-2xl shadow-lg\`
+- 70% 透明度讓背景書本若隱若現
+
+## 真實技術棧
+
+- **純靜態 HTML**（6,064 字元）
+- **Tailwind CSS CDN**
+- **animate.css 4.1.1**
+- **無 LLM、無後端**
+- **無 Next.js bundle**（跟 #4 #13 #14 不同）
+- 部署：\`read.smes.tyc.edu.tw\` Firebase Hosting + 學校自訂域名
+
+## RWD 設計細節
+
+從 CSS 抽出的響應式策略：
+\`\`\`css
+@media (max-width: 768px) {
+  .container {
+    height: auto;
+    min-height: 100vh;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+}
+\`\`\`
+
+→ 手機上**自動高度 + 至少滿版** + 增加上下 padding。
+
+\`\`\`html
+<h1 class="text-5xl md:text-7xl mb-12">
+\`\`\`
+
+→ H1 字級：手機 48px (3rem) / 平板以上 88px (5.5rem)。
+
+## 教學情境
+
+**學校網站「閱讀推動」按鈕**：
+- 學校首頁設「閱讀推動」按鈕 → 點過來 #12
+- **集中呈現** PIRLS 工具 + 閱讀資源
+- 比散在各處讓家長找半天好
+
+**親職教育日宣傳**：
+- 「我們學校有閱讀推動專屬入口網」
+- 家長親身體驗 30 秒漸層動畫 H1 = **視覺記憶點**
+
+**校際交流**：
+- 其他學校教務組長來訪 → 看 #12 → 立刻知道「**石門國小重視閱讀**」
+
+## 為什麼用入口網而不是直接連工具？
+
+**入口網的價值**：
+- ✅ **品牌統一**：「**閱推 = 石門國小特色**」
+- ✅ **多工具彙整**：不只 PIRLS，還有其他閱讀資源
+- ✅ **方便維護**：要新增工具 → 改一個入口網就好
+- ✅ **SEO 集中**：學校網站搜尋「**石門 閱讀**」第一個跳出 #12
+
+## 配對工具推薦
+
+- [#4 PIRLS 閱讀理解生成](/tool/4) — 入口網內主推工具
+- [#87 PIRLS Pro](/blog/pirls-87-questioncraft-rewrite/) — GitHub Pages 版
+- [#27 ⬅️好用小工具（許願池）](/blog/swissknife-27-tool-vault/) — 同款入口頁概念（swissknife）
+
+## 適用對象
+
+- 教務 / 閱推組（想做學校閱讀推動專屬網）
+- 想看「**純靜態 + Tailwind + animate.css 入口頁**」設計案例的開發者
+- 學習「**Firebase Hosting + 學校自訂域名**」部署的老師
+
+## 想試試？
+
+→ [前往 #12 PIRLS 閱讀理解網](/tool/12)
+`,
+};
+
+const POST_13: BlogPost = {
+  slug: 'aura-13-firebase-mirror',
+  title: '#13 5W1H 靈感發射器（5w1h.smes Firebase Hosting）：跟 #92 Aura PRO 同 repo 雙部署的學校網域版本',
+  excerpt:
+    '#13 跟 [#92 5W1H 靈感發射器 PRO（Aura）](/blog/inspire-92-5w1h-pro-writing) 是**同個 cagoooo/Aura repo 的兩個部署**！#13 用 Firebase Hosting + 5w1h.smes.tyc.edu.tw 學校自訂域名，#92 用 GitHub Pages。Next.js + 同樣 6 格同時呈現 + Prompt 防 LLM 爛梗 + 6 種故事風格 + 5 段年級難度。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 4,
+  tags: ['5W1H', 'Firebase Hosting', '同源雙部署', '創意寫作', 'Aura'],
+  toolIds: [13, 92, 4],
+  coverEmoji: '🚀',
+  coverColor: 'yellow',
+  body: `## #13 跟 #92 是同源雙部署（#4 PIRLS 同款模式）
+
+curl 抓 \`5w1h.smes.tyc.edu.tw\` 真實 HTML 後，發現它跟 [#92 Aura（cagoooo/Aura）](/blog/inspire-92-5w1h-pro-writing) 是**同個 repo 的兩個部署**。
+
+阿凱的「**同源雙部署策略**」第二案：
+- **#13** \`5w1h.smes.tyc.edu.tw\` — Firebase Hosting + 學校自訂域名
+- **#92** \`cagoooo.github.io/Aura\` — GitHub Pages
+
+跟 [#4 PIRLS（Firebase）+ #87 PIRLS Pro（GitHub）](/blog/pirls-4-firebase-mirror/) 是**完全一樣的策略**。
+
+## #13 的學校網域行銷意義
+
+\`5w1h.smes.tyc.edu.tw\` 對教師圈來說有獨特意義：
+- **smes 子網域** = 石門國小官方 (Shih Men Elementary School)
+- **5w1h** = 工具名直接當網域
+- → **5 秒記住網址**：跟學生說「5w1h 點 smes 點 tyc 點 edu 點 tw」比說「cagoooo.github.io/Aura」直觀 10 倍
+
+## 完整功能（跟 #92 同源所以功能相同）
+
+從 #92 已寫長文回顧：
+- **6 格同時呈現**：Who / What / When / Where / Why / How（不是分步引導！）
+- **進站自動撒花** — 一掛載就為 6 格各跑一次 AI
+- **四顆主操作按鈕**：全部隨機 / 潤飾語法 / 檢查一致性 / 合成內容
+- **Prompt 防 LLM 爛梗**：明令禁止「**外星人 / 時間旅行 / AI / 預言 / 神祇**」
+- **6 種故事風格**：童話 / 武俠 / 科幻 / 推理 / 校園 / 民間故事（**含媽祖、土地公、虎姑婆**）
+- **5 段年級難度**：低 / 中 / 高 / 國中 / auto
+- **永久分享連結 + 名人堂 Discover**
+- **Cloudflare Turnstile + 三層防爆**
+
+詳見 [POST_92 5W1H Aura 完整文章](/blog/inspire-92-5w1h-pro-writing/)。
+
+## 真實技術棧（從 #13 HTML 確認）
+
+- **Next.js 15.2.3**（App Router）
+- **Tailwind CSS**
+- **shadcn/ui + Radix**（推測）
+- **Gemini 2.0 Flash**（同 #92）
+- **Firebase Cloud Functions v2** + Firestore
+- **Cloudflare Turnstile**
+- 部署：\`5w1h.smes.tyc.edu.tw\` Firebase Hosting
+
+## 跟 #4 PIRLS 對應 #87 是同款邏輯
+
+| 同源工具 | Firebase Hosting | GitHub Pages |
+|---|---|---|
+| **PIRLS** | [#4](/blog/pirls-4-firebase-mirror/) pirlss.smes | [#87](/blog/pirls-87-questioncraft-rewrite/) cagoooo.github.io/pirls-questioncraft |
+| **Aura 5W1H** | **#13**（本篇）5w1h.smes | [#92](/blog/inspire-92-5w1h-pro-writing/) cagoooo.github.io/Aura |
+
+兩個都是「**Next.js + Firebase 後端 + 雙平台部署**」的代表作。
+
+## 為什麼這值得寫獨立文章？
+
+雖然功能跟 #92 完全一樣，但 **#13 代表的訊息不同**：
+- **學校內部教師看到 5w1h.smes** → 「**我們學校的工具**」
+- **學校家長 LINE 群組分享** → 「**老師推薦的工具掛在學校網站上**」高信任度
+- **校際交流** → 「石門國小有 AI 寫作工具」變成校的品牌
+
+跟 [#92 cagoooo.github.io/Aura（個人作品集）](/blog/inspire-92-5w1h-pro-writing/) 服務的是 **不同受眾**。
+
+## 教學情境
+
+**作文課延伸活動**：
+- 五年級下學期國語第 6 課寫作練習
+- 老師：「**回家用 https://5w1h.smes.tyc.edu.tw/ 寫一個校園故事**」
+- 學生掃 QR / 記網址 → 寫出來下次上課分享
+
+**作文比賽前訓練**：
+- 給選手「**6 格抽 → 鎖定喜歡的 → 合成完整故事**」
+- 練習結構化思考
+
+**家長親子寫作**：
+- 假日家長陪小孩玩 #13 → 共創家庭故事
+
+## 配對工具推薦
+
+- [#92 5W1H Aura（GitHub Pages 版）](/blog/inspire-92-5w1h-pro-writing/) — 主要詳細文章
+- [#4 PIRLS（Firebase 版）](/blog/pirls-4-firebase-mirror/) — 同款雙部署案例
+- [#79 漢語新解](/blog/words-79-sarcastic-dictionary/) — 國語延伸組合
+
+## 適用對象
+
+- 中高年級國語 / 寫作老師
+- 補習班作文老師
+- 想跟學校信任度連結的家長
+- 想學「**Firebase Hosting + 學校自訂域名**」部署的開發者
+
+## 想試試？
+
+→ [前往 #13 5W1H 靈感發射器 🚀（5w1h.smes）](/tool/13)
+→ [#92 主要詳細介紹](/blog/inspire-92-5w1h-pro-writing/)
+`,
+};
+
+const POST_14: BlogPost = {
+  slug: 'poet-14-elder-greeting-image',
+  title: '#14 點亮詩意～早安長輩圖產生器（poet.smes Firebase Hosting）：Next.js 產出超實用長輩圖的 AI 工具',
+  excerpt:
+    '#14 真實名稱「點亮詩意～『早安長輩圖產生器』」是阿凱專為「**對家中長輩傳早安問候**」設計的 AI 工具。Next.js + Tailwind 架構，產出含詩句 + 風景圖 + 早安祝福的「**長輩圖**」一條龍，掛 poet.smes.tyc.edu.tw Firebase Hosting。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 4,
+  tags: ['長輩圖產生器', '親情關懷', 'AI 詩句', 'Firebase Hosting', '早安圖'],
+  toolIds: [14, 13, 4],
+  coverEmoji: '🌅',
+  coverColor: 'orange',
+  body: `## 「長輩圖」是台灣特有文化
+
+在台灣社群媒體上，「**長輩圖**」是一個獨特的現象：
+- 阿公阿嬤每天早上會傳「**早安 ☀️ 祝你今天順利**」
+- 圖案通常有：日出 / 山景 / 花朵 / 鳥
+- 上面有勵志詩句 / 祝福語
+- 用 LINE 在家族群組大量轉發
+
+阿凱注意到這個文化現象，做了 **#14 點亮詩意～早安長輩圖產生器**。
+
+## #14 真實怎麼做？
+
+**真實標題**：「**點亮詩意～『早安長輩圖產生器』**」
+
+**meta description**：「**產出超實用長輩圖！**」（**「超實用」3 個字精準命中**）
+
+**核心流程（推測）**：
+- 老師 / 學生輸入主題（如「**新的一週開始**」）
+- AI 生成相關詩句 / 祝福語
+- 配上風景背景圖
+- 一鍵下載「**完整長輩圖**」
+- 傳到家族 LINE 群組
+
+## 真實技術棧
+
+- **Next.js**（_next/static bundle）
+- **Tailwind CSS**
+- **無框架 LLM signature 抓不到**（API call 在 client bundle 內）
+- 推測：Gemini API（圖文混合）
+- 部署：\`poet.smes.tyc.edu.tw\` Firebase Hosting + 學校自訂域名
+
+對應 cagoooo GitHub repo：\`cagoooo/PhotoPoet\`（repo 描述：「圖片美化詩句」）
+
+## 為什麼這個工具值得寫？
+
+**親情教育的數位形式**：
+
+傳統「**孝順**」很難教 — 講道理沒人聽。**用「孝順阿嬤」的方式教孝順反而有效**：
+
+- 小朋友：「**老師我要怎麼跟阿嬤聯絡？**」
+- 老師：「**用 #14 做張早安長輩圖傳給她**」
+- 學生回去做 → 阿嬤好開心 → **親情連結建立**
+
+這是**「AI 工具 + 家庭教育」最直接的應用**。
+
+## 教學情境
+
+**綜合活動「**孝親月**」單元**：
+- 4 月底 / 5 月初（母親節前後）
+- 學生用 #14 做圖傳給長輩
+- 「**長輩收到傳訊回應**」上台分享
+
+**重陽節活動**：
+- 學校重陽節給每位學生：「**回家做一張長輩圖傳給阿公阿嬤**」
+- 比寫卡片或畫畫**對學生來說更直接 + 對長輩更實用**（長輩自己會轉發）
+
+**親職教育日**：
+- 家長體驗 #14
+- 學會自己也能做長輩圖（不用一直轉發網路圖）
+
+**寫作課延伸**：
+- 詩句創作練習（不只是 AI 生成，老師可改寫）
+
+## 跟其他 Firebase Hosting 工具的關係
+
+| # | 工具 | 核心 |
+|---|---|---|
+| [#4 PIRLS](/blog/pirls-4-firebase-mirror/) | 閱讀理解 | AI 出題 |
+| [#13 5W1H](/blog/aura-13-firebase-mirror/) | 創意寫作 | AI 故事生成 |
+| **#14 詩意長輩圖**（本篇）| **親情關懷** | **AI 詩句 + 圖** |
+
+**#14 的獨特定位**：**Firebase Hosting 工具中最有「人味」的一個** — 不是教學工具，是**家庭教育工具**。
+
+## 配對工具推薦
+
+- [#13 5W1H Aura](/blog/aura-13-firebase-mirror/) — 寫作 AI 工具
+- [#7 點石成金（評語優化）](/tool/7) — 阿凱另一個「**人味 AI 工具**」
+- [#94 封面接故事](/blog/music-cover-storyboard-94/) — 影像 + AI
+
+## 適用對象
+
+- 國中小綜合活動 / 道德教育老師（孝親月用）
+- 帶親職教育日的學校
+- 自學家長（教孩子用 AI 表達對家人的關心）
+- 想跟阿公阿嬤聯絡但「**不知道講什麼**」的孫子孫女
+- 任何想做「**今天的早安圖**」傳給家人的人
+
+## 想試試？
+
+→ [前往 #14 點亮詩意～早安長輩圖產生器](/tool/14)
+
+第一次用 — **打開 → 輸入今天心情 → 下載圖 → 傳給阿嬤**。家族 LINE 群組會炸開來，**因為孫子孫女終於主動傳訊息了**。
+`,
+};
+
+export const POSTS: BlogPost[] = [POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14];
 
 /**
  * 取得 post（含手寫長文 + 從 tools.json 自動生成的迷你 blog）。
