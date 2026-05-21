@@ -8,7 +8,7 @@
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
     <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Thu, 21 May 2026 11:04:46 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 21 May 2026 11:27:26 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -28,11 +28,11 @@
       <category>教學情境</category>
     </item>
     <item>
-      <title>📖 教學情境：校園報修不用走到總務處：#53 智慧校園報修系統三個月省下校工 60 小時</title>
+      <title>📖 教學情境：#53 校園報修系統：點地圖 + Google Vision OCR 標教室 + LINE Flex Message 雙軌通知的全鏈路設計</title>
       <link>https://cagoooo.github.io/Akai/blog/repair-53-paperless-school-maintenance</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/repair-53-paperless-school-maintenance</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#53 智慧校園報修系統累計 75 點擊。從前老師發現燈管壞掉 / 廁所漏水 / 投影機沒訊號，要走到總務處填紙本報修單。現在用手機掃 QR Code 30 秒搞定，校工排程處理進度全自動。</description>
+      <description>#53 不是「掃 QR Code 報修」那麼簡單。React 19 + Firebase 全家桶 + Google Vision API OCR 自動標教室 + LINE Messaging API Flex Message + 資訊組 / 事務組雙軌分流 + 離線報修 IndexedDB 暫存。版本到 v0.9.2 仍在演進。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
@@ -55,11 +55,11 @@
       <category>教學情境</category>
     </item>
     <item>
-      <title>📖 教學情境：#67 國語演說比賽訓練 Pro：從鄉鎮初賽到全國總冠軍的 4 個月 AI 陪練紀錄</title>
+      <title>📖 教學情境：#67 國語演說比賽訓練 Pro：107 題庫 + Web Speech 即時逐字稿 + Gemini 雷達圖評分 + 老師評分量表的單檔 5705 行神器</title>
       <link>https://cagoooo.github.io/Akai/blog/speech-67-training-pro</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/speech-67-training-pro</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#67 國語演說比賽訓練平台（Pro 版）累計 28 點擊。國小到高中的國語演說比賽每年三月開打，從鄉鎮初賽 → 縣賽 → 區賽 → 全國賽。這個工具用 AI 幫學生練稿、計時、模擬評審打分數。</description>
+      <description>#67 不是 EZPage 模板（description 誤導）— 是阿凱純手寫 5705 行 HTML / 322 KB 的演說訓練系統。107 道題目 × 7 大分類 + 雙階段計時器 + Web Speech API 即時逐字稿 + Gemini 2.5 雷達圖四維評分 + 老師現場評分量表，賽事流程完整數位化。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
@@ -91,20 +91,20 @@
       <category>教學情境</category>
     </item>
     <item>
-      <title>📖 教學情境：#92 5W1H 靈感發射器 PRO：國小作文從「老師我寫不出來」到滔滔不絕的引導法</title>
+      <title>📖 教學情境：#92 5W1H 靈感發射器 PRO（Aura）：6 格同時呈現 + Prompt 防 LLM 爛梗 + 6 種故事風格 + 名人堂的創意寫作神器</title>
       <link>https://cagoooo.github.io/Akai/blog/inspire-92-5w1h-pro-writing</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/inspire-92-5w1h-pro-writing</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#92 5W1H 靈感發射器 PRO 版用 AI 對話式引導 + 圖卡輔助，把作文教學從「擠牙膏」變「打開水龍頭」。中年級寫作課實測，全班完成率從 60% 衝到 95%。</description>
+      <description>#92 內部代號 Aura，不是分步引導工具 — 是 6 格（Who/What/When/Where/Why/How）同時呈現任意順序操作，Gemini 2.0 Flash 一鍵合成短篇故事 + 自動下標題。Prompt 明令禁止「外星人 / 時間旅行 / AI / 預言 / 神祇」這些 LLM 爛梗，逼 AI 挖日常微妙與職人題材。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
     <item>
-      <title>📖 教學情境：#82 教室資訊設備盤點系統：學期初一週的設備地獄，30 分鐘搞定的清單法</title>
+      <title>📖 教學情境：#82 設備盤點系統：iPhone 拍照 + Gemini 2.5 Vision 辨識 + 三大資產跨表自動路由 + Veyon 整合的 54.75 小時打造神器</title>
       <link>https://cagoooo.github.io/Akai/blog/inventory-82-classroom-equipment</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/inventory-82-classroom-equipment</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#82 教室資訊設備盤點系統用 QR code + 一鍵盤點 + 自動產報，把每學期初最痛的「全校設備清點」從一週濃縮到 30 分鐘。資訊組長必備。</description>
+      <description>#82 不是「QR Code 掃描盤點」那麼簡單 — 是阿凱花 54.75 小時、跑 40+ 版本（v7.4.12）打造的真實校園資管系統。iPhone 拍照 + Gemini 2.5 Flash Vision 辨識財產編號 + Supabase 6 張表跨表路由 + 設備搬家自動偵測 + Veyon 150 台教室電腦設定 JSON 匯出。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
@@ -199,11 +199,11 @@
       <category>教學情境</category>
     </item>
     <item>
-      <title>📖 教學情境：我用「教學駕駛艙入口網」帶 5 年級資訊課，學生不用記網址了</title>
+      <title>📖 教學情境：#81 國小資訊科技教學駕駛艙：25 個駕駛艙 × 飛行儀表板入口，三到六年級完整資訊課程系統</title>
       <link>https://cagoooo.github.io/Akai/blog/cockpit-81-info-tech-class</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/cockpit-81-info-tech-class</guid>
       <pubDate>Wed, 20 May 2026 00:00:00 GMT</pubDate>
-      <description>#81 國小資訊科技教學駕駛艙累計 555 點擊，是阿凱老師工具集的常勝軍。一個入口網把上課常用工具、簡報、學習單全收進去，學生 30 秒就能找到要用的東西。</description>
+      <description>#81 不是「入口連結牆」— 是阿凱用 5 週手刻 84 個 commits、純 vanilla JS 蓋出來的「飛行員儀表板 + 25 個獨立駕駛艙」課程系統，每單元含 NotebookLM 投影片 + YouTube 自學影片 + Canvas 關卡 + 評量題 + 演講簡報模式。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
