@@ -8,7 +8,7 @@
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
     <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Thu, 21 May 2026 11:55:10 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 21 May 2026 12:13:19 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -82,11 +82,11 @@
       <category>教學情境</category>
     </item>
     <item>
-      <title>📖 教學情境：#76 WebSlide Pro 簡報播放器：阿凱「許願池」工具整理頁（不是自製 — 是 Google Sites 嵌入外部簡報工具的策展連結）</title>
+      <title>📖 教學情境：#76 WebSlide 簡報播放器：阿凱早期用 Gemini 寫程式 + 嵌進 Google Sites 的隱藏自製神器（PDF.js + JSZip + jsPDF + 17 種電影級 3D 轉場）</title>
       <link>https://cagoooo.github.io/Akai/blog/webslide-76-cross-device-presenter</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/webslide-76-cross-device-presenter</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#76 是阿凱在 Google Sites（\`sites.google.com/mail2.smes.tyc.edu.tw/swissknife/\`）上整理的「許願池」工具策展頁，**不是阿凱自製的 OSS 專案**（跨 cagoooo 80+ repo 確認無對應源碼）。可能背後是 Slides.com / Pitch / Slidev / Canva Present 等商業工具，由阿凱整理進工具集供老師參考。</description>
+      <description>#76 完全是阿凱自製 — 用 Gemini 寫程式碼生成的單檔 HTML web app，800+ 行 JS/CSS 直接以 Embedded HTML 嵌進 Google Sites（早期還不熟 GitHub 的隱藏部署方式）。Tailwind + JSZip 3.10.1 + jsPDF 2.5.1 + PDF.js 3.11.174 + 17 種電影級 3D 轉場 + 雙 iframe 無閃爍翻頁 + 全螢幕 fallback + 左右 1/6 寬點擊翻頁。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>

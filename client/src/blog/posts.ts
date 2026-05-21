@@ -1600,18 +1600,16 @@ const POST_54: BlogPost = {
 
 const POST_76: BlogPost = {
   slug: 'webslide-76-cross-device-presenter',
-  title: '#76 WebSlide Pro 簡報播放器：阿凱「許願池」工具整理頁（不是自製 — 是 Google Sites 嵌入外部簡報工具的策展連結）',
+  title: '#76 WebSlide 簡報播放器：阿凱早期用 Gemini 寫程式 + 嵌進 Google Sites 的隱藏自製神器（PDF.js + JSZip + jsPDF + 17 種電影級 3D 轉場）',
   excerpt:
-    '#76 是阿凱在 Google Sites（\`sites.google.com/mail2.smes.tyc.edu.tw/swissknife/\`）上整理的「許願池」工具策展頁，**不是阿凱自製的 OSS 專案**（跨 cagoooo 80+ repo 確認無對應源碼）。可能背後是 Slides.com / Pitch / Slidev / Canva Present 等商業工具，由阿凱整理進工具集供老師參考。',
+    '#76 完全是阿凱自製 — 用 Gemini 寫程式碼生成的單檔 HTML web app，800+ 行 JS/CSS 直接以 Embedded HTML 嵌進 Google Sites（早期還不熟 GitHub 的隱藏部署方式）。Tailwind + JSZip 3.10.1 + jsPDF 2.5.1 + PDF.js 3.11.174 + 17 種電影級 3D 轉場 + 雙 iframe 無閃爍翻頁 + 全螢幕 fallback + 左右 1/6 寬點擊翻頁。',
   publishedAt: '2026-05-21',
-  readingMinutes: 4,
-  tags: ['簡報工具', '工具策展', '許願池', 'Google Sites', '公開課'],
+  readingMinutes: 5,
+  tags: ['簡報工具', 'Google Sites 嵌入', 'PDF.js', 'Gemini 寫程式', '公開課'],
   toolIds: [76, 81, 11],
   coverEmoji: '🖼️',
   coverColor: 'blue',
-  body: `## 重要澄清：這個是「策展頁」不是自製工具
-
-跨阿凱（cagoooo）GitHub 80+ 個 repo 三層搜尋（repo 名稱 / 描述 / 程式碼）— **找不到任何對應 #76 的源碼**。
+  body: `## 阿凱早期作品的隱藏部署方式
 
 \`tools.json\` 內 #76 的 \`url\` 是：
 
@@ -1619,11 +1617,16 @@ const POST_76: BlogPost = {
 https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/webslide-簡報播放器
 \`\`\`
 
-這是**阿凱老師的學校 Google Sites 「許願池」工具集**，**不是 \`cagoooo.github.io/xxx\` 格式**（自製工具的標準路徑）。
+不是 \`cagoooo.github.io/xxx\` 格式 — 因為**這是阿凱早期（還不熟 GitHub 時）用另一種方式部署的自製作品**：
 
-對照其他自製工具（[#41](/tool/41) / [#79](/tool/79) / [#87](/tool/87) / [#94](/tool/94) / [#97](/tool/97)）都指向 GitHub Pages 自家網址 — **#76 是 Google Sites 上的外部嵌入頁**，由阿凱整理成「**許願池**」清單之一。
+- 用 **Gemini 寫程式碼**生成完整單檔 HTML web app（800+ 行 JS/CSS/HTML）
+- 直接以 **Embedded HTML 嵌進 Google Sites 頁面**內
+- Google Sites 把整段原始碼存在 \`data-code\` 屬性
+- 由 Google sandbox iframe 執行（\`googleusercontent.com/embeds/...inner-frame-minified.html\`）
 
-可能背後是 **Slides.com / Pitch / Slidev / Canva Present** 等已存在的商業 / 開源工具，由阿凱策展整理。「**WebSlide Pro**」帶有 Pro 後綴，更像是商業 / 外部產品名，與阿凱其他自製工具（[#92 Aura](/tool/92) / [#87 QuestionCraft](/tool/87) / [#13 5W1H](/tool/13)）的命名風格不同。
+→ **跑得起來，但 GitHub 上找不到** — 因為整份程式碼就活在 Google Sites 後台。
+
+⚠️ 寫這篇文章前我跨 80+ 個 cagoooo GitHub repo 找不到對應源碼，**一度誤判成「不是自製是策展頁」**。阿凱澄清後我才用 curl 抓 Google Sites 的 \`data-code\` 屬性反推出真實程式碼，**確認是 100% 自製**。
 
 ## 你有沒有過這種惡夢？
 
@@ -1647,28 +1650,65 @@ PPT 是 **「綁定本機環境」** 的格式：
 
 **老師的解法：** 出門前用 USB 帶 3 個格式（PPT + PDF + 影片獨立備份）— 還是會出包。
 
-## #76 WebSlide Pro 怎麼解？
+## #76 WebSlide 怎麼解？（真實技術細節）
 
-「**簡報變成一個網址，瀏覽器就是播放器**」：
+**功能 A：雙格式輸入**
+- 上傳 **.zip**（內含 HTML 簡報）
+- 或 **.pdf** 檔
+- **PDF.js 3.11.174** 自動把每頁 render 成圖片，包進 iframe 全螢幕展示
 
-**功能 A：純網頁簡報**
-- 上傳 PPT / PDF / Markdown → 系統轉成網頁
-- 每頁是獨立 HTML，**字型不會跑**（用 Web Font）
-- 影片直接嵌 YouTube / Vimeo URL，本機沒檔案也能播
+**功能 B：17 種電影級 3D 轉場動畫**
+- fade / slide（4 向）/ zoom / flip / cube / blurZoom / spin⋯
+- 程式碼 line 211-260 全列出 keyframes
+- **特效開關 toggle**（btn-fx）— 一鍵切換純翻頁 vs 動畫
 
-**功能 B：演講者模式**
-- 主畫面 → 全螢幕簡報
-- 手機 / 平板 → 講者註記 + 計時器 + 下一頁預覽
-- **連線同步**：手機翻頁、電腦投影同步動
+**功能 C：雙 iframe 無閃爍翻頁**
+- \`frame-a\` / \`frame-b\` 兩個 iframe 輪流預載
+- \`sandbox="allow-scripts allow-same-origin"\` 安全限制
+- **避開單 iframe 切換的閃爍問題** — 翻頁如電影般滑順
 
-**功能 C：互動元素**
-- 投票牆（學生掃 QR 即時投票）
-- 文字雲（學生掃 QR 丟關鍵字）
-- 倒數計時器（討論時間用）
+**功能 D：左右 1/6 寬點擊翻頁區**
+- 演講時手點螢幕邊緣換頁
+- 不用簡報筆也能控
 
-**功能 D：離線備援**
-- 每個簡報自動產出 PDF 備份
-- 網路斷了 → 一鍵切離線版
+**功能 E：全螢幕模式 + fallback**
+- 用 \`.fake-fullscreen\` CSS class 備援
+- **不依賴瀏覽器 fullscreen API**（避開瀏覽器相容性坑）
+
+**功能 F：匯出 PDF**
+- 用 **jsPDF 2.5.1** 把當前簡報重打包
+- 老師演講後留檔給觀課老師
+
+**功能 G：進度 modal + 頁碼 HUD**
+- 處理 PDF / ZIP 時顯示百分比 + spinner
+- 當前頁 / 總頁數即時顯示
+
+## 真實技術棧（從 HTML head 抓到的證據）
+
+純前端單檔 HTML web app，**完全自寫程式碼**（不是 Glide / Bolt / Lovable / EZPage 等 no-code 平台產物）：
+
+- **Tailwind CSS**（CDN \`cdn.tailwindcss.com\`）
+- **JSZip 3.10.1** — 解壓 ZIP 簡報包
+- **jsPDF 2.5.1** — 匯出 PDF
+- **PDF.js 3.11.174**（含 worker）— 讀取 PDF 並逐頁渲染成圖片
+- **Lucide Icons**（最新版）— UI 圖標
+- **Noto Sans TC** — 中文字型
+- **雙 iframe 切換架構** — \`frame-a\` / \`frame-b\` 無閃爍翻頁
+- 保守估計 **800+ 行 JS/CSS/HTML**
+
+## 部署方式（隱藏倉庫）
+
+不在 GitHub，活在 Google Sites Embedded HTML 內：
+
+\`\`\`
+sites.google.com/mail2.smes.tyc.edu.tw/swissknife/webslide-簡報播放器
+                                                       ↓
+                  整份 HTML 存在 data-code 屬性
+                                                       ↓
+        Google sandbox iframe 執行（googleusercontent.com/embeds/...）
+\`\`\`
+
+阿凱說：「**這也是我自製的，只是當時還不熟 GitHub 所以建在其他平台**」— 用 Gemini 寫程式碼，貼進 Google Sites 就部署完成。是早期工具開發者很自然的工作流。
 
 ## 實測對比
 
