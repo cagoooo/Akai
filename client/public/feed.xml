@@ -8,7 +8,7 @@
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
     <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Thu, 21 May 2026 09:23:48 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 21 May 2026 09:44:12 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -154,6 +154,51 @@
       <category>教學情境</category>
     </item>
     <item>
+      <title>📖 教學情境：#87 PIRLS Pro QuestionCraft：把舊版 HTML 單檔砍掉重練成 Next.js + Cloud Functions 的閱讀素養出題神器</title>
+      <link>https://cagoooo.github.io/Akai/blog/pirls-87-questioncraft-rewrite</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/pirls-87-questioncraft-rewrite</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#87 PIRLS QuestionCraft 是舊版 #4 PIRLS 的完全重寫版。Next.js 15 + Gemini 2.5 Flash + Firestore，月費 &lt; 0.25 美金的 serverless 架構，PaGamO 題組批量上傳 + 學生 QR 即時作答 + 班級儀表板一條龍。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#79 漢語新解：不是字典，是 AI 用魯迅 + 王爾德口吻寫的「揭露真相版」國語延伸教材</title>
+      <link>https://cagoooo.github.io/Akai/blog/words-79-sarcastic-dictionary</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/words-79-sarcastic-dictionary</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#79 漢語新解絕對不是查字典工具。輸入任何詞 → AI 用王爾德/魯迅/羅永浩三人格混合風格，給你一段 150 字諷刺式新解 + 水墨蓋章畫卷。國語延伸教學的批判思考神器。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#97 MBTI 校園奇遇記：用 47 個 RPG 場景偷偷塞 SDG 多元議題的人格測驗</title>
+      <link>https://cagoooo.github.io/Akai/blog/mbti-97-campus-adventure-rpg</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/mbti-97-campus-adventure-rpg</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#97 MBTI 校園奇遇記不是傳統勾選題 MBTI 測驗，是 47 個校園 RPG 場景 + 12 個多元背景 NPC（客家、新住民、同志家庭、原住民…）+ 16 個結局頁。一鍵 fork 模板讓其他學校 3 分鐘自架。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#94 封面接故事：用 Gemini 2.5 把 MV 封面接成 8 種風格 25 秒分鏡，再用瀏覽器 ffmpeg.wasm 串成短片</title>
+      <link>https://cagoooo.github.io/Akai/blog/music-cover-storyboard-94</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/music-cover-storyboard-94</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#94 封面接故事是給音樂課 / 視藝課 / 媒體素養課的 AI 創作教學駕駛艙。上傳 MV → 抓封面 → AI 接 4-6 段 5 秒分鏡 → 跳 8 大 AI 影片平台產畫面 → 瀏覽器內串成完整短片。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#41 吉他點唱系統「阿凱彈唱之夜」：用 Firestore 即時投票 + 卡帶雜誌風大螢幕模式打造演出儀式感</title>
+      <link>https://cagoooo.github.io/Akai/blog/song-41-akai-night-tape-magazine</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/song-41-akai-night-tape-magazine</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#41 不是教吉他課的工具，是阿凱老師的「彈唱之夜演出系統」。觀眾掃 QR 點歌 + Firestore 即時排行榜 + 雜誌風大螢幕模式 + 卡帶 SIDE A/B 期數收藏。一個老師把午休彈唱變成校園文化。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
       <title>📖 教學情境：我用「教學駕駛艙入口網」帶 5 年級資訊課，學生不用記網址了</title>
       <link>https://cagoooo.github.io/Akai/blog/cockpit-81-info-tech-class</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/cockpit-81-info-tech-class</guid>
@@ -255,66 +300,6 @@
       <category>訂餐</category>
       <category>校園</category>
       <category>便利</category>
-    </item>
-    <item>
-      <title>🆕 新工具：蜂類配對消消樂</title>
-      <link>https://cagoooo.github.io/Akai/tool/6</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/6</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>阿凱老師打造的記憶配對消消樂遊戲，三種難度搭配注音、唐詩、英單、水果等六大主題包，老師改 JSON 就能新增主題，純靜態 PWA 離線可玩。</description>
-      <category>遊戲</category>
-      <category>蜜蜂</category>
-      <category>配對</category>
-      <category>消消樂</category>
-      <category>自然</category>
-    </item>
-    <item>
-      <title>🆕 新工具：點「石」成金🐝(評語優化)</title>
-      <link>https://cagoooo.github.io/Akai/tool/7</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/7</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>創新的學生評語優化工具，協助教師撰寫更正向、積極且個人化的學生評語</description>
-      <category>評語</category>
-      <category>AI</category>
-      <category>LINE</category>
-      <category>正向</category>
-      <category>學生</category>
-    </item>
-    <item>
-      <title>🆕 新工具：12年教案有14</title>
-      <link>https://cagoooo.github.io/Akai/tool/8</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/8</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>豐富的教案資源分享平台，提供多元化的教學素材和靈感</description>
-      <category>教案</category>
-      <category>十二年國教</category>
-      <category>課綱</category>
-      <category>資源</category>
-      <category>分享</category>
-    </item>
-    <item>
-      <title>🆕 新工具：超級瑪莉歐冒險</title>
-      <link>https://cagoooo.github.io/Akai/tool/9</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/9</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>阿凱老師打造的瀏覽器版超級瑪莉歐冒險遊戲，支援鍵盤＋觸控雙模式操作，內建關卡選擇、計分、金幣與成就系統，純前端開瀏覽器就能玩。</description>
-      <category>遊戲</category>
-      <category>瑪莉歐</category>
-      <category>冒險</category>
-      <category>跳躍</category>
-      <category>經典</category>
-    </item>
-    <item>
-      <title>🆕 新工具：班級小管家</title>
-      <link>https://cagoooo.github.io/Akai/tool/10</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/10</guid>
-      <pubDate>Mon, 01 Jan 2024 00:00:00 GMT</pubDate>
-      <description>阿凱老師打造的班級小管家全方位課堂工具箱，整合學生名單、加扣分、抽籤分組、計時器、聯絡簿、作業檢查、考試監考共八大功能，多班級資料自動隔離。</description>
-      <category>班級</category>
-      <category>管理</category>
-      <category>導師</category>
-      <category>學生</category>
-      <category>事務</category>
     </item>
   </channel>
 </rss>
