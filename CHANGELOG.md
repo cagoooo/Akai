@@ -2,6 +2,36 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.35-2] - 2026-05-21 — Gemini Embedding 升級 + iOS PWA 引導 + Firestore rules 修
+
+### 🧠 #100 工具索引神器升級 Gemini Embedding 語意搜尋
+- 三件套：build-time embed 97 工具 + Cloud Function embedQuery + client cosine similarity
+- ToolIndexAI 加 toggle ⚡字面比對 / 🧠語意搜尋 BETA（雙軌設計，未 setup 自動 fallback fuzzy）
+- 完整 SOP: docs/SETUP_EMBEDDINGS.md（6 步啟用）
+- 新 blog post #6: tool-100-gemini-embedding-build-log（8 分鐘技術 build log）
+- 程式碼全 ship，等使用者拿 Gemini API key + deploy Cloud Function 即啟用
+
+### 📱 iOS PWA 加桌面引導 + 手機 UX
+- 新 IosPwaInstallPrompt（iOS Safari + 第二次訪問 + 非 standalone 才跳，1 週 dismiss 期）
+- 含 HowTo overlay 教 3 步加桌面
+- 兩個搜尋框升級：type=search + fontSize≥16 防 iOS 縮放 + 中文不自動修正
+- viewport-fit=cover 支援 iPhone 安全區
+
+### 🔓 Firestore rules sub-collection 修
+- analytics/{docId}/{subCol}/{subDocId} wildcard 新增
+- 解決 Web Vitals / 熱門詞紀錄寫不進 Firestore 的根因
+
+### 🔧 generate-* scripts regex 修
+- POST_\\d+ → POST_[A-Z0-9_]+ 兼容 POST_INDEX_AI 命名
+- 影響 generate-og-pages / generate-sitemap / generate-feed
+
+### 🚀 部署
+- Deploy 26201446508 success
+- /blog/tool-100-gemini-embedding-build-log/ 200 OK
+- tool-embeddings.json 404（預期，等 setup）
+
+---
+
 ## [3.6.35] - 2026-05-21 — Blog UX 大改版 + 三大新 skill
 
 ### 🔍 BlogList 搜尋 + 篩選

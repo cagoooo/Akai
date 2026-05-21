@@ -2,11 +2,62 @@
 
 ## 🎯 當前版本狀態
 - **當前版本**: `v3.6.35` (本機/CI) · 工具總數 **97 個**（**破百倒數 3** 🚀）
-- **最後更新狀態**: Blog UX 大改版上線 — (1) BlogList 加搜尋（fuse.js）+ 分類 chip + 類型 toggle + URL query 同步；(2) chunk error 三層自癒（不再看到「發生錯誤」嚇人）；(3) 三頁加回到頂部按鈕；(4) BlogList 寬螢幕 RWD（1320 / 5 欄）+ ToolIndexAI 1100；(5) 三大新 skill 寫進 ~/.claude/skills/：changelog-version-drift-trap / vite-chunk-hash-pwa-self-heal / tool-catalog-blog-seo-factory。
+- **最後更新狀態**: AI 升級 + 行動 UX 上線 — (1) #100 工具索引神器升級 Gemini Embedding 語意搜尋（雙軌設計：未 setup 自動 fallback fuzzy 不會壞）；(2) iOS PWA 加桌面引導 toast；(3) 兩個搜尋框手機 UX 優化（防 iOS 縮放 / 不自動修正）；(4) Firestore rules 修 sub-collection wildcard（Web Vitals / 熱門詞紀錄之前寫不進的根因）；(5) 新 blog post #6「#100 升級 AI build log」（8 分鐘讀）。
 
 ## 📌 完成功能總覽
 
-### `v3.6.35` (最新 · Blog UX 大改版 + 三大 skill)
+### `v3.6.35-2` (最新 · Gemini Embedding 升級 + iOS PWA 引導 + Firestore rules 修)
+
+**🧠 #1 #100 工具索引神器升級 Gemini Embedding 語意搜尋（雙軌設計）**
+- **問題**：原 fuse.js 字面比對接不住抽象需求（「我想讓害羞學生開口」、「水的三態」找不到工具）
+- **升級**：Gemini Embedding 768 維向量 + cosine similarity
+- **架構**（三件套）：
+  - **build-time**: `scripts/generate-tool-embeddings.mjs` 為 97 工具算 embeddings → `tool-embeddings.json`（~0.4 MB）
+  - **runtime Cloud Function**: `functions/src/embedQuery.ts` `defineSecret(GEMINI_API_KEY)` + per-uid rate limit 20/min + asia-east1 region + maxInstances 5 防爆 quota
+  - **client lib**: `embeddingSearch.ts` 載 embeddings + 算 cosine + 排序 top 5
+- ToolIndexAI 加 toggle「⚡ 字面比對 / 🧠 語意搜尋 BETA」
+  - **預設 fuzzy**（fallback safe）
+  - 偵測 embeddings 可用才顯示 toggle
+  - 語意模式 debounced 800ms 呼叫 Cloud Function
+  - 失敗自動退回 fuzzy + 顯示「⚠️ 語意搜尋失敗」
+- **完整 SOP**：`docs/SETUP_EMBEDDINGS.md`（6 步啟用 + 90 天 key rotate + 故障排除）
+- **新 blog post #6**：`tool-100-gemini-embedding-build-log`（8 分鐘讀，技術 build log 含 fuse.js vs Gemini 實測對比）
+- **狀態**：程式碼全 ship，等使用者拿 Gemini API key 跑完 6 步即啟用
+
+**📱 #2 iOS PWA 加桌面引導 + 手機搜尋 UX**
+- 新元件 `IosPwaInstallPrompt`：cork 藍便利貼從畫面底部滑入
+  - 三條件全符合才跳：iOS Safari + 非 standalone + 訪問第二次以後
+  - 一週內 dismiss 過不再跳（localStorage flag）
+  - 含 HowTo overlay 教 3 步加桌面
+- 兩個搜尋框（BlogList / ToolIndexAI）升級：
+  - `type="search"` + `inputMode="search"` + `enterKeyHint="search"`
+  - `autoCapitalize="off"` `autoCorrect="off"` `spellCheck={false}`（中文不要被自動修正）
+  - fontSize ≥ 16px 防 iOS Safari 強制縮放
+  - `WebkitAppearance: none` 拿掉預設內陰影
+- index.html viewport 加 `viewport-fit=cover` 支援 iPhone 安全區
+
+**🔓 #3 Firestore rules 修 sub-collection wildcard**
+- 之前 rules `match /analytics/{docId}` 只匹配單層
+- 但實作寫的是 `analytics/webVitals/{date}/{id}` + `analytics/toolIndexQueries/queries/{hash}` 多層
+- 沒匹配的 sub-collection 預設拒寫 → **Web Vitals / 熱門詞紀錄全寫不進去**
+- 新增 `match /analytics/{docId}/{subCol}/{subDocId}` wildcard
+- ⚠️ rules 需要 `firebase deploy --only firestore:rules` 才會生效（使用者後續操作）
+
+**🔧 #4 三個 generate-* script regex 修**
+- 之前 regex `POST_\d+` 只認數字命名（POST_81, POST_46）
+- 新 `POST_INDEX_AI` 非數字命名沒被抓到 → sitemap / RSS / OG landing 缺
+- 改 `POST_[A-Z0-9_]+` 兼容所有 SCREAMING_SNAKE_CASE
+- 影響：generate-og-pages.mjs / generate-sitemap.mjs / generate-feed.mjs
+
+**🚀 已部署上線**
+- Deploy 26201446508 success
+- 6 篇手寫長文 + 92 篇 mini blog landing 全 200 OK
+- /tool/100 + /blog/tool-100-gemini-embedding-build-log/ 200 OK
+- tool-embeddings.json 404（預期，等使用者 setup）
+
+---
+
+### `v3.6.35` (Blog UX 大改版 + 三大 skill)
 
 **🔍 #1 BlogList 搜尋 + 篩選**
 - 即時搜尋（fuse.js）：title ×3 / tags ×2 / excerpt ×1 / body ×0.3 加權
