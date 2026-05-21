@@ -2,6 +2,40 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.35] - 2026-05-21 — Blog UX 大改版 + 三大新 skill
+
+### 🔍 BlogList 搜尋 + 篩選
+- fuse.js 即時搜尋（title ×3 / tags ×2 / excerpt ×1 / body ×0.3）
+- 類型 toggle: 全部 97 / 深度長文 5 / 工具速覽 92
+- 7 大分類 chip 多選 AND 邏輯
+- URL query 同步 `?q=&cat=&type=` 條件可分享
+- 沒結果 fallback 引導到許願池
+
+### 🩹 chunk error 三層自癒
+- App.tsx handleAssetError + ErrorBoundary isChunkError + sw.js PRECACHE 移除 index.html
+- 不再顯示「發生錯誤」嚇人 — toast 1.2s 後自動 unregister SW + reload
+- sessionStorage flag 防無限循環
+
+### ⬆️ 回到頂部按鈕
+- BlogList / BlogPost / ToolIndexAI 三頁接 BulletinBackToTop
+
+### 📐 寬螢幕 RWD
+- BlogList 960 → 1320（寬螢幕 4-5 欄）
+- ToolIndexAI 980 → 1100
+- BlogPost 720 不變（閱讀黃金寬度）
+- padding 改 clamp(20px, 3vw, 36-40px)
+
+### 📝 三大新 skill 寫進 ~/.claude/skills/
+- `changelog-version-drift-trap` — 文件 vX.Y.Z 與 package.json 同步鐵則
+- `vite-chunk-hash-pwa-self-heal` — chunk error 三層自癒模板
+- `tool-catalog-blog-seo-factory` — 工具目錄 → blog SEO 工廠 pattern
+
+### 🔖 版本對齊（首次套用新 skill 鐵則）
+- bump package.json 3.6.34 → 3.6.35
+- bump-sw-version 同步 version.json + sw.js CACHE_VERSION
+
+---
+
 ## [3.6.34] - 2026-05-21 — SEO + 內容 7 件套 + 純 ASCII slug
 
 ### 🏷️ #2 工具頁 SoftwareApplication Schema

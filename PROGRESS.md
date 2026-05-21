@@ -1,12 +1,64 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.34` (本機/CI) · 工具總數 **97 個**（**破百倒數 3** 🚀）
-- **最後更新狀態**: SEO + 內容 7 件套上線 — (1) 工具頁 SoftwareApplication Schema；(2) 92 個 mini blog stub（自動產生）；(3) Web Vitals dashboard；(4) 熱門搜尋詞 Firestore 回灌；(5) 相似工具內部連結；(6) OG 圖最近更新浮水印；(7) RSS / Atom feed。sitemap 從 204 → **296 URL**，預期 Google 索引頁數翻 30 倍。
+- **當前版本**: `v3.6.35` (本機/CI) · 工具總數 **97 個**（**破百倒數 3** 🚀）
+- **最後更新狀態**: Blog UX 大改版上線 — (1) BlogList 加搜尋（fuse.js）+ 分類 chip + 類型 toggle + URL query 同步；(2) chunk error 三層自癒（不再看到「發生錯誤」嚇人）；(3) 三頁加回到頂部按鈕；(4) BlogList 寬螢幕 RWD（1320 / 5 欄）+ ToolIndexAI 1100；(5) 三大新 skill 寫進 ~/.claude/skills/：changelog-version-drift-trap / vite-chunk-hash-pwa-self-heal / tool-catalog-blog-seo-factory。
 
 ## 📌 完成功能總覽
 
-### `v3.6.34` (最新 · SEO + 內容 7 件套 + 純 ASCII slug)
+### `v3.6.35` (最新 · Blog UX 大改版 + 三大 skill)
+
+**🔍 #1 BlogList 搜尋 + 篩選**
+- 即時搜尋（fuse.js）：title ×3 / tags ×2 / excerpt ×1 / body ×0.3 加權
+- 類型 toggle：「全部 97 / 深度長文 5 / 工具速覽 92」segmented control
+- 7 大分類 chip 多選（AND 邏輯）
+- URL query 同步：`?q=&cat=&type=` 條件可分享連結
+- 沒結果 cork 風 fallback + 引導到許願池
+- 深度長文卡片右上角紅色「深度長文」chip 區分
+
+**🩹 #2 chunk error 三層自癒**
+- **問題**：使用者看到「發生錯誤」+ console 噴 `BlogList-sd2AJIr3.js 404`
+- **根因**：vite 每次 build 換 chunk hash，舊 hash 在新 deploy 後消失；瀏覽器卡舊 SPA → 動態 import 404
+- **三層修法**：
+  - App.tsx `handleAssetError` → toast 「正在同步最新版本」→ unregister SW + 清 caches + reload
+  - ErrorBoundary `componentDidCatch` 加 `isChunkError` → 同樣自癒，不顯示「發生錯誤」
+  - sw.js PRECACHE_ASSETS 移除 index.html / BASE_PATH（避免舊 install 留下上輩子 HTML）
+- sessionStorage flag 防無限循環
+
+**⬆️ #3 回到頂部按鈕**
+- 重用 `BulletinBackToTop`（cork 風 + 紅圖釘 + scroll 500px 才浮現）
+- 接上 BlogList / BlogPost / ToolIndexAI 三頁
+
+**📐 #4 寬螢幕 RWD**
+- BlogList maxWidth **960 → 1320**（寬螢幕展 4-5 欄）
+- ToolIndexAI 980 → 1100
+- BlogPost 720 不變（閱讀黃金寬度）
+- 所有頁面 padding 改 `clamp(20px, 3vw, 36-40px)`
+
+**📝 #5 三大新 skill**
+
+| Skill | 用途 |
+|---|---|
+| `changelog-version-drift-trap` | 寫文件 vX.Y.Z 前先 bump package.json（4 鐵則 + 30 秒檢查 5 步 + pre-commit lint） |
+| `vite-chunk-hash-pwa-self-heal` | chunk error 三層自癒 TS 模板 + 反模式 7 條 + 哪層接住哪種情境對照 |
+| `tool-catalog-blog-seo-factory` | 「新工具自動產 blog landing」工廠 pattern + 4 檔完整模板 |
+
+- ~/.claude/skills/ git commit 完成
+- Claude Code 系統已載入並識別三條
+
+**🔖 #6 版本對齊（首次套用 changelog-version-drift-trap 鐵則）**
+- bump `package.json` 3.6.34 → **3.6.35**
+- 跑 `bump-sw-version.mjs` 同步 `version.json` + `sw.js CACHE_VERSION`
+- 從此 footer / SW / 進度文件三邊永遠對齊
+
+**🚀 已部署上線**
+- 多次 deploy 全 success
+- /blog/?q=閱讀 / ?cat=語文閱讀 / ?type=longform 全 200 OK
+- chunk error 自癒驗證通過（重整一次就拿到新版）
+
+---
+
+### `v3.6.34` (SEO + 內容 7 件套 + 純 ASCII slug)
 
 **🏷️ #2 工具頁 SoftwareApplication Schema**
 - PageHead mode=tool 加 Schema.org JSON-LD `SoftwareApplication`
