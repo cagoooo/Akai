@@ -7,7 +7,7 @@
  * - Stale While Revalidate: 圖片
  */
 
-const CACHE_VERSION = 'v3.6.35-fd4d7ab-202605221103';
+const CACHE_VERSION = 'v3.6.39-5d0dfa9-202605221523';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
 const ASSETS_ARCHIVE = 'assets-archive-v1';

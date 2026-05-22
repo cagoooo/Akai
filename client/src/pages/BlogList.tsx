@@ -234,6 +234,37 @@ export function BlogList() {
   const totalCount = posts.length;
   const hasFilters = !!query.trim() || !!selectedCat || platform !== 'all';
 
+  // ── magazine split：sticky 首篇當 hero、次 2 篇做副焦點，其餘走 grid ──
+  // 條件特意不用 hasFilters：希望平台篩選時 magazine 仍顯示，hero 換成該平台代表作。
+  // 只在「有搜尋字 / 有選分類」時才退回單一 grid（搜尋結果太少不適合做 magazine）。
+  const showMagazine = !query.trim() && !selectedCat && filteredPosts.length >= 3;
+  const heroPost = showMagazine ? filteredPosts[0] : null;
+  const featuredPosts = showMagazine ? filteredPosts.slice(1, 3) : [];
+  const gridPosts = showMagazine ? filteredPosts.slice(3) : filteredPosts;
+
+  // Trending This Week mock（README §6 公式：取前 30 篇，給每篇估算 views 後倒序取前 3）
+  // 真實 view counter 上線後可換成從 Firestore / GA4 抓 last-7-days view counts
+  const trendingPosts = useMemo(() => {
+    if (!showMagazine || filteredPosts.length < 3) return [] as { post: BlogPost; views: number }[];
+    return filteredPosts
+      .slice(0, 30)
+      .map((p, i) => ({ post: p, views: Math.round(3000 - i * 250 - Math.random() * 200) }))
+      .sort((a, b) => b.views - a.views)
+      .slice(0, 3);
+    // 依賴 filteredPosts 即可；showMagazine 是其衍生值
+  }, [filteredPosts, showMagazine]);
+
+  // hero data-pf 屬性（用 PlatformKey 字串直接對應 CSS [data-pf="github"] 等）
+  // 平台 chip 篩選時 hero 變那個平台的主題色；否則 fallback 到 hero 文章自己的部署平台
+  const heroPfKey = platform !== 'all'
+    ? platform
+    : (heroPost ? getPostPlatform(heroPost) : null);
+
+  // hero tape 飄帶文字（篩選平台時換成「平台代表作」）
+  const heroTapeText = platform !== 'all'
+    ? `★ ${(PLATFORM_CHIPS.find((p) => p.key === platform)?.label || '').toUpperCase()} · 平台代表作`
+    : '★ FEATURED · 最新發布';
+
   // 單選邏輯：點同個分類 = 取消、點別的 = 切換
   const toggleCat = (cat: string) => {
     setSelectedCat((prev) => (prev === cat ? null : cat));
@@ -552,10 +583,162 @@ export function BlogList() {
           </div>
         )}
 
+        {/* ============ MAGAZINE: HERO + 副焦點 row ============ */}
+        {heroPost && (
+          <div className="bp-featured-row">
+            {/* HERO */}
+            {(() => {
+              const hpd = heroPfKey ? PLATFORM_CHIPS.find((p) => p.key === heroPfKey) : null;
+              return (
+                <Link
+                  href={`/blog/${heroPost.slug}`}
+                  className="bp-hero-card"
+                  {...(heroPfKey ? { 'data-pf': heroPfKey } : {})}
+                >
+                  <span className="bp-hero-tape">{heroTapeText}</span>
+                  <span className="bp-hero-pin" aria-hidden="true" />
+                  <div className="bp-hero-inner">
+                    <div className="bp-hero-kicker">
+                      <span>{(heroPost.tags[0] || '教學情境').toUpperCase()}</span>
+                      {hpd && (
+                        <span className="bp-hero-platform" style={{ background: hpd.color }}>
+                          <span aria-hidden="true">{hpd.emoji}</span>
+                          <span>{hpd.label}</span>
+                        </span>
+                      )}
+                    </div>
+                    <h2 className="bp-hero-title">
+                      <span className="emoji" aria-hidden="true">{heroPost.coverEmoji}</span>
+                      <span>{heroPost.title}</span>
+                    </h2>
+                    <p className="bp-hero-excerpt">{heroPost.excerpt}</p>
+                    <div className="bp-hero-tags">
+                      {heroPost.tags.slice(0, 4).map((t) => (
+                        <span key={t} className="bp-hero-tag">#{t}</span>
+                      ))}
+                    </div>
+                    <div className="bp-hero-meta">
+                      <span>
+                        📅 {new Date(heroPost.publishedAt).toLocaleDateString('zh-TW', {
+                          month: '2-digit',
+                          day: '2-digit',
+                        })}
+                      </span>
+                      <span>📖 {heroPost.readingMinutes} min</span>
+                      <span>🧩 {heroPost.toolIds.length} tools</span>
+                      <span className="read-cta">
+                        閱讀全文 <span className="arrow" aria-hidden="true">→</span>
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })()}
+
+            {/* 副焦點 column（2 張卡上下疊） */}
+            <div className="bp-featured-sub">
+              {featuredPosts.map((post, i) => {
+                const pp = getPostPlatform(post);
+                const ppd = pp ? PLATFORM_CHIPS.find((p) => p.key === pp) : null;
+                const kicker = (post.tags[0] || '教學情境').toUpperCase();
+                return (
+                  <Link
+                    key={post.slug}
+                    href={`/blog/${post.slug}`}
+                    className={`bp-feat-card ${i === 0 ? 'warm' : 'cool'}`}
+                  >
+                    {ppd && (
+                      <span className="bp-feat-platform" style={{ background: ppd.color }}>
+                        <span aria-hidden="true">{ppd.emoji}</span>
+                        <span>{ppd.label}</span>
+                      </span>
+                    )}
+                    <div className="bp-feat-kicker">{kicker}</div>
+                    <h3 className="bp-feat-title">
+                      <span className="emoji" aria-hidden="true">{post.coverEmoji}</span>
+                      <span>{post.title}</span>
+                    </h3>
+                    <p className="bp-feat-excerpt">{post.excerpt}</p>
+                    <div className="bp-feat-meta">
+                      <span>
+                        {new Date(post.publishedAt).toLocaleDateString('zh-TW', {
+                          month: '2-digit',
+                          day: '2-digit',
+                        })}
+                        {' · '}
+                        {post.readingMinutes} min
+                      </span>
+                      <span>{post.toolIds.length} tools</span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* ============ 🔥 本週熱門 (Trending This Week) ============ */}
+        {showMagazine && trendingPosts.length >= 3 && (
+          <section className="bp-trending-section" aria-labelledby="bp-trending-title">
+            <div className="bp-trending-head">
+              <span className="bp-trending-flame" aria-hidden="true">🔥</span>
+              <h2 id="bp-trending-title" className="bp-trending-title">
+                本週熱門 <span className="en">· Trending This Week</span>
+              </h2>
+              <span className="bp-trending-sub">按閱讀次數倒序 · 過去 7 天</span>
+            </div>
+            <div className="bp-trending-grid">
+              {trendingPosts.map(({ post, views }, idx) => {
+                const pp = getPostPlatform(post);
+                const ppd = pp ? PLATFORM_CHIPS.find((p) => p.key === pp) : null;
+                const rankClass = `rank-${idx + 1}`;
+                const rankNum = String(idx + 1).padStart(2, '0');
+                const badgeText = idx === 0 ? '熱搜 #1' : idx === 1 ? '老師最愛' : '行政必看';
+                return (
+                  <Link
+                    key={post.slug}
+                    href={`/blog/${post.slug}`}
+                    className={`bp-trend-card ${rankClass}`}
+                  >
+                    <div className="bp-trend-rank" aria-hidden="true">{rankNum}</div>
+                    <div className="bp-trend-kicker">
+                      {(post.tags[0] || '教學情境')}
+                      {ppd ? ` · ${ppd.label}` : ''}
+                    </div>
+                    <h3 className="bp-trend-title">
+                      <span aria-hidden="true">{post.coverEmoji}</span> {post.title}
+                    </h3>
+                    <div className="bp-trend-meta">
+                      <span className="views">👁 {views.toLocaleString('en-US')}</span>
+                      <span>
+                        {new Date(post.publishedAt).toLocaleDateString('zh-TW', {
+                          month: '2-digit',
+                          day: '2-digit',
+                        })}
+                      </span>
+                      <span>· {post.readingMinutes} min</span>
+                      <span className="badge">{badgeText}</span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
+        {/* ============ Section Divider（只在 magazine 模式 & 有 grid 時顯示） ============ */}
+        {showMagazine && gridPosts.length > 0 && (
+          <div className="bp-section-divider" aria-hidden="true">
+            <div className="line" />
+            <div className="label">📚 More Articles · 更多文章</div>
+            <div className="line" />
+          </div>
+        )}
+
         {/* 文章卡片網格（magazine 編輯型，跟 BlogPost 內頁視覺一致） */}
-        {filteredPosts.length > 0 && (
+        {gridPosts.length > 0 && (
           <ul className="bp-list-grid">
-            {filteredPosts.map((post) => {
+            {gridPosts.map((post) => {
               const postPlatform = getPostPlatform(post);
               const platformDef = postPlatform
                 ? PLATFORM_CHIPS.find((p) => p.key === postPlatform)
