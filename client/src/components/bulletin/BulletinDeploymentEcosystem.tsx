@@ -13,7 +13,6 @@ interface Platform {
   emoji: string;
   name: string;
   count: number;
-  hidden: number;
   desc: string;
   color: string;
   pinColor: string;
@@ -25,8 +24,7 @@ const PLATFORMS: Platform[] = [
   {
     emoji: '🐙',
     name: 'GitHub Pages',
-    count: 60,
-    hidden: 0,
+    count: 58,
     desc: '主力作品集，cagoooo/* 80+ repo',
     color: tokens.note.blue,
     pinColor: '#3b82f6',
@@ -36,8 +34,7 @@ const PLATFORMS: Platform[] = [
   {
     emoji: '🌐',
     name: 'Google Sites Embedded',
-    count: 13,
-    hidden: 8,
+    count: 10,
     desc: 'swissknife + academic 子站',
     color: tokens.note.purple,
     pinColor: '#c026d3',
@@ -48,18 +45,16 @@ const PLATFORMS: Platform[] = [
     emoji: '🏫',
     name: 'XOOPS 校網 VM',
     count: 16,
-    hidden: 12,
     desc: '學校 smes_html/ 雲端部署',
     color: tokens.note.orange,
     pinColor: '#f97316',
-    highlight: '太陽系 Three.js 3D / 遊戲集合 12-in-1',
+    highlight: '太陽系 Three.js 3D / 遊戲集合',
     blogSlug: 'solar-29-system-explorer',
   },
   {
     emoji: '🔥',
     name: 'Firebase Hosting',
     count: 8,
-    hidden: 0,
     desc: '學校自訂 subdomain',
     color: tokens.note.green,
     pinColor: '#16a34a',
@@ -69,8 +64,7 @@ const PLATFORMS: Platform[] = [
   {
     emoji: '🧩',
     name: '第三方平台',
-    count: 4,
-    hidden: 0,
+    count: 6,
     desc: 'Replit + LINE Bot + Claude Artifacts + Padlet',
     color: tokens.note.pink,
     pinColor: '#db2777',
@@ -80,8 +74,6 @@ const PLATFORMS: Platform[] = [
 ];
 
 const TOTAL_TOOLS = PLATFORMS.reduce((s, p) => s + p.count, 0);
-const TOTAL_HIDDEN = PLATFORMS.reduce((s, p) => s + p.hidden, 0);
-const TOTAL_WORKS = TOTAL_TOOLS + TOTAL_HIDDEN;
 
 export function BulletinDeploymentEcosystem() {
   return (
@@ -116,7 +108,7 @@ export function BulletinDeploymentEcosystem() {
             letterSpacing: '0.005em',
           }}
         >
-          從 1 到 {TOTAL_WORKS}+：阿凱用過的 5 個部署平台
+          阿凱用過的 5 個部署平台
         </h2>
         <p
           style={{
@@ -126,7 +118,7 @@ export function BulletinDeploymentEcosystem() {
             fontStyle: 'italic',
           }}
         >
-          檯面工具 {TOTAL_TOOLS} 件 + 已挖出隱藏作品 {TOTAL_HIDDEN}+ 件 = <strong>{TOTAL_WORKS}+ 件作品實際分散 5 個平台</strong>
+          全部 <strong>{TOTAL_TOOLS} 件公開工具</strong>分散在 5 個部署平台 — 每個平台都對應不同教學場景與受眾
         </p>
       </div>
 
@@ -212,19 +204,10 @@ export function BulletinDeploymentEcosystem() {
                   flexWrap: 'wrap',
                 }}
               >
-                <span style={{ fontSize: 22, fontWeight: 900, color: tokens.red, lineHeight: 1 }}>
+                <span style={{ fontSize: 26, fontWeight: 900, color: tokens.red, lineHeight: 1 }}>
                   {p.count}
                 </span>
-                <span style={{ fontSize: 10, fontWeight: 700, color: tokens.muted2 }}>檯面</span>
-                {p.hidden > 0 && (
-                  <>
-                    <span style={{ fontSize: 14, color: tokens.muted2 }}>+</span>
-                    <span style={{ fontSize: 16, fontWeight: 900, color: tokens.accentDeep, lineHeight: 1 }}>
-                      {p.hidden}
-                    </span>
-                    <span style={{ fontSize: 10, fontWeight: 700, color: tokens.muted2 }}>隱藏</span>
-                  </>
-                )}
+                <span style={{ fontSize: 11, fontWeight: 700, color: tokens.muted2 }}>件工具</span>
               </div>
 
               <div
@@ -258,10 +241,10 @@ export function BulletinDeploymentEcosystem() {
           fontStyle: 'italic',
         }}
       >
-        💡 隱藏作品來自 <strong>swissknife / academic / little_games</strong> 子站 — 已被深挖寫進部落格教學心得。
+        💡 點任一張便利貼 → 看該平台代表作品的深度教學心得長文
         <br />
         <Link href="/blog" style={{ color: tokens.red, fontWeight: 800, textDecoration: 'underline' }}>
-          看 57 篇手寫教學心得 →
+          看全部 57 篇手寫教學心得 →
         </Link>
       </div>
     </div>
