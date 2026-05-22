@@ -12183,6 +12183,17 @@ const POST_40: BlogPost = {
 export const POSTS: BlogPost[] = [POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40];
 
 /**
+ * 已有「手寫長文」覆蓋的工具 ID 集合。
+ * 從 POSTS 內每篇文章的 toolIds 自動推導（包含「配對工具推薦」也算）。
+ * 用途：mini blog 生成器 / sitemap / OG landing 跳過這些 ID，避免 #N 同時出現「30 秒看完」短文 + 手寫長文重複。
+ *
+ * **唯一真相來源** — 修改後 miniPosts.ts / generate-og-pages.mjs / generate-sitemap.mjs 全部跟著走，無需 3 處硬編同步。
+ */
+export const HANDWRITTEN_TOOL_IDS: ReadonlySet<number> = new Set(
+  POSTS.flatMap((p) => p.toolIds)
+);
+
+/**
  * 取得 post（含手寫長文 + 從 tools.json 自動生成的迷你 blog）。
  * mini blog 在 runtime 才生成（避免 build 時 tools.json 變動沒同步進 posts.ts）。
  */

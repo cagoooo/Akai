@@ -55,6 +55,8 @@ for (const tool of tools) {
 // Blog 教學情境長文 — 從 client/src/blog/posts.ts 解析
 const postsPath = resolve(__dirname, '../client/src/blog/posts.ts');
 const longformSlugs = [];
+// 已有手寫長文覆蓋的 toolIds 集合（從 POSTS 自動 derive，取代之前硬編的 99 ID 列表）
+const SKIP_IDS = new Set();
 if (existsSync(postsPath)) {
     const postsSrc = readFileSync(postsPath, 'utf-8');
     const blockRegex = /const\s+POST_[A-Z0-9_]+:\s*BlogPost\s*=\s*\{([\s\S]*?)\n\};/g;
@@ -62,6 +64,13 @@ if (existsSync(postsPath)) {
     while ((m = blockRegex.exec(postsSrc)) !== null) {
         const slug = m[1].match(/slug:\s*'([^']+)'/)?.[1];
         const publishedAt = m[1].match(/publishedAt:\s*'([^']+)'/)?.[1];
+        const toolIdsMatch = m[1].match(/toolIds:\s*\[([\d,\s]+)\]/);
+        if (toolIdsMatch) {
+            for (const part of toolIdsMatch[1].split(',')) {
+                const n = parseInt(part.trim(), 10);
+                if (Number.isFinite(n)) SKIP_IDS.add(n);
+            }
+        }
         if (slug) longformSlugs.push({ slug, publishedAt: publishedAt || TODAY });
     }
     // Blog 列表頁
@@ -80,15 +89,14 @@ if (existsSync(postsPath)) {
             priority: '0.8',
         });
     }
-    console.log(`📖 手寫長文：${longformSlugs.length} 篇`);
+    console.log(`📖 手寫長文：${longformSlugs.length} 篇 / 涵蓋 ${SKIP_IDS.size} 個工具`);
 }
 
-// 自動產生的迷你 blog（一工具一篇 SEO landing）— 跟 miniPosts.ts SKIP_IDS 同邏輯
-// 純 ASCII slug 避免中文 URL encode 問題
+// 自動產生的迷你 blog（一工具一篇 SEO landing）
+// SKIP_IDS 已從 posts.ts derive，新增手寫長文時 sitemap 自動同步
 function makeMiniSlug(tool) {
     return `tool-${tool.id}`;
 }
-const SKIP_IDS = new Set([81, 46, 10, 68, 3, 100, 53, 7, 88, 67, 72, 54, 76, 92, 82, 73, 51, 89, 83, 11, 87, 79, 97, 94, 41, 24, 25, 26, 27, 44, 49, 74, 75, 80, 17, 18, 20, 21, 22, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 4, 12, 13, 14, 15, 16, 43, 77, 9, 6, 69, 85, 56, 65, 66, 86, 58, 84, 2, 47, 48, 62, 5, 55, 70, 71, 95, 91, 45, 50, 52, 57, 60, 63, 64, 93, 96, 78, 23, 42, 61, 59, 90, 1, 19, 8, 39, 40]); // 同 miniPosts.ts（含 97 篇手寫長文 + 索引神器 = 98 工具 100% 完成）
 let miniCount = 0;
 for (const tool of tools) {
     if (tool.isInternal || SKIP_IDS.has(tool.id)) continue;

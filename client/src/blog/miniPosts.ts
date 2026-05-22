@@ -17,9 +17,7 @@
 
 import type { EducationalTool } from '@/lib/data';
 import type { BlogPost } from './posts';
-
-// 不要 mini blog 的工具 ID（已有手寫長文，避免重複）
-const SKIP_IDS = new Set([81, 46, 10, 68, 3, 100, 53, 7, 88, 67, 72, 54, 76, 92, 82, 73, 51, 89, 83, 11, 87, 79, 97, 94, 41, 24, 25, 26, 27, 44, 49, 74, 75, 80, 17, 18, 20, 21, 22, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 4, 12, 13, 14, 15, 16, 43, 77, 9, 6, 69, 85, 56, 65, 66, 86, 58, 84, 2, 47, 48, 62, 5, 55, 70, 71, 95, 91, 45, 50, 52, 57, 60, 63, 64, 93, 96, 78, 23, 42, 61, 59, 90, 1, 19, 8, 39, 40]); // 已手寫 97 篇 + 索引神器 = 98 工具 100% 完成
+import { HANDWRITTEN_TOOL_IDS } from './posts';
 
 const CATEGORY_LABEL: Record<string, string> = {
   communication: '溝通互動',
@@ -111,10 +109,12 @@ ${tags.length > 0 ? `\n## 🏷 工具標籤\n\n${tags.map((t) => `\`${t}\``).joi
 }
 
 /**
- * 從工具列表批次產生 mini posts（排除 SKIP_IDS）
+ * 從工具列表批次產生 mini posts（排除已有手寫長文 + isInternal 工具）
+ *
+ * HANDWRITTEN_TOOL_IDS 由 posts.ts 從 POSTS 自動 derive，新增手寫長文時無需手動同步。
  */
 export function generateMiniPosts(tools: EducationalTool[]): BlogPost[] {
   return tools
-    .filter((t) => !t.isInternal && !SKIP_IDS.has(t.id))
+    .filter((t) => !t.isInternal && !HANDWRITTEN_TOOL_IDS.has(t.id))
     .map(toolToMiniPost);
 }

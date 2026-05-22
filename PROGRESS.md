@@ -1,12 +1,24 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.37` (本機/CI) · 工具總數 **97 個**（**破百倒數 3** 🚀）
-- **最後更新狀態**: 部落格 W1-W4 四波 quick-wins 上線 — Code 語法高亮、章節 # 錨點、a11y review、Schema.org JSON-LD、3 篇高人氣長文補 Callout/StatGrid、BlogList 改 magazine 風、閱讀完成率 + TOC 點擊熱圖觀測、admin 範本複製按鈕、/draft 草稿即時預覽器。
+- **當前版本**: `v3.6.38` (本機/CI) · 工具總數 **97 個**（**破百倒數 3** 🚀）
+- **最後更新狀態**: 修根 SKIP_IDS drift 痛點 — 3 處硬編 toolIds 黑名單改成從 POSTS.toolIds 自動 derive，未來手寫長文新增到 POSTS 之後 mini blog 生成器 / sitemap / OG landing 全部自動同步。
 
 ## 📌 完成功能總覽
 
-### `v3.6.37` (最新 · 部落格 Wave 1-4 四波 quick wins)
+### `v3.6.38` (最新 · SKIP_IDS 自動 derive · 消除 3 處硬編同步痛點)
+
+**🔧 修根：SKIP_IDS 從 POSTS 自動 derive**
+- **問題**：手寫長文需在三處同步：`miniPosts.ts` line 22 / `generate-og-pages.mjs` line 673 / `generate-sitemap.mjs` line 91，三邊各有一份 99 個 ID 的硬編黑名單。任何一處忘記同步，新加手寫長文時就會跟 mini blog 重複出現
+- **修法**：
+  - `posts.ts` 在 `export const POSTS` 後新增 `export const HANDWRITTEN_TOOL_IDS: ReadonlySet<number> = new Set(POSTS.flatMap(p => p.toolIds))`
+  - `miniPosts.ts` 改 `import { HANDWRITTEN_TOOL_IDS } from './posts'`，刪除硬編列表
+  - `generate-og-pages.mjs` reuse 既有 `extractBlogPosts()` 函式，從回傳的 posts.toolIds 建 Set
+  - `generate-sitemap.mjs` 在原本 regex 抽 slug / publishedAt 的迴圈內順便抽 toolIds 進 SKIP_IDS
+- **驗證**：build 後 sitemap 印「手寫長文：98 篇 / 涵蓋 98 個工具，迷你 blog 0 篇」— 跟改之前完全一樣
+- **效益**：未來新增 #101 手寫長文進 POSTS（指定 toolIds: [101]）→ runtime + build-time 全自動同步，不再需要記得改 3 個檔
+
+### `v3.6.37` (部落格 Wave 1-4 四波 quick wins)
 
 **🎨 Wave 1 — 內頁 quick wins 五合一**
 

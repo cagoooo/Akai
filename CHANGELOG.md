@@ -2,6 +2,21 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.38] - 2026-05-22 — SKIP_IDS 自動 derive，消除 3 處硬編同步痛點
+
+### 🔧 修根：HANDWRITTEN_TOOL_IDS 自動 derive
+- `posts.ts` 新增 `export const HANDWRITTEN_TOOL_IDS = new Set(POSTS.flatMap(p => p.toolIds))`
+- `miniPosts.ts` import HANDWRITTEN_TOOL_IDS 取代原本 99 個 ID 硬編列表
+- `generate-og-pages.mjs` 改用 extractBlogPosts() 自動 derive
+- `generate-sitemap.mjs` 改用 regex 抽 toolIds 進 Set
+- 未來新增手寫長文進 POSTS 後，mini blog 生成器 / sitemap / OG landing 全部自動同步
+- build 驗證：手寫長文 98 篇 / 涵蓋 98 個工具，mini blog 0 篇，與改前完全一致
+
+### 🚀 部署
+- bump v3.6.37 → v3.6.38
+
+---
+
 ## [3.6.37] - 2026-05-22 — 部落格 Wave 1-4 四波 quick wins
 
 ### 🎨 Wave 1 — 內頁 quick wins
