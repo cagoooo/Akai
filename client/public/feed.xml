@@ -8,7 +8,7 @@
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
     <pubDate>Fri, 22 May 2026 08:08:52 GMT</pubDate>
-    <lastBuildDate>Fri, 22 May 2026 08:09:25 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 22 May 2026 08:58:05 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -29,6 +29,15 @@
       <category>隨機抽號</category>
       <category>教室計時器</category>
       <category>隨機分組</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#98 教室小幫手：26 個課堂小工具裝進一個分頁，免登入不上傳的導師百寶箱</title>
+      <link>https://cagoooo.github.io/Akai/blog/classroom-kit-98-daily-teacher-toolkit</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/classroom-kit-98-daily-teacher-toolkit</guid>
+      <pubDate>Fri, 22 May 2026 00:00:00 GMT</pubDate>
+      <description>#98 教室小幫手把導師每天分散在 8 個分頁的小工具（情緒打卡、點名、抽號、計時器、跑馬燈、分組、座位表、生日榜⋯）合進一頁 PWA，設定班級名單一次 26 工具自動帶入，所有資料只存瀏覽器本機 IndexedDB，不上傳任何雲端。</description>
+      <category>blog</category>
+      <category>教學情境</category>
     </item>
     <item>
       <title>📖 教學情境：#100 工具索引神器升級 AI build log：從 fuse.js 字面比對到 Gemini 語意搜尋</title>
@@ -279,15 +288,6 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/slide-extractor-75-video-pdf-images</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
       <description>#75 真實名稱「Slide Extractor - 影片與 PDF 簡報擷取神器」— 兩大模式（影片轉圖片 / PDF 轉圖片），用 PDF.js 抓 PDF 每頁渲染成圖、JSZip 打包下載、jsPDF 重新匯出、Firebase 設定流程（立即設定 / 取消 / 儲存並連線）。37,748 字元單檔 HTML 嵌進 Google Sites Embedded HTML。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#80 114 學年度下學期第 13 週教師會議互動平台：校長室 + 教務處（4 組長）+ 學務處（2 組長）的 SPA 會議報告</title>
-      <link>https://cagoooo.github.io/Akai/blog/meeting-80-spring-semester-week13</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/meeting-80-spring-semester-week13</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#80 真實標題「石門國小 114 學年度下學期第 13 週教師會議互動平台」— 跟 #24（上學期期末）同款架構但內容是下學期週次會議。校長室 + 教務處（教務主任 + 註冊組長 / 六年級畢業考時程 + 設備組長 + 資訊組長）+ 學務處（訓育組長 + 衛生組長 / 語文競賽打掃與病媒蚊防制）。52KB 純 Tailwind 單檔嵌進 Google Sites。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
