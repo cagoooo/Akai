@@ -9974,7 +9974,7 @@ const POST_60: BlogPost = {
 
 **用對工具是工程師的修養**（再次！）— 阿凱不會為了簡單畫廊套整個 Three.js 引擎。
 
-## `transform-style: preserve-3d` 是什麼？
+## \`transform-style: preserve-3d\` 是什麼？
 
 CSS 3D 變形的關鍵屬性：
 \`\`\`css
