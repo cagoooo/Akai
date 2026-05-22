@@ -9966,7 +9966,7 @@ const POST_60: BlogPost = {
 
 對比阿凱另兩個 3D 工具：
 - [#29 太陽系探索者](/blog/solar-29-system-explorer/) = **Three.js**（複雜模型 + 物理）
-- **#60 3D 畫廊**（本篇）= **純 CSS `preserve-3d`**（簡單旋轉）
+- **#60 3D 畫廊**（本篇）= **純 CSS \`preserve-3d\`**（簡單旋轉）
 
 **選擇邏輯**：
 - ✅ 簡單 3D 場景 → 純 CSS（**零依賴 + 載入快**）
