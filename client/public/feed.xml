@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 98+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 99+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Fri, 22 May 2026 07:23:39 GMT</lastBuildDate>
+    <pubDate>Fri, 22 May 2026 08:08:52 GMT</pubDate>
+    <lastBuildDate>Fri, 22 May 2026 08:09:25 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,18 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：教室小幫手 — 老師的每日課堂工具</title>
+      <link>https://cagoooo.github.io/Akai/tool/98</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/98</guid>
+      <pubDate>Fri, 22 May 2026 08:08:52 GMT</pubDate>
+      <description>阿凱老師為導師日常打造的「教室百寶箱」，一頁集合 26 個課堂小工具：情緒打卡、班級 To-Do、彩虹能量卡、出勤、跑馬燈、抽號、計時器、分組、座位表、生日榜、積點榜、月度報告、班費、AI 評語草擬⋯六大分組任你切換。免登入、不上傳、可離線、PWA 一鍵裝成桌面 App。</description>
+      <category>教室百寶箱</category>
+      <category>情緒打卡</category>
+      <category>隨機抽號</category>
+      <category>教室計時器</category>
+      <category>隨機分組</category>
+    </item>
     <item>
       <title>📖 教學情境：#100 工具索引神器升級 AI build log：從 fuse.js 字面比對到 Gemini 語意搜尋</title>
       <link>https://cagoooo.github.io/Akai/blog/tool-100-gemini-embedding-build-log</link>
@@ -276,15 +288,6 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/meeting-80-spring-semester-week13</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
       <description>#80 真實標題「石門國小 114 學年度下學期第 13 週教師會議互動平台」— 跟 #24（上學期期末）同款架構但內容是下學期週次會議。校長室 + 教務處（教務主任 + 註冊組長 / 六年級畢業考時程 + 設備組長 + 資訊組長）+ 學務處（訓育組長 + 衛生組長 / 語文競賽打掃與病媒蚊防制）。52KB 純 Tailwind 單檔嵌進 Google Sites。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#17 創意抽籤系統：純前端 Tailwind + canvas-confetti 輸入名單一個一個抽 + 剩餘項目即時顯示（XOOPS VM 部署）</title>
-      <link>https://cagoooo.github.io/Akai/blog/draw-17-creative-lottery</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/draw-17-creative-lottery</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#17 真實名稱「創意抽籤系統」是阿凱用 Gemini Canvas 寫的純前端 + Tailwind + canvas-confetti 抽籤工具，部署在 XOOPS 校網 VM。輸入名單後一個一個抽出（不是一次全抽），剩餘項目即時顯示，每抽中觸發 confetti 撒花，可複製結果 + 重新開始。footer 寫「桃園市石門國小 資訊組 阿凱老師 設計」。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
