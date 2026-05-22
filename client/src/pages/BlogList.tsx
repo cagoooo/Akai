@@ -2,17 +2,19 @@
  * BlogList — 教學情境部落格列表 (/blog)
  *
  * 包含：
- *   - 5 篇手寫長文 + ~92 篇 mini blog（每工具一篇 SEO landing）
+ *   - 98 篇手寫長文（100% 工具覆蓋率：5 大部署平台全收錄）
  *   - 即時搜尋（fuse.js 模糊比對 title / excerpt / tags）
- *   - 7 大分類 chip + 長文 / 迷你 類型 toggle
- *   - URL query 同步（?q=, ?cat=, ?type=）讓條件可分享
+ *   - 7 大分類 chip + 5 大部署平台 chip（按平台篩選）
+ *   - URL query 同步（?q=, ?cat=, ?platform=）讓條件可分享
  *   - 沒結果時引導到許願池
  */
 
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'wouter';
 import Fuse from 'fuse.js';
+import { useQuery } from '@tanstack/react-query';
 import { POSTS, getAllPostsAsync, type BlogPost } from '@/blog/posts';
+import type { EducationalTool } from '@/lib/data';
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
 import { Tape } from '@/components/primitives/Tape';
@@ -77,35 +79,63 @@ function postMatchesCategory(post: BlogPost, category: string): boolean {
   return false;
 }
 
-type PostType = 'all' | 'longform' | 'mini';
+// 5 大部署平台（與首頁 BulletinDeploymentEcosystem 一致）
+type PlatformKey = 'all' | 'github' | 'gsites' | 'xoops' | 'firebase' | 'thirdparty';
 
-// 判斷是否為手寫長文（POSTS 5 篇）；其他都算迷你
-function isLongform(post: BlogPost): boolean {
-  return POSTS.some((p) => p.slug === post.slug);
+interface PlatformDef {
+  key: PlatformKey;
+  emoji: string;
+  label: string;
+  hint: string;
+  color: string;
+}
+
+const PLATFORM_CHIPS: PlatformDef[] = [
+  { key: 'github', emoji: '🐙', label: 'GitHub Pages', hint: 'cagoooo/* 主力作品集（含 #100 索引神器）', color: '#3b82f6' },
+  { key: 'gsites', emoji: '🌐', label: 'Google Sites', hint: 'swissknife + academic 子站', color: '#c026d3' },
+  { key: 'xoops', emoji: '🏫', label: 'XOOPS 校網 VM', hint: '學校 smes_html/ 雲端部署', color: '#f97316' },
+  { key: 'firebase', emoji: '🔥', label: 'Firebase Hosting', hint: '*.smes.tyc.edu.tw subdomain', color: '#16a34a' },
+  { key: 'thirdparty', emoji: '🧩', label: '第三方平台', hint: 'Replit + LINE Bot + Claude Artifacts + Padlet', color: '#db2777' },
+];
+
+/**
+ * 由工具 URL 判斷部署平台（與首頁 5 大平台分類一致）
+ */
+function getToolPlatform(tool: EducationalTool | undefined): PlatformKey | null {
+  if (!tool) return null;
+  const u = tool.url || '';
+  // 索引神器 #100 / 內部路徑 → 網站本身就在 GitHub Pages
+  if (u.startsWith('/Akai/') || u.startsWith('/') && !u.includes('://')) return 'github';
+  if (u.includes('github.io')) return 'github';
+  if (u.includes('sites.google.com')) return 'gsites';
+  if (/^https?:\/\/www\.smes\.tyc\.edu\.tw/.test(u)) return 'xoops';
+  if (/^https?:\/\/[a-z0-9-]+\.smes\.tyc\.edu\.tw/.test(u)) return 'firebase';
+  return 'thirdparty';
 }
 
 // ── URL 雙向同步 ─────────────────────────────────────
 // 分類 chip 改成單選（避免使用者點越多 AND 邏輯越篩越少）
-function readFiltersFromUrl(): { q: string; cat: string | null; type: PostType } {
-  if (typeof window === 'undefined') return { q: '', cat: null, type: 'all' };
+function readFiltersFromUrl(): { q: string; cat: string | null; platform: PlatformKey } {
+  if (typeof window === 'undefined') return { q: '', cat: null, platform: 'all' };
   const params = new URLSearchParams(window.location.search);
-  const typeRaw = params.get('type') || 'all';
+  const platformRaw = params.get('platform') || 'all';
   // 兼容舊 ?cat=A,B 格式（只取第一個）
   const catRaw = params.get('cat') || '';
   const cat = catRaw.split(',').filter(Boolean)[0] || null;
+  const validKeys: PlatformKey[] = ['all', 'github', 'gsites', 'xoops', 'firebase', 'thirdparty'];
   return {
     q: params.get('q') || '',
     cat,
-    type: (['all', 'longform', 'mini'].includes(typeRaw) ? typeRaw : 'all') as PostType,
+    platform: (validKeys.includes(platformRaw as PlatformKey) ? platformRaw : 'all') as PlatformKey,
   };
 }
 
-function writeFiltersToUrl({ q, cat, type }: { q: string; cat: string | null; type: PostType }) {
+function writeFiltersToUrl({ q, cat, platform }: { q: string; cat: string | null; platform: PlatformKey }) {
   if (typeof window === 'undefined') return;
   const params = new URLSearchParams();
   if (q) params.set('q', q);
   if (cat) params.set('cat', cat);
-  if (type !== 'all') params.set('type', type);
+  if (platform !== 'all') params.set('platform', platform);
   const search = params.toString();
   const newUrl = window.location.pathname + (search ? '?' + search : '');
   window.history.replaceState(null, '', newUrl);
@@ -116,7 +146,20 @@ export function BlogList() {
   const [posts, setPosts] = useState<BlogPost[]>(POSTS);
   const [query, setQuery] = useState(initial.q);
   const [selectedCat, setSelectedCat] = useState<string | null>(initial.cat);
-  const [postType, setPostType] = useState<PostType>(initial.type);
+  const [platform, setPlatform] = useState<PlatformKey>(initial.platform);
+
+  // 載入 tools.json（用於 post → platform 對應）
+  const { data: tools } = useQuery<EducationalTool[]>({
+    queryKey: ['/api/tools'],
+    queryFn: async () => {
+      const base = import.meta.env.BASE_URL || '/';
+      const version = import.meta.env.VITE_APP_VERSION || Date.now();
+      const res = await fetch(`${base}api/tools.json?v=${version}`);
+      if (!res.ok) throw new Error('tools fetch failed');
+      return res.json();
+    },
+    staleTime: 5 * 60 * 1000,
+  });
 
   // async 載入完整 posts（合併手寫長文 + 迷你 blog）
   useEffect(() => {
@@ -125,8 +168,38 @@ export function BlogList() {
 
   // URL query sync
   useEffect(() => {
-    writeFiltersToUrl({ q: query, cat: selectedCat, type: postType });
-  }, [query, selectedCat, postType]);
+    writeFiltersToUrl({ q: query, cat: selectedCat, platform });
+  }, [query, selectedCat, platform]);
+
+  // 建立 toolId → platform 的 Map（tools 載入後計算）
+  const toolPlatformMap = useMemo(() => {
+    const map = new Map<number, PlatformKey>();
+    if (!tools) return map;
+    for (const tool of tools) {
+      const p = getToolPlatform(tool);
+      if (p) map.set(tool.id, p);
+    }
+    return map;
+  }, [tools]);
+
+  // 取得一篇 post 的平台（用第一個 toolId 對應，找不到回 null）
+  const getPostPlatform = (post: BlogPost): PlatformKey | null => {
+    if (post.toolIds.length === 0) return null;
+    return toolPlatformMap.get(post.toolIds[0]) || null;
+  };
+
+  // 各平台 post 數量（用於 chip label）
+  const platformCounts = useMemo(() => {
+    const counts: Record<PlatformKey, number> = {
+      all: posts.length,
+      github: 0, gsites: 0, xoops: 0, firebase: 0, thirdparty: 0,
+    };
+    for (const post of posts) {
+      const p = getPostPlatform(post);
+      if (p) counts[p]++;
+    }
+    return counts;
+  }, [posts, toolPlatformMap]);
 
   // Fuse instance for fuzzy search
   const fuse = useMemo(() => {
@@ -144,13 +217,14 @@ export function BlogList() {
     });
   }, [posts]);
 
-  // 套用所有篩選條件（type filter → category filter → search → sort）
+  // 套用所有篩選條件（platform filter → category filter → search → sort）
   const filteredPosts = useMemo(() => {
     let result = posts;
 
-    // (1) type filter
-    if (postType === 'longform') result = result.filter(isLongform);
-    else if (postType === 'mini') result = result.filter((p) => !isLongform(p));
+    // (1) platform filter（按部署平台篩選）
+    if (platform !== 'all') {
+      result = result.filter((p) => getPostPlatform(p) === platform);
+    }
 
     // (2) category chip 單選（看該分類所有文章）
     // 用 CATEGORY_KEYWORDS 關鍵字 mapping 模糊比對 tag / title / excerpt
@@ -174,12 +248,10 @@ export function BlogList() {
       );
     }
     return result;
-  }, [posts, postType, selectedCat, query, fuse]);
+  }, [posts, platform, selectedCat, query, fuse, toolPlatformMap]);
 
   const totalCount = posts.length;
-  const longformCount = posts.filter(isLongform).length;
-  const miniCount = totalCount - longformCount;
-  const hasFilters = !!query.trim() || !!selectedCat || postType !== 'all';
+  const hasFilters = !!query.trim() || !!selectedCat || platform !== 'all';
 
   // 單選邏輯：點同個分類 = 取消、點別的 = 切換
   const toggleCat = (cat: string) => {
@@ -189,15 +261,20 @@ export function BlogList() {
   const clearAllFilters = () => {
     setQuery('');
     setSelectedCat(null);
-    setPostType('all');
+    setPlatform('all');
   };
+
+  // 取得當前選中平台的 label（顯示在結果列）
+  const currentPlatformLabel = platform === 'all'
+    ? null
+    : PLATFORM_CHIPS.find((p) => p.key === platform)?.label;
 
   return (
     <>
       <PageHead
         mode="custom"
         title="📖 教學情境部落格 · 阿凱老師教育工具集"
-        description="阿凱老師親手撰寫的工具使用情境長文 — 每篇講一個熱門工具如何解決真實教學現場的問題，含實測數字與配對推薦。"
+        description="阿凱老師親手撰寫的 98 篇工具使用情境長文 — 涵蓋 5 大部署平台（GitHub Pages / Google Sites / XOOPS 校網 / Firebase / 第三方），每篇含實測數字與配對推薦。"
         path="/blog"
       />
       <BulletinHeader />
@@ -228,9 +305,16 @@ export function BlogList() {
             這些工具，我是這樣帶課的
           </h1>
           <p style={{ fontSize: 14, color: tokens.muted2, margin: 0, lineHeight: 1.6 }}>
-            共 <strong style={{ color: tokens.ink }}>{totalCount}</strong> 篇文章 ─{' '}
-            <strong style={{ color: tokens.red }}>📖 {longformCount} 篇教學心得</strong>（實戰長文）+{' '}
-            <strong style={{ color: tokens.accent }}>🔖 {miniCount} 篇工具介紹</strong>（30 秒速覽）
+            共 <strong style={{ color: tokens.ink }}>{totalCount}</strong> 篇<strong style={{ color: tokens.red }}>親手撰寫教學心得</strong>，分散在 5 個部署平台 ─{' '}
+            <strong style={{ color: '#3b82f6' }}>🐙 {platformCounts.github}</strong>
+            {' · '}
+            <strong style={{ color: '#c026d3' }}>🌐 {platformCounts.gsites}</strong>
+            {' · '}
+            <strong style={{ color: '#f97316' }}>🏫 {platformCounts.xoops}</strong>
+            {' · '}
+            <strong style={{ color: '#16a34a' }}>🔥 {platformCounts.firebase}</strong>
+            {' · '}
+            <strong style={{ color: '#db2777' }}>🧩 {platformCounts.thirdparty}</strong>
           </p>
         </div>
 
@@ -284,49 +368,77 @@ export function BlogList() {
             />
           </div>
 
-          {/* 類型 toggle */}
+          {/* 🗺️ 部署平台 chip（按平台篩選） */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10, flexWrap: 'wrap' }}>
-            <span style={{ fontSize: 12, fontWeight: 800, color: tokens.muted2 }}>📝 類型</span>
-            <div
-              role="tablist"
+            <span style={{ fontSize: 12, fontWeight: 800, color: tokens.muted2 }}>🗺️ 平台</span>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={platform === 'all'}
+              title="顯示全部 5 平台的文章"
+              onClick={() => setPlatform('all')}
               style={{
-                display: 'inline-flex',
+                padding: '5px 14px',
+                fontSize: 12,
+                fontFamily: tokens.font.tc,
+                fontWeight: 800,
+                color: platform === 'all' ? '#fff' : tokens.ink,
+                background: platform === 'all' ? tokens.ink : '#fff',
                 border: `1.8px solid ${tokens.ink}`,
                 borderRadius: 999,
-                overflow: 'hidden',
-                background: '#fff',
-                boxShadow: '1.5px 1.5px 0 rgba(0,0,0,.14)',
+                cursor: 'pointer',
+                boxShadow: platform === 'all'
+                  ? '2px 2px 0 rgba(0,0,0,.2)'
+                  : '1.5px 1.5px 0 rgba(0,0,0,.14)',
+                transition: 'all 0.15s ease',
+                whiteSpace: 'nowrap',
               }}
             >
-              {([
-                { key: 'all', label: `全部 ${totalCount}`, hint: '所有文章（精選 + 工具介紹）' },
-                { key: 'longform', label: `📖 教學心得 ${longformCount}`, hint: '阿凱老師親手寫的長文：含實測數據、學生引言、配對推薦（5-8 分鐘）' },
-                { key: 'mini', label: `🔖 工具介紹 ${miniCount}`, hint: '每個工具一篇 30 秒看完：用途、適合誰用、怎麼開始（2 分鐘）' },
-              ] as { key: PostType; label: string; hint: string }[]).map((opt) => (
+              全部 {platformCounts.all}
+            </button>
+            {PLATFORM_CHIPS.map((p) => {
+              const active = platform === p.key;
+              const count = platformCounts[p.key];
+              return (
                 <button
-                  key={opt.key}
+                  key={p.key}
                   type="button"
                   role="tab"
-                  aria-selected={postType === opt.key}
-                  title={opt.hint}
-                  onClick={() => setPostType(opt.key)}
+                  aria-selected={active}
+                  title={p.hint}
+                  onClick={() => setPlatform(p.key)}
                   style={{
-                    padding: '6px 14px',
+                    padding: '5px 12px',
                     fontSize: 12,
                     fontFamily: tokens.font.tc,
-                    fontWeight: 800,
-                    color: postType === opt.key ? '#fff' : tokens.ink,
-                    background: postType === opt.key ? tokens.accent : 'transparent',
-                    border: 'none',
+                    fontWeight: 700,
+                    color: active ? '#fff' : tokens.ink,
+                    background: active ? p.color : '#fff',
+                    border: `1.8px solid ${active ? p.color : tokens.ink}`,
+                    borderRadius: 999,
                     cursor: 'pointer',
-                    transition: 'background 0.15s ease',
+                    boxShadow: active
+                      ? `2px 2px 0 ${p.color}`
+                      : '1.5px 1.5px 0 rgba(0,0,0,.14)',
+                    transition: 'all 0.15s ease',
                     whiteSpace: 'nowrap',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 4,
                   }}
                 >
-                  {opt.label}
+                  <span>{p.emoji}</span>
+                  <span>{p.label}</span>
+                  <span style={{
+                    fontFamily: tokens.font.en,
+                    fontWeight: 900,
+                    fontSize: 11,
+                    opacity: active ? 0.85 : 0.7,
+                    marginLeft: 2,
+                  }}>{count}</span>
                 </button>
-              ))}
-            </div>
+              );
+            })}
           </div>
 
           {/* 分類 chip 單選（點同個 = 取消，點別的 = 切換） */}
@@ -412,6 +524,9 @@ export function BlogList() {
               {selectedCat && (
                 <span>· 分類：{selectedCat}</span>
               )}
+              {currentPlatformLabel && (
+                <span>· 平台：{currentPlatformLabel}</span>
+              )}
             </>
           ) : (
             <span>📌 全部文章（按發佈日期倒序）</span>
@@ -473,7 +588,10 @@ export function BlogList() {
               const noteColor = COLOR_MAP[post.coverColor] || tokens.note.yellow;
               const pinColor = PIN_MAP[post.coverColor] || tokens.red;
               const tilt = (idx % 3) === 0 ? -1.2 : (idx % 3) === 1 ? 0.8 : -0.4;
-              const longform = isLongform(post);
+              const postPlatform = getPostPlatform(post);
+              const platformDef = postPlatform
+                ? PLATFORM_CHIPS.find((p) => p.key === postPlatform)
+                : null;
               return (
                 <li key={post.slug}>
                   <Link
@@ -506,26 +624,32 @@ export function BlogList() {
                     >
                       <Pin color={pinColor} size={18} style={{ top: -9, left: '50%', marginLeft: -9 }} />
 
-                      {/* 長文徽章 */}
-                      {longform && (
+                      {/* 平台徽章（小貼紙） */}
+                      {platformDef && (
                         <div
+                          title={`部署於 ${platformDef.label}`}
                           style={{
                             position: 'absolute',
                             top: 8,
                             right: 8,
-                            background: tokens.red,
+                            background: platformDef.color,
                             color: '#fff',
                             fontSize: 9,
                             fontWeight: 900,
                             padding: '2px 7px',
                             borderRadius: 999,
                             border: `1.5px solid ${tokens.ink}`,
-                            letterSpacing: '0.05em',
+                            letterSpacing: '0.03em',
                             transform: 'rotate(6deg)',
                             boxShadow: '1.5px 1.5px 0 rgba(0,0,0,.22)',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 3,
+                            whiteSpace: 'nowrap',
                           }}
                         >
-                          📖 教學心得
+                          <span>{platformDef.emoji}</span>
+                          <span>{platformDef.label}</span>
                         </div>
                       )}
 
