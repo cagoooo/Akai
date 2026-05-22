@@ -1390,6 +1390,136 @@
   .bp-cta { padding: 24px 16px; }
 }
 
+/* =========================================================
+   BlogList — magazine card 列表（套用於 /blog 列表頁）
+   ========================================================= */
+.bp-list-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: clamp(16px, 2vw, 24px);
+}
+.bp-list-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1.5px solid var(--rule);
+  border-radius: 12px;
+  padding: 22px 22px 18px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+  position: relative;
+  min-height: 280px;
+  font-family: var(--font-tc);
+}
+.bp-list-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--ink);
+  box-shadow: 0 12px 24px -10px rgba(0,0,0,.18);
+}
+.bp-list-card__platform {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  letter-spacing: .04em;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #fff;
+}
+.bp-list-card__kicker {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--accent-deep);
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: calc(100% - 80px); /* 留給右上 platform badge */
+}
+.bp-list-card__kicker::before {
+  content: '';
+  width: 20px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.bp-list-card__title {
+  font-size: 17.5px;
+  font-weight: 900;
+  color: var(--ink);
+  margin: 0 0 10px;
+  line-height: 1.35;
+  letter-spacing: -.005em;
+  word-break: break-word;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.bp-list-card__emoji {
+  font-size: 24px;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.bp-list-card__excerpt {
+  font-size: 13.5px;
+  color: var(--ink-mute);
+  margin: 0 0 14px;
+  line-height: 1.6;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.bp-list-card__tags {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.bp-list-tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  background: var(--paper-warm);
+  color: var(--ink-mute);
+  border-radius: 999px;
+  border: 1px solid var(--rule);
+  letter-spacing: .02em;
+}
+.bp-list-card__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+  font-weight: 600;
+  letter-spacing: .04em;
+  border-top: 1px solid var(--rule-soft);
+  padding-top: 10px;
+}
+
+@media (max-width: 720px) {
+  .bp-list-card { min-height: auto; padding: 18px 18px 16px; }
+  .bp-list-card__title { font-size: 16px; }
+  .bp-list-card__excerpt { font-size: 13px; -webkit-line-clamp: 2; }
+}
+
 /* reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .bp-lrail-polaroid,

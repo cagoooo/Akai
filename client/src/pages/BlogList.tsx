@@ -16,30 +16,11 @@ import { useQuery } from '@tanstack/react-query';
 import { POSTS, getAllPostsAsync, type BlogPost } from '@/blog/posts';
 import type { EducationalTool } from '@/lib/data';
 import { tokens } from '@/design/tokens';
-import { Pin } from '@/components/primitives/Pin';
 import { Tape } from '@/components/primitives/Tape';
 import { BulletinHeader } from '@/components/bulletin/BulletinHeader';
 import { BulletinFooter } from '@/components/bulletin/BulletinFooter';
 import { BulletinBackToTop } from '@/components/bulletin/BulletinBackToTop';
 import { PageHead } from '@/components/PageHead';
-
-const COLOR_MAP: Record<string, string> = {
-  yellow: tokens.note.yellow,
-  blue: tokens.note.blue,
-  pink: tokens.note.pink,
-  green: tokens.note.green,
-  orange: tokens.note.orange,
-  purple: tokens.note.purple,
-};
-
-const PIN_MAP: Record<string, string> = {
-  yellow: '#eab308',
-  blue: '#2563eb',
-  pink: '#ec4899',
-  green: '#16a34a',
-  orange: '#dc2626',
-  purple: '#c026d3',
-};
 
 // 七大分類 chip（同 tools.json category 集合，blog 內的 tags 第一個通常對應）
 const CATEGORY_CHIPS = [
@@ -571,139 +552,52 @@ export function BlogList() {
           </div>
         )}
 
-        {/* 文章便利貼牆 */}
+        {/* 文章卡片網格（magazine 編輯型，跟 BlogPost 內頁視覺一致） */}
         {filteredPosts.length > 0 && (
-          <ul
-            style={{
-              listStyle: 'none',
-              margin: 0,
-              padding: 0,
-              display: 'grid',
-              // 卡片最小 300px，auto-fill 讓寬螢幕自動展 4-5 欄、平板 2-3 欄、手機 1 欄
-              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-              gap: 'clamp(20px, 2vw, 32px)',
-            }}
-          >
-            {filteredPosts.map((post, idx) => {
-              const noteColor = COLOR_MAP[post.coverColor] || tokens.note.yellow;
-              const pinColor = PIN_MAP[post.coverColor] || tokens.red;
-              const tilt = (idx % 3) === 0 ? -1.2 : (idx % 3) === 1 ? 0.8 : -0.4;
+          <ul className="bp-list-grid">
+            {filteredPosts.map((post) => {
               const postPlatform = getPostPlatform(post);
               const platformDef = postPlatform
                 ? PLATFORM_CHIPS.find((p) => p.key === postPlatform)
                 : null;
+              const kicker = (post.tags[0] || '教學情境').toUpperCase();
+              const extraTags = post.tags.slice(1, 4);
               return (
                 <li key={post.slug}>
-                  <Link
-                    href={`/blog/${post.slug}`}
-                    style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
-                  >
-                    <article
-                      style={{
-                        position: 'relative',
-                        background: noteColor,
-                        border: `2.5px solid ${tokens.ink}`,
-                        borderRadius: 10,
-                        padding: '22px 20px 18px',
-                        transform: `rotate(${tilt}deg)`,
-                        boxShadow: '5px 6px 0 rgba(0,0,0,.22), 0 8px 18px -6px rgba(0,0,0,.18)',
-                        transition: 'transform 0.18s ease, box-shadow 0.18s ease',
-                        cursor: 'pointer',
-                        minHeight: 280,
-                        display: 'flex',
-                        flexDirection: 'column',
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = `rotate(${tilt}deg) translate(-2px, -3px)`;
-                        e.currentTarget.style.boxShadow = '7px 8px 0 rgba(0,0,0,.25), 0 12px 22px -6px rgba(0,0,0,.22)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = `rotate(${tilt}deg)`;
-                        e.currentTarget.style.boxShadow = '5px 6px 0 rgba(0,0,0,.22), 0 8px 18px -6px rgba(0,0,0,.18)';
-                      }}
-                    >
-                      <Pin color={pinColor} size={18} style={{ top: -9, left: '50%', marginLeft: -9 }} />
-
-                      {/* 平台徽章（小貼紙） */}
-                      {platformDef && (
-                        <div
-                          title={`部署於 ${platformDef.label}`}
-                          style={{
-                            position: 'absolute',
-                            top: 8,
-                            right: 8,
-                            background: platformDef.color,
-                            color: '#fff',
-                            fontSize: 9,
-                            fontWeight: 900,
-                            padding: '2px 7px',
-                            borderRadius: 999,
-                            border: `1.5px solid ${tokens.ink}`,
-                            letterSpacing: '0.03em',
-                            transform: 'rotate(6deg)',
-                            boxShadow: '1.5px 1.5px 0 rgba(0,0,0,.22)',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: 3,
-                            whiteSpace: 'nowrap',
-                          }}
-                        >
-                          <span>{platformDef.emoji}</span>
-                          <span>{platformDef.label}</span>
-                        </div>
-                      )}
-
-                      <div style={{ fontSize: 42, lineHeight: 1, marginBottom: 8 }}>{post.coverEmoji}</div>
-                      <h2
-                        style={{
-                          fontSize: 18,
-                          fontWeight: 900,
-                          color: tokens.ink,
-                          margin: '0 0 8px',
-                          lineHeight: 1.35,
-                        }}
+                  <Link href={`/blog/${post.slug}`} className="bp-list-card">
+                    {platformDef && (
+                      <span
+                        className="bp-list-card__platform"
+                        title={`部署於 ${platformDef.label}`}
+                        style={{ background: platformDef.color }}
                       >
-                        {post.title}
-                      </h2>
-                      <p
-                        style={{
-                          fontSize: 13,
-                          color: tokens.muted2,
-                          margin: '0 0 12px',
-                          lineHeight: 1.55,
-                          flex: 1,
-                          display: '-webkit-box',
-                          WebkitLineClamp: 4,
-                          WebkitBoxOrient: 'vertical',
-                          overflow: 'hidden',
-                        }}
-                      >
-                        {post.excerpt}
-                      </p>
-
-                      {/* meta */}
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          fontSize: 11,
-                          color: tokens.muted2,
-                          fontFamily: tokens.font.en,
-                          borderTop: `1.5px dashed ${tokens.ink}`,
-                          paddingTop: 8,
-                        }}
-                      >
-                        <span>
-                          {new Date(post.publishedAt).toLocaleDateString('zh-TW', {
-                            month: '2-digit',
-                            day: '2-digit',
-                          })}
-                        </span>
-                        <span>📖 {post.readingMinutes} 分鐘</span>
-                        <span>關聯 {post.toolIds.length} 個工具</span>
+                        <span aria-hidden="true">{platformDef.emoji}</span>
+                        <span>{platformDef.label}</span>
+                      </span>
+                    )}
+                    <div className="bp-list-card__kicker">{kicker}</div>
+                    <h2 className="bp-list-card__title">
+                      <span className="bp-list-card__emoji" aria-hidden="true">{post.coverEmoji}</span>
+                      <span>{post.title}</span>
+                    </h2>
+                    <p className="bp-list-card__excerpt">{post.excerpt}</p>
+                    {extraTags.length > 0 && (
+                      <div className="bp-list-card__tags">
+                        {extraTags.map((t) => (
+                          <span key={t} className="bp-list-tag">#{t}</span>
+                        ))}
                       </div>
-                    </article>
+                    )}
+                    <div className="bp-list-card__meta">
+                      <span>
+                        {new Date(post.publishedAt).toLocaleDateString('zh-TW', {
+                          month: '2-digit',
+                          day: '2-digit',
+                        })}
+                      </span>
+                      <span>📖 {post.readingMinutes} min</span>
+                      <span>{post.toolIds.length} tool{post.toolIds.length === 1 ? '' : 's'}</span>
+                    </div>
                   </Link>
                 </li>
               );
