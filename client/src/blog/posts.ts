@@ -7106,7 +7106,7 @@ const POST_85: BlogPost = {
   slug: 'penguin-85-runner',
   title: '#85 南極大冒險：企鵝跑酷 — 致敬 Konami 1983 Antarctic Adventure + 隱藏 God Mode 指令 + React 19 重製版',
   excerpt:
-    '#85 真實名稱「🐧 南極大冒險：企鵝跑酷」是阿凱致敬 Konami 1983 年經典《Antarctic Adventure》的 React 19 重製版，為石門國小學生製作。包含 ← / → 切換車道 + ↑/Space 跳躍 + ↓ 減速 + **🥚 隱藏指令 ↑↑↓↓←←→→AB 啟動 God Mode**。配 1882 年公版《Skater\\'s Waltz》音樂。',
+    '#85 真實名稱「🐧 南極大冒險：企鵝跑酷」是阿凱致敬 Konami 1983 年經典《Antarctic Adventure》的 React 19 重製版，為石門國小學生製作。包含 ← / → 切換車道 + ↑/Space 跳躍 + ↓ 減速 + **🥚 隱藏指令 ↑↑↓↓←←→→AB 啟動 God Mode**。配 1882 年公版《Skaters Waltz》音樂。',
   publishedAt: '2026-05-21',
   readingMinutes: 4,
   tags: ['企鵝跑酷', 'Konami 致敬', 'React 19', 'God Mode 彩蛋', '經典重製'],
