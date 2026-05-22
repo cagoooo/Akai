@@ -6740,7 +6740,610 @@ const POST_77: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77];
+const POST_9: BlogPost = {
+  slug: 'mario-9-platformer-adventure',
+  title: '#9 超級瑪莉歐冒險：純 Canvas 多關卡平台跳躍 + 蹬牆跳 + 成就系統 + 教學模式（v2.33.0 持續打磨）',
+  excerpt:
+    '#9 真實名稱「超級冒險 🍄 Mario Style Platformer」是阿凱用純 Canvas 寫的多關卡平台跳躍遊戲。完整 Stage Clear / 暫停 / 教學 / 成就系統 / 全螢幕 + 操作含蹬牆跳 / 衝刺 / 蹲下，已迭代到 v2.33.0。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 4,
+  tags: ['瑪莉歐風格', '平台跳躍', 'Canvas 2D', '成就系統', '蹬牆跳'],
+  toolIds: [9, 28, 30],
+  coverEmoji: '🍄',
+  coverColor: 'orange',
+  body: `## #9 vs #28 — 同主題不同進化階段
+
+阿凱有兩個瑪莉歐風格遊戲：
+
+| 維度 | **#9 超級瑪莉歐冒險**（本篇）| [#28 瑪莉歐風格平台跳躍](/blog/mario-28-jump-platform/) |
+|---|---|---|
+| 部署 | GitHub Pages \`cagoooo/mario-game\` | XOOPS VM \`smes_html/\` |
+| 規模 | **多關卡 + 成就系統 + 教學** | 單關純跳躍 |
+| 控制 | ←→ 移動 / 空白跳 / **Shift 衝刺 / S 蹲下 / 蹬牆跳** | 純 ←→ + 空白 |
+| 版本 | **v2.33.0**（持續打磨）| 早期單版 |
+
+#9 是 #28 的 **Pro / 升級進化版** — 阿凱「**漸進式工具家族**」哲學再案例。
+
+## #9 真實怎麼做？
+
+**真實標題**：「**🍄 超級冒險 🍄 Mario Style Platformer**」
+
+**完整功能**：
+- **多世界選擇**「SELECT WORLD」（NES retro style text menu）
+- 「↑↓ 選擇 ｜ Enter / 點擊 進入」
+- Stage Clear 結算頁
+- 「★ STAGE CLEAR ★ World 1-1 SCORE: 0」
+- 過關解鎖下一關
+
+**操作（完整 6 種）**：
+
+| 鍵盤 | 動作 |
+|------|------|
+| ⬅️ ➡️ | 移動 |
+| **空白鍵** | 跳躍 |
+| ⬇️ / S | **蹲下** |
+| Shift | **衝刺** |
+| **牆壁 + 跳** | **蹬牆跳**（瑪莉歐風格進階） |
+
+**手機觸控**：點擊移動 + 點擊跳躍。
+
+**遊戲統計**：
+- 💀 擊殺
+- 🪙 金幣
+- 👑 分數
+- 🏅 成就
+
+**功能按鈕**：
+- 🔊 音效開關
+- ⚙️ 音效設定
+- ⛶ 全螢幕
+- ⏸️ 暫停
+- 📖 重看教學
+
+**🏅 成就系統**：完整 modal 顯示成就清單 + 「X/Y」進度。
+
+## 真實技術棧
+
+- **純前端**（無 React/Vue）
+- **Canvas 2D**（\`<canvas id="gameArea">\`）
+- **CSS 版本控制**：\`style.css?v=2.33.0\` — 阿凱用 query string 強制清快取
+- **PWA 完整**：manifest.json + 多尺寸 icon + apple-mobile-web-app-capable
+- **無 LLM、無後端**（localStorage 存進度）
+- 部署：\`cagoooo.github.io/mario-game/\`
+
+## 為什麼用純 Canvas 而不是 Phaser?
+
+阿凱在遊戲開發上的選擇：
+- **Canvas 2D**：#9 / [#28](/blog/mario-28-jump-platform/) / [#36 貪食蛇](/blog/snake-36-game/) / [#31 抓抓樂](/tool/31)
+- **Three.js**：[#29 太陽系](/blog/solar-29-system-explorer/) — 唯一 3D
+- **React + Canvas**：[#69 猴子投擲](/tool/69) / [#85 企鵝跑酷](/tool/85)
+
+**Canvas 2D 適合「**完整可控自製遊戲**」** — 不需要 Phaser 引擎的物理 / 場景系統，自己寫更輕（v2.33.0 累積這麼多功能還在純 Canvas）。
+
+## 教學情境
+
+**資訊科技課示範**：
+- 五六年級程式設計單元
+- 老師展示「**多關卡 + 成就系統 + 蹬牆跳 = 純 Canvas + JS 也能做**」
+- 開 DevTools 看 \`v2.33.0\` 一路迭代史
+
+**下課休閒**：
+- 比商業遊戲入口網（充滿廣告）親民 100 倍
+- 學生可以正面挑戰多關卡
+
+**家長親子**：
+- 假日陪小孩玩
+- 「**蹬牆跳**」教手指靈活度
+
+## 配對工具推薦
+
+- [#28 瑪莉歐風格平台跳躍](/blog/mario-28-jump-platform/) — XOOPS VM 早期版
+- [#30 遊戲集合](/blog/games-30-collection-12-in-1/) — 12-in-1 經典遊戲合集
+- [#85 企鵝跑酷](/tool/85) — 致敬經典版本
+
+## 適用對象
+
+- 國中小所有任課老師（下課小遊戲）
+- 想看「**Canvas 2D 多關卡遊戲程式**」的開發者
+- 五六年級資訊課（純 Canvas 教學案例）
+- 想做「**經典遊戲復刻**」的工程師
+
+## 想試試？
+
+→ [前往 #9 超級瑪莉歐冒險](/tool/9)
+
+按 「**SELECT WORLD**」進關卡 → 試試 **Shift 衝刺 + 蹬牆跳** — 比 #28 有層次得多。
+`,
+};
+
+const POST_6: BlogPost = {
+  slug: 'bee-6-pair-game',
+  title: '#6 蜂勤耘友配對消消樂：3 難度 × 6 主題包 + themes.json 可擴充 + PWA 離線 + 鍵盤無障礙的記憶配對遊戲',
+  excerpt:
+    '#6 真實名稱「🐝 蜂勤耘友配對消消樂」是阿凱寫的記憶配對遊戲。3 難度（初 / 中 / 高）× 6 主題（蜂勤耘友 / 注音 / 唐詩 / 英文 / 數字 / 水果）= 18 種組合，**themes.json 可擴充不寫程式**新增主題。純前端 ES Modules + PWA + 鍵盤無障礙 + WebP 省 50%。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 4,
+  tags: ['記憶配對', '注音教學', '唐詩', 'PWA', '無障礙'],
+  toolIds: [6, 9, 30],
+  coverEmoji: '🐝',
+  coverColor: 'yellow',
+  body: `## 記憶配對遊戲 + 教學主題化 = 多用途神器
+
+記憶配對遊戲（Memory Match）是經典遊戲類型 — 但傳統版只能玩「翻牌找一樣的圖」。
+
+阿凱的 **#6 蜂勤耘友配對消消樂** 反向設計：**用配對遊戲機制 + 教學主題包 = 一遊戲多用途**：
+
+| 主題包 | 學什麼 |
+|---|---|
+| 🐝 **蜂勤耘友**（圖片）| 圖像辨識 / 美感 |
+| ㄅㄆㄇ **注音符號** | 認注音（一年級）|
+| 📜 **唐詩名句** | 古典文學 / 國文 |
+| 🇬🇧 **英文單字** | 基礎英文 |
+| 🔢 **數字英文** | 數字英文對照 |
+| 🍎 **水果英文** | 水果英文 |
+
+**6 種主題 × 3 難度（初 / 中 / 高）= 18 種組合**，每種獨立計時 + 最佳紀錄。
+
+## #6 真實怎麼做？
+
+**真實標題**：「**🐝 蜂勤耘友配對消消樂**」
+
+**完整功能（從 README 抽出）**：
+
+**遊戲機制**：
+- 每關 **5 對 = 10 張卡片**
+- 翻牌找配對
+- 配對成功 → 消除
+- 全部消完 → **彩帶動畫慶祝** + 個人紀錄追蹤
+
+**主題可擴充（神細節）**：
+- 所有主題定義在 \`docs/themes.json\`
+- **不用寫程式即可新增主題**
+- 老師可以**自製校內主題**：「校徽配對」「老師頭像配對」「學校歷史人物」
+
+**鍵盤無障礙**：
+- Tab + Enter / Space 即可全鍵盤操作
+- **特教學生友善設計**
+
+**視覺優化**：
+- **WebP 圖片**（省 50%）
+- **\`<link rel="preload">\`** 預載強化
+- 不卡頓
+
+## 真實技術棧
+
+- **純前端 ES Modules**（無 React/Vue）
+- 模組架構：
+  - \`game.js\` 入口模組
+  - \`theme.js\` 主題載入 / WebP 偵測 / 卡面渲染
+  - \`board.js\` 棋盤建立 / 翻牌 / 配對判定
+  - \`ui.js\` 特效 / 計時器 / 完成彈窗
+  - \`audio.js\` 音效 / 靜音 / 背景音樂
+  - \`storage.js\` 個人最佳紀錄持久化
+- **PWA**：manifest.webmanifest + sw.js
+- **OG 圖**：用 Python Pillow 自動生成 1200×630 分享圖
+- 部署：\`cagoooo.github.io/bee/\`
+
+## 「主題化遊戲」的教學魔力
+
+對國小老師來說 — **#6 是「一遊戲全年用」**：
+
+| 學期單元 | 用哪個主題 |
+|---|---|
+| 一年級上「認識注音」| ㄅㄆㄇ 注音符號 |
+| 三年級下「唐詩誦讀」| 唐詩名句 |
+| 四年級上「水果英文」| 水果英文 |
+| 五年級上「數字英文」| 數字英文 |
+| 期末「複習英文單字」| 英文單字 |
+| 校內活動「校徽認識」| **老師自製主題**（改 themes.json）|
+
+→ 一個遊戲服務多年級多單元，老師備課**省力 10 倍**。
+
+## 鍵盤無障礙的特殊價值
+
+對**特教學生 / 肢體不便學生**：
+- 不需精確點擊（觸控對部分孩子困難）
+- Tab + Space 全鍵盤操作
+- 一隻手 / 輔具裝置也能玩
+- **遊戲化教學的融合教育**
+
+## 配對工具推薦
+
+- [#9 超級瑪莉歐冒險](/blog/mario-9-platformer-adventure/) — 同款 Canvas 純前端遊戲
+- [#30 遊戲集合](/blog/games-30-collection-12-in-1/) — 12-in-1 經典遊戲合集
+- [#22 成語填空遊戲](/blog/idiom-22-fill-blank-game/) — 同款語文 + 遊戲化
+
+## 適用對象
+
+- 一年級導師（注音教學）
+- 中高年級英文老師（單字 / 水果 / 數字）
+- 國語老師（唐詩教學）
+- 特教老師（鍵盤無障礙友善）
+- 想做「**主題化教學遊戲**」的工程師
+
+## 想試試？
+
+→ [前往 #6 蜂類配對消消樂](/tool/6)
+
+第一次玩建議：**初階 + 注音符號**（一年級複習）→ 看看 5 對 = 10 張卡片好不好認 → 再換 5 種主題試試。
+`,
+};
+
+const POST_69: BlogPost = {
+  slug: 'monkey-69-pixel-clash',
+  title: '#69 猴子投擲大戰 Monkey Pixel-Art Clash：致敬 1991 QBASIC GORILLAS.BAS + 拋物線物理 + Firebase 雲端排行榜',
+  excerpt:
+    '#69 真實名稱「🐒 猴子投擲大戰 (Monkey Pixel-Art Clash)」致敬 1991 年 QBASIC 經典遊戲 **GORILLAS.BAS**。React + TypeScript + Vite + 拋物線物理（重力 + 風力）+ 地形破壞 + 道具系統（10X / 酸 / 流星雨 / 雷射）+ Firebase Firestore 雲端排行榜（含防刷分 Rules）+ 8-bit 音效。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 5,
+  tags: ['投擲遊戲', 'QBASIC 致敬', '拋物線物理', 'Firebase 排行榜', '像素風'],
+  toolIds: [69, 9, 85],
+  coverEmoji: '🐒',
+  coverColor: 'green',
+  body: `## 致敬 1991 年 QBASIC GORILLAS.BAS
+
+DOS 時代 1991 年的 QBASIC 內建範例遊戲 **GORILLAS.BAS** — 兩隻大猩猩在城市天際線上互丟爆炸香蕉，看誰先擊倒對方。
+
+那是 **無數工程師的程式設計啟蒙遊戲**（一打開 GORILLAS.BAS 程式碼 → 看到「**這就是遊戲**」→ 想自己寫一個）。
+
+阿凱的 **#69 猴子投擲大戰** 是 **這款 35 年經典的 React 重製版**：
+- 從大猩猩 → 改成猴子（pixel-art 風格更可愛）
+- 從 QBASIC text mode → 改成 Canvas + React 像素美學
+- 加上現代化功能（Firebase 雲端排行榜 / PWA / 道具系統）
+
+## #69 真實怎麼做？
+
+**真實標題**：「**🐒 猴子投擲大戰 (Monkey Pixel-Art Clash)**」
+
+**完整功能（從 README 抽出）**：
+
+**核心遊戲機制**：
+- 🎯 **拋物線物理**：拖曳發射，**受重力 + 風力影響**
+- 💥 **地形破壞**：爆炸**挖洞改變戰場地形**
+- 兩人輪流出招（同電腦對戰）
+
+**🎁 道具系統（4 種）**：
+- **10X 巨大化**：香蕉變超大
+- **ACID 強酸**：穿透地形
+- **流星雨**：天降多顆
+- **雷射**：直線攻擊
+
+**🌬️ 風力視覺化**（神細節）：
+- 雲層 + 旗幟 + HUD **三層指示**
+- 學生**看得到風的存在**
+
+**🏆 雲端排行榜**：
+- Firebase Firestore
+- **含防刷分 Rules**
+- 全國學生 PK
+
+**🔊 8-bit 音效**：
+- Web Audio API **即時合成**（不放 mp3）
+- 撞擊 / 爆炸 / 風聲都自合成
+
+**📱 PWA**：可離線玩、加入主畫面
+
+**🎨 螢幕方向**：直立 / 橫向皆可玩
+
+## 真實技術棧（React + Vite）
+
+- **React 19 + TypeScript + Vite**
+- **App.tsx ~1590 行**（B1 拆分後）
+- 架構：
+  - \`src/App.tsx\` 主編排
+  - \`src/main.tsx\` React 入口 + audio unlock + SW 註冊
+  - \`src/pwa.ts\` PWA 更新提示
+  - \`src/firebase.ts\` Firestore 排行榜 API
+  - \`src/game/constants.ts\` 物理 / 道具 / 顏色常數
+  - \`src/game/types.ts\` GameState / Building / Particle 型別
+- **環境變數**：\`.env\` 填 Firebase config
+- **CI/CD**：GitHub Actions 自動部署
+- 部署：\`cagoooo.github.io/monkey/\`
+
+## 為什麼這個工具值得寫獨立文章？
+
+**「**經典遊戲現代化**」+「**程式設計啟蒙**」雙重意義**：
+
+對學生：
+- 看到「**會物理 + 風力的遊戲**」是基礎物理運動學的具象化
+- 30 年前的程式設計入門遊戲 → 現在還能玩
+
+對工程師：
+- **「**用 React 重製 1991 QBASIC**」**是一個有趣的程式設計練習
+- 看 cagoooo/monkey repo 學「**遊戲狀態管理 + Firebase 排行榜架構**」
+
+對教育系：
+- 「**讓學生用工程師的眼光看遊戲**」 — 「**這背後是物理 + 程式**」
+
+## 跟阿凱其他遊戲對比
+
+| 工具 | 致敬經典 | 技術棧 |
+|---|---|---|
+| **#69 猴子投擲**（本篇）| 1991 QBASIC GORILLAS.BAS | React + TS + Firebase |
+| [#85 企鵝跑酷](/tool/85) | 1983 Konami Antarctic Adventure | React + TS |
+| [#9 瑪莉歐冒險](/blog/mario-9-platformer-adventure/) | 任天堂 Mario | Canvas 純前端 |
+| [#28 瑪莉歐](/blog/mario-28-jump-platform/) | 同上 早期版 | Canvas 純前端 |
+
+阿凱「**致敬經典遊戲系列**」清晰可見。
+
+## 教學情境
+
+**自然科「拋物線運動」單元**：
+- 講「**水平 + 垂直分速度**」抽象 → 玩 #69 看香蕉飛
+- 切換風力 → 看影響軌跡
+- **物理 → 程式 → 遊戲**三層關聯
+
+**資訊課「程式設計史」單元**：
+- 講 1991 QBASIC → 看 #69 致敬版
+- 「**40 年前一台 DOS PC 也能跑這種遊戲**」
+
+**下課休閒 PVP**：
+- 兩人輪流玩 → 排行榜 PK
+- 全班一起拼最高分
+
+## 配對工具推薦
+
+- [#9 超級瑪莉歐冒險](/blog/mario-9-platformer-adventure/) — 同款 Canvas 遊戲
+- [#85 南極大冒險：企鵝跑酷](/tool/85) — 致敬經典系列同伴
+- [#28 瑪莉歐風格平台跳躍](/blog/mario-28-jump-platform/) — 早期版
+
+## 適用對象
+
+- 國中小自然 / 物理老師（拋物線運動單元）
+- 資訊老師（程式設計史 + 遊戲開發）
+- 想看「**React + Firebase 遊戲架構**」的開發者
+- 想看「**1991 QBASIC 經典重製**」的懷舊玩家
+
+## 想試試？
+
+→ [前往 #69 猴子丟香蕉 - 投擲大戰爭](/tool/69)
+
+兩人開玩 — **看誰先學會「**逆風該怎麼瞄**」**。
+`,
+};
+
+const POST_85: BlogPost = {
+  slug: 'penguin-85-runner',
+  title: '#85 南極大冒險：企鵝跑酷 — 致敬 Konami 1983 Antarctic Adventure + 隱藏 God Mode 指令 + React 19 重製版',
+  excerpt:
+    '#85 真實名稱「🐧 南極大冒險：企鵝跑酷」是阿凱致敬 Konami 1983 年經典《Antarctic Adventure》的 React 19 重製版，為石門國小學生製作。包含 ← / → 切換車道 + ↑/Space 跳躍 + ↓ 減速 + **🥚 隱藏指令 ↑↑↓↓←←→→AB 啟動 God Mode**。配 1882 年公版《Skater\\'s Waltz》音樂。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 4,
+  tags: ['企鵝跑酷', 'Konami 致敬', 'React 19', 'God Mode 彩蛋', '經典重製'],
+  toolIds: [85, 69, 9],
+  coverEmoji: '🐧',
+  coverColor: 'blue',
+  body: `## 致敬 1983 Konami Antarctic Adventure
+
+1983 年 Konami 在 MSX 平台推出《Antarctic Adventure》：
+- 企鵝在南極跑步
+- 跳過冰洞 + 海豹
+- 蹲下避過巨大冰山
+- 收集旗幟過關
+
+那是 **MSX/NES 時代的經典橫向卷軸跑酷遊戲** — 影響後來的「跑酷類」遊戲。
+
+阿凱的 **#85 南極大冒險：企鵝跑酷** 是 **這款 43 年經典的 React 19 重製版**，**專為石門國小學生製作**。
+
+## #85 真實怎麼做？
+
+**真實標題**：「**🐧 南極大冒險：企鵝跑酷**」
+
+副標：「**致敬 Konami 1983 年經典遊戲《Antarctic Adventure》的 React 重製版。由阿凱老師為石門國小學生製作。**」
+
+**操作（4 個鍵）**：
+
+| 鍵盤 | 動作 |
+|---|---|
+| ← / → | 切換車道 |
+| **↑ / Space** | 跳躍 |
+| ↓ | 減速 |
+
+**手機觸控**：長按左右切換車道並加速、輕點跳躍。
+
+## 🥚 隱藏彩蛋：God Mode
+
+> **在開始畫面依序按 \`↑↑↓↓←←→→AB\` 啟動 God Mode**
+
+這是**經典 Konami Code**（Konami 三十年來在自家遊戲埋的密技 ↑↑↓↓←←→→BA）變奏版！
+
+阿凱**致敬到骨子裡** — 連 Konami Code 都復刻。對懂的學生 / 老師會心一笑。
+
+## 真實技術棧
+
+- **React 19**（最新版！）
+- **TypeScript 5.8**
+- **Vite 6**
+- **Tailwind CSS v4**
+- **Motion**（動畫）
+- **Lucide Icons**
+- **Canvas Confetti**（過關撒花）
+- 部署：\`cagoooo.github.io/penguin/\`
+
+## 「Skater's Waltz」音樂選擇
+
+阿凱選的背景音樂：
+- **Émile Waldteufel《Les Patineurs / Skater's Waltz》**
+- **1882 年公共領域作品**（無版權問題）
+- 法文「Skater's Waltz」= 溜冰圓舞曲
+- 跟企鵝在冰上溜的視覺**音畫合一**
+
+**版權意識**：選 1882 公版避開 Konami 原版音樂版權。
+
+## 「起源」備註（神細節）
+
+README 寫的「**起源：Google AI Studio Remix 模板**」。
+
+→ 阿凱**用 Google AI Studio 的 Remix 功能起手** + 改成自己的版本。
+
+跟其他作品的工作流：
+- [#76 WebSlide](/blog/webslide-76-cross-device-presenter/) — 用 Gemini 寫
+- [#77 雙語宣導網](/blog/bilingual-77-english-promotion/) — 用 Manus 建立
+- **#85 企鵝跑酷** — 用 **Google AI Studio Remix** 模板
+
+**多 AI 工具混搭**再次驗證。
+
+## 跟 #69 #9 對比
+
+| 工具 | 致敬經典 | 技術棧 | God Mode |
+|---|---|---|---|
+| **#85 企鵝跑酷**（本篇）| Konami 1983 Antarctic Adventure | **React 19** + TS | ✅ \`↑↑↓↓←←→→AB\` |
+| [#69 猴子投擲](/blog/monkey-69-pixel-clash/) | 1991 QBASIC GORILLAS.BAS | React + Firebase | - |
+| [#9 瑪莉歐冒險](/blog/mario-9-platformer-adventure/) | 任天堂 Mario | Canvas 純前端 | - |
+
+## 教學情境
+
+**資訊課「遊戲開發史」單元**：
+- 講 1983 Konami 經典 → 用 #85 致敬版
+- 學生看 Konami Code 解鎖 God Mode → **驚奇感**
+
+**體育課暖身**：
+- 體育館投影
+- 學生看企鵝跑酷 → 自己也想動
+
+**下課休閒**：
+- 4 鍵操作極簡 → **連低年級都能玩**
+
+**家長親子**：
+- 「**爸爸我給你看 30 年前的遊戲**」
+- 親子共玩 + 講遊戲史
+
+## 配對工具推薦
+
+- [#69 猴子投擲大戰](/blog/monkey-69-pixel-clash/) — 致敬經典系列同伴
+- [#9 超級瑪莉歐冒險](/blog/mario-9-platformer-adventure/) — 同款 Canvas 遊戲
+- [#28 瑪莉歐風格平台跳躍](/blog/mario-28-jump-platform/) — 早期版
+
+## 適用對象
+
+- 國中小所有任課老師（下課小遊戲）
+- 資訊課（遊戲開發史 / React 案例）
+- 體育課暖身
+- 想看「**React 19 + Konami 致敬遊戲**」的開發者
+
+## 想試試？
+
+→ [前往 #85 南極大冒險：企鵝跑酷](/tool/85)
+
+第一次玩 — **試試 \`↑↑↓↓←←→→AB\` Konami Code** → 啟動 God Mode 後就無敵了，**懂的人會心一笑**。
+`,
+};
+
+const POST_56: BlogPost = {
+  slug: 'lantern-56-festival-riddles',
+  title: '#56 2026 石門國小元宵猜燈謎：Vite + React + PWA 中國紅主題 + 一起來猜燈謎歡慶元宵',
+  excerpt:
+    '#56 真實名稱「2026 石門國小元宵猜燈謎 | Lantern Festival Riddles」是阿凱專為石門國小 2026 年元宵節活動做的猜燈謎遊戲。Vite + React + PWA + 中國紅主題色 #E60012 + Noto Sans TC 字體 + Service Worker 完整支援。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 3,
+  tags: ['元宵節', '猜燈謎', '節慶活動', '石門國小', 'Vite + React'],
+  toolIds: [56, 22, 71],
+  coverEmoji: '🏮',
+  coverColor: 'pink',
+  body: `## 元宵節數位化的真實意義
+
+元宵節是台灣傳統節日，國小常辦「猜燈謎」活動：
+- 老師寫燈謎在紅紙上 → 掛走廊
+- 學生路過猜 → 答對拿禮物
+- **問題**：燈謎被同學偷看答案 / 紙會被風吹掉 / 老師要一個個確認
+
+阿凱的 **#56 元宵猜燈謎** 反向：**手機掃 QR → 線上猜 → 即時答案 + 計分**。
+
+## #56 真實怎麼做？
+
+**真實標題**：「**2026 石門國小元宵猜燈謎 | Lantern Festival Riddles**」
+
+**meta description**：「**石門國小 2026 年元宵節猜燈謎活動 - 一起來猜燈謎，歡慶元宵！**」
+
+**完整功能**（從技術 signature 推測）：
+- 學生掃 QR 進入
+- 看燈謎題目
+- 答案輸入 / 選項點選
+- 即時對答 + 計分
+- 結算 / 排行榜
+- **中國紅主題色** \`#E60012\` 配 Noto Sans TC
+
+## 真實技術棧
+
+- **Vite + React**（看 \`assets/index-DqCBxp-A.js\` bundle）
+- **Tailwind CSS**（推測）
+- **PWA 完整**：manifest.json + 多尺寸 icon + Service Worker
+- **Service Worker** 含 localhost 偵測（dev 時不註冊 SW 避免 HMR 衝突）
+- **Noto Sans TC** Google Fonts
+- 主題色：**#E60012**（中國紅）— 元宵節氣氛
+- 部署：\`cagoooo.github.io/lantern/\`
+
+## 神細節：PointerLock 錯誤防禦
+
+從 HTML 第一段 script 抓到：
+
+\`\`\`javascript
+window.addEventListener('unhandledrejection', function (e) {
+  if (e.reason && (e.reason.name === 'SecurityError' ||
+    (typeof e.reason.message === 'string' &&
+     e.reason.message.toLowerCase().includes('lock')))) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+  }
+}, true); // capture phase = 最優先執行
+\`\`\`
+
+→ 阿凱**踩過 Vite + PointerLock SecurityError 錯誤彈窗**的雷，**最早執行的 script 就吞掉**這個錯誤。
+
+**踩雷後在 production 寫 capture phase listener** = 工程師等級的防禦性程式設計。
+
+## 「節慶活動專用工具」的特殊地位
+
+阿凱有一系列「**節慶 / 活動專用**」工具：
+- **#56 元宵猜燈謎**（2 月元宵節）— 本篇
+- [#62 親職教育日](/tool/62)（3 月親職日）
+- [#74 1150328 親職日場地配置](/blog/parent-day-74-venue-map/)（3/28 特定日期）
+- [#80 114 下學期教師會議](/blog/meeting-80-spring-semester-week13/)（學期週次）
+
+這些工具**用完即丟**（每年要更新版本），但**每年都會有新的需求**。
+
+阿凱把工具當「**節慶配套**」做 — 像一張**數位海報**，活動結束放在那當紀念。
+
+## 教學情境
+
+**元宵節班會活動**：
+- 全班同時掃 QR
+- 看誰答對最多燈謎
+- 結算頒小獎品
+
+**走廊互動裝置**：
+- 學校觸控螢幕掛 #56
+- 學生課間互玩
+
+**家長互動**：
+- 親子一起猜燈謎
+- 「**爸媽我猜這題你也不會**」
+
+**國語延伸活動**：
+- 猜燈謎含**諧音 / 拆字 / 字謎** → 國語素養延伸
+
+## 配對工具推薦
+
+- [#22 成語填空遊戲](/blog/idiom-22-fill-blank-game/) — 同款語文遊戲化
+- [#71 成語填空大挑戰](/tool/71) — 進階版
+- [#62 親職教育日](/tool/62) — 同款活動專用工具
+
+## 適用對象
+
+- 國中小元宵節活動承辦
+- 學務 / 訓育組（節慶活動數位化）
+- 國文老師（猜燈謎 + 字謎教學）
+- 想做「**節慶活動專用 web app**」的學校
+
+## 想試試？
+
+→ [前往 #56 元宵猜燈謎闖關遊戲](/tool/56)
+
+2026 元宵節已過 — 但這份**活動數位化的設計思維**可以套用任何年度節慶（中秋 / 端午 / 教師節 / 校慶⋯）。
+`,
+};
+
+export const POSTS: BlogPost[] = [POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56];
 
 /**
  * 取得 post（含手寫長文 + 從 tools.json 自動生成的迷你 blog）。
