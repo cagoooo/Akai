@@ -40,6 +40,95 @@
 - 保留 ReactMarkdown + remark-gfm 渲染管線（不改成寫死 JSX）
 - **未動**：BlogPost schema、POSTS 與 miniPosts 資料、BlogList.tsx（out of scope）
 
+---
+
+## 📋 BlogPost 重構後 — 未來優化建議 Roadmap
+
+> 依本次 v3.6.36 完成的視覺與架構基礎，列出可接著開發的方向。每項標 **P0 / P1 / P2 優先級** + **Effort（S/M/L）** + **預期效益**，挑著做即可。  
+> P0 = 影響最大或 quick win，建議近期；P1 = 中期可做；P2 = 大型或實驗性。
+
+### A. 內文體驗深度（接續本次重構，效益最直接）
+
+| 項目 | 優先級 | Effort | 說明 |
+|---|---|---|---|
+| **A1. 範本擴散到 5-10 篇精選長文** | **P0** | M | POST_53 已是範本；可挑 #81 / #46 / #84 / #100 / #7 等熱門長文加 callout / stat-grid。每篇 15-30 分鐘人工抓重點，效益是整套文章質感升一檔 |
+| **A2. Code block 語法高亮（shiki / prism）** | **P0** | S | 目前 `<pre>` 純黑底白字，加 shiki 就有 VSCode 級顯色。bundle +30-50 KB 換來技術內容可讀性大躍進。語法名稱寫在 ``` 後面（如 ```ts）即可 |
+| **A3. 章節「複製連結」icon** | **P0** | S | 滑鼠移過 H2 顯示 `#` icon，點擊複製 `#anchor` URL 到剪貼簿 + toast「已複製章節連結」。技術文 / SOP 類文章超實用 |
+| **A4. 內文圖片支援 + lightbox** | **P1** | M | 目前 markdown 不貼圖；加 `![alt](url)` 支援 + lazy load + 點圖放大覆蓋層 + caption。注意 LCP 第一張圖要 `fetchpriority="high"` |
+| **A5. Drop cap 首段大寫首字 toggle** | **P1** | S | CSS 已寫好 `.dropcap`，加全站 toggle 或預設給長文用（≥1000 字才套）。視覺辨識度高 |
+| **A6. 「估剩餘時間」浮動標籤** | **P2** | S | 根據捲動位置 + 字數估「還剩 ~2 分鐘」顯示在左欄進度條下方 |
+| **A7. 文末「下載 PDF」按鈕** | **P2** | S | 用 `window.print()` + `@media print` CSS，按 skill `pdf-export-print-best-practice` 做（已有方法論） |
+| **A8. Print stylesheet 細節** | **P2** | S | 列印時隱藏左欄 / 右欄 TOC / hero emoji / Tour 提示，文章單欄黑白排版 |
+
+### B. BlogList 列表頁優化（之前 out of scope，邏輯上接續）
+
+| 項目 | 優先級 | Effort | 說明 |
+|---|---|---|---|
+| **B1. 列表頁也走 magazine 風** | **P0** | M | 套用同樣的編輯型卡片：kicker / 大標 / excerpt / reading time / tags chip。跟內頁視覺一致 |
+| **B2. 時間軸視圖切換** | **P1** | M | 「卡片網格 / 時間軸 / 表格」三視圖切換。時間軸特別適合教學進度回顧（哪個月開了哪個系列） |
+| **B3. 「最近 7 天熱讀」徽章** | **P1** | M | top 3 文章貼便利貼徽章。需先有讀數紀錄（Firestore `blog_read` 事件已在收，可加 aggregator） |
+| **B4. 篩選後 URL 共享** | **P1** | S | 篩選狀態同步進 URL query，方便老師之間互相轉貼「某分類的文章清單」 |
+| **B5. 作者主題頁 /author/akai** | **P2** | M | 列出所有作品 + 主題分布 + 寫作頻率時間軸 |
+
+### C. 內容生產線（給寫作流程加速）
+
+| 項目 | 優先級 | Effort | 說明 |
+|---|---|---|---|
+| **C1. 「複製 markdown body 範本」按鈕（admin only）** | **P0** | S | admin 登入下看到 BlogPost 頁右下出現「Copy template」按鈕，複製含 callout / stat-grid 標籤的範本骨架，省去翻 POST_53 source 對照 |
+| **C2. 草稿即時預覽頁 /draft** | **P1** | M | 開發中文章貼 markdown 進 textarea 即時看渲染效果（用 localStorage 暫存），不用每改一段就 npm run dev |
+| **C3. AI assist 找適合塞 callout 段落** | **P2** | L | 寫好文章後送 LLM 分析，產出「這 3 段適合塞 .callout--tip」「這段數字適合做 stat-grid」建議；人工確認 |
+| **C4. 同時匯出 Medium / Substack 格式** | **P2** | M | 把 markdown body 一鍵轉純 markdown（去掉 callout HTML、保留 GFM），同步發到外部 |
+
+### D. 觀測與分析（量化讀者行為）
+
+| 項目 | 優先級 | Effort | 說明 |
+|---|---|---|---|
+| **D1. 閱讀完成率** | **P1** | S | 用 IntersectionObserver 看誰捲到 95%（區分掃過 vs 認真讀），上報 GA + Firestore。能驗證內容黏著度 |
+| **D2. TOC 點擊熱圖** | **P1** | M | 哪些章節最多人跳轉到 → 顯示讀者真正關心什麼。可指導未來文章結構 |
+| **D3. 熱點章節 / 離開區段** | **P1** | M | 根據停留時間找出哪些 H2 段落最多人停 / 最容易讓人關 tab，回頭優化內容 |
+| **D4. A/B 測試 hero variant** | **P2** | M | editorial vs sticky 哪個轉換率高（按進文章 vs 滑離）。需要 cohort 分流邏輯 |
+
+### E. 無障礙 / 效能 / SEO
+
+| 項目 | 優先級 | Effort | 說明 |
+|---|---|---|---|
+| **E1. a11y review pass** | **P0** | S | focus-visible 樣式統一、TOC keyboard nav（Tab + Enter）、aria-current 章節 active 標記、aria-labels 補齊 |
+| **E2. Article schema.org JSON-LD** | **P0** | S | 每篇文章加 `BlogPosting` schema（title / datePublished / author / image / wordCount）。Google 結果頁能顯示 rich snippet |
+| **E3. Semantic H2 wrap in `<section>`** | **P1** | S | README §5 提到但 Phase A 沒做。每個 H2 包成 `<section id>` 強化語意，screen reader 友善 |
+| **E4. 預載 hero emoji 字型 subset** | **P2** | S | 把首屏會用到的 emoji 範圍做字型 subset 預載，避免 emoji 渲染偏移造成 CLS |
+| **E5. RSS feed 內文升級** | **P2** | S | 目前 feed.xml 只有 excerpt；補上完整 body 後給 reader app 完整閱讀 |
+
+### F. 視覺一致性與互動細節
+
+| 項目 | 優先級 | Effort | 說明 |
+|---|---|---|---|
+| **F1. Dark mode 適配 blog-article.css** | **P1** | M | 目前 `.bp-*` class 沒對 dark mode；其他頁有 `.high-contrast`，未來統一補上 |
+| **F2. Stat card 數字 count-up 動畫** | **P1** | S | 進入視窗時數字從 0 跑到目標（如 1.4 天），加強視覺戲劇性。注意 `prefers-reduced-motion` 守則 |
+| **F3. H2 進入視窗 fade-in** | **P2** | S | 微動畫 / 章節分明感。同樣注意 reduced motion |
+| **F4. 章節間隔手繪插圖** | **P2** | L | 每節結尾隨機顯示一個阿凱手繪插圖（hr 進階版）。需要美術素材 |
+| **F5. 「sticky 黃便利貼 hero」變體上線** | **P2** | S | 實作 README §5.2 的便利貼變體，作為某些「節慶 / 公告類」文章的特別 hero |
+
+### G. 大型架構升級（謹慎評估）
+
+| 項目 | 優先級 | Effort | 說明 |
+|---|---|---|---|
+| **G1. MDX 替代 markdown** | **P2** | L | 未來想直接寫 `<Callout>` React 元件而非 HTML，可考慮遷到 MDX。**影響整套渲染管線**，需評估 chunk size 與 hydration 成本 |
+| **G2. Decap CMS 後台** | **P2** | L | 若要讓非工程師（社團幹部 / 學生 / 共備老師）寫文章，可接 Decap CMS（GitHub backed, free, static），讓 posts.ts 可視覺化編輯 |
+| **G3. 英文版 i18n** | **P2** | L | `/en/blog/...` 路由 + i18n key，給國際教師同行看。需翻譯成本 |
+| **G4. 留言系統** | **P2** | L | 接 Firebase + 簡易 moderation 或用 Giscus（GitHub Discussions backed） |
+
+### 建議起手順序（如果要排優先做）
+
+1. **A1（範本擴散）+ A2（語法高亮）+ A3（章節複製連結）+ E1（a11y）+ E2（Schema.org）** — 一波 P0 小修共約 2-3 小時，CP 值最高
+2. **B1（列表頁 magazine 風）** — 跟內頁視覺一致化，獨立 PR
+3. **D1 + D2（觀測）** — 不影響使用者，幫後續決策提供數據
+4. **C1（admin 範本複製）+ C2（即時預覽）** — 加速未來寫文章效率
+5. 之後再依使用情況評估 Dark mode / MDX 等大改
+
+任何一項說「做這個」就能直接動工，每項都有對應的 Phase 規劃可細拆。
+
+---
+
 ### `v3.6.35-2` (Gemini Embedding 升級 + iOS PWA 引導 + Firestore rules 修)
 
 **🧠 #1 #100 工具索引神器升級 Gemini Embedding 語意搜尋（雙軌設計）**
