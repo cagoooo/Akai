@@ -22,6 +22,7 @@ const ToolIndexAI = lazy(() => import("@/pages/ToolIndexAI").then(module => ({ d
 // Blog（教學情境長文）
 const BlogList = lazy(() => import("@/pages/BlogList").then(module => ({ default: module.BlogList })));
 const BlogPost = lazy(() => import("@/pages/BlogPost").then(module => ({ default: module.BlogPost })));
+const BlogDraftPreview = lazy(() => import("@/pages/BlogDraftPreview").then(module => ({ default: module.BlogDraftPreview })));
 const AdminAuth = lazy(() => import("@/components/AdminAuth").then(module => ({ default: module.AdminAuth })));
 const TriviaDialog = lazy(() => import("@/components/TriviaDialog").then(module => ({ default: module.TriviaDialog })));
 const PWAUpdatePrompt = lazy(() => import("@/components/PWAUpdatePrompt").then(module => ({ default: module.PWAUpdatePrompt })));
@@ -293,6 +294,10 @@ function App() {
                         </Route>
                         <Route path="/blog/:slug">
                           <BlogPost />
+                        </Route>
+                        {/* admin only - 草稿即時預覽 */}
+                        <Route path="/draft">
+                          <BlogDraftPreview />
                         </Route>
                       </Switch>
                     </Suspense>

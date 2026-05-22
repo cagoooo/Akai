@@ -2,6 +2,38 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.37] - 2026-05-22 — 部落格 Wave 1-4 四波 quick wins
+
+### 🎨 Wave 1 — 內頁 quick wins
+- A1 範本擴散到 POST_81 / POST_46 / POST_INDEX_AI（含 POST_53 累計 4 篇有 callout + stat-grid 範本）
+- A2 Code 語法高亮：新增 BlogCodeBlock + react-syntax-highlighter PrismLight + 14 種常用語言 + vscDarkPlus 主題 + 6 行以上自動行號
+- A3 章節 # 錨點 icon：H2/H3 hover 顯示，點擊複製 anchor URL + history.replaceState
+- E1 a11y review：TOC aria-current="true"、main/aside aria-label、全域 focus-visible 統一樣式
+- E2 BlogPosting Schema.org JSON-LD：headline / datePublished / author（阿凱老師 + 石門國小）/ publisher / wordCount / timeRequired
+
+### 🎨 Wave 2 — BlogList magazine 風
+- 列表卡片從 sticky-note 改為編輯型：白底 + rule border + radius 12 + hover 浮起
+- kicker mono caps + 橘短線 / emoji 小圖示內聯 / excerpt 3 行 / tag chips / meta 列 mono
+- platform 徽章右上 pill（不再傾斜貼紙）
+- ≤720px 手機 RWD
+
+### 📊 Wave 3 — 觀測上報
+- D1 閱讀完成率：文末 IntersectionObserver sentinel → blog_read_complete 事件（每篇一次）
+- D2 TOC 點擊熱圖：桌機 + 手機 TOC 點擊 → blog_toc_click 事件含 section_id / section_label / source
+
+### ✏️ Wave 4 — 寫作工具加速
+- C1 admin 範本複製按鈕（BlogTemplateCopier）：fixed bottom-left，含 callout / stat-grid / code / blockquote / table 範本骨架
+- C2 /draft 草稿即時預覽器：左 textarea 右 ReactMarkdown 即時渲染，localStorage 暫存 5 篇，800ms debounce 自動存，非 admin 導首頁
+
+### 🚀 依賴
+- `react-syntax-highlighter ^16.1.1` + `@types/react-syntax-highlighter ^15.5.13`
+
+### 🚀 部署
+- 1a12258 (W1) + 26be6cb (W2) + 9e90049 (W3) + W4 docs/bump
+- bump v3.6.36 → v3.6.37
+
+---
+
 ## [3.6.36] - 2026-05-22 — 部落格文章內頁 magazine 三欄重構 + 右下角彈窗互斥
 
 ### 🎨 BlogPost 三欄式重構（Phase A · 骨架 + 視覺）

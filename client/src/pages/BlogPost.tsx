@@ -31,6 +31,7 @@ import { BlogCta } from '@/components/blog/BlogCta';
 import { BlogMobileShare } from '@/components/blog/BlogMobileShare';
 import { BlogCodeBlock } from '@/components/blog/BlogCodeBlock';
 import { BlogPostingSchema } from '@/components/blog/BlogPostingSchema';
+import { BlogTemplateCopier } from '@/components/blog/BlogTemplateCopier';
 import { useReadingProgress } from '@/hooks/useReadingProgress';
 import { useActiveSection } from '@/hooks/useActiveSection';
 import { useExtractedSections, slugifyHeading } from '@/hooks/useExtractedSections';
@@ -392,6 +393,7 @@ export function BlogPost() {
 
       <BulletinFooter />
       <BulletinBackToTop />
+      <BlogTemplateCopier />
     </>
   );
 }

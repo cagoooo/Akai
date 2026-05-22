@@ -1,12 +1,59 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.36` (本機/CI) · 工具總數 **97 個**（**破百倒數 3** 🚀）
-- **最後更新狀態**: 部落格文章內頁 magazine 三欄重構（Phase A + Phase B）+ 右下角 Tour / PWA 提示互斥 — 雜誌編輯級閱讀介面、左欄拍立得 + 索引卡 + 進度條 + 紙標籤分享、右欄筆記本紙風格 TOC + 螢光筆塗抹高亮、手機摺疊手風琴 TOC + 分享水平列、自動從 markdown body 抽 H2 產生 sections（零 schema 變動）、rehype-raw 啟用讓 Callout / StatGrid 直接寫 HTML、POST_53 補 callout / stat-grid 範例。
+- **當前版本**: `v3.6.37` (本機/CI) · 工具總數 **97 個**（**破百倒數 3** 🚀）
+- **最後更新狀態**: 部落格 W1-W4 四波 quick-wins 上線 — Code 語法高亮、章節 # 錨點、a11y review、Schema.org JSON-LD、3 篇高人氣長文補 Callout/StatGrid、BlogList 改 magazine 風、閱讀完成率 + TOC 點擊熱圖觀測、admin 範本複製按鈕、/draft 草稿即時預覽器。
 
 ## 📌 完成功能總覽
 
-### `v3.6.36` (最新 · 部落格文章內頁 magazine 三欄重構 + 右下角彈窗互斥)
+### `v3.6.37` (最新 · 部落格 Wave 1-4 四波 quick wins)
+
+**🎨 Wave 1 — 內頁 quick wins 五合一**
+
+*A1. 範本擴散到 3 篇高人氣長文*
+- POST_81 教學駕駛艙：補 `.callout--tip`（視覺主題梗設計理由）+ 4 卡 `.stat-grid`（覆蓋年級 / 記網址數 / 切換工具 / 開發週數）
+- POST_46 場地預約系統：補 `.callout--warn`（無審核反而比有審核穩的設計觀點）+ 4 卡 `.stat-grid`（預約時間 / 衝突 / 預約量 / 校外借用）
+- POST_INDEX_AI 工具索引神器：補 `.callout--info`（字面 vs 語意關鍵概念）+ 4 卡 `.stat-grid`（一次性費用 / 暖啟動 / Free tier / 抽象命中率）
+- 累計 4 篇有範本（含 POST_53）
+
+*A2. Code 語法高亮*
+- 新增 `BlogCodeBlock.tsx`：react-syntax-highlighter PrismLight + 註冊 14 種常用語言（ts/tsx/js/jsx/json/bash/css/html/python/markdown/yaml/sql 等）
+- vscDarkPlus 主題、customStyle 對齊 .bp-article pre 圓角/陰影/JetBrains Mono
+- 6 行以上自動顯示行號
+
+*A3. 章節 # 錨點 icon*
+- HeadingAnchor 元件：H2/H3 hover/focus-visible 才顯示 #
+- 點擊複製完整 anchor URL 到剪貼簿 + history.replaceState
+- 觸控裝置永遠顯示 opacity .55（無 hover 狀態）
+
+*E1. a11y review*
+- TOC 兩種裝置都加 `aria-current="true"` 標記 active 章節
+- BlogArticleLayout main / aside 加 `aria-label`
+- 全域 focus-visible 統一 accent 色 outline + 2px offset
+
+*E2. BlogPosting Schema.org JSON-LD*
+- 新增 `BlogPostingSchema.tsx`：用 react-helmet-async 注入結構化資料
+- headline / description / datePublished / inLanguage / wordCount / timeRequired / keywords / author（阿凱老師 + 石門國小 affiliation）/ publisher
+- Google rich snippet 友善
+
+**🎨 Wave 2 — BlogList 列表頁 magazine 風**
+- sticky-note 便利貼牆改成編輯型卡片：白底 + 1.5px rule border + radius 12 + hover 浮起加陰影
+- kicker mono caps + 橘色短線、emoji 小圖示內聯標題、excerpt 3 行 clamp、tag chips（2-4）、meta 列 mono 11px
+- platform 徽章移到右上 pill 不再傾斜（與 magazine 風格一致）
+- 手機 ≤720px：min-height 自動、title 16px、excerpt 2 行 clamp
+- 清掉 BlogList 未用的 COLOR_MAP / PIN_MAP / Pin import
+
+**📊 Wave 3 — 觀測上報**
+- D1 閱讀完成率：文末 IntersectionObserver sentinel 進入 50% 視窗 → 上報 `blog_read_complete`（每篇只一次）。可算「完讀率 = blog_read_complete / blog_read」當內容質量指標
+- D2 TOC 點擊熱圖：桌機 + 手機 TOC 點任一章節 → 上報 `blog_toc_click({ slug, section_id, section_label, source })`。後續可 aggregate 看哪些章節最受關注
+
+**✏️ Wave 4 — 寫作工具加速**
+- C1 admin 範本複製按鈕：BlogPost 右下浮卡（fixed bottom-left，非 admin 不顯示），點擊複製含 callout / stat-grid / code block / blockquote / table 全部標籤的 markdown 骨架
+- C2 草稿即時預覽頁 `/draft`：admin only，左 textarea 貼 markdown 即時右側預覽（同樣 ReactMarkdown 設定 + bp-article CSS）。localStorage 暫存最多 5 篇草稿，800ms debounce 自動存。非 admin 自動導首頁
+
+依賴：+ `react-syntax-highlighter ^16.1.1` + `@types/react-syntax-highlighter ^15.5.13`
+
+### `v3.6.36` (部落格文章內頁 magazine 三欄重構 + 右下角彈窗互斥)
 
 **🎨 #1 部落格文章內頁三欄式重構（Phase A · 骨架 + 視覺）**
 - 三欄 magazine layout：左欄 200px sticky + 文章 680px + 右欄 230px sticky TOC、max 1200px、≤1080px 自動折成單欄

@@ -1391,6 +1391,56 @@
 }
 
 /* =========================================================
+   BlogDraftPreview /draft 頁雙欄 RWD
+   ========================================================= */
+@media (max-width: 900px) {
+  .bp-draft-split {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* =========================================================
+   Admin 寫作範本複製按鈕（fixed bottom-left，避開 BackToTop / Tour 提示）
+   ========================================================= */
+.bp-template-copier {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 35;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #fff;
+  color: var(--ink);
+  font-family: var(--font-tc);
+  font-size: 13px;
+  font-weight: 700;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 rgba(0,0,0,.18);
+  transition: transform .15s, box-shadow .15s, background .15s;
+}
+.bp-template-copier:hover {
+  background: var(--note-yellow);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 rgba(0,0,0,.22);
+}
+.bp-template-copier:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+@media (max-width: 720px) {
+  .bp-template-copier {
+    bottom: 80px;
+    left: 14px;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+}
+
+/* =========================================================
    BlogList — magazine card 列表（套用於 /blog 列表頁）
    ========================================================= */
 .bp-list-grid {
