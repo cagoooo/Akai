@@ -7343,7 +7343,663 @@ window.addEventListener('unhandledrejection', function (e) {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56];
+const POST_65: BlogPost = {
+  slug: 'ai-video-65-creator-hub',
+  title: '#65 AI 影片創作整合資源 Hub：ChatGPT → Grok → Canva 三步驟工作流 + 12+ YouTube 範例合集',
+  excerpt:
+    '#65「AI Creator Hub 影片創作與教學整合資源」不是另一個 AI 工具 — 是阿凱整理的「ChatGPT 寫腳本 → Grok 動圖化 → Canva 剪輯」三步驟工作流入口頁，含 12+ YouTube 創意作品範例合集。EZPage 部署，cagoooo/Grok-Canva。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 4,
+  tags: ['AI 影片創作', 'ChatGPT', 'Grok', 'Canva', '教學資源整合'],
+  toolIds: [65, 66, 94],
+  coverEmoji: '🎬',
+  coverColor: 'pink',
+  body: `## AI 影片創作的「工具碎片化」問題
+
+2024 年起 AI 影片工具爆炸式增長：
+- **ChatGPT** 寫劇本 / 腳本
+- **Grok** 把靜態圖動畫化
+- **Sora** 文字生成完整影片
+- **Runway / Pika / Hailuo** 各家影片生成
+- **Canva / 剪映 / CapCut** 後製剪輯
+- **NotebookLM** 知識圖卡
+- **Padlet** 分享作品
+
+老師最痛的不是學會用某個工具，而是「**這麼多工具到底怎麼串起來**」。
+
+## #65 真實怎麼解？
+
+**真實名稱**：「**AI Creator Hub 影片創作與教學整合資源**」
+
+阿凱的解法：**做一個整合入口頁** — 不是另一個 AI 工具，是 **AI 影片創作工作流的「**路徑圖**」**：
+
+**三步驟工作流**：
+1. **ChatGPT** → 寫腳本與文案
+2. **Grok** → 把靜態圖片動畫化
+3. **Canva / 剪映** → 拖拉式剪輯與後製
+
+**進階搭配**：
+- NotebookLM → 知識圖卡
+- Padlet → 分享作品
+
+**頁面結構**：
+- 導向 ChatGPT / Grok / Canva 官方網站的快速連結
+- 清楚的操作指南
+- **12+ YouTube 創意作品範例合集**（可收合介面 ▶️ AI 影片創作範例合集）
+
+## 真實技術棧
+
+- **EZPage 部署**（README 寫「Deployed by EZPage」）
+- 純前端教學資源彙整頁
+- **沒有特殊後端**
+- 部署：\`cagoooo.github.io/Grok-Canva/\`
+
+## 「工具整合資源頁」的教學價值
+
+對老師來說 — **#65 是 AI 影片創作備課的「**第一站**」**：
+
+| 老師需求 | #65 解法 |
+|---|---|
+| 想帶學生做 AI 影片但不知從哪開始 | **看三步驟路徑** |
+| 不知道 Grok 怎麼用 | **點官方連結 + 看範例** |
+| 要給學生看範例 | **12+ YouTube 作品合集**直接放 |
+| 想跟其他 AI 工具混搭 | **NotebookLM / Padlet 進階搭配建議** |
+
+→ 比看 100 篇 Medium 文章好。
+
+## 跟 #94 封面接故事 / #66 Sora 的關係
+
+阿凱的 AI 影片三件套：
+
+| # | 工具 | 角色 |
+|---|---|---|
+| **#65 AI Creator Hub**（本篇）| **教學資源入口頁** | 三步驟工作流 |
+| [#66 Sora AI 旅遊全記錄](/tool/66) | **Sora 教學資源庫** | OpenAI Sora 專屬 |
+| [#94 封面接故事](/blog/music-cover-storyboard-94/) | **實際操作工具** | MV 封面 → AI 分鏡 |
+
+**#65 是「**為什麼用**」 / #66 是「**用 Sora**」 / #94 是「**動手做**」** — 完整 AI 影片教學鏈。
+
+## 12+ YouTube 範例合集的價值
+
+對教師「**素養導向教學**」：
+- ✅ **不需自己花半天 Google 找範例**
+- ✅ **看好作品才知道要做什麼**
+- ✅ **學生看了會被啟發**
+- ✅ **每年更新可以追新潮流**
+
+## 教學情境
+
+**藝術與人文「AI 影片創作」單元**：
+- 第 1 節：開 #65 → 看 12+ 範例 → 引起動機
+- 第 2 節：分組 → 照三步驟流程
+- 第 3 節：實作 ChatGPT 寫腳本
+- 第 4 節：實作 Grok 動畫化
+- 第 5 節：實作 Canva 剪輯
+- 第 6 節：成果發表 + 反思
+
+**自主學習計畫**：
+- 學生看 #65 + 自己挑工具學
+- 不用老師逐步帶
+
+**社團指導**：
+- AI 創作社 / 媒體社 第一週就用 #65 起手
+
+## 配對工具推薦
+
+- [#66 Sora AI 旅遊全記錄](/tool/66) — OpenAI Sora 專屬教學
+- [#94 封面接故事](/blog/music-cover-storyboard-94/) — 實作工具
+- [#86 TieTu 3D Q版貼圖生成器](/tool/86) — 同款 AI 圖像生成
+
+## 適用對象
+
+- 國中小到高中 藝術與人文 / 媒體素養老師
+- AI 創作社 / 媒體社指導
+- 自主學習計畫指導老師
+- 想入門 AI 影片創作的老師（**第一站**）
+
+## 想試試？
+
+→ [前往 #65 AI 影片創作與教學整合資源](/tool/65)
+
+下次帶 AI 影片創作 — **先給學生看 12+ 範例合集** → 再分組照三步驟做。
+`,
+};
+
+const POST_66: BlogPost = {
+  slug: 'sora-66-travel-record',
+  title: '#66 Sora AI 旅遊全記錄教學網：OpenAI Sora 旅遊影片創作教學資源庫（EZPage 部署）',
+  excerpt:
+    '#66「Sora AI 旅遊全記錄教學網」是阿凱針對 **OpenAI Sora 影片生成工具**做的旅遊主題教學資源庫。從提示詞撰寫到高細節生成，把零散旅遊素材轉成電影質感全記錄短片。EZPage 部署，cagoooo/Sora。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 4,
+  tags: ['Sora', '旅遊影片', '提示詞工程', 'OpenAI', 'EZPage 部署'],
+  toolIds: [66, 65, 94],
+  coverEmoji: '✈️',
+  coverColor: 'blue',
+  body: `## Sora — OpenAI 2024 年最強 AI 影片生成
+
+OpenAI Sora 2024 年 2 月發表震驚世界：
+- **文字 → 影片**（不只圖片）
+- 一段 prompt 生成 **60 秒以上電影級短片**
+- 物理運動 / 鏡頭運動 / 角色一致性都自動處理
+- 上線後 Twitter / IG 滿天飛 Sora 作品
+
+對老師 — Sora 是**新世代 AI 影片工具的代表** —— 但學生不知道怎麼用、不知道怎麼寫好 prompt。
+
+阿凱的 **#66 Sora AI 旅遊全記錄教學網** 反向：**用「旅遊」主題切入 + 教 Sora 完整工作流**。
+
+## #66 真實怎麼做？
+
+**真實標題**：「**Sora AI 旅遊全記錄教學網**」
+
+**完整描述**（從 tools.json 抽出）：
+
+> 探索 Sora AI 與旅遊記錄的完美結合，掌握如何利用 AI 技術捕捉、編輯並分享您的旅遊點滴，打造個人專屬的高質感全記錄教學平台。
+
+**核心內容**：
+- 從**初步的提示詞撰寫**到**後期的高細節生成**
+- 把**零散的旅遊素材** → 轉化為**具備電影質感的全記錄短片**
+- 透過 AI 工具**優化敘事節奏與視覺呈現**
+
+## 為什麼選「旅遊」主題？
+
+對國中小教學 — **「旅遊」是學生最有共鳴的主題**：
+- ✅ 每個學生都有出去玩的經驗
+- ✅ 家族旅遊 / 校外教學 / 畢業旅行
+- ✅ 「**用 AI 把我的旅遊變成電影**」聽起來夢幻
+
+比抽象的「AI 影片創作」更有切入點。
+
+## 真實技術棧
+
+- **EZPage 部署**（README 寫「Deployed by EZPage」）
+- 純前端教學資源頁
+- **沒有後端**
+- 部署：\`cagoooo.github.io/Sora/\`
+
+## 跟 #65 #94 三件套對比
+
+| # | 工具 | 重點 |
+|---|---|---|
+| [#65 AI Creator Hub](/blog/ai-video-65-creator-hub/) | **三步驟工作流**：ChatGPT → Grok → Canva | 通用 |
+| **#66 Sora 旅遊全記錄**（本篇）| **OpenAI Sora 專屬** + 旅遊主題切入 | 進階 |
+| [#94 封面接故事](/blog/music-cover-storyboard-94/) | **MV 封面 → AI 分鏡 → 串成短片** | 實作 |
+
+**#66 的獨特定位**：**Sora 是 #65 三步驟以外的進階選擇** — 阿凱另外做一個教學網介紹。
+
+## 教學情境
+
+**社會課「家鄉文化」單元**：
+- 學生用手機拍家鄉景物
+- 用 Sora prompt 把素材轉成「**家鄉影像詩**」
+- 全班放映分享
+
+**畢業旅行回顧**：
+- 全班合作每人寫 1 個 Sora prompt
+- 拼成完整畢旅紀錄影片
+- 畢業典禮播放
+
+**社團指導**：
+- 影音社 / 媒體社
+- 用 #66 學 Sora prompt 進階寫法
+- 比商業 prompt 教學課程便宜（**免費**）
+
+## Sora 寫 prompt 的關鍵
+
+阿凱在 #66 講的應該包含：
+- **明確主體**（誰 / 什麼）
+- **場景細節**（時間 / 地點 / 環境）
+- **鏡頭運動**（推進 / 拉遠 / 旋轉）
+- **質感風格**（電影感 / 紀錄片 / 動畫）
+- **情緒氛圍**（溫暖 / 神祕 / 興奮）
+
+## 配對工具推薦
+
+- [#65 AI Creator Hub](/blog/ai-video-65-creator-hub/) — 三步驟工作流入口
+- [#94 封面接故事](/blog/music-cover-storyboard-94/) — 實作工具
+- [#86 TieTu 3D Q版貼圖](/tool/86) — 同款 AI 圖像生成
+
+## 適用對象
+
+- 國中小到高中 社會 / 藝術老師
+- 想帶學生做「**家鄉文化紀錄**」的老師
+- 畢業旅行影片製作指導
+- 影音社團 / 媒體社指導
+
+## 想試試？
+
+→ [前往 #66 Sora AI 旅遊全記錄教學網](/tool/66)
+→ [#65 三步驟入門](/blog/ai-video-65-creator-hub/)（先看完工作流再深入 Sora）
+`,
+};
+
+const POST_86: BlogPost = {
+  slug: 'tietu-86-chibi-sticker',
+  title: '#86 TieTu 3D Q版貼圖生成器：上傳大頭照 + 24 個文字 → Gemini 2.5 Flash Image 生 4×6 貼圖 + LINE 上架包',
+  excerpt:
+    '#86 TieTu — 上傳大頭照 → 自訂主題與 24 個文字標籤 → Gemini 2.5 Flash Image（Nano Banana Pro）生成 4×6 共 24 張 Q 版貼圖 → 下載 PNG / 24 張 ZIP / **LINE 個人原創貼圖上架包**（含 main.png + tab.png + README.txt）。Vite + React 19 + Cloud Functions v2 + Cloudflare Turnstile。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 6,
+  tags: ['AI 圖像生成', 'LINE 貼圖', 'Gemini 2.5 Flash Image', 'Nano Banana', 'IndexedDB'],
+  toolIds: [86, 65, 94],
+  coverEmoji: '🎨',
+  coverColor: 'yellow',
+  body: `## 「LINE 個人原創貼圖」上架的真實痛點
+
+LINE 創作者市集開放後，**任何人都能上架自己的貼圖**賺錢：
+- 每組 24 / 32 / 40 張，每張 240×240 主圖 + 96×74 索引圖
+- 自畫太累、找設計師太貴
+- 想做「**我自己 Q 版貼圖**」但畫畫不會
+
+阿凱的 **#86 TieTu** 是**這痛點的解藥**：
+
+> **上傳一張大頭照 → 自訂主題與 24 個文字標籤 → AI 生成 4×6 共 24 張 Q 版貼圖 → 下載成 PNG / 24 張 ZIP / LINE 個人原創貼圖上架包**
+
+## #86 真實技術細節（README 超完整）
+
+**真實標題**：「**TieTu — 3D Q版貼圖生成器**」（Traditional Chinese chibi sticker generator）
+
+**技術棧表格**：
+
+| 介面 | 後端 | 模型 | 部署 |
+|---|---|---|---|
+| Vite + React 19 + Tailwind 4 + shadcn/ui | Express 5 (monorepo) → Cloud Functions v2 | **Google Gemini 2.5 Flash Image** (\`gemini-2.5-flash-image\`，multimodal IMAGE output) | **GitHub + Firebase**（主推）|
+
+**完整 9 大功能**：
+
+**功能 A：照片上傳**
+- JPG / PNG / WEBP / **HEIC** 都支援
+- 前端用 **magic bytes 驗證**（不只看副檔名）
+- 上限 **10 MB**
+
+**功能 B：主題客製**
+- 輸入關鍵字（如「馬年、太空人、黏土風」）
+- 一鍵套用到 24 格
+
+**功能 C：24 格自訂文字**
+- 每格 1-8 字繁中
+- 可單獨修改
+
+**功能 D：AI 生成（核心）**
+- **Google Gemini 2.5 Flash Image**（Nano Banana Pro）multimodal
+- **輸入照片 + prompt → 生成 4×6 sticker sheet**
+
+**功能 E：客戶端切片**
+- Canvas 切成 24 張獨立 PNG
+- **不依賴後端**
+
+**功能 F：單張微調**
+- 旋轉 ±15°
+- 平移 ±15%
+- 縮放 80-120%
+- **即時預覽**
+
+**功能 G：三種下載格式**
+- 整張 PNG
+- 24 張 ZIP
+- **LINE 上架版 ZIP**（24 張 370×320 + main.png 240×240 + tab.png 96×74 + README.txt）
+
+**功能 H：歷史紀錄**
+- **IndexedDB** 保留最近 5 次
+- JPEG 1280px @ 0.85 壓縮存放
+- 點擊重新開啟
+
+**功能 I：限流保護 + 人機驗證**
+- 每 IP 每分鐘 3 張、每日 30 張
+- Postgres 持久化
+- **Cloudflare Turnstile** production 必填
+
+## 真實技術棧（從 README）
+
+- **Monorepo**：pnpm workspaces
+- **Node.js**：v24 本機 → **v22 部署到 Cloud Functions**
+- **TypeScript 5.9**（strict mode）
+- Prettier 3 + ESLint
+- **Replit Autoscale → GitHub + Firebase**（README 內有完整遷移指南）
+
+## LINE 上架包的細節
+
+LINE Creators Market 要求的檔案：
+- 24 / 32 / 40 張貼圖每張 **370×320** PNG
+- **main.png**（240×240）主圖
+- **tab.png**（96×74）索引圖
+- **README.txt** 說明
+
+阿凱的 #86 **一鍵打包成 ZIP** → **直接拖進 LINE Creators 後台上架**。
+
+## 跟 #91 PhotoPoet Pro 的關係
+
+阿凱有兩個 AI 圖像工具：
+- **#86 TieTu**（本篇）— LINE Q 版貼圖
+- [#91 PhotoPoet Pro](/tool/91) — 早安長輩圖
+
+兩個都用 Gemini 圖像生成 — **不同 use case 不同產品**：
+- TieTu = **24 張一組產品包**（量產 sticker pack）
+- PhotoPoet = **單張詩意圖**（每天傳一張）
+
+## 為什麼用 Nano Banana Pro？
+
+Google Gemini 2.5 Flash Image 別名「**Nano Banana**」是 2024 末新模型：
+- ✅ **multimodal 輸出**（同時看圖 + 文字 + 輸出新圖）
+- ✅ **角色一致性** — 24 張貼圖人臉統一不會變
+- ✅ **繁中文字渲染** — 中文小字也能寫進貼圖
+
+對 LINE Q 版貼圖這個 use case **完美匹配**。
+
+## 教學情境
+
+**畢業班禮物**：
+- 老師用全班合照 → 跑 #86
+- 24 張 Q 版貼圖每張寫一個學生名字
+- LINE 上架 → 全班保存
+
+**教師節活動**：
+- 學生用老師大頭照 + 24 個感謝詞
+- 「**XX 老師謝謝您**」「**XX 老師我愛您**」⋯
+- 上架成班級獨家貼圖
+
+**家庭親子活動**：
+- 假日家長陪小孩用 #86 做「**家族貼圖包**」
+- 阿公阿嬤的 LINE 從此多了專屬 stickers
+
+## 配對工具推薦
+
+- [#94 封面接故事](/blog/music-cover-storyboard-94/) — 同款 AI multimodal
+- [#65 AI Creator Hub](/blog/ai-video-65-creator-hub/) — AI 影片整合
+- [#91 PhotoPoet Pro](/tool/91) — 早安長輩圖
+
+## 適用對象
+
+- 國中小所有老師（畢業班禮物 / 教師節）
+- 想做 LINE 貼圖賺零用錢的人
+- 家庭親子活動
+- 想看「**Gemini 2.5 Flash Image multimodal**」案例的開發者
+
+## 想試試？
+
+→ [前往 #86 3D Q版貼圖生成器](/tool/86)
+
+第一次用：**上傳自己的大頭照 → 主題填「動物農場」→ 24 格各填一個動物**（貓 / 狗 / 兔 / 熊⋯） → 看 4×6 出來。
+`,
+};
+
+const POST_58: BlogPost = {
+  slug: 'prepare-58-lesson-plan',
+  title: '#58 十二年國教教案生成器：Python Flask + Gemini 1.5 Flash + Word docx 下載 + Email 自動寄送的教案 AI',
+  excerpt:
+    '#58 真實名稱「十二年國教教案生成器 (Lesson Plan Generator)」是阿凱**用 Python Flask 寫的教案生成系統**（跟其他大多 Node 工具不同）。Google Gemini 1.5 Flash + 生成 20 項目完整教案（核心素養 / 學習重點 / 教學活動）+ python-docx Word 下載 + Flask-Mail Email 自動寄送。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 5,
+  tags: ['十二年國教', '教案生成', 'Python Flask', 'python-docx', 'Email 自動寄送'],
+  toolIds: [58, 88, 78],
+  coverEmoji: '📋',
+  coverColor: 'green',
+  body: `## 老師寫教案的真實痛點
+
+108 課綱推動後，老師寫教案要包含：
+- **核心素養**（A1 身心素質 / A2 系統思考 / A3 規劃執行⋯）
+- **學習重點**（學習表現 + 學習內容）
+- **教學活動**（引起動機 → 發展活動 → 綜合活動）
+- **議題融入**（性平 / 環境 / 多元文化⋯）
+- **評量設計**（多元評量 / 形成性 / 總結性）
+- ⋯ 共 **20 個項目**
+
+寫一份完整教案 = **2-3 小時手寫**。一學期 18 個單元 × 2 hr = **36 小時**。
+
+阿凱的 **#58 十二年國教教案生成器** 反向：**輸入單元資訊 → AI 自動產出 20 項目完整教案**。
+
+## #58 真實怎麼做？
+
+**真實名稱**：「**十二年國教教案生成器 (Lesson Plan Generator)**」
+
+**核心功能（從 README 抽出）**：
+
+**功能 A：智慧教案生成**
+- 基於 **Google Gemini 1.5 Flash**
+- 生成 **20 個項目的完整教案**
+- 包含核心素養 / 學習重點 / 教學活動等
+
+**功能 B：Word 下載**
+- 一鍵將生成的教案轉換為**標準 .docx 格式**
+- 用 **python-docx** 渲染
+
+**功能 C：Email 自動發送**
+- 生成後自動將教案**格式化並寄送到指定信箱**
+- 用 **Flask-Mail**
+- 方便存檔與分享
+
+**功能 D：十二年國教適配**
+- **詞彙與邏輯完全符合台灣教育架構**
+- 不是直接套通用教案模板
+
+## 真實技術棧（特殊：Python Flask！）
+
+跟阿凱其他工具大多用 Node.js / Next.js 不同，**#58 是 Python Flask 後端**：
+
+- **Backend**: Python / Flask
+- **AI Engine**: Google Gemini API（gemini-1.5-flash）
+- **Document Rendering**: \`python-docx\`
+- **Email**: Flask-Mail
+- **Frontend**: HTML / Vanilla CSS / JavaScript
+
+**部署**（**不能用 GitHub Pages 因為有 Flask 後端**）：
+- Render.com（推薦）
+- Google Cloud Run
+- Railway.app
+
+## ⚠️ 注意 Gemini 1.5 Flash 已棄用警告
+
+README 寫的是 \`gemini-1.5-flash\` — 這個模型**已在 2024 年下半被 Google 棄用**，建議升級到：
+- \`gemini-2.0-flash\`（一般使用）
+- \`gemini-2.5-flash\`（最新）
+
+如果 #58 還跑得起來，可能是 Google 還有 grace period，但阿凱可能要更新 model 字串。
+
+## 為什麼用 Python Flask 而不是 Node？
+
+從技術棧推測：
+- ✅ **python-docx** 是業界標準 Word 生成套件（比 Node 版穩定）
+- ✅ Flask-Mail 簡單好用
+- ✅ Gemini 官方 SDK 對 Python 支援早
+- ✅ 阿凱可能那時剛好熟 Python
+
+**「**用對工具是工程師的修養**」** —— Python 在「**生 Word 文件 + Email + AI**」工作流上有先天優勢。
+
+## 跟 #88 / #78 國中課程計畫的關係
+
+阿凱的「**教案 / 課程計畫**」工具：
+
+| # | 工具 | 規模 | 對象 |
+|---|---|---|---|
+| **#58 教案生成器**（本篇）| **單元教案**（20 項目）| 任何學科老師 |
+| [#88 國中課程計畫 AI 審查](/blog/curriculum-88-ai-junior-high-review/) | **整學期計畫**審查 | 國中校內預審 |
+| [#78 國小課程計畫 AI 審查](/tool/78) | **整學期計畫**審查 | 國小校內預審 |
+
+**#58 是「**寫教案**」 / #88 #78 是「**審課程計畫**」** — 完整覆蓋備課到送審。
+
+## 教學情境
+
+**新進老師備課**：
+- 第一次寫教案不知道格式
+- 用 #58 → AI 給範本 → 學習標準格式
+
+**資深老師量產**：
+- 一學期 18 個單元
+- #58 + 微調 → 每單元省 1.5 小時
+
+**校際分享 / 觀課**：
+- AI 寫好基本框架
+- 老師加入創意內容
+- **Email 自動寄送** → 全領域老師可看
+
+**送教育局 / 督學訪視**：
+- 教案格式不符會被退
+- 用 #58 確保 20 項目齊備
+
+## 配對工具推薦
+
+- [#88 國中課程計畫 AI 審查](/blog/curriculum-88-ai-junior-high-review/) — 國中送審用
+- [#78 國小課程計畫 AI 審查](/tool/78) — 國小送審用
+- [#84 領域共備GO 會議記錄 Pro](/tool/84) — 領域共備配套
+
+## 適用對象
+
+- 國中小新進老師（學寫教案）
+- 領域召集人（量產領域教案）
+- 教學主任 / 教務組長（彙整全校教案）
+- 想看「**Python Flask + Gemini + python-docx**」案例的開發者
+
+## 想試試？
+
+→ [前往 #58 教師數位備課小幫手](/tool/58)
+
+第一次用 — **填單元名稱 + 學年 + 學科 + 教學目標** → AI 給你 20 項目完整教案 → 下載 docx + 寄 Email 存檔。
+`,
+};
+
+const POST_84: BlogPost = {
+  slug: 'meeting-84-domain-go-pro',
+  title: '#84 領域共備 GO Pro（domain-meeting-go）：跟 #15 同源雙部署 + AI 照片描述 + 編輯部期刊風 UI',
+  excerpt:
+    '#84 跟 [#15 領域共備 GO](/blog/report-15-domain-meeting-go) 是**同源雙部署**！#84 cagoooo.github.io/domain-meeting-go = GitHub Pages 版，#15 report.smes = Firebase Hosting 學校域名版。Next.js 15.2.3 + Gemini 2.5 Flash Lite + 上傳會議照片 AI 逐張描述 + 整場深度總結 + Word/PDF 匯出 + v0.5.0 編輯部期刊風 UI。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 5,
+  tags: ['領域共備', '會議記錄', '編輯部期刊風', '同源雙部署', 'Gemini 2.5 Flash Lite'],
+  toolIds: [84, 15, 24],
+  coverEmoji: '📰',
+  coverColor: 'orange',
+  body: `## #84 跟 #15 是同源雙部署（再 +1 案例）
+
+curl 抓 \`cagoooo.github.io/domain-meeting-go\` 真實 README 後，發現它跟 [#15 領域共備 GO（report.smes）](/blog/report-15-domain-meeting-go/) 是**同個專案的兩個部署**。
+
+阿凱「**同源雙部署策略**」已累積 4 個案例：
+
+| 工具家族 | Firebase Hosting 學校域名 | GitHub Pages 個人作品集 |
+|---|---|---|
+| **PIRLS** | [#4 pirlss.smes](/blog/pirls-4-firebase-mirror/) | [#87 cagoooo.github.io/pirls-questioncraft](/blog/pirls-87-questioncraft-rewrite/) |
+| **Aura 5W1H** | [#13 5w1h.smes](/blog/aura-13-firebase-mirror/) | [#92 cagoooo.github.io/Aura](/blog/inspire-92-5w1h-pro-writing/) |
+| **領域共備 GO** | [#15 report.smes](/blog/report-15-domain-meeting-go/) | **#84 cagoooo.github.io/domain-meeting-go**（本篇）|
+| **詩意長輩圖** | [#14 poet.smes](/blog/poet-14-elder-greeting-image/) | [#91 cagoooo.github.io/PhotoPoet](/tool/91) |
+
+## #84 真實怎麼做？
+
+**真實標題**：「**領域共備 GO ｜ Domain Meeting Go**」
+
+**Version 標籤** v0.5.4 / Next.js 15.2.3 / Firebase Functions v2 / **Gemini 2.5 Flash Lite**
+
+**完整核心功能**（從 README 抽出）：
+
+**功能 A：📝 會議資訊輸入**
+- 教學領域（國語 / 數學 / 自然 / 社會⋯）
+- 會議類別：**備課 / 觀課 / 議課 / 講座 / 社群 / 其他**
+- 主題、日期、社群成員
+
+**功能 B：📷 照片智慧描述**
+- 最多上傳 **4 張會議照片**
+- AI 逐張分析並產出符合教學情境的觀察描述
+- **含重試機制 + 2 秒冷卻避開配額**（神細節！）
+
+**功能 C：🤖 會議深度總結**
+- 結合會議資訊與照片描述
+- AI 產出**結構化 Markdown 總結報告**
+
+**功能 D：📄 Word 匯出**
+- 產出 \`.docx\` 含：
+  - 基本資訊表
+  - **簽到表**
+  - 照片紀錄
+  - Markdown 解析後的格式化總結
+
+**功能 E：🖨️ PDF 匯出**
+- 透過瀏覽器原生 \`window.print()\` + \`@media print\` CSS
+- 產出 A4 版面 PDF
+- **中文字型完美 + 標準分頁規則**
+
+**功能 F：🎯 即時視覺回饋**
+- 成功產出時在照片位置**播放彩花動畫**
+- **進度條**
+- **自動捲動定位**目前處理的項目
+
+**功能 G：🎨 v0.5.0 編輯部期刊風 UI（大改版）**
+- 報紙頭版 masthead
+- **酒紅 × 牛皮配色**
+- AI 摘要以雙欄期刊版型呈現
+- **首字下沉、■ 項目符號、底部簽名**
+- 自訂 \`dmg-*\` CSS 元件
+
+## 真實技術棧
+
+**前端**：
+- Next.js 15.2.3（**App Router + Turbopack**，dev port 9002，靜態 export → GitHub Pages）
+- React 18.3.1 + TypeScript 5
+- Tailwind CSS 3.4 + shadcn/ui（Radix UI）
+- **Google Fonts**: Noto Serif TC / Noto Sans TC / JetBrains Mono
+- React Hook Form + Zod 表單驗證
+- \`react-markdown\` + \`docx\` Word 生成
+- \`window.print()\` + \`@media print\` CSS（**v0.4.0 起取代 html2pdf.js**）
+- \`canvas-confetti\` 成功動畫
+
+**後端 / AI**：
+- Firebase Cloud Functions v2（\`onCall\` 可呼叫函式）
+- **Google Genkit + @genkit-ai/google-genai**
+- **模型**：\`googleai/gemini-2.5-flash-lite\`
+- API Key 透過 \`defineSecret("GEMINI_API_KEY")\` 管理
+
+**兩個對外 Cloud Functions**：
+- \`generatePhotoDescriptions\` — 單張照片 AI 描述
+- \`generateMeetingSummary\` — 整場 Markdown 總結
+
+## v0.4.0 → v0.5.0 改版重點
+
+**v0.4.0**：取代 html2pdf.js 改用 \`window.print()\` + \`@media print\`
+- **痛點**：html2pdf.js 中文字型常掛、分頁亂跑
+- **解法**：用瀏覽器原生 print → 中文字型完美 + 標準分頁
+
+**v0.5.0**：「編輯部期刊風」UI 改版
+- 從一般 form 風 → **報紙 masthead + 雙欄期刊**
+- 「**會議記錄 = 期刊報導**」的美學定位
+
+## 為什麼這值得寫獨立文章？
+
+- ✅ **同源雙部署案例第 4** — 鞏固阿凱部署策略觀察
+- ✅ **「**Gemini 2.5 Flash Lite + 多模態照片描述**」**技術案例
+- ✅ **「**v0.4 取代 html2pdf**」**踩雷紀錄
+- ✅ **「**編輯部期刊風 UI**」**對「會議記錄」這冷門需求的美學提升
+
+## 教學情境（同 #15 但補充）
+
+[#15 已寫詳細教學情境](/blog/report-15-domain-meeting-go/) — #84 補充：
+
+**「**領域共備 GO Pro 用法**」**（本工具獨有功能）：
+- **領域召集人會後 30 分鐘**：上傳 4 張會議照片 + 填會議資訊
+- **#84 AI 逐張描述**（神細節：用 2 秒冷卻避配額爆）
+- **整場深度總結 Markdown**
+- **匯出 docx + PDF** 雙格式給校長 + 領域成員 + 教育局
+
+## 配對工具推薦
+
+- [#15 領域共備 GO（report.smes Firebase 版）](/blog/report-15-domain-meeting-go/) — 同源學校域名版
+- [#24 上學期期末校務會議紀錄](/blog/meeting-24-end-semester-record/) — 同款會議系列
+- [#80 114 下學期教師會議](/blog/meeting-80-spring-semester-week13/) — 週次會議
+
+## 適用對象
+
+- 國中小領域召集人
+- 教學主任 / 教學組長
+- 想看「**Gemini 多模態 + 照片描述**」案例的開發者
+- 想看「**v0.4 取代 html2pdf 用 window.print**」遷移案例
+- 任何需要「**會議記錄報告**」的職場人
+
+## 想試試？
+
+→ [前往 #84 會議記錄自動產出平台 Pro 版](/tool/84)
+→ [#15 學校域名版](/blog/report-15-domain-meeting-go/)
+
+實際功能完全一樣 — **掛學校網域 vs 掛 cagoooo.github.io 看你想分享給誰**（再次驗證阿凱同源雙部署策略）。
+`,
+};
+
+export const POSTS: BlogPost[] = [POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84];
 
 /**
  * 取得 post（含手寫長文 + 從 tools.json 自動生成的迷你 blog）。
