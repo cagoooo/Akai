@@ -780,7 +780,12 @@ const POST_53: BlogPost = {
 
 打開 [repo cagoooo/repair](https://github.com/cagoooo/repair) 看才發現我完全錯了：
 
+<div class="callout callout--warn">
+<div class="callout__label">⚠ 真相</div>
+
 **這工具沒有 QR Code 掃描功能。** 那個 \`react-qr-code\` 套件只是用來「產生」單據連結 QR（給 deep link 用），不是掃碼入口。
+
+</div>
 
 真正的核心是 — **「**點互動式校園平面圖 + Google Vision OCR 自動標教室 + LINE Flex Message 雙軌通知**」**這條完全不一樣的軸線。
 
@@ -818,6 +823,13 @@ const POST_53: BlogPost = {
 - 卡片含照片 + 地點 + 項目 + 申報人 + 「**查看詳情**」按鈕 deep link
 - LINE Notify 2025/3 停止後，**已遷移到 LINE Messaging API**，用 Cloud Function \`sendLineNotification\` 當 proxy 解 CORS
 
+<div class="callout callout--tip">
+<div class="callout__label">💡 重點機制</div>
+
+雙軌分流不是給管理者看的 UI 設計 — 是**核心業務邏輯**。資訊組長手機只收到投影機 / WiFi 故障，事務組長只看冷氣 / 水龍頭，**互不干擾、責任清楚**。系統用 \`category\` 欄位自動分流，老師不用選給誰。
+
+</div>
+
 **功能 D：角色切換後台**
 - 管理員進後台跳「**角色選擇器**」(\`AdminRoleSelector\`)
 - 🖥️ 資訊組長 / 🔧 事務組長 / 📊 全部檢視
@@ -847,6 +859,31 @@ const POST_53: BlogPost = {
 - **部署**：GitHub Pages \`cagoooo.github.io/repair/\` + Firebase Hosting
 
 ## 實測數字（石門國小三個月實戰）
+
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-card__label">平均處理時長</div>
+    <div class="stat-card__value">1.4 <span style="font-size:14px;color:#6b5e4a;">天</span></div>
+    <span class="stat-card__delta">-73% vs 紙本 5.2 天</span>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card__label">老師月跑總務</div>
+    <div class="stat-card__value">0 <span style="font-size:14px;color:#6b5e4a;">次</span></div>
+    <span class="stat-card__delta">vs 紙本 3-5 次</span>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card__label">分流錯誤率</div>
+    <div class="stat-card__value">0<span style="font-size:14px;color:#6b5e4a;">%</span></div>
+    <span class="stat-card__delta">系統自動分</span>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card__label">學期統計</div>
+    <div class="stat-card__value">30 <span style="font-size:14px;color:#6b5e4a;">秒</span></div>
+    <span class="stat-card__delta">vs 紙本半天</span>
+  </div>
+</div>
+
+完整對照表：
 
 | 指標 | 紙本時代 | #53 上線後 |
 |------|---------|-----------|

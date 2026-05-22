@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import type { EducationalTool } from '@/lib/data';
 import { POSTS, getPostBySlug, getPostBySlugAsync, type BlogPost as BlogPostType } from '@/blog/posts';
 import { tokens } from '@/design/tokens';
@@ -231,6 +232,7 @@ export function BlogPost() {
             <div className="bp-article">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeRaw]}
                 components={{
                   h2: ({ children }) => {
                     const id = slugifyHeading(flattenText(children));
@@ -245,9 +247,30 @@ export function BlogPost() {
                       <table>{children}</table>
                     </div>
                   ),
-                  a: ({ href, children }) => {
-                    if (href?.startsWith('/')) {
+                  a: ({ href, children, ...rest }) => {
+                    if (!href) return <a {...rest}>{children}</a>;
+                    if (href.startsWith('/')) {
                       return <Link href={href}>{children}</Link>;
+                    }
+                    if (href.startsWith('#')) {
+                      // 文章內錨點：scrollTo 該 id 並補 24px header offset
+                      return (
+                        <a
+                          href={href}
+                          onClick={(e) => {
+                            const id = href.slice(1);
+                            const el = document.getElementById(id);
+                            if (el) {
+                              e.preventDefault();
+                              const top = el.getBoundingClientRect().top + window.scrollY - 24;
+                              window.scrollTo({ top, behavior: 'smooth' });
+                              history.replaceState(null, '', href);
+                            }
+                          }}
+                        >
+                          {children}
+                        </a>
+                      );
                     }
                     return (
                       <a href={href} target="_blank" rel="noopener noreferrer">
