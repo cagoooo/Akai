@@ -50,6 +50,33 @@ const CATEGORY_CHIPS = [
   { key: '互動體驗', emoji: '🎯', color: tokens.cat.interactive.dot },
 ];
 
+// 分類關鍵字 mapping：tag / title / excerpt 含任一關鍵字即列入該分類
+// 2026-05-21 修：原本要求 tag 完全等於分類名（'語文寫作'），但 78 篇文章都沒用過分類名當 tag → 永遠 0 篇
+const CATEGORY_KEYWORDS: Record<string, string[]> = {
+  '溝通互動': ['親師', '親師溝通', '訊息', 'LINE Messaging', '即時投票', '課堂互動', '報修', '會議'],
+  '教學設計': ['課程計畫', '教案', 'PIRLS', '備課', '會議記錄', '領域共備', '教學駕駛艙', '備課小幫手'],
+  '語文寫作': ['作文', '寫作', '5W1H', '成語', '漢語', '評語', '創意寫作', '長輩圖', '詩意'],
+  '語文閱讀': ['PIRLS', '閱讀理解', '閱讀推廣', '閱讀素養', '注音', 'ㄅㄆㄇ', '中打', '英打', '打字', '語文競賽', '演說', '國語'],
+  '實用工具': ['行政', '校務', '報修', '排課', '盤點', '抽籤', '財產', '會計', '動支', '黏存', '簽名', '同意書', '表單', '會議記錄', 'PDF', '檔案轉換', '校園點餐', '場地', '預約'],
+  '教育遊戲': ['遊戲', '互動遊戲', '九九乘法', '注音', '打字遊戲', '迷宮', '配對', '瑪莉歐', '貪食蛇', '企鵝', '猴子', '燈謎', '夾娃娃', '太陽系', '抽籤'],
+  '互動體驗': ['觸屏', '互動藝術', '聲音視覺化', '3D', '塗鴉', '即時', 'WordCloud', '文字雲', 'AI 互動', 'Three.js'],
+};
+
+/**
+ * 判斷文章是否屬於某分類：
+ * 1. 先看 tags 是否含分類關鍵字
+ * 2. 再看 title / excerpt 是否含關鍵字
+ */
+function postMatchesCategory(post: BlogPost, category: string): boolean {
+  const keywords = CATEGORY_KEYWORDS[category];
+  if (!keywords || keywords.length === 0) return false;
+  // tag 含關鍵字
+  if (post.tags.some((tag) => keywords.some((kw) => tag.includes(kw)))) return true;
+  // title / excerpt 含關鍵字
+  if (keywords.some((kw) => post.title.includes(kw) || post.excerpt.includes(kw))) return true;
+  return false;
+}
+
 type PostType = 'all' | 'longform' | 'mini';
 
 // 判斷是否為手寫長文（POSTS 5 篇）；其他都算迷你
@@ -126,8 +153,9 @@ export function BlogList() {
     else if (postType === 'mini') result = result.filter((p) => !isLongform(p));
 
     // (2) category chip 單選（看該分類所有文章）
+    // 用 CATEGORY_KEYWORDS 關鍵字 mapping 模糊比對 tag / title / excerpt
     if (selectedCat) {
-      result = result.filter((p) => p.tags.some((tag) => tag === selectedCat));
+      result = result.filter((p) => postMatchesCategory(p, selectedCat));
     }
 
     // (3) fuzzy search（只在有 query 時）
