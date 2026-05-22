@@ -20,11 +20,15 @@ interface Platform {
   blogSlug?: string;
 }
 
+// ⚠️ 各平台的 `count:` + 底部「看全部 N 篇手寫教學心得」由
+// `scripts/sync-deployment-ecosystem.mjs` 在 `npm run build` 時自動同步，
+// 來源 = tools.json (套用 getToolPlatform 規則) + posts.ts 的 POST_* const 數量。
+// 不要手改這些數字 — 改 tools.json / posts.ts 後 build 即同步。
 const PLATFORMS: Platform[] = [
   {
     emoji: '🐙',
     name: 'GitHub Pages',
-    count: 58,
+    count: 59,
     desc: '主力作品集，cagoooo/* 80+ repo',
     color: tokens.note.blue,
     pinColor: '#3b82f6',
@@ -244,7 +248,7 @@ export function BulletinDeploymentEcosystem() {
         💡 點任一張便利貼 → 看該平台代表作品的深度教學心得長文
         <br />
         <Link href="/blog" style={{ color: tokens.red, fontWeight: 800, textDecoration: 'underline' }}>
-          看全部 57 篇手寫教學心得 →
+          看全部 99 篇手寫教學心得 →
         </Link>
       </div>
     </div>

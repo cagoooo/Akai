@@ -1,12 +1,12 @@
 {
   "name": "rest-express",
-  "version": "3.6.41",
+  "version": "3.6.42",
   "type": "module",
   "license": "MIT",
   "scripts": {
     "deploy": "gh-pages -d dist/public",
     "dev": "tsx server/index.ts",
-    "build": "node scripts/bump-sw-version.mjs && node scripts/sync-featured-from-firestore.mjs && node scripts/sync-popular-queries.mjs && node scripts/generate-favicon.mjs && node scripts/generate-home-og.mjs && node scripts/generate-home-og-heatmap.mjs && node scripts/sync-meta-from-stats.mjs && node scripts/generate-sitemap.mjs && node scripts/generate-feed.mjs && node scripts/generate-wish-preview.mjs && vite build && node scripts/generate-og-pages.mjs && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
+    "build": "node scripts/bump-sw-version.mjs && node scripts/sync-featured-from-firestore.mjs && node scripts/sync-popular-queries.mjs && node scripts/sync-deployment-ecosystem.mjs && node scripts/generate-favicon.mjs && node scripts/generate-home-og.mjs && node scripts/generate-home-og-heatmap.mjs && node scripts/sync-meta-from-stats.mjs && node scripts/generate-sitemap.mjs && node scripts/generate-feed.mjs && node scripts/generate-wish-preview.mjs && vite build && node scripts/generate-og-pages.mjs && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
     "bump-sw": "node scripts/bump-sw-version.mjs",
     "new-tool": "node scripts/new-tool.mjs",
     "gen:favicon": "node scripts/generate-favicon.mjs",
