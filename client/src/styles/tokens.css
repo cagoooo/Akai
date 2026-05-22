@@ -13,6 +13,17 @@
   --muted: #8b7356;
   --muted2: #4a3a20;
 
+  /* ── Blog article surface (editorial reading view) ─────────
+     用於 /blog/:slug 內頁，更暖的紙色與細階分隔線，不影響站內其他頁面。 */
+  --paper-warm: #f5efe4;
+  --paper-edge-soft: #e8e0cf;
+  --ink-mute: #6b5e4a;
+  --ink-faint: #9a8c75;
+  --rule: #d9cfb8;
+  --rule-soft: #ebe2cd;
+  --note-yellow-soft: #fff9d4;
+  --measure: 680px;
+
   /* ── School crest palette ─────────────── */
   --navy: #1e3a8a;
   --navy-deep: #162a63;
@@ -55,6 +66,8 @@
   /* ── Type ─────────────────────────────── */
   --font-tc: 'Noto Sans TC', system-ui, sans-serif;
   --font-en: 'Plus Jakarta Sans', sans-serif;
+  --font-serif: 'Noto Serif TC', 'Source Han Serif TC', 'Songti TC', serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
   /* ── Shadows ──────────────────────────── */
   --shadow-card: 0 3px 5px rgba(0,0,0,.18), 0 16px 26px -8px rgba(0,0,0,.28), 0 30px 50px -20px rgba(0,0,0,.22);

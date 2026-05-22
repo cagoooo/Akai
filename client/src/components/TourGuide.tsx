@@ -212,6 +212,7 @@ export function TourGuide({ onComplete }: TourGuideProps) {
       }
       tourInstance.drive();
       setIsVisible(false);
+      try { window.dispatchEvent(new Event('tour-resolved')); } catch (e) { }
     } catch (error) {
       console.error("啟動導覽失敗:", error);
       // 在非 CI 環境且未完成過導覽時才顯示 Toast，避免干擾 LCP 測速
@@ -231,6 +232,8 @@ export function TourGuide({ onComplete }: TourGuideProps) {
     try {
       localStorage.setItem('lastTourPromptDismissedAt', Date.now().toString());
     } catch (e) { }
+    // 通知 InstallPrompt 等其他底部彈窗：tour 已解決，可以接力顯示
+    try { window.dispatchEvent(new Event('tour-resolved')); } catch (e) { }
   };
 
   // 重置導覽狀態

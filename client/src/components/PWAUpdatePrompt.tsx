@@ -89,6 +89,27 @@ export function PWAUpdatePrompt() {
         return true;
     });
 
+    // 與 TourGuide 互斥：tour 還在畫面上時不顯示 PWA 安裝卡，避免右下角重疊
+    const isTourAlreadyResolved = (): boolean => {
+        try {
+            if (localStorage.getItem('hasCompletedSiteTour') === 'true') return true;
+            const lastDismissed = localStorage.getItem('lastTourPromptDismissedAt');
+            if (lastDismissed) {
+                const dismissedAt = parseInt(lastDismissed, 10);
+                const oneDayMs = 24 * 60 * 60 * 1000;
+                if (Date.now() - dismissedAt < oneDayMs) return true;
+            }
+        } catch (e) { }
+        return false;
+    };
+    const [tourResolved, setTourResolved] = useState(() => isTourAlreadyResolved());
+    useEffect(() => {
+        if (tourResolved) return;
+        const onResolved = () => setTourResolved(true);
+        window.addEventListener('tour-resolved', onResolved);
+        return () => window.removeEventListener('tour-resolved', onResolved);
+    }, [tourResolved]);
+
     const handleDismissInstall = () => {
         setShowInstallPrompt(false);
         try {
@@ -317,9 +338,10 @@ export function PWAUpdatePrompt() {
     );
 
     // 安裝提示 — cork 藍色便利貼
+    // 顯示條件：可安裝 + 未在 24h cooldown + 已過 8s 延遲 + Tour 提示已解決（避免右下角重疊）
     const InstallPrompt = () => (
         <AnimatePresence>
-            {isInstallable && showInstallPrompt && shouldShowAfterDelay && (
+            {isInstallable && showInstallPrompt && shouldShowAfterDelay && tourResolved && (
                 <motion.div
                     initial={{ opacity: 0, y: 50, rotate: 3 }}
                     animate={{ opacity: 1, y: 0, rotate: 1.5 }}

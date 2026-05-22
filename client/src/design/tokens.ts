@@ -11,6 +11,14 @@ export const tokens = {
   muted: '#8b7356',
   muted2: '#4a3a20',
 
+  // Blog article surface (editorial reading view)
+  paperWarm: '#f5efe4',
+  paperEdgeSoft: '#e8e0cf',
+  inkMute: '#6b5e4a',
+  inkFaint: '#9a8c75',
+  rule: '#d9cfb8',
+  ruleSoft: '#ebe2cd',
+
   // School crest palette
   navy: '#1e3a8a',
   navyDeep: '#162a63',
@@ -28,6 +36,7 @@ export const tokens = {
   note: {
     yellow: '#fff3a8',
     yellowBright: '#fff27a',
+    yellowSoft: '#fff9d4',
     blue: '#c8e6ff',
     pink: '#ffd4d9',
     green: '#d4f4c7',
@@ -53,6 +62,8 @@ export const tokens = {
   font: {
     tc: "'Noto Sans TC', system-ui, sans-serif",
     en: "'Plus Jakarta Sans', sans-serif",
+    serif: "'Noto Serif TC', 'Source Han Serif TC', 'Songti TC', serif",
+    mono: "'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace",
   },
 } as const;
 
