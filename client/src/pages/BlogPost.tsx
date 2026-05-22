@@ -7,7 +7,7 @@
  */
 
 import { Link, useParams } from 'wouter';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -110,6 +110,35 @@ export function BlogPost() {
   const sections = useExtractedSections(post?.body);
   // 第二個 sections 引用相同記憶體 ref；useActiveSection 內部以 id 序列為 dep
   const activeId = useActiveSection(sections);
+
+  // 閱讀完成率上報：當文末 sentinel 進入視窗（≥50% 可見） → 上報一次 blog_read_complete
+  const completedRef = useRef(false);
+  const completeSentinelRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    completedRef.current = false;
+  }, [params.slug]);
+  useEffect(() => {
+    if (!post) return;
+    const el = completeSentinelRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        const e = entries[0];
+        if (e?.isIntersecting && !completedRef.current) {
+          completedRef.current = true;
+          trackEvent('blog_read_complete', {
+            slug: post.slug,
+            title: post.title,
+            reading_minutes: post.readingMinutes,
+            related_tools: post.toolIds.join(','),
+          });
+        }
+      },
+      { threshold: 0.5 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [post]);
 
   // === Loading / 404 ===
   if (!post && !loadedAsync) {
@@ -254,11 +283,11 @@ export function BlogPost() {
             variant="editorial"
           />
         }
-        toc={sections.length > 0 ? <BlogToc sections={sections} activeId={activeId} /> : undefined}
+        toc={sections.length > 0 ? <BlogToc sections={sections} activeId={activeId} slug={post.slug} /> : undefined}
         article={
           <>
             {sections.length > 0 && (
-              <BlogMobileToc sections={sections} activeId={activeId} />
+              <BlogMobileToc sections={sections} activeId={activeId} slug={post.slug} />
             )}
 
             <div className="bp-article">
@@ -346,6 +375,13 @@ export function BlogPost() {
             <BlogRelatedTools tools={relatedTools} />
 
             <BlogMobileShare shareTitle={post.title} />
+
+            {/* 閱讀完成 sentinel — 進入 50% 視窗就上報 blog_read_complete（每篇只觸發一次） */}
+            <div
+              ref={completeSentinelRef}
+              aria-hidden="true"
+              style={{ height: 1, width: '100%', marginTop: -1 }}
+            />
 
             <BlogPrevNext prev={prevItem} next={nextItem} />
 

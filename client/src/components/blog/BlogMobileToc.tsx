@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import type { Section } from '@/hooks/useActiveSection';
+import { trackEvent } from '@/lib/analytics';
 
 interface BlogMobileTocProps {
   sections: Section[];
   activeId?: string;
+  /** 文章 slug，用於上報 blog_toc_click 事件 */
+  slug?: string;
 }
 
 function scrollToId(id: string) {
@@ -13,7 +16,7 @@ function scrollToId(id: string) {
   window.scrollTo({ top, behavior: 'smooth' });
 }
 
-export function BlogMobileToc({ sections, activeId }: BlogMobileTocProps) {
+export function BlogMobileToc({ sections, activeId, slug }: BlogMobileTocProps) {
   const [open, setOpen] = useState(false);
   if (!sections.length) return null;
   const current = sections.find((s) => s.id === activeId) || sections[0];
@@ -42,6 +45,14 @@ export function BlogMobileToc({ sections, activeId }: BlogMobileTocProps) {
                   e.preventDefault();
                   setOpen(false);
                   scrollToId(s.id);
+                  if (slug) {
+                    trackEvent('blog_toc_click', {
+                      slug,
+                      section_id: s.id,
+                      section_label: s.label,
+                      source: 'mobile',
+                    });
+                  }
                 }}
               >
                 {s.label}

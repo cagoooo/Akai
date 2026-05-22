@@ -1,8 +1,11 @@
 import type { Section } from '@/hooks/useActiveSection';
+import { trackEvent } from '@/lib/analytics';
 
 interface BlogTocProps {
   sections: Section[];
   activeId?: string;
+  /** 文章 slug，用於上報 blog_toc_click 事件 */
+  slug?: string;
 }
 
 function scrollToId(id: string) {
@@ -12,7 +15,7 @@ function scrollToId(id: string) {
   window.scrollTo({ top, behavior: 'smooth' });
 }
 
-export function BlogToc({ sections, activeId }: BlogTocProps) {
+export function BlogToc({ sections, activeId, slug }: BlogTocProps) {
   if (!sections.length) return null;
   return (
     <nav className="bp-toc" aria-label="本文目錄">
@@ -29,6 +32,14 @@ export function BlogToc({ sections, activeId }: BlogTocProps) {
               onClick={(e) => {
                 e.preventDefault();
                 scrollToId(s.id);
+                if (slug) {
+                  trackEvent('blog_toc_click', {
+                    slug,
+                    section_id: s.id,
+                    section_label: s.label,
+                    source: 'desktop',
+                  });
+                }
               }}
             >
               {s.label}
