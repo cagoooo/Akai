@@ -29,6 +29,8 @@ import { BlogRelatedTools } from '@/components/blog/BlogRelatedTools';
 import { BlogPrevNext } from '@/components/blog/BlogPrevNext';
 import { BlogCta } from '@/components/blog/BlogCta';
 import { BlogMobileShare } from '@/components/blog/BlogMobileShare';
+import { BlogCodeBlock } from '@/components/blog/BlogCodeBlock';
+import { BlogPostingSchema } from '@/components/blog/BlogPostingSchema';
 import { useReadingProgress } from '@/hooks/useReadingProgress';
 import { useActiveSection } from '@/hooks/useActiveSection';
 import { useExtractedSections, slugifyHeading } from '@/hooks/useExtractedSections';
@@ -42,6 +44,26 @@ function flattenText(children: React.ReactNode): string {
     return flattenText(children.props?.children);
   }
   return '';
+}
+
+/** 章節錨點連結：滑鼠移過 H2/H3 顯示 #，點擊複製對應 URL 到剪貼簿 */
+function HeadingAnchor({ id }: { id: string }) {
+  const handle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const url = `${window.location.origin}${window.location.pathname}#${id}`;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url).catch(() => {});
+    }
+    history.replaceState(null, '', `#${id}`);
+  };
+  return (
+    <a
+      href={`#${id}`}
+      className="bp-heading-anchor"
+      aria-label="複製章節連結"
+      onClick={handle}
+    >#</a>
+  );
 }
 
 export function BlogPost() {
@@ -184,6 +206,16 @@ export function BlogPost() {
         path={`/blog/${post.slug}`}
       />
 
+      <BlogPostingSchema
+        title={post.title}
+        description={post.excerpt}
+        slug={post.slug}
+        publishedAt={post.publishedAt}
+        readingMinutes={post.readingMinutes}
+        body={post.body}
+        tags={post.tags}
+      />
+
       <BulletinHeader />
 
       {/* 頂部閱讀進度條 */}
@@ -236,17 +268,44 @@ export function BlogPost() {
                 components={{
                   h2: ({ children }) => {
                     const id = slugifyHeading(flattenText(children));
-                    return <h2 id={id}>{children}</h2>;
+                    return (
+                      <h2 id={id}>
+                        {children}
+                        <HeadingAnchor id={id} />
+                      </h2>
+                    );
                   },
                   h3: ({ children }) => {
                     const id = slugifyHeading(flattenText(children));
-                    return <h3 id={id}>{children}</h3>;
+                    return (
+                      <h3 id={id}>
+                        {children}
+                        <HeadingAnchor id={id} />
+                      </h3>
+                    );
                   },
                   table: ({ children }) => (
                     <div className="bp-table-wrap">
                       <table>{children}</table>
                     </div>
                   ),
+                  pre: ({ children }) => {
+                    // 抓 fenced code block：<pre><code class="language-xxx">{code}</code></pre>
+                    // react-markdown 把 ``` ``` 包成這個結構
+                    const child = Array.isArray(children) ? children[0] : children;
+                    if (
+                      child &&
+                      typeof child === 'object' &&
+                      'props' in (child as object)
+                    ) {
+                      const props = (child as { props?: { className?: string; children?: React.ReactNode } }).props;
+                      const className = props?.className;
+                      const code = flattenText(props?.children);
+                      const m = /language-(\w+)/.exec(className || '');
+                      return <BlogCodeBlock language={m?.[1]} code={code} />;
+                    }
+                    return <pre>{children}</pre>;
+                  },
                   a: ({ href, children, ...rest }) => {
                     if (!href) return <a {...rest}>{children}</a>;
                     if (href.startsWith('/')) {

@@ -110,6 +110,13 @@ MISSIONS: 25  |  GRADES: 4  |  SUBJECTS: 12
 
 **重點：每單元都有獨立視覺主題梗** — Retro Win98 / Circuit-glow / Risograph / Scrapbook / 暖橘奶油，**不是套模板**。
 
+<div class="callout callout--tip">
+<div class="callout__label">💡 為什麼這樣設計</div>
+
+每個駕駛艙獨立視覺主題不是炫技 — 是**讓學生視覺記憶綁定單元**。回家被家長問「今天上什麼」，學生會記得「就那個霓虹電路的」「就那個 Win98 的」，而不是「資訊課」這種模糊回答。
+
+</div>
+
 ## 真實技術棧（讓工程師同事尖叫的選擇）
 
 - **零框架**：純 HTML + vanilla JS（手寫 \`el()\` createElement helper） + 內嵌 \`<style>\` CSS
@@ -132,6 +139,31 @@ MISSIONS: 25  |  GRADES: 4  |  SUBJECTS: 12
 4. 學生作業：駕駛艙內評量題 8-18 題
 
 ## 實測效果（石門國小 5 年級 micro:bit 單元）
+
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-card__label">單元覆蓋年級</div>
+    <div class="stat-card__value">G3-G6 <span style="font-size:14px;color:#6b5e4a;">全年級</span></div>
+    <span class="stat-card__delta">25 個獨立駕駛艙</span>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card__label">學生記網址數</div>
+    <div class="stat-card__value">1 <span style="font-size:14px;color:#6b5e4a;">個</span></div>
+    <span class="stat-card__delta">vs 8 個散落平台</span>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card__label">上課切換工具</div>
+    <div class="stat-card__value">0 <span style="font-size:14px;color:#6b5e4a;">次</span></div>
+    <span class="stat-card__delta">駕駛艙內全包</span>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card__label">開發週數</div>
+    <div class="stat-card__value">5 <span style="font-size:14px;color:#6b5e4a;">週</span></div>
+    <span class="stat-card__delta">84 commits</span>
+  </div>
+</div>
+
+完整對照表：
 
 | 指標 | 傳統做法 | 用 #81 駕駛艙 |
 |------|---------|---------|
@@ -233,6 +265,13 @@ const POST_46: BlogPost = {
 - 管理員用 Firebase Auth 登入才有「取消他人預約 / 批次取消 / 設定不開放時段」
 - **持有相同 deviceId 可自刪自己的預約**
 
+<div class="callout callout--warn">
+<div class="callout__label">⚠ 為什麼無審核反而比有審核穩</div>
+
+學校最容易卡死的不是「沒人核可」，是「組長 A 不在那一週禮堂沒人能借」。**砍掉審核 = 砍掉單點故障**。Rate Limit + deviceId 自綁 + 30 秒 Undo + 管理員可隨時刪不當預約，這四層擋住所有惡意使用情境，比繁瑣審核流程實用得多。
+
+</div>
+
 **功能 F：30 秒 Undo（Gmail 風格撤銷）**
 - 預約完 30 秒內可一鍵 Undo
 
@@ -259,6 +298,31 @@ const POST_46: BlogPost = {
 - 8 篇開發文件（PROGRESS.md 68KB / FUTURE_PROPOSAL.md 60KB / OPTIMIZATION_PLAYBOOK.md 41KB）— **這不是普通工具，是當生產級教學產品在經營**
 
 ## 兩個月實測數字
+
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-card__label">平均預約時間</div>
+    <div class="stat-card__value">30 <span style="font-size:14px;color:#6b5e4a;">秒</span></div>
+    <span class="stat-card__delta">vs 紙本 5-10 分</span>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card__label">時段衝突糾紛</div>
+    <div class="stat-card__value">0 <span style="font-size:14px;color:#6b5e4a;">件</span></div>
+    <span class="stat-card__delta">vs 紙本 2-3 件/月</span>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card__label">預約總量</div>
+    <div class="stat-card__value">90 <span style="font-size:14px;color:#6b5e4a;">場/月</span></div>
+    <span class="stat-card__delta">+200% vs 紙本</span>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card__label">校外借用</div>
+    <div class="stat-card__value">6-8 <span style="font-size:14px;color:#6b5e4a;">件/月</span></div>
+    <span class="stat-card__delta">vs 紙本 1-2 件</span>
+  </div>
+</div>
+
+完整對照表：
 
 | 指標 | 紙本時代（學期前） | #46 上線後（兩個月） |
 |------|------|------|
@@ -653,6 +717,13 @@ const POST_INDEX_AI: BlogPost = {
 
 老師真實的需求往往**抽象**：「我教不下去這個單元」、「下週要上戶外教學前要熱身」、「想讓內向學生有存在感」⋯⋯ fuse.js 接不住這種語境。
 
+<div class="callout callout--info">
+<div class="callout__label">ℹ️ 關鍵設計觀念</div>
+
+字面比對找「**有沒有這個詞**」，語意搜尋找「**意圖是什麼**」。教師真實場景幾乎都是後者 — 沒有老師會打「投票」找投票工具（直接從首頁分類進就好），他們打的是「我想讓學生討論時意見更平均」這類**情境描述**。
+
+</div>
+
 ## 升級方案：Gemini Embedding
 
 **Embedding** 把文字轉成「向量」（一串 768 個數字），語意相近的文字向量會在「向量空間」中靠近彼此。比較兩段文字的相似度 = 算兩個向量的 [cosine similarity](https://en.wikipedia.org/wiki/Cosine_similarity)。
@@ -714,6 +785,31 @@ ToolIndexAI 加 toggle：「⚡ 字面比對」/「🧠 語意搜尋」
 **語意搜尋對「抽象需求」的命中率提升 5-10 倍**。
 
 ## 成本與效能
+
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-card__label">Build-time 一次性</div>
+    <div class="stat-card__value">&lt; $0.01 <span style="font-size:14px;color:#6b5e4a;">USD</span></div>
+    <span class="stat-card__delta">免費額度內</span>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card__label">Runtime 暖啟動</div>
+    <div class="stat-card__value">300 <span style="font-size:14px;color:#6b5e4a;">ms</span></div>
+    <span class="stat-card__delta">含 query embed</span>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card__label">Free tier 額度</div>
+    <div class="stat-card__value">1500 <span style="font-size:14px;color:#6b5e4a;">/min</span></div>
+    <span class="stat-card__delta">教師量綽綽有餘</span>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card__label">抽象命中率</div>
+    <div class="stat-card__value">+5-10 <span style="font-size:14px;color:#6b5e4a;">×</span></div>
+    <span class="stat-card__delta">vs fuse.js</span>
+  </div>
+</div>
+
+完整對照：
 
 | 項目 | 數字 |
 |------|------|

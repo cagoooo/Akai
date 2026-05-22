@@ -37,6 +37,7 @@ export function BlogMobileToc({ sections, activeId }: BlogMobileTocProps) {
               <a
                 href={`#${s.id}`}
                 className={'bp-mtoc__link' + (s.id === activeId ? ' is-active' : '')}
+                aria-current={s.id === activeId ? 'true' : undefined}
                 onClick={(e) => {
                   e.preventDefault();
                   setOpen(false);

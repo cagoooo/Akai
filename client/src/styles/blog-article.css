@@ -7,6 +7,20 @@
    ========================================================= */
 
 /* =========================================================
+   A11y — 全域 focus-visible 樣式（鍵盤焦點明顯，滑鼠 hover 不會誤觸發）
+   ========================================================= */
+.bp-page a:focus-visible,
+.bp-page button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.bp-toc__link:focus-visible,
+.bp-mtoc__link:focus-visible {
+  outline-offset: -2px;
+}
+
+/* =========================================================
    Page layout
    ========================================================= */
 .bp-page {
@@ -265,6 +279,35 @@
   border-radius: 2px;
 }
 .bp-article h2:first-child { margin-top: 0; }
+
+/* 章節錨點 # icon — 滑鼠移過 H2/H3 顯示，點擊複製 URL */
+.bp-heading-anchor {
+  display: inline-block;
+  margin-left: .35em;
+  color: var(--ink-faint);
+  font-weight: 600;
+  font-size: .65em;
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity .15s, color .15s;
+  vertical-align: 0.18em;
+  letter-spacing: 0;
+}
+.bp-article h2:hover .bp-heading-anchor,
+.bp-article h3:hover .bp-heading-anchor,
+.bp-heading-anchor:focus-visible {
+  opacity: 1;
+}
+.bp-heading-anchor:hover { color: var(--accent-deep); }
+.bp-heading-anchor:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+/* 觸控裝置永遠顯示（沒有 hover） */
+@media (hover: none) {
+  .bp-heading-anchor { opacity: .55; }
+}
 
 .bp-article h3 {
   font-size: clamp(17px, 1.4vw, 19px);

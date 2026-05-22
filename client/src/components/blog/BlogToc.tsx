@@ -25,6 +25,7 @@ export function BlogToc({ sections, activeId }: BlogTocProps) {
             <a
               href={`#${s.id}`}
               className={'bp-toc__link' + (s.id === activeId ? ' is-active' : '')}
+              aria-current={s.id === activeId ? 'true' : undefined}
               onClick={(e) => {
                 e.preventDefault();
                 scrollToId(s.id);

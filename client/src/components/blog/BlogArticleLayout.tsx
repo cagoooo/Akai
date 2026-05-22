@@ -19,11 +19,19 @@ interface BlogArticleLayoutProps {
  */
 export function BlogArticleLayout({ left, hero, article, toc }: BlogArticleLayoutProps) {
   return (
-    <main className="bp-page">
-      {left && <aside className="bp-page__left">{left}</aside>}
+    <main className="bp-page" aria-label="部落格文章內容">
+      {left && (
+        <aside className="bp-page__left" aria-label="作者資訊與分享">
+          {left}
+        </aside>
+      )}
       <header className="bp-page__hero">{hero}</header>
       <article className="bp-page__article">{article}</article>
-      {toc && <aside className="bp-page__toc">{toc}</aside>}
+      {toc && (
+        <aside className="bp-page__toc" aria-label="文章目錄">
+          {toc}
+        </aside>
+      )}
     </main>
   );
 }
