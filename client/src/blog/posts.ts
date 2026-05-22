@@ -11390,7 +11390,664 @@ Gemini 畫繪本  →  Google Doc 整理  →  發布 + 共用
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90];
+const POST_1: BlogPost = {
+  slug: 'replit-1-online-customer-service',
+  title: '#1 線上即時客服：Replit shared link 公開分享 — 跟 #19 是同 Replit 專案兩入口（分享公開版 vs 製作後台）',
+  excerpt:
+    '#1「線上即時客服」是阿凱用 Replit 做的即時教育支援諮詢服務，**走 Replit shared 公開連結**（\`/shared/A4uyH5OdHI\`）讓任何人不用註冊直接使用。跟 [#19 設計專屬客服](/tool/19) 是**同個 Replit 專案的兩個入口** — 分別服務「使用者公開」vs「製作者後台」雙場景。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 4,
+  tags: ['線上客服', 'Replit 部署', '即時通訊', 'shared link', 'AI 諮詢'],
+  toolIds: [1, 19, 59],
+  coverEmoji: '💬',
+  coverColor: 'blue',
+  body: `## 阿凱的「**第三方平台部署**」策略
+
+回顧阿凱 98 工具的部署平台分佈：
+- 🐙 GitHub Pages: 58
+- 🌐 Google Sites Embedded: 10
+- 🏫 XOOPS 校網 VM: 16
+- 🔥 Firebase Hosting: 8
+- 🧩 **第三方平台: 6**（**#1 #19 Replit / #7 #8 LINE / #39 Claude Artifacts / #40 Padlet**）
+
+#1 是「**第三方平台**」5 個工具的第一個 — 用 **Replit** 部署。
+
+## #1 vs #19 — 同 Replit 專案雙入口
+
+| 維度 | **#1 線上即時客服**（本篇）| [#19 設計專屬客服](/tool/19) |
+|---|---|---|
+| URL | \`replit.app/**shared/**A4uyH5OdHI\` | \`replit.app/\`（根目錄）|
+| 入口性質 | **分享連結**（公開使用）| **製作後台**（建立自己的客服）|
+| 受眾 | **諮詢者** | **想做客服的人** |
+| 操作 | **直接問問題** | **自訂 + 訓練客服機器人** |
+
+**雙入口設計哲學**：
+- ✅ **使用者公開連結** = 不用註冊即可問
+- ✅ **製作者後台** = 老師可以建立自己的學科客服
+
+跟 [#7/#23 點石成金蜂 LINE+Web 雙形式](/blog/comments-23-web-version/) 同款邏輯 — **同源工具不同入口服務不同角色**。
+
+## #1 真實怎麼做？
+
+**真實定位**：「**即時的線上教育支援和諮詢服務**」
+
+**核心功能**：
+- 學生 / 家長**進入分享連結**
+- 直接打字問問題
+- AI 即時回答
+- 不需要註冊 / 登入
+- 不需要 LINE 加好友
+
+## 真實技術棧（從 Replit live HTML 抓出）
+
+- **Vite** 建置工具（從 \`data-vite-theme\` attr 看到）
+- **CSS 變數主題**（\`--background\` / \`--foreground\` / \`--primary\` 等）
+- **Tailwind CSS** + **shadcn/ui 風格**（HSL 色彩變數）
+- **部署**：Replit Autoscale（\`document-ai-companion-ipad4.replit.app\`）
+
+## 為什麼選 Replit 而不是 GitHub Pages？
+
+阿凱「**用對工具**」哲學再案例：
+
+| 平台 | 適合什麼 |
+|---|---|
+| **GitHub Pages** | 純靜態 / 簡單 AI 工具 |
+| **Firebase Hosting** | 學校自訂域名 + Cloud Functions |
+| **Replit Autoscale** | **AI 客服 + 對話狀態 + 後端邏輯** |
+
+**Replit 優勢**：
+- ✅ 支援 **Node.js + Python 後端**
+- ✅ 內建 **AI API 整合**
+- ✅ **shared link 公開分享**機制
+- ✅ Autoscale 自動 spin up（**省錢**）
+- ✅ 「**製作者後台 + 公開連結**」雙入口設計成熟
+
+## 跟 #59 小智鈴客服三件套
+
+阿凱「**AI 客服**」工具三件套：
+
+| # | 工具 | 部署 | 定位 |
+|---|---|---|---|
+| **#1 線上即時客服**（本篇）| **Replit shared** | 通用 AI 諮詢 |
+| [#19 設計專屬客服](/tool/19) | **Replit 根目錄** | 製作者後台 |
+| [#59 小智鈴 AI 客服](/blog/smes-59-ai-customer-service/) | **GitHub Pages** | **石門國小資訊組專屬** |
+
+**完整覆蓋**：
+- 通用問問題 → #1
+- 想自己做客服 → #19
+- 校內專用 → #59
+
+## 教學情境
+
+**新進老師遇到不懂的**：
+- 學校系統 / 教學工具 / 行政流程
+- 不知道找誰問
+- 用 #1 → AI 即時回答
+
+**家長半夜疑問**：
+- 「**孩子作業這題怎麼做**」
+- LINE 老師會被打擾
+- 用 #1 → **不打擾老師**
+
+**學生自學**：
+- 寫作業遇到不懂
+- 不想等老師回家長 LINE
+- 直接用 #1 問
+
+**校際諮詢**：
+- 其他學校老師想了解
+- 分享 #1 連結 → **不用加 LINE**
+
+## 配對工具推薦
+
+- [#19 設計自己的專屬客服](/tool/19) — 同 Replit 製作後台
+- [#59 小智鈴 AI 客服](/blog/smes-59-ai-customer-service/) — 校內專屬版
+- [#16 親師溝通小幫手](/blog/talk-16-teacher-helper/) — 親師訊息 AI
+
+## 適用對象
+
+- 學校教職員（**遇到問題隨時問**）
+- 學生 / 家長（**24/7 諮詢**）
+- 想看「**Replit shared link + 公開分享**」案例的開發者
+- 想用「**沒有 GitHub repo**」也能部署 AI 工具的老師
+
+## 想試試？
+
+→ [前往 #1 線上即時客服](/tool/1)
+
+下次卡關 — **點 #1 連結 → 直接打字問** → 不用加 LINE 不用註冊。
+`,
+};
+
+const POST_19: BlogPost = {
+  slug: 'replit-19-design-your-own',
+  title: '#19 設計自己的專屬客服：跟 #1 是同 Replit 專案製作後台 — 「fork → 自訂 → 訓練 → 上線」流程教學',
+  excerpt:
+    '#19「設計自己的專屬客服」是 [#1 線上即時客服](/blog/replit-1-online-customer-service) 的**製作後台**，跟 #1 同個 Replit 專案不同入口。提供「**fork → 自訂主題 → 訓練 QA → 上線 shared link**」完整流程 — 讓老師也能做出自己學科的 AI 客服。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 4,
+  tags: ['客服建造器', 'Replit 製作後台', 'AI 客服自訂', '機器人訓練', '老師工具'],
+  toolIds: [19, 1, 59],
+  coverEmoji: '🤖',
+  coverColor: 'pink',
+  body: `## #19 跟 #1 的關係（同 Replit 雙入口）
+
+[已寫的 #1 線上即時客服](/blog/replit-1-online-customer-service) = **使用者公開分享**（\`/shared/A4uyH5OdHI\`）
+
+**#19 設計自己的專屬客服** = **製作者後台**（\`replit.app/\` 根目錄）
+
+兩者是**同個 Replit 專案的兩個入口**：
+
+\`\`\`
+            cagoooo 的 Replit 專案
+                  ↓
+    ┌─────────┴─────────┐
+    ↓                   ↓
+#1 shared 公開連結     #19 根目錄製作後台
+   ↓                    ↓
+使用者直接問問題      老師建立自己的客服
+\`\`\`
+
+跟 [#7 LINE Bot + #23 網頁版同源雙形式](/blog/comments-23-web-version/) 是同款設計哲學。
+
+## #19 真實怎麼做？
+
+**真實定位**：「**自訂專屬的智能客服系統**」
+
+**完整流程**（推測）：
+1. 老師進 \`replit.app/\` 製作後台
+2. **fork** 阿凱的客服模板
+3. **自訂主題** / 介面色彩
+4. **訓練 QA**：輸入自己學科的常見問題 + 答案
+5. **上線** → 拿到 shared link
+6. **分享給學生 / 家長**
+
+**功能特色**（從 tags 推測）：
+- 客服 / AI / 機器人 / 自訂 / 智能
+
+## 真實技術棧
+
+- **Replit Autoscale**（與 #1 同專案）
+- **Vite + 推測 React/Vue**
+- AI 後端（推測 OpenAI / Gemini API）
+- **shared link 機制** 部署完成的客服
+
+## 「**老師也能做自己的客服**」的教育意義
+
+對「**沒有寫過程式的老師**」：
+- ✅ **不用學 Python / JavaScript**
+- ✅ **不用買伺服器**
+- ✅ **不用學 OAuth / API**
+- ✅ **只要會填 QA 資料**
+- ✅ **5 分鐘上線自己學科的 AI 客服**
+
+→ 「**讓不會程式的老師也能擁有 AI 工具**」是阿凱的長期使命。
+
+## 跟阿凱其他「**讓老師自架**」工具呼應
+
+| # | 工具 | 自架方式 |
+|---|---|---|
+| [#11 剛好學 Akailao](/blog/classroom-interaction-11-easy/) | set.html 配置生成器 + 自架 Firebase |
+| [#97 MBTI 校園奇遇記](/blog/mbti-97-campus-adventure-rpg/) | app.config.ts 一鍵 fork 改 4 行 |
+| **#19 設計專屬客服**（本篇）| **Replit fork + 自訂 QA + shared link** |
+
+**阿凱「**降低老師工具製作門檻**」**的長期策略：
+- 不只給工具
+- **教老師怎麼做自己的工具**
+- **賦能而非依賴**
+
+## 教學情境
+
+**英文老師做「英文文法客服」**：
+- fork #19 模板
+- 訓練 QA：「**現在完成式怎麼用**」「**過去式 vs 過去完成式**」
+- 學生問 → AI 用老師訓練過的答案回
+- **比 ChatGPT 更聚焦學科**
+
+**數學老師做「分數計算客服」**：
+- 訓練 QA：「**1/2 + 1/3 等於多少**」「**分子分母怎麼通分**」
+- 國小三年級學生半夜寫作業卡關 → 直接問
+
+**輔導老師做「青少年情緒輔導客服」**：
+- 訓練 QA：「**我覺得很沮喪**」「**我跟同學吵架**」
+- 學生匿名問 → 不用面對面
+- **輔導室外的 24/7 第一線支援**
+
+**校長做「學校政策 FAQ 客服」**：
+- 訓練 QA：「**校外教學什麼時候**」「**家長日是哪天**」
+- 家長有問題不用打電話到學校
+
+## 配對工具推薦
+
+- [#1 線上即時客服](/blog/replit-1-online-customer-service/) — 同 Replit 公開使用版
+- [#59 小智鈴 AI 客服](/blog/smes-59-ai-customer-service/) — 校內專屬版
+- [#11 剛好學 Akailao](/blog/classroom-interaction-11-easy/) — 同款「老師自架」哲學
+
+## 適用對象
+
+- 各科老師（**做自己學科的 AI 客服**）
+- 輔導老師（**情緒輔導 AI 第一線**）
+- 校長 / 主任（**政策 FAQ 客服**）
+- 圖書館（**閱讀推薦 AI 客服**）
+- 想看「**Replit 製作後台 + shared link**」案例的開發者
+
+## 想試試？
+
+→ [前往 #19 設計自己的專屬客服](/tool/19)
+
+下個學期 — **做一個自己學科的客服** → 學生問題你不用熬夜回。
+`,
+};
+
+const POST_8: BlogPost = {
+  slug: 'line-bot-8-lesson-plans',
+  title: '#8 12 年教案有 14 — LINE Bot：豐富教案資源分享平台 + 即時推送多元教學素材',
+  excerpt:
+    '#8「12 年教案有 14」是阿凱用 **LINE Bot 平台**做的教案資源分享機器人。加好友 \`lin.ee/pCqnVhT\` 即可獲取**十二年國教課綱對應的多元教學素材**。LINE 為部署平台 = 老師最熟悉的介面（不用記網址）。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 4,
+  tags: ['LINE Bot', '教案資源', '十二年國教', '課綱對應', '即時推送'],
+  toolIds: [8, 7, 58],
+  coverEmoji: '📚',
+  coverColor: 'green',
+  body: `## 為什麼選 LINE Bot 部署？
+
+阿凱有兩個工具用 LINE Bot：
+- [#7 點石成金蜂 LINE 版](/blog/comment-7-ai-positive-language/) — 評語 AI 機器人
+- **#8 12 年教案有 14**（本篇）— **教案資源分享**
+
+**LINE Bot 的真實優勢**：
+- ✅ **老師最熟悉的介面**（不用記網址）
+- ✅ 加好友後**即時推送新教案**（push 機制）
+- ✅ 教師圈 80%+ 都裝 LINE
+- ✅ **不用註冊新平台**
+- ✅ 可發 Flex Message 卡片教案
+
+## #8 真實怎麼做？
+
+**真實名稱**：「**12 年教案有 14**」
+
+**命名巧思**：
+- 「**12 年國教 = 1-12 年級**」
+- 「**有 14**」= **有意（諧音）** + **14 含意「貼心 / 整理好」**
+- 「教案有 14」= **「**教案？有！整理好給你**」**
+
+**定位**：
+> 「**豐富的教案資源分享平台，提供多元化的教學素材和靈感**」
+
+**核心功能**（推測）：
+- 老師加 LINE Bot 好友
+- 用關鍵字搜尋教案（如「**五年級 自然 太陽系**」）
+- Bot 推送對應教案 / 學習單 / 素材
+- **定期推送新教案**（push notification）
+- 可能含「**收藏**」「**分類**」功能
+
+## 真實技術棧
+
+- **LINE Messaging API**
+- 後端推測：Cloud Functions / Replit / 自架伺服器
+- 教案資料庫（推測 Firestore / Google Sheet）
+- 部署：LINE 平台（\`lin.ee/pCqnVhT\` 加好友連結）
+
+## 跟其他教案工具的關係
+
+阿凱「**教案資源**」三件套：
+
+| # | 工具 | 部署 | 定位 |
+|---|---|---|---|
+| **#8 12 年教案有 14**（本篇）| **LINE Bot** | **資源分享平台** |
+| [#58 十二年國教教案生成器](/blog/prepare-58-lesson-plan/) | Python Flask | **AI 自動生成單元教案** |
+| [#88 國中課程計畫 AI 審查](/blog/curriculum-88-ai-junior-high-review/) | GitHub Pages | **整學期計畫送審** |
+| [#78 國小課程計畫 AI 審查](/blog/curriculum-78-elementary-review/) | GitHub Pages | **國小版送審** |
+
+**完整教案生態**：
+- 找現成教案 → **#8 LINE Bot**
+- 用 AI 生成新教案 → #58
+- 整學期計畫送審 → #78 / #88
+
+## 「**LINE Bot vs Web**」場景對照
+
+| 場景 | 用 LINE Bot（#8）| 用 Web 工具 |
+|---|---|---|
+| 通勤時想看教案 | ✅ LINE 介面熟 | ❌ 還要開瀏覽器 |
+| 老師圈推薦 | ✅ 「加我這個好友」 | ❌ 「記這個網址」 |
+| 推送新資源 | ✅ Push notification | ❌ 要主動回查 |
+| 即時對話 | ✅ LINE 對話視窗 | ⚠️ Web Chat 需自建 |
+| 完整功能 | ⚠️ 受 LINE UI 限制 | ✅ 完整自由 |
+
+阿凱**同時用兩種介面**服務不同場景（再次驗證 [雙形式設計哲學](/blog/comments-23-web-version/)）。
+
+## 教學情境
+
+**新進老師備課**：
+- 加 #8 LINE Bot 好友
+- 「**五年級 國語 寓言**」→ Bot 推送 5 份教案
+- 不用 Google 半小時找
+
+**校際分享**：
+- 老師研習群組：「**加 lin.ee/pCqnVhT**」
+- 一加好友 → 各種教案直接送到 LINE
+- 比丟「**這個網址你看**」好分享
+
+**期初備課週**：
+- 8 月底要準備整學期
+- #8 推送 12 個月 12 個主題
+- 老師按需要存
+
+**LINE 訊息搜尋**：
+- 老師：「**之前那個關於分數的教案在哪**」
+- LINE 搜尋一下 → **整理過的教案直接拿來用**
+
+## 為什麼這值得寫獨立文章？
+
+**「**LINE Bot 部署是阿凱對「教師接觸點」的洞察**」**：
+
+對台灣教師圈：
+- ✅ LINE 是**所有老師的共同基礎**
+- ✅ 不需要學新平台
+- ✅ Bot 可以**主動推送**而非被動等查詢
+- ✅ 「**加好友**」比「**記網址**」更自然
+
+阿凱用 LINE Bot 觸及 **「不常上網的資深老師」** — 不是所有人都會記 \`cagoooo.github.io/xxx\`，但**幾乎所有老師都會加 LINE 好友**。
+
+## 配對工具推薦
+
+- [#7 點石成金蜂 LINE 版](/blog/comment-7-ai-positive-language/) — 同款 LINE Bot 平台
+- [#58 十二年國教教案生成器](/blog/prepare-58-lesson-plan/) — AI 生成新教案
+- [#78 國小課程計畫 AI 審查](/blog/curriculum-78-elementary-review/) — 課程計畫送審
+
+## 適用對象
+
+- 國中小所有任課老師（**備課找教案**）
+- 領域召集人（**整理推薦教案**）
+- 新進老師（**快速建立教案資料庫**）
+- 教師研習講師（**分享資源**）
+- 想看「**LINE Bot 部署案例**」的開發者
+
+## 想試試？
+
+→ [前往 #8 12 年教案有 14](/tool/8)（加 LINE 好友：\`lin.ee/pCqnVhT\`）
+
+下次備課 — **不用 Google 半小時** → **問 LINE Bot** → 30 秒拿到 3 份相關教案。
+`,
+};
+
+const POST_39: BlogPost = {
+  slug: 'magic-39-mind-reading',
+  title: '#39 孔明神算：心靈感應預言魔術 — 用 Claude Artifacts 公開分享連結部署的數學魔術遊戲',
+  excerpt:
+    '#39「孔明神算：心靈感應預言魔術」是阿凱用 **Claude Artifacts 公開分享連結**部署的數學魔術遊戲。學生想一個數字 → 經過幾個數學步驟 → 「孔明」精準預言！背後是數學定理（不是真的心靈感應）— 國小數學「**規律與恆等**」單元的趣味教材。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 4,
+  tags: ['數學魔術', '孔明神算', 'Claude Artifacts', '心靈感應', '數學定理'],
+  toolIds: [39, 26, 44],
+  coverEmoji: '🔮',
+  coverColor: 'purple',
+  body: `## 阿凱的「**Claude Artifacts**」部署案例
+
+Claude Artifacts 是 2024 年 Anthropic 推出的功能 — 可以在 Claude 對話中**即時生成可運行的 HTML/JS 程式**，並有「**公開分享**」連結機制。
+
+阿凱用 Claude Artifacts 部署 **#39 孔明神算** — 是他工具集裡**唯一一個用 Claude Artifacts 部署**的工具。
+
+## #39 真實怎麼做？
+
+**真實標題**：「**孔明神算：心靈感應預言魔術**」
+
+**定位**（從 tools.json）：
+> 「**神奇的心靈感應預言魔術遊戲**」
+
+**核心玩法**（推測為經典數學魔術）：
+1. 「**請想一個 1-100 的數字**」
+2. 「**加 5 → 乘 2 → 減 10 → 除 2 → 減回你原本的數字**」
+3. 「**孔明預言：你的答案是 0！**」（或其他固定值）
+
+**背後數學定理**：
+\`\`\`
+原本想的數字：x
+加 5：x + 5
+乘 2：2(x + 5) = 2x + 10
+減 10：2x + 10 - 10 = 2x
+除 2：x
+減回原本：x - x = 0  ← 答案永遠是 0！
+\`\`\`
+
+**孔明不是真的心靈感應 — 是數學恆等式**！
+
+## 真實技術棧
+
+- **Claude Artifacts 公開分享**：\`claude.ai/public/artifacts/{uuid}\`
+- 推測純 HTML + JavaScript（Artifacts 標準格式）
+- **不需要 GitHub repo / 不需要伺服器**
+- 在 Anthropic 平台託管
+
+## 為什麼用 Claude Artifacts 而不是 GitHub Pages？
+
+阿凱「**用對工具**」哲學再案例：
+
+| 場景 | 用 Artifacts | 用 GitHub Pages |
+|---|---|---|
+| **快速 demo 1 個 HTML 遊戲** | ✅ **5 分鐘上線** | ❌ 要 commit + push |
+| 跟學生分享 | ✅ 1 個連結 | ✅ 同 |
+| 長期維護 | ❌ Anthropic 平台依賴 | ✅ 自己掌握 |
+| **「**這是 Claude 寫的**」展示** | ✅ **連結含 \`claude.ai\` 證明** | ❌ 看不出來 |
+
+**阿凱選 Artifacts 的隱含訊息**：「**這是我跟 Claude 對話生出來的工具**」 — 展示「**AI 協作開發**」的真實工作流。
+
+## 「數學魔術」的教育意義
+
+對國小高年級「**規律與恆等**」單元：
+- 學生 = 「**被神算驚豔**」
+- 老師 = 「**揭密背後的數學恆等式**」
+- 結果：**抽象代數變成有趣的魔術秀**
+
+**教學翻轉**：
+1. 不講「**設 x 為未知數**」（學生睡著）
+2. 直接玩「**孔明神算**」（學生驚奇）
+3. 「**為什麼孔明會神算？**」（學生主動想搞懂）
+4. 揭密：「**原來是 (x+5)×2-10 = 2x，再 ÷2 = x，再 -x = 0**」
+5. 學生：「**這就是代數！**」
+
+→ **激起好奇心比直接教好 10 倍**。
+
+## 跟 #57 餐廳轉盤的「**讓命運決定**」呼應
+
+阿凱兩個「**神奇命運**」工具：
+
+| # | 工具 | 機制 |
+|---|---|---|
+| [#57 餐廳命運轉盤](/blog/food-57-restaurant-wheel/) | **真實隨機** | 解決選擇障礙 |
+| **#39 孔明神算**（本篇）| **數學恆等式**（看似神奇實則必然）| **數學教材** |
+
+「**讓命運決定**」是兩種：**真實隨機** vs **必然結果偽裝成隨機**。
+
+## 教學情境
+
+**國小五年級數學「**規律與恆等**」單元**：
+- 第 1 節：展示 #39 → 全班驚奇
+- 第 2 節：講解背後數學定理
+- 第 3 節：學生**自己設計類似魔術**
+- 第 4 節：分組表演互相驚奇
+
+**家長親子互動**：
+- 假日「**爸爸我給你變個魔術**」
+- 表演孔明神算 → 家長驚訝
+- 「**爸爸這背後是數學定理**」→ 親子數學討論
+
+**才藝表演**：
+- 學校才藝表演
+- 學生上台用 #39 + 自己解釋
+- 「**數學 + 表演**」跨領域
+
+**社團活動**：
+- 數學社 / 魔術社
+- 用 #39 學「**用代數變魔術**」
+- 學生自己設計新魔術
+
+## 配對工具推薦
+
+- [#26 九九乘法大冒險](/blog/multiplication-26-adventure/) — 數學遊戲
+- [#44 數學加減法練習器](/blog/math-adventure-44-grade-one/) — 一年級數學
+- [#57 餐廳命運轉盤](/blog/food-57-restaurant-wheel/) — 同款「命運」概念
+
+## 適用對象
+
+- 國小高年級數學老師（**規律與恆等**單元）
+- 國中數學老師（**代數入門**）
+- 數學社 / 魔術社指導
+- 想看「**Claude Artifacts 部署**」案例的開發者
+- 想學「**用魔術教數學**」的老師
+
+## 想試試？
+
+→ [前往 #39 孔明神算：心靈感應預言魔術](/tool/39)
+
+下次教代數 — **先用 #39 變魔術** → **再揭密數學定理** → **學生會記一輩子**。
+`,
+};
+
+const POST_40: BlogPost = {
+  slug: 'padlet-40-admin-board',
+  title: '#40 Padlet 行政宣導動態牆：用 Padlet 平台部署的即時校園公告牆（不用自架網站）',
+  excerpt:
+    '#40「Padlet 行政宣導動態牆」是阿凱用 **Padlet 平台**（不是自架）做的即時校園公告牆。Padlet 是知名線上佈告欄工具 — 阿凱直接借用 Padlet 平台快速做出**家長 / 老師都能隨時查看**的動態宣導牆，不用寫程式不用部署。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 4,
+  tags: ['Padlet', '行政宣導', '動態公告牆', '不用自架', '第三方平台'],
+  toolIds: [40, 2, 24],
+  coverEmoji: '📌',
+  coverColor: 'pink',
+  body: `## 為什麼選 Padlet 而不是自己寫？
+
+阿凱大多工具自己寫（GitHub Pages / Firebase / Google Sites），但 **#40 直接用 Padlet 平台**。為什麼？
+
+**Padlet 是 2008 年創立的線上佈告欄工具**：
+- ✅ **零開發成本** — 註冊就能用
+- ✅ **拖拉式編輯**
+- ✅ **手機 / 平板 / 桌機完整支援**
+- ✅ **即時同步** — 多人協作
+- ✅ **嵌入學校官網** — iframe 就好
+- ✅ **不用寫程式**
+
+對「**行政宣導動態牆**」這個 use case — Padlet 完美勝任，**不需要重新發明輪子**。
+
+## #40 真實怎麼做？
+
+**真實名稱**：「**Padlet 行政宣導動態牆**」
+
+**定位**：「**即時更新的行政宣導公告牆，方便資訊傳達**」
+
+**核心功能**（Padlet 標準功能）：
+- 老師在 Padlet 後台**新增便利貼**
+- 每張便利貼一個公告
+- **即時同步**到所有訪客
+- 支援圖片 / 連結 / 影片
+- 家長 / 老師掃 QR 看
+- 可**分組分類**（如：本週公告 / 重要事項 / 活動預告）
+
+## 真實技術棧
+
+- **Padlet 平台**（\`padlet.com/2104340/padlet-rl3l5wi9wmebku2k\`）
+- **阿凱不用寫程式碼**
+- 部署：直接在 Padlet 後台建立佈告欄
+
+## 阿凱「**第三方平台選擇邏輯**」
+
+回顧阿凱 6 個第三方平台工具：
+
+| # | 平台 | 為什麼選這個 |
+|---|---|---|
+| [#1 線上即時客服](/blog/replit-1-online-customer-service/) | **Replit** | AI 客服需要後端對話狀態 |
+| [#19 設計專屬客服](/blog/replit-19-design-your-own/) | **Replit** | 同上製作後台 |
+| [#7 點石成金蜂 LINE](/blog/comment-7-ai-positive-language/) | **LINE Bot** | 教師圈最熟介面 |
+| [#8 12 年教案有 14](/blog/line-bot-8-lesson-plans/) | **LINE Bot** | 同上 + push 推送 |
+| [#39 孔明神算](/blog/magic-39-mind-reading/) | **Claude Artifacts** | 1 個 HTML 遊戲 5 分鐘上線 |
+| **#40 Padlet 行政宣導**（本篇）| **Padlet** | **公告牆 use case 完美匹配** |
+
+→ 每個第三方平台選擇都有**明確理由**：對症下藥不重複造輪子。
+
+## 跟 #2 #24 校園溝通系統的關係
+
+| # | 工具 | 部署 | 適合 |
+|---|---|---|---|
+| [#2 行政業務協調系統](/blog/staff-2-admin-coordination/) | **自寫 GitHub Pages** | **內部組長**協調（要登入）|
+| [#24 校務會議紀錄報告站](/blog/meeting-24-end-semester-record/) | **Google Sites Embedded** | **校務會議結果**永久存 |
+| **#40 Padlet 行政宣導**（本篇）| **Padlet** | **對外即時公告** |
+
+**三層校園溝通生態**：
+- **對內** → #2（內部協調）
+- **正式公告** → #24（會議紀錄）
+- **即時動態** → **#40 Padlet**（最新消息）
+
+## 為什麼這值得寫獨立文章？
+
+**「**不重複造輪子**」是工程師的修養** —— 阿凱選擇用 Padlet 而不是自寫公告牆系統，展示：
+
+對學校：
+- ✅ **省下開發時間**（直接用現成工具）
+- ✅ **零維護成本**（Padlet 公司維護）
+- ✅ **不用懂程式**的老師也能更新公告
+
+對工程師：
+- ✅ **學會「**不寫程式**」的技巧** — 平台選對省半年
+- ✅ **「**用對工具**」哲學再案例** — Padlet 對公告牆是最佳解
+
+「**會寫程式的工程師很多，懂得「**什麼時候不要寫程式**」的工程師很少**。
+
+## 教學情境
+
+**學校行政公告牆**：
+- 學務處 / 教務處發公告
+- 在 Padlet 後台拖拉新增便利貼
+- 家長 LINE 群組轉貼連結
+- **永久公開可看**
+
+**班級活動動態**：
+- 班導每週新增「**本週活動**」便利貼
+- 學生 / 家長隨時看
+- 比 LINE 群組訊息「**永久存檔**」
+
+**校慶 / 親職日宣傳**：
+- 活動前 2 週開始更新
+- 倒數計時 + 活動快訊
+- **比一張紙本通知好用 10 倍**
+
+**校際交流**：
+- 「**我們學校的公告牆**」分享 Padlet 連結
+- 其他學校看 = 「**這個工具好用**」
+
+## 配對工具推薦
+
+- [#2 行政業務協調系統](/blog/staff-2-admin-coordination/) — 內部組長協調
+- [#24 校務會議紀錄報告站](/blog/meeting-24-end-semester-record/) — 正式會議紀錄
+- [#62 親職教育日](/blog/parent-day-62-114-activity/) — 活動專屬網
+
+## 適用對象
+
+- 學務 / 訓育 / 總務組（**對外宣導**）
+- 班導（**班級動態牆**）
+- 想做「**即時公告系統**」但不想自架的學校
+- 想看「**用對平台 vs 重複造輪子**」案例的工程師
+
+## 想試試？
+
+→ [前往 #40 Padlet 行政宣導動態牆](/tool/40)
+
+下次學校要做動態公告 — **不用找 IT 寫網站** → **用 Padlet 5 分鐘搞定** → 老師自己更新。
+
+---
+
+## 🎉 寫完最後一篇！
+
+**這是阿凱 98 個工具的最後一篇部落格教學心得** — 從 [#81 駕駛艙](/blog/cockpit-81-info-tech-class/) 開始的部落格化工程**正式完成 100%**！
+
+- **97 篇手寫教學心得** + **1 篇 #100 索引神器** = **98 篇對應 98 工具**
+- **0 篇 mini blog**（全部都升級為手寫長文）
+- **5 大部署平台** 全覆蓋（GitHub Pages / Google Sites / XOOPS VM / Firebase Hosting / 第三方）
+- **8 輪 + 4 輪改良 + 6 輪 Google Sites + 16 輪 XOOPS / Firebase / 主題輪 = 完整旅程**
+`,
+};
+
+export const POSTS: BlogPost[] = [POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40];
 
 /**
  * 取得 post（含手寫長文 + 從 tools.json 自動生成的迷你 blog）。
