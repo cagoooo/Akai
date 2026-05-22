@@ -8686,7 +8686,683 @@ const POST_5: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5];
+const POST_55: BlogPost = {
+  slug: 'zhuyin-55-bopomofo-challenge',
+  title: '#55 ㄅㄆㄇ 注音大挑戰：6 主題關卡 + 漸進式解鎖 + 虛擬鍵盤拼注音 + 學習回顧模組（一年級必用）',
+  excerpt:
+    '#55 真實名稱「ㄅㄆㄇ 注音大挑戰 🎲」是阿凱為一年級兒童設計的注音學習遊戲。純前端 HTML/CSS/JS、6 個主題（水果 / 動物 / 交通 / 身體 / 家人 / 學校）+ 漸進式解鎖 + 虛擬鍵盤拼聲母韻母聲調 + 答對撒紙條 / 答錯震動 + localStorage 進度儲存 + 學習回顧看答對答錯紀錄。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 4,
+  tags: ['注音學習', '一年級', 'ㄅㄆㄇ', '漸進式解鎖', '純前端'],
+  toolIds: [55, 21, 70],
+  coverEmoji: '🎲',
+  coverColor: 'yellow',
+  body: `## 一年級「ㄅㄆㄇ」學習的真實痛點
+
+一年級上學期前 10 週是**注音密集學習期**：
+- 從不認識 ㄅㄆㄇ → 學會拼音
+- 37 個注音符號 + 4 個聲調
+- 老師最痛的是「**學生每個都會念但拼不出來**」
+
+傳統做法：
+- ❌ 抄注音 → 學生抗拒
+- ❌ 注音樂理本 → 沒互動
+- ❌ APP 廣告太多 → 老師不敢推薦
+
+阿凱的 **#55 ㄅㄆㄇ 注音大挑戰** 反向：**6 個主題 + 漸進解鎖 + 虛擬鍵盤拼音 + 純前端零廣告**。
+
+## #55 真實怎麼做？
+
+**真實標題**：「**ㄅㄆㄇ 注音大挑戰 🎲 (Bopomofo Learning Game)**」
+
+**完整 5 大功能**（從 README 抽出）：
+
+**功能 A：6 個主題關卡（漸進式解鎖）**
+- 🍎 **水果**
+- 🐶 **動物**
+- 🚗 **交通**
+- ✋ **身體**
+- 👨‍👩‍👧‍👦 **家人**
+- 🏫 **學校**
+
+**漸進式解鎖規則**：玩家必須**成功通過前一關，才能挑戰下一關**。
+
+**功能 B：生動測驗互動**
+- 每關從題庫**隨機抽 5 題**
+- **可愛圖片 + 單字提示**（如「🍎 apple → ㄆㄧㄥˊㄍㄨㄛˇ」蘋果）
+- 玩家用畫面下方**虛擬鍵盤**拼出對應的：
+  - **聲母**（ㄅㄆㄇㄈ⋯）
+  - **韻母**（ㄚㄛㄜㄝㄞ⋯）
+  - **聲調**（一聲 / 二聲 / 三聲 / 四聲 / 輕聲）
+- **答對**：彩色碎紙機動畫 + 綠色字體
+- **答錯**：畫面震動 + 顯示正確答案
+
+**功能 C：學習回顧模組**
+- 關卡結束後可點「**學習回顧**」
+- 查看該回合**所有答對與答錯的題目紀錄**
+- 學生看自己弱在哪
+- 老師看全班統計（推測有）
+
+**功能 D：進度儲存（localStorage）**
+- 已解鎖關卡 / 各關獲得的**愛心數量評等**
+- 自動儲存於瀏覽器
+- 「**重置進度**」按鈕重來
+
+**功能 E：RWD**
+- 手機 / 平板 / 桌機完美支援
+- 自動調整大小與排版
+
+## 真實技術棧
+
+- **純前端 HTML/CSS/JS**（無框架！）
+- 圖片引用外部 CDN（Apple / Banana 等）
+- **無後端、無 LLM、無依賴**
+- 部署：\`cagoooo.github.io/zhuyin/\`
+
+「**極端適合 GitHub Pages 部署**」(README 原文) — 阿凱明確選擇純靜態的理由：**一年級工具最重要的就是「**永遠不會壞**」**。
+
+## 跟 #21 #70 三件套對比
+
+| # | 工具 | 學什麼 | 適合 |
+|---|---|---|---|
+| **#55 注音大挑戰**（本篇）| **拼注音**（聲母 + 韻母 + 聲調）| **一年級**入門 |
+| [#21 中文注音打字](/blog/typing-21-zhuyin-keymap/) | **注音→鍵盤鍵位** | **四五年級**中打 |
+| [#70 中打 Pro](/tool/70) | **進階中打競賽** | **高年級 + 大師級** |
+
+**完整注音學習進化鏈**：
+- **一上**：#55 學會 ㄅㄆㄇ 怎麼拼
+- **四上**：#21 知道 ㄅㄆㄇ 在鍵盤哪
+- **六上**：#70 中打速度大師級
+
+## 教學情境
+
+**一年級國語課**：
+- **第 1-3 週**：學生上完 ㄅㄆㄇ 課堂後 → 玩 #55「水果」關卡
+- **第 4-6 週**：解鎖「動物」「交通」
+- **第 7-10 週**：「身體」「家人」「學校」漸進完成
+- **學期末**：學生全 6 關通過 → **得到 6 顆愛心評等**
+
+**早自習補強**：
+- 全班同時開 #55
+- 老師看誰卡哪個主題 → 個別輔導
+
+**家長親子**：
+- 假日家長陪小孩玩 → 看「**學習回顧**」對針弱點
+- 比注音樂理本好玩 + 不用印
+
+## 配對工具推薦
+
+- [#21 中文注音打字遊戲](/blog/typing-21-zhuyin-keymap/) — 中年級鍵盤版
+- [#70 中文注音打字 Pro](/tool/70) — 高年級進階版
+- [#6 蜂類配對消消樂](/blog/bee-6-pair-game/) — 同款一年級主題（注音符號主題包）
+
+## 適用對象
+
+- 一年級導師（注音必教）
+- 一年級國語老師
+- 補救教學老師（針對拼音卡關學生）
+- 家長親子教注音
+- 想看「**純前端 + localStorage 漸進解鎖**」設計案例的開發者
+
+## 想試試？
+
+→ [前往 #55 ㄅㄆㄇ注音大挑戰](/tool/55)
+
+一年級新生入學第一週 — **印 QR Code 貼黑板** → 學生掃進 → 從「水果」關開始解鎖整個世界。
+`,
+};
+
+const POST_70: BlogPost = {
+  slug: 'typing-70-zhuyin-pro',
+  title: '#70 中文注音打字遊戲 Pro v1.3.0：4 級難度（初學者 / 入門 / 進階 / 大師）+ 全球排行榜 + 成績單分享 + PWA',
+  excerpt:
+    '#70「中文注音打字遊戲 Pro (Zhuyin Challenge Pro) v1.3.0」是 [#21 中打](/blog/typing-21-zhuyin-keymap) 的 Vite + Tailwind 升級版。4 級難度（初學者 / 入門 / 進階 / 大師）+ 進階詞庫（常用漢字 / 詞語 / 四字成語）+ 全球排行榜 + 一鍵生成成績單圖片分享 + PWA 離線可裝桌面。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 4,
+  tags: ['中打 Pro', '注音輸入', '全球排行榜', 'PWA', '成績單分享'],
+  toolIds: [70, 21, 71],
+  coverEmoji: '🏆',
+  coverColor: 'blue',
+  body: `## #70 跟 #21 是 Pro 版升級
+
+阿凱的中打工具家族：
+
+| 維度 | [#21 中打遊戲](/blog/typing-21-zhuyin-keymap/) | **#70 中打 Pro**（本篇）|
+|---|---|---|
+| 部署 | XOOPS 校網 VM | **GitHub Pages \`cagoooo/typeCC\`** |
+| 程式碼 | 純前端單檔 HTML | **Vite + Tailwind CSS** 模組化 |
+| 版本 | 早期單版 | **v1.3.0**（持續打磨）|
+| 難度 | 單一模式 | **4 級**（初學者 / 入門 / 進階 / 大師）|
+| 詞庫 | 字元落下 | **常用漢字 + 詞語 + 四字成語** |
+| 排行榜 | 無 | **全球排行榜** |
+| 分享 | 截圖 | **一鍵生成精美成績單圖片** |
+| PWA | 無 | **可離線玩 + 安裝桌面** |
+
+**「漸進式工具家族」**再 +1 案例（前 5 個：PIRLS / Aura / 教師回覆 / 演說 / 瑪莉歐）。
+
+## #70 真實怎麼做？
+
+**真實標題**：「**中文注音打字遊戲 Pro (Zhuyin Challenge Pro)**」
+
+**完整功能（v1.3.0）**：
+
+**功能 A：多級難度系統（4 級）**
+- **初學者**：常見單字
+- **入門**：常用漢字
+- **進階**：常用詞語
+- **大師**：**四字成語**（最高難度）
+
+**功能 B：進階詞庫**
+- 內建**常用漢字 / 詞語 / 四字成語**
+- 隨著難度提升詞長變長
+
+**功能 C：全球排行榜**
+- 挑戰**世界各地的玩家**
+- 留下名字 → 看排名
+- 跟 #69 猴子投擲一樣有全球 PK
+
+**功能 D：成績分享**
+- 一鍵生成**精美的成績單圖片**
+- 分享到 LINE / IG / FB
+- 學生喜歡炫耀進步
+
+**功能 E：PWA 支援**
+- **離線遊玩**
+- 可**安裝到手機 / 電腦桌面**
+- 像原生 App
+
+**功能 F：現代化設計**
+- 基於 **Vite + Tailwind CSS** 響應式介面
+
+## 真實技術棧
+
+- **Vite** 建置工具
+- **Tailwind CSS** 樣式
+- 純 JavaScript（無大型框架）
+- **MIT 授權**
+- 部署：\`cagoooo.github.io/typeCC/\`
+
+## 跟 #71 成語填空大挑戰是姊妹工具
+
+阿凱的注音 / 成語**雙姊妹工具**：
+
+| # | 工具 | 重點 |
+|---|---|---|
+| **#70 中打 Pro**（本篇）| **打字 + 注音鍵位** | 速度導向 |
+| [#71 成語填空大挑戰](/tool/71) | **拼字 + 成語意義** | 知識導向 |
+
+兩個工具 repo 命名也呼應：\`typeCC\` vs \`typeTC\` — \`Zhuyin Challenge\` vs \`Type Chengyu\`（成語）。
+
+## 為什麼「全球排行榜」這麼重要？
+
+對國小學生：
+- ✅ **動機**：想看自己在世界第幾名
+- ✅ **比較**：同學之間 PK
+- ✅ **進步追蹤**：今天比昨天前進幾名
+
+對老師：
+- ✅ **資料**：看全班排名分布
+- ✅ **獎勵**：「**這週進步最多得貼紙**」
+- ✅ **班內競賽**：分組挑戰
+
+## 教學情境
+
+**資訊課中打單元（5 節課）**：
+- **第 1 節**：認識中打 + 玩 #21 入門版熟悉鍵位
+- **第 2 節**：玩 #70「初學者」級 → 第一張成績單
+- **第 3 節**：升級「入門」「進階」級
+- **第 4 節**：挑戰「大師」級四字成語
+- **第 5 節**：班內 PK 大賽 → 全球排行榜競爭
+
+**期末挑戰**：
+- 期末作業：**全班同學分享成績單到家長 LINE 群**
+- 看誰一學期進步最多
+
+**家長假日陪練**：
+- **「**今天破我中打紀錄**」**變家庭遊戲
+
+## 配對工具推薦
+
+- [#21 中文注音打字遊戲](/blog/typing-21-zhuyin-keymap/) — 早期 XOOPS VM 版
+- [#71 成語填空大挑戰](/tool/71) — 姊妹成語版
+- [#22 成語填空遊戲](/blog/idiom-22-fill-blank-game/) — 早期版
+
+## 適用對象
+
+- 國小高年級資訊老師（必教中打）
+- 國中國文補救教學
+- 家長想加強孩子中打速度
+- 「**全球排行榜**」愛好者
+- 想看「**Vite + Tailwind + PWA 中打遊戲**」案例的開發者
+
+## 想試試？
+
+→ [前往 #70 中文注音打字遊戲 (pro版)](/tool/70)
+
+從「初學者」開始挑戰 → 看自己有沒有實力進「大師級四字成語」。
+`,
+};
+
+const POST_71: BlogPost = {
+  slug: 'idiom-71-typeTC-challenge',
+  title: '#71 成語填空大挑戰 v1.3.1：Neon Heritage 霓虹古韻 UI + 國樂背景 + 櫻花特效 + Firebase 全球排行榜',
+  excerpt:
+    '#71「成語填空大挑戰 (TypeTC) v1.3.1」是 [#22 成語填空遊戲](/blog/idiom-22-fill-blank-game) 的進階版。Vite + Vanilla JS + Tailwind + **Neon Heritage（Red/Gold Theme）+ Glassmorphism「霓虹古韻」視覺** + 隨機**國樂背景音樂** + **櫻花落下特效** + Firebase Firestore 全球排行榜 + 2026-03-06 API Key 零洩漏規範。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 4,
+  tags: ['成語挑戰', '霓虹古韻', '國樂音樂', '櫻花特效', 'Firebase 排行榜'],
+  toolIds: [71, 22, 70],
+  coverEmoji: '🏮',
+  coverColor: 'pink',
+  body: `## #71 跟 #22 是進階版
+
+阿凱成語工具家族：
+
+| 維度 | [#22 成語填空遊戲](/blog/idiom-22-fill-blank-game/) | **#71 成語填空大挑戰**（本篇）|
+|---|---|---|
+| 部署 | XOOPS 校網 VM | **GitHub Pages \`cagoooo/typeTC\`** |
+| 程式碼 | 純單檔 HTML | **Vite + Vanilla JS + Tailwind** |
+| 視覺 | Tailwind 一般 | **Neon Heritage 霓虹古韻**（Red/Gold + Glassmorphism）|
+| 音效 | 無 | **隨機國樂背景音樂** |
+| 特效 | 無 | **櫻花落下** + 大氣氛圍 |
+| 排行榜 | 無 | **Firebase Firestore 全球排行榜** |
+| PWA | 無 | **PWA 支援 + 離線啟動** |
+| 安全 | - | **2026-03-06 API Key 零洩漏規範** |
+
+## #71 真實怎麼做？
+
+**真實標題**：「**成語填空大挑戰 (TypeTC)**」
+
+**完整功能（v1.3.1）**：
+
+**功能 A：互動學習**
+- **隨機成語挖空**強化記憶
+- 跟 #22 同款核心機制
+
+**功能 B：全域排行榜**
+- 與全球玩家競爭
+- **即時更新榮譽榜**
+- 用 Firebase Firestore（**Anonymous Auth**，不需註冊）
+
+**功能 C：霓虹古韻視覺（神細節）**
+- **Neon Heritage (Red/Gold Theme)**
+- **Glassmorphism** 毛玻璃
+- 「**融合現代與東方美學**」
+- RWD 響應式
+
+**功能 D：大氣氛圍（v1.3.1）**
+- **隨機國樂背景音樂**
+- **櫻花落下特效**
+- 「**體驗如原生 App**」
+
+**功能 E：PWA 支援**
+- 離線啟動
+- 加入手機主畫面
+
+**功能 F：安全防護（重要！）**
+- **2026-03-06 API Key 零洩漏規範**
+- **佔位符機制**：\`index.html\` 用 \`__PLACEHOLDER__\` 不含真實 API Key
+- **祕鑰注入**：GitHub Secrets + \`.github/inject.py\` 部署階段注入
+
+## 真實技術棧
+
+- **核心**：Vite + Vanilla JS + Tailwind CSS（**沒用 React**）
+- **視覺設計**：Neon Heritage (Red/Gold Theme) + Glassmorphism
+- **後端**：Firebase Firestore（**Anonymous Auth**）
+- **部署**：GitHub Actions + GitHub Pages
+- repo：\`cagoooo/typeTC\`
+
+## 為什麼選「霓虹古韻」這個視覺定位？
+
+**Neon Heritage** = 「**霓虹現代 + 東方傳承**」：
+- ✅ 紅金配色 → 傳統廟宇 / 春節
+- ✅ Glassmorphism 半透明 → 現代化
+- ✅ 國樂背景 → 古典氛圍
+- ✅ 櫻花落下 → 東方美學
+
+對「**成語**」這 use case 完美 — 成語本身就是**傳統文化的現代化呈現**，視覺呼應主題。
+
+## 跟 #70 中打 Pro 是姊妹工具
+
+兩個工具 repo 都用 \`type*\` 命名：
+- **#70 \`typeCC\`** = **Z**huyin **C**hallenge **C**lassic（中打挑戰）
+- **#71 \`typeTC\`** = **Type Chengyu**（成語）
+
+阿凱「**寫一次基礎模組 → 換主題複製做不同工具**」的策略再 +1 案例。
+
+## API Key 零洩漏規範（值得學的工程紀律）
+
+從 README 看到阿凱 **2026-03-06 訂的內部規範**：
+
+1. **佔位符機制**：\`index.html\` 中**不含真實 API Key**，用 \`__PLACEHOLDER__\` 格式
+2. **祕鑰注入**：透過 **GitHub Secrets** 結合 \`.github/inject.py\` 於**部署階段注入真實值**
+
+→ 不會把 API Key commit 到 repo 內，即使工具是 public repo 也安全。
+
+跟我之前寫過的 [#7 點石成金 Gemini API Key 安全](/blog/comment-7-ai-positive-language/) 同款思路。
+
+## 教學情境
+
+**國語高年級成語單元**：
+- 上完課堂成語教學 → 用 #71 鞏固
+- 學生看「**Neon Heritage 視覺**」覺得「**成語也可以這麼酷**」
+- 比看課本好玩 100 倍
+
+**早自習語文素養**：
+- 全班同時挑戰 #71
+- 國樂背景 → 教室氛圍寧靜不吵
+- 看誰登榮譽榜
+
+**期末班級成語王挑戰**：
+- 全球排行榜 PK
+- 班內最高分頒「**班級成語王**」
+
+**家長親子**：
+- 中秋 / 春節傳統節日陪小孩玩
+- 邊玩邊講成語典故
+- **櫻花特效 + 國樂**很有節日氛圍
+
+## 配對工具推薦
+
+- [#22 成語填空遊戲](/blog/idiom-22-fill-blank-game/) — 早期 XOOPS VM 版
+- [#70 中文注音打字 Pro](/blog/typing-70-zhuyin-pro/) — 姊妹中打版
+- [#79 漢語新解](/blog/words-79-sarcastic-dictionary/) — AI 諷刺式新解
+
+## 適用對象
+
+- 國小高年級 / 國中國文老師
+- 語文競賽選手培訓
+- 想做「**東方美學 web app**」的開發者
+- 想學「**API Key 零洩漏規範 + inject.py 注入**」的工程師
+
+## 想試試？
+
+→ [前往 #71 成語填空大挑戰](/tool/71)
+
+打開 → 配上隨機**國樂背景音樂** → 看**櫻花落下** → 挑戰全球榮譽榜 — **這比 Kahoot 有質感 10 倍**。
+`,
+};
+
+const POST_95: BlogPost = {
+  slug: 'language-95-longtan-competition',
+  title: '#95 2026 桃園市語文競賽龍潭區複賽：17 大項 / 33 場細分賽事 + 我的比賽時間查詢 + 個人指引卡列印（5/23 石門承辦）',
+  excerpt:
+    '#95「2026 桃園市語文競賽 龍潭區複賽」是石門國小**承辦 2026/5/23 龍潭區語文競賽**的對外宣傳網站。17 大項 / 33 場細分賽事 + **我的比賽時間查詢**（輸入場次 + 序號自動算抽題 / 上台 / 報到時間）+ **個人指引卡列印**選手專屬比賽行程 + 場地配置 1F-3F 分樓層 + A4 QR Code 海報。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 4,
+  tags: ['語文競賽', '龍潭區', '個人指引卡', '比賽時間查詢', '活動專屬網'],
+  toolIds: [95, 67, 62],
+  coverEmoji: '🏆',
+  coverColor: 'green',
+  body: `## 語文競賽承辦學校的真實痛點
+
+學校承辦縣市級語文競賽 → **要服務數百位選手 + 帶隊老師 + 評審 + 家長**：
+- 50+ 學校報名
+- 17 大項：演說 / 朗讀 / 作文 / 寫字 / 字音字形 / 閩南語 / 客家語 / 原住民語⋯
+- 一天賽程**緊張到分鐘級**
+
+**痛點**：
+- ❌ 印賽程表 → 老師 / 家長現場拿著翻
+- ❌ 「**我的孩子幾點上場**」要問承辦
+- ❌ 評審 / 選手 / 家長**走錯場地**
+- ❌ 抽題時間 / 上台時間 / 報到時間**算不清楚**
+
+阿凱的 **#95 龍潭區複賽** 反向：**對外宣傳網 + 個人化查詢 + 列印指引卡 + 分樓層場地圖**。
+
+## #95 真實怎麼做？
+
+**真實標題**：「**2026 桃園市語文競賽 龍潭區複賽**」
+
+**完整資訊**：
+- 📅 **2026 年 5 月 23 日（六）**
+- 🏫 **石門國民小學承辦**
+- 🌐 對外宣傳網站
+
+**完整 4 大功能**（從 README 抽出）：
+
+**功能 A：完整賽程表**
+- **17 大項 / 33 場細分賽事**
+- **分類篩選**（依語別 / 組別）
+- **關鍵字搜尋**（找選手 / 找學校）
+
+**功能 B：我的比賽時間查詢 ⭐（殺手鐧）**
+- 輸入**場次 + 序號**
+- 系統自動算出：
+  - **抽題時間**（規定的多久前）
+  - **上台時間**（精確到分）
+  - **報到時間**
+
+**功能 C：個人指引卡列印**
+- 一鍵列印選手**專屬比賽行程**
+- 含完整時間 / 場地 / 規則
+- **比賽當天放口袋不會弄丟**
+
+**功能 D：場地配置（分樓層）**
+- **1F / 2F / 3F** 分樓層顯示
+- 哪個比賽在哪間教室
+- **不會走錯**
+
+**附贈：A4 QR Code 海報**
+- \`poster.html\` 可列印張貼
+- 公佈欄掛一張 → 大家掃 QR 進網站
+
+## 真實技術棧
+
+- **單檔 HTML**（\`index.html\` 主網站含所有功能）
+- **\`poster.html\`** A4 QR Code 海報
+- **\`og.png\`** 1200×630 社群分享預覽圖
+- 推測純前端 + 可能用 Firebase（個人查詢需要資料）
+- 部署：\`cagoooo.github.io/Language-Competitions/\`
+
+## 跟 #67 演說比賽 Pro 的關係
+
+阿凱的「**語文競賽**」三件套：
+
+| # | 工具 | 角色 |
+|---|---|---|
+| **#95 龍潭區複賽**（本篇）| **承辦資訊網** | 對外宣傳 + 場地查詢 |
+| [#67 演說比賽訓練 Pro](/blog/speech-67-training-pro/) | **平日訓練** | 選手平日練習 |
+| [#25 國語演說特訓班](/blog/speech-25-training-class-entry/) | **入門訓練** | 新手老師入門 |
+
+**完整語文競賽生態**：
+- 平日：#25 / #67 訓練
+- 比賽前：#95 查場次時間
+- 比賽中：#95 個人指引卡
+- 比賽後：#67 雷達圖看表現
+
+## 「活動專屬網」系列再 +1
+
+阿凱的「**單一活動專屬網**」系列：
+
+| # | 活動 | 部署 |
+|---|---|---|
+| [#62 親職教育日 114 學年度](/blog/parent-day-62-114-activity/) | 親職日 | EZPage |
+| [#74 親職日場地配置 1150328](/blog/parent-day-74-venue-map/) | 親職日 | Google Sites |
+| [#56 2026 元宵猜燈謎](/blog/lantern-56-festival-riddles/) | 元宵節 | GitHub Pages |
+| [#80 114 下學期教師會議](/blog/meeting-80-spring-semester-week13/) | 教師會議 | Google Sites |
+| **#95 龍潭區語文競賽**（本篇）| 語文競賽 | GitHub Pages |
+
+**規律**：阿凱對校內承辦的大型活動都做一份**專屬網站**，活動結束**保留作紀念**。
+
+**未來看歷史**：「**石門國小辦過哪些大型活動**」可以從這些工具拼出來。
+
+## 教學情境
+
+**選手家長**：
+- 比賽前 1 週 → 老師發 #95 連結
+- 家長輸入孩子場次 + 序號 → 看到完整時間
+- 「**早上 8:00 報到、8:30 抽題、9:00 上台**」一目了然
+
+**帶隊老師**：
+- 自己學校 5 個選手分散不同場
+- **列印 5 張個人指引卡**給選手帶身上
+- 帶隊不會搞錯場次
+
+**評審 / 監考老師**：
+- 不熟石門校園
+- 用 1F-3F 場地配置圖
+- **5 分鐘找到教室**
+
+**承辦學校石門**：
+- 自己用 #95 確認賽程合理
+- 同事不用一直問「**我的場次幾點**」
+
+## 配對工具推薦
+
+- [#67 演說比賽訓練 Pro](/blog/speech-67-training-pro/) — 平日訓練配套
+- [#25 國語演說特訓班](/blog/speech-25-training-class-entry/) — 入門版
+- [#62 / #74 親職日工具](/blog/parent-day-62-114-activity/) — 同款活動專屬網
+
+## 適用對象
+
+- 縣市語文競賽承辦學校
+- 語文競賽帶隊老師
+- 語文競賽選手家長
+- 想做「**大型活動專屬網**」的學校
+- 想看「**單檔 HTML 個人化查詢工具**」設計案例
+
+## 想試試？
+
+→ [前往 #95 2026 桃園市語文競賽龍潭區複賽](/tool/95)
+
+下次你校承辦語文競賽 — **改改 #95 的賽程 + 場地 + QR 海報** → 5 小時搞定整套對外宣傳網。
+`,
+};
+
+const POST_91: BlogPost = {
+  slug: 'photopoet-91-pro',
+  title: '#91 PhotoPoet Pro 點亮詩意：跟 #14 同源雙部署第 5 案例 + Cloudflare Turnstile + SSRF 防護 + Gemini 2.0 Flash 繁中詩生成',
+  excerpt:
+    '#91 PhotoPoet **Pro** 是 [#14 poet.smes Firebase Hosting 版](/blog/poet-14-elder-greeting-image) 的進階姊妹版！cagoooo/PhotoPoet repo + photopoet-ha364.web.app 線上版。Next.js 15 (static export) + Firebase Hosting + Cloud Functions gen2 + Genkit + **Cloudflare Turnstile** + **SSRF 防護**（私有 IP 黑名單 / redirect 重檢 / Content-Type 白名單 / 10MB / 8s 上限）+ Gemini 2.0 Flash 繁中詩生成。**阿凱同源雙部署策略第 5 案例**。',
+  publishedAt: '2026-05-21',
+  readingMinutes: 5,
+  tags: ['長輩圖 Pro', '同源雙部署', 'Cloudflare Turnstile', 'SSRF 防護', 'Gemini 2.0 Flash'],
+  toolIds: [91, 14, 86],
+  coverEmoji: '🌅',
+  coverColor: 'pink',
+  body: `## #91 跟 #14 是同源雙部署第 5 案例
+
+阿凱「**同源雙部署策略**」累積 **5 個案例**：
+
+| 工具家族 | Firebase Hosting 學校域名 | GitHub Pages / 個人作品集 |
+|---|---|---|
+| **PIRLS** | [#4 pirlss.smes](/blog/pirls-4-firebase-mirror/) | [#87 cagoooo/pirls-questioncraft](/blog/pirls-87-questioncraft-rewrite/) |
+| **Aura 5W1H** | [#13 5w1h.smes](/blog/aura-13-firebase-mirror/) | [#92 cagoooo/Aura](/blog/inspire-92-5w1h-pro-writing/) |
+| **領域共備 GO** | [#15 report.smes](/blog/report-15-domain-meeting-go/) | [#84 cagoooo/domain-meeting-go](/blog/meeting-84-domain-go-pro/) |
+| **詩意長輩圖** | [#14 poet.smes](/blog/poet-14-elder-greeting-image/) | **#91 PhotoPoet Pro**（本篇）|
+| **領域共備 GO** （上面 #15/84）| - | - |
+
+完整 4 工具家族 = 8 個工具掛雙網域。
+
+## #91 真實怎麼做？
+
+**真實標題**：「**PhotoPoet Pro · 點亮詩意（早安長輩圖產生器）**」
+
+**核心流程**：
+> 上傳照片 → **Gemini 2.0 Flash 生成繁體中文詩** → 一鍵下載長輩圖。
+
+**線上版**：\`photopoet-ha364.web.app\`（**Firebase Hosting 預設域名**，不是 GitHub Pages 也不是 poet.smes — 第三個部署位置！）
+
+## 真實技術棧（極完整）
+
+- **前端**：**Next.js 15 (static export)**
+- **部署**：**Firebase Hosting**
+- **後端**：**Cloud Functions (gen2, asia-east1)**
+- **AI 編排**：**Genkit**
+- **人機驗證**：**Cloudflare Turnstile**
+
+## 🔒 安全設計（三層防護，工程紮實度爆表）
+
+### 1️⃣ Gemini API Key 嚴格限制
+- API key **受限只能呼叫 \`generativelanguage.googleapis.com\`**
+- 存於 **Firebase Secret Manager**
+- 即使洩漏也只能呼叫 Gemini，**無法挪用其他 Google API**
+
+### 2️⃣ SSRF 防護（神細節！）
+\`proxyImage\` Cloud Function 配完整 SSRF 防護：
+- 🚫 **私有 IP 黑名單**（防止打內網）
+- 🔁 **redirect 重檢**（防止 301 跳到內網）
+- ✅ **Content-Type 白名單**（只接圖片 MIME）
+- 📦 **10MB 上限**（防 DoS）
+- ⏱️ **8 秒 timeout**（防 hang）
+
+**SSRF（Server-Side Request Forgery）是後端打外部 URL 最大的資安風險** — 阿凱寫了完整的防護程式碼，**這是企業級工程紀律**。
+
+### 3️⃣ Cloudflare Turnstile 人機驗證
+- \`generatePoem\` Cloud Function 受 **Cloudflare Turnstile 保護**
+- **無 token 直接 403**
+- 擋掉 bot 大量呼叫消耗 quota
+
+## CI/CD 完整流程
+
+- **push 到 \`main\`** → GitHub Actions 自動 deploy 到 **Firebase**
+- 5 個 docs 文件支持：
+  - \`docs/USAGE.md\` 詳細使用說明
+  - \`docs/OPERATIONS.md\` 運維手冊
+  - \`docs/ROADMAP.md\` 未來開發路線圖
+  - \`docs/MIGRATION_AND_OPTIMIZATION.md\` 移植歷史記錄
+  - \`docs/blueprint.md\` 原始產品需求
+
+## 跟 #14 的差別（Pro 進化）
+
+| 維度 | [#14 poet.smes](/blog/poet-14-elder-greeting-image/) | **#91 PhotoPoet Pro**（本篇）|
+|---|---|---|
+| 部署 | poet.smes Firebase Hosting | photopoet-ha364.web.app + Firebase Hosting |
+| LLM | 推測 Gemini 圖文 | **Gemini 2.0 Flash** 明確 |
+| 後端 | 推測 | **Cloud Functions gen2 + Genkit** |
+| 人機驗證 | 無 | **Cloudflare Turnstile** |
+| SSRF 防護 | 無 | **完整防護**（私 IP / redirect / MIME / size / timeout）|
+| docs | 簡單 | **5 個 markdown 完整工程文件** |
+
+**#91 Pro 是「**企業級工程紀律的 #14**」** — 同款 use case 但安全防護升 5 個檔次。
+
+## 為什麼這值得寫獨立文章？
+
+**「**個人作品也要做企業級安全**」** —— 阿凱在 #91 展示的工程紀律：
+
+對工程師：
+- ✅ SSRF 防護完整程式碼可學
+- ✅ API Key 限制範圍最佳實踐
+- ✅ Cloudflare Turnstile 整合案例
+- ✅ Cloud Functions gen2 + Genkit 架構
+
+對教育圈：
+- ✅ 「**老師做的工具也可以這麼專業**」
+- ✅ **個資隱私意識** — 學生長輩照片不會被亂打 API
+- ✅ **永久維護** — Firebase 安全規則
+- ✅ **不會被當免費 API 消耗點** — Turnstile 擋 bot
+
+## 教學情境（同 #14 但補充工程紀律）
+
+[#14 已寫教學情境](/blog/poet-14-elder-greeting-image/) — #91 補充：
+
+**「**為什麼用 Pro 版而不是 #14**」**：
+- ✅ **大量學生上傳照片** → Cloudflare Turnstile 擋 bot 不會把 quota 耗光
+- ✅ **私照片不會洩漏** → SSRF 防護 + 限定範圍 API Key
+- ✅ **學校 IT 組長放心** → 「**這工具有完整安全防護可推給家長**」
+
+## 配對工具推薦
+
+- [#14 poet.smes 早期版](/blog/poet-14-elder-greeting-image/) — 同源雙部署
+- [#86 TieTu 3D Q版貼圖](/blog/tietu-86-chibi-sticker/) — 同款 AI 圖像 + LINE 整合
+- [#94 封面接故事](/blog/music-cover-storyboard-94/) — 同款 Gemini multimodal
+
+## 適用對象
+
+- 國中小綜合活動 / 道德教育老師（孝親月）
+- 想看「**SSRF 防護完整程式碼**」的後端工程師
+- 想看「**Cloudflare Turnstile + Cloud Functions gen2**」案例的開發者
+- 重視「**個人作品工程紀律**」的學習者
+
+## 想試試？
+
+→ [前往 #91 ✨點亮詩意 Pro✨ 早安長輩圖](/tool/91)
+
+下次傳長輩圖 — **#91 Pro 版** → 配 Cloudflare Turnstile + SSRF 防護 → **比 #14 安全 5 倍**。
+`,
+};
+
+export const POSTS: BlogPost[] = [POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91];
 
 /**
  * 取得 post（含手寫長文 + 從 tools.json 自動生成的迷你 blog）。

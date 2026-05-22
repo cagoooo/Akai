@@ -1627,6 +1627,36 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://cagoooo.github.io/Akai/blog/zhuyin-55-bopomofo-challenge</loc>
+    <lastmod>2026-05-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cagoooo.github.io/Akai/blog/typing-70-zhuyin-pro</loc>
+    <lastmod>2026-05-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cagoooo.github.io/Akai/blog/idiom-71-typeTC-challenge</loc>
+    <lastmod>2026-05-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cagoooo.github.io/Akai/blog/language-95-longtan-competition</loc>
+    <lastmod>2026-05-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cagoooo.github.io/Akai/blog/photopoet-91-pro</loc>
+    <lastmod>2026-05-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://cagoooo.github.io/Akai/blog/tool-1</loc>
     <lastmod>2026-05-22</lastmod>
     <changefreq>monthly</changefreq>
@@ -1687,12 +1717,6 @@
     <priority>0.65</priority>
   </url>
   <url>
-    <loc>https://cagoooo.github.io/Akai/blog/tool-55</loc>
-    <lastmod>2026-05-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.65</priority>
-  </url>
-  <url>
     <loc>https://cagoooo.github.io/Akai/blog/tool-57</loc>
     <lastmod>2026-05-22</lastmod>
     <changefreq>monthly</changefreq>
@@ -1729,18 +1753,6 @@
     <priority>0.65</priority>
   </url>
   <url>
-    <loc>https://cagoooo.github.io/Akai/blog/tool-70</loc>
-    <lastmod>2026-05-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.65</priority>
-  </url>
-  <url>
-    <loc>https://cagoooo.github.io/Akai/blog/tool-71</loc>
-    <lastmod>2026-05-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.65</priority>
-  </url>
-  <url>
     <loc>https://cagoooo.github.io/Akai/blog/tool-78</loc>
     <lastmod>2026-05-22</lastmod>
     <changefreq>monthly</changefreq>
@@ -1753,19 +1765,7 @@
     <priority>0.65</priority>
   </url>
   <url>
-    <loc>https://cagoooo.github.io/Akai/blog/tool-91</loc>
-    <lastmod>2026-05-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.65</priority>
-  </url>
-  <url>
     <loc>https://cagoooo.github.io/Akai/blog/tool-93</loc>
-    <lastmod>2026-05-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.65</priority>
-  </url>
-  <url>
-    <loc>https://cagoooo.github.io/Akai/blog/tool-95</loc>
     <lastmod>2026-05-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.65</priority>
