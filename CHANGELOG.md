@@ -2,6 +2,37 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.36] - 2026-05-22 — 部落格文章內頁 magazine 三欄重構 + 右下角彈窗互斥
+
+### 🎨 BlogPost 三欄式重構（Phase A · 骨架 + 視覺）
+- 三欄 magazine layout：左欄 200px sticky + 文章 680px + 右欄 230px sticky TOC、max 1200px、≤1080px 折成單欄
+- 左欄 sticky：拍立得作者卡（rotate(-2.2°)）+ 索引卡資訊（細格線紙 + 打洞 + 點線連接）+ 厚 ink border 斜紋進度條 + 黃/粉/藍三色紙標籤分享（複製連結 / LINE / 列印）
+- Hero 編輯型：mono caps kicker + Noto Sans TC 900 大標 + 上下細線 meta row + 右上 emoji sticker 88×88 rotate(6°) + 紅圖釘
+- 右欄 TOC：washi tape header rotate(-2°)、筆記本紙 + 紅 margin line、decimal-leading-zero mono 編號、active 橘色螢光筆塗抹、底部回到頂端膠囊、IntersectionObserver scrollspy（rootMargin -12%/-70%）
+- 手機 ≤1080px：左欄 + 右側 TOC 隱藏、文章頂部行動版手風琴 TOC、hero emoji 內聯 60×60、文末紙標籤水平分享列
+- 新增 hooks：`useReadingProgress` / `useActiveSection` / `useExtractedSections`（從 markdown body regex 抽 H2 自動生 sections，**零 schema 變動**）
+- 新增 stylesheet：`client/src/styles/blog-article.css` ~880 行 scoped 在 `.bp-*` class
+- 擴充 tokens：補 paper-warm / ink-mute / ink-faint / rule / rule-soft / note-yellow-soft / font-serif / font-mono / measure（「擴充 not replace」避免動到 `--paper`）
+- 載入字型：Noto Serif TC + JetBrains Mono 合併進既有 Google Fonts URL
+- 新增元件家族 9 個：BlogArticleLayout / BlogHero / BlogLeftRail / BlogToc / BlogMobileToc / BlogRelatedTools / BlogPrevNext / BlogCta / BlogMobileShare
+
+### 📝 內文渲染精修（Phase B）
+- 啟用 `rehype-raw`：let posts.ts body 直接內嵌 `<div class="callout">` / `<div class="stat-grid">` HTML
+- ReactMarkdown a renderer 三路分流：內部 wouter Link / `#anchor` smooth scroll + 24px offset / 外部 `_blank`
+- POST_53 retrofit 作為範本：`.callout--warn`（真相段）+ `.callout--tip`（雙軌機制）+ 4 卡 `.stat-grid`（實測數字頭條）
+
+### 🔧 右下角 Tour / PWA 提示重疊修復
+- TourGuide 在 startTour / dismissTour 兩處 dispatch `tour-resolved` window event
+- PWAUpdatePrompt 監聽該事件 + 初始 localStorage 檢查（`hasCompletedSiteTour` 或 24h 內 `lastTourPromptDismissedAt`）才顯示
+- 體驗：新訪客先看 Tour → 按完接力 PWA 安裝；24h 內已關 Tour 直接顯示 PWA
+
+### 🚀 部署
+- 3c8df13 (Phase A) → deploy 26266615476 success
+- 179ca3f (Phase B) → 內含 rehype-raw dep + POST_53 retrofit
+- bump v3.6.35 → v3.6.36
+
+---
+
 ## [3.6.35-2] - 2026-05-21 — Gemini Embedding 升級 + iOS PWA 引導 + Firestore rules 修
 
 ### 🧠 #100 工具索引神器升級 Gemini Embedding 語意搜尋

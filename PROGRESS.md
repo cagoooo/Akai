@@ -1,12 +1,46 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.35` (本機/CI) · 工具總數 **97 個**（**破百倒數 3** 🚀）
-- **最後更新狀態**: AI 升級 + 行動 UX 上線 — (1) #100 工具索引神器升級 Gemini Embedding 語意搜尋（雙軌設計：未 setup 自動 fallback fuzzy 不會壞）；(2) iOS PWA 加桌面引導 toast；(3) 兩個搜尋框手機 UX 優化（防 iOS 縮放 / 不自動修正）；(4) Firestore rules 修 sub-collection wildcard（Web Vitals / 熱門詞紀錄之前寫不進的根因）；(5) 新 blog post #6「#100 升級 AI build log」（8 分鐘讀）。
+- **當前版本**: `v3.6.36` (本機/CI) · 工具總數 **97 個**（**破百倒數 3** 🚀）
+- **最後更新狀態**: 部落格文章內頁 magazine 三欄重構（Phase A + Phase B）+ 右下角 Tour / PWA 提示互斥 — 雜誌編輯級閱讀介面、左欄拍立得 + 索引卡 + 進度條 + 紙標籤分享、右欄筆記本紙風格 TOC + 螢光筆塗抹高亮、手機摺疊手風琴 TOC + 分享水平列、自動從 markdown body 抽 H2 產生 sections（零 schema 變動）、rehype-raw 啟用讓 Callout / StatGrid 直接寫 HTML、POST_53 補 callout / stat-grid 範例。
 
 ## 📌 完成功能總覽
 
-### `v3.6.35-2` (最新 · Gemini Embedding 升級 + iOS PWA 引導 + Firestore rules 修)
+### `v3.6.36` (最新 · 部落格文章內頁 magazine 三欄重構 + 右下角彈窗互斥)
+
+**🎨 #1 部落格文章內頁三欄式重構（Phase A · 骨架 + 視覺）**
+- 三欄 magazine layout：左欄 200px sticky + 文章 680px + 右欄 230px sticky TOC、max 1200px、≤1080px 自動折成單欄
+- **左欄 sticky 區塊**（≥1080px）：
+  - 拍立得作者卡（白紙 + rotate(-2.2°) + 黃和紙膠帶 + hover 自動擺正）
+  - 索引卡資訊（細格線紙背景 + 左側打洞 + 橘色虛線「本篇 · INFO」標籤 + 點線連接 key↔value：發布 / 閱讀 / 分類 / 收錄）
+  - 閱讀進度條（厚 ink border + 斜紋進度 + 兩端刻度 + 同步頂部進度條）
+  - 紙標籤分享按鈕（黃 / 粉 / 藍三色 + 左側打洞 + 不同傾角 + hover 歸正 + 複製連結 / LINE 分享 / 列印 PDF 三按鈕）
+- **中央 Hero 編輯型**：橘色短線 + mono caps kicker、Noto Sans TC 900 大標、上下細線 meta row、右上 emoji sticker 88×88 rotate(6°) + 紅圖釘
+- **右欄 sticky TOC**（≥1080px）：washi tape header rotate(-2°)、筆記本紙背景 + 紅 margin line、mono `01 02 03...` 編號、active 章節橘色螢光筆塗抹、底部回到頂端膠囊、IntersectionObserver scrollspy
+- **手機 ≤1080px**：左欄 + 右側 TOC 隱藏、文章頂部行動版手風琴 TOC、hero emoji 內聯 60×60、文末紙標籤水平分享列
+- **新增 hooks**：`useReadingProgress` / `useActiveSection` / `useExtractedSections`（**從 markdown body regex 掃 H2 + slugify 自動產生 sections，零 schema 變動**，舊文章自動有目錄）
+- **新增 stylesheet**：`client/src/styles/blog-article.css` ~880 行，scoped 在 `.bp-*` class
+- **擴充 tokens**：補 paper-warm / ink-mute / ink-faint / rule / rule-soft / note-yellow-soft / font-serif / font-mono / measure（**「擴充 not replace」策略**，避免動到既有 100+ 處引用的 `--paper`）
+- **載入字型**：Noto Serif TC + JetBrains Mono 合併進既有 Google Fonts URL
+- **新增元件家族**（9 個）：BlogArticleLayout / BlogHero / BlogLeftRail / BlogToc / BlogMobileToc / BlogRelatedTools / BlogPrevNext / BlogCta / BlogMobileShare
+
+**📝 #2 內文渲染精修（Phase B）**
+- 啟用 `rehype-raw`：讓 `posts.ts` body 可直接內嵌 `<div class="callout">` / `<div class="stat-grid">` HTML
+- ReactMarkdown a renderer 三路分流：內部 `/` → wouter Link、`#anchor` → smooth scroll + 24px offset、外部 → `_blank + noopener`
+- **POST_53「校園報修系統」retrofit** 作為範本：「真相」段塞 `.callout--warn`、功能 C 雙軌通知補 `.callout--tip`、實測數字段補 4 卡 `.stat-grid` + 原表保留
+
+**🔧 #3 右下角 Tour / PWA 提示重疊修復**
+- 之前現象：黃色新手導覽 + 藍色 PWA 安裝同時冒右下角視覺重疊
+- 修法：TourGuide 在 startTour / dismissTour 兩處 dispatch `tour-resolved` window event；PWAUpdatePrompt 監聽 + 初始 localStorage 檢查才顯示
+- 體驗：第一次造訪先看 Tour → 按完才接力顯示 PWA；24h 內已關 Tour 直接顯示 PWA
+
+**📂 #4 設計交接落地**
+- Phase A + Phase B 完整對應 `design_handoff_blog_article/` 設計交接包（README 13 章 + SCREENSHOTS 6 圖 + index.html 互動原型）
+- 沿用既有 BulletinHeader / BulletinFooter / BulletinBackToTop / PageHead / Pin / Tape primitives
+- 保留 ReactMarkdown + remark-gfm 渲染管線（不改成寫死 JSX）
+- **未動**：BlogPost schema、POSTS 與 miniPosts 資料、BlogList.tsx（out of scope）
+
+### `v3.6.35-2` (Gemini Embedding 升級 + iOS PWA 引導 + Firestore rules 修)
 
 **🧠 #1 #100 工具索引神器升級 Gemini Embedding 語意搜尋（雙軌設計）**
 - **問題**：原 fuse.js 字面比對接不住抽象需求（「我想讓害羞學生開口」、「水的三態」找不到工具）
