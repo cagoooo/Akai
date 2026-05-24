@@ -130,8 +130,8 @@ export function ToolFlowAnalysisPanel({ toolTitles }: Props) {
       >(functions, 'getToolFlowAnalysis');
       const res = await callable({
         toolId,
-        fromDate: toDateStr(dateRange.start),
-        toDate: toDateStr(dateRange.end),
+        fromDate: toDateStr(dateRange.from),
+        toDate: toDateStr(dateRange.to),
       });
       setData(res.data);
     } catch (err: any) {
