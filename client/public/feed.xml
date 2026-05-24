@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 99+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 100+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Fri, 22 May 2026 08:08:52 GMT</pubDate>
-    <lastBuildDate>Fri, 22 May 2026 09:14:05 GMT</lastBuildDate>
+    <pubDate>Sun, 24 May 2026 06:05:54 GMT</pubDate>
+    <lastBuildDate>Sun, 24 May 2026 06:08:05 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,27 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：考試卷生圖 Studio — AI 黑白線稿插圖生成</title>
+      <link>https://cagoooo.github.io/Akai/tool/99</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/99</guid>
+      <pubDate>Sun, 24 May 2026 06:05:54 GMT</pubDate>
+      <description>備課時想加一張剛剛好的學習單插畫？輸入四個欄位（標題、對話、角色、場景），10–20 秒生成兩張 1024×1024 黑白線稿 PNG，列印不吃墨水、可當著色頁、支援中文精準渲染。內建 4 組教學情境範例 + AI Prompt 可複製轉用 ChatGPT / Bing。</description>
+      <category>試卷插圖</category>
+      <category>學習單插畫</category>
+      <category>AI 線稿生成</category>
+      <category>黑白線稿</category>
+      <category>著色頁</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#99 考試卷生圖 Studio：四欄位 20 秒生兩張黑白線稿，列印不吃墨水的備課救星</title>
+      <link>https://cagoooo.github.io/Akai/blog/exam-illustration-99-ai-line-art-studio</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/exam-illustration-99-ai-line-art-studio</guid>
+      <pubDate>Sun, 24 May 2026 00:00:00 GMT</pubDate>
+      <description>#99 考試卷生圖 Studio 是阿凱寫給自己備課用的 AI 插圖工具：填四個欄位（標題、對話、角色、場景），按一鍵 20 秒生兩張 1024×1024 純黑白線稿 PNG，校園黑白印表機友善、可當著色頁、中文精準渲染，每天免費 5 次。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
     <item>
       <title>🆕 新工具：教室小幫手 — 老師的每日課堂工具</title>
       <link>https://cagoooo.github.io/Akai/tool/98</link>
@@ -270,24 +291,6 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/academic-49-treasure-trove</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
       <description>#49 真實是 `sites.google.com/mail2.smes.tyc.edu.tw/academic/` 教務處子站，含 3 個子頁：「2026 英語歌唱比賽網站」（G6 6 首歌 × 601-606 6 班 = 36 組合）、「2026 親職日場地配置」（即 Akai #74）、「班級榮譽榜名單調查」（Akai 尚未收錄的隱藏作品）。純 Tailwind 嵌進 Google Sites Embedded HTML。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#74 1150328 親職日場地配置互動網：戶外籃球場 + 教室活動區 + 攤位展區 + 4 tab 切換的 SPA 場地圖</title>
-      <link>https://cagoooo.github.io/Akai/blog/parent-day-74-venue-map</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/parent-day-74-venue-map</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#74 真實標題「1150328 親職日場地配置互動網」（115/03/28 親職日專用）。Tailwind + Lucide 純前端 SPA，4 個 tab 切換（戶外班級區 / 1-3 年級教室區 / 攤位展區 / 其他區域），含戶外籃球場配置（4-6 年級與專區）+ 教室活動區（1-3 年級英語闖關）+ 攤位活動展區（石門國中升學輔導 / 性平教育展 / 家庭教育有獎徵答 / 星空計畫作品展示）。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#75 Slide Extractor 影片與 PDF 簡報擷取神器：PDF.js + jsPDF + JSZip + Firebase 設定流程的單檔擷取工具</title>
-      <link>https://cagoooo.github.io/Akai/blog/slide-extractor-75-video-pdf-images</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/slide-extractor-75-video-pdf-images</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#75 真實名稱「Slide Extractor - 影片與 PDF 簡報擷取神器」— 兩大模式（影片轉圖片 / PDF 轉圖片），用 PDF.js 抓 PDF 每頁渲染成圖、JSZip 打包下載、jsPDF 重新匯出、Firebase 設定流程（立即設定 / 取消 / 儲存並連線）。37,748 字元單檔 HTML 嵌進 Google Sites Embedded HTML。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
