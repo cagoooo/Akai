@@ -1,13 +1,64 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.52` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
+- **當前版本**: `v3.6.53` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
 - **里程碑**: **2026-05-24 06:08 UTC（台灣時間 14:08）達成 100 工具** — 首頁破百倒數 banner 撒花特效自動啟動，從「倒數 3」滑進「🎉 100 工具達成」金色 Tape 模式
-- **最後更新狀態**: v3.6.52 — 100 工具達成紀念三件套上線：(1) 紀念 OG 圖（金色拼貼 + #100/#81/#46/#3 四主角 + 達成日金箔 + 撒花裝飾）；(2) `share/100.html` landing 給社群爬蟲拿紀念卡；(3) `POST_100_MILESTONE` 8 分鐘紀念長文（5 個里程碑工具 + 3 個技術決策 + 給未來自己一封信）+ working tree 大清理（13 個 scratch 檔刪除、functions/lib build 產物移出版控、handoff/ 與 design_handoff_*tmp/ 加進 .gitignore）
+- **最後更新狀態**: v3.6.53 — Anonymous Auth health check Cloud Function 上線：(1) `verifyAnonAuthDaily` 每天 02:00 (Asia/Taipei) 自動檢查 + 修復；(2) `verifyAnonAuthNow` onCall 手動觸發（admin only）；(3) 修復時推 LINE Flex card 告警 + 寫健康日誌；(4) 順手抽 `pushFlexToAdmin` 到 `lib/lineNotify.ts` 共用 helper。**從此 Identity Toolkit anonymous provider 漂移會自動修復不再炸**（解決 2026-05-24 訪客追蹤被 rules 全擋的根因）
 
 ## 📌 完成功能總覽
 
-### `v3.6.52` (最新 · 🎉 100 工具達成紀念三件套 + working tree 大清理)
+### `v3.6.53` (最新 · 🛟 Anonymous Auth health check Cloud Function)
+
+**🐛 根因背景**
+- 2026-05-24 使用者在 `/admin` console 看到 4 個 Firestore 寫入失敗：
+  - `增加訪客計數失敗: FirebaseError: Missing or insufficient permissions`
+  - `[trackPageVisit] Firestore device/desktop 寫入失敗`
+  - `[trackPageVisit] Firestore referrer/direct 寫入失敗`
+  - `[trackPageVisit] Firestore geo/桃園市 寫入失敗`
+- 根因排查（rules 正確、線上 rules 同步、程式碼路徑正確）→ 最後鎖定 **Identity Toolkit config 的 `signIn.anonymous` 是空物件 `{}` → anonymous provider 被關**
+- 修復：用 Identity Toolkit Admin API PATCH `signIn.anonymous.enabled = true`（與 v3.6.4 啟用方式相同）→ 訪客追蹤立即恢復
+- 但這是**第二次漂移**（v3.6.4 啟用 → 2026-05-24 又被關），需要自動防漂移機制 → G13 health check 誕生
+
+**🛟 #1 新增 verifyAnonAuthDaily 排程函式**
+- `functions/src/verifyAnonAuth.ts` 全新檔（287 行）
+- 排程：每天 02:00 (Asia/Taipei)（dailySnapshot 03:00 之前跑，分流）
+- 機制：
+  1. admin SDK 取 OAuth2 access token
+  2. GET `https://identitytoolkit.googleapis.com/admin/v2/projects/{pid}/config`
+  3. 讀 `signIn.anonymous.enabled` 狀態
+  4. 若為 `false` → PATCH 設回 `true` + 再驗證一次確認修復
+  5. 修復成功 → 推 LINE Flex card「🛟 Anonymous Auth 已自動修復」（綠色 header + Console 直連按鈕）
+  6. API 失敗 → 推 LINE Flex card「⚠️ 健康檢查失敗」（紅色 header + 200 字 stacktrace + 立即到 Console 檢查 CTA）
+  7. 正常狀態（`enabled === true && !wasFixed`）→ 安靜不打擾
+- 健康日誌寫入 `analytics/anonAuthHealth/checks/{YYYY-MM-DD}`：lastCheckedAt / lastEnabled / lastWasFixed / lastError / checkCount / fixCount
+- region asia-east1 / memory 256MiB / timeoutSeconds 60
+
+**🚨 #2 新增 verifyAnonAuthNow onCall 函式**
+- admin custom claim 才可呼叫（其他人 throw `permission-denied`）
+- 後台「立即檢查 Anonymous Auth」按鈕（未來 UI）可呼叫，當下立即驗證狀態
+- 同樣寫健康日誌 + 修復時推 LINE
+- 正常時不推 LINE（避免手動觸發噪音），由前端 UI 自己顯示結果
+
+**🧹 #3 順手抽 `pushFlexToAdmin` 到共用 helper**
+- 新檔 `functions/src/lib/lineNotify.ts`
+- 既有 `index.ts` 內的 `onWishCreated` / `onReviewCreated` 改 import helper
+- `verifyAnonAuth.ts` 也使用同一份
+- 避免循環依賴 + 三處 LINE 推送統一 error handling
+
+**📋 部署狀態**
+- `firebase deploy --only functions:verifyAnonAuthDaily,functions:verifyAnonAuthNow` 成功
+- Cloud Functions 上線在 asia-east1
+- 第一次跑會發現 enabled=true（剛才手動修好的）→ 安靜不推 LINE
+- 真正觸發要等下一次漂移（希望不會發生）
+
+**💡 給未來的自己**
+- 這條 health check 是「Anonymous Auth 第二次漂移」逼出來的
+- 如果半年內看到 LINE 推「🛟 Anonymous Auth 已自動修復」→ 就是漂移又發生了，但這次系統自己修了
+- 如果看到「⚠️ 健康檢查失敗」→ 表示 admin SDK 拿 token 或 Identity Toolkit API 出問題，得人工到 Console 看 anonymous 狀態 + 看 Cloud Functions logs
+
+---
+
+### `v3.6.52` (🎉 100 工具達成紀念三件套 + working tree 大清理)
 
 **🎨 #1 紀念 OG 圖 generate-100-celebration-og.mjs**
 - 新腳本：1200×630 cork 風背景 + 上方金色緞帶「★ 100 工具達成！★」（左右 5 角星裝飾，純 Canvas 自畫不靠 emoji 字型）

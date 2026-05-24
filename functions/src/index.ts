@@ -1,7 +1,7 @@
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import * as admin from "firebase-admin";
-import axios from "axios";
+import { pushFlexToAdmin } from "./lib/lineNotify";
 
 // 初始化 Firebase Admin
 admin.initializeApp();
@@ -14,52 +14,13 @@ export { dailySnapshot, restoreFromSnapshot } from "./dailySnapshot";
 // 部署：firebase functions:secrets:set GEMINI_API_KEY && firebase deploy --only functions:embedQuery
 export { embedQuery } from "./embedQuery";
 
-// 從環境變數中取得 LINE 官方帳號的 Token 與推播對象 ID
-const LINE_CHANNEL_ACCESS_TOKEN = process.env.LINE_NOTIFY_TOKEN;
-const LINE_ADMIN_USER_ID = process.env.LINE_ADMIN_USER_ID;
+// 🆕 v3.6.53: Anonymous Auth health check（防 Identity Toolkit anonymous provider 漂移被關）
+// - verifyAnonAuthDaily：每天 02:00 (Asia/Taipei) 自動檢查 + 修復
+// - verifyAnonAuthNow：admin onCall，手動觸發
+export { verifyAnonAuthDaily, verifyAnonAuthNow } from "./verifyAnonAuth";
 
 // 對外公開站點（供 LINE 卡片裡的「打開查看」按鈕用）
 const SITE_BASE = "https://cagoooo.github.io/Akai";
-
-// ────────────────────────────────────────────────────────────
-// 共用：把任意 Flex Message bubble 推給管理員
-// ────────────────────────────────────────────────────────────
-async function pushFlexToAdmin(altText: string, bubble: any, contextLabel: string) {
-    if (!LINE_CHANNEL_ACCESS_TOKEN || !LINE_ADMIN_USER_ID) {
-        console.error(`[${contextLabel}] 尚未配置 LINE_NOTIFY_TOKEN 或 LINE_ADMIN_USER_ID，無法發送通知。`);
-        return;
-    }
-
-    const payload = {
-        to: LINE_ADMIN_USER_ID.trim(),
-        messages: [
-            {
-                type: "flex",
-                altText,
-                contents: bubble,
-            },
-        ],
-    };
-
-    try {
-        await axios.post(
-            "https://api.line.me/v2/bot/message/push",
-            payload,
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${LINE_CHANNEL_ACCESS_TOKEN.trim()}`,
-                },
-            }
-        );
-        console.log(`[${contextLabel}] LINE Flex Notification sent successfully.`);
-    } catch (error: any) {
-        console.error(
-            `[${contextLabel}] Failed to send LINE Flex notification:`,
-            JSON.stringify(error.response?.data) || error.message
-        );
-    }
-}
 
 /**
  * 監聽 wishingWell 集合中的新增文件
