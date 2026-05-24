@@ -107,25 +107,48 @@ export function ToolIndexAI() {
   }, [externalTools]);
 
   // Fuzzy 即時搜尋（client-side fuse.js）
-  // 中文友善：用 / 空白 、 , ; | 把 query tokenize 後對每個 token 各搜一次，
-  // 再依 toolId 取 best score 合併（單一長字串會被 fuse.js 整段比對失敗的問題）
+  // 中文友善三層策略：
+  //   1) 用 / 空白 、 , ; | 把 query 拆 separator tokens
+  //   2) 對純中文長 token (>=4 字) 額外做 n-gram sliding 切片 (size 3-4)
+  //      讓「想做閱讀理解練習」這種能抽出「閱讀理解」「閱讀理」等子串各搜
+  //   3) 整句也丟一次（保留命中 detailedDescription 段落能力）
+  //   最後依 toolId 取 best score 合併、排序取 top 5
   const fuzzyResults: FuseResult<EducationalTool>[] = useMemo(() => {
     if (!fuse || !query.trim()) return [];
-    const tokens = query
+
+    const sepTokens = query
       .split(/[\s\/\\、，,;；|]+/)
       .map((t) => t.trim())
       .filter((t) => t.length >= 1);
 
-    if (tokens.length === 0) return [];
-    // 1 個 token + 含整句 — 直接用 fuse 跑（保留原行為）
-    if (tokens.length === 1) return fuse.search(tokens[0], { limit: 5 });
+    if (sepTokens.length === 0) return [];
 
-    // 多 token：對每個 token 搜、依 toolId 取 best score 合併
+    // n-gram 切片：純中文 token 長度 >= 4 才切（避免短 token 過度爆量）
+    // size 3-4 雙視窗（不切 2-gram 避免「想做」「練習」噪聲）
+    const chineseRe = /^[㐀-鿿　-〿＀-￯]+$/;
+    function ngramChunks(text: string): string[] {
+      if (text.length < 4 || !chineseRe.test(text)) return [];
+      const out = new Set<string>();
+      for (const size of [4, 3]) {
+        for (let i = 0; i + size <= text.length; i++) {
+          out.add(text.slice(i, i + size));
+        }
+      }
+      return Array.from(out);
+    }
+
+    // 組合候選 query pool：separator tokens + 整句 + 每個 token 的 n-gram chunks
+    const pool = new Set<string>();
+    pool.add(query.trim());
+    for (const t of sepTokens) {
+      pool.add(t);
+      for (const c of ngramChunks(t)) pool.add(c);
+    }
+
+    // 對每個候選跑 fuse search，依 toolId 取 best score 合併
     const byId = new Map<number, FuseResult<EducationalTool>>();
-    // 順便把整句也丟一次（萬一整句能命中某個 detailedDescription 段落）
-    const allQueries = [...tokens, query.trim()];
-    for (const tok of allQueries) {
-      const hits = fuse.search(tok, { limit: 10 });
+    for (const q of Array.from(pool)) {
+      const hits = fuse.search(q, { limit: 10 });
       for (const h of hits) {
         const existing = byId.get(h.item.id);
         if (!existing || (h.score ?? 1) < (existing.score ?? 1)) {
