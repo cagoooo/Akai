@@ -107,9 +107,35 @@ export function ToolIndexAI() {
   }, [externalTools]);
 
   // Fuzzy 即時搜尋（client-side fuse.js）
+  // 中文友善：用 / 空白 、 , ; | 把 query tokenize 後對每個 token 各搜一次，
+  // 再依 toolId 取 best score 合併（單一長字串會被 fuse.js 整段比對失敗的問題）
   const fuzzyResults: FuseResult<EducationalTool>[] = useMemo(() => {
     if (!fuse || !query.trim()) return [];
-    return fuse.search(query, { limit: 5 });
+    const tokens = query
+      .split(/[\s\/\\、，,;；|]+/)
+      .map((t) => t.trim())
+      .filter((t) => t.length >= 1);
+
+    if (tokens.length === 0) return [];
+    // 1 個 token + 含整句 — 直接用 fuse 跑（保留原行為）
+    if (tokens.length === 1) return fuse.search(tokens[0], { limit: 5 });
+
+    // 多 token：對每個 token 搜、依 toolId 取 best score 合併
+    const byId = new Map<number, FuseResult<EducationalTool>>();
+    // 順便把整句也丟一次（萬一整句能命中某個 detailedDescription 段落）
+    const allQueries = [...tokens, query.trim()];
+    for (const tok of allQueries) {
+      const hits = fuse.search(tok, { limit: 10 });
+      for (const h of hits) {
+        const existing = byId.get(h.item.id);
+        if (!existing || (h.score ?? 1) < (existing.score ?? 1)) {
+          byId.set(h.item.id, h);
+        }
+      }
+    }
+    return Array.from(byId.values())
+      .sort((a, b) => (a.score ?? 1) - (b.score ?? 1))
+      .slice(0, 5);
   }, [fuse, query]);
 
   // 語意搜尋：query 變動 + semantic 模式 → debounced 800ms 呼叫 Cloud Function
