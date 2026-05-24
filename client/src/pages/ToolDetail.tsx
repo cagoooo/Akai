@@ -9,6 +9,8 @@ import { useQuery } from '@tanstack/react-query';
 import { PageHead } from '@/components/PageHead';
 import { m as motion, AnimatePresence } from 'framer-motion';
 import { useMemo } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import {
     ArrowLeft,
     Heart,
@@ -560,9 +562,11 @@ export function ToolDetail() {
                                     )}>
                                         {tool.title}
                                     </h1>
-                                    <p className="text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed max-w-3xl">
-                                        {tool.detailedDescription || tool.description}
-                                    </p>
+                                    <div className="text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed max-w-3xl prose prose-gray max-w-none [&_p]:my-2 [&_strong]:text-gray-900 [&_strong]:font-semibold [&_ul]:my-2 [&_li]:my-1 [&_a]:text-blue-600 [&_a]:underline">
+                                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                            {(tool.detailedDescription || tool.description).replace(/\n/g, '\n\n')}
+                                        </ReactMarkdown>
+                                    </div>
                                 </div>
                             </div>
 

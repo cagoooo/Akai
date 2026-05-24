@@ -12,6 +12,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { PageHead } from '@/components/PageHead';
 import { BulletinRelatedTools } from '@/components/bulletin/BulletinRelatedTools';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 import { type EducationalTool } from '@/lib/data';
 import { getToolStats, trackToolUsage } from '@/lib/firestoreService';
@@ -556,8 +558,9 @@ export function BulletinToolDetail() {
               </div>
             )}
 
-            {/* 描述（白底便條） */}
+            {/* 描述（白底便條 — Markdown 渲染） */}
             <div
+              className="bulletin-tool-desc"
               style={{
                 marginTop: 24,
                 background: 'rgba(255,255,255,.92)',
@@ -570,7 +573,37 @@ export function BulletinToolDetail() {
                 boxShadow: '2px 2px 0 rgba(0,0,0,.12)',
               }}
             >
-              {tool.detailedDescription || tool.description}
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  p: ({ children }) => (
+                    <p style={{ margin: '0 0 12px 0' }}>{children}</p>
+                  ),
+                  strong: ({ children }) => (
+                    <strong style={{ color: tokens.accent, fontWeight: 700 }}>
+                      {children}
+                    </strong>
+                  ),
+                  ul: ({ children }) => (
+                    <ul style={{ margin: '8px 0 12px 0', paddingLeft: 20 }}>
+                      {children}
+                    </ul>
+                  ),
+                  li: ({ children }) => (
+                    <li style={{ marginBottom: 4 }}>{children}</li>
+                  ),
+                  a: ({ href, children }) => (
+                    <a
+                      href={href}
+                      style={{ color: tokens.accent, textDecoration: 'underline' }}
+                    >
+                      {children}
+                    </a>
+                  ),
+                }}
+              >
+                {(tool.detailedDescription || tool.description).replace(/\n/g, '\n\n')}
+              </ReactMarkdown>
             </div>
 
             {/* 標籤 */}
