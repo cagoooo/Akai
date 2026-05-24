@@ -146,68 +146,116 @@ export async function incrementVisitorCount(): Promise<VisitorStats> {
 
 const TOOL_STATS_COLLECTION = 'toolUsageStats';
 
+// ── client-side context helpers（提供 sessionId / device 給 Cloud Function event log）─
+const SESSION_ID_KEY = 'akai_session_id_v1';
+const SESSION_TS_KEY = 'akai_session_id_ts';
+const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 天滾動 session
+
+function getOrCreateSessionId(): string {
+    try {
+        const existing = localStorage.getItem(SESSION_ID_KEY);
+        const tsRaw = localStorage.getItem(SESSION_TS_KEY);
+        const ts = tsRaw ? Number(tsRaw) : 0;
+        if (existing && ts && Date.now() - ts < SESSION_TTL_MS) {
+            return existing;
+        }
+        // 新 session：用 crypto.randomUUID 若可用，fallback Math.random
+        const id =
+            typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+                ? crypto.randomUUID()
+                : `s_${Math.random().toString(36).slice(2)}_${Date.now().toString(36)}`;
+        localStorage.setItem(SESSION_ID_KEY, id);
+        localStorage.setItem(SESSION_TS_KEY, String(Date.now()));
+        return id;
+    } catch {
+        return 'anon';
+    }
+}
+
+function detectDevice(): 'mobile' | 'tablet' | 'desktop' {
+    if (typeof navigator === 'undefined') return 'desktop';
+    const ua = navigator.userAgent || '';
+    if (/iPad|Tablet|Nexus 7|Nexus 9|Kindle|PlayBook/i.test(ua)) return 'tablet';
+    if (/Mobi|Android.*Mobile|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua)) return 'mobile';
+    return 'desktop';
+}
+
 /**
- * 追蹤工具使用
+ * 追蹤工具使用（v3.6.49+ 改走 Cloud Function 主管道，順便寫 toolClickEvents）
+ *
+ * 主管道：incrementToolClick callable（後端原子寫 totalClicks + dailyClicks + event log）
+ * fallback：Firebase 不可用 / callable 失敗時 → 本地 localStorage 計數
  */
 export async function trackToolUsage(toolId: number): Promise<ToolStats> {
-    // 如果 Firebase 不可用，使用本地計數
-    if (!isFirebaseAvailable() || !db) {
-        const localKey = `localToolStats_${toolId}`;
-        const localClicks = parseInt(localStorage.getItem(localKey) || '0') + 1;
-        localStorage.setItem(localKey, localClicks.toString());
-        return {
-            toolId,
-            totalClicks: localClicks,
-            lastUsedAt: null,
-            categoryClicks: {}
-        };
-    }
+    // 收集 client-side context
+    const context = {
+        toolId,
+        referrer: typeof document !== 'undefined' ? (document.referrer || '') : '',
+        device: detectDevice(),
+        sessionId: getOrCreateSessionId(),
+    };
 
-    try {
-        const docRef = doc(db as Firestore, TOOL_STATS_COLLECTION, `tool_${toolId}`);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-            await updateDoc(docRef, {
-                totalClicks: increment(1),
-                lastUsedAt: serverTimestamp()
-            });
-
-            const data = docSnap.data() as ToolStats;
+    // 主管道：call Cloud Function
+    if (isFirebaseAvailable() && db) {
+        try {
+            const { getFunctions, httpsCallable } = await import('firebase/functions');
+            const functions = getFunctions(undefined, 'asia-east1');
+            const callable = httpsCallable<typeof context, { success: boolean; toolId: number }>(
+                functions,
+                'incrementToolClick'
+            );
+            await callable(context);
+            // 本地 fallback 也順手 +1 給離線排行榜立刻反應（不等回查 doc）
+            const localKey = `localToolStats_${toolId}`;
+            const localClicks = parseInt(localStorage.getItem(localKey) || '0') + 1;
+            localStorage.setItem(localKey, localClicks.toString());
             return {
-                ...data,
-                totalClicks: data.totalClicks + 1,
-                lastUsedAt: Timestamp.now()
-            };
-        } else {
-            // 建立新記錄
-            const newStats: ToolStats = {
                 toolId,
-                totalClicks: 1,
+                totalClicks: localClicks,
                 lastUsedAt: Timestamp.now(),
-                categoryClicks: {}
+                categoryClicks: {},
             };
-
-            await setDoc(docRef, {
-                ...newStats,
-                lastUsedAt: serverTimestamp()
-            });
-
-            return newStats;
+        } catch (err) {
+            console.warn('[trackToolUsage] callable 失敗，fallback direct write:', err);
+            // fallthrough 到 direct write fallback
         }
-    } catch (error) {
-        console.error('追蹤工具使用失敗:', error);
-        // 使用本地備份
-        const localKey = `localToolStats_${toolId}`;
-        const localClicks = parseInt(localStorage.getItem(localKey) || '0') + 1;
-        localStorage.setItem(localKey, localClicks.toString());
-        return {
-            toolId,
-            totalClicks: localClicks,
-            lastUsedAt: null,
-            categoryClicks: {}
-        };
+
+        // Fallback：callable 失敗時 client direct write totalClicks（沒 event log）
+        try {
+            const docRef = doc(db as Firestore, TOOL_STATS_COLLECTION, `tool_${toolId}`);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                await updateDoc(docRef, {
+                    totalClicks: increment(1),
+                    lastUsedAt: serverTimestamp(),
+                });
+                const data = docSnap.data() as ToolStats;
+                return { ...data, totalClicks: data.totalClicks + 1, lastUsedAt: Timestamp.now() };
+            } else {
+                const newStats: ToolStats = {
+                    toolId,
+                    totalClicks: 1,
+                    lastUsedAt: Timestamp.now(),
+                    categoryClicks: {},
+                };
+                await setDoc(docRef, { ...newStats, lastUsedAt: serverTimestamp() });
+                return newStats;
+            }
+        } catch (error) {
+            console.error('追蹤工具使用失敗 (direct write fallback):', error);
+        }
     }
+
+    // 最終 fallback：純本地計數
+    const localKey = `localToolStats_${toolId}`;
+    const localClicks = parseInt(localStorage.getItem(localKey) || '0') + 1;
+    localStorage.setItem(localKey, localClicks.toString());
+    return {
+        toolId,
+        totalClicks: localClicks,
+        lastUsedAt: null,
+        categoryClicks: {},
+    };
 }
 
 /**

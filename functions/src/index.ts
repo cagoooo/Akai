@@ -301,17 +301,65 @@ function todayInTaipei(): string {
     return fmt.format(new Date());
 }
 
+/** 把任意 referrer URL 正規化成「來源類別」+「host」（給 toolClickEvents 統計用）*/
+function classifyReferrer(rawReferrer: string | undefined | null): { category: string; host: string } {
+    if (!rawReferrer || typeof rawReferrer !== "string") return { category: "direct", host: "" };
+    let host = "";
+    try {
+        host = new URL(rawReferrer).hostname.toLowerCase();
+    } catch {
+        return { category: "direct", host: "" };
+    }
+    if (!host) return { category: "direct", host: "" };
+    // 自己站內導流不算流量源
+    if (host.includes("cagoooo.github.io")) return { category: "internal", host };
+    if (host.includes("line.me") || host.includes("liff.line")) return { category: "line", host };
+    if (host.includes("facebook.com") || host.includes("fb.com") || host.includes("m.facebook")) return { category: "facebook", host };
+    if (host.includes("google.")) return { category: "google", host };
+    if (host.includes("youtube.com") || host.includes("youtu.be")) return { category: "youtube", host };
+    if (host.includes("instagram.com")) return { category: "instagram", host };
+    if (host.includes("threads.net")) return { category: "threads", host };
+    if (host.includes("twitter.com") || host.includes("x.com") || host.includes("t.co")) return { category: "twitter", host };
+    if (host.includes("bing.com")) return { category: "bing", host };
+    if (host.includes("yahoo.")) return { category: "yahoo", host };
+    if (host.endsWith(".edu.tw") || host.includes("tyc.edu.tw")) return { category: "school", host };
+    if (host.includes("notion.")) return { category: "notion", host };
+    if (host.includes("padlet.com")) return { category: "padlet", host };
+    return { category: "other", host };
+}
+
+/** rawRequest header 抓國別（Cloudflare / Fastly / GAE 三種）— 取不到回 "unknown" */
+function detectCountry(rawReq: any): string {
+    if (!rawReq?.headers) return "unknown";
+    const h = rawReq.headers;
+    const get = (k: string) => (typeof h[k] === "string" ? h[k] : Array.isArray(h[k]) ? h[k][0] : "");
+    const c = get("cf-ipcountry") || get("x-appengine-country") || get("fastly-client-country") || get("x-country-code");
+    return (c || "unknown").toUpperCase().slice(0, 2);
+}
+
 /**
- * 可呼叫的 Cloud Function：原子性地遞增工具點擊次數
- * 更新 toolUsageStats/{toolId}：
- *   - totalClicks（累計）
- *   - dailyClicks.{YYYY-MM-DD}（當日，供日期 picker 篩選用，v3.6.8+）
- *   - lastClickedAt（最後點擊時間）
+ * 可呼叫的 Cloud Function：原子性地遞增工具點擊次數 + 寫 event log
+ *
+ * 寫入兩筆：
+ *   1. toolUsageStats/{toolId}：totalClicks / dailyClicks / lastClickedAt（累計快取）
+ *   2. toolClickEvents/{auto-id}：個別事件 含 referrer/device/country/sessionId/hour/dateKey
+ *      （給後台流量解析切片用，dailySnapshot 自動裁切 90 天）
+ *
+ * 接受 request.data（皆 optional）：
+ *   - toolId (required, 1-200)
+ *   - referrer  (client 端 document.referrer)
+ *   - device    ('mobile'|'tablet'|'desktop')
+ *   - sessionId (client 端 localStorage 持久 UUID)
  */
-export const incrementToolClick = onCall(async (request) => {
+export const incrementToolClick = onCall(
+    {
+        region: "asia-east1", // 與 embedQuery 對齊；台灣 latency 最低
+        memory: "256MiB",
+        maxInstances: 10,
+    },
+    async (request) => {
     const toolId = request.data?.toolId;
 
-    // 驗證 toolId 為 1~200 之間的數字
     if (typeof toolId !== "number" || !Number.isInteger(toolId) || toolId < 1 || toolId > 200) {
         throw new HttpsError(
             "invalid-argument",
@@ -321,8 +369,12 @@ export const incrementToolClick = onCall(async (request) => {
 
     const docRef = admin.firestore().collection("toolUsageStats").doc(String(toolId));
     const today = todayInTaipei();
+    const now = new Date();
+    // Asia/Taipei 小時（UTC+8）
+    const hourTW = (now.getUTCHours() + 8) % 24;
 
-    await docRef.set(
+    // 1. 累計 doc (toolUsageStats)
+    const accumulatePromise = docRef.set(
         {
             totalClicks: admin.firestore.FieldValue.increment(1),
             dailyClicks: { [today]: admin.firestore.FieldValue.increment(1) },
@@ -331,5 +383,109 @@ export const incrementToolClick = onCall(async (request) => {
         { merge: true }
     );
 
+    // 2. event log (toolClickEvents) — 從 client data + rawRequest headers 拼湊 context
+    const rawRef = request.data?.referrer;
+    const { category: referrer, host: referrerHost } = classifyReferrer(rawRef);
+    const deviceRaw = String(request.data?.device || "").toLowerCase();
+    const device: "mobile" | "tablet" | "desktop" =
+        deviceRaw === "mobile" || deviceRaw === "tablet" || deviceRaw === "desktop" ? deviceRaw : "desktop";
+    const sessionId = String(request.data?.sessionId || "").slice(0, 64) || "anon";
+    const country = detectCountry(request.rawRequest);
+
+    const eventPromise = admin
+        .firestore()
+        .collection("toolClickEvents")
+        .add({
+            toolId,
+            dateKey: today,
+            hour: hourTW,
+            timestamp: admin.firestore.FieldValue.serverTimestamp(),
+            referrer,
+            referrerHost: referrerHost.slice(0, 100),
+            device,
+            country,
+            sessionId,
+        });
+
+    // 兩者並行；event log 失敗不影響主流程（accumulate 才是 source-of-truth）
+    await accumulatePromise;
+    eventPromise.catch((err) => console.warn("[toolClickEvents] write failed:", err));
+
     return { success: true, toolId };
-});
+    }
+);
+
+/**
+ * getToolFlowAnalysis — 後台流量解析（admin only）
+ *
+ * 輸入：{ toolId, fromDate: 'YYYY-MM-DD', toDate: 'YYYY-MM-DD' }（皆 Asia/Taipei 日曆日）
+ * 回傳：{
+ *   totalEvents, uniqueSessions,
+ *   hourDist: { 0-23: count },         24 小時時段分布
+ *   referrerDist: { line: N, ... },    流量來源
+ *   deviceDist:   { mobile: N, ... },  裝置
+ *   countryDist:  { TW: N, ... }       國別
+ * }
+ */
+export const getToolFlowAnalysis = onCall(
+    {
+        region: "asia-east1",
+        memory: "512MiB",
+        maxInstances: 3,
+    },
+    async (request) => {
+        // admin only
+        if (!request.auth?.token?.admin) {
+            throw new HttpsError("permission-denied", "admin only");
+        }
+        const toolId = Number(request.data?.toolId);
+        const fromDate = String(request.data?.fromDate || "");
+        const toDate = String(request.data?.toDate || "");
+        if (!Number.isInteger(toolId) || toolId < 1 || toolId > 200) {
+            throw new HttpsError("invalid-argument", "toolId out of range");
+        }
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(fromDate) || !/^\d{4}-\d{2}-\d{2}$/.test(toDate)) {
+            throw new HttpsError("invalid-argument", "date must be YYYY-MM-DD");
+        }
+
+        const snap = await admin
+            .firestore()
+            .collection("toolClickEvents")
+            .where("toolId", "==", toolId)
+            .where("dateKey", ">=", fromDate)
+            .where("dateKey", "<=", toDate)
+            .get();
+
+        const hourDist: Record<string, number> = {};
+        const referrerDist: Record<string, number> = {};
+        const deviceDist: Record<string, number> = {};
+        const countryDist: Record<string, number> = {};
+        const sessionSet = new Set<string>();
+        for (let h = 0; h < 24; h++) hourDist[String(h)] = 0;
+
+        snap.forEach((d) => {
+            const e = d.data();
+            const hour = typeof e.hour === "number" ? e.hour : 0;
+            hourDist[String(hour)] = (hourDist[String(hour)] || 0) + 1;
+            const ref = String(e.referrer || "direct");
+            referrerDist[ref] = (referrerDist[ref] || 0) + 1;
+            const dev = String(e.device || "desktop");
+            deviceDist[dev] = (deviceDist[dev] || 0) + 1;
+            const c = String(e.country || "unknown");
+            countryDist[c] = (countryDist[c] || 0) + 1;
+            if (e.sessionId && e.sessionId !== "anon") sessionSet.add(String(e.sessionId));
+        });
+
+        return {
+            toolId,
+            fromDate,
+            toDate,
+            totalEvents: snap.size,
+            uniqueSessions: sessionSet.size,
+            hourDist,
+            referrerDist,
+            deviceDist,
+            countryDist,
+        };
+    }
+);

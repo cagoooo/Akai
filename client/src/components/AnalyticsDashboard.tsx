@@ -12,6 +12,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "wouter";
 import type { VisitorStats, ToolUsageStat } from "@/types/analytics";
 import { WishingWellAdmin } from "@/components/admin/WishingWellAdmin";
+import { ToolFlowAnalysisPanel } from "@/components/admin/ToolFlowAnalysisPanel";
 import {
   DateRangePicker,
   presetToRange,
@@ -1112,6 +1113,9 @@ export function AnalyticsDashboard() {
                 )}
               </CardContent>
             </Card>
+
+            {/* 🆕 v3.6.49 流量解析面板（細粒度 toolClickEvents 切片） */}
+            <ToolFlowAnalysisPanel toolTitles={toolTitles} />
           </TabsContent>
 
           <TabsContent value="heatmap">

@@ -57,6 +57,30 @@ async function readAllDocs(collection: string): Promise<Record<string, any>> {
     return out;
 }
 
+/** 裁切 toolClickEvents 中 timestamp 超過 90 天的舊 event docs（v3.6.49+）*/
+async function pruneOldClickEvents(): Promise<{ deleted: number }> {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - 90);
+    let deleted = 0;
+    // 分批刪避免單次 batch 超過 500 限制
+    const PAGE = 400;
+    while (true) {
+        const snap = await admin
+            .firestore()
+            .collection("toolClickEvents")
+            .where("timestamp", "<", admin.firestore.Timestamp.fromDate(cutoff))
+            .limit(PAGE)
+            .get();
+        if (snap.empty) break;
+        const batch = admin.firestore().batch();
+        snap.forEach((d) => batch.delete(d.ref));
+        await batch.commit();
+        deleted += snap.size;
+        if (snap.size < PAGE) break;
+    }
+    return { deleted };
+}
+
 /** 裁切 toolUsageStats 各 doc 中 dailyClicks 超過 90 天的舊 entry */
 async function pruneOldDailyClicks(): Promise<{ docsScanned: number; keysRemoved: number }> {
     const cutoffDate = new Date();
@@ -168,6 +192,12 @@ export const dailySnapshot = onSchedule(
             const prune = await pruneOldDailyClicks();
             if (prune.keysRemoved > 0) {
                 console.log(`[dailySnapshot] 🧹 裁切 dailyClicks：掃描 ${prune.docsScanned} 個工具，移除 ${prune.keysRemoved} 個過期日期 key`);
+            }
+
+            // 5. 裁切 toolClickEvents 中超過 90 天的舊事件（v3.6.49+）
+            const pruneEvents = await pruneOldClickEvents();
+            if (pruneEvents.deleted > 0) {
+                console.log(`[dailySnapshot] 🧹 裁切 toolClickEvents：刪除 ${pruneEvents.deleted} 筆過期事件`);
             }
         } catch (err) {
             console.error("[dailySnapshot] 失敗：", err);
