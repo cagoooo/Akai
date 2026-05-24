@@ -228,6 +228,25 @@ export function ToolFlowAnalysisPanel({ toolTitles }: Props) {
                 提示：需要 admin custom claim 才能 call。檢查 Firebase Auth 帳號是否已 setCustomClaims。
               </div>
             )}
+            {/index|failed-precondition|建置中/i.test(error) && (
+              <div style={{ marginTop: 4, fontSize: 11, color: '#92400e' }}>
+                🛠️ Firestore 索引第一次建置需要 1-5 分鐘，
+                <a
+                  href="https://console.firebase.google.com/project/akai-e693f/firestore/indexes"
+                  target="_blank"
+                  rel="noopener"
+                  style={{ color: '#92400e', textDecoration: 'underline' }}
+                >
+                  到 Console 看建置狀態
+                </a>
+                ，State 變 Enabled 後再按一次「分析」即可。
+              </div>
+            )}
+            {/INTERNAL/i.test(error) && !/index/i.test(error) && (
+              <div style={{ marginTop: 4, fontSize: 11, color: '#7c2d12' }}>
+                🐛 Cloud Function 拋未預期錯誤。請開 `firebase functions:log --only getToolFlowAnalysis` 看詳細 stacktrace。
+              </div>
+            )}
           </div>
         )}
 

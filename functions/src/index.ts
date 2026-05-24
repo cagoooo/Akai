@@ -448,13 +448,26 @@ export const getToolFlowAnalysis = onCall(
             throw new HttpsError("invalid-argument", "date must be YYYY-MM-DD");
         }
 
-        const snap = await admin
-            .firestore()
-            .collection("toolClickEvents")
-            .where("toolId", "==", toolId)
-            .where("dateKey", ">=", fromDate)
-            .where("dateKey", "<=", toDate)
-            .get();
+        let snap;
+        try {
+            snap = await admin
+                .firestore()
+                .collection("toolClickEvents")
+                .where("toolId", "==", toolId)
+                .where("dateKey", ">=", fromDate)
+                .where("dateKey", "<=", toDate)
+                .get();
+        } catch (err: any) {
+            // Firestore needs-index error 包成 failed-precondition + 友善訊息
+            const msg = String(err?.message || err);
+            if (err?.code === 9 || /requires an index/i.test(msg)) {
+                throw new HttpsError(
+                    "failed-precondition",
+                    "Firestore 索引建置中（toolClickEvents/toolId+dateKey），通常 1-5 分鐘可用，請稍後再試"
+                );
+            }
+            throw new HttpsError("internal", `query failed: ${msg.slice(0, 200)}`);
+        }
 
         const hourDist: Record<string, number> = {};
         const referrerDist: Record<string, number> = {};
