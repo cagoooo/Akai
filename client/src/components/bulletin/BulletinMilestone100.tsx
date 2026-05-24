@@ -9,10 +9,98 @@
  * 用法：在 BulletinHome 的 BulletinHero 上方插入 <BulletinMilestone100 />
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { tokens } from '@/design/tokens';
 import { Tape } from '@/components/primitives/Tape';
 import { Pin } from '@/components/primitives/Pin';
+
+// 撒花動畫 keyframes（注入一次到 <head>）
+const CONFETTI_STYLE_ID = 'akai-confetti-keyframes';
+function ensureConfettiStyles() {
+  if (typeof document === 'undefined') return;
+  if (document.getElementById(CONFETTI_STYLE_ID)) return;
+  const style = document.createElement('style');
+  style.id = CONFETTI_STYLE_ID;
+  style.textContent = `
+    @keyframes akai-confetti-fall {
+      0%   { transform: translate3d(0,-10vh,0) rotate(0deg); opacity: 1; }
+      80%  { opacity: 1; }
+      100% { transform: translate3d(var(--akai-drift, 40px), 110vh, 0) rotate(720deg); opacity: 0; }
+    }
+    @keyframes akai-cheer-bounce {
+      0%, 100% { transform: translateY(0) rotate(-8deg); }
+      50%      { transform: translateY(-6px) rotate(8deg); }
+    }
+    @keyframes akai-cheer-bounce-r {
+      0%, 100% { transform: translateY(0) rotate(8deg); }
+      50%      { transform: translateY(-6px) rotate(-8deg); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .akai-confetti-piece, .akai-cheer-emoji { animation: none !important; }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+const CONFETTI_COLORS = ['#fde047', '#fb923c', '#f87171', '#60a5fa', '#34d399', '#a78bfa', '#f472b6', '#fbbf24'];
+const CONFETTI_PIECES = 28;
+
+function ConfettiBurst({ trigger }: { trigger: number }) {
+  const [pieces, setPieces] = useState<Array<{ id: number; left: number; delay: number; duration: number; color: string; size: number; drift: number; shape: 'rect' | 'circle' }>>([]);
+
+  useEffect(() => {
+    if (trigger === 0) return;
+    ensureConfettiStyles();
+    const next = Array.from({ length: CONFETTI_PIECES }, (_, i) => ({
+      id: trigger * 1000 + i,
+      left: Math.random() * 100,
+      delay: Math.random() * 0.4,
+      duration: 3.2 + Math.random() * 2.0,
+      color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+      size: 6 + Math.random() * 6,
+      drift: (Math.random() - 0.5) * 240,
+      shape: (Math.random() > 0.5 ? 'rect' : 'circle') as 'rect' | 'circle',
+    }));
+    setPieces(next);
+    // 動畫結束清掉 DOM
+    const cleanup = window.setTimeout(() => setPieces([]), 5800);
+    return () => window.clearTimeout(cleanup);
+  }, [trigger]);
+
+  if (pieces.length === 0) return null;
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        position: 'fixed',
+        inset: 0,
+        pointerEvents: 'none',
+        overflow: 'hidden',
+        zIndex: 9999,
+      }}
+    >
+      {pieces.map((p) => (
+        <span
+          key={p.id}
+          className="akai-confetti-piece"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: `${p.left}%`,
+            width: p.size,
+            height: p.shape === 'rect' ? p.size * 1.6 : p.size,
+            background: p.color,
+            borderRadius: p.shape === 'circle' ? '50%' : 2,
+            // 撒花飄散方向（CSS var）
+            ['--akai-drift' as never]: `${p.drift}px`,
+            animation: `akai-confetti-fall ${p.duration}s cubic-bezier(.22,.65,.4,1) ${p.delay}s forwards`,
+            boxShadow: '0 0 0 1px rgba(0,0,0,.06)',
+          }}
+        />
+      ))}
+    </div>
+  );
+}
 
 interface SiteStats {
   toolCount: number;
@@ -250,76 +338,132 @@ function CelebrationBanner({
     day: '2-digit',
   });
   const base = import.meta.env.BASE_URL || '/';
+
+  // 撒花觸發次數（每加 1 撒一次）
+  const [confettiTick, setConfettiTick] = useState(0);
+  const firedOnceRef = useRef(false);
+
+  // 進場時撒一次（每次刷新都撒一次，慶祝期內氛圍要熱鬧）
+  useEffect(() => {
+    if (firedOnceRef.current) return;
+    firedOnceRef.current = true;
+    // 稍微延遲，等使用者看到 banner 後再撒
+    const t = window.setTimeout(() => setConfettiTick((n) => n + 1), 250);
+    return () => window.clearTimeout(t);
+  }, []);
+
   return (
-    <div
-      data-testid="milestone-celebration"
-      style={{
-        position: 'relative',
-        padding: '18px 60px 12px',
-        display: 'flex',
-        justifyContent: 'center',
-      }}
-    >
-      <a
-        href={`${base}tool/100`}
+    <>
+      <ConfettiBurst trigger={confettiTick} />
+      <div
+        data-testid="milestone-celebration"
         style={{
-          textDecoration: 'none',
-          display: 'inline-block',
+          position: 'relative',
+          padding: '18px 60px 12px',
+          display: 'flex',
+          justifyContent: 'center',
         }}
       >
-        <div
+        <a
+          href={`${base}tool/100`}
+          onMouseEnter={() => setConfettiTick((n) => n + 1)}
+          onFocus={() => setConfettiTick((n) => n + 1)}
           style={{
-            position: 'relative',
-            transform: 'rotate(-1.5deg)',
-            transition: 'transform 0.18s ease',
+            textDecoration: 'none',
+            display: 'inline-block',
           }}
         >
-          <Tape color="#fde047" width={520} angle={0} style={{ padding: '14px 28px', fontSize: 20 }}>
-            <span style={{ fontSize: 26, fontWeight: 900, color: tokens.ink, letterSpacing: '0.04em' }}>
-              🎉 100 工具達成
-            </span>
-            <span style={{ margin: '0 10px', color: tokens.muted2 }}>·</span>
-            <span style={{ fontSize: 14, fontWeight: 700, color: tokens.muted2 }}>
-              {dateStr} 解鎖｜點我看 #100 工具索引神器 →
-            </span>
-          </Tape>
-          {/* 慶祝小提示 */}
           <div
             style={{
-              position: 'absolute',
-              right: -6,
-              top: -10,
-              fontSize: 22,
-              transform: 'rotate(12deg)',
-              filter: 'drop-shadow(0 2px 2px rgba(0,0,0,.18))',
+              position: 'relative',
+              transform: 'rotate(-1.5deg)',
+              transition: 'transform 0.18s ease',
             }}
-            aria-hidden="true"
           >
-            ✨
-          </div>
-          {daysSince >= 0 && daysSince <= CELEBRATION_DAYS - 1 && (
+            {/* 左側歡呼 emoji */}
+            <span
+              className="akai-cheer-emoji"
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                left: -34,
+                top: '50%',
+                marginTop: -16,
+                fontSize: 30,
+                animation: 'akai-cheer-bounce 1.4s ease-in-out infinite',
+                filter: 'drop-shadow(0 2px 2px rgba(0,0,0,.2))',
+                transformOrigin: '50% 100%',
+              }}
+            >
+              🎊
+            </span>
+
+            <Tape color="#fde047" width={520} angle={0} style={{ padding: '14px 28px', fontSize: 20 }}>
+              <span style={{ fontSize: 26, fontWeight: 900, color: tokens.ink, letterSpacing: '0.04em' }}>
+                🎉 100 工具達成
+              </span>
+              <span style={{ margin: '0 10px', color: tokens.muted2 }}>·</span>
+              <span style={{ fontSize: 14, fontWeight: 700, color: tokens.muted2 }}>
+                {dateStr} 解鎖｜點我看 #100 工具索引神器 →
+              </span>
+            </Tape>
+
+            {/* 右側歡呼 emoji */}
+            <span
+              className="akai-cheer-emoji"
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                right: -34,
+                top: '50%',
+                marginTop: -16,
+                fontSize: 30,
+                animation: 'akai-cheer-bounce-r 1.4s ease-in-out infinite 0.2s',
+                filter: 'drop-shadow(0 2px 2px rgba(0,0,0,.2))',
+                transformOrigin: '50% 100%',
+              }}
+            >
+              🥳
+            </span>
+
+            {/* 慶祝小提示 */}
             <div
               style={{
                 position: 'absolute',
-                left: -8,
-                bottom: -16,
-                fontSize: 11,
-                fontWeight: 700,
-                color: tokens.muted2,
-                background: '#fff',
-                padding: '2px 8px',
-                borderRadius: 999,
-                border: `1.5px solid ${tokens.ink}`,
-                boxShadow: '1px 1px 0 rgba(0,0,0,.2)',
-                transform: 'rotate(-3deg)',
-                fontFamily: tokens.font.tc,
+                right: -6,
+                top: -10,
+                fontSize: 22,
+                transform: 'rotate(12deg)',
+                filter: 'drop-shadow(0 2px 2px rgba(0,0,0,.18))',
               }}
+              aria-hidden="true"
             >
-              慶祝第 {daysSince + 1} 天
+              ✨
             </div>
-          )}
-        </div>
-      </a>
-    </div>
+            {daysSince >= 0 && daysSince <= CELEBRATION_DAYS - 1 && (
+              <div
+                style={{
+                  position: 'absolute',
+                  left: -8,
+                  bottom: -16,
+                  fontSize: 11,
+                  fontWeight: 700,
+                  color: tokens.muted2,
+                  background: '#fff',
+                  padding: '2px 8px',
+                  borderRadius: 999,
+                  border: `1.5px solid ${tokens.ink}`,
+                  boxShadow: '1px 1px 0 rgba(0,0,0,.2)',
+                  transform: 'rotate(-3deg)',
+                  fontFamily: tokens.font.tc,
+                }}
+              >
+                慶祝第 {daysSince + 1} 天
+              </div>
+            )}
+          </div>
+        </a>
+      </div>
+    </>
   );
 }
