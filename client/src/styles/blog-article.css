@@ -59,25 +59,101 @@
 }
 
 /* =========================================================
-   Breadcrumb
+   Breadcrumb / Back-to-blog button (v3.6.54 redesign)
    ========================================================= */
 .bp-crumb {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--ink-mute);
+  gap: 10px;
+  padding: 9px 18px 9px 11px;
+  background: linear-gradient(180deg, #fff4b8 0%, #fde047 100%);
+  border: 2.5px solid var(--ink);
+  border-radius: 10px;
+  color: var(--ink);
   text-decoration: none;
-  font-weight: 700;
-  padding: 6px 0;
-  margin-bottom: 24px;
+  font-weight: 900;
+  font-size: 14px;
   letter-spacing: .02em;
   font-family: var(--font-tc);
+  margin-bottom: 28px;
+  box-shadow: 3px 3px 0 rgba(26, 15, 5, .55);
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+  transform: rotate(-0.8deg);
+  min-height: 44px;
+  position: relative;
+  white-space: nowrap;
+  cursor: pointer;
 }
-.bp-crumb__arrow { transition: transform .18s ease; display: inline-block; }
-.bp-crumb:hover { color: var(--red); }
-.bp-crumb:hover .bp-crumb__arrow { transform: translateX(-3px); }
-.bp-crumb__sep { color: var(--ink-faint); }
+.bp-crumb:hover,
+.bp-crumb:focus-visible {
+  transform: rotate(0deg) translate(-2px, -2px);
+  box-shadow: 5px 5px 0 rgba(26, 15, 5, .55);
+  background: linear-gradient(180deg, #fde047 0%, #facc15 100%);
+  outline: none;
+}
+.bp-crumb:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 rgba(26, 15, 5, .55);
+}
+.bp-crumb__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: var(--ink);
+  color: #fde047;
+  border-radius: 50%;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 900;
+  flex-shrink: 0;
+  transition: transform .22s cubic-bezier(.4, 0, .2, 1);
+}
+.bp-crumb:hover .bp-crumb__arrow,
+.bp-crumb:focus-visible .bp-crumb__arrow {
+  transform: translateX(-4px);
+}
+.bp-crumb__label { font-weight: 900; }
+.bp-crumb__path {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bp-crumb__sep {
+  color: rgba(26, 15, 5, .45);
+  font-weight: 700;
+}
+.bp-crumb__context {
+  color: rgba(26, 15, 5, .72);
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* a11y：reduced motion 全程不動 */
+@media (prefers-reduced-motion: reduce) {
+  .bp-crumb,
+  .bp-crumb__arrow {
+    transition: none;
+  }
+  .bp-crumb {
+    transform: none;
+  }
+  .bp-crumb:hover,
+  .bp-crumb:focus-visible {
+    transform: none;
+    box-shadow: 3px 3px 0 rgba(26, 15, 5, .55);
+  }
+  .bp-crumb:hover .bp-crumb__arrow,
+  .bp-crumb:focus-visible .bp-crumb__arrow {
+    transform: none;
+  }
+}
 
 /* =========================================================
    Hero — editorial
@@ -1317,7 +1393,17 @@
 @media (max-width: 720px) {
   .bp-page { padding: 18px 16px 60px; }
 
-  .bp-crumb { margin-bottom: 16px; font-size: 12.5px; }
+  /* 手機：按鈕放大成 48px tap target、隱藏 path 段只留主按鈕、加厚陰影更顯眼 */
+  .bp-crumb {
+    padding: 12px 18px 12px 12px;
+    font-size: 14px;
+    min-height: 48px;
+    margin-bottom: 20px;
+    box-shadow: 4px 4px 0 rgba(26, 15, 5, .5);
+    transform: rotate(-0.5deg);
+  }
+  .bp-crumb__path { display: none; }
+  .bp-crumb__arrow { width: 26px; height: 26px; font-size: 15px; }
 
   .bp-hero { margin-bottom: 28px; }
   .bp-hero__emoji-sticker {

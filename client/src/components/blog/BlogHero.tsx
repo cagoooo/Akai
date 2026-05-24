@@ -46,12 +46,12 @@ export function BlogHero({
     <>
       <Link href={crumbHref} className="bp-crumb" aria-label={`回到${crumbLabel}列表`}>
         <span className="bp-crumb__arrow" aria-hidden="true">←</span>
-        <span>{crumbLabel}</span>
+        <span className="bp-crumb__label">回{crumbLabel}</span>
         {kicker && (
-          <>
-            <span className="bp-crumb__sep">/</span>
-            <span style={{ color: 'var(--ink-soft)' }}>{kicker.split('·')[0].trim()}</span>
-          </>
+          <span className="bp-crumb__path">
+            <span className="bp-crumb__sep" aria-hidden="true">·</span>
+            <span className="bp-crumb__context">{kicker.split('·')[0].trim()}</span>
+          </span>
         )}
       </Link>
 
