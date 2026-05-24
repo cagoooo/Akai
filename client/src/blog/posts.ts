@@ -12480,7 +12480,22 @@ const POST_100_MILESTONE: BlogPost = {
   toolIds: [100, 81, 46, 3],
   coverEmoji: '🎉',
   coverColor: 'orange',
-  body: `## 兩年，剛好走到 100
+  body: `<div class="bp-video-embed">
+  <video
+    controls
+    preload="metadata"
+    poster="https://cagoooo.github.io/Akai/celebration100/cover.png"
+    style="width:100%;border-radius:12px;border:3px solid #1a1a1a;box-shadow:6px 6px 0 rgba(26,15,5,0.45);background:#1a1a1a;display:block;"
+  >
+    <source src="https://github.com/cagoooo/Akai/releases/download/v3.6.55-celebration100/celebration-100-final-v2.mp4" type="video/mp4" />
+    瀏覽器不支援影片播放。<a href="https://github.com/cagoooo/Akai/releases/tag/v3.6.55-celebration100">直接下載 87 秒紀念短片 (9 MB)</a>
+  </video>
+  <div style="text-align:center;margin-top:10px;font-size:13px;color:#6b5e4a;font-weight:600;">
+    🎬 87 秒紀念短片 · 旁白 + BGM · 一次看完 100 工具達成全紀錄
+  </div>
+</div>
+
+## 兩年，剛好走到 100
 
 2024 年我做了第一個給班上用的小工具，沒打算當「作品集」，純粹是因為**找不到適合的現成工具**所以自己刻。
 

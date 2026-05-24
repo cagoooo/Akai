@@ -487,17 +487,9 @@ function generateCelebration100PageHtml() {
   <meta name="twitter:description" content="${description}">
   <meta name="twitter:image" content="${imageUrl}">
 
-  <link rel="canonical" href="${SITE_URL}/">
+  <link rel="canonical" href="${SITE_URL}/share/100.html">
 
-  <script>
-    (function() {
-      var ua = navigator.userAgent || '';
-      var isSocialBot = /facebookexternalhit|Facebot|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Slackbot|Discordbot|Pinterest|Googlebot|bingbot|YandexBot|LineBot|Line-Networking/i.test(ua);
-      if (!isSocialBot) {
-        window.location.replace('/Akai/');
-      }
-    })();
-  </script>
+  <!-- 不 redirect — 此頁本身即是「紀念短片觀賞頁」，使用者進來看影片 -->
 
   <style>
     body {
@@ -510,10 +502,30 @@ function generateCelebration100PageHtml() {
         radial-gradient(circle at 70% 60%, rgba(140,95,55,.30) 1.5px, transparent 2.5px);
       background-size: 60px 60px, 80px 80px;
       color: #1a1a1a;
+      padding: 32px 16px;
+    }
+    .stack {
+      display: flex; flex-direction: column; align-items: center; gap: 28px;
+      max-width: 720px; width: 100%;
+    }
+    .video-frame {
+      width: 100%;
+      background: #1a1a1a;
+      border: 3px solid #1a1a1a;
+      border-radius: 14px;
+      box-shadow: 8px 8px 0 rgba(26,15,5,.4);
+      overflow: hidden;
+    }
+    .video-frame video { width: 100%; display: block; }
+    .video-caption {
+      text-align: center; margin-top: -16px; font-size: 13px;
+      color: #fefdfa; background: rgba(26,15,5,.78);
+      padding: 6px 14px; border-radius: 14px; font-weight: 700;
+      letter-spacing: .04em;
     }
     .celebrate-card {
       background: linear-gradient(180deg, #fff4b8 0%, #fde047 50%, #e8b341 100%);
-      padding: 40px 44px;
+      padding: 36px 40px;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0,0,0,.18), 6px 6px 0 rgba(0,0,0,.25);
       transform: rotate(-1.2deg);
@@ -529,21 +541,41 @@ function generateCelebration100PageHtml() {
       padding: 6px 14px; background: rgba(26,15,5,.85); color: #fde047;
       border-radius: 14px; font-size: 13px; font-weight: 900;
     }
-    a {
+    a.cta {
       display: inline-block; margin-top: 18px; padding: 12px 26px;
       background: #1a1a1a; color: #fde047; text-decoration: none;
       border: 2.5px solid #fde047; border-radius: 10px;
       font-weight: 900; box-shadow: 4px 4px 0 rgba(0,0,0,.4);
     }
+    @media (max-width: 720px) {
+      .celebrate-card { padding: 28px 22px; }
+      h1 { font-size: 26px; }
+      p { font-size: 14px; }
+    }
   </style>
 </head>
 <body>
-  <div class="celebrate-card">
-    <div class="badge">★ MILESTONE 100 ★</div>
-    <h1>🎉 100 工具達成！</h1>
-    ${achievedDate ? `<div class="date-tag">達成日 · ${achievedDate}</div>` : ''}
-    <p>${description}</p>
-    <a href="/Akai/">📚 探索全部 100 款工具</a>
+  <div class="stack">
+    <div class="video-frame">
+      <video
+        controls
+        preload="metadata"
+        playsinline
+        poster="${SITE_URL}/celebration100/cover.png"
+      >
+        <source src="https://github.com/cagoooo/Akai/releases/download/v3.6.55-celebration100/celebration-100-final-v2.mp4" type="video/mp4" />
+        瀏覽器不支援影片，<a href="https://github.com/cagoooo/Akai/releases/tag/v3.6.55-celebration100" style="color:#fde047">直接下載 (9 MB)</a>
+      </video>
+    </div>
+    <div class="video-caption">🎬 87 秒紀念短片　·　旁白 + BGM　·　Pixabay CC0 配樂</div>
+
+    <div class="celebrate-card">
+      <div class="badge">★ MILESTONE 100 ★</div>
+      <h1>🎉 100 工具達成！</h1>
+      ${achievedDate ? `<div class="date-tag">達成日 · ${achievedDate}</div>` : ''}
+      <p>${description}</p>
+      <a class="cta" href="/Akai/">📚 探索全部 100 款工具</a>
+    </div>
   </div>
 </body>
 </html>`;

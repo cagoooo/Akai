@@ -1,13 +1,59 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.53` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
-- **里程碑**: **2026-05-24 06:08 UTC（台灣時間 14:08）達成 100 工具** — 首頁破百倒數 banner 撒花特效自動啟動，從「倒數 3」滑進「🎉 100 工具達成」金色 Tape 模式
-- **最後更新狀態**: v3.6.53 — Anonymous Auth health check Cloud Function 上線：(1) `verifyAnonAuthDaily` 每天 02:00 (Asia/Taipei) 自動檢查 + 修復；(2) `verifyAnonAuthNow` onCall 手動觸發（admin only）；(3) 修復時推 LINE Flex card 告警 + 寫健康日誌；(4) 順手抽 `pushFlexToAdmin` 到 `lib/lineNotify.ts` 共用 helper。**從此 Identity Toolkit anonymous provider 漂移會自動修復不再炸**（解決 2026-05-24 訪客追蹤被 rules 全擋的根因）
+- **當前版本**: `v3.6.55` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
+- **里程碑**: **2026-05-24 06:08 UTC（台灣時間 14:08）達成 100 工具** + **87 秒紀念短片完成** — 首頁破百倒數 banner 撒花特效自動啟動
+- **最後更新狀態**: v3.6.55 — 100 紀念短片正式嵌進站內：(1) 影片託管於 [GitHub Release v3.6.55-celebration100](https://github.com/cagoooo/Akai/releases/tag/v3.6.55-celebration100) (9.4 MB / 87 秒 / Pixabay CC0 BGM)；(2) `POST_100_MILESTONE` 紀念長文頂部加 `<video>` 嵌入；(3) `share/100.html` 改為「真正可看影片的紀念頁」（拿掉 bot redirect、加 video frame + 黃便利貼說明卡 RWD）
 
 ## 📌 完成功能總覽
 
-### `v3.6.53` (最新 · 🛟 Anonymous Auth health check Cloud Function)
+### `v3.6.55` (最新 · 🎬 100 紀念短片正式嵌進站內)
+
+**🎬 影片發布到 GitHub Release**
+- Tag：`v3.6.55-celebration100`
+- 檔案：`celebration-100-final-v2.mp4`（9.4 MB / 87 秒 / 1920×1080 H.264 / AAC 317 kbps）
+- 製作流程：Remotion + Microsoft Edge TTS YunJhe 男聲 -15% + Pixabay CC0 BGM
+- BGM：「Inspirational Acoustic - Organic Harmony」by sonican
+- 流程符合 `pixabay-audio-asset-pipeline` skill（Chrome MCP 抓 candidates → ffprobe 比較 duration/bitrate → fade in 1.5s / steady 0.16 / fade out 2.5s）
+
+**📚 POST_100_MILESTONE 頂部加 video**
+- 開頭加 `<div class="bp-video-embed">` 含 `<video controls preload="metadata" poster="...cover.png">`
+- poster 用穩定檔名 `celebration100/cover.png`（不用 hash 命名以免每次 build 漂移）
+- 影片 fallback `<a>` 連結到 GitHub Release tag 供下載
+- 「🎬 87 秒紀念短片」說明字提示影片屬性
+
+**📮 share/100.html 改成「紀念短片觀賞頁」**
+- 移除原本「非 bot 自動 redirect 主頁」邏輯 — 使用者進來就能看影片
+- 新 RWD 結構：`.stack` 720px 中央容器內 → 黑底 `.video-frame` + 黑底白字 `.video-caption` + 既有黃便利貼 `.celebrate-card`
+- 手機 ≤720px：celebrate-card 縮 padding 28×22 + h1 26px + p 14px
+- bot 仍可解析 og:image / og:title / og:description（OG meta 保留），LINE/FB 分享預覽不變
+
+**🖼 client/public/celebration100/cover.png**
+- 從線上 og-preview-celebration-100-a750dbf5.png 抓回（316 KB）
+- commit 進 git tracked（不在 `og-preview-*.png` gitignore pattern 內）
+- 用於 video poster + 未來其他紀念素材 reference
+
+**🧠 記憶系統新增 feedback**
+- [feedback-video-bgm-pipeline](C:/Users/smes/.claude/projects/H--Akai/memory/feedback_video_bgm_pipeline.md) — 凡是影片必加 BGM 走 pixabay-audio-asset-pipeline，不可交付「只有旁白沒 BGM」版本
+
+---
+
+### `v3.6.54` (BlogPost 返回按鈕黃便利貼 button 大改良)
+
+**🎨 改了什麼**
+- 之前「← 部落格 / 教室百寶箱」純文字 breadcrumb 太不顯眼 → 改成黃便利貼風按鈕
+- 漸層黃底（#fff4b8 → #fde047）+ 2.5px ink 厚邊 + 3px 3D 陰影 + 黑色圓圈包箭頭 + 微旋轉 -0.8°
+- hover/focus → 浮起轉正 + 陰影加深；:active → 按壓回彈
+- label 改「回部落格」更口語化
+- **桌機 (≥720px)**：min-height 44px tap target + 接顯示 path 段
+- **手機 (≤720px)**：min-height 48px tap target、隱藏 path 段（只顯示「← 回部落格」）、陰影加厚 4px、箭頭圓圈放大 26px
+- a11y：`prefers-reduced-motion: reduce` 全程停動畫、`:focus-visible` 同 hover 樣式、`white-space: nowrap` 避免分行
+- 影響範圍：所有 `/blog/:slug` 頁面（100+ 篇手寫長文 + 迷你 blog）
+- 沿用記憶 [[feedback-ui-design-language]]「cork + 便利貼 + 拍立得」設計語彙
+
+---
+
+### `v3.6.53` (🛟 Anonymous Auth health check Cloud Function)
 
 **🐛 根因背景**
 - 2026-05-24 使用者在 `/admin` console 看到 4 個 Firestore 寫入失敗：
