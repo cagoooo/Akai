@@ -361,7 +361,9 @@ function CelebrationBanner({
           position: 'relative',
           padding: '18px 60px 12px',
           display: 'flex',
-          justifyContent: 'center',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 14,
         }}
       >
         <a
@@ -462,6 +464,53 @@ function CelebrationBanner({
               </div>
             )}
           </div>
+        </a>
+
+        {/* 🎬 紀念短片 CTA — v3.6.56 新增，連到 share/100.html (新分頁，video 觀賞頁) */}
+        <a
+          href={`${base}share/100.html`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="開啟 87 秒 100 工具達成紀念短片"
+          style={{
+            textDecoration: 'none',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 10,
+            padding: '10px 22px',
+            background: 'rgba(26,15,5,.88)',
+            color: '#fde047',
+            border: '2.5px solid #fde047',
+            borderRadius: 22,
+            fontSize: 14,
+            fontWeight: 900,
+            letterSpacing: '0.04em',
+            boxShadow: '3px 3px 0 rgba(26,15,5,.55)',
+            transition: 'transform .15s ease, box-shadow .15s ease',
+            fontFamily: tokens.font.tc,
+            cursor: 'pointer',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translate(-2px, -2px)';
+            e.currentTarget.style.boxShadow = '5px 5px 0 rgba(26,15,5,.55)';
+            setConfettiTick((n) => n + 1);
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translate(0, 0)';
+            e.currentTarget.style.boxShadow = '3px 3px 0 rgba(26,15,5,.55)';
+          }}
+          onFocus={(e) => {
+            e.currentTarget.style.transform = 'translate(-2px, -2px)';
+            e.currentTarget.style.boxShadow = '5px 5px 0 rgba(26,15,5,.55)';
+          }}
+          onBlur={(e) => {
+            e.currentTarget.style.transform = 'translate(0, 0)';
+            e.currentTarget.style.boxShadow = '3px 3px 0 rgba(26,15,5,.55)';
+          }}
+        >
+          <span style={{ fontSize: 18 }}>🎬</span>
+          <span>看 87 秒紀念短片</span>
+          <span style={{ fontSize: 11, opacity: 0.72, fontWeight: 700 }}>含旁白 + BGM</span>
         </a>
       </div>
     </>
