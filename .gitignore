@@ -33,3 +33,26 @@ service-account.json
 
 # 字型原始檔（完整 TTF 過大，精簡版已 commit 於 scripts/fonts/NotoSansTC-WishSubset.ttf）
 scripts/fonts/NotoSansTC-Bold.ttf
+
+# Cloud Functions build 產物（tsc outDir）
+functions/lib/
+
+# OG 圖 build 產物（檔名含 md5 hash，由 generate-home-og*.mjs 產出，CI build 會重生）
+client/public/og-preview-*.png
+client/public/og-preview-*.webp
+
+# 設計交接素材（本機保留，不入版控）
+handoff/
+design_handoff_*tmp/
+
+# Claude Code worktrees / 本機暫存
+.claude/
+
+# 暫存 / 診斷 / 抓站源碼 / debug 截圖（不入版控）
+_diag*
+_zh*
+_test_write
+.tmp_*
+page25_*
+*-debug.png
+*-debug.webp

@@ -1,12 +1,271 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.38` (本機/CI) · 工具總數 **97 個**（**破百倒數 3** 🚀）
-- **最後更新狀態**: 修根 SKIP_IDS drift 痛點 — 3 處硬編 toolIds 黑名單改成從 POSTS.toolIds 自動 derive，未來手寫長文新增到 POSTS 之後 mini blog 生成器 / sitemap / OG landing 全部自動同步。
+- **當前版本**: `v3.6.52` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
+- **里程碑**: **2026-05-24 06:08 UTC（台灣時間 14:08）達成 100 工具** — 首頁破百倒數 banner 撒花特效自動啟動，從「倒數 3」滑進「🎉 100 工具達成」金色 Tape 模式
+- **最後更新狀態**: v3.6.52 — 100 工具達成紀念三件套上線：(1) 紀念 OG 圖（金色拼貼 + #100/#81/#46/#3 四主角 + 達成日金箔 + 撒花裝飾）；(2) `share/100.html` landing 給社群爬蟲拿紀念卡；(3) `POST_100_MILESTONE` 8 分鐘紀念長文（5 個里程碑工具 + 3 個技術決策 + 給未來自己一封信）+ working tree 大清理（13 個 scratch 檔刪除、functions/lib build 產物移出版控、handoff/ 與 design_handoff_*tmp/ 加進 .gitignore）
 
 ## 📌 完成功能總覽
 
-### `v3.6.38` (最新 · SKIP_IDS 自動 derive · 消除 3 處硬編同步痛點)
+### `v3.6.52` (最新 · 🎉 100 工具達成紀念三件套 + working tree 大清理)
+
+**🎨 #1 紀念 OG 圖 generate-100-celebration-og.mjs**
+- 新腳本：1200×630 cork 風背景 + 上方金色緞帶「★ 100 工具達成！★」（左右 5 角星裝飾，純 Canvas 自畫不靠 emoji 字型）
+- 中央巨大金色「100」字（金箔漸層 + ink stroke + 高光線 + 外圈金色光暈）
+- 4 張拍立得圍繞中央 100：左上 #100 索引神器、右上 #81 駕駛艙、左下 #46 場地預約、右下 #3 即時投票
+- 撒花裝飾：deterministic seed 撒 36 片彩帶 + 圓圈，避開中央主視覺區與木條
+- 達成日期讀 `site-stats.milestones.tool100`（顯示 2026.05.24）
+- 底部 attribution bar：金邊頭像 + 金色 CTA「下一個 100 從你的許願開始 →」
+- 寫入 `site-stats.json` 的 `ogImageCelebration` 欄位
+- npm alias：`npm run gen:100-og`
+- 接入 build pipeline（在 `generate-home-og-heatmap` 之後 / `sync-meta-from-stats` 之前）
+
+**📮 #2 share/100.html landing page**
+- `generate-og-pages.mjs` 加 `generateCelebration100PageHtml()`
+- 仿 `share/heatmap.html` pattern：社群爬蟲拿 `ogImageCelebrationAbsolute` 金色拼貼，一般 user JS redirect 回主頁讓 BulletinMilestone100 撒花特效接手
+- landing UI：金色漸層卡片 + ink badge「★ MILESTONE 100 ★」+ 達成日 tag + 黑底金字 CTA
+- 用途：紀念分享圖 LINE / FB 廣播、blog 紀念長文 CTA、後續廣播素材
+
+**📚 #3 紀念長文 POST_100_MILESTONE（8 分鐘 / ~2200 字）**
+- slug: `milestone-100-tools-achieved`
+- coverEmoji 🎉 / coverColor orange
+- toolIds: `[100, 81, 46, 3]`
+- **置頂 POSTS 陣列首位** → BlogList magazine 版自動把它當 heroPost
+- 章節結構：
+  - 兩年走到 100（含 callout--tip「為什麼是 100」）
+  - 100 個工具背後的數字（4 卡 stat-grid：100 篇手寫長文 / 5 大平台 / 7 大分類 / G1-G6 全年級）
+  - 7 大分類分佈表（含每分類 2-3 個代表作連結）
+  - 5 個改變一切的里程碑（#1 第一個工具 → #3 第一個爆紅 → #46 校園真正用上 → #81 自己用最多 → #100 智能門口）
+  - callout--info「技術選擇 3 個關鍵決策」（100 獨立 repo / 繁中優先 / 拍立得 cork 風）
+  - 兩年踩坑學到的 5 件事
+  - blockquote「給未來自己 · 一封信」
+  - 給其他想開始的老師三句話
+  - CTA 連到 share/100.html + 工具索引 + 許願池
+
+**🧹 #4 working tree 大清理（G1 + G4）**
+- 刪除 13 個 scratch / 診斷 / 抓站源碼 / debug 截圖：
+  - `_diag.py / _diag_log.txt / _diagrun.bat / _test_write`（Claude session 路徑診斷）
+  - `_zhpdf_build.py / _zhpdf_log.txt / _zhrun.bat / _zhrun_log.txt`（reportlab 中文 PDF 測試）
+  - `.tmp_tool26.html / .tmp_tool26_decoded.html`（抓 #26 Google Sites 源碼）
+  - `page25_source.html / page25_tmp.html`（抓 #25 源碼）
+  - `gh-pages-wish-debug.png`（許願池 debug 截圖）
+- `design_handoff_blog_article_tmp/` + `design_handoff_blog_magazine_layout_tmp/` 兩個設計交接解壓暫存 → 集中歸檔到 `handoff/legacy/`
+- `git rm --cached`：`functions/lib/*` (6 個 build 產物) + `logs/system.log`（已在 `.gitignore` 但歷史 tracked）
+- `.gitignore` 大幅補強：
+  - `functions/lib/`（tsc outDir，build 產物）
+  - `handoff/` + `design_handoff_*tmp/`（設計素材本機保留不入版控）
+  - `_diag*` / `_zh*` / `_test_write` / `.tmp_*` / `page25_*` / `*-debug.png` / `*-debug.webp`（暫存 pattern）
+  - `client/public/og-preview-*.png` / `.webp`（OG 圖 build 產物，CI 會重生）
+  - `.claude/`（Claude Code worktrees 本機暫存）
+- 結果：`git status` 從 15+ untracked + 7+ stale tracked → 5 個合理修改 + 7 個 cached-remove
+
+---
+
+### `v3.6.51` (ToolFlowAnalysis needs-index 友善錯誤訊息)
+
+**🩺 Cloud Function 端錯誤分類**
+- `getToolFlowAnalysis` catch Firestore code 9 (`FAILED_PRECONDITION`) → throw `HttpsError('failed-precondition')` + 中文「索引建置中，1-5 分鐘」
+- 其他未預期 error → `HttpsError('internal')` + 截 200 字 stacktrace
+- 前端 ToolFlowAnalysisPanel error 區塊：
+  - 偵測 `/index|failed-precondition|建置中/` → 顯示「到 Console 看建置狀態」+ 直連 URL
+  - 偵測 `/INTERNAL/` → 提示去看 `functions:log` 看 stacktrace
+- 效益：未來索引變動或 race condition 不會再吐 raw "code 9" 給管理員看
+
+### `v3.6.50` (Firestore indexes 入版控 + DateRange 欄位修正)
+
+**🗂️ firestore.indexes.json**
+- 之前 `/admin SnapshotPanel` 與 ToolFlowAnalysis 都會冒「The query requires an index」
+- 建 `firestore.indexes.json` 收 2 個 index：
+  - `analyticsSnapshots`：`__name__ DESC` (single field)
+  - `toolClickEvents`：`(toolId ASC, dateKey ASC)` composite
+- 接進 `firebase.json` 讓 `firebase deploy` 帶上 → 索引變動可走 PR review
+- 已 deploy 到 `akai-e693f`（1-5 分鐘建置完成）
+
+**🐛 ToolFlowAnalysisPanel DateRange 欄位名修正**
+- 按「分析」報 `Cannot read properties of undefined (reading 'getFullYear')`
+- 根因：`DateRange` 型別是 `{ from, to }`，誤寫 `dateRange.start / .end` → `undefined.getFullYear()` throw
+- 修法：`start → from`、`end → to`
+
+### `v3.6.49` (工具點擊細粒度事件記錄 + 後台流量解析面板)
+
+**【後端 Cloud Functions】**
+- `incrementToolClick` 升級：region `asia-east1`（對齊 embedQuery）+ 寫雙路徑：
+  - `toolUsageStats/{toolId}` — 累計快取（既有）
+  - `toolClickEvents/{auto-id}` — 細粒度事件（新增）
+- 事件欄位：`toolId / dateKey / hour(Asia/Taipei) / referrer / referrerHost / device(mobile/tablet/desktop) / country(cf-ipcountry/fastly/gae) / sessionId / timestamp`
+- `classifyReferrer` 把 host 正規化為 11 種來源類別：`line / facebook / google / youtube / instagram / threads / twitter / bing / yahoo / school / notion / padlet / internal / direct / other`
+- 新增 `getToolFlowAnalysis(toolId, fromDate, toDate)` — admin only：
+  - 回傳 `totalEvents / uniqueSessions / hourDist / referrerDist / deviceDist / countryDist`
+
+**【client 端】**
+- `trackToolUsage` 改走 callable 主管道（帶 sessionId / referrer / device）
+- sessionId `crypto.randomUUID` + localStorage 30 天滾動
+- device 從 `navigator.userAgent` 偵測
+- Firebase 不可用或 callable 失敗 → fallback direct write → fallback localStorage（三層）
+
+**【Firestore Rules】**
+- `toolClickEvents`：read = admin only，write = false（僅 admin SDK 寫）
+- `dailySnapshot` 加 `pruneOldClickEvents` 90 天 TTL 裁切（400/batch 分頁）
+
+**【後台 UI】ToolFlowAnalysisPanel**
+- AnalyticsDashboard 工具 tab 加 `ToolFlowAnalysisPanel`
+- 工具下拉（預設 #14 早安長輩圖）+ DateRangePicker + 分析按鈕
+- 3 KPI 卡：總事件 / 去重 session / 人均點擊
+- 24h 時段 BarChart + referrer / device / country 三個 PieChart
+
+### `v3.6.48` (PWA chunk 404 全域 self-heal)
+
+**🛟 問題現場**
+- deploy 換新 chunk hash 後，舊 SW 給出舊 `index.html` 引用舊 chunk
+- 舊 chunk 已被新 build 蓋掉 → 404 → React Suspense 永遠卡 spinner
+- 使用者要自己進 DevTools 清 site data 才能救回來
+
+**修法（main.tsx 最上面加全域攔截）**
+- `unhandledrejection` 攔 dynamic import 失敗（6 種 pattern：`ChunkLoadError` / `Failed to fetch dynamically imported module` / `Loading chunk N failed` 等）
+- `window.error` capture phase 攔 `<script>` / `<link>` 404 含 `/assets/*.js|.css`
+- 觸發後：unregister 所有 SW + 清所有 caches + hard reload（加 `?_heal=ts`）
+- `sessionStorage` flag 防無限 loop（1 shot / session）
+- 只攔本站 `/assets/` 路徑 + 6 種 chunk error message pattern，避免誤殺第三方 script / 圖片 / Sentry 等錯誤
+- 比 v3.6.35 BlogList-only 自癒更廣，所有 lazy route 都覆蓋
+
+### `v3.6.47` (#100 索引：長中文 query 加 n-gram 切片)
+
+**🔧 問題**
+- 輸入「想做閱讀理解練習」（7 字無分隔符）找不到 #4 / #12 / #87 閱讀理解工具
+- 根因：fuse.js 對 7 字長 query 模糊比對過嚴（threshold 0.42 跨不過去）
+
+**fuzzyResults 三層中文友善策略**
+1. separator tokens（保留 v3.6.45 行為）— `/ 空白 、 , ; |` 切
+2. **n-gram sliding 切片** — 純中文 token 長度 ≥ 4 才切，size 3-4 雙視窗
+   - 「想做閱讀理解練習」會切出「閱讀理解」「閱讀理」「讀理解」等 11 個子串
+   - 「閱讀理解」exact match #4 #12 #87 title
+3. 整句也丟一次（保留命中 detailedDescription 段落能力）
+- n-gram min size 3 避免「想做」「練習」這種 2-char 噪聲
+
+### `v3.6.46` (🎉 100 工具達成 banner 撒花歡呼特效)
+
+**🎊 ConfettiBurst 純 CSS 撒花**
+- 純 CSS keyframes 撒 28 片彩帶 + 圓圈，8 色隨機 / 隨機 drift / 隨機 delay / 5.8s 後 unmount，**零 dep**
+- 左右各加 🎊 🥳 歡呼 emoji，1.4s ease-in-out 跳動動畫
+- 觸發時機：banner mount 進場撒一次 + hover/focus banner 再撒
+- `prefers-reduced-motion: reduce` → 自動禁用動畫（a11y）
+- z-index 9999 + `pointer-events: none` 不擋使用者操作
+- BulletinMilestone100 改寫 +254 行 / -64 行
+
+### `v3.6.45` (#100 工具索引神器：query 多 token 切割修法)
+
+**🔧 問題**
+- 使用者輸入「學生票選 / 投票」明明有相關工具（#96 自治市投票、#93 自治市市長計票）卻顯示「沒找到匹配」
+- 根因：fuse.js 把整串「學生票選 / 投票」當單一 token 比對，9 字長對中文模糊搜尋過嚴
+
+**修法**
+- `fuzzyResults` 改成先用 `/ 空白 、 , ; |` 把 query tokenize
+- 對每個 token 各搜，依 toolId 取 best score 合併排序取 top 5
+- 也保留整句搜一次（保留長 query 命中 `detailedDescription` 段落能力）
+
+### `v3.6.44` (工具詳情頁卡片說明改用 ReactMarkdown 渲染)
+
+**🎨 問題**
+- `tools.json` 的 `detailedDescription` 內含 `**bold**` / `•` 列點 / 換行
+- 之前直接純文字塞 `<div>` 或 `<p>`，使用者看到的是 raw markdown（如「**純黑白線稿風格**」整段擠在一起，星號沒渲染）
+
+**修法**
+- 工具詳情頁的卡片說明區塊改用 `ReactMarkdown` 渲染
+- 與 BlogPost 共用同一套 markdown 設定（remark-gfm + 既有 styling）
+
+### `v3.6.43` (✨ 新增工具 #99：考試卷生圖 Studio — AI 黑白線稿插圖生成)
+
+**【新工具卡片】**
+- ID 99 · 分類 `teaching` · icon `Palette`
+- URL https://cagoooo.github.io/picture-master/
+- 卡片描述：四欄位（T 標題 / D 對話 / C 角色 / S 場景）20 秒生兩張 1024×1024 黑白線稿 PNG，列印不吃墨水、可當著色頁、OpenAI gpt-image-2 中文精準渲染
+- 12 個精準 tags（試卷插圖、學習單插畫、AI 線稿、列印省墨…）
+- `previews/tool_99.webp`（Playwright 截圖）
+- `previews/og/tool_99.webp`（generate-unified-og.mjs 自動產出）
+
+**【手寫長文】POST_99（5 分鐘 / ~1500 字）**
+- 痛點開場：出題卡在配圖，圖庫收費 / 校園印表機糊 / Google 圖片有版權
+- 為何選純黑白線稿（3 理由：印表機友善 / 兼著色頁 / 學生能改造）
+- 真實 5 種教學情境（英對、社會、自然、數學、注音）
+- 跟 #87 PIRLS PRO + #58 教案小幫手串成「出題→配圖→印單」工作流
+- 配對工具：`[99, 87, 58]`
+- 老師回饋 3 段（英語、低年級導師、美術老師）
+
+**【部署】**
+- sw bump、sitemap / feed 自動更新
+- 迷你 blog landing：0 篇（無漏寫）
+
+### `v3.6.42` (首頁部署生態系自動同步 sync-deployment-ecosystem.mjs)
+
+**🔧 問題**
+- 阿凱貼截圖回報「全部 98 件公開工具」沒跟著 tools.json 更新
+- 根因：`BulletinDeploymentEcosystem.tsx` 內 5 平台 count + 「看全部 N 篇手寫教學心得」全是 hardcode，從 v3.6.34 至 v3.6.41 沒人手動同步
+
+**修法：scripts/sync-deployment-ecosystem.mjs**
+- 讀 `client/public/api/tools.json` 套用 `getToolPlatform` 規則算各平台 count
+- 讀 `client/src/blog/posts.ts` grep `^const POST_` 數量得手寫長文總數
+- 用 regex 寫進 `BulletinDeploymentEcosystem.tsx` 對應行
+- 支援 `--dry` 模式：只報告差異不寫檔
+- 整合進 build pipeline（`sync-popular-queries` 之後 / `generate-favicon` 之前）
+- 校正當下：GitHub Pages 58 → 59、手寫長文 57 → 99 篇、5 平台合計 99 件公開工具
+- 元件頂端加註解警示：count 由 sync 腳本自動同步，**不要手改 hardcode**
+
+**【相關 skill 更新】**
+- `~/.claude/skills/akai-new-tool-full-pipeline/SKILL.md`
+- 新增工具 = 卡片 + 手寫長文 + **首頁部署生態系區塊**三邊都要對齊
+
+### `v3.6.41` (#98 教室小幫手 手寫長文 POST_98)
+
+**📚 POST_98 — 26 工具六大組 + 隱私設計 + 早晨 SOP**
+- 為 v3.6.40 剛新增的 #98 教室小幫手補手寫長文
+- 涵蓋六大組 26 個小工具總覽 + 隱私設計（純前端、無上傳、PWA 離線）+ 早晨 SOP（情緒打卡 → 隨機抽號 → 計時器）
+- 連動 v3.6.38 SKIP_IDS auto-derive：
+  - 迷你 blog OG landing 從 1 篇 → 0 篇（#98 自動從 mini 升級為手寫長文）
+  - `generate-og-pages.mjs` 自動產 `/blog/classroom-kit-98-daily-teacher-toolkit/index.html`
+  - 不需手改任何黑名單
+- 工具卡片左下「📖 教學情境」按鈕現在連到內頁 `/blog/classroom-kit-98-daily-teacher-toolkit`
+
+### `v3.6.40` (✨ 新增工具 #98：教室小幫手)
+
+**【新工具卡片】**
+- ID 98（最小未使用 slot，#99 留空、#100 已是「工具索引神器」）
+- URL https://cagoooo.github.io/coolclass/
+- 分類 `utilities` · icon `Sparkles`
+- 標籤：教室百寶箱 / 情緒打卡 / 隨機抽號 / 教室計時器 / 隨機分組 / 座位表 / AI 評語草擬 / 導師工具 / 班級經營 / PWA 離線 / 免登入 / 26 工具
+- description 90 字 / detailedDescription 約 480 字（含六大組分類清單）
+
+**【產出檔案】**
+- `client/public/previews/tool_98.webp` — 1024×1024 卡片預覽（Playwright headless screenshot）
+- `client/public/previews/og/tool_98.webp` — 1200×630 OG 社群分享
+- `scripts/add-tool-98.mjs` — 一次性 batch script（截圖 + 寫 tools.json + spawn OG）
+
+**【截圖踩雷修正】**
+- 首次截圖被 `.akai-ob-bg` 「歡迎使用」onboarding 彈窗整版蓋住
+- 追到 `onboarding.js` 的 KEY = `akai_onboarded_v1`，加進 init-script localStorage dismiss 清單 + DOM 移除 selector 後重截即正常
+- 順帶把 description 從原本「8 個小工具」更正為實際的「26 個」六大組
+
+### `v3.6.39` (BlogList 雜誌特刊版 Direction 01)
+
+**🎨 BlogList.tsx +187 行**
+- `showMagazine` 條件：`!query && !selectedCat && filteredPosts.length>=3`（特意不檢查 platform → 平台篩選時 magazine 仍顯示，hero swap）
+- `heroPost / featuredPosts(2) / gridPosts` 三段切分
+- `trendingPosts` useMemo：前 30 篇 × 估算 views → 倒序取 3
+- `heroPfKey + heroTapeText`：平台篩選時 hero 內容換成「★ {PLATFORM} · 平台代表作」
+- 新增 JSX 區塊：`bp-featured-row → bp-trending-section → bp-section-divider → bp-list-grid`
+- 原 `filteredPosts.map → gridPosts.map`（map 內 JSX 不變）
+
+**🎨 blog-article.css +571 行（檔尾追加，不動既有 .bp-list-card）**
+- `.bp-list-grid` `minmax(280px) → minmax(260px)`（寬螢幕多塞一欄）
+- `.bp-hero-card`：深 ink 背景 + 飄帶 + 紅圖釘 + 兩團 radial glow + 米黃虛線 inset 框
+  - data-pf 5 平台 swap：`github/gsites/xoops/firebase/thirdparty`
+  - `heroGlow` 8s 循環（hover 觸發）+ read-cta arrow translateX
+- `.bp-feat-card` warm/cool 漸層 + 副焦點 platform badge
+- `.bp-trending-section`：火焰 `flameWiggle` 2.4s 擺動 + rank-1/2/3 金/銀/銅大字 + 黃色貼紙標籤
+- `.bp-section-divider`：黃色貼紙標籤 + 兩側虛線（rotate -1deg）
+- RWD：≤980px 疊單欄、≤560px hero title 21px + excerpt clamp 3
+- `prefers-reduced-motion`：關掉所有 hover transform + glow + flame 動畫
+
+### `v3.6.38` (SKIP_IDS 自動 derive · 消除 3 處硬編同步痛點)
 
 **🔧 修根：SKIP_IDS 從 POSTS 自動 derive**
 - **問題**：手寫長文需在三處同步：`miniPosts.ts` line 22 / `generate-og-pages.mjs` line 673 / `generate-sitemap.mjs` line 91，三邊各有一份 99 個 ID 的硬編黑名單。任何一處忘記同步，新加手寫長文時就會跟 mini blog 重複出現
@@ -1636,5 +1895,201 @@
 5. **「需要審計流程嗎？」** → 是 → 規則寫嚴格 + Cloud Function 校驗
 
 這 5 條規則寫進 README 或 CLAUDE.md 提醒未來的自己（與 AI 協作者）。
+
+---
+
+## 🎉 100 工具達成後 — 未來優化與開發路線圖（v3.6.51 之後）
+
+> 本站於 **2026-05-24 14:08 (UTC+8) 突破 100 工具大關** 🎊
+> 從「累積數量」轉向「累積影響力 / 累積讀者 / 累積口碑」的下一階段。
+> 以下分 **8 大類 / 60+ 項建議**，每項標 **P0 / P1 / P2 優先級** + **Effort (S / M / L)** + **預期效益**。  
+> P0 = 影響大或 quick win（2 週內可動工），P1 = 中期排程（1-3 個月內），P2 = 大型或實驗性（時機到再評估）。
+
+---
+
+### 🎯 階段 A — 100 達成後的「歡慶與沉澱」（本週 P0）
+
+> 100 工具只是一個里程碑，要趁熱寫好故事、把流量轉成口碑、讓搜尋引擎收得到。
+
+| 項目 | 優先級 | Effort | 說明 |
+|---|---|---|---|
+| **A1. 寫「100 工具達成」紀念長文 POST_100_MILESTONE** | **P0** | M | 1500-2500 字，三段式：（1）2024 第一個工具 → 2026 第 100 個的時間軸大事記（用 git log 撈 addedAt）；（2）7 大分類分佈圖 + 最受歡迎前 10 工具實戰故事；（3）給未來自己 / 給其他老師的一封信。可順手用 stat-grid 顯示「99 篇手寫長文 / 1 篇 LandingPage / 5 大平台 / 累積點擊數」。**首頁釘選 sticker：「⭐ 100 工具達成紀念」** |
+| **A2. 紀念版 OG 圖 + share/100.html landing** | **P0** | S | 仿 `generate-home-og-heatmap.mjs` 出一張「🎉 100 工具達成」金色拍立得拼貼，4 張代表作（#81 / #46 / #3 / #100）+ 達成日期金箔。配 `share/100.html`（仿 wish/heatmap）讓使用者直接分享「我們的 100」。可附上 `?utm=100milestone` 追溯 |
+| **A3. 拍紀念短片 + Heygen / 自己錄 narration** | **P0** | M | 60-90 秒，3 段：頂部 banner 撒花 → 7 大分類拼貼 → 結尾「下一個 100 從你的許願開始」CTA。素材已俱備（既有 OG 圖 + previews 100 張），照 `hf-narrated-video-pipeline` skill 跑。傳 YouTube + LINE + 社群可帶大波流量 |
+| **A4. 「100 工具達成」LINE 廣播 + Facebook 教師社團** | **P0** | S | 用既有 LINE Messaging Cloud Function（admin 廣播）+ 手動發到 3 個 FB 教師社團。內容：「100 達成感謝 + 紀念長文連結 + 紀念分享圖」。**注意：先做 A2 再做 A4** |
+| **A5. 把 Milestone100 banner 從「達成 < 7 天」延長到 30 天 + 後期切「100+」常駐 sticker** | **P0** | S | 之前設計 7 天就撤掉太可惜；改 30 天 hero banner、之後改為小型「100+ 工具 ⭐」常駐 sticker 貼在 hero 右上 |
+| **A6. Google Search Console 重新提交 sitemap + 觀察「100」搜尋詞表現** | **P0** | S | A1 / A2 上線後 24-48 小時手動 trigger SC reindex；3-7 天後在 SC 看「阿凱老師 100」「教育工具 100」是否進前 10 |
+| **A7. 釘選 GitHub repo README + 加「100 tools achieved」shield badge** | **P0** | S | README 頂部加金色 badge `tools-100-blue`（shields.io custom）+ pin 一段「2026-05-24 達成 100」段落 + 紀念長文連結 |
+
+**建議起手順序（本週搞定）**：A2（OG 紀念圖） → A1（紀念長文） → A5（banner 延長） → A7（README badge） → A4（廣播 + 社群） → A3（紀念短片，週末做）
+
+---
+
+### 🧠 階段 B — #100 工具索引神器升級（從 fuse 到 Gemini Embedding 真正啟用）
+
+> #100 是站內最有戰略價值的工具，目前還只用 fuse.js 字面比對（雖然 v3.6.45-47 已加 token 切割 + n-gram 大改善）。Gemini Embedding 程式碼自 v3.6.35-2 起已 ship 但**還沒實際啟用**（卡在使用者要拿 Gemini API key + 跑 6 步 SETUP_EMBEDDINGS.md）。
+
+| 項目 | 優先級 | Effort | 說明 |
+|---|---|---|---|
+| **B1. 正式啟用 Gemini Embedding 語意搜尋（跑完 6 步 SETUP）** | **P0** | S | 整套程式碼已 ship 半年沒人按按鈕；現在 100 工具到位，語意搜尋對使用者落地價值最高。**唯一缺**：使用者花 10 分鐘執行 SETUP_EMBEDDINGS.md。建議在 admin dashboard 加按鈕「🚀 一鍵啟用 Gemini Embedding（會跳轉 SETUP 步驟）」做引導 |
+| **B2. ToolIndexAI 搜尋熱詞回灌實際接到 fuse.js 加權** | **P1** | M | v3.6.34 已收 `analytics/toolIndexQueries`，但只用在「範例 query chips」更新。可進一步：高頻 query 對應的工具自動 boost weight。需要小 ML pipeline，或人工 review top 20 query 後改 `popularQueries.ts` |
+| **B3. 「找不到匹配」自動連到許願池 + 預填使用者 query** | **P0** | S | 目前「沒找到」只顯示「去許願池」連結；改成「點按鈕 → /wish?q=該 query 自動預填」。把搜尋失敗轉成許願池 input，閉環 |
+| **B4. 推薦結果加「點按率 / hover 看更多」事件** | **P1** | M | ToolIndexAI 結果卡點擊後上報 `tool_index_result_click({ query, tool_id, rank })`，後續可看：哪些 query 排第 1 但實際不被點（表示 ranking 錯）→ 反饋給 B2 加權 |
+| **B5. ToolIndexAI mobile UX 大改：query suggestion bar + recent searches** | **P1** | S | 目前手機 query chips 9 個塞在搜尋框下方很擠；改成水平捲動 chip rail + localStorage 存最近 5 次搜尋（含可清除 X）|
+| **B6. 「相關工具」改用 embeddings 算 cosine top 5** | **P2** | M | 目前 BulletinRelatedTools 用 fuse 比對 tags + title；embedding 啟用後改用 cosine 相似度精準度躍升 |
+| **B7. 把 embeddings 算的結果與 fuse 結果 A/B 對照給 admin 看** | **P2** | M | 後台一個 debug 頁同時跑兩種策略給同一 query，並排顯示 top 5，方便 tuning 與寫 blog |
+
+---
+
+### 📊 階段 C — 觀測 / 分析 / 後台 Dashboard 升級（v3.6.49 ToolFlow 之後）
+
+> v3.6.49 剛開啟工具點擊細粒度事件記錄，這是後續所有資料分析的基礎。可接著做的方向。
+
+| 項目 | 優先級 | Effort | 說明 |
+|---|---|---|---|
+| **C1. 細粒度事件 7 天熱榜全站化** | **P0** | M | 既有 `useToolClickStats` deltas7d 是用「歷史快照差值」估算；改成從 `toolClickEvents` 真實 aggregate（更準）+ 後台「7 日急上升」面板可看到 referrer / device 分佈 |
+| **C2. 「跨工具流量路徑」分析** | **P1** | L | 同 sessionId 點了哪幾個工具的序列（如：#100 索引 → #46 場地預約 → #81 駕駛艙）→ 找出最常見的 user journey。前端 sessionId 已有，後端 `toolClickEvents` 已收，只差 aggregate query |
+| **C3. 後台「最易掉到 0 的工具」健康度看板** | **P1** | M | 找出 30 天 0 點擊的工具（可能命名差 / 沒對到場景）→ 列清單給作者 review 是否該下架、改名、或寫 blog 引流 |
+| **C4. blog `blog_read_complete` 完讀率 dashboard** | **P0** | S | v3.6.37 已收 D1 IntersectionObserver 事件；補一個 admin panel 看「完讀率 = blog_read_complete / blog_read」，找出哪些長文中段流失最多 |
+| **C5. blog TOC 點擊熱圖 dashboard** | **P0** | S | v3.6.37 已收 D2 `blog_toc_click` 事件；後台用 BarChart 列每篇文章 top 5 章節，回饋未來文章結構設計 |
+| **C6. PWA 安裝 / 解除安裝率 + iOS PWA 引導觸發轉換率** | **P1** | M | v3.6.35-2 已加 iOS PWA prompt；補上「prompt 出現 → 使用者 dismiss vs 真的安裝」事件，量化引導效果 |
+| **C7. Sentry / 錯誤監控接入** | **P0** | S | v3.6.48 PWA chunk self-heal 是 reactive 機制；補上 Sentry 把 self-heal 觸發次數打給 admin，知道哪些 deploy 後 chunk hash 飄移最多 |
+| **C8. 後台「站長日報」LINE 推送** | **P1** | S | 每天早上 9 點 LINE 推 admin：昨日訪客 / 評論 / 許願 / 工具點擊 top 3 / 異常告警。所有資料源已就緒，只差排程 Cloud Function（cron） |
+| **C9. 「假流量警報」detection** | **P1** | M | 某工具突然單日點擊暴增 10×→ 推 LINE 警報（可能被爬蟲 / DDoS / 同學起鬨）。已有 `referrer / device / country` 資料可做 |
+| **C10. 把 GA4 接到 Looker Studio 做 viz** | **P2** | M | GA4 報表介面差，搬到 Looker Studio 用 BigQuery export 做精美 dashboard，可分享給家長 / 校長看 |
+
+---
+
+### 📚 階段 D — 部落格平台升級（基於 v3.6.39 雜誌特刊 + v3.6.36-37 三欄重構）
+
+> 部落格從「附屬功能」變成「站內第二大流量入口」，可繼續深化。
+
+| 項目 | 優先級 | Effort | 說明 |
+|---|---|---|---|
+| **D1. 內文圖片支援 + lightbox** | **P0** | M | 目前 markdown 不貼圖，加 `![alt](url)` 支援 + lazy load + 點圖放大覆蓋層 + caption。注意 LCP 第一張圖要 `fetchpriority="high"`。**很多工具 blog 沒圖實在可惜** |
+| **D2. 範本擴散到 30 篇精選長文** | **P0** | L | POST_53 / 81 / 46 / INDEX_AI 已是範本（含 callout + stat-grid）；可挑剩餘 95+ 篇逐步補。每篇 15-30 分鐘人工抓重點，效益是整套文章質感升一檔。**可優先做最受歡迎 top 10 / addedAt 最近 10 篇** |
+| **D3. 文末「下載 PDF」按鈕** | **P0** | S | 用 `window.print() + @media print` CSS，按 `pdf-export-print-best-practice` skill 做。**老師最愛印下來貼班級公佈欄** |
+| **D4. Print stylesheet 細節** | **P1** | S | 列印時隱藏左欄 / 右欄 TOC / hero emoji / Tour 提示，文章單欄黑白排版 |
+| **D5. 文章互相 internal linking（自動算 related 3-5 篇）** | **P1** | M | 跟 BulletinRelatedTools 同邏輯但作用在 blog；提升內部 link density + Google PageRank。tags 重疊度 + 同分類 +0.15 bonus |
+| **D6. 「最近 7 天熱讀」徽章** | **P1** | M | 用 `blog_read` 事件 aggregate，top 3 文章貼便利貼徽章 |
+| **D7. 「估剩餘時間」浮動標籤** | **P1** | S | 根據捲動位置 + 字數估「還剩 ~2 分鐘」顯示在左欄進度條下方 |
+| **D8. Drop cap 首段大寫首字 toggle** | **P1** | S | CSS 已寫好 `.dropcap`；加全站 toggle 或預設給長文用（≥1000 字才套） |
+| **D9. Dark mode 適配 blog-article.css** | **P1** | M | 目前 `.bp-*` class 沒對 dark mode；其他頁有 `.high-contrast`，未來統一補上 |
+| **D10. C3 AI assist 找適合塞 callout 段落** | **P2** | L | 寫好文章送 LLM 分析，產出「這 3 段適合塞 .callout--tip」「這段數字適合做 stat-grid」建議，人工確認 |
+| **D11. RSS feed 內文升級** | **P2** | S | 目前 feed.xml 只有 excerpt；補上完整 body 後給 reader app 完整閱讀 |
+| **D12. 章節間隔手繪插圖** | **P2** | L | 每節結尾隨機顯示一個阿凱手繪插圖（hr 進階版）。需要美術素材 |
+| **D13. MDX 替代 markdown** | **P2** | L | 未來想直接寫 `<Callout>` React 元件而非 HTML 字串，可考慮遷到 MDX。影響整套渲染管線，需評估 chunk size 與 hydration 成本 |
+
+---
+
+### 🔍 階段 E — SEO / 搜尋引擎 / 國際化（100 工具的可發現性）
+
+| 項目 | 優先級 | Effort | 說明 |
+|---|---|---|---|
+| **E1. 重啟 Bing Webmaster Tools + 提交 sitemap** | **P0** | S | Google 已接（v3.6.33）；Bing 也接一下，台灣家長用 Edge 預設搜 Bing 的不少 |
+| **E2. 站內每個工具補 FAQ schema** | **P1** | M | 每個工具的 detailedDescription 抽 3-5 個 Q&A → JSON-LD FAQPage。Google 結果頁能展開常問列表，CTR 大幅提升 |
+| **E3. HowTo schema for blog** | **P1** | M | 部分長文（如 #81 駕駛艙、#46 場地預約）是 step-by-step，加 HowTo schema → Google 結果頁出現「3 steps to...」rich snippet |
+| **E4. Video schema（若做 A3 紀念片 + YouTube 嵌入）** | **P1** | S | 嵌入 YouTube 後對應頁面加 VideoObject schema |
+| **E5. og:image 大張化（1200×675 / 1200×800）測 LINE 卡片比例** | **P1** | S | LINE 偏好 16:9，FB 偏好 1.91:1；測哪個比例分享出去最大張、不被裁切 |
+| **E6. 補 alternate hreflang（zh-TW + zh-Hant + zh）** | **P1** | S | 避免 Google 把繁中當簡中索引，每個關鍵頁加 `<link rel="alternate" hreflang="zh-TW">` |
+| **E7. 英文版 i18n `/en/...`（給國際教師同行）** | **P2** | L | 翻譯成本高；可先翻 top 10 工具卡 + 1 篇「100 tools made by an elementary teacher in Taiwan」英文長文當引子 |
+| **E8. 站內搜尋（toolsAndBlog 跨表搜尋）** | **P1** | M | 現在 BlogList 搜 blog、首頁搜 tools，分開兩處；做一個 `Cmd+K` 全站搜尋 palette 同時找工具 + blog（fuse.js 已會用）|
+
+---
+
+### 🎨 階段 F — UI / UX / 視覺一致性深化
+
+| 項目 | 優先級 | Effort | 說明 |
+|---|---|---|---|
+| **F1. 全站 Dark mode（首頁 + 工具卡 + 詳情頁 + admin）** | **P1** | L | 目前只有 high-contrast 模式，沒真正 dark mode。cork 風配 dark 不直觀，需重新設計色票（深 cork = 巧克力色？）|
+| **F2. Hero 區「100 工具達成」動態 sticker swap** | **P0** | S | 跟 A5 整合：30 天內顯示金色「100 達成」貼紙；之後改「100+ 工具 ⭐」常駐 sticker |
+| **F3. 首頁 BulletinDeploymentEcosystem 圖示化（不只文字 count）** | **P1** | M | 5 平台改成 icon + 進度條 + hover popover 顯示代表工具 3 個 |
+| **F4. 工具卡 hover preview（拍立得翻面顯示功能截圖）** | **P1** | M | 拍立得 hover 後 flip 顯示工具實際截圖 + 2-3 個 key feature bullet。已有 1024×1024 preview 資料，動畫即可 |
+| **F5. 7 大分類顏色系統 review + 統一 design token** | **P1** | S | 目前 cork / blog / OG / category badge 各有自己的色票；統一到 `tailwind.config` + CSS vars |
+| **F6. 拍立得卡進入視窗 stagger fade-in** | **P2** | S | IntersectionObserver + 50ms stagger，視覺戲劇性。注意 prefers-reduced-motion |
+| **F7. 自製 emoji / 圖示替代第三方 lucide-react** | **P2** | L | 目前 icon 用 lucide-react，未來想全自製手繪風 SVG icon set 對齊整站手作感 |
+
+---
+
+### 🛡️ 階段 G — 技術債 / 維運穩定度 / 工程效率
+
+| 項目 | 優先級 | Effort | 說明 |
+|---|---|---|---|
+| **G1. 清理 working tree 7+ 個 _diag*.py / _zhrun*.bat / page25_*.html 暫存檔** | **P0** | S | `git status` 看到 .tmp_tool26.html、_diag.py、_zhrun.bat、handoff/、design_handoff_*tmp/ 等 untracked 雜物；統一移到 `.scratch/` + 加進 .gitignore |
+| **G2. 把 functions/lib/*.js 從版控移出（functions deploy 會 build）** | **P0** | S | `functions/lib/dailySnapshot.js` 等已 build 產物還在版控；加進 `.gitignore` 並從 git rm --cached 移除 |
+| **G3. CI 加 `firebase deploy --only firestore:indexes` 自動部署** | **P0** | S | v3.6.50 indexes 入版控了，但目前要手動 deploy。GitHub Actions 加一步：merge 到 main 後跑 indexes deploy |
+| **G4. 把 design_handoff_*tmp/ 目錄完整移到 handoff/ 集中管理** | **P0** | S | 設計交接包散在 root 目錄很亂；統一 `handoff/{topic}/` |
+| **G5. Lighthouse CI 真正啟用 performance threshold（之前設 0）** | **P1** | M | v3.6.30 設 perf 門檻 = 0 因為 CI 跑分太不穩；改用「7 天滑動平均」當 baseline，比過去 7 天平均退步 10% 就 fail |
+| **G6. Visual regression test (Percy / Chromatic)** | **P1** | L | 首頁 + 工具詳情 + blog post 三個關鍵頁加快照測；之後重構 UI 不怕誤改視覺 |
+| **G7. Functions cold start 監控 + 預熱 cron** | **P1** | M | `embedQuery` / `getToolFlowAnalysis` 等少用函式 cold start 3-5 秒；加 cron 每 5 分鐘 ping 預熱（成本可忽略） |
+| **G8. firestore.rules 加 unit test (firebase rules unit testing)** | **P1** | M | rules 改動風險高；加 emulator-based unit test 確保 admin / anon / signed-in 三種身份的權限正確 |
+| **G9. PWA cache 策略 review（avoid stale-while-revalidate 對 HTML）** | **P1** | M | v3.6.35 / v3.6.48 都在打 chunk 漂移問題；根本解是 SW 對 HTML 走 network-first，按 `pwa-cache-bust` skill |
+| **G10. Tools.json 改 SSR 或 build-time inline 進 HTML** | **P2** | M | 目前 100 工具 JSON 是 client fetch；改 SSR 預塞 first contentful 工具卡列 → LCP 大幅改善 |
+| **G11. Vite plugin: bundle size budget 失敗 CI** | **P2** | S | 設 main bundle ≤ 400KB、route chunk ≤ 200KB；超過 CI fail，逼自己拆 chunk |
+| **G12. 把 client + functions 拆 monorepo（pnpm workspace）** | **P2** | M | 目前 client + functions + scripts 同 package.json 衝突會打架；pnpm workspace 整理依賴 |
+
+---
+
+### 💎 階段 H — 新功能擴展（從工具集 → 教學生態）
+
+> 真正的長尾價值在這 — 工具到 100 是起點，後續可朝「教師社群 / 教案平台 / AI 助手」三個方向擴張。
+
+| 項目 | 優先級 | Effort | 說明 |
+|---|---|---|---|
+| **H1. 「許願池 → 真的做出來」追蹤管線** | **P0** | M | 許願池 → 開 GitHub issue → commit close → 推 LINE 通知許願者「你的願望實現了」+ blog 記錄。完整閉環體驗超有黏著度 |
+| **H2. 站內 AI 助手（小聊天框，問教學情境推工具）** | **P1** | L | #100 是「丟一句 query 推 top 5 工具」靜態頁；H2 是「LLM 對話：阿凱老師我需要這樣的工具，可不可以推薦？」用 Gemini + 工具 embeddings 做 RAG。比 #100 更會聊天 |
+| **H3. 教師回饋表單 + 站內公告** | **P1** | M | 目前評論散在每個工具下；做一個「教師牆」收所有評論 + 月度精選 + 阿凱回覆。形成社群感 |
+| **H4. 「想用看看 demo」沙箱模式（不留資料）** | **P1** | L | 對需要登入的工具（如 #84 會議記錄 Pro），加「無痕 demo 模式」用測試帳號 5 分鐘體驗，降低使用門檻 |
+| **H5. 工具發布日程 / RoadMap 公開** | **P1** | S | 公開「下個月即將上線」3-5 個工具預告 + 開發進度條，建立期待 + 早期回饋 |
+| **H6. 「老師共創」入口（投稿其他老師做的工具）** | **P2** | L | 接其他國小老師作品 → 開放投稿 → review 後加進工具集（標 contributor）。從個人作品集 → 教育界共建 |
+| **H7. 工具 API 化（給第三方教學平台引用）** | **P2** | L | 把工具核心（如 #45 文字雲、#100 索引）API 化，給其他教學系統 embed |
+| **H8. 自訂教學主題包（A4 列印整套）** | **P2** | M | 選工具 → 自動拼成 A4 教師活動手冊 PDF + 學習單 + 評量。一鍵下載整套 |
+| **H9. 親子家長端 LINE 官方帳號** | **P2** | L | 家長加 LINE → 推送：學生本週用了哪些工具、阿凱老師新出什麼。從學生端跨進家長端 |
+| **H10. 工具影片教學庫（每工具一支 30 秒）** | **P2** | L | 用 Heygen / 阿凱錄製，每工具 30 秒短片，學生看完直接用。100 支內容很多，可分批做（一個月做 10 支） |
+
+---
+
+### 🚦 建議起跑順序（如果要排優先做）
+
+**🥇 本週（A 段 + 收尾）**：A2（紀念 OG）→ A1（紀念長文）→ A5（banner 延長）→ A7（README badge）→ G1/G2/G4（清掉 working tree 雜物）
+
+**🥈 兩週內（高 ROI quick wins）**：D1（blog 圖片）→ D3（PDF 下載）→ B3（找不到 → 許願池）→ C4/C5（既有事件 dashboard 化）→ E1（Bing 提交）→ F2（100+ sticker）→ G3（indexes auto deploy）
+
+**🥉 第一個月（基礎強化）**：B1（Gemini Embedding 啟用）→ D2（範本擴散 top 10）→ A4（廣播 + 社群）→ C1（細粒度熱榜全站化）→ C7（Sentry 接入）→ G9（PWA cache network-first）
+
+**🚀 第二三月（新方向）**：H1（許願閉環）→ E2/E3（FAQ + HowTo schema）→ C2（跨工具流量路徑）→ A3（紀念短片）→ D9（Dark mode for blog）
+
+**🌌 半年後再評估**：H2（AI 對話助手）→ H6（老師共創）→ E7（英文版）→ G10（SSR / Tools.json inline）
+
+---
+
+### 📌 量化目標建議（給未來 6-12 個月）
+
+| 指標 | 現況（推估） | 6 個月目標 | 12 個月目標 |
+|---|---|---|---|
+| 工具總數 | 100 | 110-115 | 120-130 |
+| 手寫長文總數 | 99 | 110+ | 130+ |
+| 月活訪客 (DAU/MAU) | 待 Web Vitals + GA 累積 | +50% | +200% |
+| Google 索引頁數 | ~300 | 500+ | 800+ |
+| 排行榜冠軍工具點擊數 | #81 駕駛艙 555+ | 1500+ | 3000+ |
+| Lighthouse perf p75 (RUM) | 待補 | LCP < 2.5s | LCP < 2.0s |
+| 評論累計 | 個位數 | 50+ | 200+ |
+| 許願池兌現率 | ~70% | 80% | 85% |
+| 跨平台連動（LINE / FB / IG） | 0 | 1 個 | 3 個 |
+| 累積網誌總字數 | ~100K | 150K | 250K |
+
+---
+
+### 💌 給自己的一句話
+
+從 2024 年第 1 個工具到 2026 年 5 月 24 日的第 100 個 — 中間有：
+- 數十次 deploy 失敗 → 修復 → 再 deploy
+- 多次 Firestore rules 漂移 → 規則重寫 → 補測試
+- PWA cache stale → 三層 self-heal
+- 100 工具不是平地長出來，是一個一個踩坑、一個一個 commit 累積的
+
+**100 之後，不再追數量，追深度。**  
+讓每個工具背後都有一篇好故事、一群真實受惠的老師、一個被認真記錄的場景。  
+這條路慢慢走，能走得久。
 
 ---
