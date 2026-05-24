@@ -426,6 +426,130 @@ function generateHeatmapPageHtml() {
 }
 
 /**
+ * 生成 100 工具達成紀念 landing page（/share/100.html）
+ * - 社群爬蟲抓 → 拿到 celebration OG 圖（金色拼貼 + 達成日期）
+ * - 一般使用者 → JS redirect 到主頁（讓 BulletinMilestone100 撒花特效接手）
+ *
+ * 用於：紀念分享圖 LINE / FB 廣播、blog 紀念長文 CTA、後續廣播素材
+ */
+function generateCelebration100PageHtml() {
+  const pageUrl = `${SITE_URL}/share/100.html`;
+
+  // 讀 ogImageCelebration（由 generate-100-celebration-og.mjs 寫入）
+  let imageUrl = `${SITE_URL}/og-preview.png`;
+  let achievedDate = '';
+  try {
+    const statsPath = path.resolve(__dirname, '../client/public/api/site-stats.json');
+    if (fs.existsSync(statsPath)) {
+      const s = JSON.parse(fs.readFileSync(statsPath, 'utf-8'));
+      if (s.ogImageCelebrationAbsolute) imageUrl = s.ogImageCelebrationAbsolute;
+      if (s.milestones?.tool100) {
+        const d = new Date(s.milestones.tool100);
+        if (!Number.isNaN(d.getTime())) {
+          achievedDate = `${d.getFullYear()} 年 ${d.getMonth() + 1} 月 ${d.getDate()} 日`;
+        }
+      }
+    }
+  } catch { /* fallback */ }
+
+  const title = `🎉 100 工具達成！· 阿凱老師教育工具集${achievedDate ? `（${achievedDate}）` : ''}`;
+  const description = `從 2024 第一個工具到 2026 年 5 月 24 日的第 100 個 — 阿凱老師親手打造的 100 款國小教育工具，由教學駕駛艙、場地預約、即時投票、工具索引神器領銜。下一個 100，從你的許願開始。`;
+
+  return `<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>${title}</title>
+  <meta name="title" content="${title}">
+  <meta name="description" content="${description}">
+  <meta name="author" content="阿凱老師">
+  <meta name="keywords" content="100 工具達成,阿凱老師,石門國小,科技教育創新專區,教育工具達成,100 milestone,教學工具集,免費教育工具">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="${pageUrl}">
+  <meta property="og:title" content="${title}">
+  <meta property="og:description" content="${description}">
+  <meta property="og:image" content="${imageUrl}">
+  <meta property="og:image:secure_url" content="${imageUrl}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="阿凱老師 100 工具達成紀念拼貼">
+  <meta property="og:site_name" content="科技教育創新專區">
+  <meta property="og:locale" content="zh_TW">
+
+  <!-- Twitter / LINE -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="${pageUrl}">
+  <meta name="twitter:title" content="${title}">
+  <meta name="twitter:description" content="${description}">
+  <meta name="twitter:image" content="${imageUrl}">
+
+  <link rel="canonical" href="${SITE_URL}/">
+
+  <script>
+    (function() {
+      var ua = navigator.userAgent || '';
+      var isSocialBot = /facebookexternalhit|Facebot|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Slackbot|Discordbot|Pinterest|Googlebot|bingbot|YandexBot|LineBot|Line-Networking/i.test(ua);
+      if (!isSocialBot) {
+        window.location.replace('/Akai/');
+      }
+    })();
+  </script>
+
+  <style>
+    body {
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; margin: 0;
+      background: #c99a6c;
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(110,80,50,.35) 1px, transparent 2px),
+        radial-gradient(circle at 70% 60%, rgba(140,95,55,.30) 1.5px, transparent 2.5px);
+      background-size: 60px 60px, 80px 80px;
+      color: #1a1a1a;
+    }
+    .celebrate-card {
+      background: linear-gradient(180deg, #fff4b8 0%, #fde047 50%, #e8b341 100%);
+      padding: 40px 44px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,.18), 6px 6px 0 rgba(0,0,0,.25);
+      transform: rotate(-1.2deg);
+      max-width: 540px;
+      text-align: center;
+      border: 2.5px solid #a87520;
+    }
+    h1 { margin: 0 0 8px; font-size: 32px; font-weight: 900; color: #1a1a1a; }
+    .badge { font-size: 13px; font-weight: 900; color: #7a1a18; letter-spacing: 1.5px; margin-bottom: 14px; }
+    p { font-size: 15px; color: #4a3a20; line-height: 1.7; margin: 8px 0; }
+    .date-tag {
+      display: inline-block; margin: 12px 0;
+      padding: 6px 14px; background: rgba(26,15,5,.85); color: #fde047;
+      border-radius: 14px; font-size: 13px; font-weight: 900;
+    }
+    a {
+      display: inline-block; margin-top: 18px; padding: 12px 26px;
+      background: #1a1a1a; color: #fde047; text-decoration: none;
+      border: 2.5px solid #fde047; border-radius: 10px;
+      font-weight: 900; box-shadow: 4px 4px 0 rgba(0,0,0,.4);
+    }
+  </style>
+</head>
+<body>
+  <div class="celebrate-card">
+    <div class="badge">★ MILESTONE 100 ★</div>
+    <h1>🎉 100 工具達成！</h1>
+    ${achievedDate ? `<div class="date-tag">達成日 · ${achievedDate}</div>` : ''}
+    <p>${description}</p>
+    <a href="/Akai/">📚 探索全部 100 款工具</a>
+  </div>
+</body>
+</html>`;
+}
+
+/**
  * 為每篇 blog post 產 static OG landing page（/blog/{slug}/index.html）
  * 與 /blog 列表頁（/blog/index.html）
  *
@@ -647,6 +771,19 @@ async function main() {
     console.log('  ✅ share/heatmap.html - 熱門工具拼貼 OG 變體頁面');
   } catch (error) {
     console.error('  ❌ share/heatmap.html 失敗:', error.message);
+    errorCount++;
+  }
+
+  // 生成 100 工具達成紀念 landing page（/share/100.html）
+  try {
+    const shareDir = path.resolve(__dirname, '../dist/public/share');
+    if (!fs.existsSync(shareDir)) {
+      fs.mkdirSync(shareDir, { recursive: true });
+    }
+    fs.writeFileSync(path.join(shareDir, '100.html'), generateCelebration100PageHtml(), 'utf-8');
+    console.log('  ✅ share/100.html - 100 工具達成紀念 OG landing');
+  } catch (error) {
+    console.error('  ❌ share/100.html 失敗:', error.message);
     errorCount++;
   }
 

@@ -12469,7 +12469,215 @@ const POST_99: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+const POST_100_MILESTONE: BlogPost = {
+  slug: 'milestone-100-tools-achieved',
+  title: '🎉 100 工具達成：阿凱老師教育工具集兩年實驗筆記',
+  excerpt:
+    '從 2024 年第 1 個工具到 2026 年 5 月 24 日的第 100 個 — 一位國小資訊老師的兩年實驗筆記。沒有融資、沒有團隊、沒有商業計畫，只有 5 大部署平台、7 大分類、99 篇手寫長文、和一個信念：把上課真的用得到的工具寫出來，免費送出去。',
+  publishedAt: '2026-05-24',
+  readingMinutes: 8,
+  tags: ['100 工具達成', '里程碑', '阿凱老師', '教育工具集', '開源教學工具', '石門國小', '開發筆記'],
+  toolIds: [100, 81, 46, 3],
+  coverEmoji: '🎉',
+  coverColor: 'orange',
+  body: `## 兩年，剛好走到 100
+
+2024 年我做了第一個給班上用的小工具，沒打算當「作品集」，純粹是因為**找不到適合的現成工具**所以自己刻。
+
+兩年後的今天，**2026 年 5 月 24 日下午 14:08**，第 100 個工具「[#100 工具索引神器](/tool/100)」上線那一刻，首頁的破百倒數 banner 從「倒數 1」滑進「🎉 100 工具達成」的金色 Tape — **撒花特效自動觸發**，我在電腦前看著螢幕笑了一下，然後繼續備課（隔天還要上資訊課）。
+
+100 不是目標。**100 是「持續解決真實問題」這條路上自然累積的副產品**。
+
+<div class="callout callout--tip">
+<div class="callout__label">💡 為什麼是 100，不是 50 或 200</div>
+
+50 太少，覆蓋不到一個小學的全年級教學情境。200 太多，自己沒能力維護品質。**100 剛好是一個人 × 兩年 × 國小資訊課每週的真實產出**。
+
+每個工具背後都有「某天某堂課真的需要它」的故事 — 不是為了湊數做的。
+
+</div>
+
+## 100 個工具背後，藏著什麼數字
+
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-card__label">手寫教學情境長文</div>
+    <div class="stat-card__value">100 <span style="font-size:14px;color:#6b5e4a;">篇</span></div>
+    <span class="stat-card__delta">100% 覆蓋率（每工具至少一篇）</span>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card__label">部署平台</div>
+    <div class="stat-card__value">5 <span style="font-size:14px;color:#6b5e4a;">大平台</span></div>
+    <span class="stat-card__delta">GH Pages / Sites / XOOPS / Firebase / 第三方</span>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card__label">工具分類</div>
+    <div class="stat-card__value">7 <span style="font-size:14px;color:#6b5e4a;">大類</span></div>
+    <span class="stat-card__delta">從互動到備課全覆蓋</span>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card__label">適用年級</div>
+    <div class="stat-card__value">G1-G6 <span style="font-size:14px;color:#6b5e4a;">全年級</span></div>
+    <span class="stat-card__delta">含部分國中段也能用</span>
+  </div>
+</div>
+
+## 7 大分類，看 100 個工具的真實重心
+
+| 分類 | 工具數 | 代表作 |
+|---|---|---|
+| 🛠️ **實用工具** | 32 | [#46 場地預約系統](/tool/46) · [#98 教室小幫手](/tool/98) |
+| 📚 **教學設計** | 19 | [#81 教學駕駛艙](/tool/81) · [#87 PIRLS 閱讀理解 PRO](/tool/87) · [#99 考試卷生圖 Studio](/tool/99) |
+| 🎮 **教育遊戲** | 17 | [#10 班級小管家](/tool/10) · [#3 即時投票](/tool/3) |
+| ✍️ **語文寫作** | 13 | [#7 點石成金 評語](/tool/7) · [#91 點亮詩意](/tool/91) |
+| 🎨 **互動體驗** | 10 | [#97 MBTI 校園奇遇記](/tool/97) · [#52 幸運大轉盤](/tool/52) |
+| 💬 **溝通互動** | 6 | [#89 教師回覆小幫手](/tool/89) · [#26 評語網頁版](/tool/26) |
+| 📖 **語文閱讀** | 3 | [#87 PIRLS](/tool/87) · [#4 閱讀理解小老師](/tool/4) |
+
+**最大宗是「實用工具」32 個**（佔 32%）— 因為國小資訊老師每天碰最多的不是高深的 AI，是「怎麼讓場地預約不要再印紙本」「怎麼隨機抽號不用每天重洗籤」這些細碎場景。
+
+## 5 個改變一切的里程碑工具
+
+不是排行榜，是**真正改變我「下一步要做什麼」的那 5 個**：
+
+### 1️⃣ #1 第一個工具（2024 年初）
+
+當時甚至不知道要不要做網頁版 — 第一個工具上線那天，發現有家長在班級群組轉貼**還配了驚嘆號**，那一刻意識到：**「老師寫的工具」這 7 個字本身就有渠道**。
+
+從此確定方向：寫，並且寫多。
+
+### 2️⃣ [#3 即時投票](/tool/3)（第一個爆紅）
+
+讓無聊提問變全班搶答的那個。**累計使用 84 場、12 所國小、3 所國中**，參與率從傳統 25% 拉到 92%。
+
+第一次有別校老師私訊「能不能也來我們學校演示」，第一次有校長視察聽到後說「這個全市都該用」。
+
+證明了：**好工具會自己長腳跑出校園**。
+
+### 3️⃣ [#46 場地預約系統](/tool/46)（讓校園真正用上）
+
+把禮堂、視聽教室、特別教室的紙本登記簿換成網頁。**寫了 3 週，校內用了 1 年，到現在每月還在被預約**。
+
+學到的事：**比起花俏功能，「不要審核就能預約」這個反直覺設計反而是穩定關鍵** — 把預約權交還老師、信任老師會自治，比加一道審核流程更穩。
+
+### 4️⃣ [#81 教學駕駛艙](/tool/81)（自己上課用最多）
+
+不是給學生用的，**是給自己上課用的**。25 個獨立駕駛艙覆蓋 G3-G6 全年級資訊單元，每個駕駛艙有自己的視覺主題梗（Retro Win98 / Circuit-glow / Risograph⋯）。
+
+學生記網址數從 8 個降到 1 個，上課切換工具 0 次。
+
+**最受歡迎工具是「老師上課工作流」本身**，這件事顛覆了我以前以為「教學工具 = 學生互動工具」的想像。
+
+### 5️⃣ [#100 工具索引神器](/tool/100)（智能推薦器）
+
+100 個工具一字排開，老師怎麼挑？所以做了 #100 — **丟一句話「我想讓害羞學生開口」「水的三態怎麼教」→ fuse.js 模糊比對 + Gemini Embedding 語意搜尋 → 推 top 5 工具**。
+
+它不是第 100 個工具，它是**讓前面 99 個工具被找到的那個工具**。第 100 個位置留給它，是有意設計。
+
+## 技術選擇：3 個讓工程師朋友尖叫的決策
+
+<div class="callout callout--info">
+<div class="callout__label">ℹ️ 為什麼明知有更新潮的選項，還這樣選</div>
+
+阿凱本身是工程背景出身，**這些選擇不是不會用 Next.js / Supabase / Vercel，而是刻意選最樸實的方案**。原因都跟教育場景的「能持續維護 5 年」有關。
+
+</div>
+
+### ① 100 個工具 = 100 個獨立 repo + GitHub Pages 純靜態
+
+不是一個 monorepo 塞 100 個 component，是**真的 100 個獨立 GitHub repo**。每個工具有自己的 \`index.html\` + 自己的 \`sw.js\` + 自己的 commit history。
+
+**為什麼**：教學工具會被別的老師 fork 改成自己班的版本。**獨立 repo 才能 fork 一個帶走一個**，不會被 monorepo 鎖死。
+
+**代價**：寫工具卡片時要手刻 100 個 entry，這就是為什麼 #100 工具索引神器要做。
+
+### ② 全站繁體中文，連 commit message 都是
+
+界面、文案、按鈕、錯誤訊息、blog、CHANGELOG — **沒有一個英文字是給使用者看的**。
+
+**為什麼**：受眾是台灣國小老師，介面英文化會多一道翻譯心智負擔。連 commit message 都繁中是因為**寫給未來的自己 + 共備夥伴看 git blame 時不用切翻譯**。
+
+### ③ 拍立得公佈欄視覺語彙（cork + 便利貼 + 紅圖釘）
+
+從 2024 年 v3.6.0 大改版那天決定的。**不是 Material Design、不是 shadcn 風、不是 iOS 灰白卡**，是**國小教室公佈欄的真實視覺記憶**。
+
+**為什麼**：要讓家長家阿嬤打開都覺得「這個我看得懂」。教室公佈欄是台灣國小所有人共同的視覺記憶 — **設計語彙本身就是親切感**。
+
+## 兩年踩坑學到的 5 件事
+
+1. **「能用」勝過「漂亮」** — 第 1 版上線比 5 個禮拜後上線好太多，使用者回饋是設計師
+2. **CHANGELOG 是給未來自己的情書** — \`v3.6.51\` 看回去能跟過去的自己對話，這比任何 design doc 有用
+3. **PWA chunk 漂移 = 永遠的痛** — 試了 3 種策略才在 [v3.6.48](/) 學會「全域 self-heal + sessionStorage 防 loop」
+4. **AI 工具的最大敵人是 Google 棄用模型** — 寫過 \`gemini-1.5-pro\` / \`gemini-pro\` 都掛了，現在每寫 Gemini code 前都先 ListModels
+5. **Skill / 自動化會回報自己** — 從每次踩雷後寫 skill，到現在 60+ skill 累積成阿凱的「工程腦延伸」，新工具開發速度比兩年前快 5 倍
+
+## 給未來的自己 · 一封信
+
+> 走到 100，不是要你停下來慶祝。
+> 是要提醒你**為什麼開始**。
+>
+> 開始那天，你只是一個找不到適合工具的國小資訊老師。
+> 寫第一個工具不是為了當作品集，是因為**那堂課真的需要它**。
+>
+> 100 之後，不要追數量。**追深度**。
+>
+> 每個工具背後都該有一篇好故事、一群真實受惠的老師、一個被認真記錄的場景。
+>
+> 別忘了：**你最受歡迎的工具，是你給自己上課用的那一個**（#81 教學駕駛艙）。
+> 這意味著什麼？意味著**最好的教學工具，永遠來自真實的教學現場，而不是想像中的學生**。
+>
+> 慢慢走。能走得久。
+>
+> — 2026.05.24 的阿凱
+
+## 給其他想開始做工具的老師
+
+如果你正在讀這篇，想做但卡住 — 我只有三句話：
+
+1. **第一個工具不用做大** — 一個 HTML 檔 + 一個 GitHub Pages 就上線，比想 5 個禮拜架構好太多
+2. **不要等學會 React / Vue 才開始** — 我前 30 個工具都是純 HTML + vanilla JS，學生用得很開心
+3. **把過程寫下來** — 每個工具一篇 blog，未來自己會感謝你，會看到的老師也會感謝你
+
+寫到第 10 個你會覺得很煩。寫到第 30 個你會覺得很順。寫到第 100 個 — 你會在某個下午突然發現，**這 100 個工具的累積，已經變成你的「教育語言」了**。
+
+## 想分享這個里程碑？
+
+→ [📸 100 達成紀念分享卡](/share/100.html)（轉貼 LINE / FB 直接顯示金色拼貼）
+→ [📚 探索全部 100 款工具](/)
+→ [✨ 投入下一個願望](/?wish=1)（從你的許願開始下一個 100）
+
+## 配對工具推薦
+
+- [#100 工具索引神器](/tool/100) — 100 個工具的智能門口
+- [#81 教學駕駛艙](/tool/81) — 最受歡迎、最常被自己用的
+- [#46 場地預約系統](/tool/46) — 校園實際運轉一整年
+- [#3 即時投票](/tool/3) — 跨校爆紅的破冰神器
+
+## 適用對象
+
+- **國小老師**：想看「另一個老師兩年做了什麼」找靈感
+- **想做副業教育工具的人**：兩年怎麼產出 100 個工具的真實節奏
+- **想用免費工具的家長**：100 個工具全免費，從注音到 MBTI 都有
+- **教育科技研究者**：一位老師的 ground-truth 開發筆記
+- **未來的自己**：當你哪天迷失方向時，回來讀這篇
+
+## 真的想試試？
+
+→ [前往 #100 工具索引神器](/tool/100)，輸入你今天在課堂遇到的任何問題
+
+或者，**從第 1 個工具開始逛**：[科技教育創新專區首頁](/)
+
+整個下午的時間都不夠看完 — 慢慢來，不急。
+
+---
+
+🎉 **謝謝走到這裡的你**。
+
+下一個 100，從你的許願開始。
+`,
+};
+
+export const POSTS: BlogPost[] = [POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。
