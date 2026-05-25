@@ -1,13 +1,85 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.55` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
-- **里程碑**: **2026-05-24 06:08 UTC（台灣時間 14:08）達成 100 工具** + **87 秒紀念短片完成** — 首頁破百倒數 banner 撒花特效自動啟動
-- **最後更新狀態**: v3.6.55 — 100 紀念短片正式嵌進站內：(1) 影片託管於 [GitHub Release v3.6.55-celebration100](https://github.com/cagoooo/Akai/releases/tag/v3.6.55-celebration100) (9.4 MB / 87 秒 / Pixabay CC0 BGM)；(2) `POST_100_MILESTONE` 紀念長文頂部加 `<video>` 嵌入；(3) `share/100.html` 改為「真正可看影片的紀念頁」（拿掉 bot redirect、加 video frame + 黃便利貼說明卡 RWD）
+- **當前版本**: `v3.6.58` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
+- **里程碑**: **2026-05-25 工具卡片描述全面升級**（v3.6.57 markdown 排版 + v3.6.58 部落格淬煉準確版）— 99 個工具的 `detailedDescription` 平均字數從 475 字翻倍到 **948 字**，35 個非 GitHub 工具改用阿凱手寫部落格內容淬煉，技術細節 / 工具家族互連 / 版本號全到位
+- **最後更新狀態**: v3.6.58 — 35 個非 GitHub 工具描述用部落格淬煉「準確版」：(1) 派 3 個 subagent 平行讀阿凱手寫部落格 body（每篇 6000-17000 字）；(2) 淬煉成準確 `detailedDescription`；(3) Node merge script 寫回兩份 tools.json；(4) 工具家族互連加上 `[/tool/X]` 交叉提及
 
 ## 📌 完成功能總覽
 
-### `v3.6.55` (最新 · 🎬 100 紀念短片正式嵌進站內)
+### `v3.6.58` (最新 · ✨ 35 個非 GitHub 工具描述用部落格淬煉「準確版」)
+
+**🎯 動機**
+- v3.6.57 把全部 99 個工具升級成 markdown 排版，但其中 35 個工具原本就沒有 `detailedDescription`（多為 Replit / Google Sites / XOOPS VM / Firebase / LINE / Padlet / Claude Artifacts 等 GitHub 以外平台），subagent 只能憑空猜，內容失真
+
+**📚 解法 — 從部落格淬煉**
+- 35 個工具全部有阿凱手寫的部落格長文（總計 6000-17000 字 / 工具），最權威的內容來源
+- 流程：
+  1. Node script 從 `client/src/blog/posts.ts` 提取每工具對應 `body`，依字數平衡切成 3 批（14/11/10 個工具）
+  2. 派 3 個 subagent 平行讀部落格 body → 淬煉成準確 `detailedDescription`
+  3. Node merge script 合併進 `server/data/tools.json` + `client/public/api/tools.json`
+
+**🔥 修正的失真內容（範例）**
+- `#4 PIRLS`：補上「跟 #87 同源雙部署」「Gemini 2.5 Flash」「PaGamO 題組匯出」「< $0.25 月費」
+- `#7 點石成金`：補上「450+ 成語標籤勾選」「12 種風格並列」「石門國小全校共享 API Key」「v2.15.0」
+- `#13 5W1H Aura`：補上「6 格同時呈現」「Prompt 防 LLM 爛梗」「Firebase Functions v2 + Genkit + Gemini 2.0 Flash」
+- `#17/#18 抽籤`：改正 #17「一個一個抽保留懸念」、#18「正取+備取雙清單」（兩者分工不同）
+- `#24 教師午會`：改正成「114 上學期校務會議紀錄 SPA」含 10 大章節 + 自治市長致詞
+- `#26 九九乘法`：改正成「快樂九九乘法大冒險」用 Web Audio API 合成音效
+- `#33/#37/#38 聲音`：補上「聲音三部曲」漸進設計（數字 → 視覺化 → 玩遊戲）
+- `#40 Padlet`：補上「不重複造輪子」的工程哲學
+- `#49 教務處寶藏庫`：改正成「academic 子站含 3 子頁」（不是模糊的「資源庫」）
+
+**📊 數據比較**
+| | v3.6.57（subagent 憑空版） | v3.6.58（部落格淬煉版） |
+|---|---|---|
+| 平均字數 | 475 字 | **948 字**（×2） |
+| 字數區間 | 300-600 | 741-1190 |
+| 技術細節 | 通用描述 | 含 repo 名 / 版本號 / 月費 |
+| 工具家族 | 無交叉提及 | 含 `[/tool/X]` 互連 |
+
+---
+
+### `v3.6.57` (✨ 99 個工具卡片描述全升級 Markdown 排版)
+
+**🎨 渲染樣式升級**
+- `BulletinToolDetail.tsx` ReactMarkdown components 強化（已在 v3.6.56 上線）：
+  - 新增 h1/h2/h3 樣式（橘色虛線下緣 + 階層字級）
+  - 升級 li bullets 為 ▸（橘色 accent）
+  - 加 em（深藍強調）、code（黃底框）、blockquote（橘左邊條）、hr（虛線分隔）
+  - 行距 line-height 從 1.75 → 1.8，padding 加大為 20px 24px
+- `ToolDetail.tsx` (classic) tailwind prose 同步加 h1/h2/h3、code、li::before ▸
+- `tokens.css` 加 `.bulletin-tool-desc` 在 768px / 480px 的 padding / font-size / h2 / h3 / li 縮放，手機端 14.5–15px 易讀
+
+**✍️ 99 個工具 detailedDescription 全部升級**
+- 統一範本：`## 🎯 核心特色 / ## 💡 設計理念 / ## 🎒 適合情境`
+- 每個工具 4-7 個 bullets（emoji + **粗體名稱** + 全形 — + 描述）
+- 派 5 個 subagent 平行重寫（每組 ~20 tools）
+- 合併進 `server/data/tools.json` + `client/public/api/tools.json` 兩份
+- 平均 475 字（範圍 300-600）
+- 校名統一「石門國小」（無「新明」誤植）
+- 額外加碼：#100 工具索引神器也跑同範本
+
+---
+
+### `v3.6.56` (🎬 BulletinMilestone100 加紀念短片 CTA)
+
+**🐛 問題**
+- v3.6.55 把紀念短片嵌進 blog + share/100.html，但主頁 Milestone Banner 點擊只連 `/tool/100`，沒任何明顯入口導到 share/100.html — 99% 主頁訪客根本看不到影片
+
+**🎨 修法**
+- `BulletinMilestone100.tsx` `CelebrationBanner`:
+  - 外層 div display: flex column + gap 14px
+  - 原 Tape 維持連 /tool/100（工具索引神器主推位置不動）
+  - Tape 下方新增金邊膠囊「🎬 看 87 秒紀念短片 / 含旁白 + BGM」
+  - 連到 /share/100.html target=_blank（新分頁開觀賞頁，不離開主頁）
+  - hover/focus: 浮起 -2px + 陰影加深到 5×5 + 觸發撒花特效
+  - 沿用 cork 風格：ink border + 3D offset shadow + 金色強調字
+- 同 commit 連帶把 `BulletinToolDetail.tsx` 的 ReactMarkdown components 升級加 h2/h3/li/em/code/blockquote/hr 樣式（為 v3.6.57 全面升級鋪路）
+
+---
+
+### `v3.6.55` (🎬 100 紀念短片正式嵌進站內)
 
 **🎬 影片發布到 GitHub Release**
 - Tag：`v3.6.55-celebration100`
