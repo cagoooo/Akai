@@ -471,7 +471,7 @@ function CelebrationBanner({
           href={`${base}share/100.html`}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="開啟 87 秒 100 工具達成紀念短片"
+          aria-label="開啟 5:32 100 工具達成宣傳影片（含旁白 + 同步字幕）"
           style={{
             textDecoration: 'none',
             display: 'inline-flex',
@@ -509,8 +509,8 @@ function CelebrationBanner({
           }}
         >
           <span style={{ fontSize: 18 }}>🎬</span>
-          <span>看 87 秒紀念短片</span>
-          <span style={{ fontSize: 11, opacity: 0.72, fontWeight: 700 }}>含旁白 + BGM</span>
+          <span>看 5:32 宣傳影片</span>
+          <span style={{ fontSize: 11, opacity: 0.72, fontWeight: 700 }}>含旁白 + 字幕</span>
         </a>
       </div>
     </>
