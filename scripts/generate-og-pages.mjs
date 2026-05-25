@@ -489,94 +489,96 @@ function generateCelebration100PageHtml() {
 
   <link rel="canonical" href="${SITE_URL}/share/100.html">
 
-  <!-- 不 redirect — 此頁本身即是「紀念短片觀賞頁」，使用者進來看影片 -->
-
   <style>
-    body {
-      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      display: flex; align-items: center; justify-content: center;
-      min-height: 100vh; margin: 0;
-      background: #c99a6c;
-      background-image:
-        radial-gradient(circle at 20% 30%, rgba(110,80,50,.35) 1px, transparent 2px),
-        radial-gradient(circle at 70% 60%, rgba(140,95,55,.30) 1.5px, transparent 2.5px);
-      background-size: 60px 60px, 80px 80px;
-      color: #1a1a1a;
-      padding: 32px 16px;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #111827; --card: #1f2937; --border: #374151;
+      --orange: #ff8c42; --gold: #fbbf24; --text: #f9fafb; --muted: #9ca3af;
+      --font: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
     }
-    .stack {
-      display: flex; flex-direction: column; align-items: center; gap: 28px;
-      max-width: 720px; width: 100%;
-    }
-    .video-frame {
-      width: 100%;
-      background: #1a1a1a;
-      border: 3px solid #1a1a1a;
-      border-radius: 14px;
-      box-shadow: 8px 8px 0 rgba(26,15,5,.4);
-      overflow: hidden;
-    }
-    .video-frame video { width: 100%; display: block; }
-    .video-caption {
-      text-align: center; margin-top: -16px; font-size: 13px;
-      color: #fefdfa; background: rgba(26,15,5,.78);
-      padding: 6px 14px; border-radius: 14px; font-weight: 700;
-      letter-spacing: .04em;
-    }
-    .celebrate-card {
-      background: linear-gradient(180deg, #fff4b8 0%, #fde047 50%, #e8b341 100%);
-      padding: 36px 40px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,.18), 6px 6px 0 rgba(0,0,0,.25);
-      transform: rotate(-1.2deg);
-      max-width: 540px;
-      text-align: center;
-      border: 2.5px solid #a87520;
-    }
-    h1 { margin: 0 0 8px; font-size: 32px; font-weight: 900; color: #1a1a1a; }
-    .badge { font-size: 13px; font-weight: 900; color: #7a1a18; letter-spacing: 1.5px; margin-bottom: 14px; }
-    p { font-size: 15px; color: #4a3a20; line-height: 1.7; margin: 8px 0; }
-    .date-tag {
-      display: inline-block; margin: 12px 0;
-      padding: 6px 14px; background: rgba(26,15,5,.85); color: #fde047;
-      border-radius: 14px; font-size: 13px; font-weight: 900;
-    }
-    a.cta {
-      display: inline-block; margin-top: 18px; padding: 12px 26px;
-      background: #1a1a1a; color: #fde047; text-decoration: none;
-      border: 2.5px solid #fde047; border-radius: 10px;
-      font-weight: 900; box-shadow: 4px 4px 0 rgba(0,0,0,.4);
-    }
-    @media (max-width: 720px) {
-      .celebrate-card { padding: 28px 22px; }
-      h1 { font-size: 26px; }
-      p { font-size: 14px; }
-    }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100dvh; display: flex; flex-direction: column; align-items: center; }
+    .header { width: 100%; max-width: 1100px; padding: 32px 24px 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 600; letter-spacing: .03em; transition: color .15s; }
+    .back-link:hover { color: var(--orange); }
+    .badge { background: linear-gradient(135deg, var(--orange), var(--gold)); color: #111; font-size: 12px; font-weight: 900; padding: 4px 12px; border-radius: 999px; letter-spacing: .05em; }
+    .title-block { width: 100%; max-width: 1100px; padding: 28px 24px 16px; text-align: center; }
+    .title-main { font-size: clamp(28px, 5vw, 52px); font-weight: 900; line-height: 1.2; letter-spacing: .02em; }
+    .title-main .num { background: linear-gradient(90deg, var(--orange), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .title-sub { margin-top: 10px; font-size: 16px; color: var(--muted); letter-spacing: .04em; }
+    .video-wrap { width: 100%; max-width: 1100px; padding: 0 16px; }
+    .video-container { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 16px; overflow: hidden; box-shadow: 0 0 0 1px var(--border), 0 32px 80px rgba(0,0,0,.6), 0 0 80px rgba(255,140,66,.08); }
+    video { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .stats { width: 100%; max-width: 1100px; padding: 20px 24px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    .stat-chip { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 8px 18px; font-size: 13px; font-weight: 700; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+    .stat-chip .val { color: var(--text); }
+    .cta-row { width: 100%; max-width: 1100px; padding: 8px 24px 48px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+    .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--orange); color: #fff; font-weight: 900; font-size: 15px; padding: 12px 28px; border-radius: 10px; text-decoration: none; letter-spacing: .03em; transition: opacity .15s, transform .1s; }
+    .btn-primary:hover { opacity: .88; transform: translateY(-1px); }
+    .btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--muted); font-weight: 700; font-size: 15px; padding: 12px 28px; border-radius: 10px; border: 1.5px solid var(--border); text-decoration: none; letter-spacing: .03em; transition: color .15s, border-color .15s; }
+    .btn-secondary:hover { color: var(--text); border-color: var(--muted); }
+    .footer { width: 100%; padding: 20px 24px; text-align: center; font-size: 13px; color: var(--muted); border-top: 1px solid var(--border); margin-top: auto; }
+    .footer a { color: var(--orange); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    @media (max-width: 600px) { .header { flex-direction: column; align-items: flex-start; } }
   </style>
 </head>
 <body>
-  <div class="stack">
-    <div class="video-frame">
+
+  <header class="header">
+    <a class="back-link" href="../">
+      <span>←</span>
+      <span>回到阿凱老師科技教育創新專區</span>
+    </a>
+    <span class="badge">v3.6.59 · 2026-05-25</span>
+  </header>
+
+  <div class="title-block">
+    <h1 class="title-main">
+      <span class="num">100</span> 個工具達成 🎉
+    </h1>
+    <p class="title-sub">一位國小老師，一個人，兩年做出一百款免費教育工具</p>
+  </div>
+
+  <div class="video-wrap">
+    <div class="video-container">
       <video
         controls
         preload="metadata"
-        playsinline
         poster="${SITE_URL}/celebration100/cover.png"
+        aria-label="阿凱老師科技教育創新專區 100 工具達成宣傳影片"
       >
-        <source src="https://github.com/cagoooo/Akai/releases/download/v3.6.55-celebration100/celebration-100-final-v2.mp4" type="video/mp4" />
-        瀏覽器不支援影片，<a href="https://github.com/cagoooo/Akai/releases/tag/v3.6.55-celebration100" style="color:#fde047">直接下載 (9 MB)</a>
+        <source src="./akai-promo-v3.mp4" type="video/mp4" />
+        <p>您的瀏覽器不支援 HTML5 影片。<a href="./akai-promo-v3.mp4">點此下載</a></p>
       </video>
     </div>
-    <div class="video-caption">🎬 87 秒紀念短片　·　旁白 + BGM　·　Pixabay CC0 配樂</div>
-
-    <div class="celebrate-card">
-      <div class="badge">★ MILESTONE 100 ★</div>
-      <h1>🎉 100 工具達成！</h1>
-      ${achievedDate ? `<div class="date-tag">達成日 · ${achievedDate}</div>` : ''}
-      <p>${description}</p>
-      <a class="cta" href="/Akai/">📚 探索全部 100 款工具</a>
-    </div>
   </div>
+
+  <div class="stats">
+    <div class="stat-chip">🎬 <span class="val">5:32</span> 宣傳影片</div>
+    <div class="stat-chip">🛠️ <span class="val">100</span> 款工具</div>
+    <div class="stat-chip">📝 <span class="val">104</span> 篇手寫長文</div>
+    <div class="stat-chip">🏫 <span class="val">桃園市石門國小</span></div>
+    <div class="stat-chip">📜 <span class="val">MIT 開源</span> 永久免費</div>
+  </div>
+
+  <div class="cta-row">
+    <a class="btn-primary" href="../">
+      🛫 立刻探索全部工具
+    </a>
+    <a class="btn-secondary" href="https://github.com/cagoooo/Akai" target="_blank" rel="noopener noreferrer">
+      ⭐ GitHub 開源碼
+    </a>
+    <a class="btn-secondary" href="./akai-promo-v3.mp4" download>
+      ⬇ 下載影片
+    </a>
+  </div>
+
+  <footer class="footer">
+    Made with ❤ by <a href="../">阿凱老師</a> ·
+    <a href="https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5" target="_blank" rel="noopener noreferrer">桃園市龍潭區石門國民小學</a>
+    · MIT License · 影片音樂 CC BY
+  </footer>
+
 </body>
 </html>`;
 }
