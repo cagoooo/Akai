@@ -2,6 +2,44 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.59] - 2026-05-25 — P0 三件套：63 工具部落格淬煉 v2 + tools.json 自動 sync + #100 about 區塊
+
+### 🎯 P0-1：63 個 GitHub 工具部落格淬煉 v2
+v3.6.58 處理 35 個非 GitHub 工具後，剩 63 個 GitHub 工具描述還停在 v3.6.57「合理但不準確」版（沒讀過部落格、沒寫 repo 名 / 版本號 / 月費）。本次補齊：
+- 派 4 個 subagent 平行讀部落格 → 淬煉成「準確版 v2」
+- 平均字數從 v3.6.58 的 948 字翻倍到 **1201 字**（63 個淬煉工具均 1349 字）
+- 全 99 工具現在都有：repo 名 / 版本號 / 技術棧 / 月費實測 / 工具家族 [/tool/X] 互連
+
+代表性修正：
+- `#11 剛好學`：補上「九大互動模式」「v3.8.9 + 234KB 單檔」「老師自架 Firebase」「實測 17% → 97% 發言參與率」
+- `#51 SMES 排課`：補上「遺傳演算法 GA v3.1」「五選一混合修復策略」「STC.EXE 取代」「實測 5-7 天 → 2 小時」
+- `#67 演說 Pro`：補上「5705 行單檔 322KB」「107 道題庫」「Web Speech 即時逐字稿」「四維雷達圖評分」
+- `#81 駕駛艙`：補上「25 個獨立駕駛艙」「飛行員儀表板 NES 操作邏輯」「84 commits / 5 週」「NotebookLM × Claude Code」
+- `#86 TieTu`：補上「Nano Banana Pro」「Cloudflare Turnstile + 限流 3/min」「LINE 上架包 ZIP」
+- `#88 國中課程審查`：補上「6 道桃園市鐵則」「實測 108 小時 → 10 小時」
+- `#92 5W1H Aura`：補上「Genkit 1.8 + Gemini 2.0」「Prompt 防 LLM 爛梗（禁外星人時間旅行）」「temperature 1.0」
+
+### 🔧 P0-2：tools.json 雙份漂移自動 sync
+- 新增 [scripts/sync-tools-json.mjs](scripts/sync-tools-json.mjs)
+  - server/data/tools.json = 單一來源 (Single Source of Truth)
+  - client/public/api/tools.json = 衍生（server 全部 + #100 工具索引神器）
+  - sync 時保留 #100 entry、若 #100 缺失會 fail-loud
+- npm scripts 加 `predev` + `prebuild`：每次 dev / build 前自動 sync
+- 加 `npm run sync-tools-json` 手動觸發指令
+- **修正本次發現的 #99 漂移**：v3.6.57 的 merge 漏更新 client 端 #99，這次自動補回
+
+### 🎨 P0-3：#100 ToolIndexAI 加收合 about 區塊
+- [client/src/pages/ToolIndexAI.tsx](client/src/pages/ToolIndexAI.tsx) 新增 `ToolIndexAboutBlock` 子元件
+- 用 native `<details>/<summary>` 收合（a11y 友善 + 不必管 state）
+- 點開後 ReactMarkdown 渲染 #100 的 detailedDescription（含 h1/h2/h3/em/code 完整樣式）
+- 套用 cork 設計語彙：ink 厚邊 + 3D 陰影 + 橘色 accent dashed underline
+- 修正：之前 /tool/100 走 ToolIndexAI 元件直接不渲染 detailedDescription、SEO 與相關推薦會用到的內容被閒置
+
+### 🚀 部署
+- bump v3.6.58 → v3.6.59
+
+---
+
 ## [3.6.58] - 2026-05-25 — 35 個非 GitHub 工具描述用部落格淬煉「準確版」
 
 ### 🎯 動機

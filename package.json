@@ -1,12 +1,15 @@
 {
   "name": "rest-express",
-  "version": "3.6.58",
+  "version": "3.6.59",
   "type": "module",
   "license": "MIT",
   "scripts": {
     "deploy": "gh-pages -d dist/public",
+    "predev": "node scripts/sync-tools-json.mjs",
     "dev": "tsx server/index.ts",
+    "prebuild": "node scripts/sync-tools-json.mjs",
     "build": "node scripts/bump-sw-version.mjs && node scripts/sync-featured-from-firestore.mjs && node scripts/sync-popular-queries.mjs && node scripts/sync-deployment-ecosystem.mjs && node scripts/generate-favicon.mjs && node scripts/generate-home-og.mjs && node scripts/generate-home-og-heatmap.mjs && node scripts/generate-100-celebration-og.mjs && node scripts/sync-meta-from-stats.mjs && node scripts/generate-sitemap.mjs && node scripts/generate-feed.mjs && node scripts/generate-wish-preview.mjs && vite build && node scripts/generate-og-pages.mjs && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
+    "sync-tools-json": "node scripts/sync-tools-json.mjs",
     "bump-sw": "node scripts/bump-sw-version.mjs",
     "new-tool": "node scripts/new-tool.mjs",
     "gen:favicon": "node scripts/generate-favicon.mjs",

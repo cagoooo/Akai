@@ -15,6 +15,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import Fuse, { type FuseResult, type FuseResultMatch } from 'fuse.js';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { PageHead } from '@/components/PageHead';
 import { trackEvent, logToolIndexQuery } from '@/lib/analytics';
 import { isSemanticSearchAvailable, semanticSearch } from '@/lib/embeddingSearch';
@@ -293,6 +295,9 @@ export function ToolIndexAI() {
           </p>
         </div>
 
+        {/* About 區塊（收合）— 渲染 #100 工具的 detailedDescription */}
+        <ToolIndexAboutBlock tool={tools?.find((t) => t.id === 100)} />
+
         {/* 搜尋框 */}
         <div
           style={{
@@ -496,6 +501,190 @@ export function ToolIndexAI() {
 }
 
 // ── 子元件 ────────────────────────────────────────
+
+/**
+ * About 收合區塊：渲染 #100 工具的 detailedDescription markdown
+ * 用 native <details> 標籤確保 a11y + 不必額外管 state
+ */
+function ToolIndexAboutBlock({ tool }: { tool?: EducationalTool }) {
+  if (!tool?.detailedDescription) return null;
+
+  return (
+    <details
+      style={{
+        background: '#fff',
+        border: `2.5px solid ${tokens.ink}`,
+        borderRadius: 12,
+        boxShadow: '4px 5px 0 rgba(0,0,0,.18)',
+        marginBottom: 24,
+        fontFamily: tokens.font.tc,
+      }}
+    >
+      <summary
+        style={{
+          cursor: 'pointer',
+          padding: '14px 20px',
+          fontWeight: 800,
+          fontSize: 15,
+          color: tokens.ink,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
+          listStyle: 'none',
+          userSelect: 'none',
+        }}
+      >
+        <span style={{ fontSize: 18 }}>📖</span>
+        關於這個工具（按一下展開完整介紹）
+        <span
+          style={{
+            marginLeft: 'auto',
+            fontSize: 12,
+            color: tokens.muted2,
+            fontWeight: 600,
+          }}
+        >
+          ▼
+        </span>
+      </summary>
+      <div
+        className="bulletin-tool-desc"
+        style={{
+          padding: '4px 22px 18px',
+          borderTop: `1px dashed ${tokens.muted}`,
+          fontSize: 15,
+          color: '#2a2a2a',
+          lineHeight: 1.8,
+        }}
+      >
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          components={{
+            p: ({ children }) => <p style={{ margin: '8px 0 12px 0' }}>{children}</p>,
+            h1: ({ children }) => (
+              <h2
+                style={{
+                  fontSize: 18,
+                  fontWeight: 900,
+                  color: tokens.ink,
+                  margin: '18px 0 10px 0',
+                  paddingBottom: 6,
+                  borderBottom: `2px dashed ${tokens.accent}`,
+                  fontFamily: tokens.font.tc,
+                  lineHeight: 1.35,
+                }}
+              >
+                {children}
+              </h2>
+            ),
+            h2: ({ children }) => (
+              <h2
+                style={{
+                  fontSize: 18,
+                  fontWeight: 900,
+                  color: tokens.ink,
+                  margin: '20px 0 10px 0',
+                  paddingBottom: 6,
+                  borderBottom: `2px dashed ${tokens.accent}`,
+                  fontFamily: tokens.font.tc,
+                  lineHeight: 1.35,
+                }}
+              >
+                {children}
+              </h2>
+            ),
+            h3: ({ children }) => (
+              <h3
+                style={{
+                  fontSize: 15,
+                  fontWeight: 800,
+                  color: tokens.accent,
+                  margin: '14px 0 6px 0',
+                  fontFamily: tokens.font.tc,
+                  lineHeight: 1.35,
+                }}
+              >
+                {children}
+              </h3>
+            ),
+            strong: ({ children }) => (
+              <strong style={{ color: tokens.accent, fontWeight: 800 }}>{children}</strong>
+            ),
+            em: ({ children }) => (
+              <em style={{ color: tokens.navy, fontStyle: 'normal', fontWeight: 700 }}>
+                {children}
+              </em>
+            ),
+            ul: ({ children }) => (
+              <ul
+                style={{
+                  margin: '8px 0 12px 0',
+                  paddingLeft: 4,
+                  listStyle: 'none',
+                }}
+              >
+                {children}
+              </ul>
+            ),
+            li: ({ children }) => (
+              <li
+                style={{
+                  marginBottom: 7,
+                  paddingLeft: 22,
+                  position: 'relative',
+                  lineHeight: 1.7,
+                }}
+              >
+                <span
+                  style={{
+                    position: 'absolute',
+                    left: 0,
+                    top: 0,
+                    color: tokens.accent,
+                    fontWeight: 900,
+                    fontSize: 15,
+                  }}
+                >
+                  ▸
+                </span>
+                {children}
+              </li>
+            ),
+            a: ({ href, children }) => (
+              <a
+                href={href}
+                style={{
+                  color: tokens.accent,
+                  textDecoration: 'underline',
+                  fontWeight: 700,
+                }}
+              >
+                {children}
+              </a>
+            ),
+            code: ({ children }) => (
+              <code
+                style={{
+                  background: '#fff3d6',
+                  padding: '2px 6px',
+                  borderRadius: 4,
+                  fontSize: 13,
+                  fontFamily: 'Menlo, Consolas, monospace',
+                  color: tokens.ink,
+                  border: '1px solid #e8d49a',
+                }}
+              >
+                {children}
+              </code>
+            ),
+          }}
+        >
+          {tool.detailedDescription.replace(/\n/g, '\n\n')}
+        </ReactMarkdown>
+      </div>
+    </details>
+  );
+}
 
 function NoResults({ query }: { query: string }) {
   return (
