@@ -424,6 +424,25 @@ html, body {
   .bulletin-detail-hero h1 {
     font-size: 28px !important;
   }
+  /* 描述卡片：手機把 padding / font-size 縮小，避免單行裝太少字 */
+  .bulletin-tool-desc {
+    padding: 16px 18px !important;
+    font-size: 15px !important;
+    line-height: 1.75 !important;
+  }
+  .bulletin-tool-desc h2 {
+    font-size: 17px !important;
+    margin: 18px 0 10px 0 !important;
+  }
+  .bulletin-tool-desc h3 {
+    font-size: 15px !important;
+    margin: 14px 0 6px 0 !important;
+  }
+  .bulletin-tool-desc li {
+    padding-left: 20px !important;
+    margin-bottom: 7px !important;
+    line-height: 1.65 !important;
+  }
   .bulletin-detail-nav,
   .bulletin-detail-breadcrumb,
   .bulletin-related {
@@ -470,6 +489,18 @@ html, body {
   .bulletin-detail-breadcrumb {
     font-size: 12px !important;
     line-height: 1.8 !important;
+  }
+  /* 描述卡片：超小手機再縮一些 */
+  .bulletin-tool-desc {
+    padding: 14px 16px !important;
+    font-size: 14.5px !important;
+  }
+  .bulletin-tool-desc h2 {
+    font-size: 16px !important;
+  }
+  .bulletin-tool-desc li {
+    padding-left: 18px !important;
+    font-size: 14.5px !important;
   }
 }
 

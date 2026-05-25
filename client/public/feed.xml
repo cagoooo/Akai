@@ -8,7 +8,7 @@
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
     <pubDate>Sun, 24 May 2026 06:05:54 GMT</pubDate>
-    <lastBuildDate>Sun, 24 May 2026 07:51:15 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 25 May 2026 00:23:15 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -36,6 +36,15 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/exam-illustration-99-ai-line-art-studio</guid>
       <pubDate>Sun, 24 May 2026 00:00:00 GMT</pubDate>
       <description>#99 考試卷生圖 Studio 是阿凱寫給自己備課用的 AI 插圖工具：填四個欄位（標題、對話、角色、場景），按一鍵 20 秒生兩張 1024×1024 純黑白線稿 PNG，校園黑白印表機友善、可當著色頁、中文精準渲染，每天免費 5 次。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：🎉 100 工具達成：阿凱老師教育工具集兩年實驗筆記</title>
+      <link>https://cagoooo.github.io/Akai/blog/milestone-100-tools-achieved</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/milestone-100-tools-achieved</guid>
+      <pubDate>Sun, 24 May 2026 00:00:00 GMT</pubDate>
+      <description>從 2024 年第 1 個工具到 2026 年 5 月 24 日的第 100 個 — 一位國小資訊老師的兩年實驗筆記。沒有融資、沒有團隊、沒有商業計畫，只有 5 大部署平台、7 大分類、99 篇手寫長文、和一個信念：把上課真的用得到的工具寫出來，免費送出去。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
@@ -282,15 +291,6 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/math-adventure-44-grade-one</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
       <description>#44 真實名稱「快樂數學小冒險 | 國小一年級數學練習」是阿凱給**一年級**做的數學練習遊戲。4 個關卡（10 以內加法 / 10 以內減法 / 20 以內加法 / 20 以內減法）+ canvas-confetti 撒花獎勵 + 純 Tailwind + 26KB 單檔 HTML 嵌進 Google Sites。是 #26 九九乘法大冒險的低年級姊妹工具。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#49 教務處寶藏庫（academic 子站）：3 個子頁含 2026 英語歌唱比賽 G6 歌單 × 6 班 + 親職日配置 + 班級榮譽榜（含 1 個 Akai 隱藏作品）</title>
-      <link>https://cagoooo.github.io/Akai/blog/academic-49-treasure-trove</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/academic-49-treasure-trove</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#49 真實是 `sites.google.com/mail2.smes.tyc.edu.tw/academic/` 教務處子站，含 3 個子頁：「2026 英語歌唱比賽網站」（G6 6 首歌 × 601-606 6 班 = 36 組合）、「2026 親職日場地配置」（即 Akai #74）、「班級榮譽榜名單調查」（Akai 尚未收錄的隱藏作品）。純 Tailwind 嵌進 Google Sites Embedded HTML。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>

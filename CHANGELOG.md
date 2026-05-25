@@ -2,6 +2,25 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.57] - 2026-05-25 — 99 個工具卡片描述全升級 Markdown 排版
+
+### 🎨 渲染樣式升級（接續 v3.6.56 的 BulletinToolDetail h2/h3 改動）
+- **ToolDetail.tsx (classic) tailwind prose 同步升級**：加 h1/h2/h3、code、li::before ▸ 樣式，與 cork 版視覺一致
+- **tokens.css RWD**：加 .bulletin-tool-desc 在 768px / 480px 的 padding / font-size / h2/h3/li 縮放，手機端 14.5–15px 易讀，bullet padding 跟著縮
+
+### ✍️ 99 個工具 detailedDescription 全部升級
+- 統一範本：「## 🎯 核心特色 / ## 💡 設計理念 / ## 🎒 適合情境」
+- 每個工具 4-7 個 bullets（emoji + **粗體名稱** + 全形 — + 描述）
+- 5 個 subagent 平行重寫（每組 ~20 tools），合併進 server/data/tools.json + client/public/api/tools.json 兩份
+- 平均字數 475 字（範圍 300-600），保留原語意不瞎掰技術細節
+- 校名統一使用「石門國小」（無「新明」誤植）
+- 額外加碼：#100 工具索引神器也跑同範本
+
+### 🚀 部署
+- bump v3.6.56 → v3.6.57
+
+---
+
 ## [3.6.38] - 2026-05-22 — SKIP_IDS 自動 derive，消除 3 處硬編同步痛點
 
 ### 🔧 修根：HANDWRITTEN_TOOL_IDS 自動 derive

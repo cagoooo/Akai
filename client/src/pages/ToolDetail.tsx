@@ -562,7 +562,7 @@ export function ToolDetail() {
                                     )}>
                                         {tool.title}
                                     </h1>
-                                    <div className="text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed max-w-3xl prose prose-gray max-w-none [&_p]:my-2 [&_strong]:text-gray-900 [&_strong]:font-semibold [&_ul]:my-2 [&_li]:my-1 [&_a]:text-blue-600 [&_a]:underline">
+                                    <div className="text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed max-w-3xl prose prose-gray max-w-none [&_p]:my-2 [&_strong]:text-orange-600 [&_strong]:font-bold [&_h1]:text-xl [&_h1]:font-black [&_h1]:text-gray-900 [&_h1]:mt-5 [&_h1]:mb-3 [&_h1]:pb-2 [&_h1]:border-b-2 [&_h1]:border-dashed [&_h1]:border-orange-400 [&_h2]:text-xl [&_h2]:font-black [&_h2]:text-gray-900 [&_h2]:mt-5 [&_h2]:mb-3 [&_h2]:pb-2 [&_h2]:border-b-2 [&_h2]:border-dashed [&_h2]:border-orange-400 [&_h3]:text-lg [&_h3]:font-bold [&_h3]:text-orange-600 [&_h3]:mt-4 [&_h3]:mb-2 [&_ul]:my-3 [&_ul]:list-none [&_ul]:pl-0 [&_li]:my-2 [&_li]:pl-6 [&_li]:relative [&_li]:before:content-['▸'] [&_li]:before:absolute [&_li]:before:left-0 [&_li]:before:text-orange-500 [&_li]:before:font-black [&_a]:text-blue-600 [&_a]:underline [&_code]:bg-yellow-100 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm">
                                         <ReactMarkdown remarkPlugins={[remarkGfm]}>
                                             {(tool.detailedDescription || tool.description).replace(/\n/g, '\n\n')}
                                         </ReactMarkdown>
