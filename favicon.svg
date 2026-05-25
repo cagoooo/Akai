@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Akai favicon - cork board + sticky note + pin + "A"
+  自動配色：淺色模式 cork 棕底 + 黃便利貼；深色模式自動調深保持對比
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <style>
+      .cork  { fill: #c99a6c; }
+      .note  { fill: #fff27a; }
+      .ink   { fill: #1a1a1a; }
+      .pinG  { fill: url(#pinGrad); }
+      .pinH  { fill: rgba(255,255,255,0.78); }
+      @media (prefers-color-scheme: dark) {
+        .cork { fill: #8a6a3f; }
+        .note { fill: #ffd84a; }
+      }
+    </style>
+    <radialGradient id="pinGrad" cx="35%" cy="30%" r="65%">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="40%"  stop-color="#ff8585"/>
+      <stop offset="85%"  stop-color="#dc2626"/>
+      <stop offset="100%" stop-color="#7a1a18"/>
+    </radialGradient>
+    <filter id="noteShadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0.8" dy="1.4" stdDeviation="1.2" flood-opacity="0.32"/>
+    </filter>
+    <filter id="pinShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0.4" dy="0.8" stdDeviation="0.8" flood-opacity="0.42"/>
+    </filter>
+  </defs>
+
+  <!-- cork 軟木塞圓角方形底 -->
+  <rect class="cork" x="0" y="0" width="64" height="64" rx="14" ry="14"/>
+
+  <!-- 軟木塞紋理小點（多層交錯） -->
+  <g fill="rgba(80,55,25,0.16)">
+    <circle cx="8"  cy="10" r="0.9"/>
+    <circle cx="18" cy="22" r="0.7"/>
+    <circle cx="46" cy="14" r="1.0"/>
+    <circle cx="56" cy="34" r="0.8"/>
+    <circle cx="10" cy="44" r="0.9"/>
+    <circle cx="28" cy="54" r="1.1"/>
+    <circle cx="52" cy="52" r="0.7"/>
+    <circle cx="36" cy="6"  r="0.8"/>
+    <circle cx="6"  cy="30" r="0.7"/>
+    <circle cx="60" cy="20" r="0.9"/>
+  </g>
+
+  <!-- 黃色便利貼（-3 度微旋轉） -->
+  <g transform="rotate(-3 32 32)" filter="url(#noteShadow)">
+    <rect class="note" x="9" y="11" width="46" height="46" rx="3"/>
+    <rect class="ink" x="9" y="11" width="46" height="46" rx="3" fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+
+    <!-- 中央「A」字 -->
+    <text x="32" y="44"
+          text-anchor="middle"
+          font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif"
+          font-weight="900"
+          font-size="36"
+          class="ink">A</text>
+  </g>
+
+  <!-- 紅色立體圖釘（右上） -->
+  <g filter="url(#pinShadow)">
+    <circle class="pinG" cx="49" cy="14" r="8"/>
+    <circle class="pinH" cx="46.5" cy="11.5" r="2.2"/>
+  </g>
+</svg>

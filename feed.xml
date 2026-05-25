@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>科技教育創新專區 · 阿凱老師</title>
+    <link>https://cagoooo.github.io/Akai/</link>
+    <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
+    <description>阿凱老師（桃園市石門國小）親手打造的 100+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <language>zh-TW</language>
+    <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
+    <pubDate>Sun, 24 May 2026 06:05:54 GMT</pubDate>
+    <lastBuildDate>Mon, 25 May 2026 11:32:29 GMT</lastBuildDate>
+    <generator>scripts/generate-feed.mjs · v1</generator>
+    <ttl>180</ttl>
+    <image>
+      <url>https://cagoooo.github.io/Akai/icon-512.png</url>
+      <title>阿凱老師 · 教育工具集</title>
+      <link>https://cagoooo.github.io/Akai/</link>
+      <width>144</width>
+      <height>144</height>
+    </image>
+    <item>
+      <title>🆕 新工具：考試卷生圖 Studio — AI 黑白線稿插圖生成</title>
+      <link>https://cagoooo.github.io/Akai/tool/99</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/99</guid>
+      <pubDate>Sun, 24 May 2026 06:05:54 GMT</pubDate>
+      <description>備課時想加一張剛剛好的學習單插畫？輸入四個欄位（標題、對話、角色、場景），10–20 秒生成兩張 1024×1024 黑白線稿 PNG，列印不吃墨水、可當著色頁、支援中文精準渲染。內建 4 組教學情境範例 + AI Prompt 可複製轉用 ChatGPT / Bing。</description>
+      <category>試卷插圖</category>
+      <category>學習單插畫</category>
+      <category>AI 線稿生成</category>
+      <category>黑白線稿</category>
+      <category>著色頁</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#99 考試卷生圖 Studio：四欄位 20 秒生兩張黑白線稿，列印不吃墨水的備課救星</title>
+      <link>https://cagoooo.github.io/Akai/blog/exam-illustration-99-ai-line-art-studio</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/exam-illustration-99-ai-line-art-studio</guid>
+      <pubDate>Sun, 24 May 2026 00:00:00 GMT</pubDate>
+      <description>#99 考試卷生圖 Studio 是阿凱寫給自己備課用的 AI 插圖工具：填四個欄位（標題、對話、角色、場景），按一鍵 20 秒生兩張 1024×1024 純黑白線稿 PNG，校園黑白印表機友善、可當著色頁、中文精準渲染，每天免費 5 次。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：🎉 100 工具達成：阿凱老師教育工具集兩年實驗筆記</title>
+      <link>https://cagoooo.github.io/Akai/blog/milestone-100-tools-achieved</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/milestone-100-tools-achieved</guid>
+      <pubDate>Sun, 24 May 2026 00:00:00 GMT</pubDate>
+      <description>從 2024 年第 1 個工具到 2026 年 5 月 24 日的第 100 個 — 一位國小資訊老師的兩年實驗筆記。沒有融資、沒有團隊、沒有商業計畫，只有 5 大部署平台、7 大分類、99 篇手寫長文、和一個信念：把上課真的用得到的工具寫出來，免費送出去。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>🆕 新工具：教室小幫手 — 老師的每日課堂工具</title>
+      <link>https://cagoooo.github.io/Akai/tool/98</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/98</guid>
+      <pubDate>Fri, 22 May 2026 08:08:52 GMT</pubDate>
+      <description>阿凱老師為導師日常打造的「教室百寶箱」，一頁集合 26 個課堂小工具：情緒打卡、班級 To-Do、彩虹能量卡、出勤、跑馬燈、抽號、計時器、分組、座位表、生日榜、積點榜、月度報告、班費、AI 評語草擬⋯六大分組任你切換。免登入、不上傳、可離線、PWA 一鍵裝成桌面 App。</description>
+      <category>教室百寶箱</category>
+      <category>情緒打卡</category>
+      <category>隨機抽號</category>
+      <category>教室計時器</category>
+      <category>隨機分組</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#98 教室小幫手：26 個課堂小工具裝進一個分頁，免登入不上傳的導師百寶箱</title>
+      <link>https://cagoooo.github.io/Akai/blog/classroom-kit-98-daily-teacher-toolkit</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/classroom-kit-98-daily-teacher-toolkit</guid>
+      <pubDate>Fri, 22 May 2026 00:00:00 GMT</pubDate>
+      <description>#98 教室小幫手把導師每天分散在 8 個分頁的小工具（情緒打卡、點名、抽號、計時器、跑馬燈、分組、座位表、生日榜⋯）合進一頁 PWA，設定班級名單一次 26 工具自動帶入，所有資料只存瀏覽器本機 IndexedDB，不上傳任何雲端。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#100 工具索引神器升級 AI build log：從 fuse.js 字面比對到 Gemini 語意搜尋</title>
+      <link>https://cagoooo.github.io/Akai/blog/tool-100-gemini-embedding-build-log</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/tool-100-gemini-embedding-build-log</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>工具索引神器（#100）原本用 fuse.js 字面比對 — 「水的三態」找不到「自然科實驗」。升級 Gemini Embedding 語意搜尋後，連「我想讓害羞學生敢開口」這類抽象描述都能找到對的工具。完整 build log + 架構設計分享。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#53 校園報修系統：點地圖 + Google Vision OCR 標教室 + LINE Flex Message 雙軌通知的全鏈路設計</title>
+      <link>https://cagoooo.github.io/Akai/blog/repair-53-paperless-school-maintenance</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/repair-53-paperless-school-maintenance</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#53 不是「掃 QR Code 報修」那麼簡單。React 19 + Firebase 全家桶 + Google Vision API OCR 自動標教室 + LINE Messaging API Flex Message + 資訊組 / 事務組雙軌分流 + 離線報修 IndexedDB 暫存。版本到 v0.9.2 仍在演進。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#7 點石成金蜂：勾 450+ 成語標籤 → AI 同時生成 12 種風格段落 + 二階段微調 + 全校共享 API Key 的單向轉換神器</title>
+      <link>https://cagoooo.github.io/Akai/blog/comment-7-ai-positive-language</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/comment-7-ai-positive-language</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#7 不是「直覺評語 → AI 優化」 — 真實流程是「老師從 450+ 成語詞庫勾學生特質標籤 → AI 把標籤串成段落」。12 種寫作風格同時並列生成（不是單一）、CommentAdjuster 二階段縮 / 擴 / 換說法 + 5 級語氣滑桿、全校共享 API Key（阿凱自掏腰包）、繁中強制條款源於 v2.6.2 簡體字事故。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#88 國中課程計畫 AI 審查：對應桃園市 0505 版審查文件 40+ 項次 × PDF.js 抽文字 × 6 道合規鐵則 × 🔍 / ✨ 雙模式 × LINE 通知</title>
+      <link>https://cagoooo.github.io/Akai/blog/curriculum-88-ai-junior-high-review</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/curriculum-88-ai-junior-high-review</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#88 不是給教育局審查委員用的 — 是給校內備課老師「自我預審」避免被退件。上傳 PDF（PDF.js 抽文字）→ AI 比對教育局 0505 版審查文件 40+ 項次（0-1 到 7-11）→ 給 fix-box 修正建議。雙模式：🔍 審查 PDF / ✨ 產生合規計畫，6 道桃園市 115 國中合規鐵則寫進 system prompt。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#67 國語演說比賽訓練 Pro：107 題庫 + Web Speech 即時逐字稿 + Gemini 雷達圖評分 + 老師評分量表的單檔 5705 行神器</title>
+      <link>https://cagoooo.github.io/Akai/blog/speech-67-training-pro</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/speech-67-training-pro</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#67 不是 EZPage 模板（description 誤導）— 是阿凱純手寫 5705 行 HTML / 322 KB 的演說訓練系統。107 道題目 × 7 大分類 + 雙階段計時器 + Web Speech API 即時逐字稿 + Gemini 2.5 雷達圖四維評分 + 老師現場評分量表，賽事流程完整數位化。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#72 動支及黏存單自動產生系統：拖廠商報價 PDF → PDF.js 自動解析品項數量單價 → 填入學校官方制式 Excel 範本</title>
+      <link>https://cagoooo.github.io/Akai/blog/expense-voucher-72-auto-generator</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/expense-voucher-72-auto-generator</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#72 不是「老師手鍵動支單」 — 是拖廠商報價 PDF → PDF.js 3.11 座標式擷取 + Tesseract.js OCR fallback → 自動填入石門國小現用 template.xlsx（含「預算內」「代收代辦」兩工作表）。教育部歲出政事別三碼代號內建，純瀏覽器零後端，PDF 不傳外部 server。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#54 識生學坊：MediaPipe 離線臉部偵測 + Gemini Vision 記憶口訣 + 4 模式遊戲化特訓 + 班級攻略本兩階段比對</title>
+      <link>https://cagoooo.github.io/Akai/blog/face-recognition-54-teacher-savior</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/face-recognition-54-teacher-savior</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#54「識生」= 認識學生，「學坊」= workshop 修練場。MediaPipe WebAssembly 端離線跑（不上傳第三方）+ Gemini Vision 自動產 3 個外觀特徵與口訣 + Combo 連擊 S+/S/A/B 評級 + 班級攻略本兩階段比對（fingerprint 粗篩 + Gemini 雙圖比對）。30 人班一次跑全套成本 NT$0.25-0.5，v3.14.0 活躍開發中。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#76 WebSlide 簡報播放器：阿凱早期用 Gemini 寫程式 + 嵌進 Google Sites 的隱藏自製神器（PDF.js + JSZip + jsPDF + 17 種電影級 3D 轉場）</title>
+      <link>https://cagoooo.github.io/Akai/blog/webslide-76-cross-device-presenter</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/webslide-76-cross-device-presenter</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#76 完全是阿凱自製 — 用 Gemini 寫程式碼生成的單檔 HTML web app，800+ 行 JS/CSS 直接以 Embedded HTML 嵌進 Google Sites（早期還不熟 GitHub 的隱藏部署方式）。Tailwind + JSZip 3.10.1 + jsPDF 2.5.1 + PDF.js 3.11.174 + 17 種電影級 3D 轉場 + 雙 iframe 無閃爍翻頁 + 全螢幕 fallback + 左右 1/6 寬點擊翻頁。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#92 5W1H 靈感發射器 PRO（Aura）：6 格同時呈現 + Prompt 防 LLM 爛梗 + 6 種故事風格 + 名人堂的創意寫作神器</title>
+      <link>https://cagoooo.github.io/Akai/blog/inspire-92-5w1h-pro-writing</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/inspire-92-5w1h-pro-writing</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#92 內部代號 Aura，不是分步引導工具 — 是 6 格（Who/What/When/Where/Why/How）同時呈現任意順序操作，Gemini 2.0 Flash 一鍵合成短篇故事 + 自動下標題。Prompt 明令禁止「外星人 / 時間旅行 / AI / 預言 / 神祇」這些 LLM 爛梗，逼 AI 挖日常微妙與職人題材。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#82 設備盤點系統：iPhone 拍照 + Gemini 2.5 Vision 辨識 + 三大資產跨表自動路由 + Veyon 整合的 54.75 小時打造神器</title>
+      <link>https://cagoooo.github.io/Akai/blog/inventory-82-classroom-equipment</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/inventory-82-classroom-equipment</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#82 不是「QR Code 掃描盤點」那麼簡單 — 是阿凱花 54.75 小時、跑 40+ 版本（v7.4.12）打造的真實校園資管系統。iPhone 拍照 + Gemini 2.5 Flash Vision 辨識財產編號 + Supabase 6 張表跨表路由 + 設備搬家自動偵測 + Veyon 150 台教室電腦設定 JSON 匯出。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#73 成績篩選系統：教務處挑前 X% 競賽選手 / 資優方案的全校工具（不是找退步學生！）</title>
+      <link>https://cagoooo.github.io/Akai/blog/grade-filter-73-find-students-need-help</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/grade-filter-73-find-students-need-help</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#73 不是「找退步學生需要關心」 — 是教務處用來篩選「**前 X% 或前 N 名優秀學生**」挑校內競賽選手、資優方案候選人的工具。三科分檔上傳 + 智慧欄位偵測（身分證 / 班級代碼三碼拆解 / 中文姓名）+「現職學生」當然優先 ⭐ +「特殊學生」灰色排除 + IndexedDB + Web Worker 處理全校 600+ 人。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#51 SMES AI 智慧排課 v2.12：遺傳演算法 GA v3.1 + 混合修復突變 + Smart Seed + BFS 鏈式衝突解的石門國小客製神器</title>
+      <link>https://cagoooo.github.io/Akai/blog/auto-schedule-51-curriculum-planner</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/auto-schedule-51-curriculum-planner</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#51 不是 CSP 演算法 — 是「SMES AI 智慧排課系統 v2.12.0」用遺傳演算法 GA v3.1 + 混合修復突變（教師衝突修復 30% / 數學修復 17.5% / 國語修復 17.5% / 定向優化 21% / 隨機 14%）+ Smart Seed 種子 + BFS 鏈式衝突解。台灣國小規則寫死（週三下午全校停課、低年級只有週二全天）。127 單元測試 + 23 Firestore Rules 測試，CI 三 jobs。取代舊版 STC.EXE 桌機軟體。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#89 教師回覆小幫手 Pro：親師訊息 1 分鐘草稿出爐，再也不怕家長半夜傳訊</title>
+      <link>https://cagoooo.github.io/Akai/blog/teacher-reply-89-pro-parent-message</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/teacher-reply-89-pro-parent-message</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#89 不是「情緒溫度計 + 三種口吻」 — 真實是 12 種情境分類（老師手選，不是 AI 判斷）+ 單一回覆 + 四種微調按鈕（再溫和 / 再正式 / 縮短 / 加細節）+ 對話截圖辨識（Gemini multimodal）。Next.js 15.2 + Genkit 1.8 + Gemini 2.5 Flash + Cloudflare Turnstile，Firestore 不存使用者輸入或回覆（隱私意識強）。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#83 本土語分班配對系統 v2.6：升年級重編班「舊選修語別 → 新班級座號」映射 + Levenshtein 模糊比對 + 5 種語別 16 族 7 國</title>
+      <link>https://cagoooo.github.io/Akai/blog/native-language-83-class-grouping</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/native-language-83-class-grouping</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#83 不是「分組演算法」 — 是處理「**升年級重新編班後，舊本土語選修資料怎麼映射到新班級**」的 Excel 解析配對工具。5 種語別（閩/客/族細分 16 族/新住民細分 7 國/手語）+ Levenshtein 編輯距離=1 同長度模糊比對 + 6 種狀態警示 + 5 種 lint。單檔 172 KB 純 vanilla JS，100% 本機運算，純 file:// 都能跑。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#11 剛好學 Akailao v3.8.9：九大互動模式 + 拍照 AI 出 PIRLS 題 + 老師自架 Firebase 資料自主的 Kahoot+Quizizz+Mentimeter 合體</title>
+      <link>https://cagoooo.github.io/Akai/blog/classroom-interaction-11-easy</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/classroom-interaction-11-easy</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#11 不只是「投票 + 文字雲」 — 是九大互動模式（搶答 / 繪圖板 / 是非 / 選擇 / 問答 / 互評 / **PIRLS 閱讀招牌** / 排序 / 配對）合體 SaaS。234 KB 單檔 Akailao v3.8.9 + Gemini 2.5 Flash 拍課本自動出 PIRLS 題 + 每位老師自架 Firebase（資料自主）+ set.html 配置生成器（降門檻）。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#87 PIRLS Pro QuestionCraft：把舊版 HTML 單檔砍掉重練成 Next.js + Cloud Functions 的閱讀素養出題神器</title>
+      <link>https://cagoooo.github.io/Akai/blog/pirls-87-questioncraft-rewrite</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/pirls-87-questioncraft-rewrite</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#87 PIRLS QuestionCraft 是舊版 #4 PIRLS 的完全重寫版。Next.js 15 + Gemini 2.5 Flash + Firestore，月費 &lt; 0.25 美金的 serverless 架構，PaGamO 題組批量上傳 + 學生 QR 即時作答 + 班級儀表板一條龍。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#79 漢語新解：不是字典，是 AI 用魯迅 + 王爾德口吻寫的「揭露真相版」國語延伸教材</title>
+      <link>https://cagoooo.github.io/Akai/blog/words-79-sarcastic-dictionary</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/words-79-sarcastic-dictionary</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#79 漢語新解絕對不是查字典工具。輸入任何詞 → AI 用王爾德/魯迅/羅永浩三人格混合風格，給你一段 150 字諷刺式新解 + 水墨蓋章畫卷。國語延伸教學的批判思考神器。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#97 MBTI 校園奇遇記：用 47 個 RPG 場景偷偷塞 SDG 多元議題的人格測驗</title>
+      <link>https://cagoooo.github.io/Akai/blog/mbti-97-campus-adventure-rpg</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/mbti-97-campus-adventure-rpg</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#97 MBTI 校園奇遇記不是傳統勾選題 MBTI 測驗，是 47 個校園 RPG 場景 + 12 個多元背景 NPC（客家、新住民、同志家庭、原住民…）+ 16 個結局頁。一鍵 fork 模板讓其他學校 3 分鐘自架。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#94 封面接故事：用 Gemini 2.5 把 MV 封面接成 8 種風格 25 秒分鏡，再用瀏覽器 ffmpeg.wasm 串成短片</title>
+      <link>https://cagoooo.github.io/Akai/blog/music-cover-storyboard-94</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/music-cover-storyboard-94</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#94 封面接故事是給音樂課 / 視藝課 / 媒體素養課的 AI 創作教學駕駛艙。上傳 MV → 抓封面 → AI 接 4-6 段 5 秒分鏡 → 跳 8 大 AI 影片平台產畫面 → 瀏覽器內串成完整短片。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#41 吉他點唱系統「阿凱彈唱之夜」：用 Firestore 即時投票 + 卡帶雜誌風大螢幕模式打造演出儀式感</title>
+      <link>https://cagoooo.github.io/Akai/blog/song-41-akai-night-tape-magazine</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/song-41-akai-night-tape-magazine</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#41 不是教吉他課的工具，是阿凱老師的「彈唱之夜演出系統」。觀眾掃 QR 點歌 + Firestore 即時排行榜 + 雜誌風大螢幕模式 + 卡帶 SIDE A/B 期數收藏。一個老師把午休彈唱變成校園文化。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#24 校務會議紀錄報告站：把石門國小 114 學年度期末會議「致詞 + 處室報告 + 自治市長 + 提案討論」做成單頁互動 SPA</title>
+      <link>https://cagoooo.github.io/Akai/blog/meeting-24-end-semester-record</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/meeting-24-end-semester-record</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#24 真實名稱是「桃園市龍潭區石門國小 114 學年度上學期期末校務會議紀錄」— 用純 Tailwind + Noto Sans TC + Lucide 把整份會議紀錄做成 6 章節互動式 SPA，嵌進 Google Sites Embedded HTML。含張定貴校長致詞 / 家長會長致詞 / 自治市長潘宥睿致詞 / 教務處報告 / 學務處報告 / 提案討論 / 附件規約 / 下學期重要行事簡曆。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#25 國小國語演說特訓班（進階版）：Gemini 2.5 Flash + Lucide 的單檔入門練習工具（#67 Pro 版前身）</title>
+      <link>https://cagoooo.github.io/Akai/blog/speech-25-training-class-entry</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/speech-25-training-class-entry</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#25 真實名稱「國小國語演說特訓班（進階版）」是阿凱早期版 — 用 Gemini 2.5 Flash + Lucide 做的 55KB 單檔 HTML，嵌進 Google Sites Embedded HTML。題庫 + 「儲存並關閉」+「隨機題庫」按鈕，是 #67 Pro 版（5705 行 + Web Speech + 雷達圖 + 老師評分量表）的前身入門版。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#26 九九乘法大冒險：Web Audio + Tailwind + Lucide 純前端遊戲化練習（無 LLM 也能做好工具）</title>
+      <link>https://cagoooo.github.io/Akai/blog/multiplication-26-adventure</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/multiplication-26-adventure</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#26 真實名稱「九九乘法大冒險」是純前端遊戲化練習器 — Tailwind + Lucide + **Web Audio API**（OscillatorNode 合成音效）做的 25KB 單檔 HTML，嵌進 Google Sites。3 狀態反饋（答對了 / 哎呀答錯了 / 挑戰完成）+ 計分計時，**沒用 LLM** — 證明「好的教學工具不一定需要 AI」。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#27 ⬅️好用小工具（許願池）：swissknife 13 個 Google Sites Embedded 工具總入口（含 7 個 Akai 尚未收錄的隱藏作品）</title>
+      <link>https://cagoooo.github.io/Akai/blog/swissknife-27-tool-vault</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/swissknife-27-tool-vault</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#27 真實是 `sites.google.com/mail2.smes.tyc.edu.tw/swissknife/` — 阿凱所有「Gemini 寫 + Google Sites 嵌入」工具的總入口頁，共 13 個子頁工具。其中 6 個已在 Akai 100 個工具內（#5 #10 #25 #26 #44 #75 #76），**7 個是 Akai 尚未收錄的隱藏作品**（取餐叫號區 / 校園點餐後台 / 石小閱讀推動短影片 / Loilonote 題庫轉 Excel / HEIC 轉 JPG / TIFF 轉 PNG 等）。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#44 快樂數學小冒險：國小一年級 4 關卡（10 以內加減 + 20 以內加減）+ canvas-confetti 撒花獎勵的純前端遊戲</title>
+      <link>https://cagoooo.github.io/Akai/blog/math-adventure-44-grade-one</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/math-adventure-44-grade-one</guid>
+      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
+      <description>#44 真實名稱「快樂數學小冒險 | 國小一年級數學練習」是阿凱給**一年級**做的數學練習遊戲。4 個關卡（10 以內加法 / 10 以內減法 / 20 以內加法 / 20 以內減法）+ canvas-confetti 撒花獎勵 + 純 Tailwind + 26KB 單檔 HTML 嵌進 Google Sites。是 #26 九九乘法大冒險的低年級姊妹工具。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+  </channel>
+</rss>
