@@ -417,3 +417,138 @@ v3.6.60 已做的 noindex + llms.txt + AI 爬蟲白名單只是 **起點**。完
 **下游連結效應**：
 - FAQ 內容也會被 NLM crawler 索引 → 用於下次 podcast 時的 query 結果
 - 跟「9 大經典工具 podcast 批量」可同 session 做（共享 NLM auth + notebook 管理）
+
+---
+
+# 🎬 POC：milestone-100 podcast 視覺化長片（2026-05-26 規劃）
+
+**動機**：今天剛產出 20:26 的 NotebookLM podcast。如果能把它**自動視覺化成 YouTube 教學長片**，整個 Akai 內容戰略升級為「**自動內容工廠**」：
+- 每篇部落格 → 自動 podcast → 自動視覺化長片
+- 從「每月 1 支 5 分鐘宣傳片」變「每週 1 支 15-20 分鐘深度長片」
+- 國際化：NLM `language="en"` 一鍵雙語
+
+## 5 階段 POC 工作流（估時 4-6 小時）
+
+### Stage 1：取 word-level transcript + speaker diarization（30 分鐘）
+
+**目標**：從 `milestone-100-tools-achieved.mp3` 拿到 word-level timestamps + 雙 speaker labels
+
+**做法**：用 whisperx（包裝 whisper + pyannote diarization）
+
+```bash
+# 一次性安裝（需 Python 3.10+ + ffmpeg 已有）
+pip install whisperx
+
+# 處理 20 分鐘 podcast
+whisperx H:/Akai/client/public/blog-podcasts/milestone-100-tools-achieved.mp3 \
+  --model large-v3 \
+  --language zh \
+  --diarize \
+  --hf_token <HF_TOKEN> \
+  --output_dir tmp-whisperx \
+  --output_format json
+
+# 輸出：tmp-whisperx/milestone-100-tools-achieved.json
+# Schema：[{ start, end, text, speaker: "SPEAKER_00"/"SPEAKER_01", words: [{w, start, end}] }]
+```
+
+**踩雷預期**：
+- CPU 跑 large-v3 模型約 30-60 分鐘；有 GPU 加速到 5-10 分鐘
+- HuggingFace token 需註冊 (https://huggingface.co/settings/tokens)
+- pyannote 3.x 需接受 model license（首次跑會提示）
+- Windows 上 whisperx 可能需手動裝 PyTorch CUDA（先試 CPU 版）
+
+### Stage 2：設計 Remotion 雙人對話 composition（2 小時）
+
+**檔案位置**：`C:/Users/smes/Desktop/Cowork/akai-promo-video-rm/`（沿用既有專案）
+
+**新增**：
+- `src/AkaiPodcast100.tsx`（新 composition，1080p / 20:26）
+- `src/scenes/PodcastDialog.tsx`（雙人對話 layout）
+- `src/scenes/PodcastChapter.tsx`（章節 hero）
+- `src/data/podcast-transcript.ts`（從 whisperx JSON 轉換）
+- `src/data/hosts.ts`（兩位主持人 ref）
+
+**視覺設計**：
+- 左主持人「Mia」（淺色主題 / 知性女聲 / 引導發問者）
+- 右主持人「Leo」（深色主題 / 沉穩男聲 / 內容解答者）
+- 當前說話者：發光描邊 + 對話泡泡浮現
+- 字幕：黑底毛玻璃 + 雙色高亮（speaker A 用青、speaker B 用金）
+
+### Stage 3：用 gpt-image-2 生成兩位主持人插畫（1 小時）
+
+```javascript
+// scripts/gen-podcast-hosts.js
+const HOSTS = [
+  {
+    name: 'Mia',
+    prompt: 'flat illustration, friendly female podcast host, Taiwanese teacher style, short bob hair, wearing cardigan, holding microphone, warm smile, glassmorphism style, cyan accent color, transparent background, character reference for video',
+    file: 'host-mia.png'
+  },
+  {
+    name: 'Leo',
+    prompt: 'flat illustration, thoughtful male podcast host, Taiwanese male teacher, glasses, short hair, wearing button shirt, holding microphone, calm expression, glassmorphism style, gold accent color, transparent background, character reference for video',
+    file: 'host-leo.png'
+  }
+];
+// 各生成 1024x1024 PNG，存到 akai-promo-video-rm/public/hosts/
+```
+
+兩位主持人在所有未來 podcast 視覺化影片中**重複使用**（角色一致性，建立品牌記憶點）。
+
+### Stage 4：章節自動切分（30 分鐘）
+
+```javascript
+// 用 NLM 取得章節結構
+notebook_query(notebook_id="3bcf9745-...",
+  query="這個 podcast 講了哪 5 個主題段落？每段請給：(1)開始時間秒數 (2)1 句摘要 (3)關鍵字 3 個。用 JSON 陣列回答。")
+// → 自動產 chapters.json 餵給 Remotion
+```
+
+每章節切換時：背景換色 + 章節 hero animation + 字幕暫停 0.5 秒。
+
+### Stage 5：Render + 發布（1 小時）
+
+```bash
+cd C:/Users/smes/Desktop/Cowork/akai-promo-video-rm
+npx remotion render AkaiPodcast100 --concurrency 8
+# → akai-podcast-100.mp4 (1080p, 20:26, 約 200-300 MB)
+
+# 上傳 YouTube
+python "C:/Users/smes/Documents/youtube_upload.py" \
+  "akai-podcast-100.mp4" \
+  "100 工具達成深度解析｜阿凱老師教育工具集 - NotebookLM AI 對談長片" \
+  "本影片由 NotebookLM AI 對談 + Remotion 視覺化自動生成..." \
+  "public"
+
+# 嵌入網站
+# share/100.html 加「📺 深度版（20 分鐘）」CTA 按鈕
+# 部落格頁面 BlogPodcast 元件下方加 BlogPodcastVideo 元件
+```
+
+## 驗證標準
+
+- [ ] whisperx 正確分辨 Mia / Leo 兩位 speaker（手動抽查 5 段）
+- [ ] 章節切換流暢，每段 3-5 分鐘
+- [ ] 兩位主持人插畫風格一致（5 個鏡頭抽查）
+- [ ] 字幕跟 podcast 完全對齊（無漂移）
+- [ ] 完整影片觀看「想看完」（不只第 1 分鐘）
+- [ ] YouTube 上傳成功 + 第一週瀏覽 ≥ 50 次
+
+## POC 成功後 → 寫新 skill
+
+驗證可行後寫 `notebooklm-to-video-bridge` skill，含：
+- 完整 5 階段 SOP
+- 雙人對話 Remotion composition 範本
+- 兩位主持人角色設計 brief
+- whisperx 設定踩雷清單
+- 跟 [[notebooklm-podcast-pipeline]] + [[hf-narrated-video-pipeline]] + [[remotion-best-practices]] 的整合圖
+
+預計新 skill 寫好後，**任何一篇部落格 1 小時內可產出深度視覺化長片**。
+
+## 跨 session 你可以先做的準備
+
+1. **註冊 [HuggingFace token](https://huggingface.co/settings/tokens)**（whisperx diarization 需要）
+2. **想想角色名字**（Mia/Leo 是我隨意起的，可改成更有阿凱風格的名字）
+3. **看一支既有 NotebookLM podcast 視覺化參考**：YouTube 搜「NotebookLM podcast video」看別人怎麼做
+4. **預想章節風格偏好**：cork 公佈欄延伸？暗色霓虹？risograph？（會影響 gpt-image-2 prompt 風格）
