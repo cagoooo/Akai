@@ -1,8 +1,13 @@
 User-agent: *
 Allow: /
 
-# Sitemap
+# Sitemap（傳統搜尋引擎用）
 Sitemap: https://cagoooo.github.io/Akai/sitemap.xml
+
+# llms.txt（給 AI/LLM 爬蟲讀的內容索引，llmstxt.org 標準）
+# 主要 AI 爬蟲：GPTBot (OpenAI)、ClaudeBot (Anthropic)、PerplexityBot、
+# Google-Extended (Gemini)、CCBot (Common Crawl)、Bytespider (TikTok/Doubao)
+# 全部允許爬取，請優先讀 /Akai/llms.txt 拿到結構化內容索引。
 
 # Crawl-delay suggestion
 Crawl-delay: 1
@@ -11,3 +16,25 @@ Crawl-delay: 1
 Disallow: /api/
 Disallow: /admin/
 Disallow: /private/
+
+# AI 爬蟲明確 allow（避免某些網域預設封鎖）
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
