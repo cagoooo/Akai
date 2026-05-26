@@ -31,6 +31,7 @@ import { BlogCta } from '@/components/blog/BlogCta';
 import { BlogMobileShare } from '@/components/blog/BlogMobileShare';
 import { BlogCodeBlock } from '@/components/blog/BlogCodeBlock';
 import { BlogPostingSchema } from '@/components/blog/BlogPostingSchema';
+import { BlogPodcast } from '@/components/blog/BlogPodcast';
 import { BlogTemplateCopier } from '@/components/blog/BlogTemplateCopier';
 import { useReadingProgress } from '@/hooks/useReadingProgress';
 import { useActiveSection } from '@/hooks/useActiveSection';
@@ -290,6 +291,9 @@ export function BlogPost() {
             {sections.length > 0 && (
               <BlogMobileToc sections={sections} activeId={activeId} slug={post.slug} />
             )}
+
+            {/* AI 生成 podcast 播放器（檔案存在時才渲染）*/}
+            <BlogPodcast slug={post.slug} />
 
             <div className="bp-article">
               <ReactMarkdown
