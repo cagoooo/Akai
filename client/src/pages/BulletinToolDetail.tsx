@@ -509,9 +509,85 @@ export function BulletinToolDetail() {
                 </div>
               </div>
             </div>
+
+            {/* 行動按鈕（緊貼拍立得下方，提升 UX） */}
+            <div
+              className="bulletin-detail-actions"
+              style={{
+                marginTop: 22,
+                display: 'flex',
+                gap: 10,
+                flexWrap: 'wrap',
+                justifyContent: 'center',
+              }}
+            >
+              <button
+                type="button"
+                onClick={handleUseTool}
+                style={{
+                  background: tokens.accent,
+                  color: '#fff',
+                  border: '2.5px solid #1a1a1a',
+                  padding: '14px 26px',
+                  borderRadius: 10,
+                  fontSize: 16,
+                  fontWeight: 900,
+                  cursor: 'pointer',
+                  fontFamily: tokens.font.tc,
+                  boxShadow: '4px 4px 0 rgba(0,0,0,.4)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                }}
+              >
+                ⚡ 立即使用
+              </button>
+              <button
+                type="button"
+                onClick={handleCopyLink}
+                style={{
+                  background: tokens.paper,
+                  color: tokens.ink,
+                  border: '2.5px solid #1a1a1a',
+                  padding: '14px 20px',
+                  borderRadius: 10,
+                  fontSize: 14,
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  fontFamily: tokens.font.tc,
+                  boxShadow: '3px 3px 0 rgba(0,0,0,.3)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                }}
+              >
+                📋 複製連結
+              </button>
+              <button
+                type="button"
+                onClick={handleShare}
+                style={{
+                  background: tokens.paper,
+                  color: tokens.ink,
+                  border: '2.5px solid #1a1a1a',
+                  padding: '14px 20px',
+                  borderRadius: 10,
+                  fontSize: 14,
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  fontFamily: tokens.font.tc,
+                  boxShadow: '3px 3px 0 rgba(0,0,0,.3)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                }}
+              >
+                🔗 分享
+              </button>
+            </div>
           </div>
 
-          {/* 右側：標題 + 描述 + 按鈕 */}
+          {/* 右側：標題 + 描述 + 標籤 */}
           <div>
             {/* 標題膠帶 */}
             <div style={{ marginBottom: 16 }}>
@@ -755,76 +831,6 @@ export function BulletinToolDetail() {
                 ))}
               </div>
             )}
-
-            {/* 行動按鈕 */}
-            <div
-              className="bulletin-detail-actions"
-              style={{ marginTop: 28, display: 'flex', gap: 10, flexWrap: 'wrap' }}
-            >
-              <button
-                type="button"
-                onClick={handleUseTool}
-                style={{
-                  background: tokens.accent,
-                  color: '#fff',
-                  border: '2.5px solid #1a1a1a',
-                  padding: '14px 26px',
-                  borderRadius: 10,
-                  fontSize: 16,
-                  fontWeight: 900,
-                  cursor: 'pointer',
-                  fontFamily: tokens.font.tc,
-                  boxShadow: '4px 4px 0 rgba(0,0,0,.4)',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 8,
-                }}
-              >
-                ⚡ 立即使用
-              </button>
-              <button
-                type="button"
-                onClick={handleCopyLink}
-                style={{
-                  background: tokens.paper,
-                  color: tokens.ink,
-                  border: '2.5px solid #1a1a1a',
-                  padding: '14px 20px',
-                  borderRadius: 10,
-                  fontSize: 14,
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  fontFamily: tokens.font.tc,
-                  boxShadow: '3px 3px 0 rgba(0,0,0,.3)',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 6,
-                }}
-              >
-                📋 複製連結
-              </button>
-              <button
-                type="button"
-                onClick={handleShare}
-                style={{
-                  background: tokens.paper,
-                  color: tokens.ink,
-                  border: '2.5px solid #1a1a1a',
-                  padding: '14px 20px',
-                  borderRadius: 10,
-                  fontSize: 14,
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  fontFamily: tokens.font.tc,
-                  boxShadow: '3px 3px 0 rgba(0,0,0,.3)',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 6,
-                }}
-              >
-                🔗 分享
-              </button>
-            </div>
           </div>
         </section>
 

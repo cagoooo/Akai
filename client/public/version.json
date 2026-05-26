@@ -1,7 +1,7 @@
 {
-  "version": "3.6.58",
-  "cacheVersion": "v3.6.58-bfbe619-202605251011",
-  "gitHash": "bfbe619",
-  "buildTime": "2026-05-25T02:11:36.525Z",
-  "buildTimestamp": 1779675096525
+  "version": "3.6.60",
+  "cacheVersion": "v3.6.60-actionsabovefold-202605260830",
+  "gitHash": "pending",
+  "buildTime": "2026-05-26T00:30:00.000Z",
+  "buildTimestamp": 1779755400000
 }
