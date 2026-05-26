@@ -18,6 +18,16 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const TOOLS_PATH = resolve(__dirname, '..', 'client', 'public', 'api', 'tools.json');
 const TIMEOUT_MS = 10_000;
 
+// 站內工具（如 #100 工具索引神器）的 URL 是相對路徑 `/Akai/tool/N`，
+// fetch() 無法解析相對 URL → 在檢查前 prefix 成絕對 URL。
+const SITE_ORIGIN = 'https://cagoooo.github.io';
+
+function normalizeUrl(url) {
+  if (typeof url !== 'string') return url;
+  if (url.startsWith('/')) return `${SITE_ORIGIN}${url}`;
+  return url;
+}
+
 // 模擬真實瀏覽器請求，避免被反爬蟲機制（如 Claude.ai、Cloudflare）擋掉
 const BROWSER_HEADERS = {
   'User-Agent':
@@ -115,7 +125,7 @@ async function main() {
   const results = [];
 
   for (const tool of tools) {
-    const result = await checkUrl(tool.url);
+    const result = await checkUrl(normalizeUrl(tool.url));
     results.push({
       toolId: tool.id,
       title: tool.title,
