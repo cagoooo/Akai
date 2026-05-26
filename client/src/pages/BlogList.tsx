@@ -328,6 +328,46 @@ export function BlogList() {
             {' · '}
             <strong style={{ color: '#db2777' }}>🧩 {platformCounts.thirdparty}</strong>
           </p>
+
+          {/* 🏠 回公佈欄首頁 CTA（cork 視覺語彙：紙色 + 厚 ink 邊 + 3D offset 陰影 + hover lift） */}
+          <Link
+            href="/"
+            className="bulletin-blog-back-home"
+            aria-label="回工具公佈欄首頁逛 100 個工具"
+            style={{
+              marginTop: 18,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 10,
+              background: tokens.paper,
+              color: tokens.ink,
+              border: `2.5px solid ${tokens.ink}`,
+              padding: '12px 22px',
+              borderRadius: 12,
+              fontSize: 15,
+              fontWeight: 800,
+              fontFamily: tokens.font.tc,
+              textDecoration: 'none',
+              boxShadow: '4px 4px 0 rgba(0,0,0,.3)',
+              transform: 'rotate(-1deg)',
+              transition: 'transform .15s ease, box-shadow .15s ease',
+              cursor: 'pointer',
+              minHeight: 48,
+              boxSizing: 'border-box',
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.transform = 'rotate(0deg) translate(-2px, -2px)';
+              (e.currentTarget as HTMLAnchorElement).style.boxShadow = '6px 6px 0 rgba(0,0,0,.3)';
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.transform = 'rotate(-1deg)';
+              (e.currentTarget as HTMLAnchorElement).style.boxShadow = '4px 4px 0 rgba(0,0,0,.3)';
+            }}
+          >
+            <span aria-hidden="true" style={{ fontSize: 18 }}>🏠</span>
+            <span>回公佈欄首頁逛工具</span>
+            <span aria-hidden="true" style={{ fontSize: 18, opacity: 0.7 }}>→</span>
+          </Link>
         </div>
 
         {/* 🔍 搜尋 + 篩選工具列 */}
