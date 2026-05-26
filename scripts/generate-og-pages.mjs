@@ -81,8 +81,10 @@ function generateToolPageHtml(tool) {
   <!-- LINE -->
   <meta property="og:image:secure_url" content="${imageUrl}">
 
-  <!-- Robots -->
-  <meta name="robots" content="index, follow">
+  <!-- Robots：本頁為社群爬蟲 OG 用 landing，一般使用者會 JS redirect 到 SPA。
+       告訴 Google 不索引此 OG 頁，避免 Search Console 報「頁面會重新導向 / 已檢索未索引」。
+       follow 保留，讓 Google 仍跟著連結到 SPA 主頁與其他工具。社群爬蟲不理會 noindex。-->
+  <meta name="robots" content="noindex, follow">
 
   <!-- Canonical -->
   <link rel="canonical" href="${pageUrl}">
@@ -254,8 +256,8 @@ function generateWishPageHtml() {
   <meta name="twitter:image" content="${imageUrl}">
   <meta name="twitter:image:alt" content="阿凱老師的許願池預覽圖">
 
-  <!-- Robots & Canonical -->
-  <meta name="robots" content="index, follow">
+  <!-- Robots：許願池 OG landing 純導引用，加 noindex 避免 Search Console 報「重新導向」-->
+  <meta name="robots" content="noindex, follow">
   <link rel="canonical" href="${pageUrl}">
 
   <!-- 自動重導至主 SPA（爬蟲不會執行 JS，只會讀 meta 標籤） -->
@@ -371,6 +373,9 @@ function generateHeatmapPageHtml() {
   <meta name="twitter:description" content="${description}">
   <meta name="twitter:image" content="${heatmapImageUrl}">
 
+  <!-- Robots：heatmap 是首頁的 OG 變體（canonical 也指首頁），加 noindex 避免 Search Console
+       報「替代頁面（有適當的標準標記）」。社群爬蟲不理會 noindex。-->
+  <meta name="robots" content="noindex, follow">
   <link rel="canonical" href="${SITE_URL}/">
 
   <script>
