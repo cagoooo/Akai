@@ -440,14 +440,16 @@ function generateHeatmapPageHtml() {
 function generateCelebration100PageHtml() {
   const pageUrl = `${SITE_URL}/share/100.html`;
 
-  // 讀 ogImageCelebration（由 generate-100-celebration-og.mjs 寫入）
-  let imageUrl = `${SITE_URL}/og-preview.png`;
+  // 新版 OG 圖：share/celebration100/og-1200x630.png（影片頁特製，含 5:32 + ▶ 暗示）
+  // 由 scripts/generate-share-100-assets.mjs 產出
+  const ogCacheBust = '20260526';
+  const imageUrl = `${SITE_URL}/share/celebration100/og-1200x630.png?v=${ogCacheBust}`;
+
   let achievedDate = '';
   try {
     const statsPath = path.resolve(__dirname, '../client/public/api/site-stats.json');
     if (fs.existsSync(statsPath)) {
       const s = JSON.parse(fs.readFileSync(statsPath, 'utf-8'));
-      if (s.ogImageCelebrationAbsolute) imageUrl = s.ogImageCelebrationAbsolute;
       if (s.milestones?.tool100) {
         const d = new Date(s.milestones.tool100);
         if (!Number.isNaN(d.getTime())) {
@@ -472,16 +474,25 @@ function generateCelebration100PageHtml() {
   <meta name="author" content="阿凱老師">
   <meta name="keywords" content="100 工具達成,阿凱老師,石門國小,科技教育創新專區,教育工具達成,100 milestone,教學工具集,免費教育工具">
 
+  <!-- Favicon 套組（紀念頁專屬：深 navy 圓底 + 金色「100」） -->
+  <!-- 由 scripts/generate-share-100-assets.mjs 產出於 client/public/share/celebration100/ -->
+  <link rel="icon" type="image/svg+xml" href="./celebration100/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="./celebration100/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./celebration100/favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="./celebration100/apple-touch-icon.png">
+  <link rel="shortcut icon" href="./celebration100/favicon.ico">
+
   <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="video.other">
   <meta property="og:url" content="${pageUrl}">
   <meta property="og:title" content="${title}">
   <meta property="og:description" content="${description}">
   <meta property="og:image" content="${imageUrl}">
   <meta property="og:image:secure_url" content="${imageUrl}">
+  <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="阿凱老師 100 工具達成紀念拼貼">
+  <meta property="og:image:alt" content="100 工具達成 — 阿凱老師 5:32 宣傳影片紀念頁">
   <meta property="og:site_name" content="科技教育創新專區">
   <meta property="og:locale" content="zh_TW">
 
@@ -491,6 +502,7 @@ function generateCelebration100PageHtml() {
   <meta name="twitter:title" content="${title}">
   <meta name="twitter:description" content="${description}">
   <meta name="twitter:image" content="${imageUrl}">
+  <meta name="twitter:image:alt" content="100 工具達成 — 阿凱老師 5:32 宣傳影片紀念頁">
 
   <link rel="canonical" href="${SITE_URL}/share/100.html">
 
