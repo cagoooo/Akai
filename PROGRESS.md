@@ -1,11 +1,56 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.63` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
-- **里程碑**: **2026-05-26 NotebookLM AI 內容工廠建立** — 從「100 工具達成」podcast 化 + 第二支「真實雙人對談視覺化影片」7 分鐘完成。Akai 從靜態網站升級為「**自動內容工廠起步點**」
-- **最後更新狀態**: v3.6.63 — Podcast → Video Pipeline 完整跑通：(1) NLM deep_dive 雙人對談 podcast；(2) OpenAI gpt-image-1 主持人插畫；(3) whisperx + pyannote 真實 speaker diarization；(4) librosa pitch 雙重驗證男女配對；(5) OpenCC s2twp 繁中字幕；(6) Remotion 5 場景渲染。建立 Kiki & Gordon 兩位虛擬主持人 CP
+- **當前版本**: `v3.6.64` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
+- **里程碑**: **2026-05-26 NotebookLM AI 內容工廠建立 + 字幕完美化** — 7 分鐘對談影片 v6 上線（word-level OpenCC 繁中、speaker boundary split、GPT 直切 12-18 字）
+- **最後更新狀態**: v3.6.64 — v5/v6 字幕完美化收官：(A) GPT-4o-mini 直接做 12-18 字斷句（取代演算法切詞）；(B) Speaker boundary split 把同行雙人對白拆開；(C) `fix-word-level-s2twp.mjs` 修「台灣 → 臺灣」word.w OpenCC 漏處理雷；(D) 整套經驗寫進 `notebooklm-to-video-bridge` skill trap #11.5
 
 ## 📌 完成功能總覽
+
+### `v3.6.64` (最新 · 🇹🇼 字幕完美化收官 + skill 歸檔)
+
+**🎯 動機**
+- v3.6.63 v4 影片上線後，使用者實測字幕仍有問題：「所有的字幕的句子的斷句都有點問題 請找出問題並修正」
+- 截圖顯示三大 bug：(1) 中文詞被切半（「教育工」+「具。」）；(2) 一行字幕混兩位 speaker；(3) word-level 高亮顯示簡體「台灣」而不是繁體「臺灣」
+- 收官目標：把字幕做到「逐幀截圖檢視都挑不出問題」的程度，並把所有踩雷編入可重複使用的 skill
+
+**🇹🇼 三大字幕完美化修正**
+
+| 修法 | 之前的問題 | 新作法 |
+|---|---|---|
+| **GPT 直接 12-18 字斷句** | 自寫演算法按字數+標點切，總在英文詞中間切（「Made with love b」+「y 阿凱老師」）| 用 `gpt-4o-mini` + 嚴格 prompt：「絕對不可新增/刪除任何字、絕對不在詞中間斷行、12-18 字一行」 |
+| **Speaker boundary split** | 「超罕見成就。沒錯，」一行混 Gordon + Kiki | build script 在 speaker switch 點強制 split caption group |
+| **word.w OpenCC s2twp** | text 欄位轉繁中但 `words[].w` 漏處理 → CaptionLayer 逐字高亮顯示簡體「台」| `fix-word-level-s2twp.mjs` 補丁 + 整合進主 build script Step 2.5（45 unique words 修正） |
+
+**🎬 v6 影片成品**
+- 720p 14 MB / 7:02
+- 線上：https://cagoooo.github.io/Akai/share/100-dialog.html （local mp4 fallback，YouTube quota 重置後切回 iframe）
+- 字幕 232 個 caption groups，每行 12-18 字、繁中、speaker 切換正確
+- 逐幀驗證：「震撼**臺灣**國小教育圈的」word-level 高亮正確顯示繁中「臺」
+
+**📚 skill 歸檔（避免下次再踩同樣的雷）**
+- `notebooklm-to-video-bridge` skill 完整建立（7 階段 workflow + 16 條 traps）
+  - trap #11：speaker boundary split（同行雙人對白）
+  - **trap #11.5：word-level 也必須跑 OpenCC，不能只轉 text 欄位**
+  - trap #12-16：MIN_DISPLAY_SEC / GPT prompt 嚴格度 / OpenCC s2twp 必要性 / 等等
+- `notebooklm-podcast-pipeline` skill 同步更新（auth fallback、Chrome MCP UI fallback）
+- 兩個 skill 都加進 `~/.claude/skills/README.md` 索引
+
+**📁 變動檔案**
+- `scripts/add-punctuation-rebuild-captions.mjs`（主 build script，加入 Step 2.5 word.w OpenCC + speaker boundary split）
+- `scripts/fix-word-level-s2twp.mjs`（一次性 patch，已歸檔到 repo）
+- `src/celebration-dialog/captions-data.ts`（232 groups 重新產生）
+- `H:\Akai\client\public\share\celebration-100-dialog.mp4`（v6 替換）
+
+**🎯 戰略意義**
+完美字幕 + speaker 切換 + word-level 繁中高亮三項做到位後，整條 podcast→video pipeline 才算真正「可量產」— 下一篇文章丟進來就能跑出同樣品質的成品。
+
+**📌 待辦（明天 ~15:00 YouTube quota 重置）**
+- 用 `re-upload-v6.mjs` 重傳 v6 到 YouTube 取代 `5ZvBbiC521E`（v4 簡中版）
+- 切回 `100-dialog.html` 的 YouTube iframe（取消 local mp4 fallback）
+
+---
+
 
 ### `v3.6.63` (最新 · 🎙️ Podcast→Video Pipeline 跑通 + Kiki & Gordon 雙人對談特輯)
 
