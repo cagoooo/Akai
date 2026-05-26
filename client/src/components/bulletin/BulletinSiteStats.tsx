@@ -14,6 +14,7 @@ import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { useSiteStats } from '@/hooks/useSiteStats';
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // 樹視圖較重（含 tools.json fetch + SVG），lazy load 只在切到該 tab 才下載
 const BulletinToolFamilyTree = lazy(() =>
@@ -50,6 +51,7 @@ interface Props {
 export function BulletinSiteStats({ onCategoryClick }: Props) {
   const { data, isLoading } = useSiteStats();
   const [mode, setMode] = useState<Mode>('pie');
+  const isMobile = useIsMobile();
 
   const chartData = useMemo(() => {
     if (!data?.categoryCounts) return [];
@@ -206,6 +208,12 @@ export function BulletinSiteStats({ onCategoryClick }: Props) {
               borderRadius: 999,
               border: `1.5px solid ${tokens.ink}`,
               boxShadow: '1.5px 1.5px 0 rgba(0,0,0,.18)',
+              flexShrink: 1,
+              minWidth: 0,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              maxWidth: isMobile ? '130px' : undefined,
             }}
           >
             最大宗：{topCat.emoji} {topCat.name} ({topCat.count})
@@ -228,12 +236,12 @@ export function BulletinSiteStats({ onCategoryClick }: Props) {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: '160px 1fr',
-          gap: 18,
+          gridTemplateColumns: isMobile ? '1fr' : '160px 1fr',
+          gap: isMobile ? 10 : 18,
           alignItems: 'center',
         }}
       >
-        <div style={{ width: 160, height: 160 }}>
+        <div style={{ width: 160, height: 160, margin: isMobile ? '0 auto' : undefined }}>
           <ResponsiveContainer>
             <PieChart>
               <Pie
@@ -276,8 +284,8 @@ export function BulletinSiteStats({ onCategoryClick }: Props) {
             padding: 0,
             listStyle: 'none',
             display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '4px 12px',
+            gridTemplateColumns: isMobile ? '1fr 1fr' : '1fr 1fr',
+            gap: isMobile ? '3px 8px' : '4px 12px',
             fontSize: 12,
             color: tokens.ink,
           }}

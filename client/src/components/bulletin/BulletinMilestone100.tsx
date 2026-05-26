@@ -13,6 +13,7 @@ import { useEffect, useState, useRef } from 'react';
 import { tokens } from '@/design/tokens';
 import { Tape } from '@/components/primitives/Tape';
 import { Pin } from '@/components/primitives/Pin';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // 撒花動畫 keyframes（注入一次到 <head>）
 const CONFETTI_STYLE_ID = 'akai-confetti-keyframes';
@@ -338,6 +339,7 @@ function CelebrationBanner({
     day: '2-digit',
   });
   const base = import.meta.env.BASE_URL || '/';
+  const isMobile = useIsMobile();
 
   // 撒花觸發次數（每加 1 撒一次）
   const [confettiTick, setConfettiTick] = useState(0);
@@ -359,7 +361,7 @@ function CelebrationBanner({
         data-testid="milestone-celebration"
         style={{
           position: 'relative',
-          padding: '18px 60px 12px',
+          padding: isMobile ? '14px 12px 10px' : '18px 60px 12px',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -382,51 +384,75 @@ function CelebrationBanner({
               transition: 'transform 0.18s ease',
             }}
           >
-            {/* 左側歡呼 emoji */}
-            <span
-              className="akai-cheer-emoji"
-              aria-hidden="true"
+            {/* 左側歡呼 emoji — 手機隱藏以防 overflow */}
+            {!isMobile && (
+              <span
+                className="akai-cheer-emoji"
+                aria-hidden="true"
+                style={{
+                  position: 'absolute',
+                  left: -34,
+                  top: '50%',
+                  marginTop: -16,
+                  fontSize: 30,
+                  animation: 'akai-cheer-bounce 1.4s ease-in-out infinite',
+                  filter: 'drop-shadow(0 2px 2px rgba(0,0,0,.2))',
+                  transformOrigin: '50% 100%',
+                }}
+              >
+                🎊
+              </span>
+            )}
+
+            <Tape
+              color="#fde047"
+              width={isMobile ? 0 : 520}
+              angle={0}
               style={{
-                position: 'absolute',
-                left: -34,
-                top: '50%',
-                marginTop: -16,
-                fontSize: 30,
-                animation: 'akai-cheer-bounce 1.4s ease-in-out infinite',
-                filter: 'drop-shadow(0 2px 2px rgba(0,0,0,.2))',
-                transformOrigin: '50% 100%',
+                padding: isMobile ? '10px 16px' : '14px 28px',
+                fontSize: isMobile ? 15 : 20,
+                ...(isMobile ? { minWidth: 0, width: 'calc(100vw - 28px)', textAlign: 'center' } : {}),
               }}
             >
-              🎊
-            </span>
-
-            <Tape color="#fde047" width={520} angle={0} style={{ padding: '14px 28px', fontSize: 20 }}>
-              <span style={{ fontSize: 26, fontWeight: 900, color: tokens.ink, letterSpacing: '0.04em' }}>
+              <span style={{ fontSize: isMobile ? 20 : 26, fontWeight: 900, color: tokens.ink, letterSpacing: '0.04em' }}>
                 🎉 100 工具達成
               </span>
-              <span style={{ margin: '0 10px', color: tokens.muted2 }}>·</span>
-              <span style={{ fontSize: 14, fontWeight: 700, color: tokens.muted2 }}>
-                {dateStr} 解鎖｜點我看 #100 工具索引神器 →
-              </span>
+              {isMobile ? (
+                <>
+                  <br />
+                  <span style={{ fontSize: 12, fontWeight: 700, color: tokens.muted2 }}>
+                    點我看 #100 工具索引神器 →
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span style={{ margin: '0 10px', color: tokens.muted2 }}>·</span>
+                  <span style={{ fontSize: 14, fontWeight: 700, color: tokens.muted2 }}>
+                    {dateStr} 解鎖｜點我看 #100 工具索引神器 →
+                  </span>
+                </>
+              )}
             </Tape>
 
-            {/* 右側歡呼 emoji */}
-            <span
-              className="akai-cheer-emoji"
-              aria-hidden="true"
-              style={{
-                position: 'absolute',
-                right: -34,
-                top: '50%',
-                marginTop: -16,
-                fontSize: 30,
-                animation: 'akai-cheer-bounce-r 1.4s ease-in-out infinite 0.2s',
-                filter: 'drop-shadow(0 2px 2px rgba(0,0,0,.2))',
-                transformOrigin: '50% 100%',
-              }}
-            >
-              🥳
-            </span>
+            {/* 右側歡呼 emoji — 手機隱藏以防 overflow */}
+            {!isMobile && (
+              <span
+                className="akai-cheer-emoji"
+                aria-hidden="true"
+                style={{
+                  position: 'absolute',
+                  right: -34,
+                  top: '50%',
+                  marginTop: -16,
+                  fontSize: 30,
+                  animation: 'akai-cheer-bounce-r 1.4s ease-in-out infinite 0.2s',
+                  filter: 'drop-shadow(0 2px 2px rgba(0,0,0,.2))',
+                  transformOrigin: '50% 100%',
+                }}
+              >
+                🥳
+              </span>
+            )}
 
             {/* 慶祝小提示 */}
             <div
@@ -476,19 +502,21 @@ function CelebrationBanner({
             textDecoration: 'none',
             display: 'inline-flex',
             alignItems: 'center',
-            gap: 10,
-            padding: '10px 22px',
+            flexWrap: 'nowrap',
+            gap: isMobile ? 6 : 10,
+            padding: isMobile ? '8px 16px' : '10px 22px',
             background: 'rgba(26,15,5,.88)',
             color: '#fde047',
             border: '2.5px solid #fde047',
             borderRadius: 22,
-            fontSize: 14,
+            fontSize: isMobile ? 13 : 14,
             fontWeight: 900,
             letterSpacing: '0.04em',
             boxShadow: '3px 3px 0 rgba(26,15,5,.55)',
             transition: 'transform .15s ease, box-shadow .15s ease',
             fontFamily: tokens.font.tc,
             cursor: 'pointer',
+            whiteSpace: 'nowrap',
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = 'translate(-2px, -2px)';
