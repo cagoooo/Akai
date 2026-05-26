@@ -794,15 +794,18 @@ function generateCelebration100DialogPageHtml() {
 
   <div class="video-wrap">
     <div class="video-container">
-      <iframe
-        src="https://www.youtube.com/embed/5ZvBbiC521E?rel=0&modestbranding=1"
-        title="Kiki & Gordon 雙人對談特輯 — 100 工具達成深度解析"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-        loading="lazy"
-        style="width:100%;height:100%;border:0;">
-      </iframe>
+      <!-- 本地 mp4 = v5 繁中字幕完美版（GPT 12-18 字斷句 + speaker 邊界 split） -->
+      <!-- YouTube 上的是 v4 舊字幕版（5ZvBbiC521E），待明天 quota 重置後重新上傳 v5 -->
+      <video
+        controls
+        preload="metadata"
+        poster="${SITE_URL}/share/celebration100/cover.png"
+        aria-label="Kiki & Gordon 雙人對談特輯 — 100 工具達成深度解析"
+        style="width:100%;height:100%;"
+      >
+        <source src="./celebration-100-dialog.mp4" type="video/mp4" />
+        <p>您的瀏覽器不支援 HTML5 影片。<a href="./celebration-100-dialog.mp4">點此下載</a></p>
+      </video>
     </div>
   </div>
 
