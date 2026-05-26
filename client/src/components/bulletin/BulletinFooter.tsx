@@ -3,6 +3,7 @@ import { Tape } from '@/components/primitives/Tape';
 import { Pin } from '@/components/primitives/Pin';
 import { useVersionCheck } from '@/hooks/useVersionCheck';
 import { SchoolLogo } from './SchoolLogo';
+import { BulletinInternalLinks } from './BulletinInternalLinks';
 
 const SCHOOL_URL = 'https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5';
 const SCHOOL_MAPS_URL = 'https://maps.app.goo.gl/D9hqL2eakDLC8ko46';
@@ -32,6 +33,9 @@ export function BulletinFooter() {
       role="contentinfo"
       aria-label="網站頁尾資訊"
     >
+      {/* 內部連結 SEO 區（每頁可見，集中 PageRank 到核心頁面） */}
+      <BulletinInternalLinks />
+
       {/* 中央標題膠帶 */}
       <div style={{ textAlign: 'center', marginBottom: 24 }}>
         <Tape color={tokens.note.yellow} angle={-1.5} width={220}>
