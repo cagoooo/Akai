@@ -470,10 +470,10 @@ whisperx H:/Akai/client/public/blog-podcasts/milestone-100-tools-achieved.mp3 \
 - `src/data/hosts.ts`（兩位主持人 ref）
 
 **視覺設計**：
-- 左主持人「Mia」（淺色主題 / 知性女聲 / 引導發問者）
-- 右主持人「Leo」（深色主題 / 沉穩男聲 / 內容解答者）
+- 左主持人「**Kiki**」（青色 #00e5ff 主題 / 知性女聲 / 引導發問者）
+- 右主持人「**Gordon**」（金色 #ffb300 主題 / 沉穩男聲 / 內容解答者）
 - 當前說話者：發光描邊 + 對話泡泡浮現
-- 字幕：黑底毛玻璃 + 雙色高亮（speaker A 用青、speaker B 用金）
+- 字幕：黑底毛玻璃 + 雙色高亮（Kiki 青、Gordon 金）
 
 ### Stage 3：用 gpt-image-2 生成兩位主持人插畫（1 小時）
 
@@ -481,14 +481,14 @@ whisperx H:/Akai/client/public/blog-podcasts/milestone-100-tools-achieved.mp3 \
 // scripts/gen-podcast-hosts.js
 const HOSTS = [
   {
-    name: 'Mia',
-    prompt: 'flat illustration, friendly female podcast host, Taiwanese teacher style, short bob hair, wearing cardigan, holding microphone, warm smile, glassmorphism style, cyan accent color, transparent background, character reference for video',
-    file: 'host-mia.png'
+    name: 'Kiki',
+    prompt: 'flat illustration, friendly female podcast host named Kiki, Taiwanese elementary school teacher style, short bob hair, wearing cardigan, holding microphone, warm bright smile, glassmorphism style, cyan accent color #00e5ff, transparent background, character reference for video, consistent style for series',
+    file: 'host-kiki.png'
   },
   {
-    name: 'Leo',
-    prompt: 'flat illustration, thoughtful male podcast host, Taiwanese male teacher, glasses, short hair, wearing button shirt, holding microphone, calm expression, glassmorphism style, gold accent color, transparent background, character reference for video',
-    file: 'host-leo.png'
+    name: 'Gordon',
+    prompt: 'flat illustration, thoughtful male podcast host named Gordon, Taiwanese male elementary school teacher, round glasses, short neat hair, wearing button shirt, holding microphone, calm warm expression, glassmorphism style, gold accent color #ffb300, transparent background, character reference for video, consistent style for series',
+    file: 'host-gordon.png'
   }
 ];
 // 各生成 1024x1024 PNG，存到 akai-promo-video-rm/public/hosts/
@@ -528,7 +528,7 @@ python "C:/Users/smes/Documents/youtube_upload.py" \
 
 ## 驗證標準
 
-- [ ] whisperx 正確分辨 Mia / Leo 兩位 speaker（手動抽查 5 段）
+- [ ] whisperx 正確分辨 Kiki / Gordon 兩位 speaker（手動抽查 5 段）
 - [ ] 章節切換流暢，每段 3-5 分鐘
 - [ ] 兩位主持人插畫風格一致（5 個鏡頭抽查）
 - [ ] 字幕跟 podcast 完全對齊（無漂移）
@@ -552,3 +552,24 @@ python "C:/Users/smes/Documents/youtube_upload.py" \
 2. **想想角色名字**（Mia/Leo 是我隨意起的，可改成更有阿凱風格的名字）
 3. **看一支既有 NotebookLM podcast 視覺化參考**：YouTube 搜「NotebookLM podcast video」看別人怎麼做
 4. **預想章節風格偏好**：cork 公佈欄延伸？暗色霓虹？risograph？（會影響 gpt-image-2 prompt 風格）
+
+---
+
+## 📌 POC 已就緒設定（2026-05-26 完成準備）
+
+### 主持人角色（已定）
+- **Kiki** 🌸 — 青色 `#00e5ff` 主題、知性女聲、引導發問者（podcast 左側）
+- **Gordon** 🎙️ — 金色 `#ffb300` 主題、沉穩男聲、內容解答者（podcast 右側）
+
+### HuggingFace 設定（已驗證）
+- 帳號：`cagoo` / Email: `ipad@mail2.smes.tyc.edu.tw`
+- Token 儲存：`C:\Users\smes\.cache\huggingface\token`（37 字元）
+- huggingface_hub 套件版本：1.15.0 已就位
+- pyannote license 狀態：
+  - `speaker-diarization-3.1` ✅ Accepted
+  - `segmentation-3.0` ✅ Accepted
+
+### 下次 session 開頭只要一句話
+> 「開始 milestone-100 podcast 視覺化 POC」
+
+即可直接從 Stage 1（whisperx 跑 mp3）開始，0 setup 時間。
