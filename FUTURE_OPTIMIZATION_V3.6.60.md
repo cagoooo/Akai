@@ -378,3 +378,42 @@ v3.6.60 已做的 noindex + llms.txt + AI 爬蟲白名單只是 **起點**。完
 > **製作**：阿凱老師 × Claude Sonnet 4.6
 > **參考路徑**：本文件路徑 `H:\Akai\FUTURE_OPTIMIZATION_V3.6.60.md`
 > **配套**：`PROGRESS.md`（已完成）、`FUTURE_DEVELOPMENT.md`（舊版策略總覽）、`FUTURE_ROADMAP_DETAILED.md`（細項清單）
+
+---
+
+# 🚀 下個 Session 預定起點（2026-05-26 規劃）
+
+**選擇**：FAQ Schema 大爆發（P0-5 部落格 SEO 加強的具體落地版）
+
+**為什麼**：
+- 配合今天已完成的 GEO/SEO 五項，形成完整 SEO 護城河
+- Google FAQ Rich Snippet 是目前最強的 CTR 工具之一（30-60% 提升）
+- 純 NLM 自動化，人工只需設計 prompt + 驗證
+
+**5 步工作流（估時 2-3 小時）**：
+
+1. **環境準備**（5 分鐘）：確認 NLM MCP 通了，必要時跑 `notebooklm-podcast-pipeline` skill SOP
+
+2. **寫 `scripts/generate-blog-faqs.mjs`**（30 分鐘）：
+   - 讀 `posts.ts` → 100 篇 BlogPost
+   - 每篇 → NLM `notebook_create` + `source_add(text)` + `notebook_query("5 個常見問題 JSON")`
+   - 結果存 `client/public/api/blog-faqs.json`：`{ [slug]: [{q, a}] × 5 }`
+   - 跑完刪除 notebook（避免 326 變 426 垃圾）
+
+3. **注入 FAQPage Schema**（30 分鐘）：
+   - 改 `scripts/generate-og-pages.mjs` 的 `generateBlogPostHtml(post)`
+   - 讀 blog-faqs.json，注入 `FAQPage` JSON-LD
+   - body 加可視 FAQ accordion（Google 偏好雙重）
+
+4. **BlogPost.tsx 加 FAQ section**（20 分鐘）：
+   - 文章底部 accordion 區塊，第 1 題預設展開
+
+5. **build + push + 驗證**（10 分鐘）：
+   - Google Rich Results Test 驗證 schema
+   - 跑 `scripts/test-geo-discoverability.mjs` 取 baseline
+
+**策略建議**：分批跑 — 先 5 篇（9 大經典中的 5 個）驗證 prompt 工程，再 scale to 100 篇。
+
+**下游連結效應**：
+- FAQ 內容也會被 NLM crawler 索引 → 用於下次 podcast 時的 query 結果
+- 跟「9 大經典工具 podcast 批量」可同 session 做（共享 NLM auth + notebook 管理）
