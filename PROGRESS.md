@@ -1,13 +1,66 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.60` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
-- **里程碑**: **2026-05-26 影片 v3 上線 + RWD 優化 + GEO 強化** — 5:32 YunJhe 旁白 + word-level 同步字幕的全新宣傳影片、手機端跑版修正、新增 llms.txt 給 AI 助手讀
-- **最後更新狀態**: v3.6.60 — Search Console 觀察報告處理 + GEO 強化：(1) 純 OG redirect 頁加 noindex 清乾淨 Search Console；(2) 新增 `llms.txt` 給 ChatGPT/Claude/Perplexity 讀（72 KB 結構化內容索引，含 100 工具 + 101 篇部落格）；(3) `robots.txt` 明確 allow 7 個主流 AI 爬蟲
+- **當前版本**: `v3.6.61` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
+- **里程碑**: **2026-05-26 P0 GEO/SEO 全套到位** — Schema.org 三件套 + llms-full.txt（404 KB 全文版）+ GEO 監測 script + 內部連結優化，全站 SEO/GEO 體質一次升級
+- **最後更新狀態**: v3.6.61 — P0 五項 GEO/SEO 優化全部完成：(1) Schema.org Person/WebSite/VideoObject/BlogPosting 全注入；(2) llms-full.txt 給 OpenAI custom GPT / Claude Project 深度 ingest；(3) GEO 監測腳本（10 個標準 prompt × 4 平台）；(4) Footer 內部連結優化集中 PageRank；(5) blog OG 加 BlogPosting + 閱讀時間 + image alt
 
 ## 📌 完成功能總覽
 
-### `v3.6.60` (最新 · 🤖 GEO 強化 + SEO 優化 + RWD 跑版修正)
+### `v3.6.61` (最新 · 🟥 P0 GEO/SEO 五項全套到位)
+
+**🎯 動機**
+- v3.6.60 完成 GEO 基礎（llms.txt + noindex），這版把整個 P0 路線圖五項一次做完，全面建立 GEO/SEO 護城河
+
+**📦 五項變更**
+
+| # | 項目 | 檔案 | 影響 |
+|---|---|---|---|
+| 1 | Schema.org 三件套 | `client/index.html`、`scripts/generate-og-pages.mjs` | Google rich snippets、AI 知識圖譜 |
+| 2 | `llms-full.txt` 全文版 | `scripts/generate-llms-txt.mjs`（擴充） | 給 ChatGPT GPT/Claude Project 深度 ingest |
+| 3 | GEO 監測腳本 | `scripts/test-geo-discoverability.mjs`（新建） | 每月可追蹤 AI 助手引用率 |
+| 4 | 內部連結優化 | `BulletinInternalLinks.tsx`（新建）+ `BulletinFooter.tsx` | PageRank 集中到 9 大經典 |
+| 5 | Blog SEO 升級 | `generate-og-pages.mjs` blog 段 | BlogPosting schema + 閱讀時間 + alt text |
+
+**🏷️ Schema.org 三件套詳細**
+- 首頁 `index.html`：
+  - `EducationalOrganization`（站點主體，描述修正「90+」→「100」）
+  - `Person` schema（阿凱老師 @id #akai，含 9 個 `knowsAbout` 技能領域）
+  - `WebSite` schema 含 `SearchAction` → Google sitelinks search box
+- `share/100.html`：`VideoObject`（`duration: PT5M32S` + `contentUrl` → Google 搜尋可顯示影片縮圖卡片）
+- `blog/{slug}/index.html`：`BlogPosting`（含 `author`/`publisher`/`wordCount`/`timeRequired`/`about` 關聯工具）
+- 驗證結果：首頁 6 entries / 影片頁 4 entries / blog post 10 entries
+
+**🤖 llms-full.txt（404 KB 全文版）**
+- 對 `llms.txt`（72 KB 索引版）的擴展，包含每工具完整 `detailedDescription`（~948 字/工具）+ 每篇部落格完整內文（截到 4000 字/篇）
+- 適合場景：OpenAI custom GPT、Claude Project knowledge、Perplexity Spaces
+- `llms.txt` 內加 reference 連到 `llms-full.txt`，AI 爬蟲可依需求選深度
+
+**🧪 GEO 監測腳本（10 prompts × 4 平台）**
+- 10 個標準測試 prompts 分四類：直接搜尋（A）/ 情境搜尋（B）/ 技術搜尋（C）/ 名詞搜尋（D）
+- 4 個 AI 平台：ChatGPT / Claude / Perplexity / Gemini
+- 結果記錄到 `geo-tests.json`（HIT/PARTIAL/MISS）
+- `--report` flag 看歷史 hit rate 趨勢與各平台統計
+- 建議頻率：每月 1 號跑一次
+
+**🔗 內部連結優化**
+- 新元件 `BulletinInternalLinks.tsx`，插到 `BulletinFooter` 頂部
+- 顯示三區：⭐ 9 大經典工具 chips（#1/8/3/4/7/6/17/26/74）/ 🧭 4 hub 連結 / 📰 最新 3 篇部落格
+- 用 `<nav aria-label>` 加語意，每頁可見 → 集中 PageRank 到核心內容
+- 補強：BulletinFooter 在 App.tsx、BlogList.tsx、BlogPost.tsx、BlogDraftPreview.tsx 都用 → 全站受益
+
+**📝 Blog SEO 升級**
+- `og:image:alt` 加上明確描述（無 alt 是 SEO 扣分項）
+- `article:tag` meta 從 post.tags 動態產出
+- `BlogPosting` JSON-LD 含 author Person reference (`@id`)、publisher、wordCount、timeRequired
+- `about` 欄位列出文章關聯的工具 → AI 能建構「文章 ↔ 工具」雙向圖譜
+
+**🐛 連帶修正**
+- VideoObject schema 的 `uploadDate` 解析 `2026 年 5 月 24 日` 中文格式失敗，改為硬編碼 `2026-05-25`
+
+---
+
+### `v3.6.60` (🤖 GEO 強化基礎 + SEO 優化 + RWD 跑版修正)
 
 **🎯 動機**
 - Google Search Console 報「頁面會重新導向 / 替代頁面 / 已檢索未索引」13 頁，需釐清是否真有問題
