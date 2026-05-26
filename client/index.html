@@ -276,30 +276,82 @@
   <meta name="format-detection" content="telephone=no" />
 
 
-  <!-- Schema.org markup for Google -->
+  <!-- Schema.org: EducationalOrganization（站點主體）-->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "EducationalOrganization",
+      "@id": "https://cagoooo.github.io/Akai/#organization",
       "name": "科技教育創新專區",
       "alternateName": "阿凱老師 · 教育工具集",
-      "description": "桃園市龍潭區石門國民小學阿凱老師親手打造的 90+ 款國小教育科技工具，涵蓋課堂互動、AI 教案、閱讀評量、語文寫作、教育遊戲。",
+      "description": "桃園市龍潭區石門國民小學阿凱老師親手打造的 100 款國小教育科技工具，涵蓋課堂互動、AI 教案、閱讀評量、語文寫作、教育遊戲、行政自動化、親師溝通。所有工具皆為 MIT 開源、永久免費、無需註冊。",
       "url": "https://cagoooo.github.io/Akai/",
       "logo": "https://cagoooo.github.io/Akai/icon-512.png",
       "image": "https://cagoooo.github.io/Akai/og-preview-0cc6358c.png",
       "sameAs": [
         "https://line.me/R/ti/p/@733oiboa",
         "https://lin.ee/pCqnVhT",
-        "https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5"
+        "https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5",
+        "https://github.com/cagoooo/Akai"
       ],
-      "founder": {
-        "@type": "Person",
-        "name": "阿凱老師",
-        "jobTitle": "教育科技創新者 · 國小資訊教師",
-        "affiliation": {
-          "@type": "EducationalOrganization",
-          "name": "桃園市龍潭區石門國民小學"
-        }
+      "founder": { "@id": "https://cagoooo.github.io/Akai/#akai" }
+    }
+    </script>
+
+  <!-- Schema.org: Person（阿凱老師個人檔案 → AI 助手介紹作者時引用）-->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "@id": "https://cagoooo.github.io/Akai/#akai",
+      "name": "阿凱老師",
+      "alternateName": ["Akai", "cagoooo"],
+      "jobTitle": "資訊組長 / 導師 / 教育科技創新者",
+      "description": "桃園市龍潭區石門國民小學資訊組長，自 2024 年起獨立開發 100 款 MIT 開源的國小教育工具，並撰寫 100+ 篇教學情境深度長文。技術棧：React 18 + TypeScript + Vite + Tailwind + Firebase + Edge TTS + Remotion。",
+      "url": "https://cagoooo.github.io/Akai/",
+      "image": "https://cagoooo.github.io/Akai/assets/Akai.png",
+      "worksFor": {
+        "@type": "EducationalOrganization",
+        "name": "桃園市龍潭區石門國民小學",
+        "alternateName": "Shih Men Elementary School",
+        "url": "https://www.smes.tyc.edu.tw/"
+      },
+      "knowsAbout": [
+        "國小資訊教育",
+        "AI 教育應用",
+        "教學科技工具開發",
+        "PIRLS 閱讀理解",
+        "親師溝通系統",
+        "教學駕駛艙設計",
+        "Firebase / Cloud Functions",
+        "React / TypeScript",
+        "Edge TTS / Remotion 教學影片"
+      ],
+      "sameAs": [
+        "https://github.com/cagoooo",
+        "https://github.com/cagoooo/Akai"
+      ]
+    }
+    </script>
+
+  <!-- Schema.org: WebSite（含 site search action → Google sitelinks search box）-->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": "https://cagoooo.github.io/Akai/#website",
+      "name": "阿凱老師 · 科技教育創新專區",
+      "url": "https://cagoooo.github.io/Akai/",
+      "description": "100 款國小教育工具 · 100+ 篇教學情境長文 · MIT 開源永久免費",
+      "publisher": { "@id": "https://cagoooo.github.io/Akai/#organization" },
+      "inLanguage": "zh-TW",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://cagoooo.github.io/Akai/?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
       }
     }
     </script>

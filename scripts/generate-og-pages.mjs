@@ -494,6 +494,30 @@ function generateCelebration100PageHtml() {
 
   <link rel="canonical" href="${SITE_URL}/share/100.html">
 
+  <!-- Schema.org: VideoObject → Google 搜尋結果可能顯示影片縮圖卡片 -->
+  <script type="application/ld+json">
+  ${JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'VideoObject',
+    name: '阿凱老師 100 工具達成宣傳影片',
+    description: '5 分 32 秒的紀錄片風格宣傳影片：一位桃園市石門國小老師，兩年內獨立完成 100 款免費教育工具的歷程。含 zh-TW-YunJheNeural 男聲旁白與 word-level 同步字幕。',
+    thumbnailUrl: `${SITE_URL}/celebration100/cover.png`,
+    uploadDate: '2026-05-25',
+    duration: 'PT5M32S',
+    contentUrl: `${SITE_URL}/share/akai-promo-v3.mp4`,
+    embedUrl: `${SITE_URL}/share/100.html`,
+    inLanguage: 'zh-TW',
+    isFamilyFriendly: true,
+    author: { '@type': 'Person', name: '阿凱老師', url: `${SITE_URL}/` },
+    publisher: {
+      '@type': 'EducationalOrganization',
+      name: '科技教育創新專區',
+      url: `${SITE_URL}/`,
+    },
+    keywords: '100 工具達成,阿凱老師,石門國小,教育科技,Remotion,Edge TTS,word-level subtitle',
+  }, null, 2)}
+  </script>
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -667,6 +691,45 @@ function generateBlogPostHtml(post) {
   }
   const keywords = ['教學情境', '阿凱老師', '教育工具', ...(post.tags || [])].join(',');
 
+  // 閱讀時間估算（中文 ~ 350 字/分鐘）
+  const bodyLength = (post.body || '').replace(/<[^>]+>/g, '').length;
+  const readingMin = Math.max(1, Math.round(bodyLength / 350));
+
+  // BlogPosting Schema.org structured data — 給 Google rich snippets + AI 爬蟲建構知識圖譜
+  const blogPostingSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.excerpt,
+    image: imageUrl,
+    datePublished: post.publishedAt,
+    dateModified: post.publishedAt,
+    url: pageUrl,
+    author: {
+      '@type': 'Person',
+      '@id': `${SITE_URL}/#akai`,
+      name: '阿凱老師',
+      url: `${SITE_URL}/`,
+    },
+    publisher: {
+      '@type': 'EducationalOrganization',
+      name: '科技教育創新專區',
+      url: `${SITE_URL}/`,
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/icon-512.png` },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
+    inLanguage: 'zh-TW',
+    keywords: keywords,
+    wordCount: bodyLength,
+    timeRequired: `PT${readingMin}M`,
+    // 連結到此篇對應的工具（給 AI 建構工具與文章的關聯）
+    about: (post.toolIds || []).map(id => ({
+      '@type': 'SoftwareApplication',
+      name: `阿凱老師工具 #${id}`,
+      url: `${SITE_URL}/tool/${id}`,
+    })),
+  };
+
   return `<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -681,6 +744,7 @@ function generateBlogPostHtml(post) {
   <meta property="og:title" content="${title}">
   <meta property="og:description" content="${description}">
   <meta property="og:image" content="${imageUrl}">
+  <meta property="og:image:alt" content="${post.title} — 阿凱老師教學情境長文封面">
   <meta property="og:image:secure_url" content="${imageUrl}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -688,11 +752,19 @@ function generateBlogPostHtml(post) {
   <meta property="og:locale" content="zh_TW">
   <meta property="article:author" content="阿凱老師">
   <meta property="article:published_time" content="${post.publishedAt}">
+  <meta property="article:section" content="教學情境深度長文">
+  ${(post.tags || []).map(t => `<meta property="article:tag" content="${t}">`).join('\n  ')}
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${title}">
   <meta name="twitter:description" content="${description}">
   <meta name="twitter:image" content="${imageUrl}">
+  <meta name="twitter:image:alt" content="${post.title} 封面圖">
   <link rel="canonical" href="${pageUrl}">
+
+  <!-- Schema.org: BlogPosting — Google rich snippets + AI 知識圖譜 -->
+  <script type="application/ld+json">
+  ${JSON.stringify(blogPostingSchema, null, 2)}
+  </script>
   <script>
     (function() {
       var ua = navigator.userAgent || '';
@@ -741,8 +813,13 @@ function extractBlogPosts() {
     const tagsMatch = body.match(/tags:\s*\[([^\]]+)\]/);
     const tags = tagsMatch ? tagsMatch[1].split(',').map((s) => s.trim().replace(/^'|'$/g, '')).filter(Boolean) : [];
 
+    // 抓 body 欄位（HTML 內文，用於計算 wordCount / readingTime）
+    let postBody = '';
+    const bodyMatch = body.match(/body:\s*`([\s\S]*?)`,/) ?? body.match(/body:\s*'([\s\S]*?)',/);
+    if (bodyMatch) postBody = bodyMatch[1];
+
     if (slug && title) {
-      posts.push({ slug, title, excerpt: excerpt || '', publishedAt: publishedAt || '', toolIds, coverEmoji, tags });
+      posts.push({ slug, title, excerpt: excerpt || '', publishedAt: publishedAt || '', toolIds, coverEmoji, tags, body: postBody });
     }
   }
   return posts;
