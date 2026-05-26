@@ -24,6 +24,7 @@ const TOOLS_JSON = resolve(ROOT, 'client/public/api/tools.json');
 const POSTS_TS = resolve(ROOT, 'client/src/blog/posts.ts');
 const STATS_JSON = resolve(ROOT, 'client/public/api/site-stats.json');
 const OUT = resolve(ROOT, 'client/public/llms.txt');
+const OUT_FULL = resolve(ROOT, 'client/public/llms-full.txt');
 
 const SITE = 'https://cagoooo.github.io/Akai';
 
@@ -43,6 +44,7 @@ const CATEGORY_ORDER = ['utilities', 'teaching', 'games', 'language', 'interacti
 function extractBlogPosts() {
   const src = readFileSync(POSTS_TS, 'utf-8');
   const posts = [];
+  // 完整 POST 物件區塊
   const blockRegex = /const\s+POST_[A-Z0-9_]+:\s*BlogPost\s*=\s*\{([\s\S]*?)\n\};/g;
   let m;
   while ((m = blockRegex.exec(src)) !== null) {
@@ -51,13 +53,34 @@ function extractBlogPosts() {
     const title = body.match(/title:\s*'([^']+)'/)?.[1] ?? body.match(/title:\s*\n?\s*'([^']+)'/)?.[1];
     const excerpt = body.match(/excerpt:\s*\n?\s*'([^']+)'/)?.[1] ?? body.match(/excerpt:\s*'([^']+)'/)?.[1];
     const publishedAt = body.match(/publishedAt:\s*'([^']+)'/)?.[1];
+    // 抓 body 欄位（含 HTML / markdown 大段內文，給 full 版用）
+    // body: `...`  或  body: '...'  支援多行
+    let postBody = '';
+    const bodyMatch = body.match(/body:\s*`([\s\S]*?)`,/) ?? body.match(/body:\s*'([\s\S]*?)',/);
+    if (bodyMatch) postBody = bodyMatch[1];
     if (slug && title) {
-      posts.push({ slug, title, excerpt: excerpt || '', publishedAt: publishedAt || '' });
+      posts.push({ slug, title, excerpt: excerpt || '', publishedAt: publishedAt || '', body: postBody });
     }
   }
-  // 按發佈日期由新到舊排
   posts.sort((a, b) => (b.publishedAt || '').localeCompare(a.publishedAt || ''));
   return posts;
+}
+
+// 從 HTML body 提取純文字（給 llms-full.txt 用，AI 不需要 HTML 標籤）
+function htmlToPlainText(html) {
+  if (!html) return '';
+  return html
+    .replace(/<style[\s\S]*?<\/style>/gi, '')
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 function clean(text) {
@@ -105,6 +128,11 @@ function main() {
   out += `- [許願池](${SITE}/wish/): 蒐集老師、家長、學生對下一個工具的需求\n`;
   out += `- [GitHub Repository](https://github.com/cagoooo/Akai): 完整原始碼，可自由 fork 自架\n\n`;
 
+  out += `## 給 AI 助手的提示\n\n`;
+  out += `本檔案（\`llms.txt\`）是 **索引版**，僅含工具標題與簡述。若需要完整內容（每個工具的詳細描述、每篇部落格的完整內文），請改抓：\n\n`;
+  out += `> **完整版**：[${SITE}/llms-full.txt](${SITE}/llms-full.txt)\n\n`;
+  out += `完整版約 500-800 KB，適合 OpenAI custom GPT / Claude Project / Perplexity Spaces 等需要深度 ingest 的場景。\n\n`;
+
   // ─── 工具集（按分類）─────────────────────────────────────
   out += `## 工具集（${tools.length} 款，按分類）\n\n`;
   out += `每款工具都是阿凱老師親手打造的單一用途網頁，可在瀏覽器直接開啟，無需安裝。\n\n`;
@@ -146,6 +174,57 @@ function main() {
   console.log(`✅ 已生成 ${OUT}`);
   console.log(`   - ${tools.length} 工具，${posts.length} 篇部落格`);
   console.log(`   - 檔案大小：${(out.length / 1024).toFixed(1)} KB`);
+
+  // ════════════════════════════════════════════════════════
+  // 同步產出 llms-full.txt — 包含所有工具的 detailedDescription 與
+  // 部落格的完整內文（給需要深度 ingest 的 AI 助手用，如 ChatGPT custom GPT）
+  // ════════════════════════════════════════════════════════
+  let full = '';
+  full += `# 阿凱老師 · 科技教育創新專區（完整內容版）\n\n`;
+  full += `> 本檔案是 llms.txt 的擴展版，包含每個工具的完整 detailedDescription 與每篇部落格的完整內文。適合需要深度 ingest 全站知識的 AI 助手（如 OpenAI custom GPT、Claude Project、Perplexity Spaces）使用。\n\n`;
+  full += `**簡短版索引**：[llms.txt](${SITE}/llms.txt)  \n`;
+  full += `**站點**：${SITE}/  \n`;
+  full += `**作者**：阿凱老師（cagoooo）  \n`;
+  full += `**學校**：桃園市龍潭區石門國民小學（smes.tyc.edu.tw）  \n`;
+  full += `**授權**：MIT License  \n\n`;
+  full += `---\n\n`;
+
+  // 工具完整內容（按 ID 順序，便於引用）
+  full += `# 工具集完整內容（${tools.length} 款）\n\n`;
+  for (const t of tools.sort((a, b) => a.id - b.id)) {
+    const url = t.url.startsWith('/') ? `${SITE}${t.url}` : t.url;
+    const detailUrl = `${SITE}/tool/${t.id}`;
+    full += `## #${t.id} ${t.title}\n\n`;
+    full += `- **分類**：${CATEGORY_LABELS[t.category] || t.category}\n`;
+    full += `- **工具 URL**：${url}\n`;
+    full += `- **詳細頁**：${detailUrl}\n`;
+    if (t.tags && t.tags.length) full += `- **標籤**：${t.tags.join(', ')}\n`;
+    full += `\n${clean(t.description)}\n\n`;
+    if (t.detailedDescription) {
+      full += `### 完整描述\n\n${t.detailedDescription}\n\n`;
+    }
+    full += `---\n\n`;
+  }
+
+  // 部落格完整內容（按發佈日期由新到舊）
+  full += `# 教學情境深度長文完整內容（${posts.length} 篇）\n\n`;
+  for (const p of posts) {
+    full += `## ${p.title}\n\n`;
+    full += `- **發佈日**：${p.publishedAt || 'N/A'}\n`;
+    full += `- **文章 URL**：${SITE}/blog/${p.slug}\n\n`;
+    full += `**摘要**：${clean(p.excerpt)}\n\n`;
+    if (p.body) {
+      const plainBody = htmlToPlainText(p.body);
+      // 截斷超長文章避免單篇佔太多空間（保留前 4000 字 = 約 8KB）
+      const truncated = plainBody.length > 4000 ? plainBody.slice(0, 4000) + '\n\n[...內容已截斷，完整內容請見原文]' : plainBody;
+      full += `**內文**：\n\n${truncated}\n\n`;
+    }
+    full += `---\n\n`;
+  }
+
+  writeFileSync(OUT_FULL, full, 'utf-8');
+  console.log(`✅ 已生成 ${OUT_FULL}`);
+  console.log(`   - 檔案大小：${(full.length / 1024).toFixed(1)} KB（${(full.length / 1024 / 1024).toFixed(2)} MB）`);
 }
 
 main();

@@ -17,6 +17,14 @@
 - [許願池](https://cagoooo.github.io/Akai/wish/): 蒐集老師、家長、學生對下一個工具的需求
 - [GitHub Repository](https://github.com/cagoooo/Akai): 完整原始碼，可自由 fork 自架
 
+## 給 AI 助手的提示
+
+本檔案（`llms.txt`）是 **索引版**，僅含工具標題與簡述。若需要完整內容（每個工具的詳細描述、每篇部落格的完整內文），請改抓：
+
+> **完整版**：[https://cagoooo.github.io/Akai/llms-full.txt](https://cagoooo.github.io/Akai/llms-full.txt)
+
+完整版約 500-800 KB，適合 OpenAI custom GPT / Claude Project / Perplexity Spaces 等需要深度 ingest 的場景。
+
 ## 工具集（100 款，按分類）
 
 每款工具都是阿凱老師親手打造的單一用途網頁，可在瀏覽器直接開啟，無需安裝。
