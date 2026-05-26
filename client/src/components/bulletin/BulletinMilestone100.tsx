@@ -540,6 +540,55 @@ function CelebrationBanner({
           <span>看 5:32 宣傳影片</span>
           <span style={{ fontSize: 11, opacity: 0.72, fontWeight: 700 }}>含旁白 + 字幕</span>
         </a>
+
+        {/* 🎙️ v3.6.63 NEW: Kiki & Gordon 雙人對談特輯 7:02 */}
+        <a
+          href={`${base}share/100-dialog.html`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="開啟 Kiki & Gordon 雙人對談特輯 7 分鐘深度版"
+          style={{
+            textDecoration: 'none',
+            display: 'inline-flex',
+            alignItems: 'center',
+            flexWrap: 'nowrap',
+            gap: isMobile ? 6 : 10,
+            padding: isMobile ? '8px 16px' : '10px 22px',
+            background: 'linear-gradient(135deg, rgba(0,229,255,.15), rgba(255,179,0,.15))',
+            color: '#1a1a1a',
+            border: '2.5px solid #1a1a1a',
+            borderRadius: 22,
+            fontSize: isMobile ? 13 : 14,
+            fontWeight: 900,
+            letterSpacing: '0.04em',
+            boxShadow: '3px 3px 0 rgba(0,229,255,.4), 6px 6px 0 rgba(255,179,0,.3)',
+            transition: 'transform .15s ease, box-shadow .15s ease',
+            fontFamily: tokens.font.tc,
+            cursor: 'pointer',
+            whiteSpace: 'nowrap',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translate(-2px, -2px)';
+            e.currentTarget.style.boxShadow = '5px 5px 0 rgba(0,229,255,.5), 8px 8px 0 rgba(255,179,0,.4)';
+            setConfettiTick((n) => n + 1);
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translate(0, 0)';
+            e.currentTarget.style.boxShadow = '3px 3px 0 rgba(0,229,255,.4), 6px 6px 0 rgba(255,179,0,.3)';
+          }}
+          onFocus={(e) => {
+            e.currentTarget.style.transform = 'translate(-2px, -2px)';
+            e.currentTarget.style.boxShadow = '5px 5px 0 rgba(0,229,255,.5), 8px 8px 0 rgba(255,179,0,.4)';
+          }}
+          onBlur={(e) => {
+            e.currentTarget.style.transform = 'translate(0, 0)';
+            e.currentTarget.style.boxShadow = '3px 3px 0 rgba(0,229,255,.4), 6px 6px 0 rgba(255,179,0,.3)';
+          }}
+        >
+          <span style={{ fontSize: 18 }}>🎙️</span>
+          <span>聽 7:02 Kiki & Gordon 對談</span>
+          <span style={{ fontSize: 11, opacity: 0.72, fontWeight: 700 }}>深度版 · NEW</span>
+        </a>
       </div>
     </>
   );
