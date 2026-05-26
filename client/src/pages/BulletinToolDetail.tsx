@@ -585,6 +585,42 @@ export function BulletinToolDetail() {
                 🔗 分享
               </button>
             </div>
+
+            {/* 統計便利貼（搬到按鈕下方 — 對齊拍立得整列視覺中軸） */}
+            {(stats || statsLoading) && (
+              <div
+                className="bulletin-detail-stats"
+                style={{
+                  marginTop: 22,
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: 14,
+                }}
+              >
+                <StatCard
+                  tilt={-1.5}
+                  pinColor={tokens.pin[0]}
+                  bg={tokens.note.blue}
+                  emoji="✨"
+                  label="累計使用"
+                  value={stats ? stats.totalClicks.toLocaleString() : '—'}
+                  subtitle="次被點開"
+                />
+                <StatCard
+                  tilt={1.2}
+                  pinColor={tokens.pin[2]}
+                  bg={tokens.note.green}
+                  emoji="🕐"
+                  label="最後使用"
+                  value={
+                    stats?.lastUsedAt
+                      ? new Date(stats.lastUsedAt.toDate?.() ?? stats.lastUsedAt).toLocaleDateString('zh-TW')
+                      : '尚無紀錄'
+                  }
+                  subtitle="最近一次點擊"
+                />
+              </div>
+            )}
           </div>
 
           {/* 右側：標題 + 描述 + 標籤 */}
@@ -833,44 +869,6 @@ export function BulletinToolDetail() {
             )}
           </div>
         </section>
-
-        {/* 統計便利貼 */}
-        {(stats || statsLoading) && (
-          <section
-            className="bulletin-detail-stats"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: 20,
-              padding: '10px 60px 30px',
-              maxWidth: 720,
-              margin: '0 auto',
-            }}
-          >
-            <StatCard
-              tilt={-1.5}
-              pinColor={tokens.pin[0]}
-              bg={tokens.note.blue}
-              emoji="✨"
-              label="累計使用"
-              value={stats ? stats.totalClicks.toLocaleString() : '—'}
-              subtitle="次被點開"
-            />
-            <StatCard
-              tilt={1.2}
-              pinColor={tokens.pin[2]}
-              bg={tokens.note.green}
-              emoji="🕐"
-              label="最後使用"
-              value={
-                stats?.lastUsedAt
-                  ? new Date(stats.lastUsedAt.toDate?.() ?? stats.lastUsedAt).toLocaleDateString('zh-TW')
-                  : '尚無紀錄'
-              }
-              subtitle="最近一次點擊"
-            />
-          </section>
-        )}
 
         {/* 麵包屑（膠帶風格） */}
         <section
