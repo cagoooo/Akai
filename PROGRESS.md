@@ -1,13 +1,90 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.58` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
-- **里程碑**: **2026-05-25 工具卡片描述全面升級**（v3.6.57 markdown 排版 + v3.6.58 部落格淬煉準確版）— 99 個工具的 `detailedDescription` 平均字數從 475 字翻倍到 **948 字**，35 個非 GitHub 工具改用阿凱手寫部落格內容淬煉，技術細節 / 工具家族互連 / 版本號全到位
-- **最後更新狀態**: v3.6.58 — 35 個非 GitHub 工具描述用部落格淬煉「準確版」：(1) 派 3 個 subagent 平行讀阿凱手寫部落格 body（每篇 6000-17000 字）；(2) 淬煉成準確 `detailedDescription`；(3) Node merge script 寫回兩份 tools.json；(4) 工具家族互連加上 `[/tool/X]` 交叉提及
+- **當前版本**: `v3.6.60` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
+- **里程碑**: **2026-05-26 影片 v3 上線 + RWD 優化 + GEO 強化** — 5:32 YunJhe 旁白 + word-level 同步字幕的全新宣傳影片、手機端跑版修正、新增 llms.txt 給 AI 助手讀
+- **最後更新狀態**: v3.6.60 — Search Console 觀察報告處理 + GEO 強化：(1) 純 OG redirect 頁加 noindex 清乾淨 Search Console；(2) 新增 `llms.txt` 給 ChatGPT/Claude/Perplexity 讀（72 KB 結構化內容索引，含 100 工具 + 101 篇部落格）；(3) `robots.txt` 明確 allow 7 個主流 AI 爬蟲
 
 ## 📌 完成功能總覽
 
-### `v3.6.58` (最新 · ✨ 35 個非 GitHub 工具描述用部落格淬煉「準確版」)
+### `v3.6.60` (最新 · 🤖 GEO 強化 + SEO 優化 + RWD 跑版修正)
+
+**🎯 動機**
+- Google Search Console 報「頁面會重新導向 / 替代頁面 / 已檢索未索引」13 頁，需釐清是否真有問題
+- 使用者強調希望被 ChatGPT / Claude / Perplexity 等 AI 搜尋找到（GEO）
+- 手機端發現工具地圖卡片與 100 達成 Banner 都有跑版問題
+- check-links workflow 報 #100 為「Failed to parse URL」誤判
+
+**🤖 GEO 強化（核心）**
+- 新增 `scripts/generate-llms-txt.mjs`：從 `tools.json` + `posts.ts` 動態產出 `llms.txt`
+- `client/public/llms.txt`（72 KB）：按 [llmstxt.org](https://llmstxt.org) 標準的 Markdown 索引
+  - 站點簡介 + 主要頁面 + 100 工具按 7 大分類列出 + 101 篇深度長文 + 引用建議
+  - 每次 `npm run build` 自動更新（已掛 build pipeline）
+- `robots.txt` 升級：明確 `Allow` 七個主流 AI 爬蟲（GPTBot、ClaudeBot、Claude-Web、PerplexityBot、Google-Extended、CCBot、anthropic-ai）
+- 預期效果：1-3 個月內 AI 助手回答「桃園國小老師 自製教育工具」、「PIRLS 閱讀理解 怎麼用 AI 做」這類問題時開始引用本站
+
+**🔍 SEO 優化（Search Console 清理）**
+- `scripts/generate-og-pages.mjs` 三個純 OG redirect 頁加 `<meta name="robots" content="noindex, follow">`：
+  - `/tool/N/index.html`（100 個工具 OG landing）
+  - `/wish/index.html`（許願池 OG landing）
+  - `/share/heatmap.html`（首頁 heatmap 變體，canonical 指首頁）
+- 保留 index 的頁面：`/share/100.html`（真實影片頁）、`/blog/{slug}/index.html`（部落格文章）
+- 副作用：1-4 週後 Search Console「重新導向 / 替代頁面 / 已檢索未索引」報告數字會逐漸歸零
+
+**📱 RWD 手機優化**
+- `BulletinMilestone100.tsx`：
+  - 容器水平 padding `60px → 12px`（手機）
+  - Tape 膠帶：固定 `520px → calc(100vw - 28px)`，避免溢出
+  - 副標文字手機版精簡並換行顯示
+  - 側邊 🎊🥳 emoji（絕對定位 -34px）手機隱藏
+  - 「看 5:32 宣傳影片」按鈕加 `whiteSpace: nowrap` 防斷字
+  - 引入 `useIsMobile` hook 統一斷點處理（768px）
+- `BulletinSiteStats.tsx`：
+  - 「最大宗」chip 加 `flexShrink + minWidth: 0 + ellipsis`，文字超出截斷而非溢出
+  - 圓餅圖 + 圖例 grid 手機改縱向排列（圓餅圖獨佔一行自動置中，圖例下方雙欄全寬）
+
+**🔗 check-links CI 修正**
+- 問題：#100 工具索引神器 URL 為 `/Akai/tool/100`（站內 SPA 路由相對路徑），`fetch()` 無法解析
+- 解法：`scripts/check-links.mjs` 加 `normalizeUrl()`，遇 `/` 開頭 prefix `https://cagoooo.github.io`
+- 結果：100/100 全 OK（98 通過 + 2 反爬蟲網站 skipped），關閉 GitHub issue #4
+
+**📊 數據摘要**
+| 項目 | 數量 |
+|---|---|
+| 新增檔案 | 2（generate-llms-txt.mjs、llms.txt） |
+| 修改檔案 | 5（robots.txt、check-links.mjs、generate-og-pages.mjs、BulletinMilestone100.tsx、BulletinSiteStats.tsx） |
+| llms.txt 大小 | 72 KB（含 100 工具 + 101 篇文章） |
+| Commits | 5（644abe7、b40d67d、b1d845e、7c6dde2、+ SW bump） |
+
+---
+
+### `v3.6.59` (✨ 100 工具達成宣傳影片 v3 + 影片觀賞頁)
+
+**🎬 影片重製（akai-promo-video-rm 專案）**
+- 從舊版 87 秒 BGM 影片升級為 5:32 紀錄片風格旁白影片
+- TTS：Microsoft Edge `zh-TW-YunJheNeural` 男聲沉穩 rate=-15%
+- 字幕：word-level 同步（`boundary="WordBoundary"`），script-first 演算法產 139 個 CaptionGroup
+- 12 個場景：hook → milestone → repo → 主推 5 大工具 → usecase → 9 大經典 → 7 大類別 → openspirit → techStack → blog → bloglist → cta
+- 新場景 `SceneMilestone.tsx`：暗色霓虹 2×2 卡片展示最後四款 #97-100
+- 全程字幕 overlay（`Captions.tsx`）：黑底毛玻璃 + 金色高亮，讀 `captionsData.ts` 139 groups
+- Render 輸出：`akai-promo-v3.mp4`（28.8 MB / 9960 幀 / 5:32）
+
+**📺 影片觀賞頁 `share/100.html` 重做**
+- 暗色主題（`#111827`）取代舊款軟木板棕色
+- HTML5 video player + stats strip：5:32 / 100 款工具 / 104 篇手寫長文 / 桃園市石門國小 / MIT
+- 三個 CTA 按鈕：探索工具 / GitHub 開源碼 / 下載影片
+- **關鍵架構修正**：原本 `scripts/generate-og-pages.mjs` 內的 `generateCelebration100PageHtml()` 會在每次 build 覆寫 `share/100.html`，把舊 87 秒版生成回去。直接改寫生成器函式輸出新影片頁，徹底解決「靜態檔被 build 覆蓋」陷阱
+- `BulletinMilestone100.tsx`：按鈕文字「看 87 秒紀念短片」→「看 5:32 宣傳影片」、「含旁白+BGM」→「含旁白+字幕」
+
+**🛠️ 影片製作技術棧（akai-promo-video-rm/）**
+- Remotion 4.x（React-based video framework）
+- Edge TTS（Python API）取 word-level WordBoundary 時間戳
+- ffmpeg：mp3 → wav (pcm_s16le, 22050Hz) 給 Remotion Audio
+- 字幕演算法（v2 script-first）：narration-script.txt 為斷句基準，transcript-v3.json 只用來取時間，保護詞組（Production / micro:bit / Made with love）跨界 merge
+
+---
+
+### `v3.6.58` (✨ 35 個非 GitHub 工具描述用部落格淬煉「準確版」)
 
 **🎯 動機**
 - v3.6.57 把全部 99 個工具升級成 markdown 排版，但其中 35 個工具原本就沒有 `detailedDescription`（多為 Replit / Google Sites / XOOPS VM / Firebase / LINE / Padlet / Claude Artifacts 等 GitHub 以外平台），subagent 只能憑空猜，內容失真
