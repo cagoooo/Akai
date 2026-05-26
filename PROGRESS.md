@@ -1,13 +1,126 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.61` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
-- **里程碑**: **2026-05-26 P0 GEO/SEO 全套到位** — Schema.org 三件套 + llms-full.txt（404 KB 全文版）+ GEO 監測 script + 內部連結優化，全站 SEO/GEO 體質一次升級
-- **最後更新狀態**: v3.6.61 — P0 五項 GEO/SEO 優化全部完成：(1) Schema.org Person/WebSite/VideoObject/BlogPosting 全注入；(2) llms-full.txt 給 OpenAI custom GPT / Claude Project 深度 ingest；(3) GEO 監測腳本（10 個標準 prompt × 4 平台）；(4) Footer 內部連結優化集中 PageRank；(5) blog OG 加 BlogPosting + 閱讀時間 + image alt
+- **當前版本**: `v3.6.63` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
+- **里程碑**: **2026-05-26 NotebookLM AI 內容工廠建立** — 從「100 工具達成」podcast 化 + 第二支「真實雙人對談視覺化影片」7 分鐘完成。Akai 從靜態網站升級為「**自動內容工廠起步點**」
+- **最後更新狀態**: v3.6.63 — Podcast → Video Pipeline 完整跑通：(1) NLM deep_dive 雙人對談 podcast；(2) OpenAI gpt-image-1 主持人插畫；(3) whisperx + pyannote 真實 speaker diarization；(4) librosa pitch 雙重驗證男女配對；(5) OpenCC s2twp 繁中字幕；(6) Remotion 5 場景渲染。建立 Kiki & Gordon 兩位虛擬主持人 CP
 
 ## 📌 完成功能總覽
 
-### `v3.6.61` (最新 · 🟥 P0 GEO/SEO 五項全套到位)
+### `v3.6.63` (最新 · 🎙️ Podcast→Video Pipeline 跑通 + Kiki & Gordon 雙人對談特輯)
+
+**🎯 動機**
+- v3.6.62 第一篇 podcast 上線後，user 提議「**先有語音再做 HTML 渲染簡報影片**」— 把流程倒裝
+- 用 NLM 自動產 podcast，再用 whisperx + Remotion 視覺化成完整教學長片
+- 結果：建立可重複的「文章 → AI Podcast → 視覺化長片」流水線
+
+**🎙️ Podcast 來源（NotebookLM Pro，cgoooo 帳號）**
+- 主題：「100 工具達成慶祝特輯」（4 連 source 含精煉文字 + 主講者 prompts）
+- 格式：`audio_format="deep_dive"` + `audio_length="short"`
+- 實際長度：**7:02 / 13 MB m4a**
+- 結構：Kiki 開場「歡迎加入今天的深度解析」→ Gordon 接話介紹背景 → 雙人輪流對談 5 主題
+
+**🎨 視覺角色（OpenAI gpt-image-1，medium quality 1024×1024）**
+- **Kiki 🌸**：青色 `#00e5ff` 主題、知性女聲發問者
+- **Gordon 🎙️**：金色 `#ffb300` 主題、沉穩男聲解答者
+- 風格：拍立得相片 + 紅圖釘 + cork 公佈欄背景一次性畫進去
+- 一次生圖約 22-26 秒，並行生 2 張總耗時 30 秒
+
+**🤖 Speaker Diarization 雙重驗證**
+- `whisperx 3.8.6 + small` 模型 + `pyannote/speaker-diarization-community-1`
+- 輸出 SPEAKER_00 / SPEAKER_01 word-level labels
+- **librosa YIN F0 pitch 分析驗證**：
+  - SPEAKER_01 中位數 **211 Hz**（女聲區間 165-255Hz）→ ✅ Kiki
+  - SPEAKER_00 中位數 **156 Hz**（男聲區間 85-180Hz）→ ✅ Gordon
+- Group level speaker：用 word-level majority 決定該 caption group 顯示哪位
+
+**🇹🇼 繁中字幕（OpenCC s2twp）**
+- whisperx 偶爾把繁中音訊 transcribe 成簡中
+- OpenCC s2twp（簡 → 臺灣繁體 + 詞彙轉換）批次處理 750 unique 字串
+- 範例：「这是」→「這是」、「台灣」→「**臺灣**」、「老师」→「老師」
+
+**🎬 Remotion 5 場景 composition**
+- 0-25s **openTitle**：Kiki 發藍光 + 黃膠帶「阿凱老師 × 100 工具達成」
+- 25-100s **chNumbers**：三色便利貼數字（100 / 101 / 7）
+- 100-220s **chTools**：五大里程碑工具拼貼（#1/3/46/81/100）
+- 220-360s **chTech**：3 個工程師朋友尖叫的技術決定
+- 360-422s **chClosing**：黃膠帶「不要追數量 · 追深度」+ URL CTA
+
+**📦 Component 庫**（可複用，未來其他 podcast 視覺化都能用）
+- `CorkBackground` — 軟木板紋理 + 上下木條
+- `RedPin` — 紅色圖釘
+- `PolaroidHost` — 主持人卡片（active 發光 + scale up）
+- `BulletinTape` + `StickyNote` — 黃膠帶 + 便利貼
+- `DialogScene` — 雙人對話 layout
+- `CaptionLayer` — 黑底毛玻璃 + word-level 高亮 + speaker badge
+
+**📊 4 版迭代史**
+| 版本 | 主持人 | Speaker 切換 | 字幕 | 長度 | 階段 |
+|---|---|---|---|---|---|
+| v1 | brief 單人配音 + 視覺雙人 | 硬編 | 無 | 1:44 | 視覺驗證 |
+| v2 | brief 單人配音 + 視覺雙人 | 奇偶切換 | 簡中 | 1:44 | 字幕串接 |
+| v3 | skip（檔名混淆） | - | - | - | - |
+| **v4** ⭐ | **真實 NLM 雙人 deep_dive** | **whisperx diarization** | **繁中** | **7:02** | **完成版** |
+
+**🚀 戰略意義**
+從這天起，Akai 任何一篇部落格都可在 **4-6 小時內** 自動產出：
+- 🎙️ NLM 雙人對談 podcast（5-10 分鐘）
+- 🎬 Remotion 視覺化長片（與 podcast 同長度）
+- 📺 上 YouTube + 嵌入網站 podcast 播放器
+
+**📁 Akai-promo-video-rm 專案的新增**
+（這部分檔案在 `C:\Users\smes\Desktop\Cowork\akai-promo-video-rm\`，獨立於 Akai repo）
+
+- `src/AkaiCelebration100Dialog.tsx`（主 composition）
+- `src/celebration-dialog/` 目錄（6 個 cork 風 components）
+- `scripts/gen-hosts.mjs`（OpenAI gpt-image-1 角色生成）
+- `scripts/build-celebration-captions.mjs`（whisperx → captions）
+- `scripts/patch-captions-traditional.mjs`（OpenCC 簡轉繁）
+- `public/hosts/host-kiki.png` + `host-gordon.png`（1024×1024 PNG）
+- `public/celebration-100-dialog.m4a`（13 MB / 7:02 NLM podcast）
+- `out/celebration-100-dialog-v4-real-dialog.mp4`（43 MB / 7:02 / 1080p 影片）
+
+**📚 配套 skill 更新**
+- 新增 `notebooklm-podcast-pipeline` skill（完整 7 階段 + 15 條踩雷）
+- 升級 `teaching-cockpit` + `lesson-prep` 同步 NotebookLM auth 真根因 SOP
+- HuggingFace token 概念釐清（不是 MCP，是 license 認證憑證）
+
+---
+
+### `v3.6.62` (🎙️ 100 工具達成 milestone podcast 上線)
+
+**🎯 動機**
+- v3.6.61 完成 GEO/SEO 五項後，下一波是「**內容多形式化**」
+- NotebookLM Pro 帳號（cgoooo）的 deep_dive 對談功能 = 業界最強中文 podcast 自動化
+
+**📦 第一篇 podcast 上線**
+- 對應文章：`milestone-100-tools-achieved`
+- 來源：用 1432 字精煉摘要餵入 NLM（從 5000+ 字原文濃縮）
+- 格式：deep_dive default（兩位主持人對談）
+- 結果：**20:26 / 19 MB mp3**（m4a 38MB → ffmpeg 128kbps mp3 = 19MB）
+- 部署位置：`client/public/blog-podcasts/milestone-100-tools-achieved.mp3`
+
+**🎨 BlogPodcast 元件**（`client/src/components/blog/BlogPodcast.tsx`）
+- cork 風便利貼 + 黃色背景 + 黑框
+- HTML5 audio controls + 自動讀 metadata 顯示時長
+- 「🎙️ AI PODCAST」橘色 badge + 「由 NotebookLM 生成」說明
+- 「⬇ 下載 mp3 離線聽」連結
+- **條件渲染**：HEAD 探測檔案存在才顯示，其他 100 篇沒 podcast 的文章不受影響
+- 掛入 `BlogPost.tsx` 在 BlogHero 與正文之間
+
+**🔬 流程記錄（建立 SOP）**
+- Notebook ID：`3bcf9745-804c-4e16-b1fe-45defc0d67c6`
+- 透過 Chrome MCP 自動操作 NotebookLM UI（當時 MCP auth 有 bug）
+- 後續 MCP 修對：升級 nlm 0.5.20 → 0.6.12 + 用新版重抓 cookies
+- 完整流程寫進 `notebooklm-podcast-pipeline` skill
+
+**🐛 連帶修正**
+- check-links.mjs 加 `normalizeUrl()` 處理 #100 站內 SPA 路由
+- GitHub Actions「Failed to parse URL」誤報排除
+
+---
+
+### `v3.6.61` (🟥 P0 GEO/SEO 五項全套到位)
 
 **🎯 動機**
 - v3.6.60 完成 GEO 基礎（llms.txt + noindex），這版把整個 P0 路線圖五項一次做完，全面建立 GEO/SEO 護城河
