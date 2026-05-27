@@ -44,6 +44,7 @@ client/public/og-preview-*.webp
 # 設計交接素材（本機保留，不入版控）
 handoff/
 design_handoff_*tmp/
+_handoff_*/
 
 # Claude Code worktrees / 本機暫存
 .claude/

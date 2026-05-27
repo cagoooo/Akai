@@ -24,6 +24,7 @@ import { BulletinBoard } from '@/components/bulletin/BulletinBoard';
 import { BulletinHeader } from '@/components/bulletin/BulletinHeader';
 import { BulletinHero } from '@/components/bulletin/BulletinHero';
 import { BulletinMilestone100 } from '@/components/bulletin/BulletinMilestone100';
+import { BulletinSpeechBanner } from '@/components/bulletin/BulletinSpeechBanner';
 import { BulletinLeaderboard } from '@/components/bulletin/BulletinLeaderboard';
 import { BulletinWishPool } from '@/components/bulletin/BulletinWishPool';
 import { BulletinSiteStats } from '@/components/bulletin/BulletinSiteStats';
@@ -231,6 +232,7 @@ export function BulletinHome() {
     <BulletinBoard>
       <BulletinHeader />
       <BulletinMilestone100 onWishClick={() => setShowWishingWellFromShortcut(true)} />
+      <BulletinSpeechBanner />
       <BulletinHero toolCount={toolsWithStats.length} />
 
       {/* 排行榜 + 工具地圖 + 許願池 */}
