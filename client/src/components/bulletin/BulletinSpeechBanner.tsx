@@ -33,24 +33,35 @@ export function BulletinSpeechBanner() {
           background: tokens.note.green,
           border: `2px solid ${tokens.ink}`,
           borderRadius: 10,
-          padding: isMobile ? '10px 14px 9px' : '10px 22px 9px',
+          padding: isMobile ? '12px 14px 12px' : '10px 22px 9px',
           boxShadow: '3px 4px 0 rgba(0,0,0,.18), 0 6px 14px -6px rgba(0,0,0,.15)',
           transform: 'rotate(-0.5deg)',
           maxWidth: 640,
           width: '100%',
           fontFamily: tokens.font.tc,
           display: 'flex',
-          alignItems: 'center',
+          flexDirection: isMobile ? 'column' : 'row',
+          alignItems: isMobile ? 'stretch' : 'center',
           gap: isMobile ? 10 : 14,
-          flexWrap: 'wrap',
+          flexWrap: isMobile ? 'nowrap' : 'wrap',
           justifyContent: 'space-between',
         }}
       >
         <Pin color={NAVY_DEEP} size={14} style={{ top: -7, left: '50%', marginLeft: -7 }} />
 
-        {/* 左：標題 — 單行排版 */}
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap', flex: '1 1 auto', minWidth: 0 }}>
-          <span style={{ fontSize: isMobile ? 14 : 15, fontWeight: 900, color: tokens.ink, letterSpacing: '0.01em' }}>
+        {/* 上：標題 + AIFED label */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'baseline',
+            gap: 8,
+            flexWrap: 'wrap',
+            flex: '1 1 auto',
+            minWidth: 0,
+            justifyContent: isMobile ? 'flex-start' : undefined,
+          }}
+        >
+          <span style={{ fontSize: isMobile ? 15 : 15, fontWeight: 900, color: tokens.ink, letterSpacing: '0.01em' }}>
             🎤 從使用者到開發者
           </span>
           <span
@@ -70,8 +81,16 @@ export function BulletinSpeechBanner() {
           </span>
         </div>
 
-        {/* 右：CTA chips */}
-        <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexShrink: 0 }}>
+        {/* 下：CTA chips — 手機改成 stretch 等寬兩格 */}
+        <div
+          style={{
+            display: 'flex',
+            gap: isMobile ? 8 : 6,
+            alignItems: 'center',
+            flexShrink: 0,
+            width: isMobile ? '100%' : 'auto',
+          }}
+        >
           <a
             href={`${base}akai-talk-2026/index.html`}
             target="_blank"
@@ -81,18 +100,22 @@ export function BulletinSpeechBanner() {
               textDecoration: 'none',
               display: 'inline-flex',
               alignItems: 'center',
-              gap: 4,
-              padding: '4px 10px',
+              justifyContent: 'center',
+              gap: 5,
+              padding: isMobile ? '9px 14px' : '4px 10px',
               background: NAVY_DEEP,
               color: '#fff',
               border: `1.5px solid ${tokens.ink}`,
-              borderRadius: 14,
-              fontSize: 12,
+              borderRadius: isMobile ? 10 : 14,
+              fontSize: isMobile ? 13 : 12,
               fontWeight: 800,
               fontFamily: tokens.font.tc,
               cursor: 'pointer',
               whiteSpace: 'nowrap',
               transition: 'transform .15s ease',
+              flex: isMobile ? '2 1 0' : '0 0 auto',
+              minHeight: isMobile ? 40 : 'auto',
+              boxShadow: isMobile ? '2px 2px 0 rgba(0,0,0,.22)' : 'none',
             }}
             onMouseEnter={(e) => { e.currentTarget.style.transform = 'translate(-1px, -1px)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.transform = 'translate(0, 0)'; }}
@@ -108,18 +131,21 @@ export function BulletinSpeechBanner() {
               textDecoration: 'none',
               display: 'inline-flex',
               alignItems: 'center',
-              gap: 3,
-              padding: '4px 9px',
+              justifyContent: 'center',
+              gap: 4,
+              padding: isMobile ? '9px 14px' : '4px 9px',
               background: 'transparent',
               color: NAVY_DEEP,
               border: `1.5px solid ${NAVY_DEEP}`,
-              borderRadius: 14,
-              fontSize: 11,
+              borderRadius: isMobile ? 10 : 14,
+              fontSize: isMobile ? 12 : 11,
               fontWeight: 700,
               fontFamily: tokens.font.tc,
               cursor: 'pointer',
               whiteSpace: 'nowrap',
               transition: 'background .15s ease, color .15s ease',
+              flex: isMobile ? '1 1 0' : '0 0 auto',
+              minHeight: isMobile ? 40 : 'auto',
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = NAVY_DEEP;
