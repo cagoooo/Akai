@@ -1,13 +1,67 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.64` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
-- **里程碑**: **2026-05-26 NotebookLM AI 內容工廠建立 + 字幕完美化** — 7 分鐘對談影片 v6 上線（word-level OpenCC 繁中、speaker boundary split、GPT 直切 12-18 字）
-- **最後更新狀態**: v3.6.64 — v5/v6 字幕完美化收官：(A) GPT-4o-mini 直接做 12-18 字斷句（取代演算法切詞）；(B) Speaker boundary split 把同行雙人對白拆開；(C) `fix-word-level-s2twp.mjs` 修「台灣 → 臺灣」word.w OpenCC 漏處理雷；(D) 整套經驗寫進 `notebooklm-to-video-bridge` skill trap #11.5
+- **當前版本**: `v3.6.65` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
+- **里程碑**: **2026-05-28 2026 AIFED 演講簡報整合上線** — 主頁永久 banner 入口 + `/akai-talk-2026/` 純靜態子站（25 張投影片含動畫、Tweaks 配色面板、4 個現場 QR Code、投稿稿件 PDF）
+- **最後更新狀態**: v3.6.65 — Claude Design handoff 整合：(A) 簡報純靜態子站不塞 React Router；(B) BulletinSpeechBanner 三次迭代 260→65→142px 找到「夠顯眼但不誇張」的視覺重量；(C) 手機 RWD column flex + CTA stretch 等寬 + tap target 41px；(D) `_handoff_*/` 加 .gitignore 防誤入版控
 
 ## 📌 完成功能總覽
 
-### `v3.6.64` (最新 · 🇹🇼 字幕完美化收官 + skill 歸檔)
+### `v3.6.65` (最新 · 🎤 2026 AIFED 演講簡報整合)
+
+**🎯 動機**
+- 阿凱老師受邀 AIFED 2026（亞洲教育科技創新領袖年會）演講「從使用者到開發者」，已用 Claude Design 完成 25 張投影片純 HTML
+- 把這份對外作品整合進 Akai 主頁，讓教學現場訪客也能看見「學術年會」這個外部 milestone
+- 同時保留 PDF 投稿稿件下載入口，給學術引用 / 跨校研習 / 媒體採訪使用
+
+**🎤 整合策略**
+
+| 設計取捨 | 抉擇 | 理由 |
+|---|---|---|
+| 進工具卡片牆 vs 主頁 hero 入口 | **主頁 hero 入口**（像影片介紹）| 演講不是課堂工具，硬塞 7 大分類會破壞 taxonomy |
+| Vite multi-page entry vs 純靜態子站 | **純靜態子站**（`client/public/akai-talk-2026/`）| 簡報自帶 React UMD + Babel CDN，自管 deck-stage.js，塞進 React Router 是噪音 |
+| 整合廣度（MVP / 中間 / 全套）| **中間**（卡片 + 主頁 hero 入口）| 符合 memory「冷啟動訪客 1 次點擊內看見」原則 |
+| 附帶素材 | PDF (132KB) 一起放 / PPTX (4.9MB) 不放 | 學術引用 PDF 有價值，PPTX 對訪客無意義且太大 |
+
+**📐 三次設計迭代（5/27-5/28 三 commit 上線）**
+
+| commit | 改動 | banner 高度 | 視覺重量 |
+|---|---|---|---|
+| [f645737](https://github.com/cagoooo/Akai/commit/f645737) v1 大 banner | 深寶藍底 + 主標 26px + 副標 + 鍵盤提示 | 260px | 太誇張 |
+| [6e526e9](https://github.com/cagoooo/Akai/commit/6e526e9) 低調版 | 淺綠便利貼 + 單行排版，移除副標／鍵盤提示 | 65px | ✅ 收斂 1/4 |
+| [0945905](https://github.com/cagoooo/Akai/commit/0945905) 手機 RWD | column flex + CTA stretch 等寬 + 41px tap target | 桌面 65px / 手機 142px | ✅ 兩端兼顧 |
+
+**📁 變動檔案**
+- 新增：`client/public/akai-talk-2026/`（11 個檔，~2.4MB）
+  - `index.html`（118KB / 25 sections / speaker-notes JSON / Tweaks 面板掛載）
+  - `deck-stage.js` `image-slot.js`（核心 web component）
+  - `tweaks-app.jsx` `tweaks-panel.jsx`（Babel standalone runtime compile）
+  - `assets/logo.png` + 4 個 QR Code（投票 / 文字雲 / 駕駛艙 / 平台）
+  - `AIFED2026_paper.pdf`（132KB 學術投稿稿件）
+- 新增：`client/src/components/bulletin/BulletinSpeechBanner.tsx`（淺綠便利貼 + 主標 + 雙 CTA）
+- 修改：`client/src/pages/BulletinHome.tsx`（import + 掛載在 milestone 與 hero 之間）
+- 修改：`.gitignore`（加 `_handoff_*/` 規則防 Claude Design zip 解壓目錄誤入版控）
+
+**📌 線上**
+- 主頁入口：https://cagoooo.github.io/Akai/
+- 簡報：https://cagoooo.github.io/Akai/akai-talk-2026/index.html
+- PDF：https://cagoooo.github.io/Akai/akai-talk-2026/AIFED2026_paper.pdf
+
+**🎯 戰略意義**
+- 主頁不只放「教學工具」，也能放「對外作品 / 學術活動 / 媒體露出」這類非工具但同等重要的成果
+- 為未來其他演講 / 研習 / 工作坊建立可重複的 banner 模板（複製 BulletinSpeechBanner 改文案即可）
+- 雙 CTA 模式（看簡報 + 下載 PDF）也適用於其他「視覺呈現 + 文字稿」配對的內容
+- 證明「Claude Design handoff → Akai 平台整合」可在 4 小時內完成（含 scope 對齊 + 三次設計迭代 + 手機 RWD）
+
+**📚 踩到的雷（避免下次再踩）**
+- Vite dev server 對 `/akai-talk-2026/`（無 trailing index.html）會 SPA fallback 到 React → 連結必須明確帶 `/index.html`（跟 `share/100.html` pattern 一致）
+- `useIsMobile` hook 在 preview_resize 後不會自動 re-render，必須 reload 才會生效（測試 RWD 注意）
+- Claude Design handoff 的 zip 解壓目錄記得加 `.gitignore`，否則 1.6MB logo + 5MB PPTX 會被誤 commit
+
+---
+
+
+### `v3.6.64` (🇹🇼 字幕完美化收官 + skill 歸檔)
 
 **🎯 動機**
 - v3.6.63 v4 影片上線後，使用者實測字幕仍有問題：「所有的字幕的句子的斷句都有點問題 請找出問題並修正」
