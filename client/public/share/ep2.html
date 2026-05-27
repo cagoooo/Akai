@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EP2 · #1 線上即時客服 — 阿凱老師 AI 教學頻道</title>
+  <meta name="description" content="阿凱老師 AI 教學頻道 EP2：為什麼 #1 不是 LINE Bot？因為 Replit shared link 24/7 不打擾老師。5 分 22 秒 Kiki + Gordon 雙人對談。" />
+
+  <!-- ── Favicon 套組（共用 100.html 紀念頁套組） ── -->
+  <link rel="icon" type="image/svg+xml" href="./celebration100/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="./celebration100/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="./celebration100/favicon-16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="./celebration100/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="./celebration100/favicon.ico" />
+
+  <!-- ── Open Graph (Facebook / LINE / 一般社群分享預覽) ── -->
+  <meta property="og:type" content="video.other" />
+  <meta property="og:locale" content="zh_TW" />
+  <meta property="og:site_name" content="阿凱老師科技教育創新專區" />
+  <meta property="og:url" content="https://cagoooo.github.io/Akai/share/ep2.html" />
+  <meta property="og:title" content="EP2 · #1 線上即時客服 — 為什麼不是 LINE Bot？" />
+  <meta property="og:description" content="Replit shared link 24/7 不打擾老師的 AI 客服 — Kiki + Gordon 雙人對談 5 分 22 秒。" />
+  <meta property="og:image" content="https://cagoooo.github.io/Akai/share/ep2/og-1200x630.png?v=20260527" />
+  <meta property="og:image:secure_url" content="https://cagoooo.github.io/Akai/share/ep2/og-1200x630.png?v=20260527" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="EP2 — Kiki + Gordon 解析 #1 線上即時客服" />
+
+  <!-- ── Twitter Card ── -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="EP2 · #1 線上即時客服 — 阿凱老師 AI 教學頻道" />
+  <meta name="twitter:description" content="Replit shared link 24/7 不打擾老師的 AI 客服 — 5:22 雙人對談視覺化。" />
+  <meta name="twitter:image" content="https://cagoooo.github.io/Akai/share/ep2/og-1200x630.png?v=20260527" />
+  <meta name="twitter:image:alt" content="EP2 — Kiki + Gordon 解析 #1 線上即時客服" />
+
+  <!-- ── Schema.org VideoObject（給 Google Knowledge Graph） ── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    "name": "EP2 · #1 線上即時客服 — 阿凱老師 AI 教學頻道",
+    "description": "Replit shared link 24/7 不打擾老師的 AI 客服 — Kiki + Gordon 雙人對談視覺化",
+    "thumbnailUrl": "https://cagoooo.github.io/Akai/share/ep2/og-1200x630.png",
+    "uploadDate": "2026-05-27",
+    "duration": "PT5M22S",
+    "contentUrl": "https://cagoooo.github.io/Akai/share/ep2-customer-service.mp4",
+    "actor": [
+      { "@type": "Person", "name": "Kiki", "description": "活潑的引導發問者，podcast 風格主持人" },
+      { "@type": "Person", "name": "Gordon", "description": "沉穩的內容解答者，技術背景轉教育" }
+    ],
+    "author": {
+      "@type": "Person",
+      "name": "阿凱老師",
+      "affiliation": {
+        "@type": "EducationalOrganization",
+        "name": "桃園市龍潭區石門國民小學"
+      }
+    }
+  }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #111827;
+      --card: #1f2937;
+      --border: #374151;
+      --orange: #ff8c42;
+      --gold: #fbbf24;
+      --cyan: #00e5ff;
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --font: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .header {
+      width: 100%;
+      max-width: 1100px;
+      padding: 32px 24px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: color .15s;
+    }
+    .back-link:hover { color: var(--orange); }
+    .badge {
+      background: linear-gradient(135deg, var(--orange), var(--gold));
+      color: #111;
+      font-size: 12px;
+      font-weight: 900;
+      padding: 4px 12px;
+      border-radius: 999px;
+      letter-spacing: .05em;
+    }
+    .title-block {
+      width: 100%;
+      max-width: 1100px;
+      padding: 28px 24px 16px;
+      text-align: center;
+    }
+    .episode-tag {
+      display: inline-block;
+      background: var(--cyan);
+      color: #111;
+      font-size: 13px;
+      font-weight: 900;
+      padding: 4px 14px;
+      border-radius: 999px;
+      letter-spacing: .08em;
+      margin-bottom: 12px;
+    }
+    .title-main {
+      font-size: clamp(26px, 4.5vw, 46px);
+      font-weight: 900;
+      line-height: 1.25;
+      letter-spacing: .02em;
+    }
+    .title-main .num {
+      background: linear-gradient(90deg, var(--orange), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .title-sub {
+      margin-top: 12px;
+      font-size: 16px;
+      color: var(--muted);
+      letter-spacing: .04em;
+      line-height: 1.5;
+    }
+    .video-wrap {
+      width: 100%;
+      max-width: 1100px;
+      padding: 0 16px;
+    }
+    .video-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #000;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px var(--border),
+        0 32px 80px rgba(0,0,0,.6),
+        0 0 80px rgba(0,229,255,.1);
+    }
+    video, iframe {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border: 0;
+    }
+    video { object-fit: contain; }
+    .stats {
+      width: 100%;
+      max-width: 1100px;
+      padding: 20px 24px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .stat-chip {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .stat-chip .val { color: var(--text); }
+    .cta-row {
+      width: 100%;
+      max-width: 1100px;
+      padding: 8px 24px 48px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn-primary, .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      padding: 12px 28px;
+      border-radius: 10px;
+      text-decoration: none;
+      letter-spacing: .03em;
+      transition: opacity .15s, transform .1s, color .15s, border-color .15s;
+    }
+    .btn-primary {
+      background: var(--orange);
+      color: #fff;
+      font-weight: 900;
+    }
+    .btn-primary:hover { opacity: .88; transform: translateY(-1px); }
+    .btn-secondary {
+      background: transparent;
+      color: var(--muted);
+      font-weight: 700;
+      border: 1.5px solid var(--border);
+    }
+    .btn-secondary:hover { color: var(--text); border-color: var(--muted); }
+    .hosts-row {
+      width: 100%;
+      max-width: 700px;
+      padding: 12px 24px 0;
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .host-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .host-card.kiki { border-left: 3px solid var(--cyan); }
+    .host-card.gordon { border-left: 3px solid var(--gold); }
+    .host-card .name { color: var(--text); font-weight: 900; margin-right: 6px; }
+    .footer {
+      width: 100%;
+      padding: 20px 24px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+    }
+    .footer a { color: var(--orange); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 600px) {
+      .header { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <a class="back-link" href="../">
+      <span>←</span>
+      <span>回到阿凱老師科技教育創新專區</span>
+    </a>
+    <span class="badge">EP2 · 2026-05-27</span>
+  </header>
+
+  <div class="title-block">
+    <span class="episode-tag">🎙️ EPISODE 2</span>
+    <h1 class="title-main">
+      <span class="num">#1</span> 線上即時客服
+    </h1>
+    <p class="title-sub">
+      為什麼不是 LINE Bot？<br />
+      Replit shared link · 24/7 不打擾老師的 AI 客服
+    </p>
+  </div>
+
+  <div class="video-wrap">
+    <div class="video-container">
+      <video
+        controls
+        preload="metadata"
+        poster="./ep2/og-1200x630.png"
+        aria-label="EP2 · #1 線上即時客服 — Kiki + Gordon 雙人對談 5 分 22 秒"
+      >
+        <source src="./ep2-customer-service.mp4" type="video/mp4" />
+        <p>您的瀏覽器不支援 HTML5 影片。<a href="./ep2-customer-service.mp4">點此下載</a></p>
+      </video>
+    </div>
+  </div>
+
+  <div class="hosts-row">
+    <div class="host-card kiki">
+      <span>🌸</span>
+      <span class="name">Kiki</span>
+      <span>引導發問者</span>
+    </div>
+    <div class="host-card gordon">
+      <span>🎙️</span>
+      <span class="name">Gordon</span>
+      <span>內容解答者</span>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-chip">🎬 <span class="val">5:22</span> 雙人對談</div>
+    <div class="stat-chip">💬 <span class="val">#1</span> 線上即時客服</div>
+    <div class="stat-chip">🔗 <span class="val">Replit shared</span> 24/7</div>
+    <div class="stat-chip">🏫 <span class="val">桃園市石門國小</span></div>
+    <div class="stat-chip">📜 <span class="val">MIT 開源</span> 永久免費</div>
+  </div>
+
+  <div class="cta-row">
+    <a class="btn-primary" href="https://document-ai-companion-ipad4.replit.app/shared/A4uyH5OdHI" target="_blank" rel="noopener noreferrer">
+      💬 試試 #1 線上即時客服
+    </a>
+    <a class="btn-secondary" href="../tool/1" >
+      📖 看 #1 工具介紹
+    </a>
+    <a class="btn-secondary" href="../blog/replit-1-online-customer-service" >
+      📝 阿凱手寫深度文
+    </a>
+    <a class="btn-secondary" href="./ep2-customer-service.mp4" download>
+      ⬇ 下載影片
+    </a>
+  </div>
+
+  <footer class="footer">
+    Made with ❤ by <a href="../">阿凱老師</a> ·
+    <a href="https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5" target="_blank" rel="noopener noreferrer">桃園市龍潭區石門國民小學</a>
+    · MIT License · Podcast by NotebookLM
+  </footer>
+
+</body>
+</html>
