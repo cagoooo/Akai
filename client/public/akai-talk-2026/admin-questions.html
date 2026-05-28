@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<title>提問後台管理 · 2026 AIFED · admin only</title>
+<link rel="icon" href="favicon.svg" />
+<meta name="robots" content="noindex, nofollow" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1F4C3E;
+    --navy-deep: #143526;
+    --cream: #F4F0E6;
+    --orange: #C99744;
+    --red: #B9512B;
+    --green-ok: #2F7A4F;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%);
+    color: var(--cream);
+    font-family: 'Noto Sans TC', system-ui, sans-serif;
+    width: 100%; min-height: 100vh;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 28px 20px 60px; }
+
+  header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; }
+  .brand { font-size: 20px; font-weight: 900; letter-spacing: 0.03em; }
+  .brand .tag { font-size: 11px; background: var(--red); padding: 3px 8px; border-radius: 999px; margin-left: 8px; vertical-align: middle; font-weight: 800; }
+  .user-info { font-size: 13px; color: rgba(244,240,230,.7); font-family: 'JetBrains Mono', monospace; display: flex; gap: 12px; align-items: center; }
+  .btn { padding: 8px 16px; border-radius: 8px; border: 1.5px solid var(--orange); background: transparent; color: var(--orange); font-weight: 700; cursor: pointer; font-family: inherit; font-size: 13px; transition: background .15s ease, color .15s ease; }
+  .btn:hover { background: var(--orange); color: var(--navy-deep); }
+  .btn.danger { border-color: var(--red); color: var(--red); }
+  .btn.danger:hover { background: var(--red); color: #fff; }
+  .btn.primary { border-color: var(--green-ok); color: var(--green-ok); }
+  .btn.primary:hover { background: var(--green-ok); color: #fff; }
+
+  /* 登入畫面 */
+  .login-card { max-width: 460px; margin: 80px auto; padding: 32px; background: rgba(244,240,230,.05); border: 1.5px solid rgba(244,240,230,.15); border-radius: 16px; text-align: center; }
+  .login-card h1 { margin: 0 0 14px; font-size: 22px; }
+  .login-card p { font-size: 14px; color: rgba(244,240,230,.7); line-height: 1.7; margin: 0 0 24px; }
+  .login-card .btn { font-size: 15px; padding: 12px 28px; }
+
+  /* 工具列 */
+  .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; padding: 14px 16px; background: rgba(244,240,230,.04); border: 1.5px solid rgba(244,240,230,.1); border-radius: 12px; align-items: center; }
+  .toolbar-stat { font-size: 13px; color: rgba(244,240,230,.7); font-family: 'JetBrains Mono', monospace; margin-right: auto; }
+  .toolbar-stat strong { color: var(--orange); font-size: 16px; }
+
+  /* 訊息卡片 */
+  .question-list { display: flex; flex-direction: column; gap: 10px; }
+  .q-card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+    padding: 14px 18px;
+    background: rgba(244,240,230,.06);
+    border: 1.5px solid rgba(244,240,230,.12);
+    border-radius: 12px;
+    transition: opacity .2s ease, border-color .2s ease;
+    align-items: center;
+  }
+  .q-card.hidden { opacity: 0.45; border-style: dashed; }
+  .q-card.pinned { border-color: var(--orange); background: rgba(201,151,68,.12); }
+  .q-meta { display: flex; flex-direction: column; gap: 4px; min-width: 100px; }
+  .q-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; background: rgba(201,151,68,.18); border: 1px solid var(--orange); border-radius: 999px; font-size: 11px; font-weight: 800; color: var(--orange); font-family: 'JetBrains Mono', monospace; width: fit-content; }
+  .q-time { font-size: 11px; color: rgba(244,240,230,.45); font-family: 'JetBrains Mono', monospace; }
+  .q-text { font-size: 16px; line-height: 1.5; word-break: break-word; }
+  .q-text.text-hidden { text-decoration: line-through; }
+  .q-actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .q-actions button { padding: 6px 12px; font-size: 12px; border-radius: 8px; border: 1.5px solid; background: transparent; cursor: pointer; font-family: inherit; font-weight: 700; transition: all .15s ease; }
+  .btn-pin { border-color: var(--orange); color: var(--orange); }
+  .btn-pin:hover, .btn-pin.active { background: var(--orange); color: var(--navy-deep); }
+  .btn-hide { border-color: rgba(244,240,230,.4); color: rgba(244,240,230,.7); }
+  .btn-hide:hover, .btn-hide.active { background: rgba(244,240,230,.2); color: var(--cream); }
+  .btn-del { border-color: var(--red); color: var(--red); }
+  .btn-del:hover { background: var(--red); color: #fff; }
+
+  .status-pill { display: inline-block; padding: 1px 6px; border-radius: 999px; font-size: 9px; font-weight: 800; letter-spacing: 0.05em; margin-left: 4px; }
+  .status-pill.pin { background: var(--orange); color: var(--navy-deep); }
+  .status-pill.hide { background: rgba(244,240,230,.25); color: var(--cream); }
+
+  .empty-state { text-align: center; padding: 60px 20px; color: rgba(244,240,230,.5); }
+  .empty-state .emoji { font-size: 56px; opacity: .6; }
+
+  .error-banner { background: rgba(185,81,43,.18); border: 1.5px solid var(--red); padding: 14px 16px; border-radius: 10px; margin-bottom: 16px; font-size: 13px; }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 16px 12px 40px; }
+    .q-card { grid-template-columns: 1fr; gap: 8px; padding: 12px 14px; }
+    .q-meta { flex-direction: row; align-items: center; }
+    .q-text { font-size: 14px; }
+    .q-actions { justify-content: flex-end; flex-wrap: wrap; }
+    .q-actions button { font-size: 11px; padding: 5px 10px; }
+    .toolbar { padding: 10px 12px; }
+    .toolbar-stat { font-size: 12px; flex: 1 1 100%; }
+    header .brand { font-size: 16px; }
+    header .user-info { font-size: 11px; flex: 1 1 100%; justify-content: space-between; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">🛡️ 提問後台管理 <span class="tag">ADMIN</span></div>
+    <div class="user-info" id="userInfo" style="display:none;">
+      <span id="userEmail"></span>
+      <button class="btn" id="logoutBtn">登出</button>
+    </div>
+  </header>
+
+  <!-- 登入畫面 (預設顯示) -->
+  <div class="login-card" id="loginCard">
+    <h1>🔒 需要管理員登入</h1>
+    <p>此頁面僅供阿凱老師管理 2026 AIFED 演講提問訊息。<br/>請用具備 admin 權限的 Google 帳號登入。</p>
+    <button class="btn primary" id="loginBtn">🔑 Google 登入</button>
+  </div>
+
+  <!-- 後台主畫面 (登入後顯示) -->
+  <div id="adminPanel" style="display:none;">
+    <div class="error-banner" id="errorBanner" style="display:none;"></div>
+    <div class="toolbar">
+      <div class="toolbar-stat">
+        共 <strong id="totalCount">0</strong> 則 ·
+        顯示中 <strong id="visibleCount">0</strong> ·
+        隱藏 <strong id="hiddenCount">0</strong> ·
+        置頂 <strong id="pinnedCount">0</strong>
+      </div>
+      <button class="btn" id="refreshBtn">🔄 重新整理</button>
+      <a class="btn" href="live-questions.html" target="_blank" style="text-decoration:none;display:inline-flex;align-items:center;">👁️ 看公開大螢幕頁</a>
+      <button class="btn danger" id="clearAllBtn">⚠️ 清空全部</button>
+    </div>
+    <div class="question-list" id="questionList"></div>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js';
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js';
+  import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, writeBatch, getDocs } from 'https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDWwk3dCFmEM9_5x07fvmBMZ6LApstxkw0",
+    authDomain: "akai-e693f.firebaseapp.com",
+    projectId: "akai-e693f",
+    storageBucket: "akai-e693f.firebasestorage.app",
+    messagingSenderId: "1056659479431",
+    appId: "1:1056659479431:web:d166da50e1aef3888f5122"
+  };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const provider = new GoogleAuthProvider();
+
+  const $ = (id) => document.getElementById(id);
+  const loginCard = $('loginCard');
+  const adminPanel = $('adminPanel');
+  const userInfo = $('userInfo');
+  const errorBanner = $('errorBanner');
+  const questionList = $('questionList');
+
+  function showError(msg) {
+    errorBanner.textContent = '⚠️ ' + msg;
+    errorBanner.style.display = 'block';
+  }
+  function clearError() { errorBanner.style.display = 'none'; errorBanner.textContent = ''; }
+
+  // ── 登入流程 ─────────────────────────────────────────────
+  $('loginBtn').addEventListener('click', async () => {
+    try {
+      clearError();
+      await signInWithPopup(auth, provider);
+    } catch (e) {
+      showError('登入失敗：' + (e.message || e.code));
+    }
+  });
+
+  $('logoutBtn').addEventListener('click', async () => {
+    try { await signOut(auth); } catch (e) { showError('登出失敗：' + e.message); }
+  });
+
+  let unsubQuestions = null;
+
+  onAuthStateChanged(auth, async (user) => {
+    if (unsubQuestions) { unsubQuestions(); unsubQuestions = null; }
+    if (!user) {
+      loginCard.style.display = 'block';
+      adminPanel.style.display = 'none';
+      userInfo.style.display = 'none';
+      return;
+    }
+    try {
+      const idTokenResult = await user.getIdTokenResult();
+      const isAdmin = !!idTokenResult.claims.admin;
+      if (!isAdmin) {
+        showError('您（' + user.email + '）沒有 admin 權限，無法管理訊息。如果需要請聯絡管理員設定 admin custom claim。');
+        loginCard.style.display = 'block';
+        adminPanel.style.display = 'none';
+        userInfo.style.display = 'none';
+        return;
+      }
+      // 認證通過
+      $('userEmail').textContent = user.email;
+      userInfo.style.display = 'flex';
+      loginCard.style.display = 'none';
+      adminPanel.style.display = 'block';
+      clearError();
+      subscribeQuestions();
+    } catch (e) {
+      showError('讀取 admin claim 失敗：' + e.message);
+    }
+  });
+
+  // ── 訂閱 talkQuestions 全部訊息 ─────────────────────────────
+  let currentQuestions = [];
+
+  function subscribeQuestions() {
+    const q = query(collection(db, 'talkQuestions'), orderBy('createdAt', 'desc'));
+    unsubQuestions = onSnapshot(q, (snap) => {
+      currentQuestions = [];
+      snap.forEach((d) => currentQuestions.push({ id: d.id, ...d.data() }));
+      renderList();
+    }, (err) => {
+      showError('讀取訊息失敗：' + err.message);
+    });
+  }
+
+  // ── 動物 emoji + 編號 mapping（同 live-questions.html）─────
+  const AUDIENCE_EMOJIS = ['🐹','🐰','🦊','🐼','🐨','🐯','🦁','🐸','🐻','🐵','🐧','🦄'];
+  const userToNumber = new Map();
+  let nextNum = 1;
+  function getAudience(hash) {
+    if (!userToNumber.has(hash)) userToNumber.set(hash, nextNum++);
+    const n = userToNumber.get(hash);
+    return { num: n, emoji: AUDIENCE_EMOJIS[(n - 1) % AUDIENCE_EMOJIS.length] };
+  }
+
+  function renderList() {
+    const total = currentQuestions.length;
+    const hidden = currentQuestions.filter((q) => q.hidden).length;
+    const pinned = currentQuestions.filter((q) => q.pinned).length;
+    $('totalCount').textContent = total;
+    $('visibleCount').textContent = total - hidden;
+    $('hiddenCount').textContent = hidden;
+    $('pinnedCount').textContent = pinned;
+
+    if (total === 0) {
+      questionList.innerHTML = `<div class="empty-state"><div class="emoji">📭</div><br/>還沒有任何訊息</div>`;
+      return;
+    }
+
+    questionList.innerHTML = '';
+    currentQuestions.forEach((q) => {
+      const audience = getAudience(q.userIdHash || 'anon');
+      const date = new Date(q.timestamp || q.createdAt?.toMillis?.() || Date.now());
+      const timeStr = String(date.getMonth() + 1).padStart(2, '0') + '/' +
+                      String(date.getDate()).padStart(2, '0') + ' ' +
+                      String(date.getHours()).padStart(2, '0') + ':' +
+                      String(date.getMinutes()).padStart(2, '0') + ':' +
+                      String(date.getSeconds()).padStart(2, '0');
+
+      const card = document.createElement('div');
+      card.className = 'q-card' + (q.hidden ? ' hidden' : '') + (q.pinned ? ' pinned' : '');
+      card.innerHTML = `
+        <div class="q-meta">
+          <span class="q-badge">${audience.emoji} #${audience.num}</span>
+          <span class="q-time">${timeStr}</span>
+        </div>
+        <div class="q-text ${q.hidden ? 'text-hidden' : ''}">
+          <span class="text-content"></span>
+          ${q.pinned ? '<span class="status-pill pin">📌 置頂</span>' : ''}
+          ${q.hidden ? '<span class="status-pill hide">🙈 隱藏</span>' : ''}
+        </div>
+        <div class="q-actions">
+          <button class="btn-pin${q.pinned ? ' active' : ''}" data-action="pin" data-id="${q.id}">${q.pinned ? '取消置頂' : '📌 置頂'}</button>
+          <button class="btn-hide${q.hidden ? ' active' : ''}" data-action="hide" data-id="${q.id}">${q.hidden ? '取消隱藏' : '🙈 隱藏'}</button>
+          <button class="btn-del" data-action="del" data-id="${q.id}">🗑️</button>
+        </div>
+      `;
+      card.querySelector('.text-content').textContent = q.text || '(無內容)';
+      questionList.appendChild(card);
+    });
+  }
+
+  // ── 事件委派處理操作 ─────────────────────────────────────
+  questionList.addEventListener('click', async (e) => {
+    const btn = e.target.closest('button[data-action]');
+    if (!btn) return;
+    const id = btn.dataset.id;
+    const action = btn.dataset.action;
+    const q = currentQuestions.find((x) => x.id === id);
+    if (!q) return;
+    btn.disabled = true;
+    try {
+      const ref = doc(db, 'talkQuestions', id);
+      if (action === 'pin') {
+        await updateDoc(ref, { pinned: !q.pinned });
+      } else if (action === 'hide') {
+        await updateDoc(ref, { hidden: !q.hidden });
+      } else if (action === 'del') {
+        if (!confirm(`確定刪除這則訊息？\n\n「${(q.text || '').slice(0, 40)}」\n\n刪除後不可復原。`)) {
+          btn.disabled = false;
+          return;
+        }
+        await deleteDoc(ref);
+      }
+    } catch (err) {
+      showError('操作失敗：' + err.message);
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  // ── 清空全部 ─────────────────────────────────────────────
+  $('clearAllBtn').addEventListener('click', async () => {
+    const total = currentQuestions.length;
+    if (total === 0) { alert('沒有訊息可清空'); return; }
+    if (!confirm(`⚠️ 確定要刪除全部 ${total} 則訊息？\n\n這個操作無法復原，建議只在演講前清測試訊息時用。`)) return;
+    if (!confirm(`再次確認：真的要刪除 ${total} 則訊息嗎？`)) return;
+    try {
+      const snap = await getDocs(collection(db, 'talkQuestions'));
+      // 分批 batch 寫入避免單 batch 超過 500 限制
+      const docs = [];
+      snap.forEach((d) => docs.push(d.ref));
+      while (docs.length > 0) {
+        const batch = writeBatch(db);
+        const chunk = docs.splice(0, 400);
+        chunk.forEach((ref) => batch.delete(ref));
+        await batch.commit();
+      }
+      clearError();
+    } catch (err) {
+      showError('清空失敗：' + err.message);
+    }
+  });
+
+  $('refreshBtn').addEventListener('click', () => {
+    if (unsubQuestions) {
+      unsubQuestions();
+      unsubQuestions = null;
+    }
+    subscribeQuestions();
+  });
+</script>
+</body>
+</html>

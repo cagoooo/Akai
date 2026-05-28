@@ -118,6 +118,20 @@ urls.push({
     priority: '0.6',
 });
 
+// 🆕 v3.6.67: 2026 AIFED 演講子站（簡報 + 學術稿件 + 即時頁）
+urls.push({
+    loc: `${SITE_URL}/akai-talk-2026/`,
+    lastmod: TODAY,
+    changefreq: 'monthly',
+    priority: '0.8',
+});
+urls.push({
+    loc: `${SITE_URL}/akai-talk-2026/AIFED2026_paper.pdf`,
+    lastmod: TODAY,
+    changefreq: 'yearly',
+    priority: '0.7',
+});
+
 // Generate XML
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

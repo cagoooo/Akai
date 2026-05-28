@@ -9,12 +9,14 @@ service cloud.firestore {
     }
 
     // 🆕 v3.6.67: 2026 AIFED 演講「現場提問」收件箱
-    //   寫入：lineTalkWebhook Cloud Function 走 admin SDK（繞過 rules）
-    //   讀取：所有人可讀（演講當下 live-questions.html 公開顯示用）
+    //   create: lineTalkWebhook Cloud Function 走 admin SDK（繞過 rules）
+    //   read:   所有人可讀（演講當下 live-questions.html 公開顯示用）
+    //   update/delete: 只有 admin custom claim（後台管理刪除測試訊息 / 隱藏不當訊息 / 釘選重要提問）
     //   注意：userId 已 hash 截 8 字，原 LINE userId 不會外洩
     match /talkQuestions/{msgId} {
       allow read: if true;
-      allow write: if false;
+      allow create: if false;
+      allow update, delete: if request.auth != null && request.auth.token.admin == true;
     }
 
     // 訪客 context 全站累計（地理 / 裝置 / 來源 三類，與 totalVisits 對齊的全域統計）

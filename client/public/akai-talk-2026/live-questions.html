@@ -527,12 +527,20 @@
     const next = [];
     snap.forEach((doc) => {
       const data = doc.data();
+      // admin-questions.html 標記 hidden 的訊息不公開顯示
+      if (data.hidden) return;
       next.push({
         id: doc.id,
         text: data.text || '',
         userIdHash: data.userIdHash || 'anon',
         timestamp: data.timestamp || (data.createdAt?.toMillis?.() ?? Date.now()),
+        pinned: !!data.pinned,
       });
+    });
+    // 置頂訊息排到陣列最前（pinned: true 永遠優先輪播）
+    next.sort((a, b) => {
+      if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+      return (b.timestamp || 0) - (a.timestamp || 0); // 同 pinned 狀態仍按時間 desc
     });
     // 偵測新訊息（doc id 跟上次第一則不同 → 新進，觸發 flash glow）
     const isNewArrival = next.length > 0 && next[0].id !== lastSeenId.current;
