@@ -132,6 +132,34 @@
     padding: 16px 8px;
     animation: slideIn .5s ease-out;
   }
+  .card-active.flash { animation: slideIn .5s ease-out, flashGlow 1.8s ease-out; }
+  @keyframes flashGlow {
+    0%   { box-shadow: 0 0 0 0 rgba(201,151,68,0); }
+    20%  { box-shadow: 0 0 60px 12px rgba(201,151,68,.45); }
+    100% { box-shadow: 0 0 0 0 rgba(201,151,68,0); }
+  }
+  .audience-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px;
+    background: rgba(201,151,68,.18);
+    border: 1.5px solid var(--orange);
+    border-radius: 999px;
+    font-size: 14px; font-weight: 800;
+    color: var(--orange);
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 14px;
+    letter-spacing: 0.04em;
+  }
+  .audience-badge .emoji { font-size: 16px; }
+  .audience-badge .repeat-tag {
+    background: var(--orange);
+    color: var(--navy-deep);
+    padding: 1px 7px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 900;
+    margin-left: 4px;
+  }
   .card-text {
     font-family: 'Noto Serif TC', serif;
     font-size: clamp(28px, 4.5vw, 56px);
@@ -354,7 +382,26 @@
   let activeIdx = 0;
   let rotateTimer = null;
 
-  function renderActive() {
+  // 觀眾編號 + emoji mapping（同 hash 永遠拿到同編號／emoji，演講中穩定不變）
+  const AUDIENCE_EMOJIS = ['🐹','🐰','🦊','🐼','🐨','🐯','🦁','🐸','🐻','🐵','🐧','🦄'];
+  const userToNumber = new Map();
+  const lastSeenId = { current: null }; // 記住最新一則 doc id 用於 flash glow
+  let nextAudienceNumber = 1;
+  function getAudience(hash) {
+    if (!userToNumber.has(hash)) {
+      userToNumber.set(hash, nextAudienceNumber++);
+    }
+    const n = userToNumber.get(hash);
+    return { num: n, emoji: AUDIENCE_EMOJIS[(n - 1) % AUDIENCE_EMOJIS.length] };
+  }
+
+  // 計算同 hash 在 questions 內的總數 / 當前是該人的第幾則（依時間順序）
+  function userStats(hash) {
+    const sameUser = questions.filter((qq) => qq.userIdHash === hash);
+    return { total: sameUser.length };
+  }
+
+  function renderActive(opts = {}) {
     const oldCard = stage.querySelector('.card-active');
     if (oldCard) oldCard.remove();
     if (questions.length === 0) {
@@ -368,14 +415,33 @@
     const timeStr = String(date.getHours()).padStart(2, '0') + ':' +
                     String(date.getMinutes()).padStart(2, '0') + ':' +
                     String(date.getSeconds()).padStart(2, '0');
+    const audience = getAudience(q.userIdHash || 'anon');
+    const stats = userStats(q.userIdHash || 'anon');
+
+    // 找出 q 在「該觀眾自己訊息序列」中的順位（asc 時間）
+    const sameUserAsc = questions
+      .filter((qq) => qq.userIdHash === q.userIdHash)
+      .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+    const thisUserSeq = sameUserAsc.findIndex((qq) => qq.id === q.id) + 1;
 
     const card = document.createElement('div');
-    card.className = 'card-active';
+    card.className = 'card-active' + (opts.flash ? ' flash' : '');
+
+    // 同一觀眾多則才顯示 repeat-tag
+    const repeatTag = stats.total > 1
+      ? `<span class="repeat-tag">第 ${thisUserSeq} 則 / 共 ${stats.total}</span>`
+      : '';
+
     card.innerHTML = `
+      <div class="audience-badge">
+        <span class="emoji">${audience.emoji}</span>
+        <span>觀眾 #${audience.num}</span>
+        ${repeatTag}
+      </div>
       <div class="card-text"></div>
       <div class="card-meta">
-        <span class="from">— 觀眾 ${q.userIdHash || 'anon'}</span>
-        <span>${timeStr} · 第 ${activeIdx + 1} 則 / ${questions.length}</span>
+        <span class="from">${timeStr}</span>
+        <span>第 ${activeIdx + 1} 則 / ${questions.length}（輪播中）</span>
       </div>
     `;
     card.querySelector('.card-text').textContent = q.text;
@@ -388,10 +454,12 @@
   function renderStrip() {
     strip.innerHTML = '';
     questions.forEach((q, i) => {
+      const audience = getAudience(q.userIdHash || 'anon');
       const chip = document.createElement('div');
       chip.className = 'chip' + (i === activeIdx ? ' active' : '');
-      chip.textContent = q.text;
-      chip.title = q.text;
+      chip.innerHTML = `<span style="opacity:.7;margin-right:4px;">${audience.emoji}#${audience.num}</span><span></span>`;
+      chip.querySelector('span:last-child').textContent = q.text;
+      chip.title = `觀眾 #${audience.num}：${q.text}`;
       chip.addEventListener('click', () => {
         activeIdx = i;
         renderActive();
@@ -426,11 +494,15 @@
         timestamp: data.timestamp || (data.createdAt?.toMillis?.() ?? Date.now()),
       });
     });
+    // 偵測新訊息（doc id 跟上次第一則不同 → 新進，觸發 flash glow）
+    const isNewArrival = next.length > 0 && next[0].id !== lastSeenId.current;
+    lastSeenId.current = next.length > 0 ? next[0].id : null;
+
     questions = next;
     $('count').textContent = next.length;
     activeIdx = 0;
     renderStrip();
-    renderActive();
+    renderActive({ flash: isNewArrival });
     resetRotate();
   }, (err) => {
     console.warn('[live-questions] onSnapshot 失敗', err);
