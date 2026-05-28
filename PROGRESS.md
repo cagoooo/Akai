@@ -1,13 +1,118 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.67` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
-- **里程碑**: **2026-05-28 AIFED 演講當天互動全套上線** — H 區 4 大件套 + LINE 觀眾提問端到端跑通 + 緊急修補 tool detail 連結 bug + 4 輪 UX 迭代（11 commits / 6 hr）
-- **最後更新狀態**: v3.6.67 — H 區四大件套：(H1) `live-stats.html` Akai 主站即時訪客動態 + L 熱鍵；(H2) LINE Channel 2010219191 / @399ffpsg 觀眾即時提問 Cloud Function 部署完成 + `live-questions.html` 大字輪播 + Q 熱鍵；(H3) `#slide-N` 深連結；(H4) 觸控手勢 + 手機浮動 nav 按鈕。緊急修補：tool detail markdown 91 處連結缺 `/Akai/` basePath（resolveLink helper）+ live-questions HTTP cache 卡舊版（cache-control meta + ?v= 雙保險）。觀眾互動 UX 4 輪迭代：64px QR → 240px QR → 觀眾編號 + 同人多則 → 手機 column 排版。
+- **當前版本**: `v3.6.68` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
+- **里程碑**: **2026-05-28 演講提問 Ops 工作流完整上線** — admin 後台 + UX 三修 + 後台快捷按鈕 + sitemap + QR 驗證（5 commits / 2 hr）
+- **最後更新狀態**: v3.6.68 — P1 admin-questions.html 後台（Firebase Auth + admin custom claim + 置頂/隱藏/刪除/清空全部）；live-questions.html 訂閱 filter hidden + pinned 置頂；UX 三修（errorBanner 移位 / 匿名 user 不誤觸發 / 加 ipad@ 明示）；live-questions header 加 ⚙️ 後台快捷按鈕；R2 sitemap 補 akai-talk-2026 + PDF；O3 簡報內 7 個 tool-cta + 4 個外部站全驗 OK；memory 存「Akai admin claim 屬於 ipad@」。
 
 ## 📌 完成功能總覽
 
-### `v3.6.67` (最新 · 🎤 AIFED 演講當天互動全套)
+### `v3.6.68` (最新 · 🛡️ 演講提問 Ops 工作流完整上線)
+
+**🎯 動機**
+v3.6.67 H 區四大件套上線後，使用者實機測試遇到第一個「測試訊息怎麼刪」需求 — 開啟 admin 後台路線。同時補完 v3.6.67 後續 R2 sitemap + O3 QR 驗證 + 三大 UX 修復。
+
+**🛡️ P1 admin-questions.html 後台（commit [4606bd7](https://github.com/cagoooo/Akai/commit/4606bd7)）**
+
+純靜態頁 + Firebase Web SDK + Google sign-in + admin custom claim：
+
+| 功能 | 行為 |
+|---|---|
+| 🔒 admin 認證 | onAuthStateChanged + idTokenResult.claims.admin 驗證；非 admin 自動 signOut |
+| 📌 置頂 | `pinned: true` → live-questions.html 訂閱時優先輪播 |
+| 🙈 隱藏 | `hidden: true` → live-questions.html 直接 filter 掉（觀眾消失，後台保留紀錄）|
+| 🗑️ 刪除 | confirm + deleteDoc 永久刪除 |
+| ⚠️ 清空全部 | 雙重 confirm + batch delete 400/批 防超 500 限制 |
+| 📊 即時 stats | 工具列顯示「共 N / 顯示中 / 隱藏 / 置頂」|
+| 🐹 觀眾編號 | 跟 live-questions.html 完全對齊（同 hash 拿同 emoji + 同編號）|
+
+對應 Firestore rules 更新：
+```
+match /talkQuestions/{msgId} {
+  allow read: if true;                    // 公開大螢幕讀
+  allow create: if false;                 // 只 Cloud Function admin SDK 寫
+  allow update, delete: if admin claim    // admin 後台管理
+}
+```
+
+**🔐 admin UX 三大修復（commit [3fbe250](https://github.com/cagoooo/Akai/commit/3fbe250) + [1a979e3](https://github.com/cagoooo/Akai/commit/1a979e3)）**
+
+| 問題 | 修法 |
+|---|---|
+| 帳號錯誤時看不到 banner | errorBanner 從 adminPanel 內部移到 wrap 頂部，loginCard / adminPanel 任一狀態都可見 |
+| 進頁面立刻看到「null 沒有 admin」誤觸發錯誤 | Akai 站自動匿名登入訪客做 visitorStats，`!user \|\| user.isAnonymous \|\| !user.email` 都視為「未登入」靜悄悄顯示登入卡不報錯 |
+| 沒明示管理員是哪個帳號 | loginCard 加「請用 `ipad@mail2.smes.tyc.edu.tw` 登入」明示；錯誤時 errorBanner 跑 errorShake 動畫 + 自動 signOut。1a979e3 後續砍掉囉嗦的 cagooo@ 解釋句 |
+
+**⚙️ live-questions header 加後台快捷（commit [1df8614](https://github.com/cagoooo/Akai/commit/1df8614)）**
+
+- header 右側 stats 區塊最前面加 32×32 圓形 ⚙️ 按鈕
+- `target="_blank"` 新分頁開（不打斷大螢幕輪播）
+- hover：橘金底 + 旋轉 45° 動畫
+- 普通觀眾看到 tooltip 顯示「需 admin 登入」會自動退避
+
+**🔎 R2 sitemap 補 talk 路徑（commit [4606bd7](https://github.com/cagoooo/Akai/commit/4606bd7)）**
+- `akai-talk-2026/` priority 0.8
+- `AIFED2026_paper.pdf` priority 0.7
+- 總 URL 306 條
+
+**✅ O3 簡報內 QR 連結驗證（4606bd7 內）**
+- 7 個 tool-cta（#3/#23/#45/#58/#78/#81/#87）HTTP 301 — GitHub Pages trailing-slash redirect，預期行為
+- Akai 主站 + `vote/` + `cloud/` + `class/` 全 200 OK
+- 簡報內 QR 連結沒問題
+
+**📁 變動檔案總覽（v3.6.68）**
+```
+新增:
+client/public/akai-talk-2026/admin-questions.html  ← P1 後台管理（500 行純 HTML）
+~/.claude/projects/H--Akai/memory/akai_admin_account.md  ← Akai admin = ipad@ memory
+
+修改:
+client/public/akai-talk-2026/live-questions.html
+  - onSnapshot filter data.hidden（admin 隱藏不顯示）
+  - 排序: pinned 優先 → 同 pinned 按 timestamp desc
+  - header 加 ⚙️ 後台快捷按鈕（target=_blank）
+
+firestore.rules
+  - talkQuestions 加 allow update, delete: admin claim
+  - create 改為 false (Cloud Function admin SDK 繞 rules)
+  - 已 deploy 到 akai-e693f
+
+scripts/generate-sitemap.mjs  ← 加 akai-talk-2026/ + PDF
+client/public/sitemap.xml      ← regenerate 後 306 URL
+
+~/.claude/projects/H--Akai/memory/MEMORY.md  ← 加 admin claim memory 索引條目
+```
+
+**🎯 戰略意義**
+- **演講當天閉環**：先有 live-questions.html 公開大螢幕 + 現在補上 admin 後台，演講者助理能即時 hide 不當訊息 / pin 精彩問題
+- **權限分層清楚**：公開讀（觀眾掃 QR 看大螢幕）/ Cloud Function 寫（webhook）/ admin 改刪（後台）三層完整
+- **Memory 寫好 Akai admin claim 屬於 ipad@**：未來任何 admin UI 自動引導使用 ipad@ 避免重蹈這次「cagooo@ 用不了 admin」誤會
+- **R2 sitemap + O3 QR 驗證**：演講對外曝光跟 QR 跳轉路徑都驗過，演講當天不會掃 QR 跳 404
+
+**📌 線上**
+- live-questions（公開大螢幕，演講者按 Q 開）: https://cagoooo.github.io/Akai/akai-talk-2026/live-questions.html
+- admin-questions（後台管理，ipad@ 登入）: https://cagoooo.github.io/Akai/akai-talk-2026/admin-questions.html
+
+**📚 5 個 commits（v3.6.67 PROGRESS commit 474cdfc 之後）**
+```
+4606bd7 🛡️ [P1] admin-questions.html 後台 + [R2] sitemap 加 talk 路徑
+3fbe250 🔐 admin-questions 三大 UX 修復（errorBanner / 匿名 user / 加 ipad@ 提示）
+1a979e3 ✂️ admin login card 砍掉囉嗦解釋
+1df8614 ⚙️ live-questions header 加後台快捷按鈕
+（PROGRESS commit 待）
+```
+
+**📚 演講當天 admin 工作流**
+1. 演講前清測試訊息：admin 後台「⚠️ 清空全部」雙重 confirm
+2. 演講進行中：助理開 live-questions（主視覺）+ admin（操作）雙視窗
+3. 不適合訊息 → admin 點「🙈 隱藏」→ live-questions 立刻消失
+4. 精彩問題 → admin 點「📌 置頂」→ live-questions 永遠優先輪播該則
+5. 演講後：保留 talkQuestions 當「阿凱老師問題信箱」常態運作 / 或一鍵清空歸零
+
+---
+
+
+### `v3.6.67` (🎤 AIFED 演講當天互動全套)
 
 **🎯 動機**
 v3.6.66 收完簡報靜態 + 平台整合的「基礎建設」，演講倒數階段需要「現場真正能用」的互動工具。H 區四大件套 + LINE 觀眾提問端到端跑通。
