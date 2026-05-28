@@ -1275,6 +1275,7 @@
                 <tr><td style="padding:6px 0;color:#C99744;font-family:'JetBrains Mono',monospace;font-weight:700;">1 - 9 / 0</td><td style="padding:6px 0;">跳到第 N 張（0 = 第 10 張）</td></tr>
                 <tr><td style="padding:6px 0;color:#C99744;font-family:'JetBrains Mono',monospace;font-weight:700;">R</td><td style="padding:6px 0;">重啟（回第一張）</td></tr>
                 <tr><td style="padding:6px 0;color:#C99744;font-family:'JetBrains Mono',monospace;font-weight:700;">L</td><td style="padding:6px 0;">📊 開啟即時統計頁（新分頁，給觀眾看 Akai 數據）</td></tr>
+                <tr><td style="padding:6px 0;color:#C99744;font-family:'JetBrains Mono',monospace;font-weight:700;">Q</td><td style="padding:6px 0;">🎤 開啟實況提問牆（新分頁，顯示 LINE 觀眾即時提問）</td></tr>
                 <tr><td style="padding:6px 0;color:#C99744;font-family:'JetBrains Mono',monospace;font-weight:700;">F11</td><td style="padding:6px 0;">瀏覽器全螢幕</td></tr>
                 <tr><td style="padding:6px 0;color:#C99744;font-family:'JetBrains Mono',monospace;font-weight:700;">?</td><td style="padding:6px 0;">顯示 / 隱藏此說明</td></tr>
               </tbody>
@@ -1486,6 +1487,9 @@
       } else if (key === 'l' || key === 'L') {
         // 演講者熱鍵：打開即時統計頁（新分頁全屏給觀眾看 Akai 主站當下數據）
         window.open('live-stats.html', '_blank', 'noopener');
+      } else if (key === 'q' || key === 'Q') {
+        // 演講者熱鍵：打開實況提問牆（新分頁顯示觀眾透過 LINE 提問的即時內容）
+        window.open('live-questions.html', '_blank', 'noopener');
       } else if (key === '?') {
         this._toggleHelp(true);
       } else if (/^[0-9]$/.test(key)) {

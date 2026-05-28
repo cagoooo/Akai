@@ -19,6 +19,12 @@ export { embedQuery } from "./embedQuery";
 // - verifyAnonAuthNow：admin onCall，手動觸發
 export { verifyAnonAuthDaily, verifyAnonAuthNow } from "./verifyAnonAuth";
 
+// 🆕 v3.6.67: 2026 AIFED 演講「現場提問」LINE Bot inbound webhook
+// 觀眾掃 closing slide LINE OA QR → 加好友 → 傳訊息 → 寫 Firestore talkQuestions
+// 簡報內 live-questions.html 用 onSnapshot 即時顯示
+// Secret: TALK_LINE_CHANNEL_SECRET (printf "..." | firebase functions:secrets:set ...)
+export { lineTalkWebhook } from "./lineTalkWebhook";
+
 // 對外公開站點（供 LINE 卡片裡的「打開查看」按鈕用）
 const SITE_BASE = "https://cagoooo.github.io/Akai";
 
