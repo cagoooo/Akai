@@ -25,6 +25,7 @@ import { BulletinHeader } from '@/components/bulletin/BulletinHeader';
 import { BulletinHero } from '@/components/bulletin/BulletinHero';
 import { BulletinMilestone100 } from '@/components/bulletin/BulletinMilestone100';
 import { BulletinSpeechBanner } from '@/components/bulletin/BulletinSpeechBanner';
+import { BulletinQuickNav } from '@/components/bulletin/BulletinQuickNav';
 import { BulletinLeaderboard } from '@/components/bulletin/BulletinLeaderboard';
 import { BulletinWishPool } from '@/components/bulletin/BulletinWishPool';
 import { BulletinSiteStats } from '@/components/bulletin/BulletinSiteStats';
@@ -234,15 +235,18 @@ export function BulletinHome() {
       <BulletinMilestone100 onWishClick={() => setShowWishingWellFromShortcut(true)} />
       <BulletinSpeechBanner />
       <BulletinHero toolCount={toolsWithStats.length} />
+      <BulletinQuickNav />
 
       {/* 排行榜 + 工具地圖 + 許願池 */}
       <div
+        id="ranking"
         className="bulletin-sections-grid"
         style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
           gap: 40,
           padding: '20px 60px 12px',
+          scrollMarginTop: 20,
         }}
       >
         <BulletinLeaderboard
@@ -255,16 +259,20 @@ export function BulletinHome() {
 
       {/* 工具地圖 + 教學情境長文 兩欄並排 */}
       <div
+        id="stats"
         className="bulletin-sections-grid"
         style={{
           display: 'grid',
           gridTemplateColumns: '1.4fr 1fr',
           gap: 40,
           padding: '0 60px 30px',
+          scrollMarginTop: 20,
         }}
       >
         <BulletinSiteStats onCategoryClick={(cat) => handleCategoryChange(cat)} />
-        <BulletinBlogEntry />
+        <div id="blog" style={{ scrollMarginTop: 20 }}>
+          <BulletinBlogEntry />
+        </div>
       </div>
 
       {/* 部署生態系全圖 — 5 大平台便利貼牆 */}
@@ -318,13 +326,15 @@ export function BulletinHome() {
       </div>
 
       {/* 工具網格 */}
-      {isLoading ? (
-        <div style={{ textAlign: 'center', padding: 60, color: tokens.muted, fontStyle: 'italic' }}>
-          📌 正在把工具釘上公佈欄…
-        </div>
-      ) : (
-        <BulletinToolGrid tools={sortedTools} />
-      )}
+      <div id="tools" style={{ scrollMarginTop: 20 }}>
+        {isLoading ? (
+          <div style={{ textAlign: 'center', padding: 60, color: tokens.muted, fontStyle: 'italic' }}>
+            📌 正在把工具釘上公佈欄…
+          </div>
+        ) : (
+          <BulletinToolGrid tools={sortedTools} />
+        )}
+      </div>
 
       <BulletinFooter />
 
