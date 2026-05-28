@@ -1,7 +1,7 @@
 {
-  "version": "3.6.64",
-  "cacheVersion": "v3.6.64-share100ogfix-202605261445",
-  "gitHash": "pending",
-  "buildTime": "2026-05-26T06:45:00.000Z",
-  "buildTimestamp": 1779778500000
+  "version": "3.6.60",
+  "cacheVersion": "v3.6.60-1b6593c-202605282042",
+  "gitHash": "1b6593c",
+  "buildTime": "2026-05-28T12:42:44.712Z",
+  "buildTimestamp": 1779972164712
 }

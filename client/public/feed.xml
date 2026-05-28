@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 100+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 101+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Sun, 24 May 2026 06:05:54 GMT</pubDate>
-    <lastBuildDate>Mon, 25 May 2026 02:11:39 GMT</lastBuildDate>
+    <pubDate>Thu, 28 May 2026 00:00:00 GMT</pubDate>
+    <lastBuildDate>Thu, 28 May 2026 12:42:53 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,27 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：3D 迷宮冒險遊戲 — 第一人稱光球收集 × 全班排行榜</title>
+      <link>https://cagoooo.github.io/Akai/tool/101</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/101</guid>
+      <pubDate>Thu, 28 May 2026 00:00:00 GMT</pubDate>
+      <description>第一人稱 3D 迷宮探索遊戲：收集藍色光球、躲避紅色巡守者、與時間賽跑。React + Three.js 純瀏覽器跑 3D，桌機鍵盤滑鼠 + iPad 觸控全支援，內建全班 / 全校排行榜，下課十分鐘剛好打一輪。</description>
+      <category>3D 迷宮</category>
+      <category>第一人稱</category>
+      <category>Three.js</category>
+      <category>光球收集</category>
+      <category>全班排行榜</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#101 3D 迷宮冒險遊戲：第一人稱光球收集 × 紅怪閃避 × 全班排行榜，瀏覽器跑 3D 的下課十分鐘</title>
+      <link>https://cagoooo.github.io/Akai/blog/maze-3d-101-first-person-orb-collection</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/maze-3d-101-first-person-orb-collection</guid>
+      <pubDate>Thu, 28 May 2026 00:00:00 GMT</pubDate>
+      <description>#101 3D 迷宮冒險遊戲是阿凱寫給孩子玩的第一人稱探索遊戲：React + Three.js 純瀏覽器跑 3D，收集藍色光球、躲避紅色巡守者、與時間賽跑，4 段難度 7×7 到 17×17 噩夢級，桌機 + iPad 觸控全支援，內建全班 / 全校排行榜。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
     <item>
       <title>🆕 新工具：考試卷生圖 Studio — AI 黑白線稿插圖生成</title>
       <link>https://cagoooo.github.io/Akai/tool/99</link>
@@ -273,24 +294,6 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/multiplication-26-adventure</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
       <description>#26 真實名稱「九九乘法大冒險」是純前端遊戲化練習器 — Tailwind + Lucide + **Web Audio API**（OscillatorNode 合成音效）做的 25KB 單檔 HTML，嵌進 Google Sites。3 狀態反饋（答對了 / 哎呀答錯了 / 挑戰完成）+ 計分計時，**沒用 LLM** — 證明「好的教學工具不一定需要 AI」。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#27 ⬅️好用小工具（許願池）：swissknife 13 個 Google Sites Embedded 工具總入口（含 7 個 Akai 尚未收錄的隱藏作品）</title>
-      <link>https://cagoooo.github.io/Akai/blog/swissknife-27-tool-vault</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/swissknife-27-tool-vault</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#27 真實是 `sites.google.com/mail2.smes.tyc.edu.tw/swissknife/` — 阿凱所有「Gemini 寫 + Google Sites 嵌入」工具的總入口頁，共 13 個子頁工具。其中 6 個已在 Akai 100 個工具內（#5 #10 #25 #26 #44 #75 #76），**7 個是 Akai 尚未收錄的隱藏作品**（取餐叫號區 / 校園點餐後台 / 石小閱讀推動短影片 / Loilonote 題庫轉 Excel / HEIC 轉 JPG / TIFF 轉 PNG 等）。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#44 快樂數學小冒險：國小一年級 4 關卡（10 以內加減 + 20 以內加減）+ canvas-confetti 撒花獎勵的純前端遊戲</title>
-      <link>https://cagoooo.github.io/Akai/blog/math-adventure-44-grade-one</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/math-adventure-44-grade-one</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#44 真實名稱「快樂數學小冒險 | 國小一年級數學練習」是阿凱給**一年級**做的數學練習遊戲。4 個關卡（10 以內加法 / 10 以內減法 / 20 以內加法 / 20 以內減法）+ canvas-confetti 撒花獎勵 + 純 Tailwind + 26KB 單檔 HTML 嵌進 Google Sites。是 #26 九九乘法大冒險的低年級姊妹工具。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>

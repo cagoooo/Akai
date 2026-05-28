@@ -607,6 +607,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://cagoooo.github.io/Akai/tool/101</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://cagoooo.github.io/Akai/tool/100</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
@@ -1202,6 +1208,12 @@
   </url>
   <url>
     <loc>https://cagoooo.github.io/picture-master/</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cagoooo.github.io/maze-3d-game/</loc>
     <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -1809,6 +1821,12 @@
   <url>
     <loc>https://cagoooo.github.io/Akai/blog/exam-illustration-99-ai-line-art-studio</loc>
     <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cagoooo.github.io/Akai/blog/maze-3d-101-first-person-orb-collection</loc>
+    <lastmod>2026-05-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

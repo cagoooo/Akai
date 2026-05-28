@@ -12469,6 +12469,176 @@ const POST_99: BlogPost = {
 `,
 };
 
+const POST_101: BlogPost = {
+  slug: 'maze-3d-101-first-person-orb-collection',
+  title: '#101 3D 迷宮冒險遊戲：第一人稱光球收集 × 紅怪閃避 × 全班排行榜，瀏覽器跑 3D 的下課十分鐘',
+  excerpt:
+    '#101 3D 迷宮冒險遊戲是阿凱寫給孩子玩的第一人稱探索遊戲：React + Three.js 純瀏覽器跑 3D，收集藍色光球、躲避紅色巡守者、與時間賽跑，4 段難度 7×7 到 17×17 噩夢級，桌機 + iPad 觸控全支援，內建全班 / 全校排行榜。',
+  publishedAt: '2026-05-28',
+  readingMinutes: 5,
+  tags: ['3D 迷宮', '第一人稱', 'Three.js', '教育遊戲', '排行榜'],
+  toolIds: [101, 50, 97],
+  coverEmoji: '🎮',
+  coverColor: 'blue',
+  body: `## 下課十分鐘，孩子滑手機 vs 跑 3D 迷宮
+
+每節下課這 10 分鐘，國小教室的場景大概兩種：
+
+- **滑手機派**：頭低下去，玩到上課鐘響還停不下來，眼睛紅紅的回座位
+- **追跑派**：滿教室追逐，老師喊「不要跑」喊到嗓子啞
+
+兩種都不算理想。我想要一個**中間值** — 孩子願意玩、不會吵到別班、又跟「資訊課在學什麼」有關聯的東西。
+
+於是 #101 出現了：**用瀏覽器打開就能玩的第一人稱 3D 迷宮**。
+
+## #101 怎麼解？4 個欄位 + WASD + 滑鼠視角
+
+打開 [cagoooo.github.io/maze-3d-game](https://cagoooo.github.io/maze-3d-game/) 那一刻看到的不是 Loading，是一個叫 **MAZE.OS** 的開始畫面 — sci-fi 深色配色、左上「REC · CORRIDOR_07」、右上「FPS 60」、中央霓虹藍標題「3D 迷宮冒險」。
+
+**核心玩法極簡**：
+
+\`\`\`
+WASD · MOVE     ← 走路
+MOUSE · LOOK    ← 視角
+◆ COLLECT       ← 撿藍光球
+▲ AVOID         ← 躲紅怪
+ESC · PAUSE     ← 暫停
+\`\`\`
+
+開始前先選 4 個東西：
+
+**① 難度（4 段）**
+- 🟢 **EASY** — 7×7 迷宮 / 180 秒（適合三四年級或第一次玩）
+- 🔥 **NORMAL** — 9×9 迷宮 / 150 秒（國小高年級主力）
+- 💀 **HARD** — 13×13 迷宮 / 180 秒（資訊老師自己挑戰用）
+- ☠️ **NIGHTMARE** — 17×17 迷宮 / 200 秒（噩夢級，下班後紓壓）
+
+**② 暱稱（最多 4 字）+ 班級（如「601」）**
+這兩個欄位決定你在「歷史光榮榜 Hall of Explorers」上的署名。
+
+**③ 按下「進入迷宮 ENTER」**
+畫面切換成第一人稱視角 — 你就在走廊裡了。
+
+## 為什麼選 React + Three.js？三個非常實際的理由
+
+第一次看到「瀏覽器跑 3D」會覺得卡卡的，其實 [Three.js](https://threejs.org/) + [react-three-fiber](https://r3f.docs.pmnd.rs/) 的組合在 2025 年已經**比 Unity WebGL 快**：
+
+**① 學校電腦也能跑 30 FPS** — 學校那台 Celeron / i3 Chromebook 開 Unity WebGL 會直接卡死，但 Three.js 用 WebGL 硬體加速 + R3F 的 declarative 寫法，**老舊設備也能流暢**。
+
+**② 純前端、零後端伺服器** — 排行榜資料用 Firestore，但遊戲邏輯全在瀏覽器跑，**沒有掉線問題**、**沒有伺服器爆掉**。學校 Wi-Fi 不穩也能單機玩。
+
+**③ PWA 可安裝** — 有 \`manifest.webmanifest\` + Service Worker，iPad / Chrome / Edge 可加入桌面，孩子下次直接點 icon 就開，不用記網址。
+
+**代價**：第一次載入要下載 Three.js + R3F bundle（約 600 KB），但有了 SW 快取後第二次起就是 0 ms。
+
+## 第一人稱 3D 跟「教學」有什麼關係？
+
+說真的，3D 迷宮**不直接教任何學科**。但它對國小資訊課與班級經營有 3 個非常具體的價值：
+
+### ① 「React + Three.js 真的能跑 3D」的活範例
+
+高年級資訊課講到「網頁可以做什麼」時，**示範 #101 比講半小時還有效** — 孩子看到瀏覽器裡跑第一人稱 3D，當場驚呼「這是用網頁做的？」**對技術的想像力被打開**。
+
+### ② 3D 空間認知訓練
+
+孩子玩第一人稱遊戲時，**大腦在做空間建模** — 我現在在哪、剛剛從哪來、光球可能在哪。這是**平面遊戲完全給不了**的訓練（特別對特教 / 資源班學生的視覺空間感）。
+
+### ③ 全班排行榜的「健康競爭」
+
+光球數 × 時間雙因子排序，**不能單純比手速** — 想拿高分要同時：(1) 找到所有光球、(2) 避開紅怪、(3) 路線最短。**策略多元 = 不同特質的孩子都有機會上榜**。
+
+「歷史光榮榜 Hall of Explorers」會記錄 RANK / PLAYER / DATE / TIME / SCORE，**每節下課孩子湊過來看自己排第幾**，比口頭表揚更有動力。
+
+## 真實技術棧
+
+- **3D 引擎**：[Three.js](https://threejs.org/) + [react-three-fiber](https://r3f.docs.pmnd.rs/) (R3F)
+- **框架**：React + Vite
+- **狀態管理**：Zustand（輕量、適合單頁遊戲）
+- **字型**：Inter + Noto Sans TC + JetBrains Mono（sci-fi 質感）
+- **配色**：theme-color \`#06080d\`（深色 sci-fi）
+- **資料**：Firestore 排行榜
+- **PWA**：manifest.webmanifest + Service Worker
+- **部署**：GitHub Pages（[cagoooo/maze-3d-game](https://github.com/cagoooo/maze-3d-game)）
+- **SEO**：完整 Schema.org \`VideoGame\` Structured Data（Google 會跳 Rich Result 卡片）
+- **版本**：v0.7.1
+
+## 桌機 vs iPad，操作有什麼不同？
+
+阿凱班上一半學生用 Chromebook、一半用 iPad，兩端體驗都顧到：
+
+**桌機 / Chromebook**
+- 移動：WASD
+- 視角：滑鼠（pointer lock）
+- 暫停：ESC
+
+**iPad / 手機**
+- 移動：**左下虛擬搖桿**
+- 視角：**右下螢幕拖曳**
+- 暫停：螢幕上 PAUSE 按鈕
+
+iPad 觸控的搖桿手感意外好 — **R3F 把 touch event 接得很乾淨**，沒有「我明明按了但角色沒動」的卡頓感。
+
+## 老師回饋
+
+> 「以前下課我要顧不能滑手機 + 不能在教室跑，學生會抱怨『那能幹嘛』。**現在我說「去玩迷宮」**，他們自己排隊用我那台 Chromebook，**連我都驚訝可以這樣解決**。」
+>
+> — 桃園某國小高年級導師
+
+> 「資訊課最後 10 分鐘我會放 #101 給孩子玩，**順便講 Three.js 是什麼**。學生回家還問家長能不能在家電腦也裝，**整個技術話題被打開**。」
+>
+> — 同校資訊老師
+
+> 「我們班有個 ADHD 孩子，下課 10 分鐘很難靜下來。**他玩 NORMAL 9×9 那 150 秒會超級專注**，玩完反而能順利進入下節課。」
+>
+> — 輔導老師
+
+## 跟其他工具的關係：學生體驗類三劍客
+
+阿凱工具集裡「給孩子直接體驗」的工具不多，#101 算進來剛好補齊一塊：
+
+\`\`\`
+[#50 童樂學園] 全學科互動學習入口
+    ↓
+[#97 MBTI 校園奇遇記] 16 型人格情境探索
+    ↓
+[#101 3D 迷宮冒險遊戲] 第一人稱 3D 空間挑戰
+\`\`\`
+
+三個都是「孩子打開就玩、不用老師全程在旁邊」的**自驅型體驗工具**，差別在維度：
+- **#50 童樂學園**：學科 × 趣味（廣度）
+- **#97 MBTI 校園奇遇記**：個人 × 情境（深度）
+- **#101 3D 迷宮冒險**：空間 × 反應（即時）
+
+## 配對工具推薦
+
+- [#50 童樂學園](/tool/50) — 全學科互動學習入口
+- [#97 MBTI 校園奇遇記](/tool/97) — 16 型人格情境探索
+- [#101 3D 迷宮冒險遊戲](/tool/101) — 本篇主角
+
+## 適用對象
+
+- **國小高年級導師** — 下課十分鐘的健康放電方案
+- **資訊老師** — 高年級「網頁做 3D」單元的活範例
+- **資源班 / 特教老師** — 視覺空間訓練 + 第一人稱專注力鍛鍊
+- **想體驗 Three.js 的家長** — 跟孩子一起玩 + 看技術背景
+- **想試試獨立遊戲質感的人** — sci-fi 配色 + FPS 60 + 排行榜，免費玩到飽
+
+## 想試試？
+
+→ [前往 #101 3D 迷宮冒險遊戲](/tool/101)
+
+**第一次玩**：選 EASY 7×7、暱稱填一下、按 ENTER。WASD 走、滑鼠看，把所有藍光球撿完按 ESC 結束。第一輪通常 60-90 秒。
+
+**第二次玩**：升級到 NORMAL 9×9 挑戰 150 秒內通關。
+
+**進階玩**：HARD 13×13 / NIGHTMARE 17×17，留給下班後紓壓用。
+
+每次通關都會自動上「歷史光榮榜 Hall of Explorers」 — 看自己班 / 全校排第幾，是國小孩子最愛的環節。
+
+下次資訊課最後 10 分鐘，**試試把這個丟給孩子當作下課放電**。
+`,
+};
+
 const POST_100_MILESTONE: BlogPost = {
   slug: 'milestone-100-tools-achieved',
   title: '🎉 100 工具達成：阿凱老師教育工具集兩年實驗筆記',
@@ -12692,7 +12862,7 @@ const POST_100_MILESTONE: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+export const POSTS: BlogPost[] = [POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。
