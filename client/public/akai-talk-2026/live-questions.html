@@ -259,51 +259,91 @@
   .clock { font-weight: 700; color: var(--cream); }
 
   /* ── 手機 RWD ─────────────────────────────────
-     ≤768px：QR 從側欄移到主視覺，提問卡下方堆疊
-     提供觸控友善的字級與間距 */
+     ≤768px：全部改 column 排版,QR 變成主視覺,提問卡下方堆疊
+     觸控友善的字級、緊湊間距、單行 badge */
   @media (max-width: 768px) {
-    .wrap { padding: 12px 14px; gap: 10px; }
-    .brand { font-size: 15px; flex: 1 1 100%; }
+    .wrap { padding: 10px 12px; gap: 10px; }
+    .brand { font-size: 14px; flex: 0 1 auto; line-height: 1.25; }
     header { gap: 8px; }
-    .stats { font-size: 11px; gap: 8px; }
+    .stats { font-size: 11px; gap: 8px; flex-shrink: 0; }
     .stats .count { font-size: 13px; }
-    .live-tag { font-size: 10px; padding: 4px 8px; }
+    .live-tag { font-size: 10px; padding: 3px 9px; }
+    .live-dot { width: 7px; height: 7px; }
 
     main {
       grid-template-columns: 1fr;
       grid-template-rows: auto 1fr;
-      gap: 12px;
+      gap: 10px;
     }
 
-    /* 手機版 QR 區塊縮小但仍夠大可掃（160x160 = 演講廳近距觀眾 OK 用） */
+    /* QR 區塊改 column 中央,QR 變主視覺尺寸 */
     .qr-side {
-      flex-direction: row;
-      padding: 12px 14px;
-      gap: 14px;
-      text-align: left;
+      flex-direction: column;
+      padding: 14px 14px 12px;
+      gap: 8px;
+      text-align: center;
       align-items: center;
     }
-    .qr-side .qr-img { width: 130px; height: 130px; padding: 6px; border-radius: 10px; }
-    .qr-side .cta { font-size: 14px; }
-    .qr-side .at-id { font-size: 13px; padding: 3px 9px; }
-    .qr-side .hint { font-size: 11px; margin-top: 2px; }
+    .qr-side .qr-img {
+      width: 180px; height: 180px;
+      padding: 8px; border-radius: 12px;
+    }
+    .qr-side .cta { font-size: 15px; }
+    .qr-side .at-id { font-size: 13px; padding: 3px 10px; }
+    .qr-side .hint { font-size: 11px; line-height: 1.45; margin-top: 0; }
 
-    .stage { padding: 14px 18px; border-radius: 14px; min-height: 220px; }
-    .card-text { font-size: clamp(20px, 5.5vw, 32px); margin-bottom: 14px; line-height: 1.4; }
-    .card-meta { font-size: 11px; }
-    .empty-emoji { font-size: 52px; }
-    .empty-text { font-size: 17px; }
-    .empty-hint { font-size: 12px; }
+    /* 主視覺收緊 — 行動裝置內容偏短,卡片不需要那麼高 */
+    .stage {
+      padding: 14px 14px;
+      border-radius: 14px;
+      min-height: auto;
+    }
+    .card-active { padding: 4px 2px; }
+    /* badge 強制單行,不要 wrap 把「共 X 則」擠到下一行 */
+    .audience-badge {
+      font-size: 12px;
+      padding: 3px 10px;
+      margin-bottom: 8px;
+      flex-wrap: nowrap;
+      white-space: nowrap;
+    }
+    .audience-badge .emoji { font-size: 14px; }
+    .audience-badge .repeat-tag {
+      font-size: 10px;
+      padding: 1px 6px;
+      margin-left: 2px;
+    }
+    .card-text {
+      font-size: clamp(20px, 6.5vw, 30px);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+    .card-meta { font-size: 10px; gap: 6px; }
+
+    .empty { padding: 10px; gap: 10px; }
+    .empty-emoji { font-size: 48px; }
+    .empty-text { font-size: 16px; }
+    .empty-hint { font-size: 11px; line-height: 1.5; }
+    .empty-arrow { font-size: 12px; margin-top: 2px; }
 
     .recent-strip { gap: 6px; }
-    .chip { padding: 6px 11px; font-size: 11px; max-width: 180px; }
-    footer { font-size: 10px; }
+    .chip { padding: 6px 10px; font-size: 11px; max-width: 180px; }
+    footer { font-size: 10px; gap: 4px; }
   }
 
-  /* ── 超小螢幕（≤375px）—— iPhone SE 等 ────────── */
+  /* ── 中等手機（≤480px）—— iPhone 12/14/15 標準 ─── */
+  @media (max-width: 480px) {
+    .qr-side .qr-img { width: 168px; height: 168px; }
+    .card-text { font-size: clamp(18px, 6vw, 26px); }
+  }
+
+  /* ── 小手機（≤375px）—— iPhone SE 等 ──────────── */
   @media (max-width: 375px) {
-    .qr-side { flex-direction: column; text-align: center; }
-    .qr-side .qr-img { width: 160px; height: 160px; }
+    .wrap { padding: 8px 10px; gap: 8px; }
+    .qr-side .qr-img { width: 150px; height: 150px; padding: 6px; }
+    .qr-side .cta { font-size: 14px; }
+    .qr-side .hint { display: none; } /* SE 螢幕太擠，藏掉次要 hint */
+    .card-text { font-size: clamp(17px, 5.5vw, 22px); }
   }
 </style>
 </head>
