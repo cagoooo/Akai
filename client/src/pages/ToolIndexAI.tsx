@@ -16,6 +16,7 @@ import { Link } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import Fuse, { type FuseResult, type FuseResultMatch } from 'fuse.js';
 import ReactMarkdown from 'react-markdown';
+import { resolveInternalLink } from '@/lib/resolveLink';
 import remarkGfm from 'remark-gfm';
 import { PageHead } from '@/components/PageHead';
 import { trackEvent, logToolIndexQuery } from '@/lib/analytics';
@@ -652,7 +653,7 @@ function ToolIndexAboutBlock({ tool }: { tool?: EducationalTool }) {
             ),
             a: ({ href, children }) => (
               <a
-                href={href}
+                href={resolveInternalLink(href)}
                 style={{
                   color: tokens.accent,
                   textDecoration: 'underline',

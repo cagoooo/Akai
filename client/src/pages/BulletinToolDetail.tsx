@@ -13,6 +13,7 @@ import { PageHead } from '@/components/PageHead';
 import { BulletinRelatedTools } from '@/components/bulletin/BulletinRelatedTools';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { resolveInternalLink } from '@/lib/resolveLink';
 import remarkGfm from 'remark-gfm';
 
 import { type EducationalTool } from '@/lib/data';
@@ -789,7 +790,7 @@ export function BulletinToolDetail() {
                   ),
                   a: ({ href, children }) => (
                     <a
-                      href={href}
+                      href={resolveInternalLink(href)}
                       style={{ color: tokens.accent, textDecoration: 'underline', fontWeight: 700 }}
                     >
                       {children}
