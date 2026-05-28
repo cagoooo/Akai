@@ -50,6 +50,25 @@
     font-family: 'JetBrains Mono', monospace;
   }
   .stats .count { color: var(--orange); font-weight: 700; font-size: 16px; }
+  .admin-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: rgba(244,240,230,.08);
+    border: 1.5px solid rgba(244,240,230,.25);
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 15px;
+    transition: background .15s ease, border-color .15s ease, transform .15s ease;
+    cursor: pointer;
+  }
+  .admin-btn:hover, .admin-btn:focus {
+    background: var(--orange);
+    border-color: var(--orange);
+    color: var(--navy-deep);
+    transform: rotate(45deg);
+    outline: none;
+  }
   .live-tag {
     display: inline-flex; align-items: center; gap: 6px;
     padding: 5px 12px;
@@ -352,6 +371,7 @@
   <header>
     <div class="brand">🎤 現場提問實況 <span class="accent">· 2026 AIFED</span></div>
     <div class="stats">
+      <a class="admin-btn" href="admin-questions.html" target="_blank" rel="noopener" title="進入後台管理（需 admin 登入）" aria-label="管理後台">⚙️</a>
       <span>已收 <span class="count" id="count">0</span> 則</span>
       <span class="live-tag"><span class="live-dot"></span>LIVE</span>
     </div>
