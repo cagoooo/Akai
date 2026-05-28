@@ -1122,6 +1122,62 @@
       }, OVERLAY_HIDE_MS);
     }
 
+    _toggleHelp(visible) {
+      // 動態建立並 toggle 鍵盤快捷鍵 overlay（按 ? 觸發 / Esc 關閉）
+      if (!this._helpEl) {
+        const el = document.createElement('div');
+        el.setAttribute('data-deck-help', '');
+        el.style.cssText = [
+          'position:fixed', 'inset:0', 'z-index:2147483640',
+          'background:rgba(15,20,30,.78)', 'backdrop-filter:blur(6px)',
+          '-webkit-backdrop-filter:blur(6px)',
+          'display:flex', 'align-items:center', 'justify-content:center',
+          'font-family:"Noto Sans TC",sans-serif', 'color:#fff',
+          'opacity:0', 'pointer-events:none',
+          'transition:opacity .2s ease',
+        ].join(';');
+        el.innerHTML = `
+          <div style="background:#1F4C3E;border:2px solid #fff;border-radius:14px;padding:32px 40px;max-width:520px;width:calc(100% - 48px);box-shadow:6px 8px 0 rgba(0,0,0,.32);">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px;gap:12px;">
+              <div style="font-size:22px;font-weight:900;letter-spacing:.04em;">⌨️ 鍵盤快捷鍵</div>
+              <button type="button" data-close style="background:transparent;border:1.5px solid rgba(255,255,255,.5);color:#fff;border-radius:999px;padding:4px 12px;font-size:11px;cursor:pointer;font-family:inherit;">Esc 關閉</button>
+            </div>
+            <table style="width:100%;border-collapse:collapse;font-size:14px;">
+              <tbody>
+                <tr><td style="padding:6px 0;color:#C99744;font-family:'JetBrains Mono',monospace;font-weight:700;width:40%;">→ Space PgDn</td><td style="padding:6px 0;">下一張投影片</td></tr>
+                <tr><td style="padding:6px 0;color:#C99744;font-family:'JetBrains Mono',monospace;font-weight:700;">← PgUp</td><td style="padding:6px 0;">上一張投影片</td></tr>
+                <tr><td style="padding:6px 0;color:#C99744;font-family:'JetBrains Mono',monospace;font-weight:700;">Home</td><td style="padding:6px 0;">回到第一張</td></tr>
+                <tr><td style="padding:6px 0;color:#C99744;font-family:'JetBrains Mono',monospace;font-weight:700;">End</td><td style="padding:6px 0;">最後一張</td></tr>
+                <tr><td style="padding:6px 0;color:#C99744;font-family:'JetBrains Mono',monospace;font-weight:700;">1 - 9 / 0</td><td style="padding:6px 0;">跳到第 N 張（0 = 第 10 張）</td></tr>
+                <tr><td style="padding:6px 0;color:#C99744;font-family:'JetBrains Mono',monospace;font-weight:700;">R</td><td style="padding:6px 0;">重啟（回第一張）</td></tr>
+                <tr><td style="padding:6px 0;color:#C99744;font-family:'JetBrains Mono',monospace;font-weight:700;">F11</td><td style="padding:6px 0;">瀏覽器全螢幕</td></tr>
+                <tr><td style="padding:6px 0;color:#C99744;font-family:'JetBrains Mono',monospace;font-weight:700;">?</td><td style="padding:6px 0;">顯示 / 隱藏此說明</td></tr>
+              </tbody>
+            </table>
+            <div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,.18);font-size:11px;color:rgba(255,255,255,.6);font-style:italic;">
+              提示：右側可開啟 Tweaks 面板切換配色與字體
+            </div>
+          </div>
+        `;
+        document.body.appendChild(el);
+        // 點背景或關閉鈕關閉
+        el.addEventListener('click', (ev) => {
+          if (ev.target === el || ev.target.hasAttribute('data-close')) {
+            this._toggleHelp(false);
+          }
+        });
+        this._helpEl = el;
+      }
+      this._helpVisible = !!visible;
+      if (visible) {
+        this._helpEl.style.opacity = '1';
+        this._helpEl.style.pointerEvents = 'auto';
+      } else {
+        this._helpEl.style.opacity = '0';
+        this._helpEl.style.pointerEvents = 'none';
+      }
+    }
+
     _railWidth() {
       // State-based, no offsetWidth: the first _fit() can run before the
       // rail has had layout on some load paths, and a 0 there paints the
@@ -1283,6 +1339,15 @@
       const key = e.key;
       let handled = true;
 
+      // Help overlay 開著時，? 或 Esc 關閉，其他鍵不切換投影片
+      if (this._helpVisible) {
+        if (key === '?' || key === 'Escape') {
+          this._toggleHelp(false);
+          e.preventDefault();
+        }
+        return;
+      }
+
       if (key === 'ArrowRight' || key === 'PageDown' || key === ' ' || key === 'Spacebar') {
         this._advance(1, 'keyboard');
       } else if (key === 'ArrowLeft' || key === 'PageUp') {
@@ -1293,6 +1358,8 @@
         this._go(this._slides.length - 1, 'keyboard');
       } else if (key === 'r' || key === 'R') {
         this._go(0, 'keyboard');
+      } else if (key === '?') {
+        this._toggleHelp(true);
       } else if (/^[0-9]$/.test(key)) {
         // 1..9 jump to that slide; 0 jumps to 10.
         const n = key === '0' ? 9 : parseInt(key, 10) - 1;
