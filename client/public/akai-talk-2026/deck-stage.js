@@ -557,6 +557,9 @@
       this._onMouseMove = this._onMouseMove.bind(this);
       this._onTap = this._onTap.bind(this);
       this._onMessage = this._onMessage.bind(this);
+      this._onHashChange = this._onHashChange.bind(this);
+      this._onTouchStart = this._onTouchStart.bind(this);
+      this._onTouchEnd = this._onTouchEnd.bind(this);
       // Capture-phase close so a click anywhere dismisses the menu, but
       // ignore clicks that land inside the menu itself — otherwise the
       // capture handler runs before the menu's own (bubble) handler and
@@ -587,7 +590,13 @@
       window.addEventListener('mousemove', this._onMouseMove, { passive: true });
       window.addEventListener('message', this._onMessage);
       window.addEventListener('click', this._onDocClick, true);
+      window.addEventListener('hashchange', this._onHashChange);
       this.addEventListener('click', this._onTap);
+      // 觸控手勢（手機左右滑動切換投影片）
+      this.addEventListener('touchstart', this._onTouchStart, { passive: true });
+      this.addEventListener('touchend', this._onTouchEnd, { passive: true });
+      // 手機浮動 prev/next 按鈕（只在 ≤ 768px 顯示）
+      this._buildMobileNav();
       // Initial collection + layout happens via slotchange, which fires on mount.
       this._enableRail();
       // Hold the stage hidden until webfonts are ready so the first visible
@@ -775,7 +784,10 @@
       window.removeEventListener('mousemove', this._onMouseMove);
       window.removeEventListener('message', this._onMessage);
       window.removeEventListener('click', this._onDocClick, true);
+      window.removeEventListener('hashchange', this._onHashChange);
       this.removeEventListener('click', this._onTap);
+      this.removeEventListener('touchstart', this._onTouchStart);
+      this.removeEventListener('touchend', this._onTouchEnd);
       if (this._hideTimer) clearTimeout(this._hideTimer);
       if (this._mouseIdleTimer) clearTimeout(this._mouseIdleTimer);
       if (this._liveTimer) clearTimeout(this._liveTimer);
@@ -998,6 +1010,12 @@
       this._restoreIndex();
       this._applyIndex({ showOverlay: false, broadcast: true, reason: 'init' });
       this._fit();
+      // init 後解析 URL hash 跳對應 slide（外部深連結 #14 / #slide-14 支援）
+      // 只在首次 slotchange 觸發 — 之後使用者手動切換 slide 才會更新 hash
+      if (!this._hashInitDone) {
+        this._hashInitDone = true;
+        this._onHashChange();
+      }
     }
 
     _collectSlides() {
@@ -1108,6 +1126,112 @@
 
       this._prevIndex = curr;
       if (showOverlay) this._flashOverlay();
+      // init 時不寫 hash（避免擦掉外部 #14 之類深連結，留給 _onHashChange 接手）
+      if (reason !== 'init') this._syncHash(curr);
+    }
+
+    _syncHash(i) {
+      // 把當前 slide index 寫進 URL hash（1-based），方便外部深連結
+      // 用 replaceState 不寫入 history（避免每張 slide 都污染上下頁紀錄）
+      if (typeof history === 'undefined') return;
+      const target = '#' + (i + 1);
+      if (location.hash === target) return;
+      try { history.replaceState(null, '', target); } catch { /* file:// 或 sandboxed iframe 會擋 */ }
+    }
+
+    _onHashChange() {
+      // 解析 #N 或 #slide-N 跳對應 slide（外部連結觸發）
+      if (!this._slides.length) return;
+      const m = location.hash.match(/^#(?:slide-)?(\d+)$/i);
+      if (!m) return;
+      const n = parseInt(m[1], 10) - 1;
+      if (n < 0 || n >= this._slides.length) return;
+      if (n !== this._index) this._go(n, 'hashchange');
+    }
+
+    _buildMobileNav() {
+      // 已建過就跳過（避免重複建）
+      if (this._mobileNavEl) return;
+      // CSS 注入（只一次）
+      const STYLE_ID = 'akai-deck-mobile-nav-styles';
+      if (!document.getElementById(STYLE_ID)) {
+        const style = document.createElement('style');
+        style.id = STYLE_ID;
+        style.textContent = `
+          .akai-deck-mnav {
+            position: fixed; z-index: 2147483639;
+            display: none;
+            top: 50%; transform: translateY(-50%);
+            width: 44px; height: 56px;
+            background: rgba(20,53,38,.82);
+            color: #F4F0E6;
+            border: 1.5px solid rgba(255,255,255,.3);
+            border-radius: 8px;
+            font-size: 22px; font-weight: 700;
+            font-family: system-ui, -apple-system, sans-serif;
+            cursor: pointer; user-select: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,.35);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: opacity .2s ease, transform .15s ease;
+            opacity: .85;
+          }
+          .akai-deck-mnav.prev { left: 8px; border-radius: 0 8px 8px 0; }
+          .akai-deck-mnav.next { right: 8px; border-radius: 8px 0 0 8px; }
+          .akai-deck-mnav:active { transform: translateY(-50%) scale(.92); opacity: 1; }
+          @media (max-width: 768px) {
+            .akai-deck-mnav { display: block; }
+          }
+          /* 全螢幕簡報模式下隱藏（presenting 時 host post __omelette_presenting）*/
+          .akai-deck-mnav[data-presenting] { display: none !important; }
+          /* 列印時隱藏 */
+          @media print { .akai-deck-mnav { display: none !important; } }
+        `;
+        document.head.appendChild(style);
+      }
+
+      const prev = document.createElement('button');
+      prev.type = 'button';
+      prev.className = 'akai-deck-mnav prev';
+      prev.setAttribute('aria-label', '上一張投影片');
+      prev.textContent = '‹';
+      prev.addEventListener('click', () => this._advance(-1, 'mobile-nav'));
+
+      const next = document.createElement('button');
+      next.type = 'button';
+      next.className = 'akai-deck-mnav next';
+      next.setAttribute('aria-label', '下一張投影片');
+      next.textContent = '›';
+      next.addEventListener('click', () => this._advance(1, 'mobile-nav'));
+
+      document.body.appendChild(prev);
+      document.body.appendChild(next);
+      this._mobileNavEl = { prev, next };
+    }
+
+    _onTouchStart(e) {
+      // 手指多點時不啟動 swipe（pinch / 多指手勢交給瀏覽器）
+      if (e.touches.length !== 1) { this._touch = null; return; }
+      const t = e.touches[0];
+      this._touch = { x: t.clientX, y: t.clientY, t: Date.now() };
+    }
+
+    _onTouchEnd(e) {
+      if (!this._touch) return;
+      const start = this._touch;
+      this._touch = null;
+      // 取最後一個 changedTouch
+      const t = e.changedTouches[0];
+      if (!t) return;
+      const dx = t.clientX - start.x;
+      const dy = t.clientY - start.y;
+      const dt = Date.now() - start.t;
+      // 條件：水平位移 ≥ 60px、垂直 < 50px（避免捲動誤觸發）、不超過 600ms（快滑）
+      if (Math.abs(dx) < 60) return;
+      if (Math.abs(dy) > 50) return;
+      if (dt > 600) return;
+      // 左滑 → 下一張，右滑 → 上一張
+      this._advance(dx < 0 ? 1 : -1, 'swipe');
     }
 
     _flashOverlay() {
