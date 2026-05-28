@@ -13,21 +13,17 @@ import { useEffect, useState, useRef } from 'react';
 import { tokens } from '@/design/tokens';
 import { Tape } from '@/components/primitives/Tape';
 import { Pin } from '@/components/primitives/Pin';
+import { ConfettiBurst } from '@/components/primitives/ConfettiBurst';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-// 撒花動畫 keyframes（注入一次到 <head>）
-const CONFETTI_STYLE_ID = 'akai-confetti-keyframes';
-function ensureConfettiStyles() {
+// CelebrationBanner 內 emoji bouncing keyframes（confetti 動畫已移到 primitives/ConfettiBurst）
+const CHEER_STYLE_ID = 'akai-cheer-keyframes';
+function ensureCheerStyles() {
   if (typeof document === 'undefined') return;
-  if (document.getElementById(CONFETTI_STYLE_ID)) return;
+  if (document.getElementById(CHEER_STYLE_ID)) return;
   const style = document.createElement('style');
-  style.id = CONFETTI_STYLE_ID;
+  style.id = CHEER_STYLE_ID;
   style.textContent = `
-    @keyframes akai-confetti-fall {
-      0%   { transform: translate3d(0,-10vh,0) rotate(0deg); opacity: 1; }
-      80%  { opacity: 1; }
-      100% { transform: translate3d(var(--akai-drift, 40px), 110vh, 0) rotate(720deg); opacity: 0; }
-    }
     @keyframes akai-cheer-bounce {
       0%, 100% { transform: translateY(0) rotate(-8deg); }
       50%      { transform: translateY(-6px) rotate(8deg); }
@@ -37,70 +33,10 @@ function ensureConfettiStyles() {
       50%      { transform: translateY(-6px) rotate(-8deg); }
     }
     @media (prefers-reduced-motion: reduce) {
-      .akai-confetti-piece, .akai-cheer-emoji { animation: none !important; }
+      .akai-cheer-emoji { animation: none !important; }
     }
   `;
   document.head.appendChild(style);
-}
-
-const CONFETTI_COLORS = ['#fde047', '#fb923c', '#f87171', '#60a5fa', '#34d399', '#a78bfa', '#f472b6', '#fbbf24'];
-const CONFETTI_PIECES = 28;
-
-function ConfettiBurst({ trigger }: { trigger: number }) {
-  const [pieces, setPieces] = useState<Array<{ id: number; left: number; delay: number; duration: number; color: string; size: number; drift: number; shape: 'rect' | 'circle' }>>([]);
-
-  useEffect(() => {
-    if (trigger === 0) return;
-    ensureConfettiStyles();
-    const next = Array.from({ length: CONFETTI_PIECES }, (_, i) => ({
-      id: trigger * 1000 + i,
-      left: Math.random() * 100,
-      delay: Math.random() * 0.4,
-      duration: 3.2 + Math.random() * 2.0,
-      color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
-      size: 6 + Math.random() * 6,
-      drift: (Math.random() - 0.5) * 240,
-      shape: (Math.random() > 0.5 ? 'rect' : 'circle') as 'rect' | 'circle',
-    }));
-    setPieces(next);
-    // 動畫結束清掉 DOM
-    const cleanup = window.setTimeout(() => setPieces([]), 5800);
-    return () => window.clearTimeout(cleanup);
-  }, [trigger]);
-
-  if (pieces.length === 0) return null;
-  return (
-    <div
-      aria-hidden="true"
-      style={{
-        position: 'fixed',
-        inset: 0,
-        pointerEvents: 'none',
-        overflow: 'hidden',
-        zIndex: 9999,
-      }}
-    >
-      {pieces.map((p) => (
-        <span
-          key={p.id}
-          className="akai-confetti-piece"
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: `${p.left}%`,
-            width: p.size,
-            height: p.shape === 'rect' ? p.size * 1.6 : p.size,
-            background: p.color,
-            borderRadius: p.shape === 'circle' ? '50%' : 2,
-            // 撒花飄散方向（CSS var）
-            ['--akai-drift' as never]: `${p.drift}px`,
-            animation: `akai-confetti-fall ${p.duration}s cubic-bezier(.22,.65,.4,1) ${p.delay}s forwards`,
-            boxShadow: '0 0 0 1px rgba(0,0,0,.06)',
-          }}
-        />
-      ))}
-    </div>
-  );
 }
 
 interface SiteStats {
@@ -347,6 +283,7 @@ function CelebrationBanner({
 
   // 進場時撒一次（每次刷新都撒一次，慶祝期內氛圍要熱鬧）
   useEffect(() => {
+    ensureCheerStyles();
     if (firedOnceRef.current) return;
     firedOnceRef.current = true;
     // 稍微延遲，等使用者看到 banner 後再撒

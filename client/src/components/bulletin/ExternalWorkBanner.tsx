@@ -10,8 +10,10 @@
  * GA 事件：每次 CTA 點擊發 `external_work_click { work_id, cta }`。
  * BulletinSpeechBanner 為了相容舊 GA 仍另發 `aifed_speech_click`。
  */
+import { useEffect, useState } from 'react';
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
+import { ConfettiBurst } from '@/components/primitives/ConfettiBurst';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { trackEvent } from '@/lib/analytics';
 import type { ExternalWork, ExternalWorkCta } from '@/data/externalWorks';
@@ -23,10 +25,30 @@ interface ExternalWorkBannerProps {
 }
 
 const DEFAULT_ACCENT = '#143526';
+const SEEN_STORAGE_PREFIX = 'akai-external-work-seen-';
 
 export function ExternalWorkBanner({ work, legacyEventName }: ExternalWorkBannerProps) {
   const isMobile = useIsMobile();
   const base = import.meta.env.BASE_URL || '/';
+  const [confettiTick, setConfettiTick] = useState(0);
+
+  // 首次顯示撒花：localStorage 沒記過就撒一次 + 寫入
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const storageKey = `${SEEN_STORAGE_PREFIX}${work.id}`;
+    try {
+      if (localStorage.getItem(storageKey)) return; // 看過了不撒
+      // 延遲 600ms 讓 banner 先 mount 完，視覺感受才好
+      const t = window.setTimeout(() => {
+        setConfettiTick(1);
+        localStorage.setItem(storageKey, new Date().toISOString());
+        trackEvent('external_work_first_view', { work_id: work.id });
+      }, 600);
+      return () => window.clearTimeout(t);
+    } catch {
+      /* localStorage 不可用（隱私模式）就跳過撒花，banner 正常顯示 */
+    }
+  }, [work.id]);
 
   const bg = work.colors?.bg ?? tokens.note.green;
   const accent = work.colors?.accent ?? DEFAULT_ACCENT;
@@ -47,16 +69,18 @@ export function ExternalWorkBanner({ work, legacyEventName }: ExternalWorkBanner
   };
 
   return (
-    <div
-      data-testid="external-work-banner"
-      data-work-id={work.id}
-      style={{
-        position: 'relative',
-        padding: '8px 60px 6px',
-        display: 'flex',
-        justifyContent: 'center',
-      }}
-    >
+    <>
+      <ConfettiBurst trigger={confettiTick} />
+      <div
+        data-testid="external-work-banner"
+        data-work-id={work.id}
+        style={{
+          position: 'relative',
+          padding: '8px 60px 6px',
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
       <div
         style={{
           position: 'relative',
@@ -125,8 +149,9 @@ export function ExternalWorkBanner({ work, legacyEventName }: ExternalWorkBanner
             <CtaChip cta={work.secondaryCta} accent={accent} base={base} isMobile={isMobile} onClick={handleClick} />
           )}
         </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
