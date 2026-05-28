@@ -1146,6 +1146,29 @@
     color: rgba(250,247,240,0.7); line-height: 1.55;
   }
   .s-close .right .author strong { color: var(--cream); font-weight: 500; font-size: 28px; display: block; margin-bottom: 6px; }
+  .s-close .right .author a.school-link {
+    color: inherit; text-decoration: none; border-bottom: 1px dotted rgba(250,247,240,0.4);
+    transition: color .2s ease, border-color .2s ease;
+  }
+  .s-close .right .author a.school-link:hover,
+  .s-close .right .author a.school-link:focus {
+    color: var(--cream); border-bottom-color: var(--cream);
+  }
+  .s-close .right .made-with {
+    margin-top: 14px; padding-top: 14px;
+    border-top: 1px solid rgba(250,247,240,0.18);
+    font-family: var(--mono); font-size: 16px;
+    color: rgba(250,247,240,0.55); letter-spacing: 0.02em;
+  }
+  .s-close .right .made-with a {
+    color: inherit; text-decoration: none;
+    border-bottom: 1px dotted rgba(250,247,240,0.35);
+    transition: color .2s ease, border-color .2s ease;
+  }
+  .s-close .right .made-with a:hover, .s-close .right .made-with a:focus {
+    color: var(--cream); border-bottom-color: var(--cream);
+  }
+  .s-close .right .made-with .heart { color: #f87171; font-style: normal; }
 
   /* === FLAGSHIP SPOTLIGHT === */
   .s-spotlight {
@@ -2635,7 +2658,10 @@
         </div>
         <div class="author">
           <strong>黃凱揚 · 阿凱老師</strong>
-          桃園市石門國民小學 · 2026 AIFED 主題一
+          <a class="school-link" href="https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5" target="_blank" rel="noopener noreferrer">桃園市龍潭區石門國民小學</a> · 2026 AIFED 主題一
+        </div>
+        <div class="made-with">
+          Made with <span class="heart">❤️</span> by <a href="https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5" target="_blank" rel="noopener noreferrer">阿凱老師</a>
         </div>
       </div>
     </div>
