@@ -1,13 +1,123 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.65` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
-- **里程碑**: **2026-05-28 2026 AIFED 演講簡報整合上線** — 主頁永久 banner 入口 + `/akai-talk-2026/` 純靜態子站（25 張投影片含動畫、Tweaks 配色面板、4 個現場 QR Code、投稿稿件 PDF）
-- **最後更新狀態**: v3.6.65 — Claude Design handoff 整合：(A) 簡報純靜態子站不塞 React Router；(B) BulletinSpeechBanner 三次迭代 260→65→142px 找到「夠顯眼但不誇張」的視覺重量；(C) 手機 RWD column flex + CTA stretch 等寬 + tap target 41px；(D) `_handoff_*/` 加 .gitignore 防誤入版控
+- **當前版本**: `v3.6.66` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
+- **里程碑**: **2026-05-28 AIFED 演講深度優化收官** — 簡報內容打磨 + 平台整合深化 + 社群分享資產一氣呵成（9 commits / 4 hr）
+- **最後更新狀態**: v3.6.66 — AIFED 演講深度優化八件套 + favicon/OG/Schema.org：(A) 簡報 logo 壓縮 18 倍 + ? 鍵盤 overlay + 學校 footer + jsx pre-compile；(B) 主頁 GA 追蹤 + BulletinQuickNav + 通用 ExternalWorkBanner + 首次撒花機制；(C) 寶藍演字 favicon 多尺寸 + 1200×630 OG 圖（防中文 tofu）+ Schema.org PresentationDigitalDocument
 
 ## 📌 完成功能總覽
 
-### `v3.6.65` (最新 · 🎤 2026 AIFED 演講簡報整合)
+### `v3.6.66` (最新 · 🎤 AIFED 演講深度優化收官)
+
+**🎯 動機**
+v3.6.65 演講簡報上線當天即發現可改善空間，分三大方向一次性收官：
+- **A 區**：簡報靜態檔本身（效能 / 內容 / 互動 / 署名）
+- **B 區**：Akai 主頁這層的整合深化（觀測 / 跳轉 / 可重用 / 驚喜）
+- **社群資產**：favicon 多尺寸 + OG 分享卡 + Schema.org（解決「分享到 LINE/FB 預覽空白」+ 「Google 搜尋無法結構化解讀」）
+
+**🎤 A 區：簡報內容打磨（4 條）**
+
+| Task | Commit | 改動 | 效益 |
+|---|---|---|---|
+| A1 logo 壓縮 | [55b018b](https://github.com/cagoooo/Akai/commit/55b018b) | 2MB → 140KB PNG + 112KB WebP + `<picture>` fallback | 首屏 LCP 3G 5-8s → < 1s（**縮 14-18 倍**）|
+| A4 ? 鍵盤 overlay | [1218971](https://github.com/cagoooo/Akai/commit/1218971) | deck-stage.js 加 `_toggleHelp()` + 8 條快捷鍵清單 | 訪客不再需要試誤掌握導航 |
+| A2 學校 footer | [d83cd30](https://github.com/cagoooo/Akai/commit/d83cd30) | closing slide 加石門國小連結 + Made with ❤️ by 阿凱老師 | 依 `akai-author-footer` skill 合規 + SEO 反向連結 |
+| A3 jsx pre-compile | [eff9d0a](https://github.com/cagoooo/Akai/commit/eff9d0a) | 兩個 jsx → tweaks-bundle.js（esbuild）+ React production min | 拿掉 Babel CDN（**省 270KB + 300ms compile**）|
+
+**🏗️ B 區：平台整合深化（4 條）**
+
+| Task | Commit | 改動 | 效益 |
+|---|---|---|---|
+| B1 GA4 事件追蹤 | [d14fa95](https://github.com/cagoooo/Akai/commit/d14fa95) | banner 兩個 CTA 各加 trackEvent('aifed_speech_click') | 一週後可決定 banner 視覺重量是否合適 |
+| B3 QuickNav | [0a754f1](https://github.com/cagoooo/Akai/commit/0a754f1) | 4 色便利貼 anchor 跳轉：排行榜/工具地圖/部落格/工具牆 | 訪客省 30 秒滾動時間 |
+| B2 通用化 | [db8b183](https://github.com/cagoooo/Akai/commit/db8b183) | 抽 ExternalWorkBanner + externalWorks.ts 資料設定檔 | 未來第二場演講零行 React 程式碼 |
+| B4 首次撒花 | [6c874d8](https://github.com/cagoooo/Akai/commit/6c874d8) | ConfettiBurst 抽 primitives + localStorage 記憶 | 首訪驚喜感 + 老訪客不被吵 |
+
+**🎨 社群分享資產（commit [b21a41f](https://github.com/cagoooo/Akai/commit/b21a41f)）**
+
+| 資產 | 規格 | 設計 |
+|---|---|---|
+| `favicon.svg` | 向量版 | 寶藍底 + 米白「演」字 + 橘金圖釘點 |
+| `favicon.ico` | multi-size 16/32/48 | 同款 PNG 打包 |
+| `favicon-{16,32,48}x{16,32,48}.png` | 分尺寸 | 各平台 fallback |
+| `apple-touch-icon.png` | 180×180 | iOS 加入主畫面 |
+| `og-aifed-2026.png` | 1200×630, 90KB | 寶藍漸層 + 主標「從使用者到開發者」+ AIFED 標籤 + 100 工具強調 |
+| `og-aifed-2026.webp` | 38KB | 新瀏覽器較小檔案版 |
+
+技術細節：
+- 用 `@napi-rs/canvas` + `NotoSansTC-Bold.ttf` 確保中文無 tofu（依 `og-social-preview-zh` skill）
+- index.html 加完整 `og:* / twitter:*` meta（絕對 URL 給 LINE/FB crawler）
+- Schema.org `PresentationDigitalDocument` JSON-LD（學術引用可結構化解讀）
+- favicon link 用相對路徑（純靜態子站直接 resolve，不需 SPA base 處理）
+- `scripts/generate-aifed-talk-assets.mjs` 一次性生成器，未來改文案 / 換主色重跑即可
+
+**📁 變動檔案總覽（v3.6.66）**
+
+```
+client/public/akai-talk-2026/
+├── assets/logo.png            ← A1 壓縮（2MB → 140KB）
+├── assets/logo.webp           ← A1 新增（112KB）
+├── deck-stage.js              ← A4 加 _toggleHelp + ? handler
+├── index.html                 ← A2 footer + A3 bundle 引用 + favicon/og meta
+├── tweaks-bundle.js           ← A3 預編譯 bundle
+├── tweaks-{app,panel}.jsx     ← 原檔保留（dev 時可參考）
+├── favicon.{ico,svg}          ← 新增
+├── favicon-{16,32,48}x{...}.png  ← 新增
+├── apple-touch-icon.png       ← 新增
+└── og-aifed-2026.{png,webp}   ← 新增
+
+client/src/components/
+├── bulletin/ExternalWorkBanner.tsx   ← B2 新增（通用元件）
+├── bulletin/BulletinSpeechBanner.tsx ← B2 改 thin wrapper
+├── bulletin/BulletinQuickNav.tsx     ← B3 新增
+├── bulletin/BulletinMilestone100.tsx ← B4 抽 ConfettiBurst + ensureCheerStyles
+└── primitives/ConfettiBurst.tsx      ← B4 新增（共用撒花）
+
+client/src/data/
+└── externalWorks.ts           ← B2 新增（資料設定檔）
+
+client/src/pages/
+└── BulletinHome.tsx           ← B3 加 QuickNav 掛載 + section id
+
+scripts/
+└── generate-aifed-talk-assets.mjs    ← 新增（一次性 favicon/OG 生成）
+```
+
+**🎯 戰略意義**
+- **可量測**：v3.6.65 banner 視覺重量靠直覺，v3.6.66 起 GA 數據導向決策
+- **可擴展**：v3.6.66 後新增第二場演講只需往 `externalWorks.ts` unshift 一筆，**零行 React 程式碼**
+- **可分享**：v3.6.66 前分享到 LINE 預覽空白，v3.6.66 後有專屬視覺卡片（防中文 tofu）
+- **可印**：closing slide 學校連結 + Schema.org 結構化資料，未來學術引用 / 媒體採訪 / 教師研習邀約都能直接認得
+- **可重複**：所有資產生成都有腳本，未來其他演講（GESS / Bett / 教師年會）可在 30 分鐘內套同款模板上線
+
+**📌 線上**
+- 主頁入口：https://cagoooo.github.io/Akai/
+- 簡報：https://cagoooo.github.io/Akai/akai-talk-2026/index.html
+- PDF：https://cagoooo.github.io/Akai/akai-talk-2026/AIFED2026_paper.pdf
+- OG 圖（給 LINE/FB Debugger 驗證）：https://cagoooo.github.io/Akai/akai-talk-2026/og-aifed-2026.png
+
+**📚 9 個 commits 一氣呵成**
+```
+d14fa95 📊 [B1] AIFED banner CTA 加 GA4 事件追蹤
+55b018b 🗜️ [A1] 簡報 logo 壓縮：2MB → 140KB PNG + 112KB WebP
+1218971 ⌨️ [A4] 簡報加 ? 鍵盤快捷鍵 overlay
+d83cd30 🏫 [A2] 簡報 closing slide 加學校 footer
+0a754f1 🧭 [B3] 主頁加 BulletinQuickNav 快速跳轉指示牌
+db8b183 🔌 [B2] 抽通用 ExternalWorkBanner + externalWorks.ts
+6c874d8 🎊 [B4] ExternalWorkBanner 首次顯示撒花機制
+eff9d0a ⚡ [A3] 簡報 jsx pre-compile + production React
+b21a41f 🎨 簡報頁加 favicon + OG 分享卡 + Schema.org
+```
+
+**📚 三次踩雷紀錄（避免未來再踩）**
+- 簡報 logo 直接 commit 2MB 原檔 → 14 倍流量浪費（**A1 已修，未來其他 handoff zip 解壓後先 audit 圖檔尺寸**）
+- esbuild jsx transform 預設輸出 ES module 風格，跨 .jsx 共享變數需要合併成單一 bundle（**A3 已修**）
+- emoji `🎤` 在 `@napi-rs/canvas` 用 NotoSansTC-Bold 渲染變 tofu（**OG 圖已改純文字 chip 避開**）
+
+---
+
+
+### `v3.6.65` (🎤 2026 AIFED 演講簡報整合)
 
 **🎯 動機**
 - 阿凱老師受邀 AIFED 2026（亞洲教育科技創新領袖年會）演講「從使用者到開發者」，已用 Claude Design 完成 25 張投影片純 HTML
