@@ -41,9 +41,27 @@
   .btn.primary:hover { background: var(--green-ok); color: #fff; }
 
   /* 登入畫面 */
-  .login-card { max-width: 460px; margin: 80px auto; padding: 32px; background: rgba(244,240,230,.05); border: 1.5px solid rgba(244,240,230,.15); border-radius: 16px; text-align: center; }
+  .login-card { max-width: 480px; margin: 60px auto; padding: 32px; background: rgba(244,240,230,.05); border: 1.5px solid rgba(244,240,230,.15); border-radius: 16px; text-align: center; }
   .login-card h1 { margin: 0 0 14px; font-size: 22px; }
-  .login-card p { font-size: 14px; color: rgba(244,240,230,.7); line-height: 1.7; margin: 0 0 24px; }
+  .login-card p { font-size: 14px; color: rgba(244,240,230,.7); line-height: 1.7; margin: 0 0 14px; }
+  .login-card .admin-hint {
+    background: rgba(201,151,68,.12);
+    border: 1.5px solid rgba(201,151,68,.4);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin: 14px 0 24px;
+    color: var(--cream);
+    text-align: left;
+    font-size: 13px;
+  }
+  .login-card .admin-hint code {
+    background: rgba(20,53,38,.7);
+    color: var(--orange);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
   .login-card .btn { font-size: 15px; padding: 12px 28px; }
 
   /* 工具列 */
@@ -87,7 +105,24 @@
   .empty-state { text-align: center; padding: 60px 20px; color: rgba(244,240,230,.5); }
   .empty-state .emoji { font-size: 56px; opacity: .6; }
 
-  .error-banner { background: rgba(185,81,43,.18); border: 1.5px solid var(--red); padding: 14px 16px; border-radius: 10px; margin-bottom: 16px; font-size: 13px; }
+  .error-banner {
+    background: rgba(185,81,43,.18);
+    border: 1.5px solid var(--red);
+    padding: 14px 18px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    color: #ffeae0;
+    box-shadow: 0 0 24px rgba(185,81,43,.25);
+    animation: errorShake .4s ease-out;
+  }
+  @keyframes errorShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
 
   @media (max-width: 640px) {
     .wrap { padding: 16px 12px 40px; }
@@ -113,16 +148,22 @@
     </div>
   </header>
 
+  <!-- 全域錯誤訊息（登入失敗 / 無權限 / 操作失敗 都顯示在這） -->
+  <div class="error-banner" id="errorBanner" style="display:none;"></div>
+
   <!-- 登入畫面 (預設顯示) -->
   <div class="login-card" id="loginCard">
     <h1>🔒 需要管理員登入</h1>
-    <p>此頁面僅供阿凱老師管理 2026 AIFED 演講提問訊息。<br/>請用具備 admin 權限的 Google 帳號登入。</p>
+    <p>此頁面僅供阿凱老師管理 2026 AIFED 演講提問訊息。</p>
+    <p class="admin-hint">
+      <strong>請用 <code>ipad@mail2.smes.tyc.edu.tw</code> 登入</strong><br/>
+      <span style="opacity:.7;font-size:12px;">（學校 Gmail 帳號，cagooo@gmail.com 無 admin 權限會被擋）</span>
+    </p>
     <button class="btn primary" id="loginBtn">🔑 Google 登入</button>
   </div>
 
   <!-- 後台主畫面 (登入後顯示) -->
   <div id="adminPanel" style="display:none;">
-    <div class="error-banner" id="errorBanner" style="display:none;"></div>
     <div class="toolbar">
       <div class="toolbar-stat">
         共 <strong id="totalCount">0</strong> 則 ·
@@ -166,6 +207,8 @@
   function showError(msg) {
     errorBanner.textContent = '⚠️ ' + msg;
     errorBanner.style.display = 'block';
+    // 滾到頁頂讓使用者一定看到
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   function clearError() { errorBanner.style.display = 'none'; errorBanner.textContent = ''; }
 
@@ -187,17 +230,26 @@
 
   onAuthStateChanged(auth, async (user) => {
     if (unsubQuestions) { unsubQuestions(); unsubQuestions = null; }
-    if (!user) {
+    // 沒有 user 或 是匿名身份 → 顯示登入卡，不報錯（Akai 主站會自動匿名登入訪客做 visitorStats）
+    if (!user || user.isAnonymous || !user.email) {
       loginCard.style.display = 'block';
       adminPanel.style.display = 'none';
       userInfo.style.display = 'none';
+      clearError();
       return;
     }
     try {
       const idTokenResult = await user.getIdTokenResult();
       const isAdmin = !!idTokenResult.claims.admin;
       if (!isAdmin) {
-        showError('您（' + user.email + '）沒有 admin 權限，無法管理訊息。如果需要請聯絡管理員設定 admin custom claim。');
+        // 帳號錯了 — 顯示明確錯誤 + 強制登出避免卡在 limbo 狀態
+        showError(
+          '❌ 帳號權限不足：' + user.email + ' 沒有 admin 權限。\n' +
+          '請改用 ipad@mail2.smes.tyc.edu.tw（學校 Gmail）登入。\n' +
+          '（系統會自動登出此帳號讓你重新選擇）'
+        );
+        // 自動登出，讓使用者下次按「Google 登入」可重新挑帳號
+        await signOut(auth);
         loginCard.style.display = 'block';
         adminPanel.style.display = 'none';
         userInfo.style.display = 'none';
