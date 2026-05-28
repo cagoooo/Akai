@@ -10,6 +10,7 @@
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { trackEvent } from '@/lib/analytics';
 
 const NAVY_DEEP = '#143526'; // 石門寶藍 hover 色
 
@@ -96,6 +97,7 @@ export function BulletinSpeechBanner() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="開啟 2026 AIFED 演講簡報（25 張投影片）"
+            onClick={() => trackEvent('aifed_speech_click', { cta: 'slides', viewport: isMobile ? 'mobile' : 'desktop' })}
             style={{
               textDecoration: 'none',
               display: 'inline-flex',
@@ -127,6 +129,7 @@ export function BulletinSpeechBanner() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="下載 AIFED 2026 投稿學術稿件 PDF"
+            onClick={() => trackEvent('aifed_speech_click', { cta: 'pdf', viewport: isMobile ? 'mobile' : 'desktop' })}
             style={{
               textDecoration: 'none',
               display: 'inline-flex',
