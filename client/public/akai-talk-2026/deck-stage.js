@@ -1486,10 +1486,10 @@
         this._go(0, 'keyboard');
       } else if (key === 'l' || key === 'L') {
         // 演講者熱鍵：打開即時統計頁（新分頁全屏給觀眾看 Akai 主站當下數據）
-        window.open('live-stats.html', '_blank', 'noopener');
+        window.open('live-stats.html?v=' + Date.now(), '_blank', 'noopener');
       } else if (key === 'q' || key === 'Q') {
         // 演講者熱鍵：打開實況提問牆（新分頁顯示觀眾透過 LINE 提問的即時內容）
-        window.open('live-questions.html', '_blank', 'noopener');
+        window.open('live-questions.html?v=' + Date.now(), '_blank', 'noopener');
       } else if (key === '?') {
         this._toggleHelp(true);
       } else if (/^[0-9]$/.test(key)) {
