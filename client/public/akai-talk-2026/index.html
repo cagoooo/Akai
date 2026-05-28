@@ -8,10 +8,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Serif+TC:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
 <script src="deck-stage.js"></script>
 <script src="image-slot.js"></script>
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+<!-- v3.6.66 預編譯：tweaks-panel.jsx + tweaks-app.jsx → tweaks-bundle.js（拿掉 Babel CDN，省 ~300ms client compile） -->
+<script defer src="tweaks-bundle.js"></script>
 <script type="application/json" id="speaker-notes">
 [
   "各位 AIFED 的夥伴大家好，我是來自桃園市石門國小的黃凱揚老師。今天非常榮幸，能站在這個舞台上，跟大家分享一段我個人的小故事——一位國小教師如何從『使用者』變成『開發者』，用 AI 協作，親手做出 90 多款免費教育工具。接下來大約 20 分鐘的時間，我想說的不是技術，而是一個關於『教師可以做什麼』的可能性。",
@@ -2669,7 +2669,7 @@
 
 </deck-stage>
 <div id="tweaks-root"></div>
-<script type="text/babel" src="tweaks-app.jsx"></script>
+<!-- v3.6.66 預編譯：tweaks-app.jsx 已合併進 tweaks-bundle.js（在 <head> 內 defer 載入） -->
 <script>
 // Counter animation + entrance trigger + keyboard hint
 (function() {
