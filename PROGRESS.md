@@ -1,13 +1,149 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.66` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
-- **里程碑**: **2026-05-28 AIFED 演講深度優化收官** — 簡報內容打磨 + 平台整合深化 + 社群分享資產一氣呵成（9 commits / 4 hr）
-- **最後更新狀態**: v3.6.66 — AIFED 演講深度優化八件套 + favicon/OG/Schema.org：(A) 簡報 logo 壓縮 18 倍 + ? 鍵盤 overlay + 學校 footer + jsx pre-compile；(B) 主頁 GA 追蹤 + BulletinQuickNav + 通用 ExternalWorkBanner + 首次撒花機制；(C) 寶藍演字 favicon 多尺寸 + 1200×630 OG 圖（防中文 tofu）+ Schema.org PresentationDigitalDocument
+- **當前版本**: `v3.6.67` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
+- **里程碑**: **2026-05-28 AIFED 演講當天互動全套上線** — H 區 4 大件套 + LINE 觀眾提問端到端跑通 + 緊急修補 tool detail 連結 bug + 4 輪 UX 迭代（11 commits / 6 hr）
+- **最後更新狀態**: v3.6.67 — H 區四大件套：(H1) `live-stats.html` Akai 主站即時訪客動態 + L 熱鍵；(H2) LINE Channel 2010219191 / @399ffpsg 觀眾即時提問 Cloud Function 部署完成 + `live-questions.html` 大字輪播 + Q 熱鍵；(H3) `#slide-N` 深連結；(H4) 觸控手勢 + 手機浮動 nav 按鈕。緊急修補：tool detail markdown 91 處連結缺 `/Akai/` basePath（resolveLink helper）+ live-questions HTTP cache 卡舊版（cache-control meta + ?v= 雙保險）。觀眾互動 UX 4 輪迭代：64px QR → 240px QR → 觀眾編號 + 同人多則 → 手機 column 排版。
 
 ## 📌 完成功能總覽
 
-### `v3.6.66` (最新 · 🎤 AIFED 演講深度優化收官)
+### `v3.6.67` (最新 · 🎤 AIFED 演講當天互動全套)
+
+**🎯 動機**
+v3.6.66 收完簡報靜態 + 平台整合的「基礎建設」，演講倒數階段需要「現場真正能用」的互動工具。H 區四大件套 + LINE 觀眾提問端到端跑通。
+
+**🎬 H 區：演講當天互動深化**
+
+| Task | Commit | 演講當天用法 |
+|---|---|---|
+| H3 `#slide-N` 深連結 | [7f4d24a](https://github.com/cagoooo/Akai/commit/7f4d24a) | 部落格 / 社群分享連結到第 14 張投影片，hashchange handler + history.replaceState |
+| H4 觸控手勢 + 手機浮動 nav | [7f4d24a](https://github.com/cagoooo/Akai/commit/7f4d24a) | swipe ≥ 60px 切片，手機浮動 ‹ › 圓形按鈕 |
+| H1 `live-stats.html` + L 熱鍵 | [42fbde5](https://github.com/cagoooo/Akai/commit/42fbde5) | 按 L 開新分頁顯示「累計訪客 / 今天進站 / 演講中新增 / 主推工具點擊」4 格大字 tile |
+| H2 LINE 觀眾提問 + Q 熱鍵 | [80fe5b6](https://github.com/cagoooo/Akai/commit/80fe5b6) | 按 Q 開新分頁顯示 LINE 觀眾即時提問大字輪播 + 240×240 QR 主視覺 |
+
+**🎫 H2 LINE 觀眾提問完整實作**
+
+新建 LINE Channel `2010219191 / @399ffpsg` 專屬演講提問（不能共用既有 `2008810864` — 會搶 smes-e1dc3 既有 webhook URL）：
+
+- **Cloud Function**：`functions/src/lineTalkWebhook.ts` HTTP webhook
+  - HMAC-SHA256 X-Line-Signature 驗證（用 `req.rawBody` 避雷）
+  - 解析 message event → 寫 Firestore `talkQuestions` collection
+  - userId SHA-256 hash 截 8 字（隱私保護 — Firestore 公開可讀）
+  - 訊息 > 500 字 / events > 50 直接丟棄（防灌水）
+  - 部署 URL：`https://us-central1-akai-e693f.cloudfunctions.net/lineTalkWebhook`
+
+- **Firestore rules**：`talkQuestions/{msgId}` 公開讀 + Cloud Function admin SDK 寫
+- **Frontend**：`live-questions.html` 純靜態頁
+  - Firebase Web SDK 10.13.2 + onSnapshot 訂閱最新 8 則
+  - 6 秒輪播 + slideIn 動畫
+  - 240×240 LINE Bot QR 主視覺側欄（演講廳遠距觀眾可掃）
+
+- **SETUP_H2.md**：7 步部署文件（建 channel / OA 設定 / pipe secret / deploy / Verify / 下載 QR / 端到端測試）
+
+**🚨 緊急修補（演講前不能漏的兩個 bug）**
+
+| 痛點 | Commit | 修法 |
+|---|---|---|
+| tool detail markdown 連結缺 `/Akai/` basePath → 點下去 404 到 `cagoooo.github.io/tool/X` | [8ea2c61](https://github.com/cagoooo/Akai/commit/8ea2c61) | 新增 `client/src/lib/resolveLink.ts` 共用 helper 自動加 `import.meta.env.BASE_URL`，掛 BulletinToolDetail / ToolIndexAI 的 ReactMarkdown components.a — **91 處連結一次修好** |
+| live-questions deploy 後使用者看到 disk cache 舊版 QR | [183586b](https://github.com/cagoooo/Akai/commit/183586b) + [b27ae6d](https://github.com/cagoooo/Akai/commit/b27ae6d) | 雙保險：(1) HTML 加 3 個 cache-control meta 強制不快取；(2) deck-stage.js L/Q 熱鍵 `window.open('xxx.html?v=' + Date.now())` 帶 cache-bust 時戳 |
+
+**👥 觀眾互動 UX 4 輪迭代（H2 上線當天精細打磨）**
+
+| 迭代 | Commit | 解決什麼 |
+|---|---|---|
+| v1 64×64 header QR | [ee3fd8e](https://github.com/cagoooo/Akai/commit/ee3fd8e) | 上線即可用 |
+| v2 240×240 主視覺側欄 + RWD 三段 | [5907540](https://github.com/cagoooo/Akai/commit/5907540) | 演講廳遠距觀眾掃不清 → QR 從 64px → 240px 主視覺 |
+| v3 觀眾編號 + 同人多則合併 | [93caa01](https://github.com/cagoooo/Akai/commit/93caa01) | hash `5949d7b3` 不友善 → 🐹 觀眾 #1 + emoji 區分 + 「第 X 則 / 共 Y」repeat-tag + flash glow 新訊息提示 |
+| v4 手機 column 排版 + badge 單行 | [49bf086](https://github.com/cagoooo/Akai/commit/49bf086) | 手機 row 排版擠成兩行 → 統一 column flex、三段斷點（768/480/375）、badge nowrap |
+
+**📁 變動檔案總覽（v3.6.67）**
+
+```
+新增:
+client/public/akai-talk-2026/
+├── live-stats.html              ← H1 即時訪客動態 (4 格大字 + Firestore onSnapshot)
+├── live-questions.html          ← H2 LINE 提問即時輪播 (240px QR + 觀眾編號 + flash glow)
+└── assets/qr-line-talk.png      ← LINE Bot @399ffpsg 加好友 QR
+
+client/src/lib/
+└── resolveLink.ts               ← Markdown 連結 basePath helper
+
+functions/src/
+└── lineTalkWebhook.ts           ← LINE inbound webhook (HMAC-SHA256 + Firestore)
+
+(root)/
+└── SETUP_H2.md                  ← LINE 部署 7 步完整指引
+
+修改:
+client/public/akai-talk-2026/deck-stage.js
+  - constructor: bind _onHashChange / _onTouchStart / _onTouchEnd
+  - connectedCallback: 加 hashchange / touchstart / touchend listener + _buildMobileNav()
+  - _onKey: 加 L / Q 熱鍵（cache-bust ?v= 帶 timestamp）
+  - 新增 _syncHash / _onHashChange / _toggleHelp / _buildMobileNav / _onTouchStart / _onTouchEnd
+  - ? overlay 加 8 條快捷鍵清單（含新增 L / Q）
+
+client/src/pages/BulletinToolDetail.tsx
+  - import resolveInternalLink
+  - ReactMarkdown components.a 攔截 href
+
+client/src/pages/ToolIndexAI.tsx
+  - 同上 (#100 工具索引 About 區塊)
+
+functions/src/index.ts
+  - export lineTalkWebhook
+
+firestore.rules
+  - 新增 match /talkQuestions/{msgId}: read true, write false
+```
+
+**🎯 戰略意義**
+- **演講當天工具帶完整**：L/Q/?/← →/swipe 全套熱鍵 + 兩個即時頁
+- **觀眾體驗端到端**：掃 QR → 加 LINE → 傳訊息 → 即時上大螢幕（含觀眾編號、emoji 區分、flash glow）
+- **永久維護的疫苗**：cache-bust 雙保險 + resolveLink helper 杜絕兩類經典 bug 不再復發
+- **下一場演講零行 React 程式碼**：v3.6.66 ExternalWorkBanner + 這次 H 區建好的整套工具，新演講只需 SETUP_H2.md 跑一次 LINE Channel 設定
+
+**📌 線上**
+- 簡報：https://cagoooo.github.io/Akai/akai-talk-2026/index.html
+- 即時統計（按 L）：https://cagoooo.github.io/Akai/akai-talk-2026/live-stats.html
+- 實況提問（按 Q）：https://cagoooo.github.io/Akai/akai-talk-2026/live-questions.html
+- Cloud Function：`https://us-central1-akai-e693f.cloudfunctions.net/lineTalkWebhook`
+
+**🚀 演講當天熱鍵手冊**
+| 鍵 | 動作 |
+|---|---|
+| `?` | 鍵盤快捷鍵 overlay |
+| `L` | 開即時統計頁 |
+| `Q` | 開實況提問牆 |
+| `← / →` | 切換投影片 |
+| `1-9 / 0` | 跳第 N 張 |
+| `R` | 回到第 1 張 |
+| `F11` | 瀏覽器全螢幕 |
+| swipe | 手機左右切片 |
+| 浮動 ‹ › | 手機觸控按鈕 |
+
+**📚 11 個 commits（從 v3.6.66 後續）**
+```
+7f4d24a 🔗📱 [H3+H4] 簡報深連結 + 觸控手勢 + 手機浮動 nav
+42fbde5 📊 [H1] 演講即時統計頁 + L 鍵快捷開啟
+80fe5b6 🎤 [H2] LINE 演講提問完整實作（code 端齊備）
+8ea2c61 🔗 修工具卡片內 markdown 連結缺 /Akai/ basePath 的 bug
+5907540 🎫 live-questions.html QR 大幅放大 + RWD 全面改良
+ee3fd8e 🎫 LINE Bot QR (@399ffpsg) 嵌入 live-questions.html header
+183586b 🔄 演講即時頁加 cache-control 雙保險
+b27ae6d 🔄 補上 deck-stage.js L/Q 熱鍵 query string cache-bust
+93caa01 🐹 [Q-優化] 觀眾編號 + 同人多則合併標記 + flash glow
+49bf086 📱 [手機-優化] live-questions.html 直式 column 排版 + badge 單行
+```
+
+**📚 三大踩雷紀錄（未來不要再踩）**
+- LINE webhook 不能共用既有 Channel（一個 Channel 一個 webhook URL，會搶事件）→ 演講專用新建 Channel
+- GitHub Pages HTML 預設 max-age 600s，動態頁 deploy 後使用者看舊版 → cache-control meta + URL ?v=Date.now() 雙保險
+- ReactMarkdown 內 `[text](/tool/45)` render 成 `<a href="/tool/45">` 會 404 到 `cagoooo.github.io/tool/45`（缺 `/Akai/`）→ 用 helper 攔截 + import.meta.env.BASE_URL 自動加 prefix
+
+---
+
+
+### `v3.6.66` (🎤 AIFED 演講深度優化收官)
 
 **🎯 動機**
 v3.6.65 演講簡報上線當天即發現可改善空間，分三大方向一次性收官：
