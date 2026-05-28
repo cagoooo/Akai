@@ -100,6 +100,38 @@
   .empty-state { text-align: center; padding: 60px 20px; color: rgba(244,240,230,.5); }
   .empty-state .emoji { font-size: 56px; opacity: .6; }
 
+  /* T2: 鍵盤選中高亮 */
+  .q-card.selected {
+    border-color: var(--orange);
+    box-shadow: 0 0 0 3px rgba(201,151,68,.3), 0 6px 18px rgba(0,0,0,.3);
+    transform: translateX(2px);
+  }
+
+  /* T2: 鍵盤快捷鍵 overlay */
+  .kbd-overlay {
+    position: fixed; inset: 0;
+    background: rgba(15,20,30,.82);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 9999;
+  }
+  .kbd-overlay.visible { display: flex; }
+  .kbd-overlay-inner {
+    background: var(--navy);
+    border: 2px solid #fff;
+    border-radius: 14px;
+    padding: 28px 36px;
+    max-width: 480px; width: calc(100% - 48px);
+    box-shadow: 6px 8px 0 rgba(0,0,0,.32);
+  }
+  .kbd-overlay h2 { margin: 0 0 18px; font-size: 20px; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .kbd-overlay h2 .close-x { font-size: 11px; background: transparent; border: 1.5px solid rgba(255,255,255,.5); color: #fff; border-radius: 999px; padding: 4px 10px; cursor: pointer; font-family: inherit; }
+  .kbd-overlay table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .kbd-overlay td { padding: 6px 0; }
+  .kbd-overlay td:first-child { color: var(--orange); font-family: 'JetBrains Mono', monospace; font-weight: 700; width: 40%; }
+
   .error-banner {
     background: rgba(185,81,43,.18);
     border: 1.5px solid var(--red);
@@ -165,10 +197,31 @@
         置頂 <strong id="pinnedCount">0</strong>
       </div>
       <button class="btn" id="refreshBtn">🔄 重新整理</button>
+      <button class="btn" id="exportBtn">📤 匯出 Markdown</button>
+      <button class="btn" id="kbdBtn" title="顯示鍵盤快捷鍵 (?)">⌨️ 快捷鍵</button>
       <a class="btn" href="live-questions.html" target="_blank" style="text-decoration:none;display:inline-flex;align-items:center;">👁️ 看公開大螢幕頁</a>
       <button class="btn danger" id="clearAllBtn">⚠️ 清空全部</button>
     </div>
     <div class="question-list" id="questionList"></div>
+  </div>
+</div>
+
+<!-- T2: 鍵盤快捷鍵 overlay -->
+<div class="kbd-overlay" id="kbdOverlay">
+  <div class="kbd-overlay-inner">
+    <h2>⌨️ 鍵盤快捷鍵 <button class="close-x" id="kbdCloseBtn">Esc 關閉</button></h2>
+    <table>
+      <tr><td>↑ / ↓</td><td>選擇上 / 下一則訊息</td></tr>
+      <tr><td>P</td><td>📌 置頂 / 取消置頂選中訊息</td></tr>
+      <tr><td>H</td><td>🙈 隱藏 / 取消隱藏選中訊息</td></tr>
+      <tr><td>D / Delete</td><td>🗑️ 刪除選中訊息（含 confirm）</td></tr>
+      <tr><td>E</td><td>📤 匯出 Markdown</td></tr>
+      <tr><td>?</td><td>顯示 / 隱藏此說明</td></tr>
+      <tr><td>Esc</td><td>關閉說明 / 取消選擇</td></tr>
+    </table>
+    <div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,.18);font-size:11px;color:rgba(255,255,255,.6);font-style:italic;">
+      提示：游標若在輸入框內，快捷鍵會自動停用避免誤觸
+    </div>
   </div>
 </div>
 
@@ -262,6 +315,7 @@
 
   // ── 訂閱 talkQuestions 全部訊息 ─────────────────────────────
   let currentQuestions = [];
+  let selectedIdx = -1; // T2: 鍵盤選中索引（-1 = 未選）
 
   function subscribeQuestions() {
     const q = query(collection(db, 'talkQuestions'), orderBy('createdAt', 'desc'));
@@ -309,7 +363,9 @@
                       String(date.getSeconds()).padStart(2, '0');
 
       const card = document.createElement('div');
-      card.className = 'q-card' + (q.hidden ? ' hidden' : '') + (q.pinned ? ' pinned' : '');
+      const isSelected = currentQuestions.indexOf(q) === selectedIdx;
+      card.className = 'q-card' + (q.hidden ? ' hidden' : '') + (q.pinned ? ' pinned' : '') + (isSelected ? ' selected' : '');
+      card.dataset.idx = String(currentQuestions.indexOf(q));
       card.innerHTML = `
         <div class="q-meta">
           <span class="q-badge">${audience.emoji} #${audience.num}</span>
@@ -389,6 +445,160 @@
       unsubQuestions = null;
     }
     subscribeQuestions();
+  });
+
+  // ── U1: 匯出 Markdown ────────────────────────────────────
+  function exportMarkdown() {
+    if (currentQuestions.length === 0) {
+      alert('沒有訊息可匯出');
+      return;
+    }
+    const now = new Date();
+    const exportTime = now.getFullYear() + '-' +
+      String(now.getMonth() + 1).padStart(2, '0') + '-' +
+      String(now.getDate()).padStart(2, '0') + ' ' +
+      String(now.getHours()).padStart(2, '0') + ':' +
+      String(now.getMinutes()).padStart(2, '0');
+
+    const fmtTime = (q) => {
+      const d = new Date(q.timestamp || q.createdAt?.toMillis?.() || Date.now());
+      return String(d.getMonth() + 1).padStart(2, '0') + '/' +
+             String(d.getDate()).padStart(2, '0') + ' ' +
+             String(d.getHours()).padStart(2, '0') + ':' +
+             String(d.getMinutes()).padStart(2, '0') + ':' +
+             String(d.getSeconds()).padStart(2, '0');
+    };
+
+    const pinned = currentQuestions.filter((q) => q.pinned && !q.hidden);
+    const normal = currentQuestions.filter((q) => !q.pinned && !q.hidden);
+    const hidden = currentQuestions.filter((q) => q.hidden);
+
+    const lines = [];
+    lines.push('# 2026 AIFED 演講提問記錄');
+    lines.push('');
+    lines.push(`> 匯出時間：${exportTime}  `);
+    lines.push(`> 總訊息：${currentQuestions.length} 則 · 置頂 ${pinned.length} · 顯示 ${normal.length} · 隱藏 ${hidden.length}`);
+    lines.push('');
+    lines.push('---');
+    lines.push('');
+
+    const renderGroup = (label, items) => {
+      if (items.length === 0) return;
+      lines.push(`## ${label}（${items.length} 則）`);
+      lines.push('');
+      items.forEach((q, i) => {
+        const a = getAudience(q.userIdHash || 'anon');
+        lines.push(`### ${a.emoji} 觀眾 #${a.num} · ${fmtTime(q)}`);
+        lines.push('');
+        lines.push(`> ${(q.text || '(無內容)').replace(/\n/g, '\n> ')}`);
+        const tags = [];
+        if (q.pinned) tags.push('📌 置頂');
+        if (q.hidden) tags.push('🙈 隱藏');
+        if (tags.length) lines.push('');
+        if (tags.length) lines.push(`_${tags.join(' · ')}_`);
+        lines.push('');
+      });
+      lines.push('---');
+      lines.push('');
+    };
+
+    renderGroup('📌 置頂訊息', pinned);
+    renderGroup('💬 一般訊息', normal);
+    renderGroup('🙈 隱藏訊息', hidden);
+
+    lines.push('');
+    lines.push('---');
+    lines.push('');
+    lines.push('_由 2026 AIFED 演講後台一鍵匯出_');
+    lines.push(`_平台：[cagoooo.github.io/Akai/akai-talk-2026](https://cagoooo.github.io/Akai/akai-talk-2026/)_`);
+
+    const md = lines.join('\n');
+    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const filename = `aifed-2026-questions-${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}.md`;
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+  $('exportBtn').addEventListener('click', exportMarkdown);
+
+  // ── T2: 鍵盤快捷鍵 ──────────────────────────────────────
+  const kbdOverlay = $('kbdOverlay');
+  function toggleKbdOverlay(show) {
+    if (show === undefined) show = !kbdOverlay.classList.contains('visible');
+    kbdOverlay.classList.toggle('visible', show);
+  }
+  $('kbdBtn').addEventListener('click', () => toggleKbdOverlay(true));
+  $('kbdCloseBtn').addEventListener('click', () => toggleKbdOverlay(false));
+  kbdOverlay.addEventListener('click', (e) => {
+    if (e.target === kbdOverlay) toggleKbdOverlay(false);
+  });
+
+  function moveSelection(delta) {
+    if (currentQuestions.length === 0) return;
+    if (selectedIdx < 0) {
+      selectedIdx = delta > 0 ? 0 : currentQuestions.length - 1;
+    } else {
+      selectedIdx = (selectedIdx + delta + currentQuestions.length) % currentQuestions.length;
+    }
+    renderList();
+    // scroll selected card into view
+    const target = document.querySelector(`[data-idx="${selectedIdx}"]`);
+    if (target) target.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+
+  async function performSelectedAction(action) {
+    if (selectedIdx < 0 || selectedIdx >= currentQuestions.length) return;
+    const q = currentQuestions[selectedIdx];
+    const ref = doc(db, 'talkQuestions', q.id);
+    try {
+      if (action === 'pin') {
+        await updateDoc(ref, { pinned: !q.pinned });
+      } else if (action === 'hide') {
+        await updateDoc(ref, { hidden: !q.hidden });
+      } else if (action === 'del') {
+        if (!confirm(`確定刪除這則訊息？\n\n「${(q.text || '').slice(0, 40)}」\n\n刪除後不可復原。`)) return;
+        await deleteDoc(ref);
+        selectedIdx = Math.min(selectedIdx, currentQuestions.length - 2);
+      }
+    } catch (e) {
+      showError('操作失敗：' + e.message);
+    }
+  }
+
+  window.addEventListener('keydown', (e) => {
+    // 在 input / textarea / contenteditable 內不處理（避免誤觸）
+    const t = e.target;
+    if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+    // overlay 開時只接 ? 或 Esc
+    if (kbdOverlay.classList.contains('visible')) {
+      if (e.key === '?' || e.key === 'Escape') {
+        toggleKbdOverlay(false);
+        e.preventDefault();
+      }
+      return;
+    }
+
+    // 未登入時不處理（loginCard 顯示時）
+    if (loginCard.style.display !== 'none') return;
+
+    const k = e.key;
+    if (k === 'ArrowDown' || k === 'j') { moveSelection(1); e.preventDefault(); }
+    else if (k === 'ArrowUp' || k === 'k') { moveSelection(-1); e.preventDefault(); }
+    else if (k === 'p' || k === 'P') { performSelectedAction('pin'); e.preventDefault(); }
+    else if (k === 'h' || k === 'H') { performSelectedAction('hide'); e.preventDefault(); }
+    else if (k === 'd' || k === 'D' || k === 'Delete') { performSelectedAction('del'); e.preventDefault(); }
+    else if (k === 'e' || k === 'E') { exportMarkdown(); e.preventDefault(); }
+    else if (k === '?') { toggleKbdOverlay(true); e.preventDefault(); }
+    else if (k === 'Escape') {
+      if (selectedIdx >= 0) { selectedIdx = -1; renderList(); e.preventDefault(); }
+    }
   });
 </script>
 </body>
