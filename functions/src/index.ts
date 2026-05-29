@@ -340,23 +340,28 @@ async function recordToolClickInternal(opts: {
     sessionId: string;
     rawRequest: any;
     source?: string; // 'callable' | 'beacon-cockpit' 等，附在 sessionId 區辨來源
+    stageId?: string; // v3.6.70：cockpit 內 stage 細粒度（如 'micro-bit'、'canva-ai'）
 }): Promise<{ success: boolean; toolId: number }> {
-    const { toolId, rawReferrer, device: deviceRaw, sessionId: sidRaw, rawRequest, source } = opts;
+    const { toolId, rawReferrer, device: deviceRaw, sessionId: sidRaw, rawRequest, source, stageId: rawStageId } = opts;
+
+    // sanitize stageId：只允許 alphanumeric + dash/underscore，長度 ≤ 32
+    const stageId = (rawStageId && /^[a-zA-Z0-9_-]{1,32}$/.test(rawStageId)) ? rawStageId : null;
 
     const docRef = admin.firestore().collection("toolUsageStats").doc(String(toolId));
     const today = todayInTaipei();
     const now = new Date();
     const hourTW = (now.getUTCHours() + 8) % 24;
 
-    // 1. 累計 doc (toolUsageStats)
-    const accumulatePromise = docRef.set(
-        {
-            totalClicks: admin.firestore.FieldValue.increment(1),
-            dailyClicks: { [today]: admin.firestore.FieldValue.increment(1) },
-            lastClickedAt: admin.firestore.FieldValue.serverTimestamp(),
-        },
-        { merge: true }
-    );
+    // 1. 累計 doc (toolUsageStats)：含 stageBreakdown.{stageId} +1（如有）
+    const accumPayload: any = {
+        totalClicks: admin.firestore.FieldValue.increment(1),
+        dailyClicks: { [today]: admin.firestore.FieldValue.increment(1) },
+        lastClickedAt: admin.firestore.FieldValue.serverTimestamp(),
+    };
+    if (stageId) {
+        accumPayload.stageBreakdown = { [stageId]: admin.firestore.FieldValue.increment(1) };
+    }
+    const accumulatePromise = docRef.set(accumPayload, { merge: true });
 
     // 2. event log (toolClickEvents)
     const { category: referrer, host: referrerHost } = classifyReferrer(rawReferrer);
@@ -380,6 +385,7 @@ async function recordToolClickInternal(opts: {
             device,
             country,
             sessionId,
+            ...(stageId ? { stageId } : {}),
         });
 
     await accumulatePromise;
@@ -448,6 +454,7 @@ export const beaconToolClick = onRequest(
                 sessionId: String(req.query.sessionId || (req.body as any)?.sessionId || ""),
                 rawRequest: req,
                 source: "beacon",
+                stageId: String(req.query.stageId || (req.body as any)?.stageId || "") || undefined,
             });
             // 204 No Content — beacon 不關心回應內容
             res.status(204).send();
