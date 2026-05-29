@@ -13,6 +13,7 @@ import { Link } from "wouter";
 import type { VisitorStats, ToolUsageStat } from "@/types/analytics";
 import { WishingWellAdmin } from "@/components/admin/WishingWellAdmin";
 import { ToolFlowAnalysisPanel } from "@/components/admin/ToolFlowAnalysisPanel";
+import { HealthCheckPanel } from "@/components/admin/HealthCheckPanel";
 import {
   DateRangePicker,
   presetToRange,
@@ -648,6 +649,9 @@ export function AnalyticsDashboard() {
 
         {/* 📦 每日快照備份管理（admin 才看得到） */}
         <SnapshotManagementPanel />
+
+        {/* 🛡️ Schema 健檢（v3.6.70：手動觸發 healthCheckToolUsageStats callable） */}
+        <HealthCheckPanel />
 
         {/* 統計便利貼 — cork 風四色（已連動日期範圍） */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
