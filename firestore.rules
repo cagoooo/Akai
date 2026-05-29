@@ -40,6 +40,19 @@ service cloud.firestore {
       allow read, write: if request.auth != null && request.auth.token.admin == true;
     }
 
+    // 🆕 v3.6.71: 健檢結果歷史 — admin 可讀（給 dashboard 趨勢圖），寫只走 admin SDK
+    // 來源：performHealthCheck (manual or daily-cron) 跑完寫一筆
+    match /healthCheckRuns/{runId} {
+      allow read: if request.auth != null && request.auth.token.admin == true;
+      allow write: if false; // 僅 admin SDK 寫入
+    }
+
+    // 🆕 v3.6.70: schema 漂移告警去重表（24h dedup 用）— admin 可讀，寫只走 admin SDK
+    match /alertSilence/{alertKey} {
+      allow read: if request.auth != null && request.auth.token.admin == true;
+      allow write: if false;
+    }
+
     // 工具使用統計 - 所有人可讀，僅認證用戶可寫
     // 🛡️ v3.6.69 防呆：docId 必須是純數字字串（"81" 不是 "tool_81"），totalClicks 必須是 int
     //   過去踩過雙寫 doc 漂移（client direct write 寫 "tool_81" / callable 寫 "81" 分裂累計，

@@ -36,6 +36,10 @@ export { healthCheckToolUsageStats } from "./healthCheckToolUsageStats";
 // 🆕 v3.6.70: Schema 漂移即時告警 onWrite trigger（推 LINE 給管理員、24 小時 dedup）
 export { monitorToolStatsSchema } from "./monitorToolStatsSchema";
 
+// 🆕 v3.6.71: 每天 02:00 Asia/Taipei 自動跑健檢，errorCount > 0 即時推 LINE 告警
+//   結果寫進 healthCheckRuns collection，給後台歷史趨勢圖用
+export { runHealthCheckDaily } from "./runHealthCheckDaily";
+
 // 對外公開站點（供 LINE 卡片裡的「打開查看」按鈕用）
 const SITE_BASE = "https://cagoooo.github.io/Akai";
 
