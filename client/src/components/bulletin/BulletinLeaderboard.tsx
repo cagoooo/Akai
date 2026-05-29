@@ -141,19 +141,20 @@ export function BulletinLeaderboard({ tools, deltas7d, hasDeltaHistory }: Props)
                 />
 
                 {/* 金 / 銀 / 銅 膠帶（前 3 名才有，斜貼右上角） */}
+                {/* top: -16 讓膠帶飄在卡片頂端外，避免壓到標題尾巴 */}
                 {i < 3 && (
                   <div
                     style={{
                       position: 'absolute',
-                      top: -10,
-                      right: -6,
+                      top: -16,
+                      right: -4,
                       transform: 'rotate(8deg)',
                       pointerEvents: 'none',
                       zIndex: 2,
                     }}
                   >
-                    <Tape color={medalColors[i]} angle={0} width={80}>
-                      <span style={{ fontSize: 11 }}>{medalLabels[i]}</span>
+                    <Tape color={medalColors[i]} angle={0} width={60}>
+                      <span style={{ fontSize: 10 }}>{medalLabels[i]}</span>
                     </Tape>
                   </div>
                 )}
@@ -196,7 +197,8 @@ export function BulletinLeaderboard({ tools, deltas7d, hasDeltaHistory }: Props)
                   #{i + 1}
                 </div>
                 <div style={{ fontSize: 28 }}>{getToolEmoji(tool)}</div>
-                <div style={{ flex: 1, minWidth: 0 }}>
+                {/* 前 3 名右側保留 paddingRight 讓位給金/銀/銅膠帶 */}
+                <div style={{ flex: 1, minWidth: 0, paddingRight: i < 3 ? 38 : 0 }}>
                   <div
                     style={{
                       fontFamily: tokens.font.tc,
@@ -222,10 +224,19 @@ export function BulletinLeaderboard({ tools, deltas7d, hasDeltaHistory }: Props)
                     }}
                   >
                     <span>👆 {(tool.totalClicks ?? 0).toLocaleString()} clicks</span>
-                    {hasDeltaHistory && risingDelta > 0 && !isRising && (
-                      <span style={{ color: '#c2410c', fontWeight: 700 }}>
-                        +{risingDelta}/週
-                      </span>
+                    {hasDeltaHistory && !isRising && (
+                      risingDelta > 0 ? (
+                        <span style={{ color: '#c2410c', fontWeight: 700 }}>
+                          +{risingDelta}/週
+                        </span>
+                      ) : (
+                        <span
+                          style={{ color: tokens.muted2, opacity: 0.55 }}
+                          title="過去 7 天沒上升"
+                        >
+                          ±0/週
+                        </span>
+                      )
                     )}
                   </div>
                 </div>

@@ -60,6 +60,11 @@ const ICON_TO_EMOJI: Record<string, string> = {
   Brain: '🧠',
   Feather: '🪶',
   Rocket: '🚀',
+  Image: '🖼️',
+  Images: '📸',
+  CalendarCheck: '🗓️',
+  Users: '👥',
+  LayoutDashboard: '🎛️',
 };
 
 /** 安全處理 URL：沒 protocol 自動加 https://，LINE Bot 等特殊 URL 保留原樣 */
