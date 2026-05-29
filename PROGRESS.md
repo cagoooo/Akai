@@ -1,13 +1,79 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.68` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
-- **里程碑**: **2026-05-28 演講提問 Ops 工作流完整上線** — admin 後台 + UX 三修 + 後台快捷按鈕 + sitemap + QR 驗證（5 commits / 2 hr）
-- **最後更新狀態**: v3.6.68 — P1 admin-questions.html 後台（Firebase Auth + admin custom claim + 置頂/隱藏/刪除/清空全部）；live-questions.html 訂閱 filter hidden + pinned 置頂；UX 三修（errorBanner 移位 / 匿名 user 不誤觸發 / 加 ipad@ 明示）；live-questions header 加 ⚙️ 後台快捷按鈕；R2 sitemap 補 akai-talk-2026 + PDF；O3 簡報內 7 個 tool-cta + 4 個外部站全驗 OK；memory 存「Akai admin claim 屬於 ipad@」。
+- **當前版本**: `v3.6.69` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
+- **里程碑**: **2026-05-29 排行榜雙寫 doc 漂移總修復 — 史上最大 stale data bug 連根拔起** — 從 UIUX 微調出發意外揪出「學生點 90 次系統只收到 5 次」的雙寫 schema 漂移、6 commits / 3 hr 一次到位收尾、回收 2,437 click 累計
+- **最後更新狀態**: v3.6.69 — 排行榜 UIUX 三修（膠帶疊字 60→12px / 5 工具 emoji 區辨 🎛️🖼️🗓️👥📸 / ±0/週 持平）；**雙寫 doc 漂移總修復**（useToolClickStats 雙讀加總 + firestoreService fallback 統一寫 String(toolId) + +N/週 改用 dailyClicks 跨裝置一致 + migrateToolStatsMerge admin callable + Firestore Rules 限制 docId 純數字）；migration 執行回收 99 doc / 2,437 click（toolUsageStats `tool_*` 殘留歸零）；cockpit 流量歸因 beacon（new Image() pixel + sessionStorage 去重 + `beaconToolClick` HTTP function CORS open）；it-cockpit repo 一行整合。
 
 ## 📌 完成功能總覽
 
-### `v3.6.68` (最新 · 🛡️ 演講提問 Ops 工作流完整上線)
+### `v3.6.69` (最新 · 🚨 排行榜雙寫 doc 漂移總修復 + cockpit 流量歸因 beacon)
+
+**🎯 動機**
+從「排行榜 UIUX 還能改良嗎？」這個輕量問題出發，PR 過程中用 dev preview + Firestore REST API 對照 UI 顯示 vs 真實資料，**意外揪出史上最大 stale-data bug**：使用者帶全班學生 5/28 點 90 次，UI 卻只多 +5/週 — 真實累計都進 Firestore 但前端讀錯邊永遠看不到。連帶把「直接打 cockpit URL 不會計數」也一併解決。
+
+**🎨 排行榜 UIUX 三修（commit [`55094a8`](https://github.com/cagoooo/Akai/commit/55094a8)）**
+
+| 問題 | 修法 | 數據 |
+|---|---|---|
+| 金/銀/銅膠帶疊到標題 | `top: -10→-16` 飄到卡片頂端外、width 80→60、字級 11→10、標題行 `paddingRight: 38` | 疊字 60px → **12px** |
+| #2-#5 全是 🛠️ 沒區辨性 | 補 ICON_TO_EMOJI 5 條：Image / Images / CalendarCheck / Users / LayoutDashboard | 🎛️🖼️🗓️👥📸 五張卡完全區辨 |
+| `+N/週` = 0 時不顯示像「資料缺失」| 改顯示灰色 `±0/週` + tooltip「過去 7 天沒上升」 | 5 張卡資訊密度統一 |
+
+**🚨 雙寫 doc 漂移總修復（commits [`905ab3d`](https://github.com/cagoooo/Akai/commit/905ab3d) + [`20ae053`](https://github.com/cagoooo/Akai/commit/20ae053) + [`c60dbca`](https://github.com/cagoooo/Akai/commit/c60dbca)）**
+
+**Root cause**：v3.6.49+ `incrementToolClick` callable 改寫 docId 從 `tool_${id}` → `${id}`，但前端 `useToolClickStats` line 159 仍用 `typeof data.toolId === 'number'` 條件判斷（只有舊 schema 有這欄位）。**新 doc 全部被 skip**，學生點擊都進新 doc 累計但 UI 永遠讀舊 doc。`+N/週` 5 也只反映「callable 失敗 fallback 寫到舊 doc」的少數案例，完全不代表真實活躍度。
+
+| 修法 | 檔案 |
+|---|---|
+| 1️⃣ `useToolClickStats` 從 `doc.id` 推導 toolId，支援 `81` 與 `tool_81` 兩種命名並加總（過渡期不丟資料） | `client/src/hooks/useToolClickStats.ts` |
+| 2️⃣ `firestoreService` fallback 改寫 `String(toolId)`，消除未來雙寫源頭 | `client/src/lib/firestoreService.ts` |
+| 3️⃣ `+N/週` 改用 Firestore `dailyClicks` 過去 7 天加總，跨裝置一致、不再依賴 localStorage snapshot 設計缺陷（snapshot 時機是「打開首頁那刻」，老師晚上才開首頁時已含整天 90 次，隔天看不到差異） | `client/src/hooks/useToolClickStats.ts` |
+| 4️⃣ 新增 `migrateToolStatsMerge` admin onCall（從 admin browser console 觸發） | `functions/src/migrateToolStatsMerge.ts` |
+| 5️⃣ 新增 `migrateToolStatsRunOnce` 一次性 HTTP（跑完即刪） | 已撤除 |
+| 6️⃣ Firestore Rules 限制 toolUsageStats docId 必須 `^[1-9][0-9]{0,2}$` 純數字、totalClicks 必須 int >= 0 | `firestore.rules` |
+
+**Migration 執行成果（2026-05-29 03:48）**：
+- 99 個 `tool_*` 舊 doc → 全部合進對應 `${toolId}` 新 doc，0 errors
+- 回收 **2,437 次點擊累計**（之前完全消失在 stale collection）
+- 驗證：`toolUsageStats` 內 `tool_*` 殘留 = **0**，純數字 docId = 100
+- `migrateToolStatsRunOnce` HTTP endpoint 立即 `firebase functions:delete` 撤除，curl 確認 404
+
+**UI 變化（同一個 #1 toolId=81）**：
+
+| 指標 | 修前 | 修後 | 解釋 |
+|---|---|---|---|
+| totalClicks | 616 | **744** | = 舊 doc 616 + 新 doc 128 |
+| +N/週 | +5 | **+128** | 用 dailyClicks 真實 7 天：5/25=2 + 5/26=31 + 5/27=3 + **5/28=90** + 5/29=2 |
+| #2 禮堂預約 +N/週 | +4 | **+60** ↑15× | 真實熱度被 stale schema 蓋住 |
+| #5 手作課程 +N/週 | ±0 | **+20** | 「沒人用」原來是假象 |
+
+**🎯 cockpit 流量歸因 beacon（commits [`edf2e91`](https://github.com/cagoooo/Akai/commit/edf2e91) + [`b7f583d`](https://github.com/cagoooo/it-cockpit/commit/b7f583d)）**
+
+**Root cause**：`trackToolUsage()` 只在「從 cagoooo.github.io/Akai 站內點工具」時呼叫，學生直接打 cockpit URL / bookmark / LINE 連結進入完全不計數。
+
+| 元件 | 檔案 | 行為 |
+|---|---|---|
+| `beaconToolClick` HTTP function | `functions/src/index.ts` | `onRequest` + cors: true，GET `?toolId=81&referrer=&device=&sessionId=` → 204 No Content；抽出 `recordToolClickInternal` helper 給 callable 跟 beacon 共用 |
+| cockpit `<head>` IIFE | `it-cockpit/index.html` | `new Image().src = beacon URL` 像素 beacon，零 CORS preflight、unload 也送得出去；sessionStorage 去重（同分頁 reload 不重複） |
+
+**整套防線回顧（5 層）**：
+
+| 層 | 防什麼 |
+|---|---|
+| 1. `useToolClickStats` 雙讀加總 | 過渡期 onSnapshot 不丟資料 |
+| 2. `firestoreService` 寫入路徑統一 | 消除未來雙寫源頭 |
+| 3. `+N/週` 用 Firestore `dailyClicks` | 跨裝置一致、真實每日 |
+| 4. `migrateToolStatsMerge` 一次性合併 | 清理歷史 99 個漂移 doc |
+| 5. Firestore Rules `docId` 純數字限制 | 從寫入源頭擋掉未來再漂移 |
+
+**📊 影響面**
+- 排行榜歷史累計從 stale 變真實，**回收 2,437 click** 之前永遠看不到
+- 學生課堂用量現在會準確、即時反映 UI
+- 任何工具未來加同樣 beacon snippet（改 toolId）就能歸因直接訪問流量
+- 多了一個歷史教訓：寫入路徑變更務必同步更新讀取路徑（[[changelog-version-drift-trap]] 印證）
+
+
 
 **🎯 動機**
 v3.6.67 H 區四大件套上線後，使用者實機測試遇到第一個「測試訊息怎麼刪」需求 — 開啟 admin 後台路線。同時補完 v3.6.67 後續 R2 sitemap + O3 QR 驗證 + 三大 UX 修復。
