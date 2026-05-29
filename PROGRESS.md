@@ -1,13 +1,116 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.69` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
-- **里程碑**: **2026-05-29 排行榜雙寫 doc 漂移總修復 — 史上最大 stale data bug 連根拔起** — 從 UIUX 微調出發意外揪出「學生點 90 次系統只收到 5 次」的雙寫 schema 漂移、6 commits / 3 hr 一次到位收尾、回收 2,437 click 累計
-- **最後更新狀態**: v3.6.69 — 排行榜 UIUX 三修（膠帶疊字 60→12px / 5 工具 emoji 區辨 🎛️🖼️🗓️👥📸 / ±0/週 持平）；**雙寫 doc 漂移總修復**（useToolClickStats 雙讀加總 + firestoreService fallback 統一寫 String(toolId) + +N/週 改用 dailyClicks 跨裝置一致 + migrateToolStatsMerge admin callable + Firestore Rules 限制 docId 純數字）；migration 執行回收 99 doc / 2,437 click（toolUsageStats `tool_*` 殘留歸零）；cockpit 流量歸因 beacon（new Image() pixel + sessionStorage 去重 + `beaconToolClick` HTTP function CORS open）；it-cockpit repo 一行整合。
+- **當前版本**: `v3.6.70` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
+- **里程碑**: **2026-05-29 P0+P1 大滿貫：beacon 擴散 4 工具 + 健檢雙保險 + 排行榜 UI 三件套 + cockpit 27 stage 細粒度** — v3.6.69 修完地基後乘勝追擊，**1 個 session 內把 8 個 task 全部到位**
+- **最後更新狀態**: v3.6.70 — 排行榜 UI 升級三件套（火等級徽章 🔥/🔥🔥/🔥🔥🔥 三段 + #4 #5 加鋁/銅紅淡膠帶 + desktop hover「使用 →」hint）；beacon 擴散 4 個工具（schedule #2 / class #4 / files #5 / poet #3 各加 beacon snippet，#3 是 Next.js layout.tsx 注入）；**Schema 防呆雙保險**（healthCheckToolUsageStats admin callable + AnalyticsDashboard HealthCheckPanel UI 主動健檢 / monitorToolStatsSchema onWrite trigger + 24h dedup LINE Flex 告警被動監控）；cockpit 27 stage 細粒度 beacon（後端 beaconToolClick 加 stageId 支援 + toolUsageStats.stageBreakdown 寫入 + Node script 一次性批量注入）；發現 P1-4 流量來源 dashboard ToolFlowAnalysisPanel 445 行已存在無需重做。
 
 ## 📌 完成功能總覽
 
-### `v3.6.69` (最新 · 🚨 排行榜雙寫 doc 漂移總修復 + cockpit 流量歸因 beacon)
+### `v3.6.70` (最新 · 🎯 P0+P1 大滿貫：8 個 task 一個 session 內到位)
+
+**🎯 動機**
+v3.6.69 把雙寫 doc 漂移地基修好後，使用者明確要做完 FUTURE_OPTIMIZATION_V3.6.69.md 列的 P0+P1 全部 8 個 task。**一個 session 內全部完成 + deploy + verify**，共產出 8 個 commit 跨 5 個 repo（Akai / it-cockpit / schedule / class / files / PhotoPoet）。
+
+**🎨 排行榜 UI 升級三件套（commit [`4f676b7`](https://github.com/cagoooo/Akai/commit/4f676b7)）**
+
+| Task | 修法 | 結果 |
+|---|---|---|
+| P1-1 火等級徽章三段 | `fireLevels = [80→🔥🔥🔥 爆紅 / 30→🔥🔥 急上升 / 10→🔥 上升中]`，top 5 全部熱度梯度可視化（取代既有單一 isRising 標記）| #1 +128 = 🔥🔥🔥、#2 +60 = 🔥🔥、#4 +16 / #5 +20 = 🔥 |
+| P1-2 #4 #5 視覺孤兒救援 | medalLabels 擴 5 條（鋁🏅第 4、銅紅🏅第 5），medalColors 擴對應，opacity 0.78 視覺份量略輕 | 5 張卡都有完整身份感 |
+| P1-3 row hover「使用 →」hint | tokens.css 加 `.use-hint` 規則，sticker-card hover 才淡入（opacity 0→1 + translateX(-6px)→0）；觸控裝置由既有 `@media (hover:none)` 自動禁用 | desktop 強化「整 row 可點」可發現性 |
+
+順手把 `+N/週` 文字從 `!isRising` 條件解放，現在徽章跟文字 row 分工清楚：徽章說「熱度等級」、文字說「精確 +N」。
+
+**🎯 P0-1 beacon 擴散 4 個熱門工具**
+
+讓使用者直接從任何入口（LINE / Google 搜尋 / bookmark / 直接打 URL）進入這些工具都會被計入排行榜，**不再受限於「從 Akai 站排行榜點」這條窄路徑**。
+
+| toolId | repo | 部署 | commit |
+|---|---|---|---|
+| 46 (#2 禮堂預約) | cagoooo/schedule | GitHub Pages，patch index.html | [`d16a50e`](https://github.com/cagoooo/schedule/commit/d16a50e) |
+| 10 (#4 班級小管家) | cagoooo/class | GitHub Pages，patch **classnew.html**（index.html 是 meta refresh）| [`1c3dcfd`](https://github.com/cagoooo/class/commit/1c3dcfd) |
+| 68 (#5 手作課程上傳) | cagoooo/files | GitHub Pages，patch index.html | [`af5689b`](https://github.com/cagoooo/files/commit/af5689b) |
+| 14 (#3 早安長輩圖) | cagoooo/PhotoPoet | **Next.js App Router**，patch `src/app/layout.tsx` `<head>` 用 `dangerouslySetInnerHTML` 注入 IIFE | [`73bd98c`](https://github.com/cagoooo/PhotoPoet/commit/73bd98c) ⚠️ 在 master，待手動 merge 到 main |
+
+每個 beacon snippet 統一格式：sessionStorage key 帶 toolId 去重、共用 SID 串聯同學生流量、`new Image().src` 零 CORS preflight、unload 也送得出去。
+
+**🛡️ P0-2 Schema 健檢雙件套（commits [`97325d9`](https://github.com/cagoooo/Akai/commit/97325d9) + [`0ed7a6f`](https://github.com/cagoooo/Akai/commit/0ed7a6f)）**
+
+backend (`functions/src/healthCheckToolUsageStats.ts`)：
+- admin only callable，掃 toolUsageStats collection 偵測：
+  - docId 非純數字 1-999（schema 漂移）
+  - totalClicks 不是 number / 負值
+  - dailyClicks key 不符 YYYY-MM-DD / 值異常
+- 回傳 summary（totalDocs / numericDocCount / errorCount / warnCount）+ issues 前 50 條
+
+frontend (`client/src/components/admin/HealthCheckPanel.tsx`)：
+- 「▶️ 跑健檢」按鈕觸發 callable
+- 結果顯示：5 個 stat box（總 doc / 純數字 docId / 總 clicks / errors / warns）+ issues 可滾動清單（紅色 error / 橘色 warn）
+- 標題列健康狀態 badge（✅ 健康 / ⚠️ N 個問題）
+- 已在 AnalyticsDashboard 內 `SnapshotManagementPanel` 之後渲染
+
+**🚨 P0-3 LINE 即時告警 trigger（commit [`97325d9`](https://github.com/cagoooo/Akai/commit/97325d9) 內）**
+
+`functions/src/monitorToolStatsSchema.ts` 是 `onDocumentWritten('toolUsageStats/{docId}')` trigger：
+
+- 任何寫入即時檢查 docId / totalClicks 異常
+- 走 `pushFlexToAdmin`（既有 LINE Bot 管道）推 Flex Message 給管理員
+- `alertSilence` collection 記錄上次告警時間，**24 小時內同 doc dedup**（避免 burst write 噪音）
+- Flex 卡片含異常 docId + 問題清單 + 24h dedup 提示
+
+主動 + 被動雙保險：admin 隨時可手動健檢、寫入異常自動推 LINE。
+
+**🔬 P1-5 cockpit 27 stage 細粒度 beacon（commits [`3c25de5`](https://github.com/cagoooo/Akai/commit/3c25de5) + [`7073ad0`](https://github.com/cagoooo/it-cockpit/commit/7073ad0)）**
+
+把單一 toolId=81 升級成「整體 + 27 個 stage breakdown」，未來能看「micro:bit 被點 X 次、Canva AI 被點 Y 次」這類教學單元熱度。
+
+backend：
+- `recordToolClickInternal` 加 opts.stageId
+- sanitize: `^[a-zA-Z0-9_-]{1,32}$`（擋 abuse）
+- 寫入 `toolUsageStats/{toolId}.stageBreakdown.{stageId}` += 1
+- `toolClickEvents` 也帶 stageId 供後台 detail 切片
+- `beaconToolClick` HTTP 接 `?stageId=` query
+
+frontend (it-cockpit)：
+- 各 stage HTML `<head>` 加 beacon snippet 帶 stageId
+- 各 stage 自己 sessionStorage flag（akai_beacon_81_{stage}_sent）— 同分頁切 stage 各算一次
+- 共用 `akai_beacon_sid` 串聯同學生的瀏覽路徑（後台可分析學習動線）
+
+自動化：`scripts/inject-cockpit-stage-beacons.mjs` 一次性掃 cockpit dir、idempotent 注入 27 stage 全部 OK / 0 SKIP / 0 WARN。
+
+涵蓋 27 stages：
+ai-image-pk · ar-vr-wearables · blogger-ai-design · canva-ai · canva-magic · computer-friend · deepfake-detective · digital-safety · fact-check · gem-storymaker · gemini-canva · gemini-guided-learning · gemini-music · grad-film-ai · inkscape-vector-art · microbit-makecode · mqueen-microbit · pagamo-advanced · pagamo-gamified-learning · pagamo-world · photocap · pixnet-blog · scratch-animation · scratch-game · suno-class-song · typing-en · windows-basics
+
+**📊 P1-4 流量來源 dashboard — 已存在無需重做**
+
+調查發現 `client/src/components/admin/ToolFlowAnalysisPanel.tsx` 已有 445 行完整實作：referrer / device / country / 24 小時時段四維 PieChart + 工具切換 + 日期範圍。已在 AnalyticsDashboard line 1118 渲染中。FUTURE_OPTIMIZATION_V3.6.69.md 寫「資料躺在 Firestore 沒人看」是錯的，已修正認知。
+
+**🛡️ 進化後 7 道防線完整總覽**
+
+| 層 | 機制 | 防什麼 | 引入版本 |
+|---|---|---|---|
+| 1 | useToolClickStats 雙讀加總 | 過渡期不丟資料 | v3.6.69 |
+| 2 | firestoreService 寫入路徑統一 | 消除未來雙寫源頭 | v3.6.69 |
+| 3 | +N/週 用 Firestore dailyClicks | 跨裝置一致、真實每日 | v3.6.69 |
+| 4 | migrateToolStatsMerge 一次性合併 | 清歷史 99 個漂移 doc | v3.6.69 |
+| 5 | Firestore Rules docId 純數字限制 | 從寫入源頭擋掉異常命名 | v3.6.69 |
+| **6** | **healthCheckToolUsageStats callable + dashboard UI** | **主動健檢，admin 隨時可按按鈕** | **v3.6.70** |
+| **7** | **monitorToolStatsSchema onWrite trigger + LINE 告警** | **被動即時警報，24h dedup** | **v3.6.70** |
+
+**📈 影響面**
+
+- 排行榜真實流量範圍：從「只計 Akai 站內點擊」→ **#1 + #2 + #4 + #5 + (#3 在 master) 5 個工具任何入口都計入**
+- 第 #1 駕駛艙進化成「整體 + 27 stage」雙層分析資料
+- Schema 出問題 0-5 分鐘內被偵測（先前可能數週才被發現）
+- HealthCheckPanel 給後台一個「現在系統健不健康」單一答案
+- LINE 告警等於把資料品質監控外包給手機推播（不再需要主動 grep / log 巡邏）
+
+**⚠️ 待辦項目**
+
+- **PhotoPoet** beacon commit 在 master 分支但 default 是 main，且分歧 95 commit（Firebase Studio AI 工作流）。未自動 PR/merge 避免一次拖一整批不相關變更。需要使用者下次手動 merge 或在 GitHub 開 PR cherry-pick `73bd98c` 到 main。
+
+### `v3.6.69` (🚨 排行榜雙寫 doc 漂移總修復 + cockpit 流量歸因 beacon)
 
 **🎯 動機**
 從「排行榜 UIUX 還能改良嗎？」這個輕量問題出發，PR 過程中用 dev preview + Firestore REST API 對照 UI 顯示 vs 真實資料，**意外揪出史上最大 stale-data bug**：使用者帶全班學生 5/28 點 90 次，UI 卻只多 +5/週 — 真實累計都進 Firestore 但前端讀錯邊永遠看不到。連帶把「直接打 cockpit URL 不會計數」也一併解決。
