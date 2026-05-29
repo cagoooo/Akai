@@ -221,8 +221,10 @@ export async function trackToolUsage(toolId: number): Promise<ToolStats> {
         }
 
         // Fallback：callable 失敗時 client direct write totalClicks（沒 event log）
+        // ⚠️ docId 必須跟 Cloud Function 用同樣的 String(toolId) 命名 — 否則會產生
+        //    "tool_81" vs "81" 雙 doc 漂移，前端 onSnapshot 讀錯邊（歷史踩雷）
         try {
-            const docRef = doc(db as Firestore, TOOL_STATS_COLLECTION, `tool_${toolId}`);
+            const docRef = doc(db as Firestore, TOOL_STATS_COLLECTION, String(toolId));
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
                 await updateDoc(docRef, {
@@ -278,7 +280,8 @@ export async function getToolStats(toolId: number): Promise<ToolStats | null> {
     }
 
     try {
-        const docRef = doc(db as Firestore, TOOL_STATS_COLLECTION, `tool_${toolId}`);
+        // 同步 trackToolUsage 改用 String(toolId)（消除 "tool_81" vs "81" 漂移）
+        const docRef = doc(db as Firestore, TOOL_STATS_COLLECTION, String(toolId));
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {

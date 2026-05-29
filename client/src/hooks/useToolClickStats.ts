@@ -154,25 +154,41 @@ export function useToolClickStats(): ToolClickStats {
             const next = new Map<number, number>();
             const nextDaily = new Map<number, Record<string, number>>();
             const cacheArr: Array<{ toolId: number; totalClicks: number }> = [];
-            snapshot.forEach((doc) => {
-              const data = doc.data();
-              if (typeof data.toolId === 'number' && typeof data.totalClicks === 'number') {
-                next.set(data.toolId, data.totalClicks);
-                cacheArr.push({ toolId: data.toolId, totalClicks: data.totalClicks });
-                // 解析 dailyClicks（若存在）
-                if (data.dailyClicks && typeof data.dailyClicks === 'object') {
-                  const validDaily: Record<string, number> = {};
-                  for (const [k, v] of Object.entries(data.dailyClicks)) {
-                    if (/^\d{4}-\d{2}-\d{2}$/.test(k) && typeof v === 'number' && v > 0) {
-                      validDaily[k] = v;
-                    }
+            // 支援兩種 doc id 命名（過渡期雙讀並加總，避免 schema 漂移丟資料）：
+            //   新版（v3.6.49+ callable 寫）：docId = "81"，doc 內無 toolId field
+            //   舊版（v3.6.49- client direct write）：docId = "tool_81"，doc 內有 toolId field
+            // migration 把 tool_* 合進 * 並刪除舊 doc 後，這段邏輯依然安全。
+            snapshot.forEach((d) => {
+              const data = d.data();
+              let toolId: number | null = null;
+              if (typeof data.toolId === 'number') {
+                toolId = data.toolId;
+              } else if (/^\d+$/.test(d.id)) {
+                toolId = parseInt(d.id, 10);
+              } else {
+                const m = d.id.match(/^tool_(\d+)$/);
+                if (m) toolId = parseInt(m[1], 10);
+              }
+              if (toolId === null || typeof data.totalClicks !== 'number') return;
+
+              // 同 toolId 兩條 doc（過渡期）→ 累加
+              const existing = next.get(toolId) ?? 0;
+              next.set(toolId, existing + data.totalClicks);
+
+              if (data.dailyClicks && typeof data.dailyClicks === 'object') {
+                const validDaily: Record<string, number> = nextDaily.get(toolId) || {};
+                for (const [k, v] of Object.entries(data.dailyClicks)) {
+                  if (/^\d{4}-\d{2}-\d{2}$/.test(k) && typeof v === 'number' && v > 0) {
+                    validDaily[k] = (validDaily[k] || 0) + v;
                   }
-                  if (Object.keys(validDaily).length > 0) {
-                    nextDaily.set(data.toolId, validDaily);
-                  }
+                }
+                if (Object.keys(validDaily).length > 0) {
+                  nextDaily.set(toolId, validDaily);
                 }
               }
             });
+            // cache 用合併後的最終值
+            next.forEach((tc, tid) => cacheArr.push({ toolId: tid, totalClicks: tc }));
             setClicksById(next);
             setDailyClicksById(nextDaily);
             setIsLoading(false);
@@ -212,10 +228,28 @@ export function useToolClickStats(): ToolClickStats {
 
   const { deltas7d, hasDeltaHistory } = useMemo(
     () => {
+      // ⚡ v3.6.69+ 優先用 Firestore dailyClicks 算過去 7 天加總（真實每日數據、跨裝置一致）
+      // 比 localStorage snapshot 比對更準 — 後者快照時機是「使用者打開首頁那刻」，
+      // 學生課堂用完就跳走不會幫忙記快照，導致「老師晚上才開首頁」一次性把整天 +30
+      // 全部納進 baseline，隔天就看不到差異（這是 5/28 真實踩雷的根因）
+      if (dailyClicksById.size > 0) {
+        const deltas = new Map<number, number>();
+        const today = new Date();
+        const sevenDaysAgo = new Date(today);
+        sevenDaysAgo.setDate(today.getDate() - 6); // 含今天共 7 天
+        const fromStr = todayStr(sevenDaysAgo);
+        const toStr = todayStr(today);
+        dailyClicksById.forEach((daily, toolId) => {
+          const sum = sumClicksInRange(daily, fromStr, toStr);
+          if (sum > 0) deltas.set(toolId, sum);
+        });
+        return { deltas7d: deltas, hasDeltaHistory: deltas.size > 0 };
+      }
+      // fallback：dailyClicks 還沒進來時用舊的 localStorage snapshot 邏輯
       const { deltas, hasHistory } = computeDeltas7d(clicksById, snapshots);
       return { deltas7d: deltas, hasDeltaHistory: hasHistory };
     },
-    [clicksById, snapshots]
+    [clicksById, snapshots, dailyClicksById]
   );
 
   return { clicksById, dailyClicksById, deltas7d, isLoading, hasDeltaHistory };
