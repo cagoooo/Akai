@@ -41,9 +41,17 @@ service cloud.firestore {
     }
 
     // 工具使用統計 - 所有人可讀，僅認證用戶可寫
+    // 🛡️ v3.6.69 防呆：docId 必須是純數字字串（"81" 不是 "tool_81"），totalClicks 必須是 int
+    //   過去踩過雙寫 doc 漂移（client direct write 寫 "tool_81" / callable 寫 "81" 分裂累計，
+    //   前端讀錯邊看不到學生點擊）— 加 rules 從寫入源頭擋掉異常命名
+    //   注意：callable incrementToolClick 走 admin SDK 不受 rules 限制
+    //         內部已有 1-200 範圍 + Number.isInteger 雙重檢查，這層 rules 只擋 client 寫入
     match /toolUsageStats/{toolId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if request.auth != null
+        && toolId.matches('^[1-9][0-9]{0,2}$')
+        && request.resource.data.totalClicks is int
+        && request.resource.data.totalClicks >= 0;
     }
 
     // 🆕 v3.6.49: 工具點擊事件記錄（細粒度，給 /admin 流量解析用）
