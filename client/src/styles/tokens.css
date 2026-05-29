@@ -91,6 +91,17 @@
 .sticker-card {
   transition: transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .35s;
 }
+/* hover hint chip：sticker-card 內任何 .use-hint 元素 desktop hover 才淡入 (v3.6.70) */
+.sticker-card .use-hint {
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity .25s ease, transform .25s ease;
+  pointer-events: none;
+}
+.sticker-card:hover .use-hint {
+  opacity: 1;
+  transform: translateX(0);
+}
 .sticker-card:hover {
   transform: rotate(0deg) translateY(-8px) !important;
   box-shadow: 0 3px 2px rgba(0,0,0,.06), 0 18px 30px -10px rgba(0,0,0,.28), 0 40px 60px -30px rgba(0,0,0,.22) !important;

@@ -15,11 +15,31 @@ interface Props {
   hasDeltaHistory?: boolean;
 }
 
+// 🔥 火等級設定（v3.6.70）：依過去 7 天新增點擊量分三段，讓 top 5 全部熱度梯度可視化
+//   delta >= 80 → 🔥🔥🔥 爆紅（深紅）
+//   delta >= 30 → 🔥🔥 急上升（橘紅）
+//   delta >= 10 → 🔥 上升中（黃橘）
+//   <  10      → 無徽章（避免噪音）
+const fireLevels = [
+  { threshold: 80, emoji: '🔥🔥🔥', label: '爆紅', bg: 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)' },
+  { threshold: 30, emoji: '🔥🔥', label: '急上升', bg: 'linear-gradient(135deg, #fb923c 0%, #c2410c 100%)' },
+  { threshold: 10, emoji: '🔥', label: '上升中', bg: 'linear-gradient(135deg, #fbbf24 0%, #d97706 100%)' },
+];
+
+function getFireLevel(delta: number) {
+  if (!Number.isFinite(delta) || delta < 10) return null;
+  for (const lv of fireLevels) {
+    if (delta >= lv.threshold) return lv;
+  }
+  return null;
+}
+
 /**
  * 🏆 本週 TOP 5 便利貼排行榜
  * - 從傳入 tools（已合併 Firestore 即時點擊數）取累計前 5 名
- * - 第 1/2/3 名：金 / 銀 / 銅膠帶徽章
- * - 「🔥 急上升」徽章：標記 7 日內新增點擊最多的工具（需 ≥3 點擊才顯示）
+ * - 全 5 名都有名次膠帶（金/銀/銅/鋁/銅紅），#4 #5 視覺份量略輕
+ * - 「🔥 火等級」徽章三段：爆紅 / 急上升 / 上升中（依 7 日新增點擊量梯度）
+ * - desktop hover 顯示「使用 →」hint 強化可發現性
  */
 export function BulletinLeaderboard({ tools, deltas7d, hasDeltaHistory }: Props) {
   const { trackToolUsage } = useToolTracking();
@@ -31,19 +51,6 @@ export function BulletinLeaderboard({ tools, deltas7d, hasDeltaHistory }: Props)
       .sort((a, b) => (b.totalClicks ?? 0) - (a.totalClicks ?? 0))
       .slice(0, 5);
   }, [tools]);
-
-  // 在前 5 名中找出 7 日新增最多的；至少要 ≥3 點擊才標 🔥
-  const risingId = useMemo(() => {
-    if (!hasDeltaHistory || !deltas7d || top5.length === 0) return null;
-    let best: { id: number; delta: number } | null = null;
-    for (const t of top5) {
-      const d = deltas7d.get(t.id) ?? 0;
-      if (d >= 3 && (best === null || d > best.delta)) {
-        best = { id: t.id, delta: d };
-      }
-    }
-    return best?.id ?? null;
-  }, [top5, deltas7d, hasDeltaHistory]);
 
   /**
    * 處理排行榜卡片點擊：
@@ -72,9 +79,10 @@ export function BulletinLeaderboard({ tools, deltas7d, hasDeltaHistory }: Props)
   ];
   const tilts = [-2, 1.5, -1, 2.5, -1.5];
 
-  // 金 / 銀 / 銅 膠帶顏色（前 3 名）
-  const medalColors = ['#f4c430', '#c8c8d0', '#cd7f32']; // gold / silver / bronze
-  const medalLabels = ['🥇 冠軍', '🥈 亞軍', '🥉 季軍'];
+  // 名次膠帶（v3.6.70：擴到 5 名，#4 #5 用淡鋁 / 淡銅紅）
+  const medalColors = ['#f4c430', '#c8c8d0', '#cd7f32', '#a8b5c2', '#b87333'];
+  const medalLabels = ['🥇 冠軍', '🥈 亞軍', '🥉 季軍', '🏅 第 4', '🏅 第 5'];
+  const medalOpacity = [0.95, 0.95, 0.95, 0.78, 0.78];
 
   return (
     <div data-tour="tool-rankings">
@@ -105,8 +113,8 @@ export function BulletinLeaderboard({ tools, deltas7d, hasDeltaHistory }: Props)
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {top5.map((tool, i) => {
-            const isRising = risingId === tool.id;
             const risingDelta = deltas7d?.get(tool.id) ?? 0;
+            const fireLevel = hasDeltaHistory ? getFireLevel(risingDelta) : null;
             return (
               <a
                 key={tool.id}
@@ -117,7 +125,7 @@ export function BulletinLeaderboard({ tools, deltas7d, hasDeltaHistory }: Props)
                 className="sticker-card"
                 aria-label={
                   `排名第 ${i + 1} 名：${tool.title}，${tool.totalClicks ?? 0} 次點擊` +
-                  (isRising ? `，本週新增 ${risingDelta} 次點擊（急上升）` : '')
+                  (fireLevel ? `，本週新增 ${risingDelta} 次點擊（${fireLevel.label}）` : '')
                 }
                 style={{
                   background: colors[i],
@@ -140,9 +148,8 @@ export function BulletinLeaderboard({ tools, deltas7d, hasDeltaHistory }: Props)
                   style={{ top: -7, left: 14 }}
                 />
 
-                {/* 金 / 銀 / 銅 膠帶（前 3 名才有，斜貼右上角） */}
-                {/* top: -16 讓膠帶飄在卡片頂端外，避免壓到標題尾巴 */}
-                {i < 3 && (
+                {/* 名次膠帶（v3.6.70 擴到 top 5；top: -16 讓膠帶飄在卡片頂端外，避免壓到標題尾巴） */}
+                {i < 5 && (
                   <div
                     style={{
                       position: 'absolute',
@@ -151,6 +158,7 @@ export function BulletinLeaderboard({ tools, deltas7d, hasDeltaHistory }: Props)
                       transform: 'rotate(8deg)',
                       pointerEvents: 'none',
                       zIndex: 2,
+                      opacity: medalOpacity[i],
                     }}
                   >
                     <Tape color={medalColors[i]} angle={0} width={60}>
@@ -159,15 +167,15 @@ export function BulletinLeaderboard({ tools, deltas7d, hasDeltaHistory }: Props)
                   </div>
                 )}
 
-                {/* 🔥 急上升徽章（左上角貼紙） */}
-                {isRising && (
+                {/* 🔥 火等級徽章三段（v3.6.70：依 7 日新增點擊量分爆紅/急上升/上升中） */}
+                {fireLevel && (
                   <div
                     style={{
                       position: 'absolute',
                       top: -12,
                       left: -6,
                       transform: 'rotate(-10deg)',
-                      background: 'linear-gradient(135deg, #ff7849 0%, #e63946 100%)',
+                      background: fireLevel.bg,
                       color: '#fff',
                       padding: '4px 10px',
                       borderRadius: 14,
@@ -180,7 +188,7 @@ export function BulletinLeaderboard({ tools, deltas7d, hasDeltaHistory }: Props)
                       whiteSpace: 'nowrap',
                     }}
                   >
-                    🔥 急上升 +{risingDelta}
+                    {fireLevel.emoji} {fireLevel.label}
                   </div>
                 )}
 
@@ -197,8 +205,8 @@ export function BulletinLeaderboard({ tools, deltas7d, hasDeltaHistory }: Props)
                   #{i + 1}
                 </div>
                 <div style={{ fontSize: 28 }}>{getToolEmoji(tool)}</div>
-                {/* 前 3 名右側保留 paddingRight 讓位給金/銀/銅膠帶 */}
-                <div style={{ flex: 1, minWidth: 0, paddingRight: i < 3 ? 38 : 0 }}>
+                {/* top 5 都有名次膠帶 → 全部保留 paddingRight 讓位 */}
+                <div style={{ flex: 1, minWidth: 0, paddingRight: i < 5 ? 38 : 0 }}>
                   <div
                     style={{
                       fontFamily: tokens.font.tc,
@@ -224,7 +232,7 @@ export function BulletinLeaderboard({ tools, deltas7d, hasDeltaHistory }: Props)
                     }}
                   >
                     <span>👆 {(tool.totalClicks ?? 0).toLocaleString()} clicks</span>
-                    {hasDeltaHistory && !isRising && (
+                    {hasDeltaHistory && (
                       risingDelta > 0 ? (
                         <span style={{ color: '#c2410c', fontWeight: 700 }}>
                           +{risingDelta}/週
@@ -240,6 +248,25 @@ export function BulletinLeaderboard({ tools, deltas7d, hasDeltaHistory }: Props)
                     )}
                   </div>
                 </div>
+
+                {/* desktop hover hint「使用 →」(v3.6.70：強化可發現性，觸控裝置由 CSS hidden) */}
+                <span
+                  className="use-hint"
+                  aria-hidden="true"
+                  style={{
+                    fontFamily: tokens.font.en,
+                    fontSize: 11,
+                    fontWeight: 700,
+                    color: tokens.ink,
+                    background: 'rgba(255,255,255,.7)',
+                    padding: '4px 10px',
+                    borderRadius: 14,
+                    whiteSpace: 'nowrap',
+                    marginLeft: 4,
+                  }}
+                >
+                  使用 →
+                </span>
               </a>
             );
           })}
