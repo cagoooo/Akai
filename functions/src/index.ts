@@ -27,6 +27,7 @@ export { lineTalkWebhook } from "./lineTalkWebhook";
 
 // 🆕 v3.6.69: 一次性修復 toolUsageStats 雙寫 doc 漂移（admin only callable）
 // 把 tool_* 舊 doc 合進對應 ${toolId} 新 doc 再刪除 — 從 admin browser console 呼叫
+// （runOnce HTTP 版已於 2026-05-29 跑完 99 個 doc 合併，立刻撤掉避免長期暴露）
 export { migrateToolStatsMerge } from "./migrateToolStatsMerge";
 
 // 對外公開站點（供 LINE 卡片裡的「打開查看」按鈕用）

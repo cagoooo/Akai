@@ -22,6 +22,98 @@
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import * as admin from "firebase-admin";
 
+/**
+ * 內部 helper：執行 migration（dryRun mode 不寫入；non-dryRun mode 用 batch 合併 + 刪舊）
+ * 設計為 idempotent — 跑過後 tool_* 就被刪掉，再跑也是 no-op
+ */
+async function runMigration(dryRun: boolean) {
+    const col = admin.firestore().collection("toolUsageStats");
+    const allDocs = await col.get();
+
+    const oldDocs: Array<{ docId: string; toolId: number; data: any }> = [];
+    const newDocsByToolId = new Map<number, { docId: string; data: any }>();
+
+    allDocs.forEach((d) => {
+        const data = d.data();
+        const oldMatch = d.id.match(/^tool_(\d+)$/);
+        if (oldMatch) {
+            oldDocs.push({ docId: d.id, toolId: parseInt(oldMatch[1], 10), data });
+        } else if (/^\d+$/.test(d.id)) {
+            newDocsByToolId.set(parseInt(d.id, 10), { docId: d.id, data });
+        }
+    });
+
+    const plan = oldDocs.map((o) => {
+        const newDoc = newDocsByToolId.get(o.toolId);
+        const oldTotal = Number(o.data.totalClicks) || 0;
+        const newTotal = Number(newDoc?.data.totalClicks) || 0;
+        return {
+            toolId: o.toolId,
+            oldDocId: o.docId,
+            oldTotalClicks: oldTotal,
+            newDocId: newDoc?.docId ?? String(o.toolId),
+            newTotalClicks: newTotal,
+            mergedTotalClicks: oldTotal + newTotal,
+            oldHasDailyClicks: !!o.data.dailyClicks,
+        };
+    });
+
+    if (dryRun) {
+        return {
+            mode: "dry-run",
+            summary: {
+                oldDocCount: oldDocs.length,
+                newDocCount: newDocsByToolId.size,
+                toolIdsToMerge: plan.length,
+                totalClicksGainedAfterMerge: plan.reduce((s, p) => s + p.oldTotalClicks, 0),
+            },
+            plan: plan.sort((a, b) => b.mergedTotalClicks - a.mergedTotalClicks),
+        };
+    }
+
+    if (oldDocs.length === 0) {
+        return { mode: "execute", summary: { merged: 0, errors: 0, note: "no tool_* doc to migrate (already done?)" } };
+    }
+
+    const batch = admin.firestore().batch();
+    const results: Array<{ toolId: number; status: string }> = [];
+
+    for (const o of oldDocs) {
+        const newDocRef = col.doc(String(o.toolId));
+        const oldDailyClicks = o.data.dailyClicks || {};
+        const dailyClicksMerge: Record<string, any> = {};
+        for (const [k, v] of Object.entries(oldDailyClicks)) {
+            if (/^\d{4}-\d{2}-\d{2}$/.test(k) && typeof v === "number" && v > 0) {
+                dailyClicksMerge[k] = admin.firestore.FieldValue.increment(v);
+            }
+        }
+        batch.set(
+            newDocRef,
+            {
+                totalClicks: admin.firestore.FieldValue.increment(Number(o.data.totalClicks) || 0),
+                ...(Object.keys(dailyClicksMerge).length > 0 ? { dailyClicks: dailyClicksMerge } : {}),
+            },
+            { merge: true }
+        );
+        batch.delete(col.doc(o.docId));
+        results.push({ toolId: o.toolId, status: "queued" });
+    }
+
+    await batch.commit();
+    results.forEach((r) => (r.status = "ok"));
+
+    return {
+        mode: "execute",
+        summary: { merged: results.length, errors: 0 },
+        results,
+    };
+}
+
+// 2026-05-29 註：migrateToolStatsRunOnce HTTP onRequest 版本已跑完並撤除。
+//   執行結果：99 個 tool_* 合併進對應 ${toolId} 新 doc，0 errors，回收 2,437 click 累計。
+//   驗證：toolUsageStats 內 tool_* 殘留 = 0，只剩純數字 docId。
+//   未來如有殘留 schema 漂移需重跑，把 migrateToolStatsMerge callable 從 admin browser console invoke 即可。
+
 export const migrateToolStatsMerge = onCall(
     {
         region: "asia-east1",
