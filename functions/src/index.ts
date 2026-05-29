@@ -30,6 +30,12 @@ export { lineTalkWebhook } from "./lineTalkWebhook";
 // （runOnce HTTP 版已於 2026-05-29 跑完 99 個 doc 合併，立刻撤掉避免長期暴露）
 export { migrateToolStatsMerge } from "./migrateToolStatsMerge";
 
+// 🆕 v3.6.70: Schema 健檢 admin callable（給 AnalyticsDashboard 健檢區塊用）
+export { healthCheckToolUsageStats } from "./healthCheckToolUsageStats";
+
+// 🆕 v3.6.70: Schema 漂移即時告警 onWrite trigger（推 LINE 給管理員、24 小時 dedup）
+export { monitorToolStatsSchema } from "./monitorToolStatsSchema";
+
 // 對外公開站點（供 LINE 卡片裡的「打開查看」按鈕用）
 const SITE_BASE = "https://cagoooo.github.io/Akai";
 
