@@ -9,7 +9,7 @@
  * 資料源：toolClickEvents collection（v3.6.49+ 才開始累積）
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { BarChart, PieChart } from '@/components/ui/charts';
@@ -107,6 +107,32 @@ export function ToolFlowAnalysisPanel({ toolTitles }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<FlowResult | null>(null);
+  // v3.6.71 stageBreakdown：選 toolId 變動時 fetch toolUsageStats/{toolId}.stageBreakdown
+  // 目前只有 toolId=81 cockpit 會有 stage 切片（27 個教學單元各算一份）
+  const [stageBreakdown, setStageBreakdown] = useState<Record<string, number> | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    setStageBreakdown(null);
+    (async () => {
+      try {
+        const { db, isFirebaseAvailable } = await import('@/lib/firebase');
+        if (!isFirebaseAvailable() || !db) return;
+        const { doc, getDoc } = await import('firebase/firestore');
+        const snap = await getDoc(doc(db, 'toolUsageStats', String(toolId)));
+        if (cancelled) return;
+        const sb = snap.data()?.stageBreakdown;
+        if (sb && typeof sb === 'object' && Object.keys(sb).length > 0) {
+          setStageBreakdown(sb as Record<string, number>);
+        }
+      } catch (e) {
+        console.warn('[stageBreakdown] fetch failed', e);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [toolId]);
 
   // 工具下拉選項（排序：ID 升序）
   const toolOptions = useMemo(
@@ -365,12 +391,112 @@ export function ToolFlowAnalysisPanel({ toolTitles }: Props) {
                     data={entriesToPieData(data.countryDist, COUNTRY_LABEL)}
                   />
                 </div>
+
+                {/* v3.6.71 Stage 熱度排名（cockpit toolId=81 才有，其他工具自動隱藏） */}
+                <StageBreakdownSection stageBreakdown={stageBreakdown} />
               </>
             )}
           </>
         )}
       </CardContent>
     </Card>
+  );
+}
+
+// ── Stage 熱度排名（v3.6.71）─────────────────────────────────────
+// 來源：toolUsageStats/{toolId}.stageBreakdown ({ stageId: count, ... })
+// 目前只有 cockpit toolId=81 的 27 個教學單元會累積；其他工具自動隱藏
+function StageBreakdownSection({ stageBreakdown }: { stageBreakdown: Record<string, number> | null }) {
+  if (!stageBreakdown || Object.keys(stageBreakdown).length === 0) return null;
+  const sorted = Object.entries(stageBreakdown).sort((a, b) => b[1] - a[1]);
+  const max = sorted[0][1];
+  const total = sorted.reduce((s, [, v]) => s + v, 0);
+
+  return (
+    <div style={{ marginTop: 20 }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: 10,
+          paddingBottom: 6,
+          borderBottom: '2px solid #6366f1',
+        }}
+      >
+        <div style={{ fontSize: 14, fontWeight: 700, color: '#1f2937' }}>
+          📊 Stage 熱度排名（cockpit 教學單元細粒度）
+        </div>
+        <div style={{ fontSize: 11, color: '#6b7280' }}>
+          {sorted.length} 個 stage · 共 {total.toLocaleString()} 次累計
+        </div>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        {sorted.map(([stage, count], i) => (
+          <div key={stage} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span
+              style={{
+                minWidth: 32,
+                fontSize: 11,
+                color: '#9ca3af',
+                fontFamily: 'monospace',
+                textAlign: 'right',
+              }}
+            >
+              #{i + 1}
+            </span>
+            <span
+              style={{
+                minWidth: 180,
+                fontSize: 12,
+                color: '#374151',
+                fontFamily: 'monospace',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+              title={stage}
+            >
+              {stage}
+            </span>
+            <div
+              style={{
+                flex: 1,
+                height: 22,
+                background: '#f3f4f6',
+                borderRadius: 4,
+                position: 'relative',
+                overflow: 'hidden',
+              }}
+            >
+              <div
+                style={{
+                  width: `${(count / max) * 100}%`,
+                  height: '100%',
+                  background: 'linear-gradient(90deg, #6366f1, #8b5cf6)',
+                  borderRadius: 4,
+                  transition: 'width 0.4s ease',
+                }}
+              />
+              <span
+                style={{
+                  position: 'absolute',
+                  right: 6,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  fontSize: 11,
+                  fontWeight: 700,
+                  color: '#1f2937',
+                  textShadow: '0 0 3px #fff',
+                }}
+              >
+                {count.toLocaleString()}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
