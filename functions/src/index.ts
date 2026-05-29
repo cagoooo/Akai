@@ -1,5 +1,5 @@
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
-import { onCall, HttpsError } from "firebase-functions/v2/https";
+import { onCall, onRequest, HttpsError } from "firebase-functions/v2/https";
 import * as admin from "firebase-admin";
 import { pushFlexToAdmin } from "./lib/lineNotify";
 
@@ -318,26 +318,23 @@ function detectCountry(rawReq: any): string {
  *   - device    ('mobile'|'tablet'|'desktop')
  *   - sessionId (client 端 localStorage 持久 UUID)
  */
-export const incrementToolClick = onCall(
-    {
-        region: "asia-east1", // 與 embedQuery 對齊；台灣 latency 最低
-        memory: "256MiB",
-        maxInstances: 10,
-    },
-    async (request) => {
-    const toolId = request.data?.toolId;
-
-    if (typeof toolId !== "number" || !Number.isInteger(toolId) || toolId < 1 || toolId > 200) {
-        throw new HttpsError(
-            "invalid-argument",
-            "toolId must be an integer between 1 and 200."
-        );
-    }
+/**
+ * 內部 helper：把工具點擊寫進 Firestore（toolUsageStats + toolClickEvents）
+ * 供 incrementToolClick (onCall) 與 beaconToolClick (onRequest HTTP) 共用
+ */
+async function recordToolClickInternal(opts: {
+    toolId: number;
+    rawReferrer: string;
+    device: string;
+    sessionId: string;
+    rawRequest: any;
+    source?: string; // 'callable' | 'beacon-cockpit' 等，附在 sessionId 區辨來源
+}): Promise<{ success: boolean; toolId: number }> {
+    const { toolId, rawReferrer, device: deviceRaw, sessionId: sidRaw, rawRequest, source } = opts;
 
     const docRef = admin.firestore().collection("toolUsageStats").doc(String(toolId));
     const today = todayInTaipei();
     const now = new Date();
-    // Asia/Taipei 小時（UTC+8）
     const hourTW = (now.getUTCHours() + 8) % 24;
 
     // 1. 累計 doc (toolUsageStats)
@@ -350,14 +347,14 @@ export const incrementToolClick = onCall(
         { merge: true }
     );
 
-    // 2. event log (toolClickEvents) — 從 client data + rawRequest headers 拼湊 context
-    const rawRef = request.data?.referrer;
-    const { category: referrer, host: referrerHost } = classifyReferrer(rawRef);
-    const deviceRaw = String(request.data?.device || "").toLowerCase();
+    // 2. event log (toolClickEvents)
+    const { category: referrer, host: referrerHost } = classifyReferrer(rawReferrer);
+    const dRaw = String(deviceRaw || "").toLowerCase();
     const device: "mobile" | "tablet" | "desktop" =
-        deviceRaw === "mobile" || deviceRaw === "tablet" || deviceRaw === "desktop" ? deviceRaw : "desktop";
-    const sessionId = String(request.data?.sessionId || "").slice(0, 64) || "anon";
-    const country = detectCountry(request.rawRequest);
+        dRaw === "mobile" || dRaw === "tablet" || dRaw === "desktop" ? (dRaw as any) : "desktop";
+    const baseSid = String(sidRaw || "").slice(0, 56) || "anon";
+    const sessionId = source ? `${source}:${baseSid}`.slice(0, 64) : baseSid;
+    const country = detectCountry(rawRequest);
 
     const eventPromise = admin
         .firestore()
@@ -374,11 +371,79 @@ export const incrementToolClick = onCall(
             sessionId,
         });
 
-    // 兩者並行；event log 失敗不影響主流程（accumulate 才是 source-of-truth）
     await accumulatePromise;
     eventPromise.catch((err) => console.warn("[toolClickEvents] write failed:", err));
 
     return { success: true, toolId };
+}
+
+export const incrementToolClick = onCall(
+    {
+        region: "asia-east1", // 與 embedQuery 對齊；台灣 latency 最低
+        memory: "256MiB",
+        maxInstances: 10,
+    },
+    async (request) => {
+    const toolId = request.data?.toolId;
+
+    if (typeof toolId !== "number" || !Number.isInteger(toolId) || toolId < 1 || toolId > 200) {
+        throw new HttpsError(
+            "invalid-argument",
+            "toolId must be an integer between 1 and 200."
+        );
+    }
+
+    return await recordToolClickInternal({
+        toolId,
+        rawReferrer: request.data?.referrer || "",
+        device: String(request.data?.device || ""),
+        sessionId: String(request.data?.sessionId || ""),
+        rawRequest: request.rawRequest,
+    });
+    }
+);
+
+/**
+ * beaconToolClick — HTTP onRequest 版本，供外部站點（例如 cockpit）用
+ * `new Image().src` 像素 beacon 即可呼叫，零 CORS 問題、不需 preflight
+ *
+ * GET /beaconToolClick?toolId=81&referrer=...&device=mobile&sessionId=...
+ * → 204 No Content（成功） / 400 invalid toolId / 500 internal error
+ *
+ * 防 abuse：建議呼叫端用 sessionStorage 去重（同分頁不重複呼叫）；
+ * 後端不再額外節流 — 同一 sessionId 仍會記到 toolClickEvents 供後台分析。
+ */
+export const beaconToolClick = onRequest(
+    {
+        region: "asia-east1",
+        memory: "256MiB",
+        maxInstances: 10,
+        cors: true, // 開放所有來源；只能 +1 totalClicks 沒敏感資料
+    },
+    async (req, res) => {
+        const toolIdRaw = req.query.toolId ?? (req.body as any)?.toolId;
+        const toolId = Number(toolIdRaw);
+        if (!Number.isInteger(toolId) || toolId < 1 || toolId > 200) {
+            res.status(400).send("invalid toolId");
+            return;
+        }
+        try {
+            await recordToolClickInternal({
+                toolId,
+                rawReferrer:
+                    String(req.query.referrer || (req.body as any)?.referrer || "") ||
+                    (req.get("referer") || ""),
+                device: String(req.query.device || (req.body as any)?.device || "desktop"),
+                sessionId: String(req.query.sessionId || (req.body as any)?.sessionId || ""),
+                rawRequest: req,
+                source: "beacon",
+            });
+            // 204 No Content — beacon 不關心回應內容
+            res.status(204).send();
+        } catch (err: any) {
+            console.error("beaconToolClick failed:", err);
+            res.status(500).send("internal error");
+        }
     }
 );
 
