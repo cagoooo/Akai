@@ -29,7 +29,7 @@ const DEFAULT_KEYWORDS = [
     '石門國小',
 ];
 const SITE_URL = 'https://cagoooo.github.io/Akai';
-const DEFAULT_IMAGE = `${SITE_URL}/og-preview-0cc6358c.png`;
+const DEFAULT_IMAGE = `${SITE_URL}/og-preview-053cc3f3.png`;
 
 /**
  * SEO Head 元件

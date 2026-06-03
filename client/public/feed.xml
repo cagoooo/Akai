@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 101+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 102+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Thu, 28 May 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Thu, 28 May 2026 12:42:53 GMT</lastBuildDate>
+    <pubDate>Wed, 03 Jun 2026 06:36:58 GMT</pubDate>
+    <lastBuildDate>Wed, 03 Jun 2026 06:44:39 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,27 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：外星人入侵·保衛石門 — 復古太空射擊 × 全校排行榜</title>
+      <link>https://cagoooo.github.io/Akai/tool/102</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/102</guid>
+      <pubDate>Wed, 03 Jun 2026 06:36:58 GMT</pubDate>
+      <description>駕駛地球最後一艘戰機，擊退一波波外星艦隊！復古像素風太空射擊：三種難度、王關 Boss 母艦、火力強化與護盾道具、連擊加成。石門校徽開場 +「保衛石門」主題，可加入主畫面當 App、離線可玩，內建全校跨裝置排行榜。桌機鍵盤 + 手機觸控全支援，下課十分鐘剛好打一輪。</description>
+      <category>太空射擊</category>
+      <category>外星人入侵</category>
+      <category>復古像素</category>
+      <category>全校排行榜</category>
+      <category>PWA 離線</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#102 外星人入侵·保衛石門：復古太空射擊 × 全校排行榜 × 可離線的下課十分鐘</title>
+      <link>https://cagoooo.github.io/Akai/blog/alien-invasion-102-defend-shihmen-space-shooter</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/alien-invasion-102-defend-shihmen-space-shooter</guid>
+      <pubDate>Wed, 03 Jun 2026 00:00:00 GMT</pubDate>
+      <description>#102 外星人入侵是阿凱寫給孩子的復古太空射擊遊戲：純 HTML5 Canvas 單檔零相依，三種難度、王關 Boss 母艦、火力道具與連擊加成，石門校徽開場、可加入主畫面當 App、離線也能玩，內建全校跨裝置排行榜，桌機鍵盤 + 手機觸控全支援。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
     <item>
       <title>🆕 新工具：3D 迷宮冒險遊戲 — 第一人稱光球收集 × 全班排行榜</title>
       <link>https://cagoooo.github.io/Akai/tool/101</link>
@@ -276,24 +297,6 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/meeting-24-end-semester-record</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
       <description>#24 真實名稱是「桃園市龍潭區石門國小 114 學年度上學期期末校務會議紀錄」— 用純 Tailwind + Noto Sans TC + Lucide 把整份會議紀錄做成 6 章節互動式 SPA，嵌進 Google Sites Embedded HTML。含張定貴校長致詞 / 家長會長致詞 / 自治市長潘宥睿致詞 / 教務處報告 / 學務處報告 / 提案討論 / 附件規約 / 下學期重要行事簡曆。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#25 國小國語演說特訓班（進階版）：Gemini 2.5 Flash + Lucide 的單檔入門練習工具（#67 Pro 版前身）</title>
-      <link>https://cagoooo.github.io/Akai/blog/speech-25-training-class-entry</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/speech-25-training-class-entry</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#25 真實名稱「國小國語演說特訓班（進階版）」是阿凱早期版 — 用 Gemini 2.5 Flash + Lucide 做的 55KB 單檔 HTML，嵌進 Google Sites Embedded HTML。題庫 + 「儲存並關閉」+「隨機題庫」按鈕，是 #67 Pro 版（5705 行 + Web Speech + 雷達圖 + 老師評分量表）的前身入門版。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#26 九九乘法大冒險：Web Audio + Tailwind + Lucide 純前端遊戲化練習（無 LLM 也能做好工具）</title>
-      <link>https://cagoooo.github.io/Akai/blog/multiplication-26-adventure</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/multiplication-26-adventure</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#26 真實名稱「九九乘法大冒險」是純前端遊戲化練習器 — Tailwind + Lucide + **Web Audio API**（OscillatorNode 合成音效）做的 25KB 單檔 HTML，嵌進 Google Sites。3 狀態反饋（答對了 / 哎呀答錯了 / 挑戰完成）+ 計分計時，**沒用 LLM** — 證明「好的教學工具不一定需要 AI」。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
