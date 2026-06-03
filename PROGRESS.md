@@ -1,13 +1,38 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.70` (本機/CI) · 工具總數 **100 個** 🎉🎊🥳
-- **里程碑**: **2026-05-29 P0+P1 大滿貫：beacon 擴散 4 工具 + 健檢雙保險 + 排行榜 UI 三件套 + cockpit 27 stage 細粒度** — v3.6.69 修完地基後乘勝追擊，**1 個 session 內把 8 個 task 全部到位**
-- **最後更新狀態**: v3.6.70 — 排行榜 UI 升級三件套（火等級徽章 🔥/🔥🔥/🔥🔥🔥 三段 + #4 #5 加鋁/銅紅淡膠帶 + desktop hover「使用 →」hint）；beacon 擴散 4 個工具（schedule #2 / class #4 / files #5 / poet #3 各加 beacon snippet，#3 是 Next.js layout.tsx 注入）；**Schema 防呆雙保險**（healthCheckToolUsageStats admin callable + AnalyticsDashboard HealthCheckPanel UI 主動健檢 / monitorToolStatsSchema onWrite trigger + 24h dedup LINE Flex 告警被動監控）；cockpit 27 stage 細粒度 beacon（後端 beaconToolClick 加 stageId 支援 + toolUsageStats.stageBreakdown 寫入 + Node script 一次性批量注入）；發現 P1-4 流量來源 dashboard ToolFlowAnalysisPanel 445 行已存在無需重做。
+- **當前版本**: `v3.6.71` (本機/CI) · 工具總數 **102 個** 🎮🚀
+- **里程碑**: **2026-06-03 新增 #102 外星人入侵·保衛石門** — 使用者一句「設計一個外星人入侵的射擊遊戲」，一路長成完整作品：單檔 HTML5 Canvas 射擊 → PWA 離線 → Firebase 全校跨裝置排行榜 → 收進工具集（卡片 + 手寫長文 + 生態系同步）。遊戲本體獨立 repo [cagoooo/alien-invasion](https://github.com/cagoooo/alien-invasion)。
+- **最後更新狀態**: v3.6.71 — 新增工具 #102「外星人入侵·保衛石門」（games 類別 / Rocket icon）：復古太空射擊 × 全校排行榜，含 1024 預覽圖 + 1200×630 OG 圖 + 手寫長文 POST_102（三段式教學情境，配對 #101 #97）；首頁部署生態系自動同步手寫長文 102 → 103 篇；排行榜後端安全重用 penguin-leaderboard 專案的獨立 `alienInvasion` 集合（合併規則保留原功能）。順手對齊 server/data/tools.json 補回遺漏的 #100 索引神器（client 102 / server 101 → 兩邊 102）。
+- **前一版**: v3.6.70 — 排行榜 UI 升級三件套（火等級徽章三段 + #4 #5 淡膠帶 + hover hint）；beacon 擴散 4 工具；Schema 防呆雙保險；cockpit 27 stage 細粒度。
 
 ## 📌 完成功能總覽
 
-### `v3.6.70` (最新 · 🎯 P0+P1 大滿貫：8 個 task 一個 session 內到位)
+### `v3.6.71` (最新 · 🎮 新增 #102 外星人入侵·保衛石門 + 雙 tools.json 對齊)
+
+**🎯 動機**
+使用者一句「設計一個外星人入侵的射擊遊戲」，從零做成完整可玩作品，再依序加上 PWA、雲端排行榜，最後收進工具集。
+
+**🎮 新工具 #102（commit [`228d30d`](https://github.com/cagoooo/Akai/commit/228d30d)）**
+
+| 項目 | 內容 |
+|---|---|
+| 工具卡片 | client + server tools.json，games 類別 / Rocket icon / 12 tags |
+| 預覽圖 | Playwright 截遊戲開始畫面（石門校徽入鏡）→ 1024×1024 webp |
+| OG 圖 | `generate-unified-og.mjs 102` → cork 便利貼風 1200×630 |
+| 手寫長文 | POST_102 三段式：純 Canvas 單檔 / PWA 離線 / 全校榜健康競爭 / 石門主題，配對 #101 #97 |
+| 生態系 | `sync-deployment-ecosystem` 自動更新手寫長文 102 → 103 篇 |
+
+遊戲本體（獨立 repo [cagoooo/alien-invasion](https://github.com/cagoooo/alien-invasion)）：單檔 HTML5 Canvas + PWA（可安裝/離線）+ Firebase 匿名登入排行榜，後端**安全重用** penguin-leaderboard 的獨立 `alienInvasion` 集合（合併規則保留 leaderboard/nicknames 原功能）。
+
+**🔧 雙 tools.json 對齊（commit [`bdb355b`](https://github.com/cagoooo/Akai/commit/bdb355b)）**
+`server/data/tools.json` 先前遺漏 #100 索引神器（client 102 / server 101），從 client 複製 entry 依 ID 插入，兩邊 ID 完全一致（各 102）。
+
+> 📎 後續：遊戲端的「未來優化/可開發功能藍圖」見 alien-invasion repo 的 `PROGRESS.md`（8 大類 + 三波落地順序）。
+
+---
+
+### `v3.6.70` (🎯 P0+P1 大滿貫：8 個 task 一個 session 內到位)
 
 **🎯 動機**
 v3.6.69 把雙寫 doc 漂移地基修好後，使用者明確要做完 FUTURE_OPTIMIZATION_V3.6.69.md 列的 P0+P1 全部 8 個 task。**一個 session 內全部完成 + deploy + verify**，共產出 8 個 commit 跨 5 個 repo（Akai / it-cockpit / schedule / class / files / PhotoPoet）。
