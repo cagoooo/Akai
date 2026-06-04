@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 103+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 104+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Thu, 04 Jun 2026 06:04:45 GMT</pubDate>
-    <lastBuildDate>Thu, 04 Jun 2026 06:09:22 GMT</lastBuildDate>
+    <pubDate>Thu, 04 Jun 2026 06:16:09 GMT</pubDate>
+    <lastBuildDate>Thu, 04 Jun 2026 06:23:18 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,18 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：台灣官方資料庫 Twinkle-Hub — 把台灣官方資料接進 AI 助教</title>
+      <link>https://cagoooo.github.io/Akai/tool/104</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/104</guid>
+      <pubDate>Thu, 04 Jun 2026 06:16:09 GMT</pubDate>
+      <description>讓 AI 助教「直接查台灣官方來源再回答」的資料橋 MCP 服務：國定假日補班、農曆節氣、簡繁轉換、地址郵遞區號、身分證／統編格式驗證、6.4 萬份國家考試考古題與政府開放資料，65 個現成工具一次到位。申請金鑰 → 一鍵安裝 → 重開即用，老師備課出題、學生查在地資料都更踏實。相容任何支援 MCP 的 AI 客戶端，基本查詢免費。</description>
+      <category>台灣官方資料</category>
+      <category>MCP 服務</category>
+      <category>AI 助教</category>
+      <category>國考考古題</category>
+      <category>國定假日</category>
+    </item>
     <item>
       <title>🆕 新工具：AI Agent 的 Web 技能雙引擎 — Playwright × Webwright 一頁讀懂</title>
       <link>https://cagoooo.github.io/Akai/tool/103</link>
@@ -36,6 +48,15 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/web-skill-dual-engine-103-playwright-webwright</guid>
       <pubDate>Thu, 04 Jun 2026 00:00:00 GMT</pubDate>
       <description>#103 是阿凱寫給「聽過名詞、卻不知道差在哪」的人的一頁式科普頁：Playwright 是動手操作的引擎、Webwright 是動腦規劃的引擎，合起來才是完整的 Web Agent。用日記體 + 松鼠吉祥物 + 自動填表、公文歸檔的真實情境，把硬核技術講到國小老師也看得懂。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#104 台灣官方資料庫 Twinkle-Hub：讓 AI 助教「先查官方資料、再回答你」</title>
+      <link>https://cagoooo.github.io/Akai/blog/twinkle-hub-104-taiwan-official-data-mcp</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/twinkle-hub-104-taiwan-official-data-mcp</guid>
+      <pubDate>Thu, 04 Jun 2026 00:00:00 GMT</pubDate>
+      <description>#104 介紹一座「資料橋」MCP 服務 Twinkle Hub：把國定假日、農曆節氣、簡繁轉換、郵遞區號、6.4 萬份國考考古題與政府開放資料接進 Claude 等 AI 助教，65 個現成工具，讓 AI 不再「憑記憶」答錯台灣在地問題。申請金鑰、一鍵安裝、重開即用，老師備課出題、學生查資料都更踏實。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
@@ -282,24 +303,6 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/words-79-sarcastic-dictionary</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
       <description>#79 漢語新解絕對不是查字典工具。輸入任何詞 → AI 用王爾德/魯迅/羅永浩三人格混合風格，給你一段 150 字諷刺式新解 + 水墨蓋章畫卷。國語延伸教學的批判思考神器。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#97 MBTI 校園奇遇記：用 47 個 RPG 場景偷偷塞 SDG 多元議題的人格測驗</title>
-      <link>https://cagoooo.github.io/Akai/blog/mbti-97-campus-adventure-rpg</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/mbti-97-campus-adventure-rpg</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#97 MBTI 校園奇遇記不是傳統勾選題 MBTI 測驗，是 47 個校園 RPG 場景 + 12 個多元背景 NPC（客家、新住民、同志家庭、原住民…）+ 16 個結局頁。一鍵 fork 模板讓其他學校 3 分鐘自架。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#94 封面接故事：用 Gemini 2.5 把 MV 封面接成 8 種風格 25 秒分鏡，再用瀏覽器 ffmpeg.wasm 串成短片</title>
-      <link>https://cagoooo.github.io/Akai/blog/music-cover-storyboard-94</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/music-cover-storyboard-94</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#94 封面接故事是給音樂課 / 視藝課 / 媒體素養課的 AI 創作教學駕駛艙。上傳 MV → 抓封面 → AI 接 4-6 段 5 秒分鏡 → 跳 8 大 AI 影片平台產畫面 → 瀏覽器內串成完整短片。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
