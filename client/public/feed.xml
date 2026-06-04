@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 104+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 105+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Thu, 04 Jun 2026 06:16:09 GMT</pubDate>
-    <lastBuildDate>Thu, 04 Jun 2026 06:41:43 GMT</lastBuildDate>
+    <pubDate>Thu, 04 Jun 2026 09:44:38 GMT</pubDate>
+    <lastBuildDate>Thu, 04 Jun 2026 09:47:12 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,18 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：臺灣主權 AI 訓練語料庫 × 石門國小 — 把國家級本土語料變成校園教材</title>
+      <link>https://cagoooo.github.io/Akai/tool/105</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/105</guid>
+      <pubDate>Thu, 04 Jun 2026 09:44:38 GMT</pubDate>
+      <description>國家耗十年、集 265 個機關蒐集的 6 億 tokens 本土語料，從「只拿來餵 AI」變成「師生家長共用的教材庫」。九大教育主題、4,554 筆語料一鍵探索，每筆都標課綱領域與授權來源；還能用自備的免費 Gemini 金鑰，即時生成台語／客語／國語學習單與繪本腳本。數位發展部 × 桃園市龍潭區石門國民小學阿凱老師打造的「鱻本土 AI 共學站」。</description>
+      <category>臺灣主權 AI</category>
+      <category>本土語料庫</category>
+      <category>國家級開放資料</category>
+      <category>教學素材庫</category>
+      <category>數位發展部</category>
+    </item>
     <item>
       <title>🆕 新工具：台灣官方資料庫 Twinkle-Hub — 把台灣官方資料接進 AI 助教</title>
       <link>https://cagoooo.github.io/Akai/tool/104</link>
@@ -57,6 +69,15 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/twinkle-hub-104-taiwan-official-data-mcp</guid>
       <pubDate>Thu, 04 Jun 2026 00:00:00 GMT</pubDate>
       <description>#104 介紹一座「資料橋」MCP 服務 Twinkle Hub：把國定假日、農曆節氣、簡繁轉換、郵遞區號、6.4 萬份國考考古題與政府開放資料接進 Claude 等 AI 助教，65 個現成工具，讓 AI 不再「憑記憶」答錯台灣在地問題。申請金鑰、一鍵安裝、重開即用，老師備課出題、學生查資料都更踏實。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#105 臺灣主權 AI 訓練語料庫 × 石門國小：把「國家拿去訓練 AI 的語料」變成孩子的教材</title>
+      <link>https://cagoooo.github.io/Akai/blog/taiwan-sovereign-ai-corpus-105-shimen-edu</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/taiwan-sovereign-ai-corpus-105-shimen-edu</guid>
+      <pubDate>Thu, 04 Jun 2026 00:00:00 GMT</pubDate>
+      <description>數位發展部花十年、集 265 個機關蒐集了 6 億 tokens 的臺灣本土語料，本來是拿去餵 AI 模型的。#105 是石門國小阿凱老師把它「教育轉化」的共學站：九大主題、4,554 筆語料一鍵探索，每筆標課綱與來源，還能用自備的免費 Gemini 生成台語／客語學習單與繪本腳本。國家的語料，第一次真正走進國小教室。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
@@ -285,24 +306,6 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/classroom-interaction-11-easy</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
       <description>#11 不只是「投票 + 文字雲」 — 是九大互動模式（搶答 / 繪圖板 / 是非 / 選擇 / 問答 / 互評 / **PIRLS 閱讀招牌** / 排序 / 配對）合體 SaaS。234 KB 單檔 Akailao v3.8.9 + Gemini 2.5 Flash 拍課本自動出 PIRLS 題 + 每位老師自架 Firebase（資料自主）+ set.html 配置生成器（降門檻）。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#87 PIRLS Pro QuestionCraft：把舊版 HTML 單檔砍掉重練成 Next.js + Cloud Functions 的閱讀素養出題神器</title>
-      <link>https://cagoooo.github.io/Akai/blog/pirls-87-questioncraft-rewrite</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/pirls-87-questioncraft-rewrite</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#87 PIRLS QuestionCraft 是舊版 #4 PIRLS 的完全重寫版。Next.js 15 + Gemini 2.5 Flash + Firestore，月費 &lt; 0.25 美金的 serverless 架構，PaGamO 題組批量上傳 + 學生 QR 即時作答 + 班級儀表板一條龍。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#79 漢語新解：不是字典，是 AI 用魯迅 + 王爾德口吻寫的「揭露真相版」國語延伸教材</title>
-      <link>https://cagoooo.github.io/Akai/blog/words-79-sarcastic-dictionary</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/words-79-sarcastic-dictionary</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#79 漢語新解絕對不是查字典工具。輸入任何詞 → AI 用王爾德/魯迅/羅永浩三人格混合風格，給你一段 150 字諷刺式新解 + 水墨蓋章畫卷。國語延伸教學的批判思考神器。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>

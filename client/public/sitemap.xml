@@ -631,6 +631,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://cagoooo.github.io/Akai/tool/105</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://cagoooo.github.io/Akai/tool/100</loc>
     <lastmod>2026-06-04</lastmod>
     <changefreq>monthly</changefreq>
@@ -1250,6 +1256,12 @@
   </url>
   <url>
     <loc>https://cagoooo.github.io/twinkle-hub-guide/</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cagoooo.github.io/taic-edu/</loc>
     <lastmod>2026-06-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -1886,6 +1898,12 @@
   </url>
   <url>
     <loc>https://cagoooo.github.io/Akai/blog/twinkle-hub-104-taiwan-official-data-mcp</loc>
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cagoooo.github.io/Akai/blog/taiwan-sovereign-ai-corpus-105-shimen-edu</loc>
     <lastmod>2026-06-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
