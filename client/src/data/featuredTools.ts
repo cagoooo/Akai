@@ -20,12 +20,12 @@ export const FEATURED_TOOL_IDS: number[] = [
   10, // [主推] 班級小管家
   14, // [主推] 點亮詩意~『早安長輩圖產生器』
   68, // [主推] 手作課程照片影片作品上傳平台
+  103, // [fallback] AI Agent 的 Web 技能雙引擎 — Playwright × Webwright 一頁讀懂
   102, // [fallback] 外星人入侵·保衛石門 — 復古太空射擊 × 全校排行榜
   101, // [fallback] 3D 迷宮冒險遊戲 — 第一人稱光球收集 × 全班排行榜
   99, // [fallback] 考試卷生圖 Studio — AI 黑白線稿插圖生成
   98, // [fallback] 教室小幫手 — 老師的每日課堂工具
   97, // [fallback] MBTI 校園奇遇記
-  96, // [fallback] DFC 行動方案即時投票系統
 ];
 
-/** 自動產生：2026-06-03T06:44:36.434Z */
+/** 自動產生：2026-06-04T06:09:18.601Z */

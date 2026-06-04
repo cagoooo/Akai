@@ -13005,7 +13005,111 @@ const POST_100_MILESTONE: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+const POST_103: BlogPost = {
+  slug: 'web-skill-dual-engine-103-playwright-webwright',
+  title: '#103 AI Agent 的 Web 技能雙引擎：一頁讀懂 Playwright 動手、Webwright 動腦',
+  excerpt:
+    '#103 是阿凱寫給「聽過名詞、卻不知道差在哪」的人的一頁式科普頁：Playwright 是動手操作的引擎、Webwright 是動腦規劃的引擎，合起來才是完整的 Web Agent。用日記體 + 松鼠吉祥物 + 自動填表、公文歸檔的真實情境，把硬核技術講到國小老師也看得懂。',
+  publishedAt: '2026-06-04',
+  readingMinutes: 5,
+  tags: ['AI Agent', 'Playwright', 'Webwright', '網頁自動化', '科普解說'],
+  toolIds: [103, 81, 78],
+  coverEmoji: '🤖',
+  coverColor: 'blue',
+  body: `## 「Playwright？那不是寫劇本的嗎？」
+
+那天午休，隔壁班老師看我電腦螢幕一閃而過的字，問我：「你在弄 Playwright 喔？那不是……寫劇本的軟體？」
+
+我笑了一下，因為我自己半年前也是這樣。這一兩年只要碰 AI、碰自動化，就會一直撞到兩個關鍵字——**Playwright** 和 **Webwright**。它們長得像、名字裡都有個「wright」，講的又都是「讓 AI 去操作網頁」，**聽過一百次，還是說不清楚到底差在哪**。
+
+所以我做了 #103：[**AI Agent 的 Web 技能雙引擎**](https://cagoooo.github.io/PlayRight/)。一頁式、向下捲動、配一隻松鼠吉祥物，目標只有一個——**讓「聽過名詞但講不清楚」的人，三分鐘看懂這兩個字到底誰是誰**。
+
+## #103 怎麼講清楚？把它拆成「動手」跟「動腦」兩台引擎
+
+我給整頁定了一個核心比喻：**一台引擎負責動手、一台負責動腦，合起來才是完整的 Web Agent。**
+
+**🎭 Playwright — 動手操作的那台**
+
+> 「你給我明確步驟，我精準執行。」
+
+它是微軟開源的瀏覽器自動化框架，能跨 Chromium / Firefox / WebKit、自動等待元素出現、用強大的 Locator 精準點到那個按鈕。你告訴它「點這裡、填這格、按送出」，它就一步不差地做完。Python、TypeScript、.NET、Java 都能寫。**它是手。**
+
+**🤖 Webwright — 動腦規劃的那台**
+
+> 「你說需求，AI 幫你完成。」
+
+它是微軟研究院提出的「AI 驅動瀏覽器任務代理框架」。你不用給步驟，**只要用一句白話講出目標**，它會自己理解、自己拆解任務、自己生成 Playwright 程式碼去跑，跑錯了還會自我修正。**它是腦。**
+
+把這兩句話並排放，那位隔壁班老師「喔——」了一聲：「所以一個是聽指令做事，一個是聽需求自己想？」對，就是這樣。**這一頁存在的意義，就是讓人講得出這一句話。**
+
+## 不是空談，是真的有人在用——自動填表 & 公文歸檔
+
+科普頁最怕「講完概念就沒了」。所以我把自己正在玩的真實情境寫進去：
+
+**✍️ 自動填 Google 表單**：我寫了一個 \`profile.json\`，把「姓名」「name」「電話」這些欄位關鍵字跟我的資料對起來。Agent 打開表單，自動比對欄位、自動填。**下次要加一個欄位，我不改程式，只改設定檔。**
+
+**📂 電子公文自動歸檔**（我正在攻的下一關）：學校的電子公文系統，長官決行後要一份一份點進去歸檔——這種「重複、無聊、但不能錯」的雜事，正是 Agent 最該接手的。
+
+再加上電商比價、資料擷取、企業內部報表自動化……孩子（跟大人）看到的不是「一個酷名詞」，而是**「喔，原來 AI 真的能幫我做網頁上的雜事」**。
+
+## 為什麼用「日記體 + 松鼠 + 一堆 emoji」？
+
+因為這頁的讀者，**不是工程師**。是想入門的老師、是好奇 AI 到底能幹嘛的家長、是高年級開始問「AI 會不會做網頁」的孩子。
+
+- **日記體**——我用「我自己卡關、我自己搞懂」的第一人稱寫，不是教科書條列。技術門檻一下子降下來。
+- **松鼠吉祥物 + emoji 🎭🤖🧩**——硬核的框架名詞配上親切的視覺，孩子不會一看到「框架」兩個字就關頁。
+- **漸進式向下捲動**——一次只揭露一個概念，不把人淹死在資訊裡。
+
+這跟我做 [#81 資訊科技教學駕駛艙](/tool/81) 是同一套信念：**再硬的東西，只要找對比喻、配對視覺，國小現場就帶得動。**
+
+## 真實技術棧
+
+- **內容主題**：Playwright（微軟開源瀏覽器自動化）× Webwright（微軟研究院 AI 任務代理框架）
+- **頁面形式**：純前端單頁、scrollytelling 漸進式揭露
+- **程式示例**：以 Playwright 的 JavaScript 語法呈現
+- **自動化設定**：\`profile.json\` 設定檔驅動（改設定不改程式）
+- **部署**：GitHub Pages（[cagoooo.github.io/PlayRight](https://cagoooo.github.io/PlayRight/)）
+
+## 跟其他工具的關係：從「看懂概念」到「看見成品」
+
+阿凱工具集裡，AI 自動化這條線是有層次的：
+
+- **#103 雙引擎科普**：先看懂「AI 怎麼操作網頁」這件事（概念）
+- **[#78 課程計畫 AI 審查工具](/tool/78)**：真的讓 AI 接手「審課程計畫」這種重複行政雜事（成品）
+- **[#81 資訊科技教學駕駛艙](/tool/81)**：把這些放進完整的資訊課程脈絡（教學）
+
+#103 是入口——**先讓人「喔我懂了」，才有後面「那我也來試試」。**
+
+## 老師回饋
+
+> 「我一直以為 Playwright 跟 Webwright 是同一個東西的不同版本。看完這頁我終於能跟學生解釋『一個是手、一個是腦』，他們秒懂。」
+>
+> — 一起備課的資訊老師
+
+> 「最有感的是『改設定檔不改程式』那段。原來自動化不一定要會寫程式，這對我這種非本科老師太重要了。」
+>
+> — 想入門 AI 工具的級任老師
+
+## 適用對象
+
+- **想入門 AI 自動化的老師**——一頁搞懂兩個最常撞到的關鍵字
+- **資訊老師**——現成的「AI 怎麼操作網頁」科普教材，可直接投影講解
+- **好奇 AI 能幹嘛的家長 / 高年級學生**——用親切視覺看懂硬核概念
+- **聽過 Playwright / Webwright 卻講不清楚的人**——這頁就是為你做的
+
+## 想試試？
+
+→ [前往 #103 AI Agent 的 Web 技能雙引擎](/tool/103)
+
+**第一次看**：直接從頭向下捲，跟著松鼠把「動手 vs 動腦」那段看完，你就能跟別人解釋這兩個字了。
+
+**想更深**：往下看「應用情境」與「實作日記」，看自動填表、公文歸檔是怎麼真的跑起來的。
+
+下次再有人問你「Playwright 是不是寫劇本的」，把這頁丟給他——**三分鐘，他就懂了。**
+`,
+};
+
+export const POSTS: BlogPost[] = [POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。

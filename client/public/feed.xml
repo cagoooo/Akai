@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 102+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 103+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Wed, 03 Jun 2026 06:36:58 GMT</pubDate>
-    <lastBuildDate>Wed, 03 Jun 2026 06:44:39 GMT</lastBuildDate>
+    <pubDate>Thu, 04 Jun 2026 06:04:45 GMT</pubDate>
+    <lastBuildDate>Thu, 04 Jun 2026 06:09:22 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,27 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：AI Agent 的 Web 技能雙引擎 — Playwright × Webwright 一頁讀懂</title>
+      <link>https://cagoooo.github.io/Akai/tool/103</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/103</guid>
+      <pubDate>Thu, 04 Jun 2026 06:04:45 GMT</pubDate>
+      <description>一頁讀懂 AI Agent 怎麼「看得懂、做得到、做完有回報」地操作網頁！Playwright 負責動手執行、Webwright 負責動腦規劃，兩大引擎合起來才是完整的 Web Agent。含自動填 Google 表單、電子公文自動歸檔等真實自動化情境，阿凱老師用日記體一路帶你從零看懂這兩個關鍵字，松鼠吉祥物 + 大量 emoji 降低技術門檻。</description>
+      <category>AI Agent</category>
+      <category>Playwright</category>
+      <category>Webwright</category>
+      <category>網頁自動化</category>
+      <category>瀏覽器自動化</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#103 AI Agent 的 Web 技能雙引擎：一頁讀懂 Playwright 動手、Webwright 動腦</title>
+      <link>https://cagoooo.github.io/Akai/blog/web-skill-dual-engine-103-playwright-webwright</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/web-skill-dual-engine-103-playwright-webwright</guid>
+      <pubDate>Thu, 04 Jun 2026 00:00:00 GMT</pubDate>
+      <description>#103 是阿凱寫給「聽過名詞、卻不知道差在哪」的人的一頁式科普頁：Playwright 是動手操作的引擎、Webwright 是動腦規劃的引擎，合起來才是完整的 Web Agent。用日記體 + 松鼠吉祥物 + 自動填表、公文歸檔的真實情境，把硬核技術講到國小老師也看得懂。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
     <item>
       <title>🆕 新工具：外星人入侵·保衛石門 — 復古太空射擊 × 全校排行榜</title>
       <link>https://cagoooo.github.io/Akai/tool/102</link>
@@ -279,24 +300,6 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/music-cover-storyboard-94</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
       <description>#94 封面接故事是給音樂課 / 視藝課 / 媒體素養課的 AI 創作教學駕駛艙。上傳 MV → 抓封面 → AI 接 4-6 段 5 秒分鏡 → 跳 8 大 AI 影片平台產畫面 → 瀏覽器內串成完整短片。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#41 吉他點唱系統「阿凱彈唱之夜」：用 Firestore 即時投票 + 卡帶雜誌風大螢幕模式打造演出儀式感</title>
-      <link>https://cagoooo.github.io/Akai/blog/song-41-akai-night-tape-magazine</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/song-41-akai-night-tape-magazine</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#41 不是教吉他課的工具，是阿凱老師的「彈唱之夜演出系統」。觀眾掃 QR 點歌 + Firestore 即時排行榜 + 雜誌風大螢幕模式 + 卡帶 SIDE A/B 期數收藏。一個老師把午休彈唱變成校園文化。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#24 校務會議紀錄報告站：把石門國小 114 學年度期末會議「致詞 + 處室報告 + 自治市長 + 提案討論」做成單頁互動 SPA</title>
-      <link>https://cagoooo.github.io/Akai/blog/meeting-24-end-semester-record</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/meeting-24-end-semester-record</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#24 真實名稱是「桃園市龍潭區石門國小 114 學年度上學期期末校務會議紀錄」— 用純 Tailwind + Noto Sans TC + Lucide 把整份會議紀錄做成 6 章節互動式 SPA，嵌進 Google Sites Embedded HTML。含張定貴校長致詞 / 家長會長致詞 / 自治市長潘宥睿致詞 / 教務處報告 / 學務處報告 / 提案討論 / 附件規約 / 下學期重要行事簡曆。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
