@@ -3,8 +3,8 @@
  *
  * 三狀態自動切換（讀 /api/site-stats.json）：
  *   1. N < 100  →「破百倒數 X 個」橘色便利貼 + 進度條 + 「許願下一個工具」CTA
- *   2. 100 ≤ N，距離 milestones.tool100 < 7 天 →「100 工具達成 🎉」金色膠帶 + 連到 /tool/100
- *   3. 距離達成 ≥ 7 天 → 不顯示（return null）
+ *   2. 100 ≤ N，距離 milestones.tool100 < 30 天 →「100 工具達成 🎉」金色膠帶 + 連到 /tool/100
+ *   3. 距離達成 ≥ 30 天 → 不顯示（return null）
  *
  * 用法：在 BulletinHome 的 BulletinHero 上方插入 <BulletinMilestone100 />
  */
@@ -47,7 +47,7 @@ interface SiteStats {
   ogImage?: string;
 }
 
-const CELEBRATION_DAYS = 7; // 達成後幾天內顯示金色慶祝
+const CELEBRATION_DAYS = 30; // 達成後幾天內顯示金色慶祝（原 7 天，2026-06-04 延長為 30 天，讓慶祝橫幅 + 兩支紀念影片入口多留一陣子）
 const PROGRESS_TARGET = 100;
 
 function daysBetween(isoA: string, isoB: string | Date): number {
