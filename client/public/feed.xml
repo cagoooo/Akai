@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 105+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 106+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Thu, 04 Jun 2026 09:44:38 GMT</pubDate>
-    <lastBuildDate>Thu, 04 Jun 2026 09:47:12 GMT</lastBuildDate>
+    <pubDate>Fri, 05 Jun 2026 06:02:49 GMT</pubDate>
+    <lastBuildDate>Fri, 05 Jun 2026 06:06:57 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,27 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：石門國小 第103屆畢業典禮｜啟程・感恩・祝福</title>
+      <link>https://cagoooo.github.io/Akai/tool/106</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/106</guid>
+      <pubDate>Fri, 05 Jun 2026 06:02:49 GMT</pubDate>
+      <description>石門國小第103屆畢業典禮的數位主場：典禮資訊、YouTube 直播、校園巡禮、畢業歌〈風箏〉、家長祝福一站到齊。最大亮點是「即時祝福牆」——家長掃 QR 留言、老師 LINE 一鍵審核，祝福立刻飛上現場大螢幕的星空投影，剛寫完抬頭就看到自己。啟程・感恩・祝福，陪每個孩子勇敢啟程。</description>
+      <category>畢業典禮</category>
+      <category>石門國小</category>
+      <category>即時祝福牆</category>
+      <category>星空投影</category>
+      <category>掃碼互動</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#106 石門國小第103屆畢業典禮：當家長的祝福，能在三秒內飛上禮堂大螢幕</title>
+      <link>https://cagoooo.github.io/Akai/blog/graduation-103-shimen-wishwall-106</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/graduation-103-shimen-wishwall-106</guid>
+      <pubDate>Fri, 05 Jun 2026 00:00:00 GMT</pubDate>
+      <description>每年畢業季，家長最想說的話常常來不及說出口。#106 是石門國小阿凱老師為第103屆畢業典禮做的數位主場：掃 QR 留言、老師 LINE 一鍵審核，祝福三秒飛上禮堂大螢幕的星空投影，家長剛寫完抬頭就看到自己。一條 GAS + LINE 的零成本即時互動閉環。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
     <item>
       <title>🆕 新工具：臺灣主權 AI 訓練語料庫 × 石門國小 — 把國家級本土語料變成校園教材</title>
       <link>https://cagoooo.github.io/Akai/tool/105</link>
@@ -288,24 +309,6 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/teacher-reply-89-pro-parent-message</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
       <description>#89 不是「情緒溫度計 + 三種口吻」 — 真實是 12 種情境分類（老師手選，不是 AI 判斷）+ 單一回覆 + 四種微調按鈕（再溫和 / 再正式 / 縮短 / 加細節）+ 對話截圖辨識（Gemini multimodal）。Next.js 15.2 + Genkit 1.8 + Gemini 2.5 Flash + Cloudflare Turnstile，Firestore 不存使用者輸入或回覆（隱私意識強）。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#83 本土語分班配對系統 v2.6：升年級重編班「舊選修語別 → 新班級座號」映射 + Levenshtein 模糊比對 + 5 種語別 16 族 7 國</title>
-      <link>https://cagoooo.github.io/Akai/blog/native-language-83-class-grouping</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/native-language-83-class-grouping</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#83 不是「分組演算法」 — 是處理「**升年級重新編班後，舊本土語選修資料怎麼映射到新班級**」的 Excel 解析配對工具。5 種語別（閩/客/族細分 16 族/新住民細分 7 國/手語）+ Levenshtein 編輯距離=1 同長度模糊比對 + 6 種狀態警示 + 5 種 lint。單檔 172 KB 純 vanilla JS，100% 本機運算，純 file:// 都能跑。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#11 剛好學 Akailao v3.8.9：九大互動模式 + 拍照 AI 出 PIRLS 題 + 老師自架 Firebase 資料自主的 Kahoot+Quizizz+Mentimeter 合體</title>
-      <link>https://cagoooo.github.io/Akai/blog/classroom-interaction-11-easy</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/classroom-interaction-11-easy</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#11 不只是「投票 + 文字雲」 — 是九大互動模式（搶答 / 繪圖板 / 是非 / 選擇 / 問答 / 互評 / **PIRLS 閱讀招牌** / 排序 / 配對）合體 SaaS。234 KB 單檔 Akailao v3.8.9 + Gemini 2.5 Flash 拍課本自動出 PIRLS 題 + 每位老師自架 Firebase（資料自主）+ set.html 配置生成器（降門檻）。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>

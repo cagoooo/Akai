@@ -1,6 +1,6 @@
 # 阿凱老師 · 科技教育創新專區
 
-> 一位桃園市龍潭區石門國民小學的國小老師（阿凱老師），兩年內獨立完成 105 款免費教育工具與 106 篇手寫深度長文。所有工具與內容皆為 MIT 開源、永久免費、無需註冊。專案聚焦於用 AI / 科技解決真實國小教學現場的痛點：班級互動、行政自動化、語文閱讀、教育遊戲、親師溝通、互動體驗。
+> 一位桃園市龍潭區石門國民小學的國小老師（阿凱老師），兩年內獨立完成 106 款免費教育工具與 107 篇手寫深度長文。所有工具與內容皆為 MIT 開源、永久免費、無需註冊。專案聚焦於用 AI / 科技解決真實國小教學現場的痛點：班級互動、行政自動化、語文閱讀、教育遊戲、親師溝通、互動體驗。
 
 **站點**：https://cagoooo.github.io/Akai/  
 **作者**：阿凱老師（GitHub: cagoooo）  
@@ -11,8 +11,8 @@
 
 ## 主要頁面
 
-- [首頁工具集](https://cagoooo.github.io/Akai/): 互動公佈欄首頁，呈現全部 105 款工具的拍立得拼貼 + 分類篩選 + 許願池
-- [部落格](https://cagoooo.github.io/Akai/blog): 106 篇阿凱老師手寫的教學情境深度長文，每篇講一個熱門工具如何解決真實教學現場的問題
+- [首頁工具集](https://cagoooo.github.io/Akai/): 互動公佈欄首頁，呈現全部 106 款工具的拍立得拼貼 + 分類篩選 + 許願池
+- [部落格](https://cagoooo.github.io/Akai/blog): 107 篇阿凱老師手寫的教學情境深度長文，每篇講一個熱門工具如何解決真實教學現場的問題
 - [100 工具達成宣傳影片](https://cagoooo.github.io/Akai/share/100.html): 5:32 宣傳影片（含旁白與同步字幕）
 - [許願池](https://cagoooo.github.io/Akai/wish/): 蒐集老師、家長、學生對下一個工具的需求
 - [GitHub Repository](https://github.com/cagoooo/Akai): 完整原始碼，可自由 fork 自架
@@ -25,7 +25,7 @@
 
 完整版約 500-800 KB，適合 OpenAI custom GPT / Claude Project / Perplexity Spaces 等需要深度 ingest 的場景。
 
-## 工具集（105 款，按分類）
+## 工具集（106 款，按分類）
 
 每款工具都是阿凱老師親手打造的單一用途網頁，可在瀏覽器直接開啟，無需安裝。
 
@@ -127,7 +127,7 @@
 - [#79 漢語新解](https://cagoooo.github.io/words/): 以 AI 為驅動的創意漢語詮釋工具，用幽默、諷刺與機智的視角為你解讀日常詞彙的「新意」，讓語言學習更有趣，讓漢字充滿新生命！
 - [#91 ✨ 點亮詩意 Pro ✨早安長輩圖](https://cagoooo.github.io/PhotoPoet/): 阿凱老師打造的 AI 詩詞照片生成器，上傳一張照片就能 10 秒產出一首契合畫面意境的繁體中文詩詞與「早安長輩圖」，銀髮族、語文教師、創意寫作者都能輕鬆把日常影像變成有溫度的圖文作品。
 
-### 即時互動（10 款）
+### 即時互動（11 款）
 
 - [#3 學生即時投票系統](https://cagoooo.github.io/vote/): 阿凱老師打造的課堂即時投票系統，老師建立題目產生 QR Code，學生掃碼就能即時作答，搭配截圖白板標註工具，連投影片題目也能秒變互動題。
 - [#41 吉他彈唱🎸點歌系統🎵](https://cagoooo.github.io/song/): 阿凱老師打造的吉他彈唱即時點唱平台，觀眾掃碼投票點歌、看排行榜、收到「正在彈奏中」的即時通知，把表演現場變成互動社群。
@@ -139,6 +139,7 @@
 - [#94 封面串故事 · 音樂影片分鏡產生器](https://cagoooo.github.io/music-cover-storyboard/): 阿凱老師打造的 AI 音樂影片分鏡擴寫工具，把 Suno / Gemini Veo / Runway 等平台做出來的 MV 拖進瀏覽器，AI 自動抓封面幀、幫你寫出後 15-30 秒的運鏡與故事分鏡 prompt，貼回影片平台繼續生成，最後在瀏覽器內 FFmpeg 串成一支完整短片。
 - [#96 DFC 行動方案即時投票系統](https://cagoooo.github.io/Lungtan-DFC/): 阿凱老師為桃園市龍潭國民小學第 123 屆自治市小市長選舉打造的「DFC 行動方案即時投票系統」，把候選人的行動方案搬上線，全校班級同步觀看票數、長條圖與排名，讓學童在公開、即時、可監督的環境中學民主。
 - [#97 MBTI 校園奇遇記](https://cagoooo.github.io/MBTI/): 阿凱老師為國小高年級到國中量身設計的 MBTI 互動故事測驗，學生扮演主角從開學第一天走到校慶大結局，30+ 場景、4 條支線、16 種結局，玩出屬於自己的 16 型人格 + SEL 情緒因應風格，比制式問卷更有共鳴。
+- [#106 石門國小 第103屆畢業典禮｜啟程・感恩・祝福](https://cagoooo.github.io/smes-graduation-103/): 石門國小第103屆畢業典禮的數位主場：典禮資訊、YouTube 直播、校園巡禮、畢業歌〈風箏〉、家長祝福一站到齊。最大亮點是「即時祝福牆」——家長掃 QR 留言、老師 LINE 一鍵審核，祝福立刻飛上現場大螢幕的星空投影，剛寫完抬頭就看到自己。啟程・感恩・祝福，陪每個孩子勇敢啟程。
 
 ### 親師溝通（6 款）
 
@@ -155,10 +156,11 @@
 - [#12 PIRLS閱讀理解網](https://read.smes.tyc.edu.tw/smes/PIRLS/): 完整的 PIRLS 閱讀理解資源平台
 - [#87 PIRLS 閱讀理解生成站 PRO](https://cagoooo.github.io/pirls-questioncraft/): 升級版 PIRLS 閱讀理解出題平台，老師貼上課文或上傳文本，AI 依四層次（直接提取、直接推論、詮釋整合、檢驗評估）自動產生提問與答案說明，國小語文評量、補救教學、素養命題一氣呵成。
 
-## 教學情境深度長文（106 篇）
+## 教學情境深度長文（107 篇）
 
 每篇文章 5-10 分鐘閱讀，包含真實教學現場數據、學生回饋、實作思路、與其他工具的搭配建議。
 
+- [#106 石門國小第103屆畢業典禮：當家長的祝福，能在三秒內飛上禮堂大螢幕](https://cagoooo.github.io/Akai/blog/graduation-103-shimen-wishwall-106) (2026-06-05): 每年畢業季，家長最想說的話常常來不及說出口。#106 是石門國小阿凱老師為第103屆畢業典禮做的數位主場：掃 QR 留言、老師 LINE 一鍵審核，祝福三秒飛上禮堂大螢幕的星空投影，家長剛寫完抬頭就看到自己。一條 GAS + LINE 的零成本即時互動閉環。
 - [#103 AI Agent 的 Web 技能雙引擎：一頁讀懂 Playwright 動手、Webwright 動腦](https://cagoooo.github.io/Akai/blog/web-skill-dual-engine-103-playwright-webwright) (2026-06-04): #103 是阿凱寫給「聽過名詞、卻不知道差在哪」的人的一頁式科普頁：Playwright 是動手操作的引擎、Webwright 是動腦規劃的引擎，合起來才是完整的 Web Agent。用日記體 + 松鼠吉祥物 + 自動填表、公文歸檔的真實情境，把硬核技術講到國小老師也看得懂。
 - [#104 台灣官方資料庫 Twinkle-Hub：讓 AI 助教「先查官方資料、再回答你」](https://cagoooo.github.io/Akai/blog/twinkle-hub-104-taiwan-official-data-mcp) (2026-06-04): #104 介紹一座「資料橋」MCP 服務 Twinkle Hub：把國定假日、農曆節氣、簡繁轉換、郵遞區號、6.4 萬份國考考古題與政府開放資料接進 Claude 等 AI 助教，65 個現成工具，讓 AI 不再「憑記憶」答錯台灣在地問題。申請金鑰、一鍵安裝、重開即用，老師備課出
 - [#105 臺灣主權 AI 訓練語料庫 × 石門國小：把「國家拿去訓練 AI 的語料」變成孩子的教材](https://cagoooo.github.io/Akai/blog/taiwan-sovereign-ai-corpus-105-shimen-edu) (2026-06-04): 數位發展部花十年、集 265 個機關蒐集了 6 億 tokens 的臺灣本土語料，本來是拿去餵 AI 模型的。#105 是石門國小阿凱老師把它「教育轉化」的共學站：九大主題、4,554 筆語料一鍵探索，每筆標課綱與來源，還能用自備的免費 Gemini 生成台語／客語學習單與繪本腳
@@ -268,7 +270,7 @@
 
 ## 關於阿凱老師
 
-阿凱老師（cagoooo）是桃園市龍潭區石門國民小學的資訊組長與導師，自 2024 年起獨立開發教育工具，到 2026 年 5 月已達成 105 款。技術棧使用 React 18 + TypeScript + Vite + Tailwind CSS + Firebase，主站部署於 GitHub Pages。所有工具開源於 [cagoooo/Akai](https://github.com/cagoooo/Akai)，採 MIT License。
+阿凱老師（cagoooo）是桃園市龍潭區石門國民小學的資訊組長與導師，自 2024 年起獨立開發教育工具，到 2026 年 5 月已達成 106 款。技術棧使用 React 18 + TypeScript + Vite + Tailwind CSS + Firebase，主站部署於 GitHub Pages。所有工具開源於 [cagoooo/Akai](https://github.com/cagoooo/Akai)，採 MIT License。
 
 **石門國小（smes ≠ 新明！）**：「smes」是 Shih Men Elementary School 縮寫，學校全名為「桃園市龍潭區石門國民小學」，校網 https://www.smes.tyc.edu.tw/
 
