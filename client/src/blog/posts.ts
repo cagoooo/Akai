@@ -13336,6 +13336,89 @@ const POST_106: BlogPost = {
 `,
 };
 
+const POST_109: BlogPost = {
+  slug: 'digital-software-survey-109-firestore-needs-poll',
+  title: '#109 別再用 Excel 收軟體需求了：老師三分鐘勾選，全校前 5 名即時排好提報教育局',
+  excerpt:
+    '每年學校要彙整老師的教學軟體採購需求，傳統做法是一張 Excel 在處室與 LINE 群組之間傳來傳去，誰填了誰漏了、同套軟體被重複填，承辦最後還要手動去重排名。#109 是石門國小教務處的線上實名填報系統：老師勾選統購與自主需求軟體，Firebase Firestore 即時統計、自動排出全校前 5 名提報教育局，已採購的軟體自動標免填，把「對 Excel」變成「看儀表板」。',
+  publishedAt: '2026-06-12',
+  readingMinutes: 6,
+  tags: ['軟體需求調查', '數位學習', '校務行政', 'Firebase', '即時排行榜'],
+  toolIds: [109, 48, 2],
+  coverEmoji: '🛒',
+  coverColor: 'orange',
+  body: `## 那張在處室之間流浪的 Excel
+
+每年到了這個時候，學校總要做一件事：彙整全校老師「想要哪些教學軟體」，提報給教育局。這背後是「中小學數位學習實施計畫」——教育局會統購一批軟體、也讓各校自主提報需求，學校得把老師的意見收齊、去重、排名，再送上去。
+
+聽起來只是收個表，做起來卻是承辦的惡夢。傳統做法是發一張 Excel：老師填在不同欄位、有人填了有人忘了、同一套軟體被導師填一次科任又填一次、檔案在 LINE 群組裡傳到出現「需求調查_最終版_真的最終版(2).xlsx」。最後承辦還要對著幾十列手動去重、加總、排出前幾名——光是「對 Excel」就能對到天荒地老。
+
+所以我幫教務處做了 #109：[數位內容與教學軟體需求調查填報](https://cagoooo.github.io/smes-soft-survey/)。把這件事，從「收 Excel」變成「看儀表板」。
+
+## #109 怎麼運作？老師三分鐘，承辦零加班
+
+老師打開網站，照著三步驟填，平均三分鐘搞定：
+
+**第一步：實名填姓名與班級** — 實名是為了方便彙整提報名單，班級用點選 modal 選，不會手滑填錯。
+
+**第二步：統購軟體** — 教育局這次規劃統購的 3 套（像 AILEAD365、翰林雲端學院、ClassSwift），老師填「預計使用該軟體」的實際需求數，不用就填 0。
+
+**第三步：自主需求軟體** — 從教育部「校園數位內容與教學軟體」選購名單裡挑，勾選你想要的、填需求數。全校統計後，**取需求最高的前 5 名**，就是學校會提報教育局的名單。
+
+老師按下「送出我的需求」，撒花動畫一跳，這筆需求就即時進了全校統計——不用回傳檔案、不用等承辦收齊。
+
+## 幾個讓承辦真正省心的設計
+
+這套系統真正的價值，藏在那些「替承辦想到」的小地方：
+
+- **依領域快速瀏覽** — 軟體名單按「數位內容 / 課堂教學軟體 / 遠距教學軟體」三大領域分類，還能直接搜尋名稱或廠牌（打「英語」「數學」「MAKAR」秒篩出來），老師不用在長長的名單裡海撈。
+- **已採購的自動標「免填」** — 教育局先前已大量採購的（HiTeach、PaGamO、Padlet、Kahoot! 等），系統自動標示「已大量採購·免填」而且無法勾選，省得老師浪費寶貴的前 5 名名額重複要。
+- **全校即時排行榜** — 「自主需求前 5 名」依勾選人數即時更新，老師填完當下就看得到全校風向：原來大家都想要這套。承辦更是打開就看到結果，完全不用自己加總。
+- **自動去重統計** — 班級數、教師數、學生數都由系統自動算，而且**同一班被導師和科任重複需求只算一次**——這正是手動對 Excel 最容易出錯、最花時間的地方，現在交給程式。
+- **送出前預覽** — 送出前先看一眼自己勾了什麼、需求數對不對，加上截止日倒數提示，不怕漏填或填錯。
+
+## 真實技術棧：即時排行榜怎麼來的
+
+- **前端**：純靜態 HTML/CSS/JS + GitHub Pages 零成本部署
+- **軟體名單**：從 \`catalog.json\` 載入，名單更新只要改一個檔
+- **即時後端**：**Firebase Firestore**——全校老師的勾選即時寫入、前 5 名排行榜即時重算，這就是為什麼老師填完馬上看得到全校統計
+- **體驗**：PWA Service Worker、社群分享 OG 圖、字級可放大、全裝置 RWD
+
+零後端維運、零月費，一個 Firestore 專案 + 一頁靜態網站，就撐起一場全校的需求調查。
+
+## 跟其他工具的關係：校務行政自動化這條線
+
+阿凱工具集裡，有一整條「**把承辦老師從重複苦工裡解放出來**」的線：
+
+- **#48 動態表單自動回報系統**：把各種校內表單變成自動彙整回報
+- **#2 行政業務協調系統**：把處室公告與行事從 LINE 洗版裡救出來
+- **#109 數位內容與教學軟體需求調查填報**：把「收 Excel、手動去重排名」變成即時儀表板
+
+它們的共同信念是：**承辦老師的時間，該花在判斷與決策，而不是手動加總一張又一張的 Excel。**
+
+## 配對工具推薦
+
+- [#48 動態表單自動回報系統](/tool/48) — 同樣是「線上表單 → 自動彙整」的校務神器，跟需求調查是最直接的姊妹作
+- [#2 行政業務協調系統](/tool/2) — 校內行政數位轉型的同一條線，公告行事一站搞定
+- [#109 數位內容與教學軟體需求調查填報](/tool/109) — 本篇主角
+
+## 適用對象
+
+- **負責提報數位學習軟體需求的教務 / 資訊承辦老師** — 每年這檔事，今年起不用再對 Excel
+- **要做任何「全校勾選 → 取前幾名」調查的人** — 換個名單就能改成才藝社團調查、研習意願調查
+- **想學「Firestore 即時排行榜」的人** — 看一個真實校務情境怎麼用 Firestore 做即時統計
+- **關心校務數位轉型的學校** — 一個零成本、可複製的需求調查範本
+
+## 想試試？
+
+→ [前往 #109 數位內容與教學軟體需求調查填報](https://cagoooo.github.io/smes-soft-survey/)
+
+**先看看**：滑到「全校自主需求前 5 名」，感受一下「填完就看到全校風向」跟「填完石沉大海等承辦彙整」差多少。
+
+**再想想**：學校裡還有多少場調查，其實都還在用 Excel 在處室之間流浪？也許下一場，也能變成一頁三分鐘填完、結果即時排好的儀表板。承辦的加班，又可以少一個晚上。
+`,
+};
+
 const POST_108: BlogPost = {
   slug: 'security-squad-phishing-108-it-cockpit',
   title: '#108 把反詐騙變成一場闖關：學生扮資安特攻隊，跟 AI 教官一封封揪出釣魚信',
@@ -13677,7 +13760,7 @@ const POST_105: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+export const POSTS: BlogPost[] = [POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。
