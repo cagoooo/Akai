@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 107+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 108+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Fri, 12 Jun 2026 00:02:01 GMT</pubDate>
-    <lastBuildDate>Fri, 12 Jun 2026 00:06:48 GMT</lastBuildDate>
+    <pubDate>Fri, 12 Jun 2026 03:52:45 GMT</pubDate>
+    <lastBuildDate>Fri, 12 Jun 2026 03:56:04 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,18 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：資安特攻隊：釣魚郵件偵蒐</title>
+      <link>https://cagoooo.github.io/Akai/tool/108</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/108</guid>
+      <pubDate>Fri, 12 Jun 2026 03:52:45 GMT</pubDate>
+      <description>一封看起來像銀行、像老師、像官方的訊息，到底是真的還是釣魚陷阱？#108 把資安教育變成一場闖關遊戲：學生扮演「鱻盾資安特攻隊」資安新兵，跟 NotebookLM 的阿盾教官對話，一封封揪出釣魚破綻，用「五看口訣」拆穿詐騙，集滿 5 枚徽章晉升正式隊員。附老師導覽五步驟、AI 即時生成教材，一節課帶孩子練成數位防身術。</description>
+      <category>資安教育</category>
+      <category>釣魚郵件</category>
+      <category>反詐騙</category>
+      <category>數位素養</category>
+      <category>資訊安全</category>
+    </item>
     <item>
       <title>🆕 新工具：學生教育雲帳號更新工具</title>
       <link>https://cagoooo.github.io/Akai/tool/107</link>
@@ -29,6 +41,15 @@
       <category>學生帳號管理</category>
       <category>帳密總表</category>
       <category>轉入轉出比對</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#108 把反詐騙變成一場闖關：學生扮資安特攻隊，跟 AI 教官一封封揪出釣魚信</title>
+      <link>https://cagoooo.github.io/Akai/blog/security-squad-phishing-108-it-cockpit</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/security-squad-phishing-108-it-cockpit</guid>
+      <pubDate>Fri, 12 Jun 2026 00:00:00 GMT</pubDate>
+      <description>資安宣導最怕變成「老師念一遍、學生左耳進右耳出」。#108 是阿凱老師做的資訊素養情境闖關：學生扮演「鱻盾資安特攻隊」資安新兵，跟 NotebookLM 的阿盾教官對話，一封封判斷訊息是安全還是釣魚、說出破綻、集滿 5 枚徽章晉升正式隊員。用「五看口訣」拆穿詐騙，一節課把防身術練進肌肉記憶。</description>
+      <category>blog</category>
+      <category>教學情境</category>
     </item>
     <item>
       <title>📖 教學情境：#107 每學年初最磨人的雜事：上千個教育雲帳號，這次三步驟自動對齊</title>
@@ -294,24 +315,6 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/inspire-92-5w1h-pro-writing</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
       <description>#92 內部代號 Aura，不是分步引導工具 — 是 6 格（Who/What/When/Where/Why/How）同時呈現任意順序操作，Gemini 2.0 Flash 一鍵合成短篇故事 + 自動下標題。Prompt 明令禁止「外星人 / 時間旅行 / AI / 預言 / 神祇」這些 LLM 爛梗，逼 AI 挖日常微妙與職人題材。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#82 設備盤點系統：iPhone 拍照 + Gemini 2.5 Vision 辨識 + 三大資產跨表自動路由 + Veyon 整合的 54.75 小時打造神器</title>
-      <link>https://cagoooo.github.io/Akai/blog/inventory-82-classroom-equipment</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/inventory-82-classroom-equipment</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#82 不是「QR Code 掃描盤點」那麼簡單 — 是阿凱花 54.75 小時、跑 40+ 版本（v7.4.12）打造的真實校園資管系統。iPhone 拍照 + Gemini 2.5 Flash Vision 辨識財產編號 + Supabase 6 張表跨表路由 + 設備搬家自動偵測 + Veyon 150 台教室電腦設定 JSON 匯出。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#73 成績篩選系統：教務處挑前 X% 競賽選手 / 資優方案的全校工具（不是找退步學生！）</title>
-      <link>https://cagoooo.github.io/Akai/blog/grade-filter-73-find-students-need-help</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/grade-filter-73-find-students-need-help</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#73 不是「找退步學生需要關心」 — 是教務處用來篩選「**前 X% 或前 N 名優秀學生**」挑校內競賽選手、資優方案候選人的工具。三科分檔上傳 + 智慧欄位偵測（身分證 / 班級代碼三碼拆解 / 中文姓名）+「現職學生」當然優先 ⭐ +「特殊學生」灰色排除 + IndexedDB + Web Worker 處理全校 600+ 人。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
