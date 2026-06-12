@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 106+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 107+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Fri, 05 Jun 2026 06:02:49 GMT</pubDate>
-    <lastBuildDate>Fri, 05 Jun 2026 06:06:57 GMT</lastBuildDate>
+    <pubDate>Fri, 12 Jun 2026 00:02:01 GMT</pubDate>
+    <lastBuildDate>Fri, 12 Jun 2026 00:06:48 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,27 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：學生教育雲帳號更新工具</title>
+      <link>https://cagoooo.github.io/Akai/tool/107</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/107</guid>
+      <pubDate>Fri, 12 Jun 2026 00:02:01 GMT</pubDate>
+      <description>每學年初校務行政最磨人的雜事之一：教育雲帳號總表要跟教育局新名冊對齊——誰轉走了、誰轉進來、誰升年級換了班級座號。#107 讓你上傳舊帳密總表與教育局新名冊，自動比對轉入轉出、偵測末四碼撞號、跨學年保留帳密只更新座號，一鍵產出更新後總表、異動清冊與新生通知單。全程純前端、個資絕不上傳，所有運算只在你這台電腦的瀏覽器裡完成。</description>
+      <category>教育雲帳號</category>
+      <category>OpenID</category>
+      <category>學生帳號管理</category>
+      <category>帳密總表</category>
+      <category>轉入轉出比對</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#107 每學年初最磨人的雜事：上千個教育雲帳號，這次三步驟自動對齊</title>
+      <link>https://cagoooo.github.io/Akai/blog/edu-cloud-account-updater-107-openid-roster</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/edu-cloud-account-updater-107-openid-roster</guid>
+      <pubDate>Fri, 12 Jun 2026 00:00:00 GMT</pubDate>
+      <description>每到新學年，承辦老師都要面對同一場惡夢：把全校教育雲帳號總表跟教育局新名冊重新對齊——誰轉走、誰轉進、誰升年級換了班級座號，一格一格手動圈、手動貼。#107 是阿凱老師為石門國小做的純前端工具：上傳舊帳密總表與教育局新名冊，自動比對轉入轉出、揪出末四碼撞號、跨學年保留帳密只更新座號，一鍵產出總表、異動清冊與新生通知單。全程在瀏覽器運算，個資一個 byte 都不上傳。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
     <item>
       <title>🆕 新工具：石門國小 第103屆畢業典禮｜啟程・感恩・祝福</title>
       <link>https://cagoooo.github.io/Akai/tool/106</link>
@@ -291,24 +312,6 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/grade-filter-73-find-students-need-help</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
       <description>#73 不是「找退步學生需要關心」 — 是教務處用來篩選「**前 X% 或前 N 名優秀學生**」挑校內競賽選手、資優方案候選人的工具。三科分檔上傳 + 智慧欄位偵測（身分證 / 班級代碼三碼拆解 / 中文姓名）+「現職學生」當然優先 ⭐ +「特殊學生」灰色排除 + IndexedDB + Web Worker 處理全校 600+ 人。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#51 SMES AI 智慧排課 v2.12：遺傳演算法 GA v3.1 + 混合修復突變 + Smart Seed + BFS 鏈式衝突解的石門國小客製神器</title>
-      <link>https://cagoooo.github.io/Akai/blog/auto-schedule-51-curriculum-planner</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/auto-schedule-51-curriculum-planner</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#51 不是 CSP 演算法 — 是「SMES AI 智慧排課系統 v2.12.0」用遺傳演算法 GA v3.1 + 混合修復突變（教師衝突修復 30% / 數學修復 17.5% / 國語修復 17.5% / 定向優化 21% / 隨機 14%）+ Smart Seed 種子 + BFS 鏈式衝突解。台灣國小規則寫死（週三下午全校停課、低年級只有週二全天）。127 單元測試 + 23 Firestore Rules 測試，CI 三 jobs。取代舊版 STC.EXE 桌機軟體。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#89 教師回覆小幫手 Pro：親師訊息 1 分鐘草稿出爐，再也不怕家長半夜傳訊</title>
-      <link>https://cagoooo.github.io/Akai/blog/teacher-reply-89-pro-parent-message</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/teacher-reply-89-pro-parent-message</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#89 不是「情緒溫度計 + 三種口吻」 — 真實是 12 種情境分類（老師手選，不是 AI 判斷）+ 單一回覆 + 四種微調按鈕（再溫和 / 再正式 / 縮短 / 加細節）+ 對話截圖辨識（Gemini multimodal）。Next.js 15.2 + Genkit 1.8 + Gemini 2.5 Flash + Cloudflare Turnstile，Firestore 不存使用者輸入或回覆（隱私意識強）。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
