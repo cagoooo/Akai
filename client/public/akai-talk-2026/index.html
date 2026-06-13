@@ -1180,6 +1180,26 @@
     font-family: var(--sans); font-size: 24px; line-height: 1.5;
     color: var(--ink-soft); margin: 0;
   }
+  /* 致謝頁 CTA：跳轉阿凱老師親自口說的影片導讀（淺底→實心墨綠膠囊鈕）*/
+  .s-close .left .video-cta {
+    display: inline-flex; align-items: center; gap: 18px; align-self: flex-start;
+    margin-top: 40px; padding: 16px 32px 16px 20px;
+    background: var(--navy); border-radius: 999px; text-decoration: none;
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .s-close .left .video-cta:hover { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(31,76,62,0.30); }
+  .s-close .left .video-cta .vc-play {
+    display: flex; align-items: center; justify-content: center; flex: none;
+    width: 46px; height: 46px; border-radius: 50%;
+    background: var(--orange); color: var(--navy); font-size: 19px; padding-left: 3px;
+  }
+  .s-close .left .video-cta .vc-text { display: flex; flex-direction: column; line-height: 1.28; }
+  .s-close .left .video-cta .vc-main {
+    font-family: var(--sans); font-weight: 500; font-size: 26px; color: var(--cream); letter-spacing: 0.01em;
+  }
+  .s-close .left .video-cta .vc-sub {
+    font-family: var(--sans); font-weight: 300; font-size: 17px; color: rgba(250,247,240,0.62); letter-spacing: 0.02em;
+  }
 
   .s-close .right {
     background: var(--navy); color: var(--cream);
@@ -2744,6 +2764,13 @@
             </div>
           </div>
         </div>
+        <a class="video-cta" href="https://youtu.be/QIWCfU1e_wg" target="_blank" rel="noopener" title="觀看阿凱老師親自口說的影片導讀">
+          <span class="vc-play">▶</span>
+          <span class="vc-text">
+            <span class="vc-main">觀看影片導讀</span>
+            <span class="vc-sub">阿凱老師親自口說 · 全片 14 分鐘</span>
+          </span>
+        </a>
       </div>
       <div class="right">
         <div class="thanks-row">
