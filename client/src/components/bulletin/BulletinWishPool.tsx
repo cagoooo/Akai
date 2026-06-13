@@ -58,10 +58,11 @@ export function BulletinWishPool() {
           (e.currentTarget as HTMLButtonElement).style.transform = 'rotate(-0.5deg)';
         }}
       >
-        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center', minWidth: 0 }}>
           <div
             style={{
               flex: 1,
+              minWidth: 0,
               border: '2px dashed #8b7356',
               borderRadius: 8,
               padding: '10px 14px',
@@ -69,12 +70,17 @@ export function BulletinWishPool() {
               background: '#fffbea',
               color: tokens.muted,
               fontStyle: 'italic',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
             }}
           >
             寫下你的教學許願…（點擊投入）
           </div>
           <div
             style={{
+              flexShrink: 0,
+              whiteSpace: 'nowrap',
               background: tokens.accent,
               color: '#fff',
               border: '2px solid #1a1a1a',

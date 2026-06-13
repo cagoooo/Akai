@@ -123,6 +123,14 @@ html, body {
   max-width: 100%;
 }
 
+/* Grid-blowout 防護：grid item 預設 min-width:auto，會被內部最小內容寬（如許願池
+   CTA 那排「輸入框＋投入按鈕」）撐爆，使手機單欄 1fr 軌道比 viewport 還寬而被
+   overflow-x:hidden 裁掉右側。min-width:0 讓軌道乖乖縮回容器寬度。 */
+.bulletin-sections-grid > *,
+.bulletin-wish-grid > * {
+  min-width: 0;
+}
+
 /* ── 1024px 以下：Hero 改單欄 + 工具網格密度提升 ── */
 @media (max-width: 1024px) {
   .bulletin-hero {
