@@ -326,6 +326,36 @@
     box-shadow: 0 0 0 1px rgba(250,247,240,0.2);
   }
   .s-title .logo-mark img { width: 100%; height: 100%; object-fit: contain; }
+  /* 首頁 CTA：跳轉阿凱老師親自口說的影片導讀（YouTube） */
+  .s-title .video-cta {
+    display: inline-flex; align-items: center; gap: 18px;
+    padding: 16px 32px 16px 20px;
+    border: 2px solid var(--orange); border-radius: 999px;
+    text-decoration: none; background: rgba(201,151,68,0.12);
+    transition: background .25s ease, transform .25s ease, box-shadow .25s ease;
+  }
+  .s-title .video-cta:hover {
+    background: var(--orange); transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  }
+  .s-title .video-cta .vc-play {
+    display: flex; align-items: center; justify-content: center; flex: none;
+    width: 46px; height: 46px; border-radius: 50%;
+    background: var(--orange); color: var(--navy); font-size: 19px;
+    padding-left: 3px; transition: background .25s ease, color .25s ease;
+  }
+  .s-title .video-cta:hover .vc-play { background: var(--navy); color: var(--orange); }
+  .s-title .video-cta .vc-text { display: flex; flex-direction: column; line-height: 1.28; }
+  .s-title .video-cta .vc-main {
+    font-family: var(--sans); font-weight: 500; font-size: 27px;
+    color: var(--cream); letter-spacing: 0.01em;
+  }
+  .s-title .video-cta .vc-sub {
+    font-family: var(--sans); font-weight: 300; font-size: 18px;
+    color: rgba(250,247,240,0.55); letter-spacing: 0.02em;
+  }
+  .s-title .video-cta:hover .vc-main,
+  .s-title .video-cta:hover .vc-sub { color: var(--navy); }
 
   /* === SLIDE 02: Hello / Intro === */
   .s-hello {
@@ -1755,6 +1785,13 @@
         <span style="font-size:24px;">桃園市石門國民小學</span><br/>
         <span class="italic-en" style="font-size:24px;color:rgba(250,247,240,0.6);">cagooo@gmail.com</span>
       </div>
+      <a class="video-cta" href="https://youtu.be/QIWCfU1e_wg" target="_blank" rel="noopener" title="觀看阿凱老師親自口說的影片導讀">
+        <span class="vc-play">▶</span>
+        <span class="vc-text">
+          <span class="vc-main">觀看影片導讀</span>
+          <span class="vc-sub">阿凱老師親自口說 · 全片 14 分鐘</span>
+        </span>
+      </a>
       <div class="logo-mark">
         <picture><source srcset="assets/logo.webp" type="image/webp"><img src="assets/logo.png" alt="石門國小校徽" /></picture>
       </div>
