@@ -17,7 +17,7 @@ import { resolveInternalLink } from '@/lib/resolveLink';
 import remarkGfm from 'remark-gfm';
 
 import { type EducationalTool } from '@/lib/data';
-import { getToolStats, trackToolUsage } from '@/lib/firestoreService';
+import { getToolStats, trackToolUsage, type ToolStats } from '@/lib/firestoreService';
 import { useFavorites } from '@/hooks/useFavorites';
 import { useRecentTools } from '@/hooks/useRecentTools';
 import { useAchievements } from '@/hooks/useAchievements';
@@ -249,9 +249,15 @@ export function BulletinToolDetail() {
     lastTrackedToolId.current = tool.id;
 
     trackToolUsage(tool.id)
-      .then((updated) => {
-        // 樂觀更新：直接把回傳的最新統計塞進 React Query 快取，畫面立即顯示 +1
-        queryClient.setQueryData(['toolStats', tool.id], updated);
+      .then(() => {
+        // 樂觀更新：在 getToolStats 抓回的 Firebase 權威值上 +1，畫面立即 +1。
+        // ⚠️ 絕對不能用 trackToolUsage 的回傳值覆蓋快取 —— 它在 callable 成功路徑
+        //    回傳的 totalClicks 是「本地 localStorage 計數」(localToolStats_*，只反映
+        //    本機點過幾次)，會把真實的 321 蓋成個位數，使用者得 Ctrl+F5 才看到正確值。
+        //    prev 不存在(getToolStats 尚未回 / 該工具還無 Firebase doc)時不動，等權威值回填。
+        queryClient.setQueryData<ToolStats | null>(['toolStats', tool.id], (prev) =>
+          prev ? { ...prev, totalClicks: prev.totalClicks + 1 } : prev
+        );
       })
       .catch((err) => console.error('追蹤工具使用失敗:', err));
   }, [tool, queryClient]);
