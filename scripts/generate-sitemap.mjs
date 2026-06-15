@@ -21,23 +21,12 @@ urls.push({
     priority: '1.0',
 });
 
-// 許願池分享頁（供社群爬蟲抓取 OG 預覽）
-urls.push({
-    loc: `${SITE_URL}/wish/`,
-    lastmod: TODAY,
-    changefreq: 'monthly',
-    priority: '0.9',
-});
-
-// Tool detail pages — 含 #100 工具索引神器（isInternal=true）
-for (const tool of tools) {
-    urls.push({
-        loc: `${SITE_URL}/tool/${tool.id}`,
-        lastmod: tool.addedAt ? tool.addedAt.slice(0, 10) : TODAY,
-        changefreq: 'monthly',
-        priority: tool.isInternal ? '0.85' : '0.8', // 索引神器略高
-    });
-}
+// ⚠️ 不列入 sitemap 的頁面（與 generate-og-pages.mjs 的 noindex 決策對齊）：
+//   - /wish/              → OG 分享頁，<meta robots="noindex">（純導流，真人 JS 導回主站）
+//   - /tool/{id}          → OG 分享頁，<meta robots="noindex">（每個工具的可索引內容改由 /blog/tool-{id} 迷你長文承接）
+//   - /share/heatmap.html → 首頁 OG 變體，noindex + canonical 指向首頁
+// sitemap 列出 noindex 網址會讓 Search Console 報「已提交網址被標記為 noindex」矛盾警告，故一律排除。
+// 工具仍可被搜尋到：靠下方的 blog 長文 / 迷你 blog landing + 外部 app 實際網址。
 
 // External tool URLs（指向工具實際運作的 GitHub Pages / Replit 等）
 // isInternal 工具不對外（沒 url 或 url 是內部路徑），跳過
@@ -110,13 +99,7 @@ for (const tool of tools) {
 }
 console.log(`📝 迷你 blog（每工具一篇）：${miniCount} 篇`);
 
-// 熱門工具拼貼 OG 變體 landing
-urls.push({
-    loc: `${SITE_URL}/share/heatmap.html`,
-    lastmod: TODAY,
-    changefreq: 'weekly',
-    priority: '0.6',
-});
+// 註：/share/heatmap.html 為首頁 OG 變體（noindex + canonical 指首頁），不列入 sitemap（見檔頭說明）
 
 // 🆕 v3.6.67: 2026 AIFED 演講子站（簡報 + 學術稿件 + 即時頁）
 urls.push({
