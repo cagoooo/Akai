@@ -6,6 +6,8 @@ import { soundManager } from "@/lib/soundManager";
 import { m as motion } from 'framer-motion';
 import { useToast } from "@/hooks/use-toast";
 
+const TOUR_PROMPT_COOLDOWN_MS = 14 * 24 * 60 * 60 * 1000;
+
 // 建立全局事件發射器，用於外部觸發導覽開始
 export const tourEvents = {
   startTour: () => {
@@ -257,8 +259,7 @@ export function TourGuide({ onComplete }: TourGuideProps) {
         const lastDismissed = localStorage.getItem('lastTourPromptDismissedAt');
         if (lastDismissed) {
           const dismissedAt = parseInt(lastDismissed, 10);
-          const oneDayMs = 24 * 60 * 60 * 1000;
-          if (Date.now() - dismissedAt < oneDayMs) {
+          if (Date.now() - dismissedAt < TOUR_PROMPT_COOLDOWN_MS) {
             return false; // 還在冷卻期
           }
         }
@@ -452,42 +453,6 @@ export function TourGuide({ onComplete }: TourGuideProps) {
         </motion.div>
       )}
 
-      {/* 固定位置的導覽按鈕（完成後顯示）— cork 風格 */}
-      {hasCompletedTour && (
-        <motion.button
-          type="button"
-          className="fixed-tour-button"
-          onClick={startTour}
-          aria-label="重新開始網站導覽"
-          title="重新開始網站導覽"
-          initial={{ opacity: 0, scale: 0.8, rotate: -6 }}
-          animate={{ opacity: 1, scale: 1, rotate: -3 }}
-          whileHover={{ scale: 1.05, rotate: 0 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ delay: 0.5 }}
-          style={{
-            position: 'fixed',
-            bottom: '94px',
-            right: '20px',
-            zIndex: 40,
-            background: '#fff27a',
-            color: '#1a1a1a',
-            border: '2.5px solid #1a1a1a',
-            padding: '8px 14px',
-            borderRadius: 8,
-            fontSize: 13,
-            fontWeight: 800,
-            cursor: 'pointer',
-            fontFamily: "'Noto Sans TC', sans-serif",
-            boxShadow: '3px 3px 0 rgba(0,0,0,.25)',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 6,
-          }}
-        >
-          📌 網站導覽
-        </motion.button>
-      )}
     </div>
   );
 }

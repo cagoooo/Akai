@@ -14,6 +14,8 @@ interface BeforeInstallPromptEvent extends Event {
     userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
 
+const INSTALL_PROMPT_COOLDOWN_MS = 14 * 24 * 60 * 60 * 1000;
+
 export function InstallPrompt() {
     const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
     const [showPrompt, setShowPrompt] = useState(false);
@@ -32,7 +34,7 @@ export function InstallPrompt() {
         if (wasDismissed) {
             const dismissedTime = parseInt(wasDismissed, 10);
             // 7 天後再次顯示
-            if (Date.now() - dismissedTime < 7 * 24 * 60 * 60 * 1000) {
+            if (Date.now() - dismissedTime < INSTALL_PROMPT_COOLDOWN_MS) {
                 setDismissed(true);
                 return;
             }

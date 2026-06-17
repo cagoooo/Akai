@@ -15,6 +15,7 @@ import { Pin } from '@/components/primitives/Pin';
 
 // 自動更新倒數秒數（使用者可在此期間點「稍後」取消）
 const AUTO_UPDATE_COUNTDOWN = 3;
+const PROMPT_COOLDOWN_MS = 14 * 24 * 60 * 60 * 1000;
 
 export function PWAUpdatePrompt() {
     const {
@@ -80,8 +81,7 @@ export function PWAUpdatePrompt() {
             const lastDismissed = localStorage.getItem('lastPwaPromptDismissedAt');
             if (lastDismissed) {
                 const dismissedAt = parseInt(lastDismissed, 10);
-                const oneDayMs = 24 * 60 * 60 * 1000;
-                if (Date.now() - dismissedAt < oneDayMs) {
+                if (Date.now() - dismissedAt < PROMPT_COOLDOWN_MS) {
                     return false;
                 }
             }
@@ -96,8 +96,7 @@ export function PWAUpdatePrompt() {
             const lastDismissed = localStorage.getItem('lastTourPromptDismissedAt');
             if (lastDismissed) {
                 const dismissedAt = parseInt(lastDismissed, 10);
-                const oneDayMs = 24 * 60 * 60 * 1000;
-                if (Date.now() - dismissedAt < oneDayMs) return true;
+                if (Date.now() - dismissedAt < PROMPT_COOLDOWN_MS) return true;
             }
         } catch (e) { }
         return false;

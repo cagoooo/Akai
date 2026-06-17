@@ -20,7 +20,7 @@ import { Pin } from '@/components/primitives/Pin';
 
 const VISIT_KEY = 'akai-visit-count';
 const DISMISS_KEY = 'akai-ios-pwa-prompt-dismissed-at';
-const DISMISS_DAYS = 7;
+const DISMISS_DAYS = 14;
 
 function isIosSafari(): boolean {
   if (typeof window === 'undefined') return false;
