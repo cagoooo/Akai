@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 110+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 111+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Wed, 17 Jun 2026 04:43:01 GMT</pubDate>
-    <lastBuildDate>Wed, 17 Jun 2026 04:46:22 GMT</lastBuildDate>
+    <pubDate>Wed, 17 Jun 2026 08:19:31 GMT</pubDate>
+    <lastBuildDate>Wed, 17 Jun 2026 08:20:03 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,18 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：狼人殺冠軍賽</title>
+      <link>https://cagoooo.github.io/Akai/tool/111</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/111</guid>
+      <pubDate>Wed, 17 Jun 2026 08:19:31 GMT</pubDate>
+      <description>把狼人殺變成一場有規則、有賽程、有主持節奏的班級冠軍賽，讓學生在推理、辯論、聆聽與團隊合作中玩出高品質互動。</description>
+      <category>狼人殺</category>
+      <category>冠軍賽</category>
+      <category>推理遊戲</category>
+      <category>班級活動</category>
+      <category>口語表達</category>
+    </item>
     <item>
       <title>🆕 新工具：智慧自動化照片成果轉影片產生器</title>
       <link>https://cagoooo.github.io/Akai/tool/110</link>
@@ -36,6 +48,15 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/photo-to-video-110-ai-event-recap-generator</guid>
       <pubDate>Wed, 17 Jun 2026 00:00:00 GMT</pubDate>
       <description>運動會、校外教學、創意實作課辦得精彩，幾十張照片拍回來卻只能丟成無聲的相片輪播——因為剪影片要想旁白、要配音、要上字幕、要選轉場，光想就累。#110 讓你只要上傳照片，多模態 AI 自動看懂每張照片在做什麼、編寫前後連貫的繁體中文旁白與字幕、配上微軟 Neural 人聲與背景音樂，一鍵錄製匯出相容 iPhone 的 MP4。純前端、金鑰只存你的瀏覽器，照片不外傳。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#111 狼人殺冠軍賽：把班級同樂變成一場有規則、有推理、有掌聲的口語表達競賽</title>
+      <link>https://cagoooo.github.io/Akai/blog/werewolf-championship-111-classroom-deduction-game</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/werewolf-championship-111-classroom-deduction-game</guid>
+      <pubDate>Wed, 17 Jun 2026 00:00:00 GMT</pubDate>
+      <description>狼人殺最怕的不是學生太投入，而是規則講不清、節奏控不住、發言變成一團混戰。#111 把角色、流程、勝利條件與比賽提醒整理成一個可投影、可分享的冠軍賽規則頁，讓班級活動從「大家玩一下」升級成有主持、有推理、有團隊合作的互動賽事。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
@@ -303,24 +324,6 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/comment-7-ai-positive-language</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
       <description>#7 不是「直覺評語 → AI 優化」 — 真實流程是「老師從 450+ 成語詞庫勾學生特質標籤 → AI 把標籤串成段落」。12 種寫作風格同時並列生成（不是單一）、CommentAdjuster 二階段縮 / 擴 / 換說法 + 5 級語氣滑桿、全校共享 API Key（阿凱自掏腰包）、繁中強制條款源於 v2.6.2 簡體字事故。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#88 國中課程計畫 AI 審查：對應桃園市 0505 版審查文件 40+ 項次 × PDF.js 抽文字 × 6 道合規鐵則 × 🔍 / ✨ 雙模式 × LINE 通知</title>
-      <link>https://cagoooo.github.io/Akai/blog/curriculum-88-ai-junior-high-review</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/curriculum-88-ai-junior-high-review</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#88 不是給教育局審查委員用的 — 是給校內備課老師「自我預審」避免被退件。上傳 PDF（PDF.js 抽文字）→ AI 比對教育局 0505 版審查文件 40+ 項次（0-1 到 7-11）→ 給 fix-box 修正建議。雙模式：🔍 審查 PDF / ✨ 產生合規計畫，6 道桃園市 115 國中合規鐵則寫進 system prompt。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#67 國語演說比賽訓練 Pro：107 題庫 + Web Speech 即時逐字稿 + Gemini 雷達圖評分 + 老師評分量表的單檔 5705 行神器</title>
-      <link>https://cagoooo.github.io/Akai/blog/speech-67-training-pro</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/speech-67-training-pro</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#67 不是 EZPage 模板（description 誤導）— 是阿凱純手寫 5705 行 HTML / 322 KB 的演說訓練系統。107 道題目 × 7 大分類 + 雙階段計時器 + Web Speech API 即時逐字稿 + Gemini 2.5 雷達圖四維評分 + 老師現場評分量表，賽事流程完整數位化。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>

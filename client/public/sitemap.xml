@@ -661,6 +661,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://cagoooo.github.io/smes-werewolf-rules/</loc>
+    <lastmod>2026-06-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://cagoooo.github.io/Akai/blog</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
@@ -1328,6 +1334,12 @@
   </url>
   <url>
     <loc>https://cagoooo.github.io/Akai/blog/photo-to-video-110-ai-event-recap-generator</loc>
+    <lastmod>2026-06-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cagoooo.github.io/Akai/blog/werewolf-championship-111-classroom-deduction-game</loc>
     <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

@@ -13845,7 +13845,73 @@ const POST_110: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+const POST_111: BlogPost = {
+  slug: 'werewolf-championship-111-classroom-deduction-game',
+  title: '#111 狼人殺冠軍賽：把班級同樂變成一場有規則、有推理、有掌聲的口語表達競賽',
+  excerpt:
+    '狼人殺最怕的不是學生太投入，而是規則講不清、節奏控不住、發言變成一團混戰。#111 把角色、流程、勝利條件與比賽提醒整理成一個可投影、可分享的冠軍賽規則頁，讓班級活動從「大家玩一下」升級成有主持、有推理、有團隊合作的互動賽事。',
+  publishedAt: '2026-06-17',
+  readingMinutes: 5,
+  tags: ['狼人殺', '班級活動', '口語表達', '邏輯推理', '桌遊化學習'],
+  toolIds: [111, 3, 11],
+  coverEmoji: '🐺',
+  coverColor: 'orange',
+  body: `## 當狼人殺不只是遊戲，而是一場班級推理賽
+
+狼人殺在班級裡很容易爆紅，原因很簡單：學生愛演、愛猜、愛辯，也很享受「我看穿你了」的那一刻。但它也很容易失控。規則講一半有人忘了角色，主持人節奏一亂，白天討論就變成全班一起喊；最後大家很嗨，卻不一定真的練到表達、聆聽與推理。
+
+所以 #111：[狼人殺冠軍賽](https://cagoooo.github.io/smes-werewolf-rules/) 不是只做一張規則表，而是把整場活動包成可以直接投影使用的賽事頁。它讓主持人有節奏、玩家有依據、旁觀者也看得懂現在進行到哪裡。
+
+## #111 解決的核心問題：讓主持人不用一直重講
+
+一場好玩的狼人殺，關鍵不是角色有多複雜，而是每一輪的節奏有沒有被穩穩帶住。這個工具把活動現場最常卡住的地方先整理好：
+
+**角色定位清楚** — 狼人、村民與特殊角色各自要做什麼，直接放在畫面上，學生賽前可以先看，主持人也能隨時指給大家確認。
+
+**流程順序明確** — 夜晚行動、白天討論、投票放逐、勝利判定，一步一步照著走，避免「現在誰可以說話？」這種問題把氣氛打斷。
+
+**冠軍賽感拉滿** — 不是隨便玩一局，而是用賽事語氣包裝，讓學生自然進入比賽狀態：觀察、發言、結盟、反駁，都變成有目標的任務。
+
+## 教學上真正有價值的是什麼？
+
+狼人殺最迷人的地方，是它把很多抽象能力放進一個很自然的情境裡。
+
+- **口語表達**：學生要把自己的判斷說清楚，不能只喊「我覺得他怪怪的」。
+- **邏輯推理**：誰在什麼時候投了誰？誰的說法前後矛盾？線索需要被整理。
+- **聆聽與辨識**：想贏就不能只等自己發言，必須聽懂別人在說什麼。
+- **團隊合作**：好人陣營要協作找狼，狼人陣營要分工隱藏，兩邊都在練策略。
+- **情緒與規範**：遊戲再刺激，也要學會接受被懷疑、被投票，以及遵守主持節奏。
+
+換句話說，這不是把課堂變吵，而是把吵鬧的能量收進一個有規則的容器裡。
+
+## 適合怎麼用？
+
+我會把它放在高年級班級活動、畢業前同樂、社團課、營隊破冰或獎勵活動裡使用。老師可以先把連結丟給學生預習規則，活動當天再投影畫面，由主持人照著流程帶局。
+
+如果班級第一次玩，建議先用較簡單的角色配置，讓學生熟悉「夜晚閉眼、白天討論、投票放逐」的基本節奏。等大家抓到玩法，再加入更多特殊角色，活動張力會自然升上來。
+
+## 配對工具推薦
+
+- [#3 學生即時投票系統](/tool/3) — 想把放逐投票改成即時匿名表決，可以搭配使用
+- [#11 剛好學：課堂互動so easy](/tool/11) — 適合延伸成課堂問答、暖身互動與討論收斂
+- [#111 狼人殺冠軍賽](/tool/111) — 本篇主角，負責把遊戲規則與賽事感立起來
+
+## 適用對象
+
+- 想辦班級同樂，但不想整場活動失控的導師
+- 想練學生發言、聆聽、推理與反駁能力的老師
+- 想把桌遊活動做得更有儀式感的社團或營隊主持人
+- 已經會玩狼人殺，但需要一個清楚規則頁讓全班同步的人
+
+## 想試試？
+
+→ [前往 #111 狼人殺冠軍賽](https://cagoooo.github.io/smes-werewolf-rules/)
+
+把它投影出來，先讓學生讀懂規則，再開始第一局。只要主持節奏穩，狼人殺就不只是熱鬧，而會變成一場學生真的願意投入、也真的能練到能力的推理冠軍賽。
+`,
+};
+
+export const POSTS: BlogPost[] = [POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。

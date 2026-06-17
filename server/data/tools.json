@@ -1615,7 +1615,7 @@
     "icon": "MessageSquareText",
     "category": "communication",
     "previewUrl": "/previews/tool_89.webp",
-    "ogPreviewUrl": "",
+    "ogPreviewUrl": "/previews/og/tool_111.webp",
     "tags": [
       "親師溝通",
       "家長訊息",
@@ -2124,5 +2124,31 @@
       "一鍵匯出"
     ],
     "addedAt": "2026-06-17T04:43:01.354Z"
+  },
+  {
+    "id": 111,
+    "title": "狼人殺冠軍賽",
+    "description": "把狼人殺變成一場有規則、有賽程、有主持節奏的班級冠軍賽，讓學生在推理、辯論、聆聽與團隊合作中玩出高品質互動。",
+    "detailedDescription": "「狼人殺冠軍賽」是一個為班級活動、社團課與高年級口語表達練習設計的互動規則頁。它把原本容易吵成一團的狼人殺，整理成清楚的角色設定、遊戲流程、勝利條件與比賽提醒，讓主持人可以照著節奏帶場，玩家也能快速理解自己要做什麼。適合用在班級同樂、畢業前活動、社團競賽或營隊破冰，重點不只是玩遊戲，而是讓學生練習觀察線索、組織理由、說服同伴、辨識發言漏洞，並在安全的遊戲框架裡練習合作與表達。網站採純前端部署，打開就能投影使用，也能直接分享給學生賽前閱讀規則。",
+    "url": "https://cagoooo.github.io/smes-werewolf-rules/",
+    "icon": "Gamepad2",
+    "category": "interactive",
+    "previewUrl": "/previews/tool_111.webp",
+    "ogPreviewUrl": "/previews/og/tool_111.webp",
+    "tags": [
+      "狼人殺",
+      "冠軍賽",
+      "推理遊戲",
+      "班級活動",
+      "口語表達",
+      "邏輯推理",
+      "團隊合作",
+      "角色扮演",
+      "桌遊化學習",
+      "高年級活動",
+      "互動遊戲",
+      "石門國小"
+    ],
+    "addedAt": "2026-06-17T08:19:31.418Z"
   }
 ]
