@@ -12,8 +12,8 @@ interface SEOHeadProps {
     modifiedTime?: string;
 }
 
-const DEFAULT_TITLE = '科技教育創新專區 · 阿凱老師｜100+ 款國小教育工具';
-const DEFAULT_DESCRIPTION = '阿凱老師（桃園市石門國小）親手打造的 100+ 款國小教育科技工具：課堂互動、AI 教案、閱讀評量、語文寫作、教育遊戲一站搞定，100% 免費無廣告，免註冊一鍵分享給學生。';
+const DEFAULT_TITLE = '科技教育創新專區 · 阿凱老師｜110+ 款國小教育工具';
+const DEFAULT_DESCRIPTION = '阿凱老師（桃園市石門國小）親手打造的 110+ 款國小教育科技工具：課堂互動、AI 教案、閱讀評量、語文寫作、教育遊戲一站搞定，100% 免費無廣告，免註冊一鍵分享給學生。';
 const DEFAULT_KEYWORDS = [
     '教育科技',
     '教學工具',
@@ -29,7 +29,7 @@ const DEFAULT_KEYWORDS = [
     '石門國小',
 ];
 const SITE_URL = 'https://cagoooo.github.io/Akai';
-const DEFAULT_IMAGE = `${SITE_URL}/og-preview-053cc3f3.png`;
+const DEFAULT_IMAGE = `${SITE_URL}/og-preview-4c754cb4.png`;
 
 /**
  * SEO Head 元件

@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 109+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 110+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Fri, 12 Jun 2026 04:41:55 GMT</pubDate>
-    <lastBuildDate>Fri, 12 Jun 2026 04:47:29 GMT</lastBuildDate>
+    <pubDate>Wed, 17 Jun 2026 04:43:01 GMT</pubDate>
+    <lastBuildDate>Wed, 17 Jun 2026 04:46:22 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,27 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：智慧自動化照片成果轉影片產生器</title>
+      <link>https://cagoooo.github.io/Akai/tool/110</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/110</guid>
+      <pubDate>Wed, 17 Jun 2026 04:43:01 GMT</pubDate>
+      <description>辦完活動，幾十張照片躺在資料夾裡，要剪成一支有旁白、有音樂、有字幕的成果影片，光想到就累。#110 讓你只要上傳活動照片，多模態 AI 自動看懂每張照片在做什麼、編寫前後連貫的繁體中文旁白與字幕、配上微軟 Neural 高品質人聲、挑好轉場與背景音樂，最後一鍵錄製匯出相容 iPhone/Safari 的 MP4。純前端、金鑰只存在你的瀏覽器，照片不外傳。</description>
+      <category>照片轉影片</category>
+      <category>活動紀錄影片</category>
+      <category>AI 自動剪輯</category>
+      <category>多模態視覺辨識</category>
+      <category>AI 旁白腳本</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#110 活動辦完，照片就躺在資料夾裡發霉？上傳照片，AI 幫你剪成一支有旁白有配樂的成果影片</title>
+      <link>https://cagoooo.github.io/Akai/blog/photo-to-video-110-ai-event-recap-generator</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/photo-to-video-110-ai-event-recap-generator</guid>
+      <pubDate>Wed, 17 Jun 2026 00:00:00 GMT</pubDate>
+      <description>運動會、校外教學、創意實作課辦得精彩，幾十張照片拍回來卻只能丟成無聲的相片輪播——因為剪影片要想旁白、要配音、要上字幕、要選轉場，光想就累。#110 讓你只要上傳照片，多模態 AI 自動看懂每張照片在做什麼、編寫前後連貫的繁體中文旁白與字幕、配上微軟 Neural 人聲與背景音樂，一鍵錄製匯出相容 iPhone 的 MP4。純前端、金鑰只存你的瀏覽器，照片不外傳。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
     <item>
       <title>🆕 新工具：數位內容與教學軟體需求調查填報</title>
       <link>https://cagoooo.github.io/Akai/tool/109</link>
@@ -300,24 +321,6 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/speech-67-training-pro</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
       <description>#67 不是 EZPage 模板（description 誤導）— 是阿凱純手寫 5705 行 HTML / 322 KB 的演說訓練系統。107 道題目 × 7 大分類 + 雙階段計時器 + Web Speech API 即時逐字稿 + Gemini 2.5 雷達圖四維評分 + 老師現場評分量表，賽事流程完整數位化。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#72 動支及黏存單自動產生系統：拖廠商報價 PDF → PDF.js 自動解析品項數量單價 → 填入學校官方制式 Excel 範本</title>
-      <link>https://cagoooo.github.io/Akai/blog/expense-voucher-72-auto-generator</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/expense-voucher-72-auto-generator</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#72 不是「老師手鍵動支單」 — 是拖廠商報價 PDF → PDF.js 3.11 座標式擷取 + Tesseract.js OCR fallback → 自動填入石門國小現用 template.xlsx（含「預算內」「代收代辦」兩工作表）。教育部歲出政事別三碼代號內建，純瀏覽器零後端，PDF 不傳外部 server。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#54 識生學坊：MediaPipe 離線臉部偵測 + Gemini Vision 記憶口訣 + 4 模式遊戲化特訓 + 班級攻略本兩階段比對</title>
-      <link>https://cagoooo.github.io/Akai/blog/face-recognition-54-teacher-savior</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/face-recognition-54-teacher-savior</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#54「識生」= 認識學生，「學坊」= workshop 修練場。MediaPipe WebAssembly 端離線跑（不上傳第三方）+ Gemini Vision 自動產 3 個外觀特徵與口訣 + Combo 連擊 S+/S/A/B 評級 + 班級攻略本兩階段比對（fingerprint 粗篩 + Gemini 雙圖比對）。30 人班一次跑全套成本 NT$0.25-0.5，v3.14.0 活躍開發中。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
