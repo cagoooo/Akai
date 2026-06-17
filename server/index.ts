@@ -148,6 +148,80 @@ app.use((req, res, next) => {
 
       log(`Error: ${status} - ${message} - ${err.stack || 'No stack trace'}`);
 
+      // 當狀態碼為 500 且配置了 GOOGLE_CHAT_WEBHOOK_URL 時，發送告警到 Google Chat
+      const webhookUrl = process.env.GOOGLE_CHAT_WEBHOOK_URL;
+      if (status === 500 && webhookUrl && webhookUrl !== "PLACEHOLDER_NOT_CONFIGURED" && webhookUrl.trim() !== "") {
+        const errStack = err.stack || "無堆疊資訊";
+        const reqPath = _req.originalUrl || _req.path || "未知路徑";
+        const reqMethod = _req.method || "GET";
+        const clientIp = _req.headers['x-forwarded-for'] || _req.socket.remoteAddress || "未知 IP";
+
+        // 非同步推送 Google Chat，不阻塞 Response
+        (async () => {
+          try {
+            const summaryText = `🚨 Express 後端伺服器 500 錯誤: ${message}`;
+            const card = {
+              cardId: `express-err-${Date.now()}`,
+              card: {
+                header: {
+                  title: "🚨 Express 後端伺服器 500 錯誤",
+                  subtitle: message,
+                  imageUrl: "https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/dns/default/48px.svg",
+                  imageType: "CIRCLE",
+                },
+                sections: [
+                  {
+                    header: "請求詳細資訊",
+                    widgets: [
+                      {
+                        decoratedText: {
+                          topLabel: "請求路徑",
+                          text: `<b>[${reqMethod}]</b> ${reqPath}`,
+                        }
+                      },
+                      {
+                        decoratedText: {
+                          topLabel: "客戶端來源",
+                          text: `IP: ${clientIp}`,
+                        }
+                      },
+                      {
+                        decoratedText: {
+                          topLabel: "觸發時間",
+                          text: new Date().toLocaleString("zh-TW", { timeZone: "Asia/Taipei" }),
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    header: "錯誤堆疊分析 (Stack Trace)",
+                    widgets: [
+                      {
+                        textParagraph: {
+                          text: `<font color="#b91c1c"><pre>${errStack.split("\n").slice(0, 10).join("\n")}</pre></font>`,
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            };
+
+            await import("axios").then(async ({ default: axios }) => {
+              await axios.post(webhookUrl.trim(), {
+                text: summaryText.slice(0, 1000),
+                cardsV2: [card]
+              }, {
+                headers: { "Content-Type": "application/json" },
+                timeout: 5000
+              });
+            });
+          } catch (eChat) {
+            console.error("Failed to send Express error to Google Chat:", eChat);
+          }
+        })();
+      }
+
       res.status(status).json({
         message,
         errorId: new Date().getTime(),

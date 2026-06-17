@@ -24,9 +24,14 @@
 
 import { onSchedule } from "firebase-functions/v2/scheduler";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
+import { defineSecret } from "firebase-functions/params";
 import * as admin from "firebase-admin";
 import axios from "axios";
 import { pushFlexToAdmin } from "./lib/lineNotify";
+import { pushToGoogleChat } from "./lib/googleChatNotify";
+
+const GOOGLE_CHAT_WEBHOOK_URL = defineSecret("GOOGLE_CHAT_WEBHOOK_URL");
+
 
 const PROJECT_ID = process.env.GCLOUD_PROJECT || process.env.GCP_PROJECT || "akai-e693f";
 const CONFIG_URL = `https://identitytoolkit.googleapis.com/admin/v2/projects/${PROJECT_ID}/config`;
@@ -251,6 +256,7 @@ export const verifyAnonAuthDaily = onSchedule(
         region: "asia-east1",
         memory: "256MiB",
         timeoutSeconds: 60,
+        secrets: [GOOGLE_CHAT_WEBHOOK_URL],
     },
     async () => {
         const result = await checkAndHealAnonAuth();
@@ -270,12 +276,117 @@ export const verifyAnonAuthDaily = onSchedule(
                 buildFixedBubble(result.checkedAt),
                 "verifyAnonAuthDaily.fixed"
             );
+            // 同步推送 Google Chat
+            try {
+                const webhookUrl = GOOGLE_CHAT_WEBHOOK_URL.value();
+                const summaryText = `🛟 Anonymous Auth 已自動修復 (專案: ${PROJECT_ID})`;
+                const gChatCard = {
+                    cardId: `anon-fixed-${Date.now()}`,
+                    card: {
+                        header: {
+                            title: "🛟 Anonymous Auth 已自動修復",
+                            subtitle: "Firestore 訪客寫入功能已恢復正常",
+                            imageUrl: "https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/health_and_safety/default/48px.svg",
+                            imageType: "CIRCLE",
+                        },
+                        sections: [
+                            {
+                                widgets: [
+                                    {
+                                        textParagraph: {
+                                            text: "Firebase Anonymous Sign-in provider 被偵測為「關閉」，已透過 Identity Toolkit Admin API 自動 PATCH 設回啟用狀態。"
+                                        }
+                                    },
+                                    {
+                                        decoratedText: {
+                                            topLabel: "專案 ID",
+                                            text: PROJECT_ID,
+                                        }
+                                    },
+                                    {
+                                        decoratedText: {
+                                            topLabel: "修復時間",
+                                            text: new Date(result.checkedAt).toLocaleString("zh-TW", { timeZone: "Asia/Taipei" }),
+                                        }
+                                    },
+                                    {
+                                        buttonList: {
+                                            buttons: [
+                                                {
+                                                    text: "開啟 Firebase Console",
+                                                    onClick: { openLink: { url: CONSOLE_AUTH_URL } }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                };
+                await pushToGoogleChat(webhookUrl, summaryText, [gChatCard], "AnonAuthDaily.Fixed");
+            } catch (errChat) {
+                console.error("[verifyAnonAuthDaily] Google Chat fixed push failed:", errChat);
+            }
         } else if (result.error) {
             await pushFlexToAdmin(
                 "⚠️ Anonymous Auth 健康檢查失敗",
                 buildErrorBubble(result.checkedAt, result.error),
                 "verifyAnonAuthDaily.error"
             );
+            // 同步推送 Google Chat
+            try {
+                const webhookUrl = GOOGLE_CHAT_WEBHOOK_URL.value();
+                const summaryText = `⚠️ Anonymous Auth 健康檢查失敗: ${result.error}`;
+                const gChatCard = {
+                    cardId: `anon-error-${Date.now()}`,
+                    card: {
+                        header: {
+                            title: "⚠️ Anonymous Auth 健康檢查失敗",
+                            subtitle: "需要人工介入確認",
+                            imageUrl: "https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/warning/default/48px.svg",
+                            imageType: "CIRCLE",
+                        },
+                        sections: [
+                            {
+                                widgets: [
+                                    {
+                                        textParagraph: {
+                                            text: "verifyAnonAuthDaily 排程在呼叫 Identity Toolkit API 時失敗，無法確認目前 anonymous provider 狀態。"
+                                        }
+                                    },
+                                    {
+                                        decoratedText: {
+                                            topLabel: "錯誤原因",
+                                            text: `<font color="#dc2626">${result.error}</font>`,
+                                            wrapText: true
+                                        }
+                                    },
+                                    {
+                                        decoratedText: {
+                                            topLabel: "檢查時間",
+                                            text: new Date(result.checkedAt).toLocaleString("zh-TW", { timeZone: "Asia/Taipei" }),
+                                        }
+                                    },
+                                    {
+                                        buttonList: {
+                                            buttons: [
+                                                {
+                                                    text: "立即到 Console 檢查",
+                                                    onClick: { openLink: { url: CONSOLE_AUTH_URL } }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                };
+                await pushToGoogleChat(webhookUrl, summaryText, [gChatCard], "AnonAuthDaily.Error");
+            } catch (errChat) {
+                console.error("[verifyAnonAuthDaily] Google Chat error push failed:", errChat);
+            }
         }
         // result.enabled === true && !result.wasFixed → 沒事，安靜
     }
@@ -287,6 +398,7 @@ export const verifyAnonAuthNow = onCall(
         region: "asia-east1",
         memory: "256MiB",
         timeoutSeconds: 60,
+        secrets: [GOOGLE_CHAT_WEBHOOK_URL],
     },
     async (req): Promise<AnonAuthCheckResult> => {
         if (req.auth?.token?.admin !== true) {
@@ -312,12 +424,92 @@ export const verifyAnonAuthNow = onCall(
                 buildFixedBubble(result.checkedAt),
                 "verifyAnonAuthNow.fixed"
             );
+            // 同步推送 Google Chat
+            try {
+                const webhookUrl = GOOGLE_CHAT_WEBHOOK_URL.value();
+                const summaryText = `🛟 Anonymous Auth 已修復（手動觸發）`;
+                const gChatCard = {
+                    cardId: `anon-fixed-now-${Date.now()}`,
+                    card: {
+                        header: {
+                            title: "🛟 Anonymous Auth 已手動修復",
+                            subtitle: "Firestore 訪客寫入功能已恢復正常",
+                            imageUrl: "https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/health_and_safety/default/48px.svg",
+                            imageType: "CIRCLE",
+                        },
+                        sections: [
+                            {
+                                widgets: [
+                                    {
+                                        textParagraph: {
+                                            text: "管理員手動觸發了匿名認證健檢，並成功將已關閉的 anonymous provider 重新啟用。"
+                                        }
+                                    },
+                                    {
+                                        decoratedText: {
+                                            topLabel: "專案 ID",
+                                            text: PROJECT_ID,
+                                        }
+                                    },
+                                    {
+                                        decoratedText: {
+                                            topLabel: "修復時間",
+                                            text: new Date(result.checkedAt).toLocaleString("zh-TW", { timeZone: "Asia/Taipei" }),
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                };
+                await pushToGoogleChat(webhookUrl, summaryText, [gChatCard], "AnonAuthNow.Fixed");
+            } catch (errChat) {
+                console.error("[verifyAnonAuthNow] Google Chat fixed push failed:", errChat);
+            }
         } else if (result.error) {
             await pushFlexToAdmin(
                 "⚠️ Anonymous Auth 健康檢查失敗（手動觸發）",
                 buildErrorBubble(result.checkedAt, result.error),
                 "verifyAnonAuthNow.error"
             );
+            // 同步推送 Google Chat
+            try {
+                const webhookUrl = GOOGLE_CHAT_WEBHOOK_URL.value();
+                const summaryText = `⚠️ Anonymous Auth 健康檢查失敗（手動觸發）: ${result.error}`;
+                const gChatCard = {
+                    cardId: `anon-error-now-${Date.now()}`,
+                    card: {
+                        header: {
+                            title: "⚠️ Anonymous Auth 健康檢查失敗（手動觸發）",
+                            subtitle: "Identity Toolkit API 回報錯誤",
+                            imageUrl: "https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/warning/default/48px.svg",
+                            imageType: "CIRCLE",
+                        },
+                        sections: [
+                            {
+                                widgets: [
+                                    {
+                                        decoratedText: {
+                                            topLabel: "錯誤原因",
+                                            text: `<font color="#dc2626">${result.error}</font>`,
+                                            wrapText: true
+                                        }
+                                    },
+                                    {
+                                        decoratedText: {
+                                            topLabel: "檢查時間",
+                                            text: new Date(result.checkedAt).toLocaleString("zh-TW", { timeZone: "Asia/Taipei" }),
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                };
+                await pushToGoogleChat(webhookUrl, summaryText, [gChatCard], "AnonAuthNow.Error");
+            } catch (errChat) {
+                console.error("[verifyAnonAuthNow] Google Chat error push failed:", errChat);
+            }
         }
         return result;
     }

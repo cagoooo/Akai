@@ -40,6 +40,10 @@ export { monitorToolStatsSchema } from "./monitorToolStatsSchema";
 //   結果寫進 healthCheckRuns collection，給後台歷史趨勢圖用
 export { runHealthCheckDaily } from "./runHealthCheckDaily";
 
+// 🆕 v3.6.81: Google Chat Webhook 推送通知 Triggers (新使用者註冊 & 錯誤日誌)
+export { onUserCreated, onErrorLogCreated } from "./googleChatTriggers";
+
+
 // 對外公開站點（供 LINE 卡片裡的「打開查看」按鈕用）
 const SITE_BASE = "https://cagoooo.github.io/Akai";
 
