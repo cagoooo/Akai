@@ -137,7 +137,7 @@ export function BulletinDeploymentEcosystem() {
         }}
       >
         {PLATFORMS.map((p, idx) => {
-          const Wrap = p.blogSlug ? Link : ('div' as const);
+          const Wrap = (p.blogSlug ? Link : 'div') as React.ElementType;
           const wrapProps: Record<string, unknown> = p.blogSlug
             ? { href: `/blog/${p.blogSlug}` }
             : {};
@@ -162,11 +162,11 @@ export function BulletinDeploymentEcosystem() {
                 gap: 6,
                 fontFamily: tokens.font.tc,
               }}
-              onMouseEnter={p.blogSlug ? (e) => {
+              onMouseEnter={p.blogSlug ? (e: React.MouseEvent<HTMLElement>) => {
                 e.currentTarget.style.transform = `rotate(${(idx % 2 === 0 ? -1.4 : 1.4) * 0.4}deg) translate(-1px, -2px)`;
                 e.currentTarget.style.boxShadow = '5px 6px 0 rgba(0,0,0,.22)';
               } : undefined}
-              onMouseLeave={p.blogSlug ? (e) => {
+              onMouseLeave={p.blogSlug ? (e: React.MouseEvent<HTMLElement>) => {
                 e.currentTarget.style.transform = `rotate(${(idx % 2 === 0 ? -1 : 1) * 0.4}deg)`;
                 e.currentTarget.style.boxShadow = '3px 4px 0 rgba(0,0,0,.18)';
               } : undefined}

@@ -68,28 +68,50 @@ function run() {
   const currentTarget = JSON.stringify(target, null, 2);
   const newTarget = JSON.stringify(merged, null, 2) + '\n';
 
-  if (currentTarget + '\n' === newTarget) {
+  if (currentTarget + '\n' !== newTarget) {
+    // 找出哪些 tool 差異了（debug 用）
+    const diffIds = [];
+    for (const s of source) {
+      const t = target.find((x) => x.id === s.id);
+      if (!t || JSON.stringify(t) !== JSON.stringify(s)) {
+        diffIds.push(s.id);
+      }
+    }
+
+    writeFileSync(TARGET, newTarget, 'utf-8');
+    console.log(OK(`✅ sync 完成：server (${source.length}) → client (${merged.length}，含 #100)`));
+    if (diffIds.length > 0) {
+      console.log(
+        HIGHLIGHT(
+          `   📝 異動工具 id：${diffIds.length > 20 ? diffIds.slice(0, 20).join(',') + '...' : diffIds.join(',')}`,
+        ),
+      );
+    }
+  } else {
     console.log(OK(`✅ tools.json 已同步，無需更新（${source.length} + #100 = ${merged.length}）`));
-    return;
   }
 
-  // 找出哪些 tool 差異了（debug 用）
-  const diffIds = [];
-  for (const s of source) {
-    const t = target.find((x) => x.id === s.id);
-    if (!t || JSON.stringify(t) !== JSON.stringify(s)) {
-      diffIds.push(s.id);
+  // 自動生成 client/src/lib/toolUrlMap.ts
+  const mapEntries = {};
+  for (const t of merged) {
+    if (t.id && t.url && typeof t.url === 'string' && t.url.startsWith('http')) {
+      mapEntries[t.url] = t.id;
     }
   }
 
-  writeFileSync(TARGET, newTarget, 'utf-8');
-  console.log(OK(`✅ sync 完成：server (${source.length}) → client (${merged.length}，含 #100)`));
-  if (diffIds.length > 0) {
-    console.log(
-      HIGHLIGHT(
-        `   📝 異動工具 id：${diffIds.length > 20 ? diffIds.slice(0, 20).join(',') + '...' : diffIds.join(',')}`,
-      ),
-    );
+  const mapFilePath = resolve(ROOT, 'client', 'src', 'lib', 'toolUrlMap.ts');
+  const mapFileContent = `// 由 scripts/sync-tools-json.mjs 自動產生，請勿手動修改
+export const TOOL_URL_MAP: Record<string, number> = ${JSON.stringify(mapEntries, null, 2)};
+`;
+
+  let currentMapContent = '';
+  if (existsSync(mapFilePath)) {
+    currentMapContent = readFileSync(mapFilePath, 'utf-8');
+  }
+
+  if (currentMapContent !== mapFileContent) {
+    writeFileSync(mapFilePath, mapFileContent, 'utf-8');
+    console.log(OK(`✅ 已自動更新 toolUrlMap.ts，共 ${Object.keys(mapEntries).length} 筆對應`));
   }
 }
 

@@ -33,6 +33,7 @@ import { BlogCodeBlock } from '@/components/blog/BlogCodeBlock';
 import { BlogPostingSchema } from '@/components/blog/BlogPostingSchema';
 import { BlogPodcast } from '@/components/blog/BlogPodcast';
 import { BlogTemplateCopier } from '@/components/blog/BlogTemplateCopier';
+import { convertExternalToolLink } from '@/lib/resolveLink';
 import { useReadingProgress } from '@/hooks/useReadingProgress';
 import { useActiveSection } from '@/hooks/useActiveSection';
 import { useExtractedSections, slugifyHeading } from '@/hooks/useExtractedSections';
@@ -342,9 +343,15 @@ export function BlogPost() {
                   },
                   a: ({ href, children, ...rest }) => {
                     if (!href) return <a {...rest}>{children}</a>;
-                    if (href.startsWith('/')) {
-                      return <Link href={href}>{children}</Link>;
+                    
+                    // 1. 先把自家工具外部連結轉成內部連結，例如：https://cagoooo.github.io/bee/ -> /tool/6
+                    const toolHref = convertExternalToolLink(href);
+
+                    // 2. 如果為站內連結，使用 Wouter 的 Link 元件進行無刷新跳轉
+                    if (toolHref.startsWith('/') && !toolHref.startsWith('//')) {
+                      return <Link href={toolHref}>{children}</Link>;
                     }
+
                     if (href.startsWith('#')) {
                       // 文章內錨點：scrollTo 該 id 並補 24px header offset
                       return (

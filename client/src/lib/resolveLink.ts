@@ -16,16 +16,56 @@
  *   }} />
  */
 
+import { TOOL_URL_MAP } from './toolUrlMap';
+
 const BASE = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+
+function normalizeUrl(url: string): string {
+  return url
+    .replace(/^https?:\/\//i, '')
+    .replace(/\/$/, '')
+    .trim()
+    .toLowerCase();
+}
+
+// 預先建立標準化比對字典
+const NORMALIZED_MAP: Record<string, number> = {};
+for (const [rawUrl, id] of Object.entries(TOOL_URL_MAP)) {
+  NORMALIZED_MAP[normalizeUrl(rawUrl)] = id;
+}
+
+/**
+ * 將外部工具連結改寫為內部相對路徑，例如：https://cagoooo.github.io/bee/ -> /tool/6
+ */
+export function convertExternalToolLink(href?: string): string {
+  if (!href) return '';
+  const normalized = normalizeUrl(href);
+
+  for (const [key, id] of Object.entries(NORMALIZED_MAP)) {
+    // 精確匹配或是包含子路徑 (例如: key/game.html)
+    if (normalized === key || normalized.startsWith(key + '/')) {
+      return `/tool/${id}`;
+    }
+  }
+  return href;
+}
 
 export function resolveInternalLink(href?: string): string {
   if (!href) return '#';
+
+  // 1. 先把自家工具外部連結轉成內部連結，例如：https://cagoooo.github.io/bee/ -> /tool/6
+  let resolvedHref = href;
+  if (/^(https?:|\/\/)/.test(resolvedHref)) {
+    resolvedHref = convertExternalToolLink(resolvedHref);
+  }
+
+  // 2. 接著跑原本的 internal link 解析
   // 外部 / mailto / tel / hash 不動
-  if (/^(https?:|mailto:|tel:|#|\/\/)/.test(href)) return href;
+  if (/^(https?:|mailto:|tel:|#|\/\/)/.test(resolvedHref)) return resolvedHref;
   // 已經帶 basePath 不動（避免重複加 prefix）
-  if (BASE && href.startsWith(BASE + '/')) return href;
+  if (BASE && resolvedHref.startsWith(BASE + '/')) return resolvedHref;
   // 站內相對路徑（從 / 開始）→ 補 basePath
-  if (href.startsWith('/')) return BASE + href;
+  if (resolvedHref.startsWith('/')) return BASE + resolvedHref;
   // 相對路徑（不從 / 開始）→ 保持原樣
-  return href;
+  return resolvedHref;
 }

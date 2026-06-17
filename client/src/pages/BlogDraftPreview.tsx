@@ -16,6 +16,7 @@ import { BulletinHeader } from '@/components/bulletin/BulletinHeader';
 import { BulletinFooter } from '@/components/bulletin/BulletinFooter';
 import { BlogCodeBlock } from '@/components/blog/BlogCodeBlock';
 import { slugifyHeading } from '@/hooks/useExtractedSections';
+import { convertExternalToolLink } from '@/lib/resolveLink';
 
 const DRAFTS_KEY = 'akai_blog_drafts_v1';
 const CURRENT_KEY = 'akai_blog_draft_current_v1';
@@ -300,6 +301,21 @@ export function BlogDraftPreview() {
                     return <BlogCodeBlock language={m?.[1]} code={code} />;
                   }
                   return <pre>{children}</pre>;
+                },
+                a: ({ href, children, ...rest }) => {
+                  if (!href) return <a {...rest}>{children}</a>;
+                  const toolHref = convertExternalToolLink(href);
+                  if (toolHref.startsWith('/') && !toolHref.startsWith('//')) {
+                    return <Link href={toolHref}>{children}</Link>;
+                  }
+                  if (href.startsWith('#')) {
+                    return <a href={href}>{children}</a>;
+                  }
+                  return (
+                    <a href={href} target="_blank" rel="noopener noreferrer">
+                      {children}
+                    </a>
+                  );
                 },
               }}
             >
