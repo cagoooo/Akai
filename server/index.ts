@@ -207,15 +207,32 @@ app.use((req, res, next) => {
               }
             };
 
-            await import("axios").then(async ({ default: axios }) => {
-              await axios.post(webhookUrl.trim(), {
-                text: summaryText.slice(0, 1000),
-                cardsV2: [card]
-              }, {
-                headers: { "Content-Type": "application/json" },
-                timeout: 5000
-              });
+            const https = await import("https");
+            const urlObj = new URL(webhookUrl.trim());
+            const postData = JSON.stringify({
+              text: summaryText.slice(0, 1000),
+              cardsV2: [card]
             });
+
+            const req = https.request({
+              hostname: urlObj.hostname,
+              path: urlObj.pathname + urlObj.search,
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Content-Length': Buffer.byteLength(postData)
+              },
+              timeout: 5000
+            }, (res) => {
+              res.on('data', () => {}); // 消費回應數據釋放記憶體
+            });
+
+            req.on('error', (e) => {
+              console.error("Failed to send Express error to Google Chat via HTTPS request:", e);
+            });
+
+            req.write(postData);
+            req.end();
           } catch (eChat) {
             console.error("Failed to send Express error to Google Chat:", eChat);
           }

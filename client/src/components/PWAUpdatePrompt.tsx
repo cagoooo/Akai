@@ -15,7 +15,7 @@ import { Pin } from '@/components/primitives/Pin';
 
 // 自動更新倒數秒數（使用者可在此期間點「稍後」取消）
 const AUTO_UPDATE_COUNTDOWN = 3;
-const PROMPT_COOLDOWN_MS = 14 * 24 * 60 * 60 * 1000;
+const PROMPT_COOLDOWN_MS = 30 * 24 * 60 * 60 * 1000; // 延長至 30 天
 
 export function PWAUpdatePrompt() {
     const {
@@ -76,6 +76,7 @@ export function PWAUpdatePrompt() {
         dismissUpdate();
     };
 
+
     const [showInstallPrompt, setShowInstallPrompt] = useState(() => {
         try {
             const lastDismissed = localStorage.getItem('lastPwaPromptDismissedAt');
@@ -108,6 +109,23 @@ export function PWAUpdatePrompt() {
         window.addEventListener('tour-resolved', onResolved);
         return () => window.removeEventListener('tour-resolved', onResolved);
     }, [tourResolved]);
+
+    const [isInstallShownThisSession, setIsInstallShownThisSession] = useState(() => {
+        try {
+            return sessionStorage.getItem('akai-pwa-install-prompt-shown-this-session') === 'true';
+        } catch (e) {
+            return false;
+        }
+    });
+
+    useEffect(() => {
+        if (isInstallable && showInstallPrompt && shouldShowAfterDelay && tourResolved && !isInstallShownThisSession) {
+            try {
+                sessionStorage.setItem('akai-pwa-install-prompt-shown-this-session', 'true');
+                setIsInstallShownThisSession(true);
+            } catch (e) { }
+        }
+    }, [isInstallable, showInstallPrompt, shouldShowAfterDelay, tourResolved, isInstallShownThisSession]);
 
     const handleDismissInstall = () => {
         setShowInstallPrompt(false);
@@ -340,7 +358,7 @@ export function PWAUpdatePrompt() {
     // 顯示條件：可安裝 + 未在 24h cooldown + 已過 8s 延遲 + Tour 提示已解決（避免右下角重疊）
     const InstallPrompt = () => (
         <AnimatePresence>
-            {isInstallable && showInstallPrompt && shouldShowAfterDelay && tourResolved && (
+            {isInstallable && showInstallPrompt && shouldShowAfterDelay && tourResolved && !isInstallShownThisSession && (
                 <motion.div
                     initial={{ opacity: 0, y: 50, rotate: 3 }}
                     animate={{ opacity: 1, y: 0, rotate: 1.5 }}

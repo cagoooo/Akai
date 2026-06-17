@@ -6,7 +6,8 @@ import { soundManager } from "@/lib/soundManager";
 import { m as motion } from 'framer-motion';
 import { useToast } from "@/hooks/use-toast";
 
-const TOUR_PROMPT_COOLDOWN_MS = 14 * 24 * 60 * 60 * 1000;
+const TOUR_PROMPT_COOLDOWN_MS = 30 * 24 * 60 * 60 * 1000; // 延長至 30 天
+
 
 // 建立全局事件發射器，用於外部觸發導覽開始
 export const tourEvents = {
@@ -267,11 +268,23 @@ export function TourGuide({ onComplete }: TourGuideProps) {
       return true; // 可以顯示
     };
 
+    // 檢查本會話是否已經主動顯示過，避免重新整理反覆打擾
+    const isShownThisSession = () => {
+      try {
+        return sessionStorage.getItem('akai-tour-prompt-shown-this-session') === 'true';
+      } catch (e) {
+        return false;
+      }
+    };
+
     // 初次載入且尚未完成導覽時，延遲顯示提示
     // 在 Lighthouse/CI 環境中禁用自動彈窗以避免干擾 LCP/TBT 指標
-    if (!tourCompleted && checkPromptCooldown() && !isCIEnvironment()) {
+    if (!tourCompleted && checkPromptCooldown() && !isShownThisSession() && !isCIEnvironment()) {
       const timer = setTimeout(() => {
         setIsVisible(true);
+        try {
+          sessionStorage.setItem('akai-tour-prompt-shown-this-session', 'true');
+        } catch (e) { }
       }, 8000); // 增加延遲到 8 秒，確保首屏渲染完全穩定
       return () => clearTimeout(timer);
     }

@@ -20,7 +20,7 @@ import { Pin } from '@/components/primitives/Pin';
 
 const VISIT_KEY = 'akai-visit-count';
 const DISMISS_KEY = 'akai-ios-pwa-prompt-dismissed-at';
-const DISMISS_DAYS = 14;
+const DISMISS_DAYS = 30; // 延長至 30 天
 
 function isIosSafari(): boolean {
   if (typeof window === 'undefined') return false;
@@ -76,9 +76,26 @@ export function IosPwaInstallPrompt() {
 
   useEffect(() => {
     bumpVisitCount();
-    if (!isIosSafari() || isStandalone() || wasDismissedRecently() || getVisitCount() < 2) return;
+
+    // 檢查本會話是否已經主動顯示過，避免重新整理反覆打擾
+    const isShownThisSession = () => {
+      try {
+        return sessionStorage.getItem('akai-ios-pwa-prompt-shown-this-session') === 'true';
+      } catch (e) {
+        return false;
+      }
+    };
+
+    if (!isIosSafari() || isStandalone() || wasDismissedRecently() || getVisitCount() < 2 || isShownThisSession()) return;
+    
     // 延遲 4 秒再跳，給使用者先看內容
-    const handle = setTimeout(() => setShow(true), 4000);
+    const handle = setTimeout(() => {
+      setShow(true);
+      try {
+        sessionStorage.setItem('akai-ios-pwa-prompt-shown-this-session', 'true');
+      } catch (e) { }
+    }, 4000);
+    
     return () => clearTimeout(handle);
   }, []);
 
