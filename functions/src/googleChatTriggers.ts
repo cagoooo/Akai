@@ -23,8 +23,18 @@ export const onUserCreated = functions
     })
     .auth.user()
     .onCreate(async (user) => {
+        // 🔕 跳過匿名登入：站台對每個訪客都會 signInAnonymously，
+        // 一整個班級 30 台裝置進站＝30 個匿名帳號，會在同時段灌爆通知。
+        // 匿名使用者沒有 email 且 providerData 為空陣列；只有真正用帳號
+        // （Google 登入等）註冊的人才推通知。
+        const isAnonymous = !user.email && (!user.providerData || user.providerData.length === 0);
+        if (isAnonymous) {
+            console.log(`[AuthOnCreate] 略過匿名訪客註冊通知 uid=${user.uid}`);
+            return;
+        }
+
         const webhookUrl = GOOGLE_CHAT_WEBHOOK_URL.value();
-        const email = user.email || "（無電子郵件，可能是匿名登入）";
+        const email = user.email || "（無電子郵件）";
         const uid = user.uid;
         const displayName = user.displayName || "未設定名稱";
         const createdAt = user.metadata.creationTime
