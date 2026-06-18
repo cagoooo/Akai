@@ -258,6 +258,10 @@ export function BulletinToolDetail() {
         queryClient.setQueryData<ToolStats | null>(['toolStats', tool.id], (prev) =>
           prev ? { ...prev, totalClicks: prev.totalClicks + 1 } : prev
         );
+        // 寫後端成功後重抓權威值校正：callable 已 await 完伺服器原子 +1，此時 getToolStats
+        // 必拿到含本次點擊的最新值。這同時補救「prev 尚未回 → 樂觀 +1 被吞掉」的競態，
+        // 也順手把 lastUsedAt(最後使用日期) 一起回填，不必重整整頁。
+        queryClient.invalidateQueries({ queryKey: ['toolStats', tool.id] });
       })
       .catch((err) => console.error('追蹤工具使用失敗:', err));
   }, [tool, queryClient]);

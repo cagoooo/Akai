@@ -285,7 +285,16 @@ export async function getToolStats(toolId: number): Promise<ToolStats | null> {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-            return docSnap.data() as ToolStats;
+            // ⚠️ 欄位正規化：Cloud Function (incrementToolClick) 寫的是 `lastClickedAt`，
+            //    但 ToolStats / 前端 UI 讀的是 `lastUsedAt`，不對齊會導致「最後使用」永遠
+            //    顯示「尚無紀錄」。這裡統一 fallback 成 lastUsedAt，讓兩條寫入路徑都對得上。
+            const data = docSnap.data() as Partial<ToolStats> & { lastClickedAt?: Timestamp | null };
+            return {
+                toolId,
+                totalClicks: data.totalClicks ?? 0,
+                lastUsedAt: data.lastUsedAt ?? data.lastClickedAt ?? null,
+                categoryClicks: data.categoryClicks ?? {},
+            };
         }
         return null;
     } catch (error) {
