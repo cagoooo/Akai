@@ -5,7 +5,7 @@
  */
 
 import { useParams, Link, useLocation } from 'wouter';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { PageHead } from '@/components/PageHead';
 import { m as motion, AnimatePresence } from 'framer-motion';
 import { useMemo } from 'react';
@@ -31,7 +31,7 @@ import {
 import { tools, type EducationalTool, type ToolCategory } from '@/lib/data';
 import { iconRegistry, type IconName } from '@/lib/iconRegistry';
 import { categoryInfo, getCategoryColorClass } from '@/lib/categoryConstants';
-import { getToolStats, trackToolUsage } from '@/lib/firestoreService';
+import { getToolStats, trackToolUsage, type ToolStats } from '@/lib/firestoreService';
 import { useFavorites } from '@/hooks/useFavorites';
 import { useRecentTools } from '@/hooks/useRecentTools';
 import { useAchievements } from '@/hooks/useAchievements';
@@ -297,6 +297,7 @@ export function ToolDetail() {
     const toolId = parseInt(params.id || '0');
     const [, navigate] = useLocation();
     const { toast } = useToast();
+    const queryClient = useQueryClient();
 
     // 檢測是否應該減少動畫 (LINE 內建瀏覽器或使用者偏好)
     const reduceMotion = useMemo(() => shouldReduceMotion(), []);
@@ -363,14 +364,32 @@ export function ToolDetail() {
     const gradient = categoryGradients[tool.category as ToolCategory];
 
     // 處理「立即使用」按鈕 - 採用 <a> 模擬點擊以確保行為穩定
-    const handleUseTool = () => {
+    const handleUseTool = async () => {
         // 非同步追蹤使用記錄
-        trackToolUsage(tool.id).catch(console.error);
+        queryClient.setQueryData<ToolStats | null>(['toolStats', tool.id], (prev) => ({
+            toolId: tool.id,
+            totalClicks: (prev?.totalClicks ?? stats?.totalClicks ?? 0) + 1,
+            lastUsedAt: prev?.lastUsedAt ?? null,
+            categoryClicks: prev?.categoryClicks ?? {},
+        }));
+
+        const trackingPromise = trackToolUsage(tool.id)
+            .then(() => {
+                queryClient.invalidateQueries({ queryKey: ['toolStats', tool.id] });
+            })
+            .catch((error) => {
+                console.error('trackToolUsage failed:', error);
+                queryClient.invalidateQueries({ queryKey: ['toolStats', tool.id] });
+            });
         addToRecent(tool.id);
         trackAchievement(tool.id, tool.category);
 
         if (inAppBrowser) {
             // LINE 等內建瀏覽器：直接跳轉
+            await Promise.race([
+                trackingPromise,
+                new Promise((resolve) => window.setTimeout(resolve, 1200)),
+            ]);
             window.location.href = tool.url;
         } else {
             try {
