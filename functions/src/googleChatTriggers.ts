@@ -5,12 +5,15 @@
  * 2. onErrorLogCreated: 監聽 Firestore errorLogs 新增事件（前端 JS 崩潰日誌）。
  */
 
-import * as functions from "firebase-functions";
+import * as functions from "firebase-functions/v1";
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { defineSecret } from "firebase-functions/params";
 import { pushToGoogleChat } from "./lib/googleChatNotify";
 
 const GOOGLE_CHAT_WEBHOOK_URL = defineSecret("GOOGLE_CHAT_WEBHOOK_URL");
+
+// 對外公開站點（供卡片裡的「打開查看」按鈕用）
+const SITE_BASE = "https://cagoooo.github.io/Akai";
 
 // 使用者註冊成功通知 (v1 Auth Trigger，因為 v2 identity trigger 在非 blocking 情境尚未完整)
 export const onUserCreated = functions
@@ -198,5 +201,183 @@ export const onErrorLogCreated = onDocumentCreated(
         };
 
         await pushToGoogleChat(webhookUrl, summaryText, [card], "FirestoreOnErrorLog");
+    }
+);
+
+// 許願池新回饋通知 (v2 Firestore Trigger，v3.6.82 從 LINE 遷移至 Google Chat)
+export const onWishCreated = onDocumentCreated(
+    {
+        document: "wishingWell/{docId}",
+        secrets: [GOOGLE_CHAT_WEBHOOK_URL],
+        region: "asia-east1",
+    },
+    async (event) => {
+        const snapshot = event.data;
+        if (!snapshot) return;
+
+        const data = snapshot.data();
+        const userName = data.userName || "未具名使用者";
+        const typeValue = data.type;
+        const typeLabel = typeValue === "suggestion" ? "💡 新工具許願" : "⭐ 使用回饋";
+        const content = data.content || "(無內容)";
+        const rating = data.rating;
+
+        const webhookUrl = GOOGLE_CHAT_WEBHOOK_URL.value();
+        const summaryText = `🪄 許願池收到新回饋（${typeLabel}）— ${userName}`;
+
+        const widgets: any[] = [
+            {
+                decoratedText: {
+                    topLabel: "使用者",
+                    text: `<b>${userName}</b>`,
+                },
+            },
+            {
+                decoratedText: {
+                    topLabel: "類型",
+                    text: typeLabel,
+                },
+            },
+        ];
+
+        if (rating !== undefined && rating !== null) {
+            const starText = "⭐".repeat(rating) + "☆".repeat(Math.max(0, 5 - rating));
+            widgets.push({
+                decoratedText: {
+                    topLabel: "整體評分",
+                    text: `${starText}　(${rating}/5)`,
+                },
+            });
+        }
+
+        widgets.push(
+            {
+                decoratedText: {
+                    topLabel: "內容",
+                    text: content,
+                    wrapText: true,
+                },
+            },
+            {
+                buttonList: {
+                    buttons: [
+                        {
+                            text: "前往後台查看",
+                            onClick: {
+                                openLink: {
+                                    url: `${SITE_BASE}/admin`,
+                                },
+                            },
+                        },
+                    ],
+                },
+            }
+        );
+
+        const card = {
+            cardId: `wish-${event.params.docId}`,
+            card: {
+                header: {
+                    title: "🪄 許願池新回饋",
+                    subtitle: typeLabel,
+                    imageUrl: "https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/auto_awesome/default/48px.svg",
+                    imageType: "CIRCLE",
+                },
+                sections: [
+                    {
+                        collapsible: false,
+                        widgets,
+                    },
+                ],
+            },
+        };
+
+        await pushToGoogleChat(webhookUrl, summaryText, [card], "FirestoreOnWish");
+    }
+);
+
+// 工具評論通知 (v2 Firestore Trigger，v3.6.82 從 LINE 遷移至 Google Chat)
+export const onReviewCreated = onDocumentCreated(
+    {
+        document: "toolReviews/{docId}",
+        secrets: [GOOGLE_CHAT_WEBHOOK_URL],
+        region: "asia-east1",
+    },
+    async (event) => {
+        const snapshot = event.data;
+        if (!snapshot) return;
+
+        const data = snapshot.data();
+        const toolId = data.toolId;
+        const toolTitle = data.toolTitle || `工具 #${toolId}`;
+        const userName = data.userName || "匿名使用者";
+        const ratingNum = typeof data.rating === "number" ? Math.max(1, Math.min(5, data.rating)) : 0;
+        const comment = data.comment || "(無內容)";
+
+        const starText = "⭐".repeat(ratingNum) + "☆".repeat(5 - ratingNum);
+        const toolUrl = `${SITE_BASE}/?tool=${toolId}`;
+
+        const webhookUrl = GOOGLE_CHAT_WEBHOOK_URL.value();
+        const summaryText = `📝 「${toolTitle}」收到 ${userName} 的 ${ratingNum} 星評論`;
+
+        const card = {
+            cardId: `review-${event.params.docId}`,
+            card: {
+                header: {
+                    title: "📝 工具收到新評論",
+                    subtitle: toolTitle,
+                    imageUrl: "https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/rate_review/default/48px.svg",
+                    imageType: "CIRCLE",
+                },
+                sections: [
+                    {
+                        collapsible: false,
+                        widgets: [
+                            {
+                                decoratedText: {
+                                    topLabel: "工具",
+                                    text: `<b>${toolTitle}</b>`,
+                                },
+                            },
+                            {
+                                decoratedText: {
+                                    topLabel: "教師",
+                                    text: userName,
+                                },
+                            },
+                            {
+                                decoratedText: {
+                                    topLabel: "評分",
+                                    text: `${starText}　(${ratingNum}/5)`,
+                                },
+                            },
+                            {
+                                decoratedText: {
+                                    topLabel: "評論內容",
+                                    text: comment,
+                                    wrapText: true,
+                                },
+                            },
+                            {
+                                buttonList: {
+                                    buttons: [
+                                        {
+                                            text: "打開工具頁面",
+                                            onClick: {
+                                                openLink: {
+                                                    url: toolUrl,
+                                                },
+                                            },
+                                        },
+                                    ],
+                                },
+                            },
+                        ],
+                    },
+                ],
+            },
+        };
+
+        await pushToGoogleChat(webhookUrl, summaryText, [card], "FirestoreOnReview");
     }
 );
