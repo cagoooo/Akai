@@ -1,7 +1,7 @@
 /**
  * monitorToolStatsSchema — onDocumentWritten trigger
  *
- * 任何 toolUsageStats/{docId} 寫入時即時檢查 schema，發現異常推 LINE 告警給管理員。
+ * 任何 toolUsageStats/{docId} 寫入時即時檢查 schema，發現異常推 Google Chat 告警給管理員。
  * 第二道警報網（rules 擋了 99%，剩下 1% admin SDK bypass 走這條）。
  *
  * 告警觸發條件：
@@ -13,8 +13,11 @@
  * （Firestore alertSilenceUntil collection 紀錄）
  */
 import { onDocumentWritten } from "firebase-functions/v2/firestore";
+import { defineSecret } from "firebase-functions/params";
 import * as admin from "firebase-admin";
-import { pushFlexToAdmin } from "./lib/lineNotify";
+import { pushToGoogleChat } from "./lib/googleChatNotify";
+
+const GOOGLE_CHAT_WEBHOOK_URL = defineSecret("GOOGLE_CHAT_WEBHOOK_URL");
 
 const SILENCE_HOURS = 24;
 const SILENCE_COLLECTION = "alertSilence";
@@ -25,6 +28,7 @@ export const monitorToolStatsSchema = onDocumentWritten(
         region: "asia-east1",
         memory: "256MiB",
         maxInstances: 5,
+        secrets: [GOOGLE_CHAT_WEBHOOK_URL],
     },
     async (event) => {
         const docId = event.params.docId;
@@ -46,7 +50,7 @@ export const monitorToolStatsSchema = onDocumentWritten(
 
         if (issues.length === 0) return; // 一切正常
 
-        // 去重：24 小時內同 docId 已推過則跳過（節省 LINE quota）
+        // 去重：24 小時內同 docId 已推過則跳過（節省告警噪音）
         const silenceRef = admin.firestore().collection(SILENCE_COLLECTION).doc(`toolstats:${docId}`);
         const silenceSnap = await silenceRef.get();
         if (silenceSnap.exists) {
@@ -58,68 +62,63 @@ export const monitorToolStatsSchema = onDocumentWritten(
             }
         }
 
-        // 推 LINE Flex
-        const bubble = {
-            type: "bubble" as const,
-            size: "kilo" as const,
-            header: {
-                type: "box" as const,
-                layout: "vertical" as const,
-                contents: [
+        // 推 Google Chat cardsV2 告警
+        const webhookUrl = GOOGLE_CHAT_WEBHOOK_URL.value();
+        const summaryText = `⚠️ Schema 漂移告警：toolUsageStats/${docId}`;
+        const gChatCard = {
+            cardId: `schema-alert-${docId}-${Date.now()}`,
+            card: {
+                header: {
+                    title: "⚠️ toolUsageStats Schema 漂移告警",
+                    subtitle: `文檔 toolUsageStats/${docId}`,
+                    imageUrl: "https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/database_alert/default/48px.svg",
+                    imageType: "CIRCLE",
+                },
+                sections: [
                     {
-                        type: "text" as const,
-                        text: "⚠️ Schema 漂移告警",
-                        weight: "bold" as const,
-                        color: "#ffffff",
-                        size: "md" as const,
-                    },
-                ],
-                backgroundColor: "#dc2626",
-                paddingAll: "12px",
-            },
-            body: {
-                type: "box" as const,
-                layout: "vertical" as const,
-                spacing: "sm" as const,
-                contents: [
-                    {
-                        type: "text" as const,
-                        text: `toolUsageStats/${docId}`,
-                        weight: "bold" as const,
-                        size: "sm" as const,
-                        color: "#1f2937",
-                    },
-                    {
-                        type: "text" as const,
-                        text: issues.join("\n"),
-                        size: "xs" as const,
-                        color: "#374151",
-                        wrap: true,
-                    },
-                    {
-                        type: "text" as const,
-                        text: `${SILENCE_HOURS} 小時內同 doc 不再重複告警`,
-                        size: "xxs" as const,
-                        color: "#9ca3af",
-                        margin: "sm" as const,
+                        widgets: [
+                            {
+                                decoratedText: {
+                                    topLabel: "偵測到的異常",
+                                    text: `<font color="#dc2626">${issues.join("<br/>")}</font>`,
+                                    wrapText: true,
+                                },
+                            },
+                            {
+                                decoratedText: {
+                                    topLabel: "去重規則",
+                                    text: `${SILENCE_HOURS} 小時內同一文檔不再重複告警`,
+                                },
+                            },
+                            {
+                                buttonList: {
+                                    buttons: [
+                                        {
+                                            text: "前往後台健檢",
+                                            onClick: {
+                                                openLink: {
+                                                    url: "https://cagoooo.github.io/Akai/admin",
+                                                },
+                                            },
+                                        },
+                                    ],
+                                },
+                            },
+                        ],
                     },
                 ],
             },
         };
 
         try {
-            await pushFlexToAdmin(
-                `⚠️ Schema 漂移：toolUsageStats/${docId}`,
-                bubble,
-                `schema-alert:${docId}:${Date.now()}`
-            );
+            await pushToGoogleChat(webhookUrl, summaryText, [gChatCard], "MonitorToolStatsSchema");
             await silenceRef.set({
                 lastAlertAt: admin.firestore.FieldValue.serverTimestamp(),
                 lastIssues: issues,
             });
             console.log(`[monitorToolStatsSchema] alerted ${docId}: ${issues.join(" / ")}`);
         } catch (err) {
-            console.error(`[monitorToolStatsSchema] LINE push failed for ${docId}:`, err);
+            console.error(`[monitorToolStatsSchema] Google Chat push failed for ${docId}:`, err);
         }
     }
 );
