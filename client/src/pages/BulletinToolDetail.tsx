@@ -11,7 +11,7 @@ import { useParams, Link, useLocation } from 'wouter';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { PageHead } from '@/components/PageHead';
 import { BulletinRelatedTools } from '@/components/bulletin/BulletinRelatedTools';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { resolveInternalLink } from '@/lib/resolveLink';
 import remarkGfm from 'remark-gfm';
@@ -242,30 +242,6 @@ export function BulletinToolDetail() {
     enabled: !!tool,
   });
 
-  // 每次進入詳情頁就 +1（同個 toolId 在此元件 instance 只算一次，避免 StrictMode double-mount 重複計數）
-  const lastTrackedToolId = useRef<number | null>(null);
-  useEffect(() => {
-    if (!tool || lastTrackedToolId.current === tool.id) return;
-    lastTrackedToolId.current = tool.id;
-
-    trackToolUsage(tool.id)
-      .then(() => {
-        // 樂觀更新：在 getToolStats 抓回的 Firebase 權威值上 +1，畫面立即 +1。
-        // ⚠️ 絕對不能用 trackToolUsage 的回傳值覆蓋快取 —— 它在 callable 成功路徑
-        //    回傳的 totalClicks 是「本地 localStorage 計數」(localToolStats_*，只反映
-        //    本機點過幾次)，會把真實的 321 蓋成個位數，使用者得 Ctrl+F5 才看到正確值。
-        //    prev 不存在(getToolStats 尚未回 / 該工具還無 Firebase doc)時不動，等權威值回填。
-        queryClient.setQueryData<ToolStats | null>(['toolStats', tool.id], (prev) =>
-          prev ? { ...prev, totalClicks: prev.totalClicks + 1 } : prev
-        );
-        // 寫後端成功後重抓權威值校正：callable 已 await 完伺服器原子 +1，此時 getToolStats
-        // 必拿到含本次點擊的最新值。這同時補救「prev 尚未回 → 樂觀 +1 被吞掉」的競態，
-        // 也順手把 lastUsedAt(最後使用日期) 一起回填，不必重整整頁。
-        queryClient.invalidateQueries({ queryKey: ['toolStats', tool.id] });
-      })
-      .catch((err) => console.error('追蹤工具使用失敗:', err));
-  }, [tool, queryClient]);
-
   if (toolsLoading) return <ToolDetailSkeleton />;
   if (!tool) return <NotFound />;
 
@@ -280,10 +256,21 @@ export function BulletinToolDetail() {
 
   // ── 行為函式 ─────────────────────────────────────
   const handleUseTool = () => {
-    // 統計計數已在進入頁面時遞增（見上方 useEffect），這裡不再重複 +1
     addToRecent(tool.id);
     trackAchievement(tool.id, tool.category);
     setStampTrigger((t) => t + 1);
+
+    // 點下去的「瞬間」就同步樂觀 +1（先於導頁、不等任何 await），使用者當場看到數字跳動。
+    // ⚠️ 只在 prev 存在時 +1，且絕不用 trackToolUsage 回傳值覆蓋快取（那是本機 localStorage
+    //    計數，會把真實值蓋成個位數）。詳見 firestoreService.trackToolUsage 註解。
+    queryClient.setQueryData<ToolStats | null>(['toolStats', tool.id], (prev) =>
+      prev ? { ...prev, totalClicks: prev.totalClicks + 1 } : prev
+    );
+    // 寫後端 + 成功後 invalidate 校正：callable 已 await 完伺服器原子 +1，重抓必拿到含本次
+    // 點擊的權威值，補救「prev 尚未回→樂觀 +1 被吞掉」的競態，並回填 lastUsedAt。
+    trackToolUsage(tool.id)
+      .then(() => queryClient.invalidateQueries({ queryKey: ['toolStats', tool.id] }))
+      .catch((err) => console.error('追蹤工具使用失敗:', err));
 
     const openUrl = normalizeUrl(tool.url);
     setTimeout(() => {
