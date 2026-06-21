@@ -13845,6 +13845,63 @@ const POST_110: BlogPost = {
 `,
 };
 
+const POST_112: BlogPost = {
+  slug: 'pikachu-sky-adventure-112-flappy-bird-game',
+  title: '#112 皮卡丘天空大冒險：經典飛翔小鳥結合寶可夢，鍛鍊學生專注度與挫折容忍度',
+  excerpt:
+    '下課十分鐘，學生圍在電腦前只能玩充滿廣告的雜亂網頁遊戲？#112 提供一個純前端、無廣告、隨開即玩的「皮卡丘天空大冒險」，結合經典的 Flappy Bird 玩法，在躲避綠色水管的飛行挑戰中，無痛訓練孩子的手眼協調力與專注度。',
+  publishedAt: '2026-06-22',
+  readingMinutes: 4,
+  tags: ['網頁遊戲', '班級活動', '專注力訓練', '點擊練習', '課堂破冰'],
+  toolIds: [112, 101, 102],
+  coverEmoji: '⚡',
+  coverColor: 'yellow',
+  body: `## 當經典 Flappy Bird 遇上可愛的皮卡丘
+
+很多老師都有類似的經歷：下課鐘聲一響，幾個孩子立刻擠在講台的電子白板或老舊電腦前，興奮地玩著網路上隨便搜尋來的網頁遊戲。這些遊戲大多充斥著刺眼的彈出式廣告，甚至是內容不適宜的橫幅。這讓我一直在想，能不能在學校網站裡提供一些安全、無廣告、又具備基礎訓練價值的趣味小遊戲？
+
+#112：[皮卡丘天空大冒險](https://cagoooo.github.io/pikachu-flappy-bird/) 就是在這個想法下誕生的。它將人見人愛的皮卡丘與經典的 Flappy Bird 飛翔玩法相結合，提供一個純前端、無廣告、載入超快速的專注力遊戲。
+
+## #112 的核心玩法與特點
+
+遊戲的核心非常簡單，但極具挑戰性：
+
+**一鍵點擊，控制飛行** — 學生只需按下鍵盤空白鍵或以滑鼠/觸控螢幕點擊，皮卡丘就會拍動耳朵向上飛升。放開點擊，皮卡丘就會受重力影響自然下墜。
+
+**躲避綠色障礙水管** — 天空中會隨機出現高度不一的綠色水管，學生必須巧妙控制點擊節奏，讓皮卡丘平穩穿越這些障礙。一旦碰撞，遊戲便會立即結束。
+
+**無廣告、極速載入** — 沒有任何煩人的彈出視窗或影音廣告，界面乾淨清爽，適合在課堂與下課時間讓孩子安全遊玩。
+
+## 課堂教學中的延伸應用
+
+雖然看似只是款簡單的休閒遊戲，但它在教學情境中其實有幾個相當實用的點：
+
+- **滑鼠與鍵盤空白鍵的點擊練習**：對於低年級的初學者，這是極佳的手眼協調練習工具。控制皮卡丘的起伏需要非常細微的肌肉控制，比起單純的點擊更具趣味性。
+- **專注力與節奏感訓練**：Flappy Bird 玩法最考驗的就是節奏感。學生必須保持高度專注，冷靜判斷水管的高低落差並掌握點擊頻率。
+- **挫折容忍度培養**：這款遊戲以「難度高、死得快」聞名。每一次的失敗都是一次心智鍛鍊，引導學生在失敗後不氣餒、重整旗鼓再次挑戰，建立健康的競賽心態。
+- **限時分數挑戰賽**：在資訊課結束前的 5 分鐘，教師可以投影畫面，舉辦一場班級的「皮卡丘飛行挑戰賽」，讓孩子上台挑戰誰能穿過最多根水管，瞬間拉滿班級氣氛。
+
+## 配對工具推薦
+
+- [#101 3D 迷宮冒險遊戲 — 第一人稱光球收集 × 全班排行榜](/tool/101) — 適合高年級的 3D 空間定位與專注力挑戰
+- [#102 外星人入侵·保衛石門 — 復古太空射擊 × 全校排行榜](/tool/102) — 經典復古像素風太空射擊遊戲，鍛鍊反應力
+- [#112 皮卡丘天空大冒險](/tool/112) — 本篇主角，適合中低年級手眼協調與課間放電
+
+## 適用對象
+
+- 尋找安全、無廣告網頁遊戲給學生玩的國小班級導師
+- 想要設計手眼協調點擊練習的資訊課教師
+- 需要進行課堂破冰、專注力與挫折容忍度引導的特教/資源班老師
+- 喜歡皮卡丘，想在下課十分鐘放鬆挑戰自我的親師生
+
+## 想試試？
+
+→ [前往 #112 皮卡丘天空大冒險](https://cagoooo.github.io/pikachu-flappy-bird/)
+
+不需 any 註冊與安裝，點開連結就能直接在電腦或平板上遊玩。讓這隻在天空中飛翔的皮卡丘，成為您課堂上鍛鍊孩子專注力與手眼協調的可愛小幫手！
+`,
+};
+
 const POST_111: BlogPost = {
   slug: 'werewolf-championship-111-classroom-deduction-game',
   title: '#111 狼人殺冠軍賽：把班級同樂變成一場有規則、有推理、有掌聲的口語表達競賽',
@@ -13911,7 +13968,7 @@ const POST_111: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+export const POSTS: BlogPost[] = [POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。

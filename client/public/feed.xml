@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 111+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 112+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Wed, 17 Jun 2026 08:19:31 GMT</pubDate>
-    <lastBuildDate>Wed, 17 Jun 2026 12:01:13 GMT</lastBuildDate>
+    <pubDate>Mon, 22 Jun 2026 00:00:00 GMT</pubDate>
+    <lastBuildDate>Sun, 21 Jun 2026 23:49:39 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,27 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>📖 教學情境：#112 皮卡丘天空大冒險：經典飛翔小鳥結合寶可夢，鍛鍊學生專注度與挫折容忍度</title>
+      <link>https://cagoooo.github.io/Akai/blog/pikachu-sky-adventure-112-flappy-bird-game</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/pikachu-sky-adventure-112-flappy-bird-game</guid>
+      <pubDate>Mon, 22 Jun 2026 00:00:00 GMT</pubDate>
+      <description>下課十分鐘，學生圍在電腦前只能玩充滿廣告的雜亂網頁遊戲？#112 提供一個純前端、無廣告、隨開即玩的「皮卡丘天空大冒險」，結合經典的 Flappy Bird 玩法，在躲避綠色水管的飛行挑戰中，無痛訓練孩子的手眼協調力與專注度。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>🆕 新工具：皮卡丘天空大冒險</title>
+      <link>https://cagoooo.github.io/Akai/tool/112</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/112</guid>
+      <pubDate>Sun, 21 Jun 2026 23:48:41 GMT</pubDate>
+      <description>精緻好玩的皮卡丘天空冒險遊戲！結合 Flappy Bird 經典玩法，在躲避障礙的過程中鍛鍊專注力與手眼協調，非常適合用於課堂破冰、班級競賽或下課休閒。</description>
+      <category>皮卡丘</category>
+      <category>Flappy Bird</category>
+      <category>飛翔的小鳥</category>
+      <category>天空冒險</category>
+      <category>網頁遊戲</category>
+    </item>
     <item>
       <title>🆕 新工具：狼人殺冠軍賽</title>
       <link>https://cagoooo.github.io/Akai/tool/111</link>
@@ -306,24 +327,6 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/tool-100-gemini-embedding-build-log</guid>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
       <description>工具索引神器（#100）原本用 fuse.js 字面比對 — 「水的三態」找不到「自然科實驗」。升級 Gemini Embedding 語意搜尋後，連「我想讓害羞學生敢開口」這類抽象描述都能找到對的工具。完整 build log + 架構設計分享。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#53 校園報修系統：點地圖 + Google Vision OCR 標教室 + LINE Flex Message 雙軌通知的全鏈路設計</title>
-      <link>https://cagoooo.github.io/Akai/blog/repair-53-paperless-school-maintenance</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/repair-53-paperless-school-maintenance</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#53 不是「掃 QR Code 報修」那麼簡單。React 19 + Firebase 全家桶 + Google Vision API OCR 自動標教室 + LINE Messaging API Flex Message + 資訊組 / 事務組雙軌分流 + 離線報修 IndexedDB 暫存。版本到 v0.9.2 仍在演進。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#7 點石成金蜂：勾 450+ 成語標籤 → AI 同時生成 12 種風格段落 + 二階段微調 + 全校共享 API Key 的單向轉換神器</title>
-      <link>https://cagoooo.github.io/Akai/blog/comment-7-ai-positive-language</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/comment-7-ai-positive-language</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>#7 不是「直覺評語 → AI 優化」 — 真實流程是「老師從 450+ 成語詞庫勾學生特質標籤 → AI 把標籤串成段落」。12 種寫作風格同時並列生成（不是單一）、CommentAdjuster 二階段縮 / 擴 / 換說法 + 5 級語氣滑桿、全校共享 API Key（阿凱自掏腰包）、繁中強制條款源於 v2.6.2 簡體字事故。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
