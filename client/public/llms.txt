@@ -43,7 +43,7 @@
 - [#27 ⬅️好用小工具(許願池)](https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/): 各種好用的教學小工具集合與許願池
 - [#40 Padlet行政宣導動態牆](https://padlet.com/2104340/padlet-rl3l5wi9wmebku2k): 即時更新的行政宣導公告牆，方便資訊傳達
 - [#42 兒童臉部隱私保護工具](https://cagoooo.github.io/child-face-privacy/): 阿凱老師打造的兒童臉部隱私保護工具，自動偵測照片臉孔並用 emoji、馬賽克或模糊遮蓋，可設定只擋 12 歲以下兒童，圖片全程在瀏覽器處理不外傳。
-- [#46 禮堂預約系統](https://cagoooo.github.io/schedule/): 阿凱老師打造的禮堂、專科教室、平板車預約系統，整合 Gemini AI 自動撰寫學期使用報告、LINE 推播通知、熱力圖統計，行政管理場地一站搞定。
+- [#46 禮堂&專科教室&IPAD平板車預約系統](https://cagoooo.github.io/schedule/): 阿凱老師打造的禮堂、專科教室、平板車預約系統，整合 Gemini AI 自動撰寫學期使用報告、LINE 推播通知、熱力圖統計，行政管理場地一站搞定。
 - [#47 學生肖像使用授權同意書線上簽名](https://cagoooo.github.io/signature/): 阿凱老師打造的家長線上電子簽名系統，家長手機就能簽「學生活動肖像授權同意書」，自動寄 PDF 通知信給家長，行政端 Excel 一鍵匯出統整。
 - [#48 動態表單自動回報系統](https://cagoooo.github.io/form/): 阿凱老師打造的動態表單系統，視覺化拖曳建表、即時 Google Chat 推播通知、CSV 匯出與儀表板分析，用 Firebase 取代笨重的 Google Forms。
 - [#51 自動排課系統](https://cagoooo.github.io/course/): 智能化的自動排課系統協助學校快速生成課表最佳化資源分配解決排課難題。

@@ -223,7 +223,7 @@
 | 27 | **⬅️好用小工具(許願池)** | 各種好用的教學小工具集合與許願池 | [開啟工具](https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/) |
 | 40 | **Padlet行政宣導動態牆** | 即時更新的行政宣導公告牆，方便資訊傳達 | [開啟工具](https://padlet.com/2104340/padlet-rl3l5wi9wmebku2k) |
 | 42 | **兒童臉部隱私保護工具** | 保護兒童照片隱私，自動模糊處理臉部 | [開啟工具](https://cagoooo.github.io/child-face-privacy/) |
-| 46 | **禮堂預約系統** | 高效便捷的禮堂預約平台，即時查看場地空檔，簡化行政申請流程 | [開啟工具](https://cagoooo.github.io/schedule/) |
+| 46 | **禮堂&專科教室&IPAD平板車預約系統** | 高效便捷的場地與設備預約平台，即時查看場地空檔，簡化行政申請流程 | [開啟工具](https://cagoooo.github.io/schedule/) |
 | 47 | **學生肖像使用授權同意書線上簽名** | 提供便捷的線上簽署平台，讓家長能快速完成學生肖像使用授權 | [開啟工具](https://cagoooo.github.io/signature/) |
 | 68 | **手作課程照片影片作品上傳平台** | 專為手作課程設計的作品展示與分享平台，支援高品質媒體上傳 | [開啟工具](https://cagoooo.github.io/files/) |
 | 78 | **桃園市115學年度國小課程計畫AI審查工具** | 專為國小課程計畫審閱設計的 AI 輔助工具，大幅節省教務端審查時間 | [開啟工具](https://cagoooo.github.io/curriculum/) |
