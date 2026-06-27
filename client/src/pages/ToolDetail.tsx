@@ -36,6 +36,7 @@ import { useFavorites } from '@/hooks/useFavorites';
 import { useRecentTools } from '@/hooks/useRecentTools';
 import { useAchievements } from '@/hooks/useAchievements';
 import { shouldReduceMotion, isInAppBrowser, getAnimationConfig } from '@/lib/browserDetection';
+import { notifyEngagementAfterHomeEntry } from '@/lib/analytics';
 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -383,6 +384,14 @@ export function ToolDetail() {
             });
         addToRecent(tool.id);
         trackAchievement(tool.id, tool.category);
+        notifyEngagementAfterHomeEntry({
+            type: 'tool_click',
+            toolId: tool.id,
+            toolTitle: tool.title,
+            toolCategory: tool.category,
+            targetUrl: tool.url,
+            source: 'tool_detail_use',
+        });
 
         if (inAppBrowser) {
             // LINE 等內建瀏覽器：直接跳轉

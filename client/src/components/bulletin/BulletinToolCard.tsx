@@ -84,6 +84,17 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0 }: Props) {
     }, 400);
   };
 
+  const handleOpenDetail = () => {
+    notifyEngagementAfterHomeEntry({
+      type: 'tool_click',
+      toolId: tool.id,
+      toolTitle: tool.title,
+      toolCategory: tool.category,
+      targetUrl: `${window.location.origin}${import.meta.env.BASE_URL}tool/${tool.id}`,
+      source: 'home_card_detail',
+    });
+  };
+
   return (
     <article
       className="sticker-card bulletin-tool-card"
@@ -110,6 +121,7 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0 }: Props) {
       {/* 照片區（預覽圖優先，無圖時退回 emoji + icon） */}
       <Link href={`/tool/${tool.id}`}>
         <a
+          onClick={handleOpenDetail}
           style={{
             aspectRatio: '5/4',
             background: C.bg,
