@@ -26,6 +26,7 @@ const WishingWellDialog = lazy(() => import("@/components/WishingWellDialog").th
 import { tools as allTools } from "@/lib/data";
 import { PullToRefresh } from "@/components/PullToRefresh";
 import { MobileSidebarDrawer } from "@/components/MobileSidebarDrawer";
+import { markHomeEntryForEngagementNotifications } from "@/lib/analytics";
 
 // ─── URL Query String 工具函數 ───────────────────────────────────────────────
 /** 從當前 URL 讀取篩選參數（不依賴 wouter，直接操作 window.location） */
@@ -82,6 +83,10 @@ export function Home() {
   const [showSecondaryContent, setShowSecondaryContent] = useState(false);
   const [showFullList, setShowFullList] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    markHomeEntryForEngagementNotifications();
+  }, []);
 
   /** 捲動至工具卡片區塊（帶有適當偏移避免被 sticky header 遮擋） */
   const scrollToToolsGrid = useCallback((delay = 300) => {

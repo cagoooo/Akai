@@ -10,7 +10,7 @@ import { OptimizedIcon } from '@/components/OptimizedIcons';
 import { useFavorites } from '@/hooks/useFavorites';
 import { useToolTracking } from '@/hooks/useToolTracking';
 import { getToolEmoji, getCategoryLabel, getCategoryKey, normalizeUrl } from './toolAdapter';
-import { trackEvent } from '@/lib/analytics';
+import { notifyEngagementAfterHomeEntry, trackEvent } from '@/lib/analytics';
 import type { EducationalTool } from '@/lib/data';
 
 interface Props {
@@ -68,6 +68,14 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0 }: Props) {
       tool_id: tool.id,
       tool_title: tool.title,
       tool_category: tool.category,
+      source: 'home_grid',
+    });
+    notifyEngagementAfterHomeEntry({
+      type: 'tool_click',
+      toolId: tool.id,
+      toolTitle: tool.title,
+      toolCategory: tool.category,
+      targetUrl: normalizeUrl(tool.url),
       source: 'home_grid',
     });
     // 延遲 0.4 秒讓 OPENED 印章動畫有機會播放

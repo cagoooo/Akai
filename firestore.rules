@@ -77,6 +77,12 @@ service cloud.firestore {
     }
 
     // 錯誤日誌 - 認證用戶可建立（內容欄位限制 5000 字元），認證用戶可讀/更新/刪除
+    match /engagementEvents/{eventId} {
+      allow create: if request.auth != null
+        && request.resource.data.type in ['tool_click', 'blog_read'];
+      allow read, update, delete: if request.auth != null && request.auth.token.admin == true;
+    }
+
     match /errorLogs/{logId} {
       allow create: if request.auth != null
         && request.resource.data.content is string

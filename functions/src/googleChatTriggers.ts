@@ -391,3 +391,123 @@ export const onReviewCreated = onDocumentCreated(
         await pushToGoogleChat(webhookUrl, summaryText, [card], "FirestoreOnReview");
     }
 );
+
+function safeText(value: unknown, fallback = ""): string {
+    return String(value ?? fallback)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .slice(0, 600);
+}
+
+function safeUrl(value: unknown, fallback = SITE_BASE): string {
+    const raw = String(value || fallback);
+    try {
+        const url = new URL(raw);
+        return url.toString();
+    } catch {
+        return fallback;
+    }
+}
+
+// Homepage engagement notifications: tool cards and blog articles.
+export const onEngagementEventCreated = onDocumentCreated(
+    {
+        document: "engagementEvents/{eventId}",
+        secrets: [GOOGLE_CHAT_WEBHOOK_URL],
+        region: "asia-east1",
+    },
+    async (event) => {
+        const snapshot = event.data;
+        if (!snapshot) return;
+
+        const data = snapshot.data();
+        const eventType = String(data.type || "");
+        const pageUrl = safeUrl(data.pageUrl, SITE_BASE);
+        const source = safeText(data.source || "home");
+        const webhookUrl = GOOGLE_CHAT_WEBHOOK_URL.value();
+
+        if (eventType === "tool_click") {
+            const toolId = Number(data.toolId || 0);
+            const toolTitle = safeText(data.toolTitle || `工具 #${toolId}`);
+            const toolCategory = safeText(data.toolCategory || "未分類");
+            const targetUrl = safeUrl(data.targetUrl, `${SITE_BASE}/tool/${toolId}`);
+            const summaryText = `使用者從主頁點擊工具：${toolTitle}`;
+
+            const card = {
+                cardId: `engagement-tool-${event.params.eventId}`,
+                card: {
+                    header: {
+                        title: "主頁工具卡片被點擊",
+                        subtitle: `#${toolId} ${toolTitle}`,
+                        imageUrl: "https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/touch_app/default/48px.svg",
+                        imageType: "CIRCLE",
+                    },
+                    sections: [
+                        {
+                            widgets: [
+                                { decoratedText: { topLabel: "工具", text: `<b>${toolTitle}</b>`, wrapText: true } },
+                                { decoratedText: { topLabel: "分類", text: toolCategory } },
+                                { decoratedText: { topLabel: "來源", text: source } },
+                                {
+                                    buttonList: {
+                                        buttons: [
+                                            { text: "開啟工具", onClick: { openLink: { url: targetUrl } } },
+                                            { text: "查看事件頁", onClick: { openLink: { url: pageUrl } } },
+                                        ],
+                                    },
+                                },
+                            ],
+                        },
+                    ],
+                },
+            };
+
+            await pushToGoogleChat(webhookUrl, summaryText, [card], "FirestoreOnEngagementTool");
+            return;
+        }
+
+        if (eventType === "blog_read") {
+            const slug = safeText(data.slug || "");
+            const title = safeText(data.title || "未命名文章");
+            const readingMinutes = Number(data.readingMinutes || 0);
+            const relatedTools = safeText(data.relatedTools || "無");
+            const blogUrl = safeUrl(pageUrl, `${SITE_BASE}/blog/${slug}`);
+            const summaryText = `使用者從主頁觀看部落格：${title}`;
+
+            const card = {
+                cardId: `engagement-blog-${event.params.eventId}`,
+                card: {
+                    header: {
+                        title: "主頁部落格文章被觀看",
+                        subtitle: title,
+                        imageUrl: "https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/article/default/48px.svg",
+                        imageType: "CIRCLE",
+                    },
+                    sections: [
+                        {
+                            widgets: [
+                                { decoratedText: { topLabel: "文章", text: `<b>${title}</b>`, wrapText: true } },
+                                { decoratedText: { topLabel: "Slug", text: slug } },
+                                { decoratedText: { topLabel: "預估閱讀時間", text: readingMinutes ? `${readingMinutes} 分鐘` : "未提供" } },
+                                { decoratedText: { topLabel: "相關工具 ID", text: relatedTools, wrapText: true } },
+                                {
+                                    buttonList: {
+                                        buttons: [
+                                            { text: "開啟文章", onClick: { openLink: { url: blogUrl } } },
+                                        ],
+                                    },
+                                },
+                            ],
+                        },
+                    ],
+                },
+            };
+
+            await pushToGoogleChat(webhookUrl, summaryText, [card], "FirestoreOnEngagementBlog");
+            return;
+        }
+
+        console.log(`[FirestoreOnEngagement] ignored unknown event type: ${eventType}`);
+    }
+);

@@ -19,7 +19,7 @@ import { BulletinHeader } from '@/components/bulletin/BulletinHeader';
 import { BulletinFooter } from '@/components/bulletin/BulletinFooter';
 import { BulletinBackToTop } from '@/components/bulletin/BulletinBackToTop';
 import { PageHead } from '@/components/PageHead';
-import { trackEvent } from '@/lib/analytics';
+import { notifyEngagementAfterHomeEntry, trackEvent } from '@/lib/analytics';
 import { BlogArticleLayout } from '@/components/blog/BlogArticleLayout';
 import { BlogHero } from '@/components/blog/BlogHero';
 import { BlogLeftRail } from '@/components/blog/BlogLeftRail';
@@ -105,6 +105,14 @@ export function BlogPost() {
         title: post.title,
         related_tools: post.toolIds.join(','),
         reading_minutes: post.readingMinutes,
+      });
+      notifyEngagementAfterHomeEntry({
+        type: 'blog_read',
+        slug: post.slug,
+        title: post.title,
+        relatedTools: post.toolIds.join(','),
+        readingMinutes: post.readingMinutes,
+        source: 'blog_post',
       });
     }
   }, [params.slug, post]);

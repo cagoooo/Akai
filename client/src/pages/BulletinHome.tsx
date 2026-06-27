@@ -36,6 +36,7 @@ import { BulletinCategoryFilter } from '@/components/bulletin/BulletinCategoryFi
 import { BulletinToolGrid } from '@/components/bulletin/BulletinToolGrid';
 import { BulletinFooter } from '@/components/bulletin/BulletinFooter';
 import { tokens } from '@/design/tokens';
+import { markHomeEntryForEngagementNotifications } from '@/lib/analytics';
 
 const KeyboardShortcutsDialog = lazy(() =>
   import('@/components/KeyboardShortcutsDialog').then((m) => ({ default: m.KeyboardShortcutsDialog }))
@@ -83,6 +84,10 @@ export function BulletinHome() {
   const [showShortcutsDialog, setShowShortcutsDialog] = useState(false);
   const [showWishingWellFromShortcut, setShowWishingWellFromShortcut] = useState(false);
   const [selectedToolIndex, setSelectedToolIndex] = useState(0);
+
+  useEffect(() => {
+    markHomeEntryForEngagementNotifications();
+  }, []);
 
   // 自動開啟許願池對話框：支援三種觸發來源
   // 1. sessionStorage 'openWishOnLoad' 旗標（由 /wish/ 靜態頁設定，避免 URL 跳轉）

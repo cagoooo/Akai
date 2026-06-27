@@ -17,7 +17,7 @@
 
 import type { Metric } from 'web-vitals';
 import { db } from '@/lib/firebase';
-import { collection, doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 
 // ── gtag wrapper ─────────────────────────────────────────────
 type GtagFn = (command: 'event' | 'config' | 'js' | 'set', ...args: unknown[]) => void;
@@ -57,6 +57,83 @@ export function trackEvent(
 // 路徑：analytics/toolIndexQueries/{queryHash}
 //   { query, count, lastUsedAt, lastResultCount }
 // 為什麼用 hash 當 doc id？避免「不能含 / 等特殊字元」的 Firestore key 限制，且天然 deduplication
+
+const HOME_ENGAGEMENT_KEY = 'akai_home_engagement_session_v1';
+const ENGAGEMENT_DEDUP_PREFIX = 'akai_engagement_notified_v1:';
+
+type EngagementEvent =
+  | {
+      type: 'tool_click';
+      toolId: number;
+      toolTitle: string;
+      toolCategory?: string;
+      targetUrl?: string;
+      source?: string;
+    }
+  | {
+      type: 'blog_read';
+      slug: string;
+      title: string;
+      readingMinutes?: number;
+      relatedTools?: string;
+      source?: string;
+    };
+
+export function markHomeEntryForEngagementNotifications() {
+  if (typeof window === 'undefined') return;
+  try {
+    sessionStorage.setItem(HOME_ENGAGEMENT_KEY, '1');
+  } catch {
+    /* ignore */
+  }
+}
+
+function hasHomeEntryForEngagementNotifications(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    return sessionStorage.getItem(HOME_ENGAGEMENT_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+function shouldNotifyEngagementOnce(key: string): boolean {
+  if (typeof window === 'undefined') return false;
+  const storageKey = `${ENGAGEMENT_DEDUP_PREFIX}${key}`;
+  try {
+    if (sessionStorage.getItem(storageKey) === '1') return false;
+    sessionStorage.setItem(storageKey, '1');
+    return true;
+  } catch {
+    return true;
+  }
+}
+
+export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
+  if (!db || !hasHomeEntryForEngagementNotifications()) return;
+
+  const dedupKey =
+    event.type === 'tool_click'
+      ? `tool:${event.toolId}`
+      : `blog:${event.slug}`;
+  if (!shouldNotifyEngagementOnce(dedupKey)) return;
+
+  try {
+    const { ensureSignedIn } = await import('@/lib/authService');
+    await ensureSignedIn();
+
+    await addDoc(collection(db, 'engagementEvents'), {
+      ...event,
+      path: window.location.pathname,
+      pageUrl: window.location.href,
+      referrer: document.referrer || '',
+      userAgent: navigator.userAgent.slice(0, 220),
+      createdAt: serverTimestamp(),
+    });
+  } catch (err) {
+    if (import.meta.env.DEV) console.warn('[engagement notify]', err);
+  }
+}
 
 function simpleHash(s: string): string {
   let h = 0;
