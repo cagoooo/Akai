@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>#107 每學年初最磨人的雜事：上千個教育雲帳號，這次三步驟自動對齊 · 阿凱老師教學情境長文</title>
+  <meta name="description" content="每到新學年，承辦老師都要面對同一場惡夢：把全校教育雲帳號總表跟教育局新名冊重新對齊——誰轉走、誰轉進、誰升年級換了班級座號，一格一格手動圈、手動貼。#107 是阿凱老師為石門國小做的純前端工具：上傳舊帳密總表與教育局新名冊，自動比對轉入轉出、揪出末四碼撞號、跨學年保留帳密只更新座號，一鍵產出總表、異動清冊與新生通知單。全程在瀏覽器運算，個資一個 byte 都不上傳。">
+  <meta name="keywords" content="教學情境,阿凱老師,教育工具,教育雲帳號,校務行政,末四碼撞號,純前端處理,個資不上傳">
+  <meta name="author" content="阿凱老師">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://cagoooo.github.io/Akai/blog/edu-cloud-account-updater-107-openid-roster">
+  <meta property="og:title" content="#107 每學年初最磨人的雜事：上千個教育雲帳號，這次三步驟自動對齊 · 阿凱老師教學情境長文">
+  <meta property="og:description" content="每到新學年，承辦老師都要面對同一場惡夢：把全校教育雲帳號總表跟教育局新名冊重新對齊——誰轉走、誰轉進、誰升年級換了班級座號，一格一格手動圈、手動貼。#107 是阿凱老師為石門國小做的純前端工具：上傳舊帳密總表與教育局新名冊，自動比對轉入轉出、揪出末四碼撞號、跨學年保留帳密只更新座號，一鍵產出總表、異動清冊與新生通知單。全程在瀏覽器運算，個資一個 byte 都不上傳。">
+  <meta property="og:image" content="https://cagoooo.github.io/Akai/previews/og/tool_107.webp">
+  <meta property="og:image:alt" content="#107 每學年初最磨人的雜事：上千個教育雲帳號，這次三步驟自動對齊 — 阿凱老師教學情境長文封面">
+  <meta property="og:image:secure_url" content="https://cagoooo.github.io/Akai/previews/og/tool_107.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="科技教育創新專區">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="阿凱老師">
+  <meta property="article:published_time" content="2026-06-12">
+  <meta property="article:section" content="教學情境深度長文">
+  <meta property="article:tag" content="教育雲帳號">
+  <meta property="article:tag" content="校務行政">
+  <meta property="article:tag" content="末四碼撞號">
+  <meta property="article:tag" content="純前端處理">
+  <meta property="article:tag" content="個資不上傳">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="#107 每學年初最磨人的雜事：上千個教育雲帳號，這次三步驟自動對齊 · 阿凱老師教學情境長文">
+  <meta name="twitter:description" content="每到新學年，承辦老師都要面對同一場惡夢：把全校教育雲帳號總表跟教育局新名冊重新對齊——誰轉走、誰轉進、誰升年級換了班級座號，一格一格手動圈、手動貼。#107 是阿凱老師為石門國小做的純前端工具：上傳舊帳密總表與教育局新名冊，自動比對轉入轉出、揪出末四碼撞號、跨學年保留帳密只更新座號，一鍵產出總表、異動清冊與新生通知單。全程在瀏覽器運算，個資一個 byte 都不上傳。">
+  <meta name="twitter:image" content="https://cagoooo.github.io/Akai/previews/og/tool_107.webp">
+  <meta name="twitter:image:alt" content="#107 每學年初最磨人的雜事：上千個教育雲帳號，這次三步驟自動對齊 封面圖">
+  <link rel="canonical" href="https://cagoooo.github.io/Akai/blog/edu-cloud-account-updater-107-openid-roster">
+
+  <!-- Schema.org: BlogPosting — Google rich snippets + AI 知識圖譜 -->
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "#107 每學年初最磨人的雜事：上千個教育雲帳號，這次三步驟自動對齊",
+  "description": "每到新學年，承辦老師都要面對同一場惡夢：把全校教育雲帳號總表跟教育局新名冊重新對齊——誰轉走、誰轉進、誰升年級換了班級座號，一格一格手動圈、手動貼。#107 是阿凱老師為石門國小做的純前端工具：上傳舊帳密總表與教育局新名冊，自動比對轉入轉出、揪出末四碼撞號、跨學年保留帳密只更新座號，一鍵產出總表、異動清冊與新生通知單。全程在瀏覽器運算，個資一個 byte 都不上傳。",
+  "image": "https://cagoooo.github.io/Akai/previews/og/tool_107.webp",
+  "datePublished": "2026-06-12",
+  "dateModified": "2026-06-12",
+  "url": "https://cagoooo.github.io/Akai/blog/edu-cloud-account-updater-107-openid-roster",
+  "author": {
+    "@type": "Person",
+    "@id": "https://cagoooo.github.io/Akai/#akai",
+    "name": "阿凱老師",
+    "url": "https://cagoooo.github.io/Akai/"
+  },
+  "publisher": {
+    "@type": "EducationalOrganization",
+    "name": "科技教育創新專區",
+    "url": "https://cagoooo.github.io/Akai/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://cagoooo.github.io/Akai/icon-512.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://cagoooo.github.io/Akai/blog/edu-cloud-account-updater-107-openid-roster"
+  },
+  "inLanguage": "zh-TW",
+  "keywords": "教學情境,阿凱老師,教育工具,教育雲帳號,校務行政,末四碼撞號,純前端處理,個資不上傳",
+  "wordCount": 2660,
+  "timeRequired": "PT8M",
+  "about": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "阿凱老師工具 #107",
+      "url": "https://cagoooo.github.io/Akai/tool/107"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "阿凱老師工具 #72",
+      "url": "https://cagoooo.github.io/Akai/tool/72"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "阿凱老師工具 #2",
+      "url": "https://cagoooo.github.io/Akai/tool/2"
+    }
+  ]
+}
+  </script>
+  <script>
+    (function() {
+      var ua = navigator.userAgent || '';
+      var isBot = /facebookexternalhit|Facebot|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Slackbot|Discordbot|Pinterest|Googlebot|bingbot|YandexBot|LineBot|Line-Networking/i.test(ua);
+      // 同 blog 列表的修法：不能直接 replace 沒 trailing slash 的目錄路徑（無限循環）
+      if (!isBot) {
+        window.location.replace('/Akai/?redirect=' + encodeURIComponent('/Akai/blog/edu-cloud-account-updater-107-openid-roster'));
+      }
+    })();
+  </script>
+  <style>body{font-family:'Noto Sans TC',-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#c99a6c;color:#1a1a1a;text-align:center}.card{background:#fff27a;padding:32px 36px;border-radius:6px;box-shadow:6px 6px 0 rgba(0,0,0,.22);transform:rotate(-1deg);max-width:520px}h1{margin:0 0 12px;font-size:24px;font-weight:900;line-height:1.4}p{color:#4a3a20;line-height:1.65}a{display:inline-block;margin-top:18px;padding:11px 24px;background:#ea8a3e;color:#fff;text-decoration:none;border:2.5px solid #1a1a1a;border-radius:10px;font-weight:900;box-shadow:4px 4px 0 rgba(0,0,0,.4)}</style>
+</head>
+<body>
+  <div class="card">
+    <h1>🏫 #107 每學年初最磨人的雜事：上千個教育雲帳號，這次三步驟自動對齊</h1>
+    <p>每到新學年，承辦老師都要面對同一場惡夢：把全校教育雲帳號總表跟教育局新名冊重新對齊——誰轉走、誰轉進、誰升年級換了班級座號，一格一格手動圈、手動貼。#107 是阿凱老師為石門國小做的純前端工具：上傳舊帳密總表與教育局新名冊，自動比對轉入轉出、揪出末四碼撞號、跨學年保留帳密只更新座號，一鍵產出總表、異動清冊與新生通知單。全程在瀏覽器運算，個資一個 byte 都不上傳。</p>
+    <a href="/Akai/blog/edu-cloud-account-updater-107-openid-roster">📖 閱讀全文</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>#109 別再用 Excel 收軟體需求了：老師三分鐘勾選，全校前 5 名即時排好提報教育局 · 阿凱老師教學情境長文</title>
+  <meta name="description" content="每年學校要彙整老師的教學軟體採購需求，傳統做法是一張 Excel 在處室與 LINE 群組之間傳來傳去，誰填了誰漏了、同套軟體被重複填，承辦最後還要手動去重排名。#109 是石門國小教務處的線上實名填報系統：老師勾選統購與自主需求軟體，Firebase Firestore 即時統計、自動排出全校前 5 名提報教育局，已採購的軟體自動標免填，把「對 Excel」變成「看儀表板」。">
+  <meta name="keywords" content="教學情境,阿凱老師,教育工具,軟體需求調查,數位學習,校務行政,Firebase,即時排行榜">
+  <meta name="author" content="阿凱老師">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://cagoooo.github.io/Akai/blog/digital-software-survey-109-firestore-needs-poll">
+  <meta property="og:title" content="#109 別再用 Excel 收軟體需求了：老師三分鐘勾選，全校前 5 名即時排好提報教育局 · 阿凱老師教學情境長文">
+  <meta property="og:description" content="每年學校要彙整老師的教學軟體採購需求，傳統做法是一張 Excel 在處室與 LINE 群組之間傳來傳去，誰填了誰漏了、同套軟體被重複填，承辦最後還要手動去重排名。#109 是石門國小教務處的線上實名填報系統：老師勾選統購與自主需求軟體，Firebase Firestore 即時統計、自動排出全校前 5 名提報教育局，已採購的軟體自動標免填，把「對 Excel」變成「看儀表板」。">
+  <meta property="og:image" content="https://cagoooo.github.io/Akai/previews/og/tool_109.webp">
+  <meta property="og:image:alt" content="#109 別再用 Excel 收軟體需求了：老師三分鐘勾選，全校前 5 名即時排好提報教育局 — 阿凱老師教學情境長文封面">
+  <meta property="og:image:secure_url" content="https://cagoooo.github.io/Akai/previews/og/tool_109.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="科技教育創新專區">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="阿凱老師">
+  <meta property="article:published_time" content="2026-06-12">
+  <meta property="article:section" content="教學情境深度長文">
+  <meta property="article:tag" content="軟體需求調查">
+  <meta property="article:tag" content="數位學習">
+  <meta property="article:tag" content="校務行政">
+  <meta property="article:tag" content="Firebase">
+  <meta property="article:tag" content="即時排行榜">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="#109 別再用 Excel 收軟體需求了：老師三分鐘勾選，全校前 5 名即時排好提報教育局 · 阿凱老師教學情境長文">
+  <meta name="twitter:description" content="每年學校要彙整老師的教學軟體採購需求，傳統做法是一張 Excel 在處室與 LINE 群組之間傳來傳去，誰填了誰漏了、同套軟體被重複填，承辦最後還要手動去重排名。#109 是石門國小教務處的線上實名填報系統：老師勾選統購與自主需求軟體，Firebase Firestore 即時統計、自動排出全校前 5 名提報教育局，已採購的軟體自動標免填，把「對 Excel」變成「看儀表板」。">
+  <meta name="twitter:image" content="https://cagoooo.github.io/Akai/previews/og/tool_109.webp">
+  <meta name="twitter:image:alt" content="#109 別再用 Excel 收軟體需求了：老師三分鐘勾選，全校前 5 名即時排好提報教育局 封面圖">
+  <link rel="canonical" href="https://cagoooo.github.io/Akai/blog/digital-software-survey-109-firestore-needs-poll">
+
+  <!-- Schema.org: BlogPosting — Google rich snippets + AI 知識圖譜 -->
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "#109 別再用 Excel 收軟體需求了：老師三分鐘勾選，全校前 5 名即時排好提報教育局",
+  "description": "每年學校要彙整老師的教學軟體採購需求，傳統做法是一張 Excel 在處室與 LINE 群組之間傳來傳去，誰填了誰漏了、同套軟體被重複填，承辦最後還要手動去重排名。#109 是石門國小教務處的線上實名填報系統：老師勾選統購與自主需求軟體，Firebase Firestore 即時統計、自動排出全校前 5 名提報教育局，已採購的軟體自動標免填，把「對 Excel」變成「看儀表板」。",
+  "image": "https://cagoooo.github.io/Akai/previews/og/tool_109.webp",
+  "datePublished": "2026-06-12",
+  "dateModified": "2026-06-12",
+  "url": "https://cagoooo.github.io/Akai/blog/digital-software-survey-109-firestore-needs-poll",
+  "author": {
+    "@type": "Person",
+    "@id": "https://cagoooo.github.io/Akai/#akai",
+    "name": "阿凱老師",
+    "url": "https://cagoooo.github.io/Akai/"
+  },
+  "publisher": {
+    "@type": "EducationalOrganization",
+    "name": "科技教育創新專區",
+    "url": "https://cagoooo.github.io/Akai/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://cagoooo.github.io/Akai/icon-512.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://cagoooo.github.io/Akai/blog/digital-software-survey-109-firestore-needs-poll"
+  },
+  "inLanguage": "zh-TW",
+  "keywords": "教學情境,阿凱老師,教育工具,軟體需求調查,數位學習,校務行政,Firebase,即時排行榜",
+  "wordCount": 2365,
+  "timeRequired": "PT7M",
+  "about": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "阿凱老師工具 #109",
+      "url": "https://cagoooo.github.io/Akai/tool/109"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "阿凱老師工具 #48",
+      "url": "https://cagoooo.github.io/Akai/tool/48"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "阿凱老師工具 #2",
+      "url": "https://cagoooo.github.io/Akai/tool/2"
+    }
+  ]
+}
+  </script>
+  <script>
+    (function() {
+      var ua = navigator.userAgent || '';
+      var isBot = /facebookexternalhit|Facebot|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Slackbot|Discordbot|Pinterest|Googlebot|bingbot|YandexBot|LineBot|Line-Networking/i.test(ua);
+      // 同 blog 列表的修法：不能直接 replace 沒 trailing slash 的目錄路徑（無限循環）
+      if (!isBot) {
+        window.location.replace('/Akai/?redirect=' + encodeURIComponent('/Akai/blog/digital-software-survey-109-firestore-needs-poll'));
+      }
+    })();
+  </script>
+  <style>body{font-family:'Noto Sans TC',-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#c99a6c;color:#1a1a1a;text-align:center}.card{background:#fff27a;padding:32px 36px;border-radius:6px;box-shadow:6px 6px 0 rgba(0,0,0,.22);transform:rotate(-1deg);max-width:520px}h1{margin:0 0 12px;font-size:24px;font-weight:900;line-height:1.4}p{color:#4a3a20;line-height:1.65}a{display:inline-block;margin-top:18px;padding:11px 24px;background:#ea8a3e;color:#fff;text-decoration:none;border:2.5px solid #1a1a1a;border-radius:10px;font-weight:900;box-shadow:4px 4px 0 rgba(0,0,0,.4)}</style>
+</head>
+<body>
+  <div class="card">
+    <h1>🛒 #109 別再用 Excel 收軟體需求了：老師三分鐘勾選，全校前 5 名即時排好提報教育局</h1>
+    <p>每年學校要彙整老師的教學軟體採購需求，傳統做法是一張 Excel 在處室與 LINE 群組之間傳來傳去，誰填了誰漏了、同套軟體被重複填，承辦最後還要手動去重排名。#109 是石門國小教務處的線上實名填報系統：老師勾選統購與自主需求軟體，Firebase Firestore 即時統計、自動排出全校前 5 名提報教育局，已採購的軟體自動標免填，把「對 Excel」變成「看儀表板」。</p>
+    <a href="/Akai/blog/digital-software-survey-109-firestore-needs-poll">📖 閱讀全文</a>
+  </div>
+</body>
+</html>

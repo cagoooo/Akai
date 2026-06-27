@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>#110 活動辦完，照片就躺在資料夾裡發霉？上傳照片，AI 幫你剪成一支有旁白有配樂的成果影片 · 阿凱老師教學情境長文</title>
+  <meta name="description" content="運動會、校外教學、創意實作課辦得精彩，幾十張照片拍回來卻只能丟成無聲的相片輪播——因為剪影片要想旁白、要配音、要上字幕、要選轉場，光想就累。#110 讓你只要上傳照片，多模態 AI 自動看懂每張照片在做什麼、編寫前後連貫的繁體中文旁白與字幕、配上微軟 Neural 人聲與背景音樂，一鍵錄製匯出相容 iPhone 的 MP4。純前端、金鑰只存你的瀏覽器，照片不外傳。">
+  <meta name="keywords" content="教學情境,阿凱老師,教育工具,照片轉影片,活動紀錄影片,AI 自動剪輯,多模態視覺辨識,Neural 語音">
+  <meta name="author" content="阿凱老師">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://cagoooo.github.io/Akai/blog/photo-to-video-110-ai-event-recap-generator">
+  <meta property="og:title" content="#110 活動辦完，照片就躺在資料夾裡發霉？上傳照片，AI 幫你剪成一支有旁白有配樂的成果影片 · 阿凱老師教學情境長文">
+  <meta property="og:description" content="運動會、校外教學、創意實作課辦得精彩，幾十張照片拍回來卻只能丟成無聲的相片輪播——因為剪影片要想旁白、要配音、要上字幕、要選轉場，光想就累。#110 讓你只要上傳照片，多模態 AI 自動看懂每張照片在做什麼、編寫前後連貫的繁體中文旁白與字幕、配上微軟 Neural 人聲與背景音樂，一鍵錄製匯出相容 iPhone 的 MP4。純前端、金鑰只存你的瀏覽器，照片不外傳。">
+  <meta property="og:image" content="https://cagoooo.github.io/Akai/previews/og/tool_110.webp">
+  <meta property="og:image:alt" content="#110 活動辦完，照片就躺在資料夾裡發霉？上傳照片，AI 幫你剪成一支有旁白有配樂的成果影片 — 阿凱老師教學情境長文封面">
+  <meta property="og:image:secure_url" content="https://cagoooo.github.io/Akai/previews/og/tool_110.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="科技教育創新專區">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="article:author" content="阿凱老師">
+  <meta property="article:published_time" content="2026-06-17">
+  <meta property="article:section" content="教學情境深度長文">
+  <meta property="article:tag" content="照片轉影片">
+  <meta property="article:tag" content="活動紀錄影片">
+  <meta property="article:tag" content="AI 自動剪輯">
+  <meta property="article:tag" content="多模態視覺辨識">
+  <meta property="article:tag" content="Neural 語音">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="#110 活動辦完，照片就躺在資料夾裡發霉？上傳照片，AI 幫你剪成一支有旁白有配樂的成果影片 · 阿凱老師教學情境長文">
+  <meta name="twitter:description" content="運動會、校外教學、創意實作課辦得精彩，幾十張照片拍回來卻只能丟成無聲的相片輪播——因為剪影片要想旁白、要配音、要上字幕、要選轉場，光想就累。#110 讓你只要上傳照片，多模態 AI 自動看懂每張照片在做什麼、編寫前後連貫的繁體中文旁白與字幕、配上微軟 Neural 人聲與背景音樂，一鍵錄製匯出相容 iPhone 的 MP4。純前端、金鑰只存你的瀏覽器，照片不外傳。">
+  <meta name="twitter:image" content="https://cagoooo.github.io/Akai/previews/og/tool_110.webp">
+  <meta name="twitter:image:alt" content="#110 活動辦完，照片就躺在資料夾裡發霉？上傳照片，AI 幫你剪成一支有旁白有配樂的成果影片 封面圖">
+  <link rel="canonical" href="https://cagoooo.github.io/Akai/blog/photo-to-video-110-ai-event-recap-generator">
+
+  <!-- Schema.org: BlogPosting — Google rich snippets + AI 知識圖譜 -->
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "#110 活動辦完，照片就躺在資料夾裡發霉？上傳照片，AI 幫你剪成一支有旁白有配樂的成果影片",
+  "description": "運動會、校外教學、創意實作課辦得精彩，幾十張照片拍回來卻只能丟成無聲的相片輪播——因為剪影片要想旁白、要配音、要上字幕、要選轉場，光想就累。#110 讓你只要上傳照片，多模態 AI 自動看懂每張照片在做什麼、編寫前後連貫的繁體中文旁白與字幕、配上微軟 Neural 人聲與背景音樂，一鍵錄製匯出相容 iPhone 的 MP4。純前端、金鑰只存你的瀏覽器，照片不外傳。",
+  "image": "https://cagoooo.github.io/Akai/previews/og/tool_110.webp",
+  "datePublished": "2026-06-17",
+  "dateModified": "2026-06-17",
+  "url": "https://cagoooo.github.io/Akai/blog/photo-to-video-110-ai-event-recap-generator",
+  "author": {
+    "@type": "Person",
+    "@id": "https://cagoooo.github.io/Akai/#akai",
+    "name": "阿凱老師",
+    "url": "https://cagoooo.github.io/Akai/"
+  },
+  "publisher": {
+    "@type": "EducationalOrganization",
+    "name": "科技教育創新專區",
+    "url": "https://cagoooo.github.io/Akai/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://cagoooo.github.io/Akai/icon-512.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://cagoooo.github.io/Akai/blog/photo-to-video-110-ai-event-recap-generator"
+  },
+  "inLanguage": "zh-TW",
+  "keywords": "教學情境,阿凱老師,教育工具,照片轉影片,活動紀錄影片,AI 自動剪輯,多模態視覺辨識,Neural 語音",
+  "wordCount": 2549,
+  "timeRequired": "PT7M",
+  "about": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "阿凱老師工具 #110",
+      "url": "https://cagoooo.github.io/Akai/tool/110"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "阿凱老師工具 #68",
+      "url": "https://cagoooo.github.io/Akai/tool/68"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "阿凱老師工具 #94",
+      "url": "https://cagoooo.github.io/Akai/tool/94"
+    }
+  ]
+}
+  </script>
+  <script>
+    (function() {
+      var ua = navigator.userAgent || '';
+      var isBot = /facebookexternalhit|Facebot|Twitterbot|LinkedInBot|WhatsApp|TelegramBot|Slackbot|Discordbot|Pinterest|Googlebot|bingbot|YandexBot|LineBot|Line-Networking/i.test(ua);
+      // 同 blog 列表的修法：不能直接 replace 沒 trailing slash 的目錄路徑（無限循環）
+      if (!isBot) {
+        window.location.replace('/Akai/?redirect=' + encodeURIComponent('/Akai/blog/photo-to-video-110-ai-event-recap-generator'));
+      }
+    })();
+  </script>
+  <style>body{font-family:'Noto Sans TC',-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#c99a6c;color:#1a1a1a;text-align:center}.card{background:#fff27a;padding:32px 36px;border-radius:6px;box-shadow:6px 6px 0 rgba(0,0,0,.22);transform:rotate(-1deg);max-width:520px}h1{margin:0 0 12px;font-size:24px;font-weight:900;line-height:1.4}p{color:#4a3a20;line-height:1.65}a{display:inline-block;margin-top:18px;padding:11px 24px;background:#ea8a3e;color:#fff;text-decoration:none;border:2.5px solid #1a1a1a;border-radius:10px;font-weight:900;box-shadow:4px 4px 0 rgba(0,0,0,.4)}</style>
+</head>
+<body>
+  <div class="card">
+    <h1>🎬 #110 活動辦完，照片就躺在資料夾裡發霉？上傳照片，AI 幫你剪成一支有旁白有配樂的成果影片</h1>
+    <p>運動會、校外教學、創意實作課辦得精彩，幾十張照片拍回來卻只能丟成無聲的相片輪播——因為剪影片要想旁白、要配音、要上字幕、要選轉場，光想就累。#110 讓你只要上傳照片，多模態 AI 自動看懂每張照片在做什麼、編寫前後連貫的繁體中文旁白與字幕、配上微軟 Neural 人聲與背景音樂，一鍵錄製匯出相容 iPhone 的 MP4。純前端、金鑰只存你的瀏覽器，照片不外傳。</p>
+    <a href="/Akai/blog/photo-to-video-110-ai-event-recap-generator">📖 閱讀全文</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<title>即時數據 · 2026 AIFED 演講</title>
+<link rel="icon" href="favicon.svg" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1F4C3E;
+    --navy-deep: #143526;
+    --navy-soft: #2F6B5A;
+    --cream: #F4F0E6;
+    --orange: #C99744;
+    --red: #B9512B;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%);
+    color: var(--cream);
+    font-family: 'Noto Sans TC', system-ui, sans-serif;
+    width: 100%; height: 100vh; overflow: hidden;
+  }
+  .wrap {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    height: 100vh;
+    padding: 32px 48px;
+    gap: 24px;
+  }
+  header {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 16px;
+  }
+  .brand {
+    font-size: 22px; font-weight: 900; letter-spacing: 0.04em;
+  }
+  .brand .accent { color: var(--orange); }
+  .live-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px;
+    background: var(--red); border-radius: 999px;
+    font-size: 13px; font-weight: 800; letter-spacing: 0.08em;
+  }
+  .live-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #fff;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .6; transform: scale(1.2); }
+  }
+
+  /* 4 格 stat tile */
+  main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 24px;
+  }
+  .tile {
+    background: rgba(244,240,230,.06);
+    border: 1.5px solid rgba(244,240,230,.2);
+    border-radius: 16px;
+    padding: 28px 36px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    transition: background .3s ease, border-color .3s ease, transform .25s cubic-bezier(.34,1.56,.64,1);
+  }
+  .tile.accent {
+    background: linear-gradient(135deg, rgba(201,151,68,.18), rgba(201,151,68,.04));
+    border-color: var(--orange);
+  }
+  .tile.flash {
+    background: rgba(201,151,68,.32);
+    border-color: var(--orange);
+    transform: scale(1.02);
+  }
+  .tile-label {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 15px; font-weight: 700;
+    color: rgba(244,240,230,.7);
+    letter-spacing: 0.03em;
+  }
+  .tile-emoji { font-size: 22px; }
+  .tile-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(72px, 12vw, 132px);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--cream);
+    letter-spacing: -0.02em;
+  }
+  .tile.accent .tile-value { color: var(--orange); }
+  .tile-sub {
+    font-size: 14px;
+    color: rgba(244,240,230,.5);
+    margin-top: 8px;
+  }
+  .tile-delta {
+    position: absolute; top: 28px; right: 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--orange);
+    background: rgba(201,151,68,.15);
+    padding: 4px 10px;
+    border-radius: 999px;
+    opacity: 0;
+    transition: opacity .25s ease;
+  }
+  .tile-delta.show { opacity: 1; }
+
+  footer {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; color: rgba(244,240,230,.45);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.04em;
+  }
+  .clock { font-weight: 700; color: var(--cream); }
+  .url-hint a { color: rgba(244,240,230,.6); text-decoration: none; }
+
+  /* loading state */
+  .loading .tile-value::after {
+    content: '…';
+    color: rgba(244,240,230,.4);
+  }
+
+  /* 響應式 */
+  @media (max-width: 768px) {
+    .wrap { padding: 16px 18px; gap: 14px; }
+    main { gap: 12px; }
+    .tile { padding: 16px 20px; border-radius: 12px; }
+    .tile-label { font-size: 12px; }
+    .tile-value { font-size: clamp(48px, 16vw, 72px); }
+    .tile-sub { font-size: 11px; }
+    header { flex-wrap: wrap; }
+    .brand { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap loading">
+  <header>
+    <div class="brand">📊 演講即時數據 <span class="accent">· 2026 AIFED</span></div>
+    <div class="live-tag"><span class="live-dot"></span>LIVE</div>
+  </header>
+  <main>
+    <div class="tile accent" data-tile="total">
+      <div class="tile-label"><span class="tile-emoji">🌐</span><span>累計訪客</span></div>
+      <div>
+        <div class="tile-value" id="total">0</div>
+        <div class="tile-sub">cagoooo.github.io/Akai 自上線</div>
+      </div>
+      <div class="tile-delta" id="total-delta">+0</div>
+    </div>
+    <div class="tile" data-tile="today">
+      <div class="tile-label"><span class="tile-emoji">📈</span><span>今天進站</span></div>
+      <div>
+        <div class="tile-value" id="today">0</div>
+        <div class="tile-sub" id="today-date">--</div>
+      </div>
+      <div class="tile-delta" id="today-delta">+0</div>
+    </div>
+    <div class="tile" data-tile="session">
+      <div class="tile-label"><span class="tile-emoji">🎤</span><span>演講中新增</span></div>
+      <div>
+        <div class="tile-value" id="session">0</div>
+        <div class="tile-sub">從現在開始計算</div>
+      </div>
+    </div>
+    <div class="tile" data-tile="tools">
+      <div class="tile-label"><span class="tile-emoji">🔧</span><span>主推工具點擊</span></div>
+      <div>
+        <div class="tile-value" id="tools">0</div>
+        <div class="tile-sub">#3 投票 + #45 文字雲 + #81 駕駛艙</div>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <div class="url-hint"><a href="https://cagoooo.github.io/Akai/" target="_blank">cagoooo.github.io/Akai</a> · 即時數據每秒更新</div>
+    <div class="clock" id="clock">--:--</div>
+  </footer>
+</div>
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js';
+  import { getFirestore, doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDWwk3dCFmEM9_5x07fvmBMZ6LApstxkw0",
+    authDomain: "akai-e693f.firebaseapp.com",
+    projectId: "akai-e693f",
+    storageBucket: "akai-e693f.firebasestorage.app",
+    messagingSenderId: "1056659479431",
+    appId: "1:1056659479431:web:d166da50e1aef3888f5122"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const $ = (id) => document.getElementById(id);
+  const wrap = document.querySelector('.wrap');
+
+  // 數字動畫
+  function animateNumber(el, from, to, duration = 800) {
+    const start = performance.now();
+    const diff = to - from;
+    function tick(now) {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      el.textContent = Math.round(from + diff * eased).toLocaleString();
+      if (t < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // delta 閃光提示
+  function flashTile(tileName, deltaText) {
+    const tile = document.querySelector(`[data-tile="${tileName}"]`);
+    if (!tile) return;
+    tile.classList.add('flash');
+    setTimeout(() => tile.classList.remove('flash'), 400);
+    const deltaEl = $(`${tileName}-delta`);
+    if (deltaEl && deltaText) {
+      deltaEl.textContent = deltaText;
+      deltaEl.classList.add('show');
+      setTimeout(() => deltaEl.classList.remove('show'), 2500);
+    }
+  }
+
+  // 時鐘
+  function tickClock() {
+    const now = new Date();
+    $('clock').textContent =
+      String(now.getHours()).padStart(2, '0') + ':' +
+      String(now.getMinutes()).padStart(2, '0') + ':' +
+      String(now.getSeconds()).padStart(2, '0');
+  }
+  setInterval(tickClock, 1000);
+  tickClock();
+
+  // 今日日期顯示
+  const today = new Date();
+  $('today-date').textContent =
+    today.getFullYear() + '/' +
+    String(today.getMonth() + 1).padStart(2, '0') + '/' +
+    String(today.getDate()).padStart(2, '0');
+  const todayKey = today.getFullYear() + '-' +
+    String(today.getMonth() + 1).padStart(2, '0') + '-' +
+    String(today.getDate()).padStart(2, '0');
+
+  // session baseline（演講開始時刻）
+  let sessionBaseline = null;
+
+  // 訂閱 visitorStats/global
+  let prevTotal = null, prevToday = null;
+  onSnapshot(doc(db, 'visitorStats', 'global'), (snap) => {
+    const data = snap.exists() ? snap.data() : {};
+    const total = data.totalVisits || 0;
+    const todayCount = (data.dailyVisits && data.dailyVisits[todayKey]) || 0;
+    wrap.classList.remove('loading');
+
+    // 首次接到資料先記 session baseline
+    if (sessionBaseline === null) sessionBaseline = total;
+    const sessionAdds = Math.max(0, total - sessionBaseline);
+
+    // total tile
+    if (prevTotal !== null && total > prevTotal) {
+      flashTile('total', `+${total - prevTotal}`);
+    }
+    animateNumber($('total'), prevTotal ?? 0, total);
+    prevTotal = total;
+
+    // today tile
+    if (prevToday !== null && todayCount > prevToday) {
+      flashTile('today', `+${todayCount - prevToday}`);
+    }
+    animateNumber($('today'), prevToday ?? 0, todayCount);
+    prevToday = todayCount;
+
+    // session tile（從演講開始計）
+    $('session').textContent = sessionAdds.toLocaleString();
+    if (sessionAdds > 0) {
+      flashTile('session');
+    }
+  }, (err) => {
+    console.warn('[live-stats] visitorStats onSnapshot 失敗', err);
+    wrap.classList.remove('loading');
+  });
+
+  // 主推工具點擊（#3 #45 #81 加總）
+  const FEATURED_TOOL_IDS = [3, 45, 81];
+  const toolCounts = { 3: 0, 45: 0, 81: 0 };
+  let prevToolsTotal = null;
+
+  FEATURED_TOOL_IDS.forEach((id) => {
+    onSnapshot(doc(db, 'toolUsageStats', String(id)), (snap) => {
+      const c = snap.exists() ? (snap.data().clickCount || 0) : 0;
+      toolCounts[id] = c;
+      const sum = Object.values(toolCounts).reduce((a, b) => a + b, 0);
+      if (prevToolsTotal !== null && sum > prevToolsTotal) {
+        flashTile('tools', `+${sum - prevToolsTotal}`);
+      }
+      animateNumber($('tools'), prevToolsTotal ?? 0, sum);
+      prevToolsTotal = sum;
+    }, (err) => {
+      console.warn(`[live-stats] toolUsageStats/${id} 失敗`, err);
+    });
+  });
+
+  // 5 秒後若仍 loading 仍移除（避免 firestore 連線失敗永遠卡）
+  setTimeout(() => wrap.classList.remove('loading'), 5000);
+</script>
+</body>
+</html>

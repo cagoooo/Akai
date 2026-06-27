@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<title>現場提問實況 · 2026 AIFED</title>
+<link rel="icon" href="favicon.svg" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&family=Noto+Serif+TC:wght@500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1F4C3E;
+    --navy-deep: #143526;
+    --cream: #F4F0E6;
+    --orange: #C99744;
+    --red: #B9512B;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%);
+    color: var(--cream);
+    font-family: 'Noto Sans TC', system-ui, sans-serif;
+    width: 100%; min-height: 100vh; overflow-x: hidden;
+  }
+  .wrap {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
+    padding: 20px 28px;
+    gap: 14px;
+  }
+
+  /* ── Header ───────────────────────────────── */
+  header {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .brand {
+    font-size: 20px; font-weight: 900; letter-spacing: 0.04em;
+    line-height: 1.3;
+  }
+  .brand .accent { color: var(--orange); }
+  .stats {
+    display: flex; gap: 12px; align-items: center;
+    font-size: 13px;
+    color: rgba(244,240,230,.7);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .stats .count { color: var(--orange); font-weight: 700; font-size: 16px; }
+  .admin-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: rgba(244,240,230,.08);
+    border: 1.5px solid rgba(244,240,230,.25);
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 15px;
+    transition: background .15s ease, border-color .15s ease, transform .15s ease;
+    cursor: pointer;
+  }
+  .admin-btn:hover, .admin-btn:focus {
+    background: var(--orange);
+    border-color: var(--orange);
+    color: var(--navy-deep);
+    transform: rotate(45deg);
+    outline: none;
+  }
+  .live-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 12px;
+    background: var(--red); border-radius: 999px;
+    font-size: 12px; font-weight: 800; letter-spacing: 0.08em;
+  }
+  .live-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #fff;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .6; transform: scale(1.2); }
+  }
+
+  /* ── Main：桌面 grid「提問主欄 + QR 側欄」 ───── */
+  main {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 20px;
+    min-height: 0;
+  }
+  .stage {
+    position: relative;
+    background: rgba(244,240,230,.04);
+    border: 1.5px solid rgba(244,240,230,.12);
+    border-radius: 20px;
+    padding: 24px 32px;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 360px;
+  }
+  .qr-side {
+    display: flex; flex-direction: column;
+    background: linear-gradient(135deg, rgba(201,151,68,.18), rgba(201,151,68,.04));
+    border: 2px solid var(--orange);
+    border-radius: 20px;
+    padding: 20px;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+  }
+  .qr-side .qr-img {
+    width: 240px; height: 240px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 10px;
+    box-shadow: 0 6px 18px rgba(0,0,0,.35);
+    flex-shrink: 0;
+  }
+  .qr-side .qr-img img {
+    width: 100%; height: 100%; display: block;
+  }
+  .qr-side .cta {
+    font-size: 17px; font-weight: 900;
+    color: var(--orange);
+    letter-spacing: 0.02em;
+  }
+  .qr-side .at-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--cream);
+    background: rgba(20,53,38,.6);
+    padding: 4px 12px;
+    border-radius: 999px;
+    letter-spacing: 0.05em;
+  }
+  .qr-side .hint {
+    font-size: 12px;
+    color: rgba(244,240,230,.65);
+    line-height: 1.5;
+    margin-top: 4px;
+  }
+
+  /* ── 提問卡（active）─────────────────────────── */
+  .card-active {
+    width: 100%;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 16px 8px;
+    animation: slideIn .5s ease-out;
+  }
+  .card-active.flash { animation: slideIn .5s ease-out, flashGlow 1.8s ease-out; }
+  @keyframes flashGlow {
+    0%   { box-shadow: 0 0 0 0 rgba(201,151,68,0); }
+    20%  { box-shadow: 0 0 60px 12px rgba(201,151,68,.45); }
+    100% { box-shadow: 0 0 0 0 rgba(201,151,68,0); }
+  }
+  .audience-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px;
+    background: rgba(201,151,68,.18);
+    border: 1.5px solid var(--orange);
+    border-radius: 999px;
+    font-size: 14px; font-weight: 800;
+    color: var(--orange);
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 14px;
+    letter-spacing: 0.04em;
+  }
+  .audience-badge .emoji { font-size: 16px; }
+  .audience-badge .repeat-tag {
+    background: var(--orange);
+    color: var(--navy-deep);
+    padding: 1px 7px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 900;
+    margin-left: 4px;
+  }
+  .card-text {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(28px, 4.5vw, 56px);
+    font-weight: 700;
+    line-height: 1.45;
+    color: var(--cream);
+    margin-bottom: 24px;
+    word-break: break-word;
+  }
+  .card-text::before {
+    content: '「';
+    color: var(--orange);
+    margin-right: 4px;
+  }
+  .card-text::after {
+    content: '」';
+    color: var(--orange);
+    margin-left: 4px;
+  }
+  .card-meta {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-size: 13px;
+    color: rgba(244,240,230,.55);
+    font-family: 'JetBrains Mono', monospace;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .card-meta .from { color: var(--orange); font-weight: 700; }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── 空狀態 ──────────────────────────────────── */
+  .empty {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px;
+    color: rgba(244,240,230,.5);
+    text-align: center;
+    padding: 20px;
+  }
+  .empty-emoji { font-size: 72px; opacity: .7; animation: bounce 2s ease-in-out infinite; }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .empty-text { font-size: 22px; font-weight: 700; color: rgba(244,240,230,.7); }
+  .empty-hint { font-size: 14px; opacity: .8; max-width: 320px; line-height: 1.6; }
+  .empty-arrow {
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--orange);
+    font-weight: 800;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── 縮圖列（過去問題）─────────────────────── */
+  .recent-strip {
+    display: flex; gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    min-height: 36px;
+  }
+  .recent-strip::-webkit-scrollbar { height: 5px; }
+  .recent-strip::-webkit-scrollbar-thumb { background: rgba(244,240,230,.25); border-radius: 3px; }
+  .chip {
+    flex: 0 0 auto;
+    padding: 7px 14px;
+    border-radius: 999px;
+    background: rgba(244,240,230,.08);
+    border: 1px solid rgba(244,240,230,.15);
+    font-size: 12px;
+    color: rgba(244,240,230,.75);
+    max-width: 240px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    transition: background .15s ease;
+  }
+  .chip:hover, .chip:active { background: rgba(201,151,68,.25); color: var(--cream); }
+  .chip.active {
+    background: rgba(201,151,68,.3);
+    border-color: var(--orange);
+    color: var(--cream);
+    font-weight: 700;
+  }
+
+  /* ── Footer ──────────────────────────────────── */
+  footer {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; color: rgba(244,240,230,.45);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.04em;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .clock { font-weight: 700; color: var(--cream); }
+
+  /* ── 手機 RWD ─────────────────────────────────
+     ≤768px：全部改 column 排版,QR 變成主視覺,提問卡下方堆疊
+     觸控友善的字級、緊湊間距、單行 badge */
+  @media (max-width: 768px) {
+    .wrap { padding: 10px 12px; gap: 10px; }
+    .brand { font-size: 14px; flex: 0 1 auto; line-height: 1.25; }
+    header { gap: 8px; }
+    .stats { font-size: 11px; gap: 8px; flex-shrink: 0; }
+    .stats .count { font-size: 13px; }
+    .live-tag { font-size: 10px; padding: 3px 9px; }
+    .live-dot { width: 7px; height: 7px; }
+
+    main {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr;
+      gap: 10px;
+    }
+
+    /* QR 區塊改 column 中央,QR 變主視覺尺寸 */
+    .qr-side {
+      flex-direction: column;
+      padding: 14px 14px 12px;
+      gap: 8px;
+      text-align: center;
+      align-items: center;
+    }
+    .qr-side .qr-img {
+      width: 180px; height: 180px;
+      padding: 8px; border-radius: 12px;
+    }
+    .qr-side .cta { font-size: 15px; }
+    .qr-side .at-id { font-size: 13px; padding: 3px 10px; }
+    .qr-side .hint { font-size: 11px; line-height: 1.45; margin-top: 0; }
+
+    /* 主視覺收緊 — 行動裝置內容偏短,卡片不需要那麼高 */
+    .stage {
+      padding: 14px 14px;
+      border-radius: 14px;
+      min-height: auto;
+    }
+    .card-active { padding: 4px 2px; }
+    /* badge 強制單行,不要 wrap 把「共 X 則」擠到下一行 */
+    .audience-badge {
+      font-size: 12px;
+      padding: 3px 10px;
+      margin-bottom: 8px;
+      flex-wrap: nowrap;
+      white-space: nowrap;
+    }
+    .audience-badge .emoji { font-size: 14px; }
+    .audience-badge .repeat-tag {
+      font-size: 10px;
+      padding: 1px 6px;
+      margin-left: 2px;
+    }
+    .card-text {
+      font-size: clamp(20px, 6.5vw, 30px);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+    .card-meta { font-size: 10px; gap: 6px; }
+
+    .empty { padding: 10px; gap: 10px; }
+    .empty-emoji { font-size: 48px; }
+    .empty-text { font-size: 16px; }
+    .empty-hint { font-size: 11px; line-height: 1.5; }
+    .empty-arrow { font-size: 12px; margin-top: 2px; }
+
+    .recent-strip { gap: 6px; }
+    .chip { padding: 6px 10px; font-size: 11px; max-width: 180px; }
+    footer { font-size: 10px; gap: 4px; }
+  }
+
+  /* ── 中等手機（≤480px）—— iPhone 12/14/15 標準 ─── */
+  @media (max-width: 480px) {
+    .qr-side .qr-img { width: 168px; height: 168px; }
+    .card-text { font-size: clamp(18px, 6vw, 26px); }
+  }
+
+  /* ── 小手機（≤375px）—— iPhone SE 等 ──────────── */
+  @media (max-width: 375px) {
+    .wrap { padding: 8px 10px; gap: 8px; }
+    .qr-side .qr-img { width: 150px; height: 150px; padding: 6px; }
+    .qr-side .cta { font-size: 14px; }
+    .qr-side .hint { display: none; } /* SE 螢幕太擠，藏掉次要 hint */
+    .card-text { font-size: clamp(17px, 5.5vw, 22px); }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">🎤 現場提問實況 <span class="accent">· 2026 AIFED</span></div>
+    <div class="stats">
+      <a class="admin-btn" href="admin-questions.html" target="_blank" rel="noopener" title="進入後台管理（需 admin 登入）" aria-label="管理後台">⚙️</a>
+      <span>已收 <span class="count" id="count">0</span> 則</span>
+      <span class="live-tag"><span class="live-dot"></span>LIVE</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- 主視覺：提問內容 -->
+    <div class="stage" id="stage">
+      <div class="empty" id="empty">
+        <div class="empty-emoji">💬</div>
+        <div class="empty-text">等待第一則提問...</div>
+        <div class="empty-hint">掃描右側 QR Code 加 LINE Bot 好友<br/>傳訊息就會即時顯示在這裡</div>
+        <div class="empty-arrow">→ 加好友後直接傳訊息</div>
+      </div>
+    </div>
+
+    <!-- 側欄：LINE QR 主視覺（演講廳遠距觀眾看得到的尺寸） -->
+    <aside class="qr-side" aria-label="LINE Bot QR Code 加好友提問">
+      <div class="qr-img">
+        <img src="assets/qr-line-talk.png" alt="LINE Bot @399ffpsg 加好友 QR Code" />
+      </div>
+      <div class="cta">📲 掃 QR 加 LINE 提問</div>
+      <div class="at-id">@399ffpsg</div>
+      <div class="hint">加好友 → 直接傳訊息<br/>提問會即時出現在大螢幕</div>
+    </aside>
+  </main>
+
+  <div class="recent-strip" id="strip"></div>
+
+  <footer>
+    <div>每 6 秒輪播 · 顯示最新 8 則 · 點 chip 可手動切換</div>
+    <div class="clock" id="clock">--:--</div>
+  </footer>
+</div>
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js';
+  import { getFirestore, collection, query, orderBy, limit, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDWwk3dCFmEM9_5x07fvmBMZ6LApstxkw0",
+    authDomain: "akai-e693f.firebaseapp.com",
+    projectId: "akai-e693f",
+    storageBucket: "akai-e693f.firebasestorage.app",
+    messagingSenderId: "1056659479431",
+    appId: "1:1056659479431:web:d166da50e1aef3888f5122"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const $ = (id) => document.getElementById(id);
+  const stage = $('stage');
+  const empty = $('empty');
+  const strip = $('strip');
+
+  // 時鐘
+  function tickClock() {
+    const now = new Date();
+    $('clock').textContent =
+      String(now.getHours()).padStart(2, '0') + ':' +
+      String(now.getMinutes()).padStart(2, '0') + ':' +
+      String(now.getSeconds()).padStart(2, '0');
+  }
+  setInterval(tickClock, 1000);
+  tickClock();
+
+  let questions = [];
+  let activeIdx = 0;
+  let rotateTimer = null;
+
+  // 觀眾編號 + emoji mapping（同 hash 永遠拿到同編號／emoji，演講中穩定不變）
+  const AUDIENCE_EMOJIS = ['🐹','🐰','🦊','🐼','🐨','🐯','🦁','🐸','🐻','🐵','🐧','🦄'];
+  const userToNumber = new Map();
+  const lastSeenId = { current: null }; // 記住最新一則 doc id 用於 flash glow
+  let nextAudienceNumber = 1;
+  function getAudience(hash) {
+    if (!userToNumber.has(hash)) {
+      userToNumber.set(hash, nextAudienceNumber++);
+    }
+    const n = userToNumber.get(hash);
+    return { num: n, emoji: AUDIENCE_EMOJIS[(n - 1) % AUDIENCE_EMOJIS.length] };
+  }
+
+  // 計算同 hash 在 questions 內的總數 / 當前是該人的第幾則（依時間順序）
+  function userStats(hash) {
+    const sameUser = questions.filter((qq) => qq.userIdHash === hash);
+    return { total: sameUser.length };
+  }
+
+  function renderActive(opts = {}) {
+    const oldCard = stage.querySelector('.card-active');
+    if (oldCard) oldCard.remove();
+    if (questions.length === 0) {
+      empty.style.display = 'flex';
+      return;
+    }
+    empty.style.display = 'none';
+    const q = questions[activeIdx];
+    if (!q) return;
+    const date = new Date(q.timestamp || Date.now());
+    const timeStr = String(date.getHours()).padStart(2, '0') + ':' +
+                    String(date.getMinutes()).padStart(2, '0') + ':' +
+                    String(date.getSeconds()).padStart(2, '0');
+    const audience = getAudience(q.userIdHash || 'anon');
+    const stats = userStats(q.userIdHash || 'anon');
+
+    // 找出 q 在「該觀眾自己訊息序列」中的順位（asc 時間）
+    const sameUserAsc = questions
+      .filter((qq) => qq.userIdHash === q.userIdHash)
+      .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+    const thisUserSeq = sameUserAsc.findIndex((qq) => qq.id === q.id) + 1;
+
+    const card = document.createElement('div');
+    card.className = 'card-active' + (opts.flash ? ' flash' : '');
+
+    // 同一觀眾多則才顯示 repeat-tag
+    const repeatTag = stats.total > 1
+      ? `<span class="repeat-tag">第 ${thisUserSeq} 則 / 共 ${stats.total}</span>`
+      : '';
+
+    card.innerHTML = `
+      <div class="audience-badge">
+        <span class="emoji">${audience.emoji}</span>
+        <span>觀眾 #${audience.num}</span>
+        ${repeatTag}
+      </div>
+      <div class="card-text"></div>
+      <div class="card-meta">
+        <span class="from">${timeStr}</span>
+        <span>第 ${activeIdx + 1} 則 / ${questions.length}（輪播中）</span>
+      </div>
+    `;
+    card.querySelector('.card-text').textContent = q.text;
+    stage.appendChild(card);
+    Array.from(strip.children).forEach((el, i) => {
+      el.classList.toggle('active', i === activeIdx);
+    });
+  }
+
+  function renderStrip() {
+    strip.innerHTML = '';
+    questions.forEach((q, i) => {
+      const audience = getAudience(q.userIdHash || 'anon');
+      const chip = document.createElement('div');
+      chip.className = 'chip' + (i === activeIdx ? ' active' : '');
+      chip.innerHTML = `<span style="opacity:.7;margin-right:4px;">${audience.emoji}#${audience.num}</span><span></span>`;
+      chip.querySelector('span:last-child').textContent = q.text;
+      chip.title = `觀眾 #${audience.num}：${q.text}`;
+      chip.addEventListener('click', () => {
+        activeIdx = i;
+        renderActive();
+        resetRotate();
+      });
+      strip.appendChild(chip);
+    });
+  }
+
+  function resetRotate() {
+    if (rotateTimer) clearInterval(rotateTimer);
+    rotateTimer = setInterval(() => {
+      if (questions.length <= 1) return;
+      activeIdx = (activeIdx + 1) % questions.length;
+      renderActive();
+    }, 6000);
+  }
+
+  const q = query(
+    collection(db, 'talkQuestions'),
+    orderBy('createdAt', 'desc'),
+    limit(8),
+  );
+  onSnapshot(q, (snap) => {
+    const next = [];
+    snap.forEach((doc) => {
+      const data = doc.data();
+      // admin-questions.html 標記 hidden 的訊息不公開顯示
+      if (data.hidden) return;
+      next.push({
+        id: doc.id,
+        text: data.text || '',
+        userIdHash: data.userIdHash || 'anon',
+        timestamp: data.timestamp || (data.createdAt?.toMillis?.() ?? Date.now()),
+        pinned: !!data.pinned,
+      });
+    });
+    // 置頂訊息排到陣列最前（pinned: true 永遠優先輪播）
+    next.sort((a, b) => {
+      if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+      return (b.timestamp || 0) - (a.timestamp || 0); // 同 pinned 狀態仍按時間 desc
+    });
+    // 偵測新訊息（doc id 跟上次第一則不同 → 新進，觸發 flash glow）
+    const isNewArrival = next.length > 0 && next[0].id !== lastSeenId.current;
+    lastSeenId.current = next.length > 0 ? next[0].id : null;
+
+    questions = next;
+    $('count').textContent = next.length;
+    activeIdx = 0;
+    renderStrip();
+    renderActive({ flash: isNewArrival });
+    resetRotate();
+  }, (err) => {
+    console.warn('[live-questions] onSnapshot 失敗', err);
+  });
+</script>
+</body>
+</html>

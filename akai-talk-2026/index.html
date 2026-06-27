@@ -1,0 +1,2882 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>從使用者到開發者 ｜ 2026 AIFED ｜ 黃凱揚</title>
+<meta name="description" content="2026 AIFED 學術年會主題演講：一位國小教師如何用 AI 協作親手做出 100+ 款教育工具的完整心路歷程 — 黃凱揚（阿凱老師）· 桃園市龍潭區石門國民小學" />
+<meta name="author" content="黃凱揚 · 阿凱老師" />
+<meta name="theme-color" content="#1F4C3E" />
+
+<!-- Favicon（相對路徑：簡報是純靜態子站，無 SPA 轉發，路徑可直接 resolve）-->
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="icon" type="image/x-icon" href="favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="48x48" href="favicon-48x48.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+
+<!-- Open Graph / Facebook / LINE 分享預覽 -->
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="科技教育創新專區 · 阿凱老師" />
+<meta property="og:title" content="從使用者到開發者 ｜ 2026 AIFED ｜ 黃凱揚" />
+<meta property="og:description" content="一位國小教師如何用 AI 協作親手做出 100+ 款教育工具的完整心路歷程。25 張投影片 · 含現場互動 QR Code · 學術投稿稿件 PDF 可下載。" />
+<meta property="og:image" content="https://cagoooo.github.io/Akai/akai-talk-2026/og-aifed-2026.png" />
+<meta property="og:image:secure_url" content="https://cagoooo.github.io/Akai/akai-talk-2026/og-aifed-2026.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:alt" content="2026 AIFED 演講封面：從使用者到開發者 · 黃凱揚 · 阿凱老師" />
+<meta property="og:locale" content="zh_TW" />
+<meta property="og:url" content="https://cagoooo.github.io/Akai/akai-talk-2026/" />
+<meta property="article:author" content="黃凱揚 · 阿凱老師" />
+<meta property="article:section" content="教育科技 · 學術演講" />
+
+<!-- Twitter / LINE 增強 -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="從使用者到開發者 ｜ 2026 AIFED" />
+<meta name="twitter:description" content="一位國小教師如何用 AI 協作親手做出 100+ 款教育工具的完整心路歷程。" />
+<meta name="twitter:image" content="https://cagoooo.github.io/Akai/akai-talk-2026/og-aifed-2026.png" />
+<meta name="twitter:image:alt" content="2026 AIFED 演講封面" />
+
+<!-- Canonical -->
+<link rel="canonical" href="https://cagoooo.github.io/Akai/akai-talk-2026/" />
+
+<!-- Schema.org: PresentationDigitalDocument（學術演講作品結構化資料）-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "PresentationDigitalDocument",
+  "name": "從使用者到開發者",
+  "alternateName": "2026 AIFED · 從使用者到開發者",
+  "headline": "從使用者到開發者：一位國小教師用 AI 協作親手做出 100+ 款教育工具",
+  "description": "2026 AIFED 學術年會主題演講，分享國小教師如何從教育科技使用者轉變為開發者的完整歷程。",
+  "url": "https://cagoooo.github.io/Akai/akai-talk-2026/",
+  "image": "https://cagoooo.github.io/Akai/akai-talk-2026/og-aifed-2026.png",
+  "inLanguage": "zh-TW",
+  "author": {
+    "@type": "Person",
+    "name": "黃凱揚",
+    "alternateName": "阿凱老師",
+    "url": "https://cagoooo.github.io/Akai/",
+    "worksFor": {
+      "@type": "EducationalOrganization",
+      "name": "桃園市龍潭區石門國民小學",
+      "url": "https://www.smes.tyc.edu.tw/"
+    }
+  },
+  "datePublished": "2026-05-28",
+  "isPartOf": {
+    "@type": "Event",
+    "name": "2026 AIFED 亞洲教育科技創新領袖年會",
+    "eventStatus": "https://schema.org/EventScheduled"
+  }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Serif+TC:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<script src="deck-stage.js"></script>
+<script src="image-slot.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+<!-- v3.6.66 預編譯：tweaks-panel.jsx + tweaks-app.jsx → tweaks-bundle.js（拿掉 Babel CDN，省 ~300ms client compile） -->
+<script defer src="tweaks-bundle.js"></script>
+<script type="application/json" id="speaker-notes">
+[
+  "各位 AIFED 的夥伴大家好，我是來自桃園市石門國小的黃凱揚老師。今天非常榮幸，能站在這個舞台上，跟大家分享一段我個人的小故事——一位國小教師如何從『使用者』變成『開發者』，用 AI 協作，親手做出 90 多款免費教育工具。接下來大約 20 分鐘的時間，我想說的不是技術，而是一個關於『教師可以做什麼』的可能性。",
+  "在正式開始之前，先快速介紹自己。我是黃凱揚，大家叫我阿凱老師。我不是工程師、不是 AI 專家，也沒有任何資訊背景。我就是一位很普通的、會在班上批改聯絡簿、要顧 30 個學生、每天都覺得時間不夠用的國小老師。我之所以今天能站在這裡，唯一的原因，就是我嘗試了一件以前完全做不到的事——讓 AI 幫我把每天遇到的麻煩，一個一個變成可以解決的工具。",
+  "在進入正題前，我想先請問現場每一位夥伴一個問題：『您今天備一堂課，平均會打開幾個分頁？』不用回答我，您心裡有數字就好。我自己最高紀錄是 17 個。Google、注音練習網、課本電子書、簡報、AI 對話框、各種互動平台、影片、學習單。問題不是『工具不夠多』，而是工具太多了，多到我們的備課時間，幾乎都耗在『把工具準備好』。",
+  "在進入第一幕之前，我們現場做個小實驗。我打開的這個工具就是今天分享主題之一——「學生即時投票系統」，由我自己用 AI 協作開發的。請大家拿起手機掃描螢幕上的 QR Code——免登入、不用註冊，直接看到大家的回答。問題就是：剛剛那堂課，您到底開了幾個分頁？我們用一分鐘看看真實數據。（停一下等大家加入）……好，現在大家應該都看到統計圖了。這個畫面本身，就是接下來 18 分鐘要說的事：當教師需要的工具不在市面上，能不能由教師自己親手做出來？答案，就是後面這些。",
+  "今天的分享，我會分成五幕。第一幕『困境』。為什麼我會想做這件事？因為我跟在座很多老師一樣，撐到一個程度，會開始問自己：到底是工具在服務我，還是我在服務工具？",
+  "讓我把這幾年第一線老師的疲憊，整理成四個非常具體的困境。第一個『分散』——工具散在幾十個不同網站，每次上課前都要重新找、重新比對。第二個『門檻』——很多平台要註冊、要綁信箱、甚至要求學生登入，對國小學生來說登入流程本身就是一道牆。第三個『成本與干擾』——免費版有廣告、有次數限制，課堂上突然跳出廣告對教學節奏是很嚴重的打斷。第四個『被動』——我們只能接受平台商給我們的功能，不喜歡也沒辦法改。主導權，從來不在教學現場的我們手上。",
+  "這些困境累積久了，有一天我突然問自己一個問題：『教育科技工具，能不能由最了解教學現場的人——也就是教師自己——來決定它的樣子？』過去這個想法最大的障礙是技術。我不會寫程式。但 AI 出現之後，我突然意識到一件事——如果我能把教學需求清楚地『說』出來，AI 或許就能幫我把它『做』出來。於是，這個平台就誕生了。",
+  "進入第二幕，平台。我做的這個東西叫做『科技教育創新專區』。它不是研究計畫、不是學校交辦、也不是接案。它就是我自己一個人，下班後、假日、寒暑假，一點一滴累積起來的小東西。",
+  "用幾個數字快速說明平台目前的規模。90 多款工具、超過 800 次版本提交、目前版本 3.6.x、七大類別、MIT 完全開源。這個平台叫做『科技教育創新專區』。它不是研究計畫、不是學校交辦、也不是接案。它就是我自己一個人，下班後、假日、寒暑假，一點一滴累積起來的小東西。目標只有一個：讓國小老師『在一個地方、用最低的門檻，找到並分享所有需要的教學工具』。這些不是炫耀數字，而是想說明一件事：一位非資訊背景的國小教師，透過 AI 協作，是可以做到這個規模的。這就是 AI 賦能教師最直接的證據。",
+  "整個平台我給自己定了四項核心設計原則，這四件事是我下任何決定的標準。第一，100% 免費、沒有任何廣告。第二，免註冊、教師把連結或 QR Code 給學生，學生點開就能用。第三，一站整合，七大分類加上即時搜尋與排行榜，幾秒找到工具。第四，跨裝置可安裝，電腦、平板、手機都可以，也支援 PWA 像 App 一樣裝到桌面。這四件事，是我認為一線老師最需要、卻最常被忽略的事。",
+  "第三幕，開發歷程。這是整場分享我最想跟大家聊的一塊。因為，平台本身不是重點，重點是『一位不會寫程式的老師，到底是怎麼把它做出來的』。",
+  "這套方法在開發圈有一個很可愛的名字，叫做 vibe coding——直譯是『憑感覺寫程式』。它的意思是：你不用會寫一行程式，你只要用自然語言把你想要的功能描述給 AI 聽，AI 會幫你產生程式碼，你再透過反覆對話來測試、修正、優化。對老師來說，這代表開發工具所需要的核心能力，從『會寫程式』，變成『能把教學需求說清楚』。而後者，正是我們老師最擅長的事。",
+  "把這個方法拆開來，是六個步驟。第一步定義需求，先想清楚這個工具要解決什麼問題、給誰用。第二步把需求用白話描述給 AI 聽。第三步 AI 產出程式碼，順便請它解釋每段程式在做什麼。第四步實際在瀏覽器測試，把錯誤回報給 AI。第五步來回對話、逐步打磨。第六步透過 GitHub Pages、Replit、Firebase 等免費服務發布上線。整個流程，沒有一個步驟需要會寫程式。真正需要的，是教師對教學現場的敏銳觀察，以及願意動手嘗試的意願。",
+  "走了 800 多次版本提交之後，我把這條路上的心得，整理成五個原則。一，先解決自己的真實痛點，從每天都會遇到的麻煩做起，工具才會真的被用。二，把 AI 當共同開發者，不是萬能機器，AI 會出錯，老師必須自己負責測試與把關。三，小步快跑、持續迭代，先做出能用的版本，再依回饋逐步完善。四，教學需求優先於技術炫技，介面對小學生友善，比功能華麗更重要。五，公開原始碼、樂於共享，開源讓別人能複製、修改、再利用，這才是真正的擴散。",
+  "進入第四幕，應用。90 多款工具不是擺好看的，它們真的天天在我的班級、在桃園各校老師的課堂裡被使用。",
+  "我把所有工具依教學用途分成七大類別。溝通工具——親師溝通與即時諮詢；教學工具——備課、課堂教學與評語回饋；語言學習——語文讀寫與雙語；閱讀工具——閱讀理解評量；實用工具——教學行政與班級事務；遊戲互動——寓教於樂；互動平台——課堂即時互動。這七大類涵蓋了一位國小老師一天從早到晚會用到的所有場景。",
+  "其中我特別想介紹四款 AI 工具，這幾款是節省老師時間最有感的。第一，教案小幫手 Pro 版——輸入單元跟需求，AI 就能依 108 課綱產出 20 項教案初稿，還能一鍵匯出 Word。Flask + Gemini 架構，整套全開源、可 fork 可部署。第二，PIRLS 閱讀理解 Pro 版——拍一頁課本照片丟進去，自動產出符合 PIRLS 四層次的閱讀理解題組，另外還能一鍵匯出 PaGamO、PDF、Excel 與學生 QR 即時作答。Next.js + Gemini 2.5 Flash 的 serverless 重構版，同樣全開源。第三，課程計畫 AI 審查工具——這款是給教務端用的，可以快速比對與檢視課程計畫。第四，點石成金蜂評語優化——學期末寫評語的時候，把生硬的句子調整成更正向、具體、有溫度的文字。",
+  "在進入時間軸之前，我特別想拉出一款工具來介紹——『國小資訊科技教學駕駛艙』。它跟剛剛那四款 AI 工具不太一樣。剛剛是個別工具，駕駛艙是一個整合儀表板：把資科教師會用到的教學平台、軟硬體資源、教學示例、共備材料，全部收進一個入口。它解決的，是『資科專任老師東西散落各處』的問題——同樣的『一站整合』概念，從單一工具放大到整個科目。這款工具特別適合資科專任、共備社群、還有新進老師快速上手。網址在畫面下方，會後歡迎大家去看實際畫面。",
+  "把這些工具放在一節課的時間軸上，會長什麼樣子？課前，老師用 AI 備課小幫手寫教案、用 PIRLS 工具備好閱讀題。課中，用投票系統做課前診斷、用文字雲收斂全班討論、適時穿插教育遊戲鞏固練習，整個過程學生只要掃 QR Code 就能加入，沒有等待、沒有摩擦。課後，用評語優化工具寫評語，兼顧效率與溫度。行政端，用課程計畫 AI 審查、用 QRCode 批次產生器、用兒童臉部隱私保護工具、用禮堂預約系統。整套流程，是真的可以閉環的。",
+  "進入今天的最後一個段落之前，我們再玩一次。這次用的是「文字雲即時互動」——同樣免登入、掃 QR 直接參與。請大家用一個詞回答：「教師最該被賦能的事，是什麼？」（停一下，等大家輸入）……謝謝大家。看著螢幕上慢慢長出來的這些詞，這就是我為什麼要做這個平台、為什麼要站在這裡：教師最該被賦能的，是「自己決定教室會發生什麼」的權力。接下來，是我心目中「教師賦能」最具體的五個樣子。",
+  "進入最後一幕，賦能。回到 AIFED 今年的主題『教師賦能』，我想把這個平台所展現的『賦能』，講得非常具體。它不是抽象的口號，而是五件可以被指認的事。",
+  "賦能一，奪回主導權——教育科技的決定權重新回到教學現場。賦能二，降低同儕門檻——一站式、免註冊、無廣告，讓對科技較不熟悉的老師也能輕鬆把數位工具用進課堂。賦能三，示範教師也能是創造者——一位非資訊背景的國小教師，能做出 90 多款工具，這本身就是對『教師角色』最有力的重新定義。賦能四，開源讓賦能擴散——MIT 授權完全開源，任何老師都能複製、修改、再利用，把一個人的成果變成眾人的資源。賦能五，把時間還給教學——工具自動化了備課、命題、行政審查等重複性工作，讓老師能把心力放回最重要的事，與學生相處。",
+  "做這件事，我也想很誠實地跟大家說它的限制。成效這邊：平台累積 90 多款工具、800 多次提交，老師最有感的是省時，學生對遊戲化跟即時互動類最熱烈。但限制這邊：AI 產出的程式品質與長期維護仍需要持續投入；『免註冊』降低門檻，但涉及學生資料的工具仍須謹慎；平台目前由我一人維護，永續性是挑戰；90 多款工具成熟度不一，需要持續汰弱補強；最後，數位落差仍是現實。我把這些講出來，是因為唯有誠實面對限制，這條路才能走得更遠。",
+  "回到一句話。在 AI 時代，教師不必只是教育科技的被動使用者，而可以成為解決自身教學痛點的主動創造者。當教師能把對教學現場的理解，透過 AI 轉化為實際可用的工具，教育科技的主導權，就真正回到了第一線。這，就是我心目中『教師賦能』最具體、也最動人的樣子。",
+  "最後跟大家報告未來的三個方向。其一，完善平台文件與使用指南，並強化無障礙設計。其二，建立更開放的回饋與共創機制，邀請更多老師一同提案、測試與維護。其三，把這套『教師自造工具』的歷程與心法整理成可複製的研習模組，協助更多夥伴跨出第一步。畫面上是平台網址、GitHub、還有我的聯絡信箱。誠摯歡迎在座每一位夥伴取用、改作這些工具。謝謝各位，期待會後跟大家當面交流。"
+]
+</script>
+<style>
+  :root {
+    /* Type scale */
+    --type-display: 180px;
+    --type-hero: 120px;
+    --type-title: 76px;
+    --type-subtitle: 48px;
+    --type-lead: 40px;
+    --type-body: 30px;
+    --type-small: 24px;
+    --type-tiny: 20px;
+    --type-eyebrow: 22px;
+
+    /* Spacing */
+    --pad-x: 120px;
+    --pad-y: 96px;
+    --gap-title: 56px;
+    --gap-item: 28px;
+
+    /* Color palette — 石門寶藍 + 米白 + 紅／橘極小面積點綴 */
+    --navy: #1F4C3E;
+    --navy-deep: #143526;
+    --navy-soft: #2F6B5A;
+    --cream: #FFFFFF;
+    --cream-warm: #F4F0E6;
+    --ink: #1A1A2E;
+    --ink-soft: #3A3A52;
+    --muted: #7A7A8E;
+    --muted-soft: #B8B5A8;
+    --red: #B9512B;
+    --orange: #C99744;
+    --rule: rgba(31, 76, 62, 0.14);
+    --rule-strong: rgba(31, 76, 62, 0.32);
+
+    /* Fonts */
+    --serif: "Noto Serif TC", "Source Han Serif TC", "PingFang TC", serif;
+    --sans: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    --italic: "Cormorant Garamond", "Noto Serif TC", serif;
+  }
+
+  html, body { margin: 0; padding: 0; background: #000; }
+  body { font-family: var(--sans); color: var(--ink); }
+
+  /* Base slide */
+  section {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--sans);
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  /* Headings inside slides */
+  .serif { font-family: var(--serif); font-weight: 600; letter-spacing: 0.01em; }
+  .sans { font-family: var(--sans); }
+  .mono { font-family: var(--mono); }
+  .italic-en { font-family: var(--italic); font-style: italic; }
+
+  /* Common slide chrome (header rule + footer) */
+  .chrome-rule {
+    position: absolute;
+    top: 56px;
+    left: var(--pad-x);
+    right: var(--pad-x);
+    height: 1px;
+    background: var(--rule);
+  }
+  .chrome-top {
+    position: absolute;
+    top: 28px;
+    left: var(--pad-x);
+    right: var(--pad-x);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: var(--mono);
+    font-size: 24px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .chrome-top .left { color: var(--navy); font-weight: 500; }
+  .chrome-top .center { color: var(--muted); }
+
+  .chrome-bottom {
+    position: absolute;
+    bottom: 36px;
+    left: var(--pad-x);
+    right: var(--pad-x);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 24px;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .chrome-bottom .author {
+    font-family: var(--sans);
+    letter-spacing: 0.04em;
+    text-transform: none;
+    font-size: 26px;
+  }
+
+  /* Slide body container */
+  .slide-body {
+    position: absolute;
+    inset: 0;
+    padding: 140px var(--pad-x) 100px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+
+  /* Eyebrow / kicker label */
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 24px;
+    letter-spacing: 0.22em;
+    color: var(--red);
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .eyebrow.navy { color: var(--navy); }
+
+  /* Slide title */
+  .slide-title {
+    font-family: var(--serif);
+    font-size: var(--type-title);
+    font-weight: 700;
+    line-height: 1.18;
+    color: var(--navy);
+    letter-spacing: 0.005em;
+    margin: 24px 0 0;
+  }
+  .slide-subtitle {
+    font-family: var(--sans);
+    font-size: var(--type-lead);
+    font-weight: 400;
+    line-height: 1.45;
+    color: var(--ink-soft);
+    margin-top: 32px;
+    max-width: 1500px;
+  }
+
+  /* === SLIDE 01: Title === */
+  .s-title {
+    background: var(--navy);
+    color: var(--cream);
+    position: relative;
+  }
+  .s-title .corner-top {
+    position: absolute;
+    top: 56px; left: 140px; right: 140px;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: var(--mono); font-size: 24px; letter-spacing: 0.18em;
+    color: rgba(250,247,240,0.55); text-transform: uppercase;
+  }
+  .s-title .corner-bot {
+    position: absolute;
+    bottom: 80px; left: 140px; right: 140px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    color: rgba(250,247,240,0.7);
+  }
+  .s-title .center {
+    position: absolute;
+    top: 200px; bottom: 280px; left: 140px; right: 140px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .s-title .topic {
+    font-family: var(--mono);
+    font-size: 26px; letter-spacing: 0.32em;
+    color: var(--orange);
+    margin-bottom: 56px; text-transform: uppercase;
+  }
+  .s-title h1 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 140px; line-height: 1.05;
+    color: var(--cream); margin: 0;
+    letter-spacing: 0.005em;
+  }
+  .s-title .accent-line {
+    width: 180px; height: 3px;
+    background: var(--orange);
+    margin: 40px 0 32px;
+  }
+  .s-title .subtitle {
+    font-family: var(--sans); font-weight: 300;
+    font-size: 34px; line-height: 1.45;
+    color: rgba(250,247,240,0.9);
+    max-width: 1400px;
+  }
+  .s-title .subtitle-en {
+    font-family: var(--italic); font-style: italic;
+    font-size: 26px; color: rgba(250,247,240,0.55);
+    margin-top: 16px;
+    max-width: 1200px;
+  }
+  .s-title .meta {
+    font-family: var(--sans); font-size: 26px;
+    color: rgba(250,247,240,0.85); line-height: 1.7;
+  }
+  .s-title .meta strong { color: var(--cream); font-weight: 500; }
+  .s-title .logo-mark {
+    width: 132px; height: 132px;
+    border-radius: 50%;
+    background: var(--cream);
+    padding: 10px;
+    box-sizing: border-box;
+    box-shadow: 0 0 0 1px rgba(250,247,240,0.2);
+  }
+  .s-title .logo-mark img { width: 100%; height: 100%; object-fit: contain; }
+  /* 首頁 CTA：跳轉阿凱老師親自口說的影片導讀（YouTube） */
+  .s-title .video-cta {
+    display: inline-flex; align-items: center; gap: 18px;
+    padding: 16px 32px 16px 20px;
+    border: 2px solid var(--orange); border-radius: 999px;
+    text-decoration: none; background: rgba(201,151,68,0.12);
+    transition: background .25s ease, transform .25s ease, box-shadow .25s ease;
+  }
+  .s-title .video-cta:hover {
+    background: var(--orange); transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  }
+  .s-title .video-cta .vc-play {
+    display: flex; align-items: center; justify-content: center; flex: none;
+    width: 46px; height: 46px; border-radius: 50%;
+    background: var(--orange); color: var(--navy); font-size: 19px;
+    padding-left: 3px; transition: background .25s ease, color .25s ease;
+  }
+  .s-title .video-cta:hover .vc-play { background: var(--navy); color: var(--orange); }
+  .s-title .video-cta .vc-text { display: flex; flex-direction: column; line-height: 1.28; }
+  .s-title .video-cta .vc-main {
+    font-family: var(--sans); font-weight: 500; font-size: 27px;
+    color: var(--cream); letter-spacing: 0.01em;
+  }
+  .s-title .video-cta .vc-sub {
+    font-family: var(--sans); font-weight: 300; font-size: 18px;
+    color: rgba(250,247,240,0.55); letter-spacing: 0.02em;
+  }
+  .s-title .video-cta:hover .vc-main,
+  .s-title .video-cta:hover .vc-sub { color: var(--navy); }
+
+  /* === SLIDE 02: Hello / Intro === */
+  .s-hello {
+    background: var(--cream);
+    position: relative;
+  }
+  .s-hello .body {
+    position: absolute; inset: 0;
+    padding: 140px 140px 120px;
+    display: grid; grid-template-columns: 1.1fr 1fr; gap: 80px;
+    align-items: center;
+  }
+  .s-hello h2 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 120px; line-height: 1.1;
+    margin: 0; color: var(--navy);
+  }
+  .s-hello h2 .name { color: var(--red); }
+  .s-hello .hello-en {
+    font-family: var(--italic); font-style: italic;
+    font-size: 56px; color: var(--muted); margin-bottom: 24px;
+  }
+  .s-hello .tags { margin-top: 56px; display: flex; flex-direction: column; gap: 24px; }
+  .s-hello .tag {
+    display: flex; align-items: baseline; gap: 28px;
+    border-top: 1px solid var(--rule);
+    padding: 22px 0;
+    font-family: var(--sans); font-size: 38px;
+  }
+  .s-hello .tag .num { font-family: var(--mono); font-size: 24px; color: var(--muted); letter-spacing: 0.18em; min-width: 60px; }
+  .s-hello .tag .label { color: var(--navy); font-weight: 500; min-width: 360px; }
+  .s-hello .tag .label-en { color: var(--muted); font-family: var(--italic); font-style: italic; font-size: 32px; }
+  .s-hello .right { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 36px; }
+  .s-hello .logo-big {
+    width: 480px; height: 480px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0; box-sizing: border-box;
+  }
+  .s-hello .logo-big img { width: 100%; height: 100%; object-fit: contain; }
+  .s-hello .caption {
+    font-family: var(--mono); font-size: 24px;
+    color: var(--muted); letter-spacing: 0.18em; text-transform: uppercase;
+  }
+
+  /* === SLIDE 03: Question === */
+  .s-question {
+    background: var(--navy);
+    color: var(--cream);
+    position: relative;
+  }
+  .s-question .body {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 0 200px;
+  }
+  .s-question .eyebrow-w {
+    font-family: var(--mono); font-size: 24px;
+    letter-spacing: 0.28em; color: var(--orange);
+    text-transform: uppercase; margin-bottom: 48px;
+  }
+  .s-question .quote-mark {
+    position: absolute;
+    pointer-events: none;
+    font-family: var(--serif);
+    font-size: 160px; line-height: 1;
+    color: var(--orange); opacity: 0.6;
+    top: 80px; right: 120px;
+  }
+  .s-question h2 {
+    font-family: var(--serif); font-weight: 600;
+    font-size: 112px; line-height: 1.25;
+    color: var(--cream); margin: 0;
+    max-width: 1500px;
+  }
+  .s-question .footnote {
+    font-family: var(--sans); font-size: 28px;
+    color: rgba(250,247,240,0.65);
+    margin-top: 64px; line-height: 1.6;
+    font-style: italic;
+  }
+  .s-question .pgnum {
+    position: absolute; bottom: 56px; right: 120px;
+    font-family: var(--mono); font-size: 24px;
+    letter-spacing: 0.18em; color: rgba(250,247,240,0.45);
+  }
+
+  /* === Section divider (Act 第N幕) === */
+  .s-section {
+    background: var(--navy);
+    color: var(--cream);
+    position: relative;
+  }
+  .s-section .body {
+    position: absolute; inset: 0;
+    padding: 140px 140px 120px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .s-section .top {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-family: var(--mono); font-size: 24px; letter-spacing: 0.22em;
+    color: rgba(250,247,240,0.55); text-transform: uppercase;
+  }
+  .s-section .center { flex: 1; display: flex; align-items: center; }
+  .s-section .center-inner { max-width: 1500px; }
+  .s-section .act-en {
+    font-family: var(--italic); font-style: italic;
+    font-size: 42px; color: var(--orange);
+    margin-bottom: 8px; letter-spacing: 0.04em;
+  }
+  .s-section .act-num {
+    font-family: var(--mono); font-size: 28px;
+    letter-spacing: 0.4em; color: rgba(250,247,240,0.55);
+    margin-bottom: 36px; text-transform: uppercase;
+  }
+  .s-section h2 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 220px; line-height: 1; color: var(--cream);
+    margin: 0; letter-spacing: 0.02em;
+  }
+  .s-section .accent-bar {
+    width: 220px; height: 3px;
+    background: var(--orange);
+    margin: 56px 0 48px;
+  }
+  .s-section .subtitle-line {
+    font-family: var(--serif); font-weight: 400;
+    font-size: 44px; line-height: 1.5;
+    color: rgba(250,247,240,0.88);
+    max-width: 1500px;
+  }
+  .s-section .bottom {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: var(--mono); font-size: 24px; letter-spacing: 0.18em;
+    color: rgba(250,247,240,0.4); text-transform: uppercase;
+  }
+
+  /* === Content slide layouts === */
+
+  /* Four-up困境 cards */
+  .s-quadrant .body {
+    position: absolute; inset: 0;
+    padding: 140px var(--pad-x) 100px;
+    display: flex; flex-direction: column;
+  }
+  .s-quadrant .head {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 36px;
+    margin-bottom: 56px;
+  }
+  .s-quadrant .head-left .eyebrow { margin-bottom: 18px; }
+  .s-quadrant .head-left h2 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 64px; color: var(--navy); margin: 0; line-height: 1.15;
+  }
+  .s-quadrant .head-right {
+    font-family: var(--serif); font-style: italic;
+    font-size: 32px; color: var(--muted);
+    text-align: right; max-width: 520px; line-height: 1.5;
+  }
+  .s-quadrant .grid {
+    flex: 1;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 56px 80px;
+  }
+  .s-quadrant .card {
+    display: flex; flex-direction: column;
+    border-top: 2px solid var(--navy);
+    padding-top: 28px;
+  }
+  .s-quadrant .card .row {
+    display: flex; align-items: baseline; gap: 24px; margin-bottom: 18px;
+  }
+  .s-quadrant .card .num {
+    font-family: var(--mono); font-size: 24px;
+    color: var(--red); letter-spacing: 0.16em;
+  }
+  .s-quadrant .card h3 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 56px; color: var(--navy);
+    margin: 0; line-height: 1;
+  }
+  .s-quadrant .card h3 .en {
+    font-family: var(--italic); font-style: italic;
+    font-weight: 500; font-size: 32px; color: var(--muted); margin-left: 14px;
+  }
+  .s-quadrant .card p {
+    font-family: var(--sans); font-size: 26px;
+    line-height: 1.65; color: var(--ink-soft);
+    margin: 18px 0 0; max-width: 600px;
+  }
+
+  /* Pull-quote slide */
+  .s-pullquote {
+    background: var(--cream-warm);
+    position: relative;
+  }
+  .s-pullquote .body {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 0 200px;
+  }
+  .s-pullquote .qmark {
+    position: absolute;
+    pointer-events: none;
+    font-family: var(--serif); font-size: 180px;
+    line-height: 1; color: var(--red); opacity: 0.4;
+    top: 80px; right: 120px;
+  }
+  .s-pullquote h2 {
+    font-family: var(--serif); font-weight: 600;
+    font-size: 116px; line-height: 1.32;
+    color: var(--navy); margin: 0;
+    max-width: 1500px;
+  }
+  .s-pullquote h2 em { font-style: italic; color: var(--red); }
+  .s-pullquote .attribution {
+    margin-top: 80px;
+    display: flex; align-items: center; gap: 32px;
+    color: var(--muted);
+  }
+  .s-pullquote .attribution .line { width: 80px; height: 1px; background: var(--muted); }
+  .s-pullquote .attribution .text { font-family: var(--sans); font-size: 26px; line-height: 1.5; }
+
+  /* Stat / Dashboard slide */
+  .s-stats .body {
+    position: absolute; inset: 0;
+    padding: 140px var(--pad-x) 100px;
+    display: flex; flex-direction: column;
+  }
+  .s-stats .head { margin-bottom: 64px; }
+  .s-stats h2 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 64px; color: var(--navy);
+    margin: 18px 0 0; line-height: 1.15;
+  }
+  .s-stats .sub {
+    font-family: var(--sans); font-size: 30px;
+    color: var(--ink-soft); margin-top: 18px;
+  }
+  .s-stats .grid {
+    flex: 1;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: var(--rule);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .s-stats .cell {
+    background: var(--cream);
+    padding: 56px 36px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .s-stats .cell .label {
+    font-family: var(--mono); font-size: 24px; letter-spacing: 0.18em;
+    color: var(--muted); text-transform: uppercase;
+  }
+  .s-stats .cell .num {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 156px; line-height: 1; color: var(--navy);
+    margin: 32px 0 16px;
+    display: flex; align-items: baseline; gap: 0;
+  }
+  .s-stats .cell .num [data-counter] { display: inline-block; font-variant-numeric: tabular-nums; }
+  .s-stats .cell .num .unit {
+    font-family: var(--sans); font-size: 36px; color: var(--muted);
+    font-weight: 400; margin-left: 8px;
+  }
+  .s-stats .cell .desc {
+    font-family: var(--sans); font-size: 24px;
+    color: var(--ink-soft); line-height: 1.5;
+  }
+
+  /* Four-principle cards */
+  .s-principles .body {
+    position: absolute; inset: 0;
+    padding: 140px var(--pad-x) 100px;
+    display: flex; flex-direction: column;
+  }
+  .s-principles .head {
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 36px; margin-bottom: 56px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+  }
+  .s-principles h2 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 64px; color: var(--navy); margin: 18px 0 0; line-height: 1.15;
+  }
+  .s-principles .grid {
+    flex: 1;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px;
+  }
+  .s-principles .card {
+    background: var(--cream-warm);
+    padding: 44px 36px;
+    display: flex; flex-direction: column; gap: 18px;
+    border-top: 4px solid var(--navy);
+  }
+  .s-principles .card:nth-child(2) { border-top-color: var(--red); }
+  .s-principles .card:nth-child(3) { border-top-color: var(--orange); }
+  .s-principles .card:nth-child(4) { border-top-color: var(--navy-soft); }
+  .s-principles .card .num {
+    font-family: var(--mono); font-size: 24px; letter-spacing: 0.2em;
+    color: var(--muted);
+  }
+  .s-principles .card h3 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 44px; line-height: 1.2; color: var(--navy); margin: 0;
+  }
+  .s-principles .card .en {
+    font-family: var(--italic); font-style: italic;
+    font-size: 26px; color: var(--muted); margin-top: 4px;
+  }
+  .s-principles .card p {
+    font-family: var(--sans); font-size: 24px; line-height: 1.65;
+    color: var(--ink-soft); margin: 18px 0 0;
+  }
+
+  /* Vibe coding definition slide */
+  .s-vibe .body {
+    position: absolute; inset: 0;
+    padding: 140px var(--pad-x) 100px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 100px;
+  }
+  .s-vibe .col-left { display: flex; flex-direction: column; justify-content: center; }
+  .s-vibe .col-right { display: flex; flex-direction: column; justify-content: center; }
+  .s-vibe .term {
+    font-family: var(--mono); font-size: 24px; letter-spacing: 0.22em;
+    color: var(--red); margin-bottom: 24px; text-transform: uppercase;
+  }
+  .s-vibe h2 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 124px; line-height: 1.1; color: var(--navy);
+    margin: 0; letter-spacing: 0.02em;
+  }
+  .s-vibe h2 em {
+    font-family: var(--italic); font-style: italic; font-weight: 500;
+    color: var(--red);
+  }
+  .s-vibe .def {
+    margin-top: 48px;
+    font-family: var(--sans); font-size: 28px; line-height: 1.7;
+    color: var(--ink-soft); max-width: 700px;
+  }
+  .s-vibe .terminal {
+    background: var(--ink);
+    border-radius: 12px;
+    padding: 32px 36px;
+    color: #E8E5D6;
+    font-family: var(--mono);
+    font-size: 24px;
+    line-height: 1.75;
+    box-shadow: 0 24px 60px rgba(27,27,107,0.25);
+  }
+  .s-vibe .terminal .header {
+    display: flex; gap: 8px; margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    align-items: center;
+  }
+  .s-vibe .terminal .dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.2); }
+  .s-vibe .terminal .dot.r { background: #FF5F57; }
+  .s-vibe .terminal .dot.y { background: #FEBC2E; }
+  .s-vibe .terminal .dot.g { background: #28C840; }
+  .s-vibe .terminal .prompt { color: var(--orange); }
+  .s-vibe .terminal .me { color: #7CC8FF; }
+  .s-vibe .terminal .ai { color: #B6F0C8; }
+  .s-vibe .terminal .comment { color: rgba(255,255,255,0.4); }
+
+  .s-vibe .pivot {
+    margin-top: 56px;
+    padding: 32px 36px;
+    border-left: 4px solid var(--orange);
+    background: var(--cream-warm);
+  }
+  .s-vibe .pivot .label {
+    font-family: var(--mono); font-size: 24px; letter-spacing: 0.2em;
+    color: var(--orange); text-transform: uppercase; margin-bottom: 12px;
+  }
+  .s-vibe .pivot p {
+    font-family: var(--serif); font-size: 32px; line-height: 1.5;
+    color: var(--navy); margin: 0;
+  }
+  .s-vibe .pivot strong { color: var(--red); font-weight: 600; }
+
+  /* Six-step process */
+  .s-process .body {
+    position: absolute; inset: 0;
+    padding: 140px var(--pad-x) 100px;
+    display: flex; flex-direction: column;
+  }
+  .s-process .head {
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 36px; margin-bottom: 64px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+  }
+  .s-process h2 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 64px; color: var(--navy); margin: 18px 0 0; line-height: 1.15;
+  }
+  .s-process .head-right { font-family: var(--serif); font-style: italic; font-size: 28px; color: var(--muted); }
+  .s-process .steps {
+    flex: 1;
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 32px;
+  }
+  .s-process .step {
+    display: flex; flex-direction: column;
+    border-top: 2px solid var(--navy);
+    padding-top: 28px;
+    position: relative;
+  }
+  .s-process .step::before {
+    content: '';
+    position: absolute;
+    top: -7px; left: 0;
+    width: 12px; height: 12px;
+    background: var(--navy);
+    border-radius: 50%;
+  }
+  .s-process .step .num {
+    font-family: var(--mono); font-size: 24px; letter-spacing: 0.18em;
+    color: var(--red); margin-bottom: 14px;
+  }
+  .s-process .step h3 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 36px; line-height: 1.15; color: var(--navy); margin: 0;
+  }
+  .s-process .step p {
+    font-family: var(--sans); font-size: 24px; line-height: 1.5;
+    color: var(--ink-soft); margin: 18px 0 0;
+  }
+
+  /* Five-principle list */
+  .s-list5 .body {
+    position: absolute; inset: 0;
+    padding: 140px var(--pad-x) 100px;
+    display: flex; flex-direction: column;
+  }
+  .s-list5 .head { margin-bottom: 56px; }
+  .s-list5 h2 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 64px; color: var(--navy); margin: 18px 0 0; line-height: 1.15;
+  }
+  .s-list5 .list { flex: 1; display: flex; flex-direction: column; }
+  .s-list5 .item {
+    display: grid; grid-template-columns: 100px 1fr 1.4fr;
+    padding: 22px 0; gap: 48px;
+    border-top: 1px solid var(--rule);
+    align-items: baseline;
+  }
+  .s-list5 .item:last-child { border-bottom: 1px solid var(--rule); }
+  .s-list5 .item .num {
+    font-family: var(--mono); font-size: 28px; color: var(--red);
+    letter-spacing: 0.12em; font-weight: 500;
+  }
+  .s-list5 .item h3 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 38px; color: var(--navy); margin: 0; line-height: 1.25;
+  }
+  .s-list5 .item p {
+    font-family: var(--sans); font-size: 24px; line-height: 1.55;
+    color: var(--ink-soft); margin: 0;
+  }
+
+  /* Seven-category grid */
+  .s-cats .body {
+    position: absolute; inset: 0;
+    padding: 140px var(--pad-x) 100px;
+    display: flex; flex-direction: column;
+  }
+  .s-cats .head {
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 30px; margin-bottom: 36px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+  }
+  .s-cats h2 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 64px; color: var(--navy); margin: 18px 0 0; line-height: 1.15;
+  }
+  .s-cats .total {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 88px; color: var(--red); line-height: 1;
+  }
+  .s-cats .total .unit { font-family: var(--sans); font-size: 26px; color: var(--muted); font-weight: 400; margin-left: 12px; }
+  .s-cats .grid {
+    flex: 1;
+    display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: 1fr 1fr; gap: 24px;
+  }
+  .s-cats .cat {
+    background: var(--cream);
+    border: 1px solid var(--rule);
+    padding: 24px 24px;
+    display: flex; flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  .s-cats .cat .top { display: flex; justify-content: space-between; align-items: baseline; }
+  .s-cats .cat .idx {
+    font-family: var(--mono); font-size: 24px;
+    color: var(--muted); letter-spacing: 0.16em;
+  }
+  .s-cats .cat .count {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 36px; color: var(--navy);
+  }
+  .s-cats .cat h3 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 34px; color: var(--navy); margin: 16px 0 2px;
+    line-height: 1.1;
+  }
+  .s-cats .cat .en {
+    font-family: var(--italic); font-style: italic;
+    font-size: 24px; color: var(--muted);
+  }
+  .s-cats .cat p {
+    font-family: var(--sans); font-size: 24px; line-height: 1.4;
+    color: var(--ink-soft); margin: 8px 0 0;
+  }
+  .s-cats .cat.feature {
+    background: var(--navy); color: var(--cream);
+    border-color: var(--navy);
+  }
+  .s-cats .cat.feature .idx { color: rgba(250,247,240,0.5); }
+  .s-cats .cat.feature h3 { color: var(--cream); }
+  .s-cats .cat.feature .en { color: var(--orange); }
+  .s-cats .cat.feature p { color: rgba(250,247,240,0.85); }
+  .s-cats .cat.feature .count { color: var(--orange); }
+  .s-cats .cat.feature .label {
+    font-family: var(--mono); font-size: 24px; letter-spacing: 0.18em;
+    color: var(--orange); text-transform: uppercase; margin-top: auto; padding-top: 10px;
+  }
+
+  /* AI flagship tools */
+  .s-ai .body {
+    position: absolute; inset: 0;
+    padding: 140px var(--pad-x) 100px;
+    display: flex; flex-direction: column;
+  }
+  .s-ai .head {
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 36px; margin-bottom: 56px;
+  }
+  .s-ai h2 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 64px; color: var(--navy); margin: 18px 0 0; line-height: 1.15;
+  }
+  .s-ai .grid {
+    flex: 1;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 36px;
+  }
+  .s-ai .tool {
+    display: flex; flex-direction: column;
+    padding-top: 28px;
+    border-top: 2px solid var(--navy);
+  }
+  .s-ai .tool .tag {
+    font-family: var(--mono); font-size: 24px;
+    color: var(--red); letter-spacing: 0.18em;
+    margin-bottom: 14px; text-transform: uppercase;
+  }
+  .s-ai .tool h3 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 34px; line-height: 1.2; color: var(--navy); margin: 0;
+  }
+  .s-ai .tool p {
+    font-family: var(--sans); font-size: 24px; line-height: 1.55;
+    color: var(--ink-soft); margin: 20px 0 24px;
+  }
+  .s-ai .tool .benefit {
+    margin-top: auto;
+    padding-top: 24px;
+    border-top: 1px dashed var(--rule);
+    font-family: var(--sans); font-size: 24px; line-height: 1.5;
+    color: var(--navy); font-weight: 500;
+  }
+  .s-ai .tool .benefit .ic { color: var(--red); font-family: var(--mono); margin-right: 6px; }
+
+  .tool-cta {
+    display: inline-flex; align-items: center; gap: 12px;
+    margin-top: 18px;
+    padding: 12px 16px;
+    background: var(--cream-warm);
+    border: 1px solid var(--rule-strong);
+    font-family: var(--mono); font-size: 24px;
+    color: var(--navy); text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: background 0.15s, color 0.15s;
+    align-self: flex-start;
+  }
+  .tool-cta:hover { background: var(--navy); color: var(--cream); }
+  .tool-cta:hover .hash { color: var(--orange); }
+  .tool-cta .hash { color: var(--red); font-weight: 700; }
+  .tool-cta .arrow { color: var(--muted); font-size: 24px; margin-left: 4px; }
+
+  /* Timeline / 一節課的工具流 */
+  .s-timeline .body {
+    position: absolute; inset: 0;
+    padding: 140px var(--pad-x) 100px;
+    display: flex; flex-direction: column;
+  }
+  .s-timeline .head {
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 36px; margin-bottom: 64px;
+  }
+  .s-timeline h2 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 64px; color: var(--navy); margin: 18px 0 0; line-height: 1.15;
+  }
+  .s-timeline .track {
+    flex: 1;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
+    position: relative;
+  }
+  .s-timeline .track::before {
+    content: '';
+    position: absolute;
+    top: 38px; left: 0; right: 0;
+    height: 2px;
+    background: var(--rule);
+  }
+  .s-timeline .phase { display: flex; flex-direction: column; position: relative; padding-top: 0; }
+  .s-timeline .phase .dot {
+    width: 22px; height: 22px;
+    background: var(--navy);
+    border-radius: 50%;
+    margin-bottom: 24px;
+    border: 6px solid var(--cream);
+    margin-left: -2px;
+    box-sizing: content-box;
+    position: relative; z-index: 2;
+  }
+  .s-timeline .phase:nth-child(2) .dot { background: var(--red); }
+  .s-timeline .phase:nth-child(3) .dot { background: var(--orange); }
+  .s-timeline .phase:nth-child(4) .dot { background: var(--navy-soft); }
+  .s-timeline .phase .when {
+    font-family: var(--mono); font-size: 24px;
+    color: var(--muted); letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  .s-timeline .phase h3 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 44px; line-height: 1.15; color: var(--navy);
+    margin: 12px 0 24px;
+  }
+  .s-timeline .phase ul {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .s-timeline .phase li {
+    font-family: var(--sans); font-size: 24px; line-height: 1.5;
+    color: var(--ink-soft);
+    padding-left: 24px; position: relative;
+  }
+  .s-timeline .phase li::before {
+    content: '—';
+    position: absolute; left: 0;
+    color: var(--red);
+    font-family: var(--mono);
+  }
+
+  /* Five empowerment items */
+  .s-empower .body {
+    position: absolute; inset: 0;
+    padding: 140px var(--pad-x) 100px;
+    display: flex; flex-direction: column;
+  }
+  .s-empower .head {
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 36px; margin-bottom: 48px;
+  }
+  .s-empower h2 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 64px; color: var(--navy); margin: 18px 0 0; line-height: 1.15;
+  }
+  .s-empower .grid {
+    flex: 1;
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 32px;
+  }
+  .s-empower .item {
+    display: flex; flex-direction: column;
+    padding: 36px 28px;
+    background: var(--cream);
+    border: 1px solid var(--rule);
+    position: relative;
+  }
+  .s-empower .item .roman {
+    font-family: var(--italic); font-style: italic;
+    font-size: 56px; color: var(--orange); line-height: 1;
+    font-weight: 600; margin-bottom: 32px;
+  }
+  .s-empower .item h3 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 36px; line-height: 1.2; color: var(--navy);
+    margin: 0 0 18px;
+  }
+  .s-empower .item p {
+    font-family: var(--sans); font-size: 24px; line-height: 1.5;
+    color: var(--ink-soft); margin: 0;
+  }
+  .s-empower .item .tagline {
+    font-family: var(--mono); font-size: 24px; letter-spacing: 0.12em;
+    color: var(--red); text-transform: uppercase;
+    margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--rule);
+  }
+
+  /* Honest review (impact + limits) */
+  .s-honest .body {
+    position: absolute; inset: 0;
+    padding: 140px var(--pad-x) 100px;
+    display: flex; flex-direction: column;
+  }
+  .s-honest .head {
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 30px; margin-bottom: 40px;
+  }
+  .s-honest h2 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 64px; color: var(--navy); margin: 18px 0 0; line-height: 1.15;
+  }
+  .s-honest .cols { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+  .s-honest .col { display: flex; flex-direction: column; }
+  .s-honest .col .label {
+    font-family: var(--mono); font-size: 24px; letter-spacing: 0.2em;
+    text-transform: uppercase; margin-bottom: 24px;
+  }
+  .s-honest .col.good .label { color: var(--navy); }
+  .s-honest .col.bad .label { color: var(--red); }
+  .s-honest .col h3 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 40px; line-height: 1.25; color: var(--navy); margin: 0 0 28px;
+  }
+  .s-honest .col ul {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column;
+  }
+  .s-honest .col li {
+    padding: 18px 0;
+    border-top: 1px solid var(--rule);
+    font-family: var(--sans); font-size: 24px; line-height: 1.5;
+    color: var(--ink-soft);
+    display: grid; grid-template-columns: 48px 1fr; gap: 16px;
+  }
+  .s-honest .col li:last-child { border-bottom: 1px solid var(--rule); }
+  .s-honest .col li .marker {
+    font-family: var(--mono); font-size: 24px; letter-spacing: 0.16em;
+    color: var(--muted);
+    padding-top: 4px;
+  }
+  .s-honest .col.bad li .marker { color: var(--red); }
+  .s-honest .col li strong {
+    color: var(--navy); font-weight: 600;
+    display: block; margin-bottom: 2px;
+    font-family: var(--serif); font-size: 26px;
+  }
+
+  /* Final quote */
+  .s-final {
+    background: var(--navy);
+    color: var(--cream);
+    position: relative;
+  }
+  .s-final .body {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 0 200px;
+  }
+  .s-final .eyebrow-w {
+    font-family: var(--mono); font-size: 24px; letter-spacing: 0.28em;
+    color: var(--orange); text-transform: uppercase; margin-bottom: 48px;
+  }
+  .s-final .qmark {
+    position: absolute;
+    pointer-events: none;
+    font-family: var(--serif); font-size: 160px;
+    line-height: 1; color: var(--orange); opacity: 0.5;
+    top: 80px; right: 120px;
+  }
+  .s-final h2 {
+    font-family: var(--serif); font-weight: 600;
+    font-size: 92px; line-height: 1.35; color: var(--cream);
+    margin: 0; max-width: 1500px;
+  }
+  .s-final h2 em {
+    font-family: var(--italic); font-style: italic;
+    color: var(--orange); font-weight: 500;
+  }
+  .s-final .sig {
+    margin-top: 80px;
+    font-family: var(--sans); font-size: 24px;
+    color: rgba(250,247,240,0.7); line-height: 1.6;
+  }
+
+  /* Closing — future + thanks */
+  .s-close .body {
+    position: absolute; inset: 0;
+    padding: 140px var(--pad-x) 100px;
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: 100px;
+  }
+  .s-close .left { display: flex; flex-direction: column; }
+  .s-close .label {
+    font-family: var(--mono); font-size: 24px; letter-spacing: 0.22em;
+    color: var(--red); text-transform: uppercase; margin-bottom: 24px;
+  }
+  .s-close h2 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 80px; line-height: 1.18; color: var(--navy);
+    margin: 0 0 48px;
+  }
+  .s-close .future { display: flex; flex-direction: column; flex: 1; }
+  .s-close .future-item {
+    display: grid; grid-template-columns: 70px 1fr; gap: 24px;
+    padding: 24px 0; border-top: 1px solid var(--rule);
+    align-items: baseline;
+  }
+  .s-close .future-item:last-child { border-bottom: 1px solid var(--rule); }
+  .s-close .future-item .num {
+    font-family: var(--mono); font-size: 24px;
+    color: var(--red); letter-spacing: 0.12em;
+  }
+  .s-close .future-item h3 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 32px; line-height: 1.3; color: var(--navy); margin: 0 0 6px;
+  }
+  .s-close .future-item p {
+    font-family: var(--sans); font-size: 24px; line-height: 1.5;
+    color: var(--ink-soft); margin: 0;
+  }
+  /* 致謝頁 CTA：跳轉阿凱老師親自口說的影片導讀（淺底→實心墨綠膠囊鈕）*/
+  .s-close .left .video-cta {
+    display: inline-flex; align-items: center; gap: 18px; align-self: flex-start;
+    margin-top: 40px; padding: 16px 32px 16px 20px;
+    background: var(--navy); border-radius: 999px; text-decoration: none;
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .s-close .left .video-cta:hover { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(31,76,62,0.30); }
+  .s-close .left .video-cta .vc-play {
+    display: flex; align-items: center; justify-content: center; flex: none;
+    width: 46px; height: 46px; border-radius: 50%;
+    background: var(--orange); color: var(--navy); font-size: 19px; padding-left: 3px;
+  }
+  .s-close .left .video-cta .vc-text { display: flex; flex-direction: column; line-height: 1.28; }
+  .s-close .left .video-cta .vc-main {
+    font-family: var(--sans); font-weight: 500; font-size: 26px; color: var(--cream); letter-spacing: 0.01em;
+  }
+  .s-close .left .video-cta .vc-sub {
+    font-family: var(--sans); font-weight: 300; font-size: 17px; color: rgba(250,247,240,0.62); letter-spacing: 0.02em;
+  }
+
+  .s-close .right {
+    background: var(--navy); color: var(--cream);
+    padding: 56px 48px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .s-close .right .thanks {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 72px; line-height: 1; color: var(--cream);
+    margin: 0;
+  }
+  .s-close .right .thanks .en {
+    font-family: var(--italic); font-style: italic; font-weight: 500;
+    font-size: 32px; color: var(--orange); display: block; margin: 8px 0 0;
+    white-space: nowrap;
+  }
+  .s-close .right .qr-block {
+    display: flex; gap: 24px; align-items: center;
+    background: rgba(250,247,240,0.06);
+    border: 1px solid rgba(250,247,240,0.15);
+    padding: 18px;
+  }
+  .s-close .right .qr-img {
+    width: 188px; height: 188px;
+    background: #fff;
+    padding: 8px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    display: block;
+  }
+  .s-close .right .qr-text { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .s-close .right .qr-cta {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 30px; line-height: 1.2; color: var(--cream);
+  }
+  .s-close .right .qr-url {
+    font-family: var(--mono); font-size: 24px;
+    color: var(--orange); letter-spacing: 0.04em;
+    word-break: break-all;
+  }
+  .s-close .right .qr-tag {
+    font-family: var(--sans); font-size: 24px;
+    color: rgba(250,247,240,0.7); line-height: 1.4;
+  }
+  .s-close .right .contact { display: flex; flex-direction: column; gap: 16px; }
+  .s-close .right .contact-row {
+    display: grid; grid-template-columns: 130px 1fr; gap: 16px;
+    padding: 14px 0;
+    border-top: 1px solid rgba(250,247,240,0.18);
+    align-items: baseline;
+    font-family: var(--mono); font-size: 24px;
+  }
+  .s-close .right .contact-row:last-child { border-bottom: 1px solid rgba(250,247,240,0.18); }
+  .s-close .right .contact-row .k {
+    color: rgba(250,247,240,0.55); letter-spacing: 0.14em; text-transform: uppercase;
+    font-size: 24px;
+  }
+  .s-close .right .contact-row .v { font-size: 24px; }
+  .s-close .right .contact-row .v {
+    color: var(--cream); letter-spacing: 0.02em; word-break: break-all;
+  }
+  .s-close .right .contact-row .v a { color: var(--cream); text-decoration: none; }
+  .s-close .right .author {
+    font-family: var(--sans); font-size: 24px;
+    color: rgba(250,247,240,0.7); line-height: 1.55;
+  }
+  .s-close .right .author strong { color: var(--cream); font-weight: 500; font-size: 28px; display: block; margin-bottom: 6px; }
+  .s-close .right .author a.school-link {
+    color: inherit; text-decoration: none; border-bottom: 1px dotted rgba(250,247,240,0.4);
+    transition: color .2s ease, border-color .2s ease;
+  }
+  .s-close .right .author a.school-link:hover,
+  .s-close .right .author a.school-link:focus {
+    color: var(--cream); border-bottom-color: var(--cream);
+  }
+  .s-close .right .made-with {
+    margin-top: 14px; padding-top: 14px;
+    border-top: 1px solid rgba(250,247,240,0.18);
+    font-family: var(--mono); font-size: 16px;
+    color: rgba(250,247,240,0.55); letter-spacing: 0.02em;
+  }
+  .s-close .right .made-with a {
+    color: inherit; text-decoration: none;
+    border-bottom: 1px dotted rgba(250,247,240,0.35);
+    transition: color .2s ease, border-color .2s ease;
+  }
+  .s-close .right .made-with a:hover, .s-close .right .made-with a:focus {
+    color: var(--cream); border-bottom-color: var(--cream);
+  }
+  .s-close .right .made-with .heart { color: #f87171; font-style: normal; }
+
+  /* === FLAGSHIP SPOTLIGHT === */
+  .s-spotlight {
+    background: var(--cream);
+  }
+  .s-spotlight .body {
+    position: absolute; inset: 0;
+    padding: 140px var(--pad-x) 100px;
+    display: grid; grid-template-columns: 1fr 1.05fr; gap: 80px;
+    align-items: start;
+  }
+  .s-spotlight .left { display: flex; flex-direction: column; }
+  .s-spotlight .eyebrow-sp {
+    font-family: var(--mono); font-size: 24px;
+    color: var(--red); letter-spacing: 0.22em; text-transform: uppercase;
+    margin-bottom: 28px; font-weight: 500;
+  }
+  .s-spotlight h2 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 76px; line-height: 1.1; color: var(--navy);
+    margin: 0; letter-spacing: 0.005em;
+  }
+  .s-spotlight .h-en {
+    font-family: var(--italic); font-style: italic;
+    font-size: 36px; color: var(--muted); margin-top: 14px;
+  }
+  .s-spotlight .desc {
+    font-family: var(--sans); font-size: 26px; line-height: 1.55;
+    color: var(--ink-soft); margin: 28px 0 24px;
+    max-width: 720px;
+  }
+  .s-spotlight .features {
+    display: flex; flex-direction: column;
+    margin-bottom: 24px;
+  }
+  .s-spotlight .feat {
+    display: grid; grid-template-columns: 100px 1fr; gap: 24px;
+    padding: 14px 0; border-top: 1px solid var(--rule);
+    align-items: baseline;
+  }
+  .s-spotlight .feat:last-child { border-bottom: 1px solid var(--rule); }
+  .s-spotlight .feat .k {
+    font-family: var(--mono); font-size: 24px;
+    color: var(--red); letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .s-spotlight .feat .v {
+    font-family: var(--serif); font-size: 26px;
+    color: var(--navy); line-height: 1.4;
+  }
+  .s-spotlight .meta {
+    border-top: 1px solid var(--rule); padding-top: 20px;
+    font-family: var(--mono); font-size: 24px;
+    color: var(--muted); letter-spacing: 0.08em;
+  }
+  .s-spotlight .meta strong { color: var(--navy); font-weight: 500; }
+
+  .s-spotlight .screenshot {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    max-height: 500px;
+    background: var(--cream-warm);
+    border: 1px solid var(--rule-strong);
+    box-shadow: 0 24px 60px rgba(20,53,38,0.18);
+    overflow: hidden;
+  }
+  .s-spotlight .screenshot image-slot {
+    width: 100%; height: 100%; display: block;
+  }
+
+  /* Cockpit mock dashboard */
+  .s-spotlight .screenshot.cockpit-mock {
+    background: #0E1A14;
+    color: #D8E6DE;
+    border-color: var(--navy-deep);
+    padding: 16px 18px;
+    display: flex; flex-direction: column; gap: 10px;
+    font-family: var(--mono);
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  .s-spotlight .cockpit-mock .mock-header {
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid rgba(216,230,222,0.18);
+    padding-bottom: 12px;
+  }
+  .s-spotlight .cockpit-mock .mock-title { display: flex; align-items: center; gap: 10px; }
+  .s-spotlight .cockpit-mock .mock-dot { width: 10px; height: 10px; background: var(--orange); border-radius: 50%; }
+  .s-spotlight .cockpit-mock .mock-h { font-size: 18px; letter-spacing: 0.08em; color: #FAF7F0; }
+  .s-spotlight .cockpit-mock .mock-meta { display: flex; gap: 12px; font-size: 15px; letter-spacing: 0.1em; color: rgba(216,230,222,0.7); }
+  .s-spotlight .cockpit-mock .mock-meta .live { color: #FF6B6B; display: inline-flex; align-items: center; gap: 6px; }
+  .s-spotlight .cockpit-mock .mock-meta .live i { width: 8px; height: 8px; background: #FF6B6B; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px rgba(255,107,107,0.7); }
+
+  .s-spotlight .cockpit-mock .mock-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+  }
+  .s-spotlight .cockpit-mock .stat {
+    background: rgba(216,230,222,0.08);
+    border: 1px solid rgba(216,230,222,0.18);
+    padding: 6px 8px;
+  }
+  .s-spotlight .cockpit-mock .sk { font-size: 14px; letter-spacing: 0.08em; color: rgba(216,230,222,0.65); }
+  .s-spotlight .cockpit-mock .sv { font-size: 26px; color: #F0B655; font-weight: 700; margin-top: 2px; }
+
+  .s-spotlight .cockpit-mock .mock-grid {
+    flex: 1; min-height: 0;
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px;
+  }
+  .s-spotlight .cockpit-mock .mc {
+    background: rgba(216,230,222,0.08);
+    border: 1px solid rgba(216,230,222,0.16);
+    padding: 4px 6px;
+    display: flex; flex-direction: column; gap: 1px;
+    overflow: hidden;
+    min-height: 0;
+  }
+  .s-spotlight .cockpit-mock .mc-g {
+    font-size: 11px; letter-spacing: 0.06em;
+    color: rgba(216,230,222,0.65);
+  }
+  .s-spotlight .cockpit-mock .mc-t {
+    font-size: 14px; color: #FAF7F0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .s-spotlight .cockpit-mock .mc.g3 { border-left: 2px solid #5BB8FF; }
+  .s-spotlight .cockpit-mock .mc.g4 { border-left: 2px solid #B6F0C8; }
+  .s-spotlight .cockpit-mock .mc.g5 { border-left: 2px solid #FEBC2E; }
+  .s-spotlight .cockpit-mock .mc.g6 { border-left: 2px solid #F0A05A; }
+  .s-spotlight .cockpit-mock .mc.gt { border-left: 2px solid #FF6B6B; }
+
+  .s-spotlight .cockpit-mock .mock-footer {
+    font-size: 14px; letter-spacing: 0.1em;
+    color: rgba(216,230,222,0.6);
+    border-top: 1px solid rgba(216,230,222,0.18);
+    padding-top: 8px;
+    text-align: center;
+  }
+    border-top: 1px solid rgba(216,230,222,0.18);
+    padding-top: 8px;
+    text-align: center;
+  }
+  .s-spotlight .shot-caption {
+    margin-top: 18px;
+    font-family: var(--mono); font-size: 24px;
+    color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase;
+    text-align: center;
+  }
+
+  .s-spotlight .cockpit-cta {
+    display: flex; align-items: center; gap: 24px;
+    background: var(--cream-warm);
+    border-left: 6px solid var(--orange);
+    padding: 20px 24px;
+    text-decoration: none; color: inherit;
+  }
+  .s-spotlight .cockpit-cta:hover { background: var(--navy); color: var(--cream); }
+  .s-spotlight .cockpit-cta:hover .cta-url { color: var(--orange); }
+  .s-spotlight .cockpit-cta:hover .cta-label { color: var(--orange); }
+  .s-spotlight .cockpit-cta .cta-label .hash { color: var(--red); font-weight: 700; margin-right: 6px; }
+  .s-spotlight .cockpit-cta .cta-label .arrow { color: var(--muted); margin-left: 6px; }
+  .s-spotlight .cockpit-cta:hover .cta-label .hash,
+  .s-spotlight .cockpit-cta:hover .cta-label .arrow { color: var(--orange); }
+  .s-spotlight .cta-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+  .s-spotlight .cta-label {
+    font-family: var(--mono); font-size: 24px; letter-spacing: 0.18em;
+    color: var(--orange); text-transform: uppercase;
+  }
+  .s-spotlight .cta-url {
+    font-family: var(--mono); font-size: 28px;
+    color: var(--navy); letter-spacing: 0.02em; font-weight: 500;
+    word-break: break-all;
+  }
+  .s-spotlight .cta-qr {
+    width: 130px; height: 130px;
+    background: #fff; padding: 6px;
+    box-sizing: border-box;
+    border: 1px solid var(--rule-strong);
+    display: block; flex-shrink: 0;
+  }
+
+  .s-live {
+    background: var(--cream-warm);
+    position: relative;
+  }
+  .s-live::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 12px;
+    background: var(--orange);
+  }
+  .s-live .body {
+    position: absolute; inset: 0;
+    padding: 140px var(--pad-x) 100px;
+    display: grid; grid-template-columns: 1.1fr 1fr; gap: 100px;
+    align-items: center;
+  }
+  .s-live .left { display: flex; flex-direction: column; }
+  .s-live .live-eyebrow {
+    display: inline-flex; align-items: center; gap: 14px;
+    font-family: var(--mono); font-size: 24px;
+    color: var(--red); letter-spacing: 0.22em; text-transform: uppercase;
+    margin-bottom: 32px;
+    font-weight: 500;
+  }
+  .s-live .live-eyebrow .pulse {
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--red);
+    box-shadow: 0 0 0 0 rgba(199,62,42,0.55);
+    animation: pulse 1.8s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(199,62,42,0.55); }
+    70% { box-shadow: 0 0 0 18px rgba(199,62,42,0); }
+    100% { box-shadow: 0 0 0 0 rgba(199,62,42,0); }
+  }
+
+  /* === ENTRANCE ANIMATIONS === */
+  @keyframes deckFadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes deckFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes deckGrowX {
+    from { transform: scaleX(0); opacity: 0; }
+    to   { transform: scaleX(1); opacity: 1; }
+  }
+  @keyframes deckScaleIn {
+    from { opacity: 0; transform: scale(0.92); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  /* Apply only to the active slide; re-trigger on every re-activation */
+  deck-stage > [data-deck-active] :is(
+    .slide-title, .slide-subtitle,
+    h1, h2, h3,
+    .eyebrow, .eyebrow-w, .eyebrow-sp, .live-eyebrow,
+    .subtitle, .subtitle-en, .subtitle-line,
+    .footnote, .sig, .desc, .def, .meta, .corner-bot,
+    .topic, .hello-en, .caption,
+    .act-num, .act-en, .h-en,
+    .pivot, .terminal, .term,
+    .quote-mark, .qmark,
+    .attribution, .instruction, .prompt-card, .qr-wrap,
+    .total, .sub,
+    .shot-caption, .cockpit-cta, .screenshot,
+    .head-right
+  ) {
+    animation: deckFadeUp 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  deck-stage > [data-deck-active] :is(
+    .accent-line, .accent-bar
+  ) {
+    transform-origin: left center;
+    animation: deckGrowX 0.65s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: 0.45s;
+  }
+
+  /* Stagger inside grids and lists */
+  deck-stage > [data-deck-active] .grid > * {
+    animation: deckFadeUp 0.65s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  deck-stage > [data-deck-active] .grid > *:nth-child(1) { animation-delay: 0.18s; }
+  deck-stage > [data-deck-active] .grid > *:nth-child(2) { animation-delay: 0.28s; }
+  deck-stage > [data-deck-active] .grid > *:nth-child(3) { animation-delay: 0.38s; }
+  deck-stage > [data-deck-active] .grid > *:nth-child(4) { animation-delay: 0.48s; }
+  deck-stage > [data-deck-active] .grid > *:nth-child(5) { animation-delay: 0.58s; }
+  deck-stage > [data-deck-active] .grid > *:nth-child(6) { animation-delay: 0.68s; }
+  deck-stage > [data-deck-active] .grid > *:nth-child(7) { animation-delay: 0.78s; }
+  deck-stage > [data-deck-active] .grid > *:nth-child(8) { animation-delay: 0.88s; }
+
+  deck-stage > [data-deck-active] .steps > * {
+    animation: deckFadeUp 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  deck-stage > [data-deck-active] .steps > *:nth-child(1) { animation-delay: 0.15s; }
+  deck-stage > [data-deck-active] .steps > *:nth-child(2) { animation-delay: 0.25s; }
+  deck-stage > [data-deck-active] .steps > *:nth-child(3) { animation-delay: 0.35s; }
+  deck-stage > [data-deck-active] .steps > *:nth-child(4) { animation-delay: 0.45s; }
+  deck-stage > [data-deck-active] .steps > *:nth-child(5) { animation-delay: 0.55s; }
+  deck-stage > [data-deck-active] .steps > *:nth-child(6) { animation-delay: 0.65s; }
+
+  deck-stage > [data-deck-active] .list > .item,
+  deck-stage > [data-deck-active] .features > .feat {
+    animation: deckFadeUp 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  deck-stage > [data-deck-active] .list > .item:nth-child(1),
+  deck-stage > [data-deck-active] .features > .feat:nth-child(1) { animation-delay: 0.16s; }
+  deck-stage > [data-deck-active] .list > .item:nth-child(2),
+  deck-stage > [data-deck-active] .features > .feat:nth-child(2) { animation-delay: 0.28s; }
+  deck-stage > [data-deck-active] .list > .item:nth-child(3),
+  deck-stage > [data-deck-active] .features > .feat:nth-child(3) { animation-delay: 0.4s; }
+  deck-stage > [data-deck-active] .list > .item:nth-child(4) { animation-delay: 0.52s; }
+  deck-stage > [data-deck-active] .list > .item:nth-child(5) { animation-delay: 0.64s; }
+
+  deck-stage > [data-deck-active] .track > .phase {
+    animation: deckFadeUp 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  deck-stage > [data-deck-active] .track > .phase:nth-child(1) { animation-delay: 0.18s; }
+  deck-stage > [data-deck-active] .track > .phase:nth-child(2) { animation-delay: 0.32s; }
+  deck-stage > [data-deck-active] .track > .phase:nth-child(3) { animation-delay: 0.46s; }
+  deck-stage > [data-deck-active] .track > .phase:nth-child(4) { animation-delay: 0.6s; }
+
+  /* Per-slide refinement */
+  deck-stage > [data-deck-active] .s-title h1            { animation-delay: 0.15s; }
+  deck-stage > [data-deck-active] .s-title .subtitle     { animation-delay: 0.6s; }
+  deck-stage > [data-deck-active] .s-title .subtitle-en  { animation-delay: 0.75s; }
+  deck-stage > [data-deck-active] .s-title .corner-bot   { animation-delay: 0.9s; }
+  deck-stage > [data-deck-active] .s-title .topic        { animation-delay: 0s; }
+
+  deck-stage > [data-deck-active] .s-section .act-counter { animation: deckScaleIn 0.55s ease-out both; }
+  deck-stage > [data-deck-active] .s-section h2          { animation-delay: 0.18s; }
+  deck-stage > [data-deck-active] .s-section .accent-bar { animation-delay: 0.55s; }
+  deck-stage > [data-deck-active] .s-section .subtitle-line { animation-delay: 0.7s; }
+
+  deck-stage > [data-deck-active] .s-question .quote-mark,
+  deck-stage > [data-deck-active] .s-pullquote .qmark,
+  deck-stage > [data-deck-active] .s-final .qmark { animation: deckFadeIn 1s ease-out both; animation-delay: 0.3s; }
+  deck-stage > [data-deck-active] .s-question h2     { animation-delay: 0.2s; }
+  deck-stage > [data-deck-active] .s-question .footnote { animation-delay: 0.55s; }
+  deck-stage > [data-deck-active] .s-pullquote h2    { animation-delay: 0.2s; }
+  deck-stage > [data-deck-active] .s-pullquote .attribution { animation-delay: 0.55s; }
+  deck-stage > [data-deck-active] .s-final h2        { animation-delay: 0.2s; }
+  deck-stage > [data-deck-active] .s-final .sig      { animation-delay: 0.7s; }
+
+  deck-stage > [data-deck-active] .s-vibe .term      { animation-delay: 0s; }
+  deck-stage > [data-deck-active] .s-vibe h2         { animation-delay: 0.15s; }
+  deck-stage > [data-deck-active] .s-vibe .def       { animation-delay: 0.5s; }
+  deck-stage > [data-deck-active] .s-vibe .pivot     { animation-delay: 0.7s; }
+  deck-stage > [data-deck-active] .s-vibe .terminal  { animation-delay: 0.4s; }
+
+  /* === ACT COUNTER (big numeral on section dividers) === */
+  .s-section .body { position: relative; }
+  .act-counter {
+    position: absolute;
+    top: 280px; right: 140px;
+    display: flex; align-items: baseline; gap: 16px;
+    font-family: var(--serif);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .act-counter .ac-num {
+    font-size: 200px; line-height: 0.85;
+    color: var(--orange);
+    font-weight: 700;
+    letter-spacing: 0.005em;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.95;
+  }
+  .act-counter .ac-of {
+    font-family: var(--mono);
+    font-size: 24px;
+    color: rgba(250,247,240,0.5);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding-bottom: 12px;
+  }
+
+  /* === KEYBOARD HINT === */
+  .deck-hint {
+    position: fixed;
+    bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: rgba(20, 53, 38, 0.92);
+    color: rgba(250,247,240,0.92);
+    padding: 12px 24px;
+    font-family: var(--mono);
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    border: 1px solid rgba(250,247,240,0.18);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    transition: opacity 0.6s ease;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .deck-hint.show { opacity: 1; }
+  .deck-hint kbd {
+    font-family: var(--mono); font-size: 14px;
+    background: var(--orange); color: var(--navy);
+    padding: 2px 8px; border-radius: 3px;
+    margin: 0 4px;
+    font-weight: 700;
+  }
+  .deck-hint .sep { color: rgba(250,247,240,0.4); margin: 0 8px; }
+  .s-live h2 {
+    font-family: var(--serif); font-weight: 700;
+    font-size: 96px; line-height: 1.1; color: var(--navy);
+    margin: 0 0 32px; letter-spacing: 0.005em;
+  }
+  .s-live .instruction {
+    font-family: var(--sans); font-size: 32px; line-height: 1.55;
+    color: var(--ink-soft); margin: 0 0 36px; max-width: 760px;
+  }
+  .s-live .prompt-card {
+    border: 1px solid var(--rule-strong);
+    border-left: 6px solid var(--orange);
+    background: var(--cream);
+    padding: 28px 32px;
+    margin-bottom: 36px;
+  }
+  .s-live .prompt-card .q-label {
+    font-family: var(--mono); font-size: 24px; letter-spacing: 0.18em;
+    color: var(--orange); text-transform: uppercase; margin-bottom: 12px;
+  }
+  .s-live .prompt-card .q-text {
+    font-family: var(--serif); font-weight: 600;
+    font-size: 38px; line-height: 1.35; color: var(--navy); margin: 0;
+  }
+  .s-live .meta {
+    display: flex; flex-direction: column; gap: 8px;
+    border-top: 1px solid var(--rule);
+    padding-top: 24px;
+  }
+  .s-live .meta-row {
+    display: grid; grid-template-columns: 130px 1fr; gap: 16px;
+    font-family: var(--mono); font-size: 24px; line-height: 1.5;
+  }
+  .s-live .meta-row .k {
+    color: var(--muted); letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  .s-live .meta-row .v { color: var(--navy); font-weight: 500; word-break: break-all; }
+
+  .s-live .qr-wrap {
+    display: flex; flex-direction: column; align-items: center; gap: 24px;
+  }
+  .s-live .qr-frame {
+    width: 540px; height: 540px;
+    background: #FFFFFF;
+    padding: 28px;
+    box-sizing: border-box;
+    border: 2px solid var(--navy);
+    box-shadow: 0 24px 60px rgba(20,53,38,0.18);
+    position: relative;
+  }
+  .s-live .qr-frame image-slot {
+    width: 100%; height: 100%; display: block;
+  }
+  .s-live .qr-caption {
+    font-family: var(--mono); font-size: 24px;
+    color: var(--navy); letter-spacing: 0.16em; text-transform: uppercase;
+    text-align: center;
+  }
+  .s-live .qr-caption .sub {
+    display: block; font-family: var(--sans); font-size: 24px;
+    color: var(--muted); letter-spacing: 0.04em; text-transform: none;
+    margin-top: 6px;
+  }
+
+  .brand-dot {
+    width: 12px; height: 12px;
+    background: var(--orange);
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  /* Tweaks toggles */
+  body.hide-en .italic-en,
+  body.hide-en .subtitle-en,
+  body.hide-en .hello-en,
+  body.hide-en .act-en,
+  body.hide-en .tag .label-en,
+  body.hide-en .s-hello .caption,
+  body.hide-en .s-quadrant .card h3 .en,
+  body.hide-en .s-quadrant .head-right,
+  body.hide-en .s-principles .card .en,
+  body.hide-en .s-cats .cat .en,
+  body.hide-en .s-empower .item .tagline,
+  body.hide-en .s-close .right .thanks .en,
+  body.hide-en .s-final h2 em.en,
+  body.hide-en .s-honest .col .label .en-bit { display: none !important; }
+
+  body.hide-chrome .chrome-top,
+  body.hide-chrome .chrome-bottom,
+  body.hide-chrome .chrome-rule,
+  body.hide-chrome .s-title .corner-top,
+  body.hide-chrome .s-section .top,
+  body.hide-chrome .s-section .bottom,
+  body.hide-chrome .pgnum { display: none !important; }
+
+  /* Subtle decorative serial number for spread */
+  .pgnum {
+    position: absolute;
+    bottom: 36px; right: var(--pad-x);
+    font-family: var(--mono); font-size: 24px;
+    color: var(--muted); letter-spacing: 0.18em;
+  }
+  .s-section .pgnum, .s-question .pgnum, .s-final .pgnum { color: rgba(250,247,240,0.4); }
+
+</style>
+</head>
+<body>
+<deck-stage width="1920" height="1080">
+
+  <!-- 01 Title -->
+  <section data-label="01 標題" class="s-title">
+    <div class="corner-top">
+      <span>2026 Taiwan AI in Education Conference</span>
+      <span>July 03–05 · New Taipei</span>
+    </div>
+    <div class="center">
+      <div class="topic">AIFED 2026 ─ 主題一 · 教師賦能</div>
+      <h1>從使用者<br/>到開發者</h1>
+      <div class="accent-line"></div>
+      <div class="subtitle">一位國小教師以 AI 協作打造 90+ 款<br/>免費教育工具的賦能實踐</div>
+      <div class="subtitle-en">From User to Maker — An Elementary School Teacher's Teacher-Empowerment Practice</div>
+    </div>
+    <div class="corner-bot">
+      <div class="meta" style="padding-bottom:0;align-self:flex-end;">
+        <strong style="font-size:32px;">黃凱揚 老師</strong><br/>
+        <span style="font-size:24px;">桃園市石門國民小學</span><br/>
+        <span class="italic-en" style="font-size:24px;color:rgba(250,247,240,0.6);">cagooo@gmail.com</span>
+      </div>
+      <a class="video-cta" href="https://youtu.be/DvMSGrO98CI" target="_blank" rel="noopener" title="觀看阿凱老師親自口說的影片導讀">
+        <span class="vc-play">▶</span>
+        <span class="vc-text">
+          <span class="vc-main">觀看影片導讀</span>
+          <span class="vc-sub">阿凱老師親自口說 · 全片 14 分鐘</span>
+        </span>
+      </a>
+      <div class="logo-mark">
+        <picture><source srcset="assets/logo.webp" type="image/webp"><img src="assets/logo.png" alt="石門國小校徽" /></picture>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 Hello / Intro -->
+  <section data-label="02 自我介紹" class="s-hello">
+    <div class="chrome-top">
+      <span class="left">AIFED 2026 ─ 教師賦能</span>
+      <span class="center">SPEAKER · INTRODUCTION</span>
+      <span>02 / 25</span>
+    </div>
+    <div class="chrome-rule"></div>
+    <div class="body">
+      <div class="left">
+        <div class="hello-en">Hello.</div>
+        <h2>我是<br/><span class="name">阿凱老師</span>。</h2>
+        <div class="tags">
+          <div class="tag">
+            <span class="num">01</span>
+            <span class="label">國小教師 / 13 年</span>
+            <span class="label-en">Elementary teacher.</span>
+          </div>
+          <div class="tag">
+            <span class="num">02</span>
+            <span class="label">非資訊背景 / 不寫程式</span>
+            <span class="label-en">Not an engineer.</span>
+          </div>
+          <div class="tag">
+            <span class="num">03</span>
+            <span class="label">用 AI 自造 90+ 工具</span>
+            <span class="label-en">Teacher as Maker.</span>
+          </div>
+        </div>
+      </div>
+      <div class="right">
+        <div class="logo-big">
+          <picture><source srcset="assets/logo.webp" type="image/webp"><img src="assets/logo.png" alt="石門國小校徽" /></picture>
+        </div>
+        <div class="caption">桃園市石門國民小學 · SHIH MEN ELEMENTARY</div>
+      </div>
+    </div>
+    <div class="chrome-bottom">
+      <span class="author">黃凱揚 ─ 從使用者到開發者</span>
+      <span>2026 AIFED · 主題一</span>
+    </div>
+  </section>
+
+  <!-- 03 Opening question -->
+  <section data-label="03 開場提問" class="s-question">
+    <div class="body">
+      <div class="eyebrow-w">A QUESTION TO BEGIN ─ 開場提問</div>
+      <div class="quote-mark">"</div>
+      <h2>請問您今天備一堂課，<br/>打開了<em style="color:var(--orange);font-style:italic">幾個分頁</em>？</h2>
+      <div class="footnote">問題不是工具不夠多，而是工具太多了——多到我們的備課時間，都耗在「把工具準備好」。</div>
+    </div>
+    <div class="pgnum">03 / 25</div>
+  </section>
+
+  <!-- 04 現場互動：現場投票 -->
+  <section data-label="04 現場投票" class="s-live">
+    <div class="chrome-top">
+      <span class="left">互動時刻 01</span>
+      <span class="center">LIVE POLL — SCAN TO ANSWER</span>
+      <span>04 / 25</span>
+    </div>
+    <div class="chrome-rule"></div>
+    <div class="body">
+      <div class="left">
+        <div class="live-eyebrow"><span class="pulse"></span><span>互動時刻 · LIVE MOMENT 01</span></div>
+        <h2>現在換您<br/>回答了。</h2>
+        <div class="instruction">請拿出手機、打開相機，掃描右側 QR Code——<br/>我們當場用「學生即時投票系統」跑一次。</div>
+        <div class="prompt-card">
+          <div class="q-label">QUESTION · 現場問題</div>
+          <p class="q-text">您剛剛備那堂課，<br/>到底開了幾個分頁？</p>
+        </div>
+        <div class="meta">
+          <div class="meta-row"><span class="k">工具</span><span class="v">學生即時投票系統</span></div>
+          <div class="meta-row"><span class="k">網址</span><span class="v">cagoooo.github.io/vote/</span></div>
+          <div class="meta-row"><span class="k">作者</span><span class="v">黃凱揚 · AI 協作開發</span></div>
+        </div>
+        <a class="tool-cta" href="https://cagoooo.github.io/Akai/tool/3" target="_blank"><span class="hash">#3</span><span>在 Akai 平台體驗這款工具</span><span class="arrow">↗</span></a>
+      </div>
+      <div class="qr-wrap">
+        <div class="qr-frame">
+          <img src="assets/qr-vote.png" alt="現場投票 QR Code" style="width:100%;height:100%;display:block;" />
+        </div>
+        <div class="qr-caption">SCAN TO JOIN<span class="sub">掃描參加 · 免登入 · 即時看見統計</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 Act I — 困境 -->
+  <section data-label="04 第一幕 困境" class="s-section">
+    <div class="body">
+      <div class="top">
+        <span>AIFED 2026 ─ 教師賦能 ─ 黃凱揚</span>
+        <span>05 / 25</span>
+      </div>
+      <div class="center">
+        <div class="center-inner">
+          <div class="act-counter"><span class="ac-num" data-counter="1">0</span><span class="ac-of">/ 05</span></div>
+          <div class="act-num">ACT ONE · 第一幕</div>
+          <div class="act-en">The Predicament</div>
+          <h2>困境</h2>
+          <div class="accent-bar"></div>
+          <div class="subtitle-line">工具越來越多，<br/>第一線教師卻越來越累。</div>
+        </div>
+      </div>
+      <div class="bottom">
+        <span>從使用者到開發者</span>
+        <span>5 章 · 22 張</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 四大困境 quadrant -->
+  <section data-label="05 四大困境" class="s-quadrant">
+    <div class="chrome-top">
+      <span class="left">第一幕 · 困境</span>
+      <span class="center">FOUR PAIN POINTS</span>
+      <span>06 / 25</span>
+    </div>
+    <div class="chrome-rule"></div>
+    <div class="body">
+      <div class="head">
+        <div class="head-left">
+          <div class="eyebrow">第一線教師面對的四個現實困境</div>
+          <h2>「資源變多了」<br/>不等於「教學變輕鬆了」。</h2>
+        </div>
+        <div class="head-right">
+          每一場研習都在介紹「最新、最強」的工具；<br/>但站在國小教學現場，門檻一點也沒有降低。
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="row">
+            <span class="num">困境 01</span>
+          </div>
+          <h3>分散<span class="en">Scattered.</span></h3>
+          <p>好用的工具散落在數十個不同網站。每次上課前都要重新尋找、比對、開啟分頁——光是「把工具準備好」就耗掉備課時間。</p>
+        </div>
+        <div class="card">
+          <div class="row">
+            <span class="num">困境 02</span>
+          </div>
+          <h3>門檻<span class="en">High barrier.</span></h3>
+          <p>許多平台需要註冊帳號、綁定信箱，甚至要求學生登入。對國小學生而言登入流程本身就是難關，也牽涉個資與隱私疑慮。</p>
+        </div>
+        <div class="card">
+          <div class="row">
+            <span class="num">困境 03</span>
+          </div>
+          <h3>成本與干擾<span class="en">Ads &amp; limits.</span></h3>
+          <p>免費版常伴隨廣告、使用次數限制或功能鎖定；課堂上突然跳出的廣告，對教學節奏與學生專注都是干擾。</p>
+        </div>
+        <div class="card">
+          <div class="row">
+            <span class="num">困境 04</span>
+          </div>
+          <h3>被動<span class="en">Powerless.</span></h3>
+          <p>教師只能被動接受平台商提供的功能。工具不貼合自己的教學需求時，也無從調整——主導權始終握在別人手裡。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 轉念 pull quote -->
+  <section data-label="06 轉念" class="s-pullquote">
+    <div class="chrome-top">
+      <span class="left">第一幕 · 一個轉念</span>
+      <span class="center">THE PIVOT</span>
+      <span>07 / 25</span>
+    </div>
+    <div class="chrome-rule"></div>
+    <div class="body">
+      <div class="qmark">"</div>
+      <h2>與其等別人做，<br/>不如<em>自己動手</em>。</h2>
+      <div class="attribution">
+        <div class="line"></div>
+        <div class="text">教育科技工具，能不能由「最了解教學現場的人」<br/>——也就是教師自己——來決定它的樣子？</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 Act II — 平台 -->
+  <section data-label="07 第二幕 平台" class="s-section">
+    <div class="body">
+      <div class="top">
+        <span>AIFED 2026 ─ 教師賦能 ─ 黃凱揚</span>
+        <span>08 / 25</span>
+      </div>
+      <div class="center">
+        <div class="center-inner">
+          <div class="act-counter"><span class="ac-num" data-counter="2">0</span><span class="ac-of">/ 05</span></div>
+          <div class="act-num">ACT TWO · 第二幕</div>
+          <div class="act-en">The Platform</div>
+          <h2>平台</h2>
+          <div class="accent-bar"></div>
+          <div class="subtitle-line">在一個地方、用最低的門檻，<br/>找到並分享所有需要的教學工具。</div>
+        </div>
+      </div>
+      <div class="bottom">
+        <span>科技教育創新專區 · EdTech Innovation Hub</span>
+        <span>cagoooo.github.io/Akai</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 平台介紹 -->
+  <section data-label="08 平台介紹" class="s-stats">
+    <div class="chrome-top">
+      <span class="left">第二幕 · 平台亮相</span>
+      <span class="center">THE PLATFORM</span>
+      <span>09 / 25</span>
+    </div>
+    <div class="chrome-rule"></div>
+    <div class="body">
+      <div class="head">
+        <div class="eyebrow">科技教育創新專區 ─ 阿凱老師</div>
+        <h2>一個入口，<br/>整合 90+ 款免費教育工具。</h2>
+        <div class="sub">由筆者獨力開發與維護，免費、無廣告、免註冊、開源 MIT。<span style="font-family:var(--mono);color:var(--muted);font-size:24px;margin-left:16px">cagoooo.github.io/Akai</span></div>
+      </div>
+      <div class="grid">
+        <div class="cell">
+          <div class="label">SCALE · 規模</div>
+          <div class="num"><span data-counter="90">90</span><span class="unit">+ 款</span></div>
+          <div class="desc">教學、行政、互動、遊戲、評量、語言、閱讀全方位工具。</div>
+        </div>
+        <div class="cell">
+          <div class="label">COMMITS · 提交</div>
+          <div class="num"><span data-counter="800">800</span><span class="unit">+ 次</span></div>
+          <div class="desc">三年多時間，逐步迭代累積；版本 v3.6.x，仍持續更新。</div>
+        </div>
+        <div class="cell">
+          <div class="label">CATEGORIES · 類別</div>
+          <div class="num"><span data-counter="7">7</span><span class="unit">大類</span></div>
+          <div class="desc">溝通 · 教學 · 語言 · 閱讀 · 實用 · 遊戲 · 互動平台。</div>
+        </div>
+        <div class="cell">
+          <div class="label">LICENSE · 授權</div>
+          <div class="num">MIT</div>
+          <div class="desc">完全開源，原始碼公開於 GitHub。歡迎複製、修改、再利用。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09 四項核心設計原則 -->
+  <section data-label="09 四項設計原則" class="s-principles">
+    <div class="chrome-top">
+      <span class="left">第二幕 · 設計原則</span>
+      <span class="center">FOUR CORE PRINCIPLES</span>
+      <span>10 / 25</span>
+    </div>
+    <div class="chrome-rule"></div>
+    <div class="body">
+      <div class="head">
+        <div>
+          <div class="eyebrow navy">四項核心設計原則</div>
+          <h2>把「教師現場最在意的事」<br/>放進每一個決定。</h2>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="num">PRINCIPLE 01</div>
+          <h3>100% 免費<br/>零廣告</h3>
+          <div class="en">Free &amp; ad-free.</div>
+          <p>所有工具完全免費，課堂上不會出現任何廣告干擾。教學節奏不被打斷，學生專注不被偷走。</p>
+        </div>
+        <div class="card">
+          <div class="num">PRINCIPLE 02</div>
+          <h3>免註冊<br/>一鍵分享</h3>
+          <div class="en">No signup.</div>
+          <p>教師只要把連結或 QR Code 給學生，免登入即可立即使用。沒有等待、沒有摩擦、沒有個資疑慮。</p>
+        </div>
+        <div class="card">
+          <div class="num">PRINCIPLE 03</div>
+          <h3>一站整合<br/>好找好用</h3>
+          <div class="en">All in one.</div>
+          <p>七大分類、即時搜尋、標籤篩選、熱門排行榜，幾秒內就能找到工具。一個網址走完備課流程。</p>
+        </div>
+        <div class="card">
+          <div class="num">PRINCIPLE 04</div>
+          <h3>跨裝置<br/>可安裝</h3>
+          <div class="en">Cross-device.</div>
+          <p>採響應式設計（RWD），電腦、平板、手機皆適用；支援 PWA，可像 App 一樣安裝到桌面。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 Act III — 開發歷程 -->
+  <section data-label="10 第三幕 開發歷程" class="s-section">
+    <div class="body">
+      <div class="top">
+        <span>AIFED 2026 ─ 教師賦能 ─ 黃凱揚</span>
+        <span>11 / 25</span>
+      </div>
+      <div class="center">
+        <div class="center-inner">
+          <div class="act-counter"><span class="ac-num" data-counter="3">0</span><span class="ac-of">/ 05</span></div>
+          <div class="act-num">ACT THREE · 第三幕</div>
+          <div class="act-en">The Making</div>
+          <h2>開發歷程</h2>
+          <div class="accent-bar"></div>
+          <div class="subtitle-line">從「不會寫程式」<br/>到 AI 協作開發。</div>
+        </div>
+      </div>
+      <div class="bottom">
+        <span>本幕為全場核心 ─ 約 5 分鐘</span>
+        <span>Vibe Coding</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 What is vibe coding -->
+  <section data-label="11 Vibe Coding" class="s-vibe">
+    <div class="chrome-top">
+      <span class="left">第三幕 · 方法論</span>
+      <span class="center">WHAT IS VIBE CODING?</span>
+      <span>12 / 25</span>
+    </div>
+    <div class="chrome-rule"></div>
+    <div class="body">
+      <div class="col-left">
+        <div class="term">A NEW VOCABULARY ─ 一個新詞彙</div>
+        <h2>Vibe<br/><em>Coding.</em></h2>
+        <div class="def">
+          不再逐行手寫程式，而是用自然語言<br/>向大型語言模型描述想要的功能，<br/>由 AI 產生程式碼，再透過<br/>反覆對話來測試、修正與優化。
+        </div>
+        <div class="pivot">
+          <div class="label">關鍵轉變 ─ THE PIVOT</div>
+          <p>核心能力從<strong>「會寫程式」</strong>，<br/>轉變為<strong>「能把教學需求說清楚」</strong>。<br/><span style="color:var(--muted);font-size:24px">——而後者，正是教師最擅長的事。</span></p>
+        </div>
+      </div>
+      <div class="col-right">
+        <div class="terminal">
+          <div class="header">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            <span style="margin-left:16px;color:rgba(255,255,255,0.4);font-size:24px;letter-spacing:0.08em">teacher@classroom ─ vibe</span>
+          </div>
+          <div class="comment"># 一段真實的對話片段</div>
+          <br/>
+          <div class="me">▸ 我：</div>
+          <div>我想做一個課堂投票工具。學生掃 QR<br/>&nbsp;&nbsp;就能投票，老師畫面即時看到統計圖。<br/>&nbsp;&nbsp;<span class="comment">免登入、用 React 跟 Tailwind。</span></div>
+          <br/>
+          <div class="ai">▸ AI：</div>
+          <div>了解。建議用 WebSocket 即時同步。<br/>&nbsp;&nbsp;以下是初版程式碼……<span class="comment">[generates 200 lines]</span></div>
+          <br/>
+          <div class="me">▸ 我：</div>
+          <div>圖表顏色太鮮豔了，國小用偏柔和的。<br/>&nbsp;&nbsp;另外字要更大一點，後排學生看不到。</div>
+          <br/>
+          <div class="ai">▸ AI：</div>
+          <div>已調整。<span class="comment">[updates code]</span></div>
+          <br/>
+          <div class="prompt">▸ ready to deploy ▮</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 六步驟流程 -->
+  <section data-label="12 六步驟流程" class="s-process">
+    <div class="chrome-top">
+      <span class="left">第三幕 · 工作流程</span>
+      <span class="center">SIX-STEP WORKFLOW</span>
+      <span>13 / 25</span>
+    </div>
+    <div class="chrome-rule"></div>
+    <div class="body">
+      <div class="head">
+        <div>
+          <div class="eyebrow">我的實際開發流程</div>
+          <h2>六個步驟，<br/>沒有一步需要會寫程式。</h2>
+        </div>
+        <div class="head-right">真正需要的，不是程式語言，<br/>而是教師對教學現場的敏銳觀察。</div>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="num">STEP 01</div>
+          <h3>定義需求</h3>
+          <p>先想清楚這個工具要解決課堂上的什麼問題、給誰用、要有哪些功能。</p>
+        </div>
+        <div class="step">
+          <div class="num">STEP 02</div>
+          <h3>向 AI 描述</h3>
+          <p>用具體、白話的語言把需求、畫面、操作流程描述給 AI。</p>
+        </div>
+        <div class="step">
+          <div class="num">STEP 03</div>
+          <h3>取得程式碼</h3>
+          <p>由 AI 產生網頁程式碼，並請它說明每段程式的作用。</p>
+        </div>
+        <div class="step">
+          <div class="num">STEP 04</div>
+          <h3>實測與回報</h3>
+          <p>在瀏覽器中實際操作，把錯誤訊息或不理想之處回報給 AI。</p>
+        </div>
+        <div class="step">
+          <div class="num">STEP 05</div>
+          <h3>迭代修正</h3>
+          <p>與 AI 來回對話、逐步打磨，直到工具符合教學現場需求。</p>
+        </div>
+        <div class="step">
+          <div class="num">STEP 06</div>
+          <h3>部署上線</h3>
+          <p>透過 GitHub Pages、Replit、Firebase 等服務免費發布，取得分享連結。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13 五大心法 -->
+  <section data-label="13 五大心法" class="s-list5">
+    <div class="chrome-top">
+      <span class="left">第三幕 · 心法</span>
+      <span class="center">FIVE MAKER MINDSETS</span>
+      <span>14 / 25</span>
+    </div>
+    <div class="chrome-rule"></div>
+    <div class="body">
+      <div class="head">
+        <div class="eyebrow">教師自造工具的五個原則</div>
+        <h2>800+ 次提交之後，<br/>沉澱下來的五個原則。</h2>
+      </div>
+      <div class="list">
+        <div class="item">
+          <span class="num">MINDSET 01</span>
+          <h3>先解決自己的真實痛點</h3>
+          <p>從每天都會遇到的麻煩做起。工具才會真正被使用，而不是被收進書籤後永遠沒打開。</p>
+        </div>
+        <div class="item">
+          <span class="num">MINDSET 02</span>
+          <h3>把 AI 當「共同開發者」</h3>
+          <p>而非萬能機器。AI 會出錯、會幻覺、會把不存在的功能寫進來——教師必須負責測試與把關。</p>
+        </div>
+        <div class="item">
+          <span class="num">MINDSET 03</span>
+          <h3>小步快跑、持續迭代</h3>
+          <p>先做出能用的版本，再依回饋逐步完善。不追求一次到位，追求今天比昨天好一點。</p>
+        </div>
+        <div class="item">
+          <span class="num">MINDSET 04</span>
+          <h3>教學需求優先於技術炫技</h3>
+          <p>介面對小學生友善、操作單純，比功能華麗更重要。為一年級孩子設計，整個世界都會變清楚。</p>
+        </div>
+        <div class="item">
+          <span class="num">MINDSET 05</span>
+          <h3>公開原始碼、樂於共享</h3>
+          <p>開源讓其他教師能複製、修改、再利用，把一個人的賦能擴散成所有人的賦能。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14 Act IV — 應用 -->
+  <section data-label="14 第四幕 應用" class="s-section">
+    <div class="body">
+      <div class="top">
+        <span>AIFED 2026 ─ 教師賦能 ─ 黃凱揚</span>
+        <span>15 / 25</span>
+      </div>
+      <div class="center">
+        <div class="center-inner">
+          <div class="act-counter"><span class="ac-num" data-counter="4">0</span><span class="ac-of">/ 05</span></div>
+          <div class="act-num">ACT FOUR · 第四幕</div>
+          <div class="act-en">The Application</div>
+          <h2>應用</h2>
+          <div class="accent-bar"></div>
+          <div class="subtitle-line">90+ 款工具<br/>如何走進教學現場。</div>
+        </div>
+      </div>
+      <div class="bottom">
+        <span>七大類別 · 四個場景 · 一條時間軸</span>
+        <span>From planning to assessment</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15 七大類別總覽 -->
+  <section data-label="15 七大類別" class="s-cats">
+    <div class="chrome-top">
+      <span class="left">第四幕 · 工具地圖</span>
+      <span class="center">SEVEN CATEGORIES</span>
+      <span>16 / 25</span>
+    </div>
+    <div class="chrome-rule"></div>
+    <div class="body">
+      <div class="head">
+        <div>
+          <div class="eyebrow">90+ 款工具，依教學用途分為七大類別</div>
+          <h2>涵蓋一位國小老師<br/>一天從早到晚的所有場景。</h2>
+        </div>
+        <div class="total"><span data-counter="7">7</span><span class="unit">大類</span></div>
+      </div>
+      <div class="grid">
+        <div class="cat">
+          <div class="top"><span class="idx">CAT 01</span><span class="count">·</span></div>
+          <h3>溝通工具</h3>
+          <div class="en">Communication.</div>
+          <p>親師溝通與即時諮詢。<br/>線上即時客服、設計專屬客服。</p>
+        </div>
+        <div class="cat">
+          <div class="top"><span class="idx">CAT 02</span><span class="count">·</span></div>
+          <h3>教學工具</h3>
+          <div class="en">Teaching.</div>
+          <p>備課、課堂教學與評語回饋。<br/>AI 備課小幫手、5W1H 靈感發射器。</p>
+        </div>
+        <div class="cat">
+          <div class="top"><span class="idx">CAT 03</span><span class="count">·</span></div>
+          <h3>語言學習</h3>
+          <div class="en">Language.</div>
+          <p>語文讀寫與雙語能力。<br/>中英打練習、成語填空、雙語轉寫。</p>
+        </div>
+        <div class="cat">
+          <div class="top"><span class="idx">CAT 04</span><span class="count">·</span></div>
+          <h3>閱讀工具</h3>
+          <div class="en">Reading.</div>
+          <p>閱讀理解評量。<br/>PIRLS 閱讀理解生成、PIRLS 閱讀網。</p>
+        </div>
+        <div class="cat feature">
+          <div class="top"><span class="idx">CAT 05</span><span class="count">★</span></div>
+          <h3>實用工具</h3>
+          <div class="en">Utilities.</div>
+          <p>教學行政與班級事務。<br/>課程計畫 AI 審查、QRCode 批次、隱私保護。</p>
+        </div>
+        <div class="cat">
+          <div class="top"><span class="idx">CAT 06</span><span class="count">·</span></div>
+          <h3>遊戲互動</h3>
+          <div class="en">Games.</div>
+          <p>寓教於樂的教育遊戲。<br/>蜂類配對消消樂、童趣學園、平台跳躍。</p>
+        </div>
+        <div class="cat">
+          <div class="top"><span class="idx">CAT 07</span><span class="count">·</span></div>
+          <h3>互動平台</h3>
+          <div class="en">Interactive.</div>
+          <p>課堂即時互動。<br/>投票系統、文字雲、吉他彈唱點歌。</p>
+        </div>
+        <div class="cat" style="background:transparent;border:1px dashed var(--rule-strong);">
+          <div class="top"><span class="idx">TOTAL</span><span class="count" style="color:var(--red)">90+</span></div>
+          <h3 style="color:var(--ink-soft);font-size:32px;">免費 · 無廣告<br/>免註冊 · 開源</h3>
+          <p style="font-family:var(--mono);font-size:24px;color:var(--muted);letter-spacing:0.06em;">cagoooo.github.io/Akai</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16 AI flagship tools -->
+  <section data-label="16 AI 旗艦工具" class="s-ai">
+    <div class="chrome-top">
+      <span class="left">第四幕 · 代表工具</span>
+      <span class="center">FOUR AI FLAGSHIPS</span>
+      <span>17 / 25</span>
+    </div>
+    <div class="chrome-rule"></div>
+    <div class="body">
+      <div class="head">
+        <div class="eyebrow">值得一提的幾款 AI 工具</div>
+        <h2>節省老師時間最有感的四款。</h2>
+      </div>
+      <div class="grid">
+        <div class="tool">
+          <div class="tag">AI · TEACHING</div>
+          <h3>教案小幫手<br/>Pro · 全開源</h3>
+          <p>輸入單元與教學需求，由 AI 依 108 課綱生成 20 項教案初稿 · 一鍵匯出 Word。Flask + Gemini，全開源、可 fork 可部署。</p>
+          <div class="benefit"><span class="ic">▸</span>一個單元 2 小時 → 3 分鐘。</div>
+          <a class="tool-cta" href="https://cagoooo.github.io/Akai/tool/58" target="_blank"><span class="hash">#58</span><span>體驗工具</span><span class="arrow">↗</span></a>
+        </div>
+        <div class="tool">
+          <div class="tag">AI · READING</div>
+          <h3>PIRLS 閱讀理解<br/>Pro · 全開源</h3>
+          <p>Next.js + Gemini 2.5 Flash serverless 重構版。拍課本一頁 · 自動生成 PIRLS 四層次題組 · 一鍵匯出 PaGamO / PDF / Excel · QR 學生即時作答。</p>
+          <div class="benefit"><span class="ic">▸</span>一段文本，秒生分層題組。</div>
+          <a class="tool-cta" href="https://cagoooo.github.io/Akai/tool/87" target="_blank"><span class="hash">#87</span><span>體驗 Pro 版</span><span class="arrow">↗</span></a>
+        </div>
+        <div class="tool">
+          <div class="tag">AI · ADMIN</div>
+          <h3>桃園市國小<br/>課程計畫 AI 審查</h3>
+          <p>協助教務端快速比對與檢視課程計畫，原本要逐校翻閱的工作，現在可以批次審視。</p>
+          <div class="benefit"><span class="ic">▸</span>大幅縮短課程計畫審查時間。</div>
+          <a class="tool-cta" href="https://cagoooo.github.io/Akai/tool/78" target="_blank"><span class="hash">#78</span><span>體驗工具</span><span class="arrow">↗</span></a>
+        </div>
+        <div class="tool">
+          <div class="tag">AI · ASSESSMENT</div>
+          <h3>點石成金蜂<br/>評語優化</h3>
+          <p>協助教師將學生評語調整為更正向、具體、個人化的文字。兼顧效率與溫度。</p>
+          <div class="benefit"><span class="ic">▸</span>學期末評語，從負擔變成關懷。</div>
+          <a class="tool-cta" href="https://cagoooo.github.io/Akai/tool/23" target="_blank"><span class="hash">#23</span><span>體驗工具</span><span class="arrow">↗</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 18 旗艦特寫：國小資訊科技教學駕駛艙 -->
+  <section data-label="18 旗艦特寫 駕駛艙" class="s-spotlight">
+    <div class="chrome-top">
+      <span class="left">第四幕 · 旗艦特寫</span>
+      <span class="center">FLAGSHIP SPOTLIGHT</span>
+      <span>18 / 25</span>
+    </div>
+    <div class="chrome-rule"></div>
+    <div class="body">
+      <div class="left">
+        <div class="eyebrow-sp">FLAGSHIP SPOTLIGHT ─ 特別介紹</div>
+        <h2>國小資訊科技<br/>教學駕駛艙。</h2>
+        <div class="h-en">Elementary IT Education Cockpit</div>
+        <div class="desc">不是另一款單一工具，而是一個<strong style="color:var(--navy);font-weight:500;">儀表板</strong>——把資科教師需要的教學平台、軟硬體資源、教學示例、共備材料，整合進<strong style="color:var(--navy);font-weight:500;">同一個入口</strong>。</div>
+        <div class="features">
+          <div class="feat"><span class="k">DEFINE</span><span class="v">整合資科教育核心資源的儀表板</span></div>
+          <div class="feat"><span class="k">FOR</span><span class="v">資科專任教師 · 共備社群 · 新進老師</span></div>
+          <div class="feat"><span class="k">SOLVE</span><span class="v">把散落各處的資源，收進一個入口</span></div>
+        </div>
+        <a class="cockpit-cta" href="https://cagoooo.github.io/Akai/tool/81" target="_blank">
+          <div class="cta-text">
+            <div class="cta-label"><span class="hash">#81</span> SCAN · 採試看看 <span class="arrow">↗</span></div>
+            <div class="cta-url">cagoooo.github.io/it-cockpit/</div>
+          </div>
+          <img src="assets/qr-cockpit.png" alt="駕駛艙 QR Code" class="cta-qr" />
+        </a>
+      </div>
+      <div class="right">
+        <div class="screenshot cockpit-mock">
+          <div class="mock-header">
+            <div class="mock-title">
+              <span class="mock-dot"></span>
+              <span class="mock-h">IT&nbsp;COCKPIT · 國小資訊科技教學駕駛艙</span>
+            </div>
+            <div class="mock-meta">
+              <span>ALT 2026</span>
+              <span>HDG NW</span>
+              <span>SPD · 25</span>
+              <span class="live"><i></i>LIVE</span>
+            </div>
+          </div>
+          <div class="mock-stats">
+            <div class="stat"><div class="sk">MISSIONS</div><div class="sv">25</div></div>
+            <div class="stat"><div class="sk">GRADES</div><div class="sv">4</div></div>
+            <div class="stat"><div class="sk">SUBJECTS</div><div class="sv">12</div></div>
+            <div class="stat"><div class="sk">COMMITS</div><div class="sv">84</div></div>
+          </div>
+          <div class="mock-grid">
+            <div class="mc g3"><span class="mc-g">G3</span><span class="mc-t">電腦入門</span></div>
+            <div class="mc g3"><span class="mc-g">G3</span><span class="mc-t">Win98 風</span></div>
+            <div class="mc g3"><span class="mc-g">G3</span><span class="mc-t">英打練習</span></div>
+            <div class="mc g3"><span class="mc-g">G3</span><span class="mc-t">PaGamO</span></div>
+            <div class="mc g4"><span class="mc-g">G4</span><span class="mc-t">Canva</span></div>
+            <div class="mc g4"><span class="mc-g">G4</span><span class="mc-t">PhotoCap</span></div>
+            <div class="mc g4"><span class="mc-g">G4</span><span class="mc-t">桃園 PaGamO</span></div>
+            <div class="mc g5"><span class="mc-g">G5</span><span class="mc-t">數位安全</span></div>
+            <div class="mc g5"><span class="mc-g">G5</span><span class="mc-t">Scratch</span></div>
+            <div class="mc g5"><span class="mc-g">G5</span><span class="mc-t">水果接接樂</span></div>
+            <div class="mc g5"><span class="mc-g">G5</span><span class="mc-t">Risograph</span></div>
+            <div class="mc g5"><span class="mc-g">G5·★</span><span class="mc-t">micro:bit</span></div>
+            <div class="mc g6"><span class="mc-g">G6</span><span class="mc-t">Gemini×Canva</span></div>
+            <div class="mc g6"><span class="mc-g">G6</span><span class="mc-t">AI 音樂</span></div>
+            <div class="mc g6"><span class="mc-g">G6·★</span><span class="mc-t">AI 生圖</span></div>
+            <div class="mc g6"><span class="mc-g">G6·★</span><span class="mc-t">Nano Banana</span></div>
+            <div class="mc g6"><span class="mc-g">G6·★</span><span class="mc-t">假影片偵探社</span></div>
+            <div class="mc g6"><span class="mc-g">G6·★</span><span class="mc-t">假訊息偵探社</span></div>
+            <div class="mc g6"><span class="mc-g">G6</span><span class="mc-t">Gemini PARTS</span></div>
+            <div class="mc g6"><span class="mc-g">G6</span><span class="mc-t">AR / VR</span></div>
+            <div class="mc g6"><span class="mc-g">G6</span><span class="mc-t">麥昆小車</span></div>
+            <div class="mc g6"><span class="mc-g">G6</span><span class="mc-t">Blogger×AI</span></div>
+            <div class="mc g6"><span class="mc-g">G6</span><span class="mc-t">Suno 班級神曲</span></div>
+            <div class="mc g6"><span class="mc-g">G6</span><span class="mc-t">痞客邦 Scrapbook</span></div>
+            <div class="mc gt"><span class="mc-g">PD</span><span class="mc-t">師培·PaGamO</span></div>
+          </div>
+          <div class="mock-footer">FLIGHT&nbsp;PLAN · G3 · G4 · G5 · G6 · PD&nbsp;→ 25&nbsp;駕駛艙</div>
+        </div>
+        <div class="shot-caption">DASHBOARD PREVIEW ─ 25 個單元一個入口</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 17 一節課的工具流 timeline -->
+  <section data-label="17 一節課的時間軸" class="s-timeline">
+    <div class="chrome-top">
+      <span class="left">第四幕 · 應用情境</span>
+      <span class="center">A TYPICAL CLASS TIMELINE</span>
+      <span>19 / 25</span>
+    </div>
+    <div class="chrome-rule"></div>
+    <div class="body">
+      <div class="head">
+        <div class="eyebrow">一個典型的課堂情境</div>
+        <h2>把工具放回時間軸——<br/>整套流程，真的可以閉環。</h2>
+      </div>
+      <div class="track">
+        <div class="phase">
+          <div class="dot"></div>
+          <div class="when">PHASE 01 · 課前</div>
+          <h3>備課<br/>與命題</h3>
+          <ul>
+            <li>AI 備課小幫手寫教案初稿</li>
+            <li>PIRLS 閱讀理解備分層題組</li>
+            <li>5W1H 靈感發射器發想活動</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="dot"></div>
+          <div class="when">PHASE 02 · 課中</div>
+          <h3>即時互動<br/>與學習</h3>
+          <ul>
+            <li>投票系統做課前診斷</li>
+            <li>文字雲收斂全班討論</li>
+            <li>「剛好學」課堂互動問答</li>
+            <li>教育遊戲鞏固練習</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="dot"></div>
+          <div class="when">PHASE 03 · 課後</div>
+          <h3>評量<br/>與回饋</h3>
+          <ul>
+            <li>評語優化工具，撰寫正向、具體、個人化評語</li>
+            <li>排行榜回看，了解班級工具偏好</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="dot"></div>
+          <div class="when">PHASE 04 · 行政</div>
+          <h3>教學<br/>行政</h3>
+          <ul>
+            <li>課程計畫 AI 審查</li>
+            <li>QRCode 批次產生器</li>
+            <li>兒童臉部隱私保護</li>
+            <li>禮堂預約系統</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 19 現場互動：現場文字雲 -->
+  <section data-label="19 現場文字雲" class="s-live">
+    <div class="chrome-top">
+      <span class="left">互動時刻 02</span>
+      <span class="center">LIVE WORD CLOUD</span>
+      <span>20 / 25</span>
+    </div>
+    <div class="chrome-rule"></div>
+    <div class="body">
+      <div class="left">
+        <div class="live-eyebrow"><span class="pulse"></span><span>互動時刻 · LIVE MOMENT 02</span></div>
+        <h2>一起跑一次<br/>文字雲。</h2>
+        <div class="instruction">本場最後一個互動。請再掃一次 QR Code——<br/>我們試試「文字雲即時互動」這款工具。</div>
+        <div class="prompt-card">
+          <div class="q-label">QUESTION · 現場問題</div>
+          <p class="q-text">用一個詞回答：<br/>「教師最該被賦能的事，是什麼？」</p>
+        </div>
+        <div class="meta">
+          <div class="meta-row"><span class="k">工具</span><span class="v">文字雲即時互動</span></div>
+          <div class="meta-row"><span class="k">網址</span><span class="v">cagoooo.github.io/cloud</span></div>
+          <div class="meta-row"><span class="k">作者</span><span class="v">黃凱揚 · AI 協作開發</span></div>
+        </div>
+        <a class="tool-cta" href="https://cagoooo.github.io/Akai/tool/45" target="_blank"><span class="hash">#45</span><span>在 Akai 平台體驗這款工具</span><span class="arrow">↗</span></a>
+      </div>
+      <div class="qr-wrap">
+        <div class="qr-frame">
+          <img src="assets/qr-cloud.png" alt="現場文字雲 QR Code" style="width:100%;height:100%;display:block;" />
+        </div>
+        <div class="qr-caption">SCAN TO JOIN<span class="sub">一個詞 · 即時出現在大螢幕</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 18 Act V — 賦能 -->
+  <section data-label="18 第五幕 賦能" class="s-section">
+    <div class="body">
+      <div class="top">
+        <span>AIFED 2026 ─ 教師賦能 ─ 黃凱揚</span>
+        <span>21 / 25</span>
+      </div>
+      <div class="center">
+        <div class="center-inner">
+          <div class="act-counter"><span class="ac-num" data-counter="5">0</span><span class="ac-of">/ 05</span></div>
+          <div class="act-num">ACT FIVE · 第五幕</div>
+          <div class="act-en">The Empowerment</div>
+          <h2>賦能</h2>
+          <div class="accent-bar"></div>
+          <div class="subtitle-line">回扣 AIFED 2026 主題：<br/>教師賦能不是口號，而是五件具體的事。</div>
+        </div>
+      </div>
+      <div class="bottom">
+        <span>Teacher Empowerment</span>
+        <span>5 個可以被指認的面向</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 19 五大賦能 -->
+  <section data-label="19 五大賦能" class="s-empower">
+    <div class="chrome-top">
+      <span class="left">第五幕 · 五大賦能</span>
+      <span class="center">FIVE FACETS OF EMPOWERMENT</span>
+      <span>22 / 25</span>
+    </div>
+    <div class="chrome-rule"></div>
+    <div class="body">
+      <div class="head">
+        <div class="eyebrow">教師賦能的五個具體展現</div>
+        <h2>不是抽象口號，<br/>而是五件可以被指認的事。</h2>
+      </div>
+      <div class="grid">
+        <div class="item">
+          <div class="roman">I.</div>
+          <h3>奪回<br/>主導權</h3>
+          <p>不再被動接受平台商的安排。需要什麼工具就做什麼、哪裡不滿意就改哪裡，教育科技的決定權重新回到教學現場。</p>
+          <div class="tagline">RECLAIMING CONTROL</div>
+        </div>
+        <div class="item">
+          <div class="roman">II.</div>
+          <h3>降低<br/>同儕門檻</h3>
+          <p>一站式、免註冊、無廣告的設計，讓其他教師——尤其是對科技較不熟悉的夥伴——也能輕鬆把數位工具用進課堂。</p>
+          <div class="tagline">LOWERING BARRIERS</div>
+        </div>
+        <div class="item">
+          <div class="roman">III.</div>
+          <h3>示範教師<br/>也能是創造者</h3>
+          <p>一位非資訊背景的國小教師，能透過 AI 協作開發出 90 餘款工具，本身就是對「教師角色」最有力的重新定義。</p>
+          <div class="tagline">TEACHER AS MAKER</div>
+        </div>
+        <div class="item">
+          <div class="roman">IV.</div>
+          <h3>開源讓<br/>賦能擴散</h3>
+          <p>平台採 MIT 授權完全開源，任何教師都能複製、修改、再利用，把一個人的成果變成眾人的資源。</p>
+          <div class="tagline">OPEN-SOURCE SPREAD</div>
+        </div>
+        <div class="item">
+          <div class="roman">V.</div>
+          <h3>把時間<br/>還給教學</h3>
+          <p>工具自動化了備課、命題、行政審查等重複性工作，讓教師能把心力放回最重要的事——與學生相處、設計學習。</p>
+          <div class="tagline">TIME FOR TEACHING</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 20 推廣成效與限制 -->
+  <section data-label="20 成效與限制" class="s-honest">
+    <div class="chrome-top">
+      <span class="left">第五幕 · 反思</span>
+      <span class="center">HONEST REFLECTION</span>
+      <span>23 / 25</span>
+    </div>
+    <div class="chrome-rule"></div>
+    <div class="body">
+      <div class="head">
+        <div class="eyebrow">推廣、成效與反思</div>
+        <h2>誠實面對它做到的，<br/>與它還沒做到的。</h2>
+      </div>
+      <div class="cols">
+        <div class="col good">
+          <div class="label">─ 成效 · WHAT WORKS</div>
+          <h3>老師最有感的是<br/>「省時」。</h3>
+          <ul>
+            <li>
+              <span class="marker">01</span>
+              <span><strong>規模穩定累積</strong>90+ 工具、800+ commits、v3.6.x，持續迭代中。</span>
+            </li>
+            <li>
+              <span class="marker">02</span>
+              <span><strong>節省零碎時間</strong>把找工具、備課、命題的零碎時間集中省下。</span>
+            </li>
+            <li>
+              <span class="marker">03</span>
+              <span><strong>學生反應熱烈</strong>遊戲化與即時互動類工具，最受班級歡迎。</span>
+            </li>
+            <li>
+              <span class="marker">04</span>
+              <span><strong>校外開始擴散</strong>透過校內外研習與教師社群分享，逐步擴大使用社群。</span>
+            </li>
+          </ul>
+        </div>
+        <div class="col bad">
+          <div class="label">─ 限制 · WHAT'S HARD</div>
+          <h3>有些事，<br/>必須誠實面對。</h3>
+          <ul>
+            <li>
+              <span class="marker">01</span>
+              <span><strong>程式品質與維護</strong>AI 產出快，但穩健性與長期維護仍需要持續投入。</span>
+            </li>
+            <li>
+              <span class="marker">02</span>
+              <span><strong>資安與隱私的取捨</strong>「免註冊」降低門檻，但涉學生資料仍須謹慎處理。</span>
+            </li>
+            <li>
+              <span class="marker">03</span>
+              <span><strong>個人維護的永續性</strong>由筆者一人維護，需要更開放的協作機制。</span>
+            </li>
+            <li>
+              <span class="marker">04</span>
+              <span><strong>數量與品質的平衡</strong>90+ 工具成熟度不一，需持續汰弱補強。</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 21 結語金句 -->
+  <section data-label="21 結語" class="s-final">
+    <div class="body">
+      <div class="eyebrow-w">CLOSING ─ 結語</div>
+      <div class="qmark">"</div>
+      <h2>在 AI 時代，教師不必只是<br/>被動的<em>使用者</em>，<br/>而可以是主動的<em>創造者</em>。</h2>
+      <div class="sig">
+        當教師能把對教學現場的理解，透過 AI 轉化為實際可用的工具——<br/>
+        教育科技的主導權，就真正回到了第一線。<br/>
+        這，就是「教師賦能」最具體、也最動人的樣子。
+      </div>
+    </div>
+    <div class="pgnum">24 / 25</div>
+  </section>
+
+  <!-- 22 未來方向 + 致謝 -->
+  <section data-label="22 未來與致謝" class="s-close">
+    <div class="chrome-top">
+      <span class="left">未來 · 致謝</span>
+      <span class="center">WHAT'S NEXT · THANK YOU</span>
+      <span>25 / 25</span>
+    </div>
+    <div class="chrome-rule"></div>
+    <div class="body">
+      <div class="left">
+        <div class="label">FUTURE DIRECTIONS ─ 未來三大方向</div>
+        <h2>這場實踐，<br/>仍在進行中。</h2>
+        <div class="future">
+          <div class="future-item">
+            <span class="num">DIR 01</span>
+            <div>
+              <h3>完善文件與無障礙設計</h3>
+              <p>強化使用指南、無障礙標準、可訪性與在地化。</p>
+            </div>
+          </div>
+          <div class="future-item">
+            <span class="num">DIR 02</span>
+            <div>
+              <h3>建立開放共創機制</h3>
+              <p>邀請更多教師一同提案、測試、維護，從一人作品變成眾人資源。</p>
+            </div>
+          </div>
+          <div class="future-item">
+            <span class="num">DIR 03</span>
+            <div>
+              <h3>整理可複製的研習模組</h3>
+              <p>把「教師自造工具」的歷程與心法，整理成可被複製的師訓內容。</p>
+            </div>
+          </div>
+        </div>
+        <a class="video-cta" href="https://youtu.be/DvMSGrO98CI" target="_blank" rel="noopener" title="觀看阿凱老師親自口說的影片導讀">
+          <span class="vc-play">▶</span>
+          <span class="vc-text">
+            <span class="vc-main">觀看影片導讀</span>
+            <span class="vc-sub">阿凱老師親自口說 · 全片 14 分鐘</span>
+          </span>
+        </a>
+      </div>
+      <div class="right">
+        <div class="thanks-row">
+          <div class="thanks">謝謝。<span class="en">Thank you.</span></div>
+        </div>
+        <div class="qr-block">
+          <div class="qr-img">
+            <img src="assets/qr-platform.png" alt="平台 QR Code" style="width:100%;height:100%;display:block;" />
+          </div>
+          <div class="qr-text">
+            <div class="qr-cta">現在掃描、立即試用</div>
+            <div class="qr-url">cagoooo.github.io/Akai</div>
+            <div class="qr-tag">90+ 工具 · 免註冊 · 免廣告</div>
+          </div>
+        </div>
+        <div class="contact">
+          <div class="contact-row"><span class="k">SOURCE</span><span class="v">github.com/cagoooo/Akai</span></div>
+          <div class="contact-row"><span class="k">EMAIL</span><span class="v">cagooo@gmail.com</span></div>
+          <div class="contact-row"><span class="k">LICENSE</span><span class="v">MIT · 歡迎取用、改作、再分享</span></div>
+        </div>
+        <div class="author">
+          <strong>黃凱揚 · 阿凱老師</strong>
+          <a class="school-link" href="https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5" target="_blank" rel="noopener noreferrer">桃園市龍潭區石門國民小學</a> · 2026 AIFED 主題一
+        </div>
+        <div class="made-with">
+          Made with <span class="heart">❤️</span> by <a href="https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5" target="_blank" rel="noopener noreferrer">阿凱老師</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</deck-stage>
+<div id="tweaks-root"></div>
+<!-- v3.6.66 預編譯：tweaks-app.jsx 已合併進 tweaks-bundle.js（在 <head> 內 defer 載入） -->
+<script>
+// Counter animation + entrance trigger + keyboard hint
+(function() {
+  function animateCounters(slide) {
+    slide.querySelectorAll('[data-counter]').forEach(el => {
+      const target = parseInt(el.dataset.counter, 10);
+      if (isNaN(target)) return;
+      const duration = 1400;
+      const start = performance.now();
+      el.textContent = '0';
+      function step(now) {
+        const t = Math.min(1, (now - start) / duration);
+        const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
+        el.textContent = Math.round(eased * target);
+        if (t < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+  }
+
+  function init() {
+    const stage = document.querySelector('deck-stage');
+    if (!stage) { setTimeout(init, 80); return; }
+
+    // Initial active slide
+    const active = stage.querySelector('[data-deck-active]');
+    if (active) animateCounters(active);
+
+    // Watch every slide for attribute changes
+    const observer = new MutationObserver((muts) => {
+      muts.forEach(m => {
+        if (m.type === 'attributes' && m.attributeName === 'data-deck-active') {
+          if (m.target.hasAttribute('data-deck-active')) {
+            animateCounters(m.target);
+          }
+        }
+      });
+    });
+    Array.from(stage.children).forEach(slide => {
+      observer.observe(slide, { attributes: true, attributeFilter: ['data-deck-active'] });
+    });
+
+    // Keyboard hint — shows for 5s on first load, can be re-shown with ?
+    const hint = document.createElement('div');
+    hint.className = 'deck-hint';
+    hint.innerHTML = '<kbd>\u2190</kbd><kbd>\u2192</kbd>\u5207\u63db<span class="sep">\u00b7</span><kbd>F</kbd>\u5168\u87a2\u5e55<span class="sep">\u00b7</span><kbd>?</kbd>\u518d\u53eb\u51fa\u63d0\u793a';
+    document.body.appendChild(hint);
+    requestAnimationFrame(() => hint.classList.add('show'));
+    setTimeout(() => hint.classList.remove('show'), 5000);
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === '?' || e.key === '/') {
+        hint.classList.add('show');
+        clearTimeout(hint._t);
+        hint._t = setTimeout(() => hint.classList.remove('show'), 4000);
+      }
+      if (e.key === 'f' || e.key === 'F') {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen?.();
+        } else {
+          document.exitFullscreen?.();
+        }
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>

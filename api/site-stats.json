@@ -1,23 +1,23 @@
 {
-  "toolCount": 100,
-  "displayCount": "100+",
+  "toolCount": 112,
+  "displayCount": "110+",
   "categoryCounts": {
     "communication": 6,
-    "utilities": 32,
-    "interactive": 10,
+    "utilities": 36,
+    "interactive": 13,
     "reading": 3,
-    "games": 17,
-    "teaching": 19,
+    "games": 20,
+    "teaching": 21,
     "language": 13
   },
   "milestones": {
     "tool100": "2026-05-24T06:08:04.057Z"
   },
-  "ogImage": "/og-preview-0cc6358c.png",
-  "ogImageAbsolute": "https://cagoooo.github.io/Akai/og-preview-0cc6358c.png",
-  "generatedAt": "2026-05-25T11:42:17.275Z",
-  "ogImageHeatmap": "/og-preview-heatmap-5c536bb8.png",
-  "ogImageHeatmapAbsolute": "https://cagoooo.github.io/Akai/og-preview-heatmap-5c536bb8.png",
-  "ogImageCelebration": "/og-preview-celebration-100-647f6c67.png",
-  "ogImageCelebrationAbsolute": "https://cagoooo.github.io/Akai/og-preview-celebration-100-647f6c67.png"
+  "ogImage": "/og-preview-4c754cb4.png",
+  "ogImageAbsolute": "https://cagoooo.github.io/Akai/og-preview-4c754cb4.png",
+  "generatedAt": "2026-06-27T07:35:45.879Z",
+  "ogImageHeatmap": "/og-preview-heatmap-9933ea10.png",
+  "ogImageHeatmapAbsolute": "https://cagoooo.github.io/Akai/og-preview-heatmap-9933ea10.png",
+  "ogImageCelebration": "/og-preview-celebration-100-fe9e3183.png",
+  "ogImageCelebrationAbsolute": "https://cagoooo.github.io/Akai/og-preview-celebration-100-fe9e3183.png"
 }
