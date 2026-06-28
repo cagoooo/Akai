@@ -6,6 +6,7 @@ import { getToolEmoji, normalizeUrl } from './toolAdapter';
 import { useToolTracking } from '@/hooks/useToolTracking';
 import { useRecentTools } from '@/hooks/useRecentTools';
 import type { EducationalTool } from '@/lib/data';
+import { notifyEngagementAfterHomeEntry } from '@/lib/analytics';
 
 interface Props {
   tools: EducationalTool[];
@@ -68,6 +69,16 @@ export function BulletinLeaderboard({ tools, deltas7d, hasDeltaHistory }: Props)
     // 背景追蹤
     addToRecent(tool.id);
     trackToolUsage(tool.id).catch((err) => console.error('追蹤失敗:', err));
+    
+    // 上報 engagement 事件以觸發 Google Chat Webhook 通知
+    notifyEngagementAfterHomeEntry({
+      type: 'tool_click',
+      toolId: tool.id,
+      toolTitle: tool.title,
+      toolCategory: tool.category,
+      targetUrl: openUrl,
+      source: 'leaderboard',
+    });
   };
 
   const colors = [
