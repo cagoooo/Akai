@@ -28,7 +28,7 @@ const PLATFORMS: Platform[] = [
   {
     emoji: '🐙',
     name: 'GitHub Pages',
-    count: 72,
+    count: 73,
     desc: '主力作品集，cagoooo/* 80+ repo',
     color: tokens.note.blue,
     pinColor: '#3b82f6',
@@ -68,7 +68,7 @@ const PLATFORMS: Platform[] = [
   {
     emoji: '🧩',
     name: '第三方平台',
-    count: 7,
+    count: 6,
     desc: 'Replit + LINE Bot + Claude Artifacts + Padlet',
     color: tokens.note.pink,
     pinColor: '#db2777',

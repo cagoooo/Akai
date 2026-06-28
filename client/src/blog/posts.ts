@@ -13987,7 +13987,7 @@ const POST_113: BlogPost = {
 
 ## #113 怎麼解？一鍵填報與智慧格式驗證
 
-為了徹底解決這個行政痛點，[PaGamO 素養教材班級授權填報](https://github.com/cagoooo/PaGamO) 應運而生。它將繁瑣的紙本與 Excel 填報，轉化為直覺的網頁一站式表單：
+為了徹底解決這個行政痛點，[PaGamO 素養教材班級授權填報](https://cagoooo.github.io/PaGamO/) 應運而生。它將繁瑣的紙本與 Excel 填報，轉化為直覺的網頁一站式表單：
 
 **格式即時驗證** — 導師在填寫學生姓名與學號時，系統會立即進行長度與字元檢查，例如自動去除空白、限制學號長度，確保輸入源頭「零錯誤」。
 
@@ -14015,7 +14015,7 @@ const POST_113: BlogPost = {
 
 ## 想試試？
 
-→ [前往 #113 PaGamO 素養教材班級授權填報](https://github.com/cagoooo/PaGamO)
+→ [前往 #113 PaGamO 素養教材班級授權填報](https://cagoooo.github.io/PaGamO/)
 
 拒絕重複貼上，用科技把時間還給教學。讓我們用這套精準的填報系統，告別每學期初的 Excel 惡夢！
 `,

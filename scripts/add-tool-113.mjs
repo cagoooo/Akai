@@ -15,13 +15,13 @@ const TOOLS_SERVER = resolve(ROOT, 'server', 'data', 'tools.json');
 const PREVIEWS_DIR = resolve(ROOT, 'client', 'public', 'previews');
 
 const ID = 113;
-const URL = 'https://github.com/cagoooo/PaGamO';
+const URL = 'https://cagoooo.github.io/PaGamO/';
 
 const tool = {
   id: ID,
   title: 'PaGamO 素養教材班級授權填報',
   description:
-    '專為學校行政與導師設計 of PaGamO 素養教材授權填報系統。簡化繁瑣的班級名單與授權核對流程，一鍵填報、即時彙整，大幅提升行政作業效率，讓素養學習推廣更輕鬆！',
+    '專為學校行政與導師設計的 PaGamO 素養教材授權填報系統。簡化繁瑣的班級名單與授權核對流程，一鍵填報、即時彙整，大幅提升行政作業效率，讓素養學習推廣更輕鬆！',
   detailedDescription:
     '「PaGamO 素養教材班級授權填報」是專為中小學推廣 PaGamO 素養教材所開發的行政輔助平台。在過往，學校行政人員與各班導師在核對學生名單、確認授權狀態以及進行統一填報時，常面臨資料凌亂、重複核對等耗時問題。本工具提供直覺的填報介面與即時彙整功能，導師能迅速填寫班級的授權需求，系統則自動彙整並進行格式檢查，確保填報資料百分之百正確。平台採用輕量化純前端設計，無痛整合學校現有行政流程，並支援與 Excel 格式互轉，讓行政人員在匯出與提報至 PaGamO 官方時能一鍵完成。免費、免安裝且支援跨裝置，是學校落實數位行政轉型、推動科技輔助自主學習的最佳行政利器。',
   url: URL,
