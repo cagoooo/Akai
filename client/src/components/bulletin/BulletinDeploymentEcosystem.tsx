@@ -68,7 +68,7 @@ const PLATFORMS: Platform[] = [
   {
     emoji: '🧩',
     name: '第三方平台',
-    count: 6,
+    count: 7,
     desc: 'Replit + LINE Bot + Claude Artifacts + Padlet',
     color: tokens.note.pink,
     pinColor: '#db2777',
@@ -248,7 +248,7 @@ export function BulletinDeploymentEcosystem() {
         💡 點任一張便利貼 → 看該平台代表作品的深度教學心得長文
         <br />
         <Link href="/blog" style={{ color: tokens.red, fontWeight: 800, textDecoration: 'underline' }}>
-          看全部 113 篇手寫教學心得 →
+          看全部 114 篇手寫教學心得 →
         </Link>
       </div>
     </div>

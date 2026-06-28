@@ -13968,7 +13968,60 @@ const POST_111: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+const POST_113: BlogPost = {
+  slug: 'pagamo-license-113-school-enrollment',
+  title: '#113 告別 Excel 地獄！PaGamO 素養教材授權填報的行政數位轉型',
+  excerpt:
+    '專為學校導師與行政開發的 PaGamO 授權填報工具，一鍵彙整班級名單，讓繁瑣的素養教材開通流程省時 90%！',
+  publishedAt: '2026-06-28',
+  readingMinutes: 5,
+  tags: ['PaGamO', '素養教材', '行政工具', '班級管理', '表單統計'],
+  toolIds: [113, 10, 48],
+  coverEmoji: '🔑',
+  coverColor: 'blue',
+  body: `## 班級授權填報的「學期初惡夢」
+
+桃園市石門國小推廣 PaGamO 素養學習行之有年，但在每學期初，教務處設備組與各班導師最頭痛的不是如何帶學生登入，而是前置的「班級授權填報」。
+
+傳統的流程是這樣的：行政端發下一張巨型 Excel 範本，請導師填報班級學生名單、確認有家長授權同意書的學號與姓名。行政端回收 30 多個班級的 Excel 檔案後，再手動把幾百筆資料「複製貼上」彙整成一份提報總表。過程中只要有一個學號多打一個零、名字有錯別字、或是班級代碼填錯，整份檔案送到 PaGamO 官方就會被退件。反覆核對與催繳資料，常常消耗掉行政人員整整兩週的精力和下班時間。
+
+## #113 怎麼解？一鍵填報與智慧格式驗證
+
+為了徹底解決這個行政痛點，[PaGamO 素養教材班級授權填報](https://github.com/cagoooo/PaGamO) 應運而生。它將繁瑣的紙本與 Excel 填報，轉化為直覺的網頁一站式表單：
+
+**格式即時驗證** — 導師在填寫學生姓名與學號時，系統會立即進行長度與字元檢查，例如自動去除空白、限制學號長度，確保輸入源頭「零錯誤」。
+
+**一鍵彙整追蹤** — 行政端後台可以即時看見全校 30 個班級的填報狀態（已完成/填寫中/未填寫），並支援一鍵發送 LINE 提醒，催繳進度不再需要一個個辦公室跑。
+
+**PaGamO 官方範本匯出** — 當所有班級填妥後，行政人員可一鍵將資料匯出為符合 PaGamO 官方最新規格的標準格式 Excel，直接提報，零二次加工。
+
+## 真實技術棧
+
+- **前端框架**：純前端靜態部署，搭配 Tailwind CSS 與 Lucide 圖示
+- **資料存取**：免登入架構，資料以 \`localStorage\` 進行本地即時暫存，防斷電或網路瞬斷，並支援匯入/匯出 JSON 備份
+
+## 完美搭配班級行政生態系
+
+在阿凱老師的教育工具集中，本工具能與其他班級經營工具完美連動：
+- 配合 [#10 班級小管家](/tool/10) 的學生名單管理，導師能一鍵複製出正確的名單直接貼入。
+- 搭配 [#48 動態表單系統](/tool/48) 則能收集前期家長的意願授權。
+- 本工具 [#113 PaGamO 授權填報](/tool/113) 則專門處理最後送件的資料清洗與彙整，三者合作打通親師行政的最後一哩路。
+
+## 適用對象
+
+- 負責校內 PaGamO 素養教材申請的教務處設備組、資訊組長或學務行政人員。
+- 每一學期初需要幫全班學生開通帳號授權的國中小班級導師。
+- 希望減少手動處理 Excel 瑣碎工作、提升數位行政效率的行政教師。
+
+## 想試試？
+
+→ [前往 #113 PaGamO 素養教材班級授權填報](https://github.com/cagoooo/PaGamO)
+
+拒絕重複貼上，用科技把時間還給教學。讓我們用這套精準的填報系統，告別每學期初的 Excel 惡夢！
+`,
+};
+
+export const POSTS: BlogPost[] = [POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。
