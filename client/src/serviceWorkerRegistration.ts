@@ -26,7 +26,17 @@ export function registerServiceWorker() {
 
           // 初始檢查：如果有已經在 waiting 狀態的新 SW (重整頁面後)
           if (reg.waiting) {
-            _showSwUpdateToast(reg.waiting);
+            // 🚀 [最強自動更新]：網頁剛載入時若有 waiting 的新版，不彈 Toast 直接自動啟用並重整
+            console.log('[SW] 偵測到 waiting 中的新版本，自動啟用並重新整理網頁...');
+            let _reloaded = false;
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+              if (!_reloaded) {
+                _reloaded = true;
+                window.location.reload();
+              }
+            });
+            reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+            return;
           }
 
           // 監聽正在安裝的新 SW
