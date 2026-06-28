@@ -9,6 +9,24 @@ export function registerServiceWorker() {
       return;
     }
 
+    // 🚀 [作用域污染自癒]：自動清除註冊在根目錄 `/` 且控制了本專案的 Service Worker，避免被其舊快取劫持
+    const expectedScope = new URL(import.meta.env.BASE_URL, window.location.origin).href;
+    if (navigator.serviceWorker.getRegistrations) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        registrations.forEach((reg) => {
+          if (reg.scope && reg.scope !== expectedScope && expectedScope.startsWith(reg.scope)) {
+            console.warn(`[SW] 偵測到可能發生衝突的大範圍 Service Worker: ${reg.scope}，正在強制註銷以解決網頁劫持...`);
+            reg.unregister().then((success) => {
+              if (success) {
+                console.log(`[SW] 已成功註銷衝突的 Service Worker: ${reg.scope}`);
+                window.location.reload();
+              }
+            });
+          }
+        });
+      });
+    }
+
     window.addEventListener('load', () => {
       const swPath = import.meta.env.BASE_URL + 'sw.js';
       navigator.serviceWorker.register(swPath, { updateViaCache: 'none' })
