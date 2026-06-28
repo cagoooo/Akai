@@ -432,13 +432,23 @@ export const onEngagementEventCreated = onDocumentCreated(
             const toolTitle = safeText(data.toolTitle || `工具 #${toolId}`);
             const toolCategory = safeText(data.toolCategory || "未分類");
             const targetUrl = safeUrl(data.targetUrl, `${SITE_BASE}/tool/${toolId}`);
-            const summaryText = `使用者從主頁點擊工具：${toolTitle}`;
+            
+            let summaryText = `使用者從主頁點擊工具：${toolTitle}`;
+            let titleText = "主頁工具卡片被點擊";
+            
+            if (source === "leaderboard" || source === "ranking") {
+                summaryText = `🏆 使用者點擊排行榜工具：${toolTitle}`;
+                titleText = "🏆 排行榜工具被點擊";
+            } else if (source === "tool_detail_use") {
+                summaryText = `⚡ 使用者從詳情頁點擊使用工具：${toolTitle}`;
+                titleText = "⚡ 詳情頁工具被使用";
+            }
 
             const card = {
                 cardId: `engagement-tool-${event.params.eventId}`,
                 card: {
                     header: {
-                        title: "主頁工具卡片被點擊",
+                        title: titleText,
                         subtitle: `#${toolId} ${toolTitle}`,
                         imageUrl: "https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/touch_app/default/48px.svg",
                         imageType: "CIRCLE",

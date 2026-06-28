@@ -8,6 +8,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { soundManager } from "@/lib/soundManager";
 import { Button } from "@/components/ui/button";
 import { RankingTutorial } from "./RankingTutorial";
+import { notifyEngagementAfterHomeEntry } from "@/lib/analytics";
 
 // 僅匯入型別
 import type { ToolStats } from "@/lib/firestoreService";
@@ -221,6 +222,17 @@ export function ToolRankings({ tools: toolsProp }: ToolRankingsProps) {
       try {
         const { trackToolUsage } = await import("@/lib/firestoreService");
         await trackToolUsage(tool.id);
+        
+        // 發送 engagement 事件以觸發 Google Chat Webhook 通知
+        notifyEngagementAfterHomeEntry({
+          type: 'tool_click',
+          toolId: tool.id,
+          toolTitle: tool.title,
+          toolCategory: tool.category,
+          targetUrl: tool.url,
+          source: 'leaderboard',
+        });
+
         // 如果 Firebase 不可用，手動刷一下 API 數據
         const { isFirebaseAvailable } = await import('@/lib/firebase');
         if (!isFirebaseAvailable()) {

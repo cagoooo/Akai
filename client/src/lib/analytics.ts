@@ -114,7 +114,7 @@ export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
 
   const dedupKey =
     event.type === 'tool_click'
-      ? `tool:${event.toolId}`
+      ? `tool:${event.toolId}:${event.source || 'home'}`
       : `blog:${event.slug}`;
   if (!shouldNotifyEngagementOnce(dedupKey)) return;
 
