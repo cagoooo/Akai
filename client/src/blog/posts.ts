@@ -14021,7 +14021,55 @@ const POST_113: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+const POST_114: BlogPost = {
+  slug: 'student-list-checker-114-roster-verification',
+  title: '#114 告別人工肉眼比對！學生名單校對平台的個資安全與智慧防呆防線',
+  excerpt:
+    '每學期初核對幾百名學生名單，用肉眼看字形相似又容易出錯？#114 學生名單校對平台，雙欄智慧比對一秒揪出學號姓名錯漏，資料完全在本地處理，行政效率與個資安全雙贏！',
+  publishedAt: '2026-06-28',
+  readingMinutes: 5,
+  tags: ['名單校對', '學生名單', '行政效率', '名單核對', '防呆校對'],
+  toolIds: [114, 107, 109],
+  coverEmoji: '👥',
+  coverColor: 'purple',
+  body: `## 學生名單核對的「眼花撩亂時光」
+
+每學期初或舉辦大型跨班級活動、比賽報名時，學校註冊組、設備組等行政人員與各位老師，最崩潰的工作莫過於「校對名單」。
+
+學生名單往往來自不同來源：有教務處系統匯出的標準檔、有導師交來的調查表、還有教育局比賽報名系統的預審檔。這些名單看起來大同小異，但細節裡全是陷阱——有的人姓名多打了一個空白鍵、有的人學號多輸入了一個零、甚至是「凃與涂」、「温與溫」這類編碼不同的異體字。在過去，這只能依賴兩位老師一來一回拿著紙本「口頭唸讀、拿筆打勾」來比對，不僅極度耗費眼力，也容易因為人為疲勞而漏掉錯誤。
+
+## #114 怎麼解？雙欄比對與異體字模糊校正
+
+為了解決這一點，[學生名單校對平台](https://cagoooo.github.io/student-list-checker/) 提供了最直覺的數位校對解決方案。使用者只需在瀏覽器中開啟平台，即可進行高效比對：
+
+**直覺雙欄比對** — 老師只需將 A、B 兩份名單以「貼上」或「拖入 CSV/Excel」的方式放入雙欄，系統便會秒級進行交叉分析，並自動以紅、黃、綠三色標記出「僅存在於 A 表」、「學號重複」或「姓名與學號不相符」等異常列，一眼看清差異。
+
+**字元智慧清洗與模糊比對** — 系統會自動剔除前後的多餘空格、半全形字元轉換，並內建常見的簡繁體與異體字對照庫，防止因為字形微小差異導致的「假性比對失敗」，極大提高核對精準度。
+
+**本地處理，個資防線不妥協** — 學生姓名與學號屬於高度敏感的個人資料。本工具採用百分之百純前端架構，所有名單的比對邏輯、清洗與彙整工作皆在使用者本機的瀏覽器內完成，資料絕不上傳任何伺服器，讓個資保護滴水不漏。
+
+## 與同系列工具的搭配
+
+在石門國小數位行政工具中，#114 與其他名單工具形成了完美的行政流程閉環：
+- 使用 [#107 教育雲帳號更新器](/tool/107) 大量處理帳號更新前，可用 #114 校對名單資料的正確性。
+- 使用 [#109 數位軟體調查](/tool/109) 進行軟體需求登記時，亦可透過 #114 過濾並排除重複登記的學生。
+- 本工具 [#114 學生名單校對平台](/tool/114) 作為最終「資料守門員」，為學校行政省下了 90% 以上的手工比對時間。
+
+## 適用對象
+
+- 負責整理全校學生名冊、編班學籍資料的教務處註冊組或行政人員。
+- 學期初需要校對學生名冊與家長授權同意書的班級導師。
+- 負責團體比賽、跨班社團名單申報的任課指導老師。
+
+## 想試試？
+
+→ [前往 #114 學生名單校對平台](https://cagoooo.github.io/student-list-checker/)
+
+拒絕肉眼疲勞，讓電腦幫您把關名單正確性。讓我們用這套精準的本地校對系統，將行政效率提升到全新境界！
+`,
+};
+
+export const POSTS: BlogPost[] = [POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。
