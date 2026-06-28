@@ -110,19 +110,33 @@ function shouldNotifyEngagementOnce(key: string): boolean {
 }
 
 export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
-  if (!db || !hasHomeEntryForEngagementNotifications()) return;
+  console.log('[engagement notify] 觸發事件:', event);
+  
+  if (!db) {
+    console.warn('[engagement notify] db 不存在');
+    return;
+  }
+  if (!hasHomeEntryForEngagementNotifications()) {
+    console.warn('[engagement notify] 略過：沒有 HOME_ENGAGEMENT_KEY 標記');
+    return;
+  }
 
   const dedupKey =
     event.type === 'tool_click'
       ? `tool:${event.toolId}:${event.source || 'home'}`
       : `blog:${event.slug}`;
-  if (!shouldNotifyEngagementOnce(dedupKey)) return;
+      
+  if (!shouldNotifyEngagementOnce(dedupKey)) {
+    console.warn('[engagement notify] 略過：此事件在同 session 內已被去重:', dedupKey);
+    return;
+  }
 
   try {
+    console.log('[engagement notify] 確保登入並寫入 Firestore...');
     const { ensureSignedIn } = await import('@/lib/authService');
     await ensureSignedIn();
 
-    await addDoc(collection(db, 'engagementEvents'), {
+    const docRef = await addDoc(collection(db, 'engagementEvents'), {
       ...event,
       path: window.location.pathname,
       pageUrl: window.location.href,
@@ -130,7 +144,9 @@ export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
       userAgent: navigator.userAgent.slice(0, 220),
       createdAt: serverTimestamp(),
     });
+    console.log('[engagement notify] 寫入 Firestore 成功，ID:', docRef.id);
   } catch (err) {
+    console.error('[engagement notify] 寫入失敗:', err);
     if (import.meta.env.DEV) console.warn('[engagement notify]', err);
   }
 }
