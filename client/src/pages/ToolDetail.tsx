@@ -26,6 +26,7 @@ import {
     TrendingUp,
     Zap,
     Award,
+    BookOpen,
 } from 'lucide-react';
 
 import { tools, type EducationalTool, type ToolCategory } from '@/lib/data';
@@ -37,6 +38,7 @@ import { useRecentTools } from '@/hooks/useRecentTools';
 import { useAchievements } from '@/hooks/useAchievements';
 import { shouldReduceMotion, isInAppBrowser, getAnimationConfig } from '@/lib/browserDetection';
 import { notifyEngagementAfterHomeEntry } from '@/lib/analytics';
+import { getBlogPostPath, getPrimaryBlogPostForTool } from '@/lib/blogLinks';
 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -363,6 +365,7 @@ export function ToolDetail() {
     const isFav = isFavorite(toolId);
     const catInfo = categoryInfo[tool.category];
     const gradient = categoryGradients[tool.category as ToolCategory];
+    const blogPost = getPrimaryBlogPostForTool(tool.id);
 
     // 處理「立即使用」按鈕 - 採用 <a> 模擬點擊以確保行為穩定
     const handleUseTool = async () => {
@@ -562,6 +565,19 @@ export function ToolDetail() {
                                             {stats.totalClicks.toLocaleString()} 次使用
                                         </span>
                                     </motion.div>
+                                )}
+
+                                {blogPost && (
+                                    <Link href={getBlogPostPath(blogPost)}>
+                                        <Button
+                                            variant="outline"
+                                            className="gap-2 rounded-full border-amber-200 bg-amber-50 px-4 py-2 font-semibold text-amber-700 hover:border-amber-300 hover:bg-amber-100 hover:text-amber-800"
+                                            aria-label={`閱讀 ${tool.title} 的詳細文章介紹`}
+                                        >
+                                            <BookOpen className="w-4 h-4" />
+                                            讀介紹
+                                        </Button>
+                                    </Link>
                                 )}
                             </div>
 

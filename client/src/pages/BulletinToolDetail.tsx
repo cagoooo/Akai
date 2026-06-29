@@ -35,6 +35,7 @@ import { tokens } from '@/design/tokens';
 import { getToolEmoji, getCategoryLabel, getCategoryKey, normalizeUrl } from '@/components/bulletin/toolAdapter';
 import { OptimizedIcon } from '@/components/OptimizedIcons';
 import { ReviewList } from '@/components/ReviewList';
+import { getBlogPostPath, getPrimaryBlogPostForTool } from '@/lib/blogLinks';
 
 // ── NotFound：cork 風格 ───────────────────────────────
 function NotFound() {
@@ -250,6 +251,7 @@ export function BulletinToolDetail() {
   const categoryLabel = getCategoryLabel(tool.category);
   const emoji = getToolEmoji(tool);
   const isFav = isFavorite(toolId);
+  const blogPost = getPrimaryBlogPostForTool(tool.id);
   const previewSrc = tool.previewUrl
     ? `${import.meta.env.BASE_URL}previews/${tool.previewUrl.split('/').pop()}`
     : null;
@@ -645,13 +647,21 @@ export function BulletinToolDetail() {
             </h1>
 
             {/* 點擊統計徽章 */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+                flexWrap: 'wrap',
+                marginTop: 16,
+              }}
+            >
             {stats && stats.totalClicks > 0 && (
               <div
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: 8,
-                  marginTop: 16,
                   padding: '8px 16px',
                   background: tokens.accent,
                   color: '#fff',
@@ -667,6 +677,32 @@ export function BulletinToolDetail() {
                 🔥 已被使用 {stats.totalClicks.toLocaleString()} 次
               </div>
             )}
+            {blogPost && (
+              <Link
+                href={getBlogPostPath(blogPost)}
+                aria-label={`閱讀 ${tool.title} 的詳細文章介紹`}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '8px 16px',
+                  background: '#fff8e7',
+                  color: '#7a4b12',
+                  border: '2px solid #1a1a1a',
+                  borderRadius: 999,
+                  fontSize: 13,
+                  fontWeight: 900,
+                  fontFamily: tokens.font.tc,
+                  textDecoration: 'none',
+                  boxShadow: '2px 2px 0 rgba(0,0,0,.3)',
+                  transform: 'rotate(1deg)',
+                }}
+              >
+                <OptimizedIcon name="BookOpen" size={16} />
+                讀介紹
+              </Link>
+            )}
+            </div>
 
             {/* 描述（白底便條 — Markdown 渲染） */}
             <div
