@@ -11,6 +11,7 @@ import { useFavorites } from '@/hooks/useFavorites';
 import { useToolTracking } from '@/hooks/useToolTracking';
 import { getToolEmoji, getCategoryLabel, getCategoryKey, normalizeUrl } from './toolAdapter';
 import { notifyEngagementAfterHomeEntry, trackEvent } from '@/lib/analytics';
+import { getBlogPostPath, getPrimaryBlogPostForTool } from '@/lib/blogLinks';
 import type { EducationalTool } from '@/lib/data';
 
 interface Props {
@@ -37,6 +38,7 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0 }: Props) {
   const categoryLabel = getCategoryLabel(tool.category);
   const isFav = isFavorite(tool.id);
   const totalClicks = tool.totalClicks ?? 0;
+  const blogPost = getPrimaryBlogPostForTool(tool.id);
 
   // 「🆕 新工具」判斷：addedAt 在 7 天內為新；未設 addedAt 的歷史工具不算新
   const isNew = (() => {
@@ -261,6 +263,31 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0 }: Props) {
         >
           {tool.description}
         </div>
+        {blogPost && (
+          <Link
+            href={getBlogPostPath(blogPost)}
+            onClick={(e) => e.stopPropagation()}
+            aria-label={`閱讀 ${tool.title} 的詳細文章介紹`}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 5,
+              marginTop: 8,
+              padding: '5px 8px',
+              borderRadius: 8,
+              border: '1px solid #d8c5a0',
+              background: '#fff8e7',
+              color: '#7a4b12',
+              fontSize: 12,
+              fontWeight: 800,
+              textDecoration: 'none',
+              boxShadow: '1px 1px 0 rgba(26,26,26,.18)',
+            }}
+          >
+            <OptimizedIcon name="BookOpen" size={14} />
+            讀介紹
+          </Link>
+        )}
       </div>
 
       <div

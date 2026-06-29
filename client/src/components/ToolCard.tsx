@@ -33,6 +33,7 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { isInAppBrowser } from "@/lib/browserDetection";
 import { useInView } from "react-intersection-observer";
+import { getBlogPostPath, getPrimaryBlogPostForTool } from "@/lib/blogLinks";
 
 // Enhanced category colors with hover states and transitions
 const categoryColors = {
@@ -142,6 +143,7 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
   const { toast } = useToast();
   const catInfo = categoryInfo[tool.category as ToolCategory];
   const colors = categoryColors[tool.category as keyof typeof categoryColors];
+  const blogPost = getPrimaryBlogPostForTool(tool.id);
 
   // Intersection observer for image lazy loading
   const { ref, inView } = useInView({
@@ -532,6 +534,32 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
                   <OptimizedIcon name="ExternalLink" className="h-5 w-5 sm:h-6 sm:w-6" />
                   開啟使用
                 </Button>
+
+                {blogPost && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Link href={getBlogPostPath(blogPost)}>
+                        <Button
+                          variant="outline"
+                          size="lg"
+                          className={cn(
+                            "h-11 w-11 shrink-0 rounded-xl border-amber-200 bg-white/80",
+                            "text-amber-700 hover:bg-amber-50 hover:text-amber-800 hover:border-amber-300"
+                          )}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                          aria-label={`閱讀 ${tool.title} 的詳細文章介紹`}
+                        >
+                          <OptimizedIcon name="BookOpen" className="h-5 w-5" />
+                        </Button>
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>閱讀詳細介紹</p>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
 
                 {/* 使用次數 */}
                 {(usageStats || tool.totalClicks) && (
