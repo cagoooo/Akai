@@ -348,7 +348,8 @@ async function main() {
   1. 確認 ${previewUrl || '(未產生卡片預覽圖，可手動放 client/public/previews/tool_' + id + '.webp)'}
   2. git status 看一下變更
   3. git add -A && git commit -m "✨ 新增工具 #${id}：${title}"
-  4. npm run build && npx gh-pages -d dist/public
+  4. 開 /tool/${id} 按「立即使用」，確認 Google Chat 收到工具使用通知
+  5. npm run build && npx gh-pages -d dist/public
 
 如果預覽圖品質不滿意，可以：
   - 自行截圖放到 client/public/previews/tool_${id}.webp

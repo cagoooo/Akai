@@ -69,6 +69,7 @@ type EngagementEvent =
       toolCategory?: string;
       targetUrl?: string;
       source?: string;
+      requireHomeEntry?: boolean;
     }
   | {
       type: 'blog_read';
@@ -77,6 +78,7 @@ type EngagementEvent =
       readingMinutes?: number;
       relatedTools?: string;
       source?: string;
+      requireHomeEntry?: boolean;
     };
 
 export function markHomeEntryForEngagementNotifications() {
@@ -116,7 +118,8 @@ export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
     console.warn('[engagement notify] db 不存在');
     return;
   }
-  if (!hasHomeEntryForEngagementNotifications()) {
+  const requiresHomeEntry = event.requireHomeEntry ?? event.source !== 'tool_detail_use';
+  if (requiresHomeEntry && !hasHomeEntryForEngagementNotifications()) {
     console.warn('[engagement notify] 略過：沒有 HOME_ENGAGEMENT_KEY 標記');
     return;
   }
@@ -136,8 +139,10 @@ export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
     const { ensureSignedIn } = await import('@/lib/authService');
     await ensureSignedIn();
 
+    const eventPayload = { ...event };
+    delete eventPayload.requireHomeEntry;
     const docRef = await addDoc(collection(db, 'engagementEvents'), {
-      ...event,
+      ...eventPayload,
       path: window.location.pathname,
       pageUrl: window.location.href,
       referrer: document.referrer || '',
