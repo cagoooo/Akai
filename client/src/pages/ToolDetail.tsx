@@ -387,13 +387,20 @@ export function ToolDetail() {
             });
         addToRecent(tool.id);
         trackAchievement(tool.id, tool.category);
-        notifyEngagementAfterHomeEntry({
+        const notifyPromise = notifyEngagementAfterHomeEntry({
             type: 'tool_click',
             toolId: tool.id,
             toolTitle: tool.title,
             toolCategory: tool.category,
             targetUrl: tool.url,
             source: 'tool_detail_use',
+        });
+
+        await Promise.race([
+            notifyPromise,
+            new Promise((resolve) => setTimeout(resolve, 1200)),
+        ]).catch((error) => {
+            console.error('工具使用通知寫入失敗:', error);
         });
 
         if (inAppBrowser) {

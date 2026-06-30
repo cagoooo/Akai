@@ -28,8 +28,9 @@ export async function pushToGoogleChat(
         payload.cardsV2 = cardsV2;
     }
 
+    const url = webhookUrl.trim();
     try {
-        await axios.post(webhookUrl.trim(), payload, {
+        await axios.post(url, payload, {
             headers: {
                 "Content-Type": "application/json",
             },
@@ -41,5 +42,24 @@ export async function pushToGoogleChat(
             `[${contextLabel}] Failed to send Google Chat notification:`,
             JSON.stringify(error.response?.data) || error.message
         );
+
+        if (!cardsV2 || !Array.isArray(cardsV2) || cardsV2.length === 0) return;
+
+        try {
+            await axios.post(url, {
+                text: `${text.slice(0, 900)}\n\n(卡片格式被 Google Chat 拒收，已改送純文字備援)`,
+            }, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                timeout: 10000,
+            });
+            console.log(`[${contextLabel}] Google Chat fallback text notification sent successfully.`);
+        } catch (fallbackError: any) {
+            console.error(
+                `[${contextLabel}] Failed to send Google Chat fallback text notification:`,
+                JSON.stringify(fallbackError.response?.data) || fallbackError.message
+            );
+        }
     }
 }
