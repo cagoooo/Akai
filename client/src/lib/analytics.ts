@@ -59,7 +59,7 @@ export function trackEvent(
 // 為什麼用 hash 當 doc id？避免「不能含 / 等特殊字元」的 Firestore key 限制，且天然 deduplication
 
 const HOME_ENGAGEMENT_KEY = 'akai_home_engagement_session_v1';
-const ENGAGEMENT_DEDUP_PREFIX = 'akai_engagement_notified_v1:';
+const ENGAGEMENT_DEDUP_PREFIX = 'akai_engagement_notified_v2:';
 
 type EngagementEvent =
   | {
@@ -99,15 +99,23 @@ function hasHomeEntryForEngagementNotifications(): boolean {
   }
 }
 
-function shouldNotifyEngagementOnce(key: string): boolean {
+function hasNotifiedEngagement(key: string): boolean {
   if (typeof window === 'undefined') return false;
   const storageKey = `${ENGAGEMENT_DEDUP_PREFIX}${key}`;
   try {
-    if (sessionStorage.getItem(storageKey) === '1') return false;
-    sessionStorage.setItem(storageKey, '1');
-    return true;
+    return sessionStorage.getItem(storageKey) === '1';
   } catch {
-    return true;
+    return false;
+  }
+}
+
+function markEngagementNotified(key: string) {
+  if (typeof window === 'undefined') return;
+  const storageKey = `${ENGAGEMENT_DEDUP_PREFIX}${key}`;
+  try {
+    sessionStorage.setItem(storageKey, '1');
+  } catch {
+    /* ignore */
   }
 }
 
@@ -129,7 +137,7 @@ export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
       ? `tool:${event.toolId}:${event.source || 'home'}`
       : `blog:${event.slug}`;
       
-  if (!shouldNotifyEngagementOnce(dedupKey)) {
+  if (hasNotifiedEngagement(dedupKey)) {
     console.warn('[engagement notify] 略過：此事件在同 session 內已被去重:', dedupKey);
     return;
   }
@@ -149,6 +157,7 @@ export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
       userAgent: navigator.userAgent.slice(0, 220),
       createdAt: serverTimestamp(),
     });
+    markEngagementNotified(dedupKey);
     console.log('[engagement notify] 寫入 Firestore 成功，ID:', docRef.id);
   } catch (err) {
     console.error('[engagement notify] 寫入失敗:', err);
