@@ -30,13 +30,14 @@ export async function pushToGoogleChat(
 
     const url = webhookUrl.trim();
     try {
-        await axios.post(url, payload, {
+        const response = await axios.post(url, payload, {
             headers: {
                 "Content-Type": "application/json",
             },
             timeout: 10000, // 10 秒超時，防止 Cloud Function 卡死
         });
-        console.log(`[${contextLabel}] Google Chat Notification sent successfully.`);
+        const messageName = response.data?.name ? ` message=${response.data.name}` : "";
+        console.log(`[${contextLabel}] Google Chat Notification sent successfully. status=${response.status}${messageName}`);
     } catch (error: any) {
         console.error(
             `[${contextLabel}] Failed to send Google Chat notification:`,
@@ -46,7 +47,7 @@ export async function pushToGoogleChat(
         if (!cardsV2 || !Array.isArray(cardsV2) || cardsV2.length === 0) return;
 
         try {
-            await axios.post(url, {
+            const fallbackResponse = await axios.post(url, {
                 text: `${text.slice(0, 900)}\n\n(卡片格式被 Google Chat 拒收，已改送純文字備援)`,
             }, {
                 headers: {
@@ -54,7 +55,8 @@ export async function pushToGoogleChat(
                 },
                 timeout: 10000,
             });
-            console.log(`[${contextLabel}] Google Chat fallback text notification sent successfully.`);
+            const fallbackMessageName = fallbackResponse.data?.name ? ` message=${fallbackResponse.data.name}` : "";
+            console.log(`[${contextLabel}] Google Chat fallback text notification sent successfully. status=${fallbackResponse.status}${fallbackMessageName}`);
         } catch (fallbackError: any) {
             console.error(
                 `[${contextLabel}] Failed to send Google Chat fallback text notification:`,
