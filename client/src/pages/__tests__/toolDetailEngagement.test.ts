@@ -33,4 +33,9 @@ describe('tool detail engagement notifications', () => {
     expect(source).toContain("source: 'tool_detail_use'");
     expect(source).toContain('await Promise.race');
   });
+
+  it('does not require a home-page session before sending blog and tool notifications', () => {
+    const source = readSource('client/src/lib/analytics.ts');
+    expect(source).toContain('const requiresHomeEntry = event.requireHomeEntry ?? false;');
+  });
 });

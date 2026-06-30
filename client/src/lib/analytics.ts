@@ -126,7 +126,7 @@ export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
     console.warn('[engagement notify] db 不存在');
     return;
   }
-  const requiresHomeEntry = event.requireHomeEntry ?? event.source !== 'tool_detail_use';
+  const requiresHomeEntry = event.requireHomeEntry ?? false;
   if (requiresHomeEntry && !hasHomeEntryForEngagementNotifications()) {
     console.warn('[engagement notify] 略過：沒有 HOME_ENGAGEMENT_KEY 標記');
     return;
