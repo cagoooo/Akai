@@ -23,6 +23,7 @@ import { useRecentTools } from '@/hooks/useRecentTools';
 import { useAchievements } from '@/hooks/useAchievements';
 import { isInAppBrowser } from '@/lib/browserDetection';
 import { useToast } from '@/hooks/use-toast';
+import { notifyEngagementAfterHomeEntry } from '@/lib/analytics';
 
 import { BulletinBoard } from '@/components/bulletin/BulletinBoard';
 import { BulletinFooter } from '@/components/bulletin/BulletinFooter';
@@ -275,6 +276,15 @@ export function BulletinToolDetail() {
       .catch((err) => console.error('追蹤工具使用失敗:', err));
 
     const openUrl = normalizeUrl(tool.url);
+    notifyEngagementAfterHomeEntry({
+      type: 'tool_click',
+      toolId: tool.id,
+      toolTitle: tool.title,
+      toolCategory: tool.category,
+      targetUrl: openUrl,
+      source: 'tool_detail_use',
+    });
+
     setTimeout(() => {
       if (inAppBrowser) {
         window.location.href = openUrl;
