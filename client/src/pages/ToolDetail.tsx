@@ -434,6 +434,29 @@ export function ToolDetail() {
     };
 
     // 複製連結
+    const handleReadIntro = async () => {
+        if (!blogPost) return;
+
+        const blogPostPath = getBlogPostPath(blogPost);
+        const notifyPromise = notifyEngagementAfterHomeEntry({
+            type: 'blog_read',
+            slug: blogPost.slug,
+            title: blogPost.title,
+            relatedTools: blogPost.toolIds.join(','),
+            readingMinutes: blogPost.readingMinutes,
+            source: 'tool_detail_intro',
+        });
+
+        await Promise.race([
+            notifyPromise,
+            new Promise((resolve) => setTimeout(resolve, 1200)),
+        ]).catch((error) => {
+            console.error('tool detail intro notification failed:', error);
+        });
+
+        navigate(blogPostPath);
+    };
+
     const handleCopyLink = async () => {
         try {
             await navigator.clipboard.writeText(tool.url);
@@ -575,7 +598,13 @@ export function ToolDetail() {
                                 )}
 
                                 {blogPost && (
-                                    <Link href={getBlogPostPath(blogPost)}>
+                                    <Link
+                                        href={getBlogPostPath(blogPost)}
+                                        onClick={(event) => {
+                                            event.preventDefault();
+                                            void handleReadIntro();
+                                        }}
+                                    >
                                         <Button
                                             variant="outline"
                                             className="gap-2 rounded-full border-amber-200 bg-amber-50 px-4 py-2 font-semibold text-amber-700 hover:border-amber-300 hover:bg-amber-100 hover:text-amber-800"

@@ -136,9 +136,13 @@ export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
     event.type === 'tool_click'
       ? `tool:${event.toolId}:${event.source || 'home'}`
       : `blog:${event.slug}`;
-  const shouldDedup = event.type !== 'tool_click' || event.source !== 'tool_detail_use';
-      
-  if (shouldDedup && hasNotifiedEngagement(dedupKey)) {
+  const bypassDedup =
+    (event.type === 'tool_click' && event.source === 'tool_detail_use') ||
+    (event.type === 'blog_read' && event.source === 'tool_detail_intro');
+  const shouldMarkDedup =
+    !bypassDedup || (event.type === 'blog_read' && event.source === 'tool_detail_intro');
+
+  if (!bypassDedup && hasNotifiedEngagement(dedupKey)) {
     console.warn('[engagement notify] 略過：此事件在同 session 內已被去重:', dedupKey);
     return;
   }
@@ -158,7 +162,7 @@ export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
       userAgent: navigator.userAgent.slice(0, 220),
       createdAt: serverTimestamp(),
     });
-    if (shouldDedup) markEngagementNotified(dedupKey);
+    if (shouldMarkDedup) markEngagementNotified(dedupKey);
     console.log('[engagement notify] 寫入 Firestore 成功，ID:', docRef.id);
   } catch (err) {
     console.error('[engagement notify] 寫入失敗:', err);

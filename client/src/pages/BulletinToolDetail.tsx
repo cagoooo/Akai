@@ -308,6 +308,29 @@ export function BulletinToolDetail() {
     }, 400);
   };
 
+  const handleReadIntro = async () => {
+    if (!blogPost) return;
+
+    const blogPostPath = getBlogPostPath(blogPost);
+    const notifyPromise = notifyEngagementAfterHomeEntry({
+      type: 'blog_read',
+      slug: blogPost.slug,
+      title: blogPost.title,
+      relatedTools: blogPost.toolIds.join(','),
+      readingMinutes: blogPost.readingMinutes,
+      source: 'tool_detail_intro',
+    });
+
+    await Promise.race([
+      notifyPromise,
+      new Promise((resolve) => setTimeout(resolve, 1200)),
+    ]).catch((err) => {
+      console.error('tool detail intro notification failed:', err);
+    });
+
+    navigate(blogPostPath);
+  };
+
   const handleToggleFav = () => {
     toggleFavorite(toolId);
     if (!isFav) setHeartTrigger((t) => t + 1);
@@ -697,6 +720,10 @@ export function BulletinToolDetail() {
             {blogPost && (
               <Link
                 href={getBlogPostPath(blogPost)}
+                onClick={(event) => {
+                  event.preventDefault();
+                  void handleReadIntro();
+                }}
                 aria-label={`閱讀 ${tool.title} 的詳細文章介紹`}
                 style={{
                   display: 'inline-flex',

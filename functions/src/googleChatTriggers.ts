@@ -483,13 +483,22 @@ export const onEngagementEventCreated = onDocumentCreated(
             const readingMinutes = Number(data.readingMinutes || 0);
             const relatedTools = safeText(data.relatedTools || "無");
             const blogUrl = safeUrl(pageUrl, `${SITE_BASE}/blog/${slug}`);
-            const summaryText = `使用者從主頁觀看部落格：${title}`;
+            let summaryText = `使用者從主頁觀看部落格：${title}`;
+            let titleText = "主頁部落格文章被觀看";
+
+            if (source === "tool_detail_intro") {
+                summaryText = `📖 使用者從工具詳情頁點擊讀介紹：${title}`;
+                titleText = "📖 工具詳情頁讀介紹被點擊";
+            } else if (source === "blog_post") {
+                summaryText = `📖 使用者閱讀部落格：${title}`;
+                titleText = "📖 部落格文章被閱讀";
+            }
 
             const card = {
                 cardId: `engagement-blog-${event.params.eventId}`,
                 card: {
                     header: {
-                        title: "主頁部落格文章被觀看",
+                        title: titleText,
                         subtitle: title,
                         imageUrl: "https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/article/default/48px.svg",
                         imageType: "CIRCLE",
