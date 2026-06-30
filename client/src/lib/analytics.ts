@@ -136,8 +136,9 @@ export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
     event.type === 'tool_click'
       ? `tool:${event.toolId}:${event.source || 'home'}`
       : `blog:${event.slug}`;
+  const shouldDedup = event.type !== 'tool_click' || event.source !== 'tool_detail_use';
       
-  if (hasNotifiedEngagement(dedupKey)) {
+  if (shouldDedup && hasNotifiedEngagement(dedupKey)) {
     console.warn('[engagement notify] 略過：此事件在同 session 內已被去重:', dedupKey);
     return;
   }
@@ -157,7 +158,7 @@ export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
       userAgent: navigator.userAgent.slice(0, 220),
       createdAt: serverTimestamp(),
     });
-    markEngagementNotified(dedupKey);
+    if (shouldDedup) markEngagementNotified(dedupKey);
     console.log('[engagement notify] 寫入 Firestore 成功，ID:', docRef.id);
   } catch (err) {
     console.error('[engagement notify] 寫入失敗:', err);

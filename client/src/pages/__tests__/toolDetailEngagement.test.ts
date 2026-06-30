@@ -38,4 +38,11 @@ describe('tool detail engagement notifications', () => {
     const source = readSource('client/src/lib/analytics.ts');
     expect(source).toContain('const requiresHomeEntry = event.requireHomeEntry ?? false;');
   });
+
+  it('does not dedupe explicit detail-page use clicks within the same session', () => {
+    const source = readSource('client/src/lib/analytics.ts');
+    expect(source).toContain("event.source !== 'tool_detail_use'");
+    expect(source).toContain('if (shouldDedup && hasNotifiedEngagement(dedupKey))');
+    expect(source).toContain('if (shouldDedup) markEngagementNotified(dedupKey)');
+  });
 });
