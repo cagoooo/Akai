@@ -8,7 +8,7 @@
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
     <pubDate>Thu, 02 Jul 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Thu, 02 Jul 2026 01:33:20 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 02 Jul 2026 01:36:42 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -19,12 +19,12 @@
       <height>144</height>
     </image>
     <item>
-      <title>🆕 新工具：寶可夢數學道館</title>
+      <title>🆕 新工具：萌獸數學道館</title>
       <link>https://cagoooo.github.io/Akai/tool/115</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/115</guid>
       <pubDate>Thu, 02 Jul 2026 00:00:00 GMT</pubDate>
-      <description>把四則運算練習變成道館挑戰，學生在闖關、蒐集徽章與升級回饋中，一題一題練出數學手感。</description>
-      <category>寶可夢</category>
+      <description>把四則運算練習變成萌獸道館挑戰，學生在闖關、蒐集徽章與升級回饋中，一題一題練出數學手感。</description>
+      <category>萌獸</category>
       <category>數學道館</category>
       <category>四則運算</category>
       <category>數學遊戲</category>

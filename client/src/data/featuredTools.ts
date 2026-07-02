@@ -20,7 +20,7 @@ export const FEATURED_TOOL_IDS: number[] = [
   46, // [主推] 禮堂&專科教室&IPAD平板車預約系統
   9, // [主推] 超級瑪莉歐冒險
   14, // [主推] 點亮詩意~『早安長輩圖產生器』
-  115, // [fallback] 寶可夢數學道館
+  115, // [fallback] 萌獸數學道館
   114, // [fallback] 學生名單校對平台
   113, // [fallback] PaGamO 素養教材班級授權填報
   112, // [fallback] 皮卡丘天空大冒險
@@ -28,4 +28,4 @@ export const FEATURED_TOOL_IDS: number[] = [
   110, // [fallback] 智慧自動化照片成果轉影片產生器
 ];
 
-/** 自動產生：2026-07-02T01:33:16.881Z */
+/** 自動產生：2026-07-02T01:36:37.613Z */
