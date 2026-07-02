@@ -8,7 +8,7 @@
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
     <pubDate>Thu, 02 Jul 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Thu, 02 Jul 2026 01:36:42 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 02 Jul 2026 04:33:54 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -29,6 +29,15 @@
       <category>四則運算</category>
       <category>數學遊戲</category>
       <category>闖關學習</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#115 把四則運算變成道館挑戰：萌獸數學道館的練習動機設計</title>
+      <link>https://cagoooo.github.io/Akai/blog/math-beast-gym-115-arithmetic-battle</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/math-beast-gym-115-arithmetic-battle</guid>
+      <pubDate>Thu, 02 Jul 2026 00:00:00 GMT</pubDate>
+      <description>四則運算練習最難的不是出題，而是讓學生願意一題接一題做下去。#115 萌獸數學道館把加減乘除包裝成原創萌獸對戰，用 ATG 節奏、關主挑戰與即時回饋，讓練習變成一場全班都看得懂的數學冒險。</description>
+      <category>blog</category>
+      <category>教學情境</category>
     </item>
     <item>
       <title>🆕 新工具：學生名單校對平台</title>
@@ -323,18 +332,6 @@
       <description>#101 3D 迷宮冒險遊戲是阿凱寫給孩子玩的第一人稱探索遊戲：React + Three.js 純瀏覽器跑 3D，收集藍色光球、躲避紅色巡守者、與時間賽跑，4 段難度 7×7 到 17×17 噩夢級，桌機 + iPad 觸控全支援，內建全班 / 全校排行榜。</description>
       <category>blog</category>
       <category>教學情境</category>
-    </item>
-    <item>
-      <title>🆕 新工具：考試卷生圖 Studio — AI 黑白線稿插圖生成</title>
-      <link>https://cagoooo.github.io/Akai/tool/99</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/99</guid>
-      <pubDate>Sun, 24 May 2026 06:05:54 GMT</pubDate>
-      <description>備課時想加一張剛剛好的學習單插畫？輸入四個欄位（標題、對話、角色、場景），10–20 秒生成兩張 1024×1024 黑白線稿 PNG，列印不吃墨水、可當著色頁、支援中文精準渲染。內建 4 組教學情境範例 + AI Prompt 可複製轉用 ChatGPT / Bing。</description>
-      <category>試卷插圖</category>
-      <category>學習單插畫</category>
-      <category>AI 線稿生成</category>
-      <category>黑白線稿</category>
-      <category>著色頁</category>
     </item>
   </channel>
 </rss>

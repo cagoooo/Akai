@@ -14021,6 +14021,74 @@ const POST_113: BlogPost = {
 `,
 };
 
+const POST_115: BlogPost = {
+  slug: 'math-beast-gym-115-arithmetic-battle',
+  title: '#115 把四則運算變成道館挑戰：萌獸數學道館的練習動機設計',
+  excerpt:
+    '四則運算練習最難的不是出題，而是讓學生願意一題接一題做下去。#115 萌獸數學道館把加減乘除包裝成原創萌獸對戰，用 ATG 節奏、關主挑戰與即時回饋，讓練習變成一場全班都看得懂的數學冒險。',
+  publishedAt: '2026-07-02',
+  readingMinutes: 5,
+  tags: ['數學遊戲', '四則運算', '萌獸道館', '課堂闖關', '教育遊戲'],
+  toolIds: [115, 101, 11],
+  coverEmoji: '🧮',
+  coverColor: 'green',
+  body: `## 四則運算練習最怕「我已經會了」
+
+數學課裡，最常出現的矛盾是：老師知道孩子需要足夠的練習量，學生卻很快覺得「又是算題」。尤其加減乘除這種基本功，單題看起來不難，但真正要穩定、快速、少出錯，靠的是一次又一次的手感累積。
+
+以前我常看到一種情況：練習卷發下去，前幾題大家還願意算，過幾分鐘之後，速度快的學生開始分心，速度慢的學生開始焦慮，老師在教室裡來回巡，既要顧正確率，也要顧情緒。這不是題目不好，而是練習的「情境」不夠支撐孩子走完整段路。
+
+[#115 萌獸數學道館](https://cagoooo.github.io/Poke/) 想解決的就是這件事：不改變數學練習本身，改變學生進入練習的心情。
+
+## #115 怎麼解？把題目變成戰鬥節奏
+
+**原創萌獸選角** — 學生一開始不是直接進入題庫，而是先選一隻自己的萌獸夥伴。葉芽獸、焰尾獸、泡泡熊、電芽兔這些角色都不是既有商業 IP，而是為教學情境重新設計的原創角色；孩子可以用「我今天選誰」進入練習，不會只感覺自己被要求算題。
+
+**ATG 即時對戰** — 遊戲不是單純答對就下一題，而是用行動條推進戰鬥節奏。玩家行動條滿了要答攻擊題，關主行動條滿了會出防禦題。這讓加減乘除不再是一張靜態題庫，而變成「現在輪到我出招」的即時回合感。
+
+**答對攻擊、答錯承擔後果** — 答對會對關主造成傷害，答錯則會被反擊。這個設計很重要：它不是用扣分羞辱學生，而是用遊戲語言讓孩子理解「再確認一次」的必要性。算錯不是失敗，而是戰鬥中的一次失誤，下一題還能追回來。
+
+**難度與題型可調** — 老師可以依低、中、高年級調整難度，也能選擇只練加法、減法、乘法、除法或混合題。這讓工具能從課堂暖身、補救教學、課後自主練習一路延伸，不會只適合某一個年級。
+
+## 真實技術棧
+
+- **前端架構**：純 HTML、CSS、JavaScript，部署在 GitHub Pages，點開即可使用
+- **遊戲資料**：本地原創萌獸資料，不串接外部 IP API，也避免使用既有商業角色
+- **視覺呈現**：SVG 角色卡、ATG 條、HP 條、傷害回饋與結算畫面
+- **PWA 支援**：manifest、Service Worker、離線快取與版本更新提示
+- **音效設計**：攻擊、答對、答錯、防禦、勝利與 BGM 控制，課堂使用時也能關閉音量
+
+這次特別把原本可能讓人聯想到既有 IP 的命名與素材全面改掉，改成「萌獸數學道館」這套原創語彙。對學校工具來說，這不只是避開版權疑慮，也讓作品更像阿凱工具集自己的世界觀。
+
+## 我會怎麼帶課
+
+如果是中年級，我會先投影選角畫面，讓全班一起看不同萌獸的屬性與攻擊力，接著請學生用個人載具開啟同一個頁面，先玩 5 分鐘「中年級混合題」。第一輪不要求速度，只要求大家熟悉攻擊題與防禦題的節奏。
+
+第二輪開始，老師可以把任務說清楚：今天不是比誰最快，而是比誰能在關主攻擊時冷靜防禦。這樣一來，速度快的孩子有挑戰，速度慢的孩子也有明確目標，不會覺得自己只是落後。
+
+補救教學時，我會把題型鎖定在單一運算，例如只練乘法或只練除法，並把最大數字調低。當孩子連續答對，看見萌獸真的把關主打倒，那個「我做得到」的回饋，比單純批改打勾更有力量。
+
+## 配對工具推薦
+
+- [#101 3D 迷宮冒險遊戲](/tool/101) — 同樣是闖關與即時回饋，適合資訊課或班級活動做空間感挑戰
+- [#11 剛好學 Akailao](/tool/11) — 若想把數學題變成全班即時互動、搶答或選擇題，可搭配使用
+- [#115 萌獸數學道館](/tool/115) — 本篇主角，適合四則運算基本功練習與課堂暖身
+
+## 適用對象
+
+- 想讓學生大量練習四則運算，但不想每次都發練習卷的數學老師
+- 需要設計課堂暖身、下課前 5 分鐘挑戰或補救教學活動的導師
+- 想找免登入、免安裝、可投影、可自主練習數學遊戲的國小班級
+- 希望使用原創角色素材，避開商業 IP 授權疑慮的教學現場
+
+## 想試試？
+
+→ [前往 #115 萌獸數學道館](https://cagoooo.github.io/Poke/)
+
+把它放在數學課前 5 分鐘，讓孩子先選一隻萌獸，再用一題一題的加減乘除把關主打倒。當練習變成挑戰，孩子願意多算的那幾題，就是數學手感慢慢長出來的地方。
+`,
+};
+
 const POST_114: BlogPost = {
   slug: 'student-list-checker-114-roster-verification',
   title: '#114 告別人工肉眼比對！學生名單校對平台的個資安全與智慧防呆防線',
@@ -14069,7 +14137,7 @@ const POST_114: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+export const POSTS: BlogPost[] = [POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。
