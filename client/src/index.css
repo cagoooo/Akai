@@ -333,3 +333,88 @@
     grid-template-columns: 1fr !important;
   }
 }
+
+/* ============================================================
+   📌 BulletinHero RWD：主視覺內容置中，不貼左
+   ============================================================ */
+
+.bulletin-hero {
+  max-width: 1180px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.bulletin-hero-content {
+  width: min(100%, 560px);
+  justify-self: end;
+}
+
+.bulletin-hero-content .bulletin-hero-counter-wrap,
+.bulletin-hero-content .bulletin-visitor-counter {
+  width: 100%;
+}
+
+@media (max-width: 980px) {
+  .bulletin-hero {
+    grid-template-columns: 1fr !important;
+    padding: 28px 28px 44px !important;
+    gap: 34px !important;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .bulletin-hero-content {
+    justify-self: center;
+  }
+
+  .bulletin-hero-content > div:first-child,
+  .bulletin-hero-actions {
+    justify-content: center;
+  }
+
+  .bulletin-hero-content p {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    text-align: left;
+  }
+
+  .bulletin-akai-polaroid {
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 640px) {
+  .bulletin-hero {
+    padding: 24px 16px 38px !important;
+  }
+
+  .bulletin-hero h1 {
+    font-size: clamp(36px, 12vw, 50px) !important;
+  }
+
+  .bulletin-hero-content > div:first-child {
+    gap: 8px !important;
+  }
+
+  .bulletin-hero-content p {
+    max-width: 100% !important;
+    font-size: 15.5px !important;
+    line-height: 1.75 !important;
+  }
+
+  .bulletin-visitor-counter {
+    max-width: 100% !important;
+    transform: none !important;
+  }
+
+  .bulletin-hero-actions {
+    width: 100%;
+    gap: 10px !important;
+  }
+
+  .bulletin-hero-actions button {
+    flex: 1 1 150px;
+    min-width: 0;
+  }
+}

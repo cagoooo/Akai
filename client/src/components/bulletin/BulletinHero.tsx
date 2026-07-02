@@ -43,7 +43,7 @@ export function BulletinHero({ toolCount }: BulletinHeroProps = {}) {
       }}
     >
       {/* 左：公告標題區 */}
-      <div>
+      <div className="bulletin-hero-content">
         {/* 雙膠帶標題 */}
         <div style={{ display: 'flex', gap: 10, marginBottom: 18, flexWrap: 'wrap' }}>
           <Tape color={tokens.note.yellowBright} angle={-2} width={220}>
