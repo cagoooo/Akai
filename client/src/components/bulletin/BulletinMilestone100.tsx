@@ -1,10 +1,10 @@
 /**
  * BulletinMilestone100 — 破百倒數 / 達成慶祝 頂部頻帶
  *
- * 三狀態自動切換（讀 /api/site-stats.json）：
- *   1. N < 100  →「破百倒數 X 個」橘色便利貼 + 進度條 + 「許願下一個工具」CTA
- *   2. 100 ≤ N，距離 milestones.tool100 < 30 天 →「100 工具達成 🎉」金色膠帶 + 連到 /tool/100
- *   3. 距離達成 ≥ 30 天 → 不顯示（return null）
+ * 兩狀態自動切換（讀 /api/site-stats.json）：
+ *   1. N < 100 →「破百倒數 X 個」橘色便利貼 + 進度條 + 「許願下一個工具」CTA
+ *   2. 100 ≤ N →「100 工具達成 🎉」金色膠帶 + 撒花 + 紀念影片 CTA，常駐顯示
+ *      （「慶祝第 N 天」小徽章只在達成後 30 天內出現，之後自動收起）
  *
  * 用法：在 BulletinHome 的 BulletinHero 上方插入 <BulletinMilestone100 />
  */
@@ -92,13 +92,11 @@ export function BulletinMilestone100({
     );
   }
 
-  // 狀態 2 / 3：已達成 — 看是否在慶祝期內
+  // 狀態 2：已達成 — 慶祝橫幅常駐（2026-07-02 拆掉 30 天落日條款，儀式感要一直在！
+  // 「慶祝第 N 天」小徽章仍只在前 CELEBRATION_DAYS 天顯示，之後自動收起）
   if (tool100At) {
     const daysSince = daysBetween(tool100At, new Date());
-    if (daysSince < CELEBRATION_DAYS) {
-      return <CelebrationBanner achievedAt={tool100At} daysSince={daysSince} />;
-    }
-    return null; // 慶祝期過了
+    return <CelebrationBanner achievedAt={tool100At} daysSince={daysSince} />;
   }
 
   // 已達 100 但沒記錄達成日（資料異常 fallback）— 顯示一次慶祝
