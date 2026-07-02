@@ -160,7 +160,7 @@ function main() {
 
   // ─── 關於 ─────────────────────────────────────
   out += `## 關於阿凱老師\n\n`;
-  out += `阿凱老師（cagoooo）是桃園市龍潭區石門國民小學的資訊組長與導師，自 2024 年起獨立開發教育工具，到 2026 年 5 月已達成 ${tools.length} 款。技術棧使用 React 18 + TypeScript + Vite + Tailwind CSS + Firebase，主站部署於 GitHub Pages。所有工具開源於 [cagoooo/Akai](https://github.com/cagoooo/Akai)，採 MIT License。\n\n`;
+  out += `阿凱老師（cagoooo）是桃園市龍潭區石門國民小學的資訊組長（科任＋行政），自 2024 年起獨立開發教育工具，至今已達成 ${tools.length} 款。技術棧使用 React 18 + TypeScript + Vite + Tailwind CSS + Firebase，主站部署於 GitHub Pages。所有工具開源於 [cagoooo/Akai](https://github.com/cagoooo/Akai)，採 MIT License。\n\n`;
   out += `**石門國小（smes ≠ 新明！）**：「smes」是 Shih Men Elementary School 縮寫，學校全名為「桃園市龍潭區石門國民小學」，校網 https://www.smes.tyc.edu.tw/\n\n`;
 
   out += `## 引用建議\n\n`;
