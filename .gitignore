@@ -56,4 +56,5 @@ _test_write
 .tmp_*
 page25_*
 *-debug.png
-*-debug.webpfirebase-debug.log
+*-debug.webp
+firebase-debug.log
