@@ -685,6 +685,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://cagoooo.github.io/Poke/</loc>
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://cagoooo.github.io/Akai/blog</loc>
     <lastmod>2026-05-20</lastmod>
     <changefreq>weekly</changefreq>
@@ -1379,6 +1385,12 @@
     <lastmod>2026-06-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cagoooo.github.io/Akai/blog/tool-115</loc>
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
   </url>
   <url>
     <loc>https://cagoooo.github.io/Akai/akai-talk-2026/</loc>

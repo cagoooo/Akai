@@ -1,6 +1,6 @@
 # 阿凱老師 · 科技教育創新專區
 
-> 一位桃園市龍潭區石門國民小學的國小老師（阿凱老師），兩年內獨立完成 114 款免費教育工具與 115 篇手寫深度長文。所有工具與內容皆為 MIT 開源、永久免費、無需註冊。專案聚焦於用 AI / 科技解決真實國小教學現場的痛點：班級互動、行政自動化、語文閱讀、教育遊戲、親師溝通、互動體驗。
+> 一位桃園市龍潭區石門國民小學的國小老師（阿凱老師），兩年內獨立完成 115 款免費教育工具與 115 篇手寫深度長文。所有工具與內容皆為 MIT 開源、永久免費、無需註冊。專案聚焦於用 AI / 科技解決真實國小教學現場的痛點：班級互動、行政自動化、語文閱讀、教育遊戲、親師溝通、互動體驗。
 
 **站點**：https://cagoooo.github.io/Akai/  
 **作者**：阿凱老師（GitHub: cagoooo）  
@@ -11,7 +11,7 @@
 
 ## 主要頁面
 
-- [首頁工具集](https://cagoooo.github.io/Akai/): 互動公佈欄首頁，呈現全部 114 款工具的拍立得拼貼 + 分類篩選 + 許願池
+- [首頁工具集](https://cagoooo.github.io/Akai/): 互動公佈欄首頁，呈現全部 115 款工具的拍立得拼貼 + 分類篩選 + 許願池
 - [部落格](https://cagoooo.github.io/Akai/blog): 115 篇阿凱老師手寫的教學情境深度長文，每篇講一個熱門工具如何解決真實教學現場的問題
 - [100 工具達成宣傳影片](https://cagoooo.github.io/Akai/share/100.html): 5:32 宣傳影片（含旁白與同步字幕）
 - [許願池](https://cagoooo.github.io/Akai/wish/): 蒐集老師、家長、學生對下一個工具的需求
@@ -25,7 +25,7 @@
 
 完整版約 500-800 KB，適合 OpenAI custom GPT / Claude Project / Perplexity Spaces 等需要深度 ingest 的場景。
 
-## 工具集（114 款，按分類）
+## 工具集（115 款，按分類）
 
 每款工具都是阿凱老師親手打造的單一用途網頁，可在瀏覽器直接開啟，無需安裝。
 
@@ -94,7 +94,7 @@
 - [#103 AI Agent 的 Web 技能雙引擎 — Playwright × Webwright 一頁讀懂](https://cagoooo.github.io/PlayRight/): 一頁讀懂 AI Agent 怎麼「看得懂、做得到、做完有回報」地操作網頁！Playwright 負責動手執行、Webwright 負責動腦規劃，兩大引擎合起來才是完整的 Web Agent。含自動填 Google 表單、電子公文自動歸檔等真實自動化情境，阿凱老師用日記體一路帶你從零看懂這兩個關鍵字，松鼠吉祥物 + 大量 emoji 降低技術門檻。
 - [#105 臺灣主權 AI 訓練語料庫 × 石門國小 — 把國家級本土語料變成校園教材](https://cagoooo.github.io/taic-edu/): 國家耗十年、集 265 個機關蒐集的 6 億 tokens 本土語料，從「只拿來餵 AI」變成「師生家長共用的教材庫」。九大教育主題、4,554 筆語料一鍵探索，每筆都標課綱領域與授權來源；還能用自備的免費 Gemini 金鑰，即時生成台語／客語／國語學習單與繪本腳本。數位發展部 × 桃園市龍潭區石門國民小學阿凱老師打造的「鱻本土 AI 共學站」。
 
-### 趣味遊戲（20 款）
+### 趣味遊戲（21 款）
 
 - [#6 蜂類配對消消樂](https://cagoooo.github.io/bee/): 阿凱老師打造的記憶配對消消樂遊戲，三種難度搭配注音、唐詩、英單、水果等六大主題包，老師改 JSON 就能新增主題，純靜態 PWA 離線可玩。
 - [#9 超級瑪莉歐冒險](https://cagoooo.github.io/mario-game/): 阿凱老師打造的瀏覽器版超級瑪莉歐冒險遊戲，支援鍵盤＋觸控雙模式操作，內建關卡選擇、計分、金幣與成就系統，純前端開瀏覽器就能玩。
@@ -116,6 +116,7 @@
 - [#101 3D 迷宮冒險遊戲 — 第一人稱光球收集 × 全班排行榜](https://cagoooo.github.io/maze-3d-game/): 第一人稱 3D 迷宮探索遊戲：收集藍色光球、躲避紅色巡守者、與時間賽跑。React + Three.js 純瀏覽器跑 3D，桌機鍵盤滑鼠 + iPad 觸控全支援，內建全班 / 全校排行榜，下課十分鐘剛好打一輪。
 - [#102 外星人入侵·保衛石門 — 復古太空射擊 × 全校排行榜](https://cagoooo.github.io/alien-invasion/): 駕駛地球最後一艘戰機，擊退一波波外星艦隊！復古像素風太空射擊：三種難度、王關 Boss 母艦、火力強化與護盾道具、連擊加成。石門校徽開場 +「保衛石門」主題，可加入主畫面當 App、離線可玩，內建全校跨裝置排行榜。桌機鍵盤 + 手機觸控全支援，下課十分鐘剛好打一輪。
 - [#112 皮卡丘天空大冒險](https://cagoooo.github.io/pikachu-flappy-bird/): 精緻好玩的皮卡丘天空冒險遊戲！結合 Flappy Bird 經典玩法，在躲避障礙的過程中鍛鍊專注力與手眼協調，非常適合用於課堂破冰、班級競賽或下課休閒。
+- [#115 寶可夢數學道館](https://cagoooo.github.io/Poke/): 把四則運算練習變成道館挑戰，學生在闖關、蒐集徽章與升級回饋中，一題一題練出數學手感。
 
 ### 語言學習（13 款）
 
@@ -286,7 +287,7 @@
 
 ## 關於阿凱老師
 
-阿凱老師（cagoooo）是桃園市龍潭區石門國民小學的資訊組長（科任＋行政），自 2024 年起獨立開發教育工具，至今已達成 114 款。技術棧使用 React 18 + TypeScript + Vite + Tailwind CSS + Firebase，主站部署於 GitHub Pages。所有工具開源於 [cagoooo/Akai](https://github.com/cagoooo/Akai)，採 MIT License。
+阿凱老師（cagoooo）是桃園市龍潭區石門國民小學的資訊組長（科任＋行政），自 2024 年起獨立開發教育工具，至今已達成 115 款。技術棧使用 React 18 + TypeScript + Vite + Tailwind CSS + Firebase，主站部署於 GitHub Pages。所有工具開源於 [cagoooo/Akai](https://github.com/cagoooo/Akai)，採 MIT License。
 
 **石門國小（smes ≠ 新明！）**：「smes」是 Shih Men Elementary School 縮寫，學校全名為「桃園市龍潭區石門國民小學」，校網 https://www.smes.tyc.edu.tw/
 

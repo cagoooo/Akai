@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 114+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 115+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Sun, 28 Jun 2026 13:36:55 GMT</pubDate>
-    <lastBuildDate>Thu, 02 Jul 2026 01:13:16 GMT</lastBuildDate>
+    <pubDate>Thu, 02 Jul 2026 00:00:00 GMT</pubDate>
+    <lastBuildDate>Thu, 02 Jul 2026 01:33:20 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,18 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：寶可夢數學道館</title>
+      <link>https://cagoooo.github.io/Akai/tool/115</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/115</guid>
+      <pubDate>Thu, 02 Jul 2026 00:00:00 GMT</pubDate>
+      <description>把四則運算練習變成道館挑戰，學生在闖關、蒐集徽章與升級回饋中，一題一題練出數學手感。</description>
+      <category>寶可夢</category>
+      <category>數學道館</category>
+      <category>四則運算</category>
+      <category>數學遊戲</category>
+      <category>闖關學習</category>
+    </item>
     <item>
       <title>🆕 新工具：學生名單校對平台</title>
       <link>https://cagoooo.github.io/Akai/tool/114</link>
@@ -323,15 +335,6 @@
       <category>AI 線稿生成</category>
       <category>黑白線稿</category>
       <category>著色頁</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#99 考試卷生圖 Studio：四欄位 20 秒生兩張黑白線稿，列印不吃墨水的備課救星</title>
-      <link>https://cagoooo.github.io/Akai/blog/exam-illustration-99-ai-line-art-studio</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/exam-illustration-99-ai-line-art-studio</guid>
-      <pubDate>Sun, 24 May 2026 00:00:00 GMT</pubDate>
-      <description>#99 考試卷生圖 Studio 是阿凱寫給自己備課用的 AI 插圖工具：填四個欄位（標題、對話、角色、場景），按一鍵 20 秒生兩張 1024×1024 純黑白線稿 PNG，校園黑白印表機友善、可當著色頁、中文精準渲染，每天免費 5 次。</description>
-      <category>blog</category>
-      <category>教學情境</category>
     </item>
   </channel>
 </rss>

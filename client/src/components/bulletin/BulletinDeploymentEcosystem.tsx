@@ -28,7 +28,7 @@ const PLATFORMS: Platform[] = [
   {
     emoji: '🐙',
     name: 'GitHub Pages',
-    count: 74,
+    count: 75,
     desc: '主力作品集，cagoooo/* 80+ repo',
     color: tokens.note.blue,
     pinColor: '#3b82f6',
