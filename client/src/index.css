@@ -409,12 +409,17 @@
   }
 
   .bulletin-hero-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
     width: 100%;
     gap: 10px !important;
   }
 
   .bulletin-hero-actions button {
-    flex: 1 1 150px;
+    width: 100%;
     min-width: 0;
+    padding: 12px 10px !important;
+    font-size: 13.5px !important;
+    min-height: 48px;
   }
 }
