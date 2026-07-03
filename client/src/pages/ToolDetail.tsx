@@ -418,8 +418,15 @@ export function ToolDetail() {
             ]);
             window.location.href = tool.url;
         } else if (!newWin) {
-            // 彈窗被擋下的保底：改用同視窗導頁
-            window.location.href = tool.url;
+            // 彈窗被瀏覽器擋下：不導頁離開原頁面，改用提示 + 手動連結
+            toast({
+                title: '瀏覽器擋下了新分頁',
+                description: (
+                    <a href={tool.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline' }}>
+                        點此開啟「{tool.title}」
+                    </a>
+                ),
+            });
         } else {
             toast({
                 title: '已開啟工具',
