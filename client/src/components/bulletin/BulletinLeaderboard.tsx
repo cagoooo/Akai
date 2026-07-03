@@ -35,6 +35,13 @@ function getFireLevel(delta: number) {
   return null;
 }
 
+const PHOTOPOET_PRO_URL = 'https://cagoooo.github.io/PhotoPoet/';
+
+function getLaunchUrl(tool: EducationalTool) {
+  if (tool.id === 14) return PHOTOPOET_PRO_URL;
+  return normalizeUrl(tool.url);
+}
+
 /**
  * 🏆 本週 TOP 5 便利貼排行榜
  * - 從傳入 tools（已合併 Firestore 即時點擊數）取累計前 5 名
@@ -63,7 +70,7 @@ export function BulletinLeaderboard({ tools, deltas7d, hasDeltaHistory }: Props)
     e.preventDefault();
     e.stopPropagation();
     // 先開新分頁（避免部分瀏覽器因 await 失去使用者手勢而擋掉彈窗）
-    const openUrl = normalizeUrl(tool.url);
+    const openUrl = getLaunchUrl(tool);
     const newWin = window.open(openUrl, '_blank', 'noopener,noreferrer');
     if (newWin) newWin.opener = null;
     // 背景追蹤
@@ -129,7 +136,7 @@ export function BulletinLeaderboard({ tools, deltas7d, hasDeltaHistory }: Props)
             return (
               <a
                 key={tool.id}
-                href={normalizeUrl(tool.url)}
+                href={getLaunchUrl(tool)}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => handleRankingClick(e, tool)}
