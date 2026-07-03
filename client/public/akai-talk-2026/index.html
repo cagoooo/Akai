@@ -357,6 +357,79 @@
   .s-title .video-cta:hover .vc-main,
   .s-title .video-cta:hover .vc-sub { color: var(--navy); }
 
+  /* 調整 cta 組合排版，讓影片導讀和專區入口並排 */
+  .s-title .cta-group {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+
+  .s-title .portal-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 28px 10px 14px;
+    border: 2px solid var(--orange);
+    border-radius: 999px;
+    text-decoration: none;
+    background: rgba(201,151,68,0.12);
+    transition: background .25s ease, transform .25s ease, box-shadow .25s ease;
+  }
+
+  .s-title .portal-cta:hover {
+    background: var(--orange);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  }
+
+  .s-title .portal-cta .pc-qr {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: #ffffff;
+    padding: 4px;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .s-title .portal-cta .pc-qr img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 4px;
+  }
+
+  .s-title .portal-cta .pc-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.28;
+  }
+
+  .s-title .portal-cta .pc-main {
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: 27px;
+    color: var(--cream);
+    letter-spacing: 0.01em;
+  }
+
+  .s-title .portal-cta .pc-sub {
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: 18px;
+    color: rgba(250,247,240,0.55);
+    letter-spacing: 0.02em;
+  }
+
+  .s-title .portal-cta:hover .pc-main,
+  .s-title .portal-cta:hover .pc-sub {
+    color: var(--navy);
+  }
+
   /* === SLIDE 02: Hello / Intro === */
   .s-hello {
     background: var(--cream);
@@ -1805,13 +1878,27 @@
         <span style="font-size:24px;">桃園市石門國民小學</span><br/>
         <span class="italic-en" style="font-size:24px;color:rgba(250,247,240,0.6);">cagooo@gmail.com</span>
       </div>
-      <a class="video-cta" href="https://youtu.be/DvMSGrO98CI" target="_blank" rel="noopener" title="觀看阿凱老師親自口說的影片導讀">
-        <span class="vc-play">▶</span>
-        <span class="vc-text">
-          <span class="vc-main">觀看影片導讀</span>
-          <span class="vc-sub">阿凱老師親自口說 · 全片 14 分鐘</span>
-        </span>
-      </a>
+      <div class="cta-group">
+        <a class="video-cta" href="https://youtu.be/DvMSGrO98CI" target="_blank" rel="noopener" title="觀看阿凱老師親自口說的影片導讀">
+          <span class="vc-play">▶</span>
+          <span class="vc-text">
+            <span class="vc-main">觀看影片導讀</span>
+            <span class="vc-sub">阿凱老師親自口說 · 全片 14 分鐘</span>
+          </span>
+        </a>
+        <a class="portal-cta" href="https://cagoooo.github.io/Akai/" target="_blank" rel="noopener" title="前往阿凱老師的教育科技創新專區">
+          <div class="pc-qr">
+            <picture>
+              <source srcset="assets/qr-akai.png" type="image/png">
+              <img src="assets/qr-akai.png" alt="教育科技創新專區 QR Code" />
+            </picture>
+          </div>
+          <div class="pc-text">
+            <span class="pc-main">教育科技創新專區</span>
+            <span class="pc-sub">cagoooo.github.io/Akai/</span>
+          </div>
+        </a>
+      </div>
       <div class="logo-mark">
         <picture><source srcset="assets/logo.webp" type="image/webp"><img src="assets/logo.png" alt="石門國小校徽" /></picture>
       </div>
