@@ -989,6 +989,67 @@
     font-size: 88px; color: var(--red); line-height: 1;
   }
   .s-cats .total .unit { font-family: var(--sans); font-size: 26px; color: var(--muted); font-weight: 400; margin-left: 12px; }
+  .s-cats .head-right {
+    display: flex;
+    align-items: flex-end;
+    gap: 28px;
+  }
+  .s-cats .mini-tool {
+    display: grid;
+    grid-template-columns: 98px 1fr;
+    gap: 16px;
+    align-items: center;
+    width: 480px;
+    padding: 14px 16px;
+    border: 1px solid var(--rule-strong);
+    background: var(--cream);
+    color: inherit;
+    text-decoration: none;
+    box-shadow: 0 10px 26px rgba(20,53,38,0.08);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .s-cats .mini-tool:hover,
+  .s-cats .mini-tool:focus {
+    transform: translateY(-2px);
+    border-color: var(--navy);
+    box-shadow: 0 16px 36px rgba(20,53,38,0.14);
+    outline: none;
+  }
+  .s-cats .mini-tool .mini-qr {
+    width: 98px;
+    height: 98px;
+    background: #fff;
+    padding: 6px;
+    border: 1px solid var(--rule);
+    box-sizing: border-box;
+  }
+  .s-cats .mini-tool .mini-qr img {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .s-cats .mini-tool .mini-label {
+    font-family: var(--mono);
+    font-size: 16px;
+    color: var(--orange);
+    letter-spacing: 0.14em;
+  }
+  .s-cats .mini-tool .mini-title {
+    font-family: var(--serif);
+    font-size: 28px;
+    line-height: 1.12;
+    color: var(--navy);
+    font-weight: 700;
+    margin-top: 4px;
+    white-space: nowrap;
+  }
+  .s-cats .mini-tool .mini-url {
+    font-family: var(--mono);
+    font-size: 15px;
+    color: var(--muted);
+    word-break: break-all;
+    margin-top: 4px;
+  }
   .s-cats .grid {
     flex: 1;
     display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: 1fr 1fr; gap: 24px;
@@ -1036,7 +1097,6 @@
     font-family: var(--mono); font-size: 24px; letter-spacing: 0.18em;
     color: var(--orange); text-transform: uppercase; margin-top: auto; padding-top: 10px;
   }
-
   /* AI flagship tools */
   .s-ai .body {
     position: absolute; inset: 0;
@@ -2496,7 +2556,19 @@
           <div class="eyebrow">90+ 款工具，依教學用途分為七大類別</div>
           <h2>涵蓋一位國小老師<br/>一天從早到晚的所有場景。</h2>
         </div>
-        <div class="total"><span data-counter="7">7</span><span class="unit">大類</span></div>
+        <div class="head-right">
+          <a class="mini-tool" href="https://cagoooo.github.io/Akai/tool/10" target="_blank" rel="noopener" title="前往 #10 班級小管家工具卡片">
+            <span class="mini-qr">
+              <img src="assets/qr-class-helper.png" alt="班級小管家工具卡片 QR Code" />
+            </span>
+            <span>
+              <span class="mini-label">TOOL 10 · 立即試用</span>
+              <span class="mini-title">班級小管家</span>
+              <span class="mini-url">cagoooo.github.io/Akai/tool/10</span>
+            </span>
+          </a>
+          <div class="total"><span data-counter="7">7</span><span class="unit">大類</span></div>
+        </div>
       </div>
       <div class="grid">
         <div class="cat">
