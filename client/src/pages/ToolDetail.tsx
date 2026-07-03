@@ -367,8 +367,15 @@ export function ToolDetail() {
     const gradient = categoryGradients[tool.category as ToolCategory];
     const blogPost = getPrimaryBlogPostForTool(tool.id);
 
-    // 處理「立即使用」按鈕 - 採用 <a> 模擬點擊以確保行為穩定
+    // 處理「立即使用」按鈕
     const handleUseTool = async () => {
+        // 同步先開新分頁（在任何 await 之前），避免行動瀏覽器因失去「使用者手勢」而靜默擋下彈窗
+        let newWin: Window | null = null;
+        if (!inAppBrowser) {
+            newWin = window.open(tool.url, '_blank', 'noopener,noreferrer');
+            if (newWin) newWin.opener = null;
+        }
+
         // 非同步追蹤使用記錄
         queryClient.setQueryData<ToolStats | null>(['toolStats', tool.id], (prev) => ({
             toolId: tool.id,
@@ -410,26 +417,14 @@ export function ToolDetail() {
                 new Promise((resolve) => window.setTimeout(resolve, 1200)),
             ]);
             window.location.href = tool.url;
+        } else if (!newWin) {
+            // 彈窗被擋下的保底：改用同視窗導頁
+            window.location.href = tool.url;
         } else {
-            try {
-                // 使用 <a> 標籤模擬點擊是開新分頁最穩定的做法，能有效避免彈窗阻擋誤判
-                const link = document.createElement('a');
-                link.href = tool.url;
-                link.target = '_blank';
-                link.rel = 'noopener noreferrer';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-
-                toast({
-                    title: '已開啟工具',
-                    description: tool.title,
-                });
-            } catch (error) {
-                console.error('開啟工具失敗:', error);
-                // 如果模擬點擊失敗，回退到原視窗跳轉
-                window.location.href = tool.url;
-            }
+            toast({
+                title: '已開啟工具',
+                description: tool.title,
+            });
         }
     };
 

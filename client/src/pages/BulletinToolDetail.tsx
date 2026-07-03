@@ -259,6 +259,16 @@ export function BulletinToolDetail() {
 
   // ── 行為函式 ─────────────────────────────────────
   const handleUseTool = async () => {
+    const openUrl = normalizeUrl(tool.url);
+
+    // 同步先開新分頁（在任何 await 之前），避免行動瀏覽器因失去「使用者手勢」而靜默擋下彈窗。
+    // 詳見 BulletinLeaderboard.handleRankingClick 的同一套修法。
+    let newWin: Window | null = null;
+    if (!inAppBrowser) {
+      newWin = window.open(openUrl, '_blank', 'noopener,noreferrer');
+      if (newWin) newWin.opener = null;
+    }
+
     addToRecent(tool.id);
     trackAchievement(tool.id, tool.category);
     setStampTrigger((t) => t + 1);
@@ -275,7 +285,6 @@ export function BulletinToolDetail() {
       .then(() => queryClient.invalidateQueries({ queryKey: ['toolStats', tool.id] }))
       .catch((err) => console.error('追蹤工具使用失敗:', err));
 
-    const openUrl = normalizeUrl(tool.url);
     const notifyPromise = notifyEngagementAfterHomeEntry({
       type: 'tool_click',
       toolId: tool.id,
@@ -292,20 +301,14 @@ export function BulletinToolDetail() {
       console.error('工具使用通知寫入失敗:', err);
     });
 
-    setTimeout(() => {
-      if (inAppBrowser) {
-        window.location.href = openUrl;
-      } else {
-        const link = document.createElement('a');
-        link.href = openUrl;
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        toast({ title: '已開啟工具', description: tool.title });
-      }
-    }, 400);
+    if (inAppBrowser) {
+      window.location.href = openUrl;
+    } else if (!newWin) {
+      // 彈窗被擋下的保底：改用同視窗導頁
+      window.location.href = openUrl;
+    } else {
+      toast({ title: '已開啟工具', description: tool.title });
+    }
   };
 
   const handleReadIntro = async () => {
