@@ -216,6 +216,34 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0 }: Props) {
             </div>
           )}
 
+          {/* ✨ PRO 升級版徽章 — 標示此工具是另一款舊版工具的進階版 */}
+          {tool.upgradeFromId != null && (
+            <div
+              style={{
+                position: 'absolute',
+                top: isNew ? 34 : 6,
+                right: 6,
+                zIndex: 4,
+                background: 'linear-gradient(135deg, #7c3aed, #a855f7)',
+                color: '#fff',
+                fontSize: 10,
+                fontWeight: 900,
+                padding: '3px 8px',
+                borderRadius: 999,
+                border: '1.5px solid #1a1a1a',
+                boxShadow: '2px 2px 0 rgba(0,0,0,.28)',
+                fontFamily: tokens.font.tc,
+                letterSpacing: '0.05em',
+                transform: 'rotate(-5deg)',
+                pointerEvents: 'none',
+              }}
+              aria-label="Pro 升級版"
+              title="這是升級版，功能比舊版更完整"
+            >
+              ✨ PRO 升級版
+            </div>
+          )}
+
           {/* 右下角閃星星（預覽圖上也要可見，加陰影） */}
           <div
             style={{
@@ -286,6 +314,30 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0 }: Props) {
           >
             <OptimizedIcon name="BookOpen" size={14} />
             讀介紹
+          </Link>
+        )}
+        {tool.upgradeToId != null && (
+          <Link
+            href={`/tool/${tool.upgradeToId}`}
+            onClick={(e) => e.stopPropagation()}
+            aria-label={`前往 ${tool.title} 的 Pro 升級版`}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 5,
+              marginTop: 8,
+              padding: '5px 8px',
+              borderRadius: 8,
+              border: '1px solid #6d28d9',
+              background: '#f3ebff',
+              color: '#5b21b6',
+              fontSize: 12,
+              fontWeight: 800,
+              textDecoration: 'none',
+              boxShadow: '1px 1px 0 rgba(26,26,26,.18)',
+            }}
+          >
+            🚀 已推出 Pro 版，功能更完整 →
           </Link>
         )}
       </div>

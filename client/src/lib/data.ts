@@ -24,6 +24,16 @@ export interface EducationalTool {
    * 既有 #1-#97 沒填這個欄位（無法回填真實日期），預設視為「非新工具」。
    */
   addedAt?: string;
+  /**
+   * 若此工具已有更完整的進階版本，填該工具 id。
+   * 用於卡片 / 詳情頁顯示「已推出 Pro 版」升級提示，連到該工具。
+   */
+  upgradeToId?: number;
+  /**
+   * 若此工具本身就是某個舊版工具的進階（Pro）版，填舊版工具 id。
+   * 用於卡片 / 詳情頁顯示「PRO 升級版」徽章。
+   */
+  upgradeFromId?: number;
 }
 
 export interface TeacherMood {

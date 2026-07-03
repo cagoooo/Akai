@@ -696,6 +696,29 @@ export function BulletinToolDetail() {
               {tool.title}
             </h1>
 
+            {tool.upgradeFromId != null && (
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  marginTop: 10,
+                  padding: '5px 12px',
+                  background: 'linear-gradient(135deg, #7c3aed, #a855f7)',
+                  color: '#fff',
+                  border: '2px solid #1a1a1a',
+                  borderRadius: 999,
+                  fontSize: 12,
+                  fontWeight: 900,
+                  fontFamily: tokens.font.tc,
+                  boxShadow: '2px 2px 0 rgba(0,0,0,.3)',
+                  transform: 'rotate(-1deg)',
+                }}
+              >
+                ✨ PRO 升級版
+              </div>
+            )}
+
             {/* 點擊統計徽章 */}
             <div
               style={{
@@ -754,6 +777,30 @@ export function BulletinToolDetail() {
               >
                 <OptimizedIcon name="BookOpen" size={16} />
                 讀介紹
+              </Link>
+            )}
+            {tool.upgradeToId != null && (
+              <Link
+                href={`/tool/${tool.upgradeToId}`}
+                aria-label={`前往 ${tool.title} 的 Pro 升級版`}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '8px 16px',
+                  background: '#f3ebff',
+                  color: '#5b21b6',
+                  border: '2px solid #1a1a1a',
+                  borderRadius: 999,
+                  fontSize: 13,
+                  fontWeight: 900,
+                  fontFamily: tokens.font.tc,
+                  textDecoration: 'none',
+                  boxShadow: '2px 2px 0 rgba(0,0,0,.3)',
+                  transform: 'rotate(-1deg)',
+                }}
+              >
+                🚀 已推出 Pro 版，功能更完整 →
               </Link>
             )}
             </div>

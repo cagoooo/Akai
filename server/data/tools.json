@@ -226,6 +226,7 @@
     "icon": "Image",
     "category": "utilities",
     "previewUrl": "/previews/tool_14.webp",
+    "upgradeToId": 91,
     "tags": [
       "長輩圖",
       "早安",
@@ -1654,6 +1655,7 @@
   },
   {
     "id": 91,
+    "upgradeFromId": 14,
     "title": "✨ 點亮詩意 Pro ✨早安長輩圖",
     "description": "阿凱老師打造的 AI 詩詞照片生成器，上傳一張照片就能 10 秒產出一首契合畫面意境的繁體中文詩詞與「早安長輩圖」，銀髮族、語文教師、創意寫作者都能輕鬆把日常影像變成有溫度的圖文作品。",
     "detailedDescription": "「PhotoPoet Pro · 點亮詩意（早安長輩圖產生器）」是阿凱老師「**同源雙部署策略**」第 5 案例 — 跟 [#14 poet.smes Firebase Hosting 版](/tool/14) 是**同個 cagoooo/PhotoPoet repo 的姊妹進階版**，**SSRF 防護 + Cloudflare Turnstile + Gemini 2.0 Flash 繁中詩生成**，**個人作品也做企業級安全**。\n\n## 🎯 核心特色\n\n- 📸 **上傳照片 → Gemini 2.0 Flash 生成繁體中文詩 → 一鍵下載長輩圖**\n- 🔒 **三層安全防護（工程紮實度爆表）**：\n  - **1️⃣ Gemini API Key 嚴格限制** — 受限只能呼叫 `generativelanguage.googleapis.com`，存於 **Firebase Secret Manager**，即使洩漏也只能呼叫 Gemini\n  - **2️⃣ SSRF 防護（神細節）** — `proxyImage` Cloud Function 配完整防護：🚫 **私有 IP 黑名單**（防打內網）+ 🔁 **redirect 重檢**（防 301 跳內網）+ ✅ **Content-Type 白名單**（只接圖片 MIME）+ 📦 **10MB 上限**（防 DoS）+ ⏱️ **8 秒 timeout**（防 hang）— SSRF 是後端打外部 URL 最大的資安風險，**這是企業級工程紀律**\n  - **3️⃣ Cloudflare Turnstile 人機驗證** — `generatePoem` 受 Turnstile 保護，**無 token 直接 403**\n- 📚 **5 個 markdown 完整工程文件** — `docs/USAGE.md` / `OPERATIONS.md` / `ROADMAP.md` / `MIGRATION_AND_OPTIMIZATION.md` / `blueprint.md`\n- 🚀 **CI/CD 完整流程** — push 到 `main` → GitHub Actions 自動 deploy 到 Firebase\n\n## 💡 設計理念\n\n**Next.js 15 (static export) + Firebase Hosting + Cloud Functions (gen2, asia-east1) + Genkit AI 編排 + Cloudflare Turnstile + Gemini 2.0 Flash**。線上版 `photopoet-ha364.web.app`（Firebase Hosting 預設域名，第三個部署位置）。**「個人作品也要做企業級安全」** — 對工程師：SSRF 防護完整程式碼可學 / API Key 限制範圍最佳實踐 / Turnstile 整合案例 / Cloud Functions gen2 + Genkit 架構；對教育圈：「老師做的工具也可以這麼專業」+ 個資隱私意識（學生長輩照片不會被亂打 API）+ 不會被當免費 API 消耗點。\n\n## 🎒 適合情境\n\n阿凱**同源雙部署 5 案例**：\n- PIRLS：[#4 pirlss.smes](/tool/4) / [#87 cagoooo/pirls-questioncraft](/tool/87)\n- Aura 5W1H：[#13 5w1h.smes](/tool/13) / [#92 cagoooo/Aura](/tool/92)\n- 領域共備 GO：[#15 report.smes](/tool/15) / [#84 domain-meeting-go](/tool/84)\n- 詩意長輩圖：[#14 poet.smes](/tool/14) / **#91 PhotoPoet Pro（本工具）**\n\n跟 #14 差別：#91 Pro 是「**企業級工程紀律的 #14**」— 同款 use case 但安全防護升 5 個檔次，**大量學生上傳照片時 Turnstile 擋 bot 不會把 quota 耗光**。適合國中小綜合活動 / 道德教育老師（孝親月）、想看「SSRF 防護完整程式碼」的後端工程師、重視「個人作品工程紀律」的學習者。MIT 授權，cagoooo/PhotoPoet 開源。",
