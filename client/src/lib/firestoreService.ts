@@ -96,39 +96,24 @@ export async function incrementVisitorCount(): Promise<VisitorStats> {
     try {
         const today = new Date().toISOString().split('T')[0];
         const docRef = doc(db as Firestore, VISITOR_STATS_COLLECTION, VISITOR_STATS_DOC);
-        const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) {
-            const data = docSnap.data() as VisitorStats;
-            const dailyVisits = { ...data.dailyVisits };
-            dailyVisits[today] = (dailyVisits[today] || 0) + 1;
+        // 單次原子 merge 寫入：不先讀、不整份覆蓋。
+        // 2026-07-04 事故：舊寫法「getDoc → 不存在就 setDoc 重建」在 getDoc
+        // 誤判不存在時會把 4592 累計整份覆蓋成 1；dailyVisits 全 map
+        // read-modify-write 也會在高併發下互吃。increment + 巢狀 merge
+        // 兩個問題一次解決，文件不存在時 merge 也會自動建立。
+        await setDoc(docRef, {
+            totalVisits: increment(1),
+            dailyVisits: { [today]: increment(1) },
+            lastVisitAt: serverTimestamp()
+        }, { merge: true });
 
-            await updateDoc(docRef, {
-                totalVisits: increment(1),
-                dailyVisits: dailyVisits,
-                lastVisitAt: serverTimestamp()
-            });
-
-            return {
-                totalVisits: data.totalVisits + 1,
-                dailyVisits,
-                lastVisitAt: Timestamp.now()
-            };
-        } else {
-            // 建立新記錄
-            const initialStats: VisitorStats = {
-                totalVisits: 1,
-                dailyVisits: { [today]: 1 },
-                lastVisitAt: Timestamp.now()
-            };
-
-            await setDoc(docRef, {
-                ...initialStats,
-                lastVisitAt: serverTimestamp()
-            });
-
-            return initialStats;
-        }
+        // 回傳樂觀值（呼叫端顯示一律走 onSnapshot，此值僅供 fallback）
+        return {
+            totalVisits: parseInt(localStorage.getItem('totalVisits') || '0', 10) + 1,
+            dailyVisits: {},
+            lastVisitAt: Timestamp.now()
+        };
     } catch (error) {
         console.error('增加訪客計數失敗:', error);
         // 使用本地備份

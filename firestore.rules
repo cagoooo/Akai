@@ -3,9 +3,16 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     // 訪客統計 - 所有人可讀，僅認證用戶可寫
+    // 🛡️ 2026-07-04 事故防線：totalVisits 只准變大不准變小。
+    //   外面還在跑的舊版 PWA bundle 若再走「誤判不存在 → setDoc 重建」
+    //   把累計覆蓋成 1，會直接被這條擋下（4592 → 92 歸零事故不再重演）。
     match /visitorStats/{docId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null
+        && request.resource.data.totalVisits is int
+        && request.resource.data.totalVisits >= resource.data.totalVisits;
+      allow delete: if false;
     }
 
     // 🆕 v3.6.67: 2026 AIFED 演講「現場提問」收件箱
