@@ -154,13 +154,13 @@
     .overlay {
       position: fixed;
       left: 50%;
-      bottom: 22px;
-      transform: translate(-50%, 6px) scale(0.92);
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 4px);
+      transform: translate(-50%, 4px) scale(0.94);
       filter: blur(6px);
       display: flex;
       align-items: center;
-      gap: 4px;
-      padding: 4px;
+      gap: 3px;
+      padding: 3px;
       background: #000;
       color: #fff;
       border-radius: 999px;
@@ -194,8 +194,8 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      height: 28px;
-      min-width: 28px;
+      height: 26px;
+      min-width: 26px;
       border-radius: 999px;
       color: rgba(255,255,255,0.72);
       transition: background 140ms ease, color 140ms ease;
