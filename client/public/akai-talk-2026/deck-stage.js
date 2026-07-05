@@ -229,6 +229,20 @@
       background: rgba(255,255,255,0.12);
       border-radius: 4px;
     }
+    .btn.rail-toggle {
+      color: rgba(255,255,255,0.78);
+    }
+    .btn.rail-toggle[aria-pressed="false"] {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+    :host([no-rail]) .btn.rail-toggle,
+    :host([noscale]) .btn.rail-toggle {
+      display: none;
+    }
+    @media (max-width: 640px) {
+      .btn.rail-toggle { display: none; }
+    }
 
     .count {
       font-variant-numeric: tabular-nums;
@@ -848,11 +862,22 @@
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>
         </button>
         <span class="divider"></span>
+        <button class="btn rail-toggle" type="button" aria-label="Hide slide sidebar" aria-pressed="true" title="Hide slide sidebar">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2.5" y="3" width="11" height="10" rx="1.6"></rect>
+            <path d="M6 3v10"></path>
+            <path d="M4 5.8h.4M4 8h.4M4 10.2h.4"></path>
+          </svg>
+        </button>
         <button class="btn reset" type="button" aria-label="Reset to first slide" title="Reset (R)">Reset<span class="kbd">R</span></button>
       `;
 
       overlay.querySelector('.prev').addEventListener('click', () => this._advance(-1, 'click'));
       overlay.querySelector('.next').addEventListener('click', () => this._advance(1, 'click'));
+      overlay.querySelector('.rail-toggle').addEventListener('click', () => {
+        this._setRailVisible(!this._railVisible, { animate: true, persist: true });
+        this._flashOverlay();
+      });
       overlay.querySelector('.reset').addEventListener('click', () => this._go(0, 'click'));
 
       // Thumbnail rail + context menu. Thumbnails are populated in
@@ -956,6 +981,7 @@
       this._confirm = confirm;
       this._countEl = overlay.querySelector('.current');
       this._totalEl = overlay.querySelector('.total');
+      this._railToggleBtn = overlay.querySelector('.rail-toggle');
 
       // Restore persisted rail width.
       let rw = 188;
@@ -965,6 +991,42 @@
       } catch (err) {}
       this._setRailWidth(rw);
       this._syncRailHidden();
+    }
+
+    _setRailVisible(on, { animate = true, persist = true } = {}) {
+      const next = !!on;
+      if (next === this._railVisible) {
+        this._syncRailToggle();
+        return;
+      }
+      this._railVisible = next;
+      if (persist) {
+        try { localStorage.setItem('deck-stage.railVisible', next ? '1' : '0'); } catch (e) {}
+      }
+      if (animate) {
+        this.setAttribute('data-rail-anim', '');
+        void (this._rail && this._rail.offsetHeight);
+      }
+      this._syncRailHidden();
+      this._fit();
+      this._scaleThumbs();
+      if (animate) {
+        clearTimeout(this._railAnimTimer);
+        this._railAnimTimer = setTimeout(() => this.removeAttribute('data-rail-anim'), 220);
+      }
+    }
+
+    _syncRailToggle() {
+      if (!this._railToggleBtn) return;
+      const visible = !!this._railVisible && !this._railWidthHardHidden();
+      this._railToggleBtn.setAttribute('aria-pressed', visible ? 'true' : 'false');
+      this._railToggleBtn.setAttribute('aria-label', visible ? 'Hide slide sidebar' : 'Show slide sidebar');
+      this._railToggleBtn.title = visible ? 'Hide slide sidebar' : 'Show slide sidebar';
+    }
+
+    _railWidthHardHidden() {
+      return !this._railEnabled || this.hasAttribute('no-rail') || this.hasAttribute('noscale') ||
+        this._presenting || this._previewMode || NARROW_MQ.matches;
     }
 
     _setRailWidth(px) {
@@ -1309,9 +1371,7 @@
       // rail has had layout on some load paths, and a 0 there paints the
       // slide full-width for one frame before the post-slotchange _fit()
       // corrects it.
-      if (!this._railEnabled || !this._railVisible || this.hasAttribute('no-rail')
-          || this.hasAttribute('noscale') || this._presenting || this._previewMode
-          || NARROW_MQ.matches) return 0;
+      if (!this._railVisible || this._railWidthHardHidden()) return 0;
       return this._railPx || 0;
     }
 
@@ -1389,18 +1449,7 @@
       // whether the Tweaks panel itself is open — closing the panel
       // doesn't change rail visibility. Persists alongside rail width.
       if (d && d.type === '__deck_rail_visible' && typeof d.on === 'boolean') {
-        if (d.on === this._railVisible) return;
-        this._railVisible = d.on;
-        try { localStorage.setItem('deck-stage.railVisible', d.on ? '1' : '0'); } catch (e) {}
-        // Arm the transition, commit it, then flip state — otherwise the
-        // browser coalesces both writes and nothing animates on show.
-        this.setAttribute('data-rail-anim', '');
-        void (this._rail && this._rail.offsetHeight);
-        this._syncRailHidden();
-        this._fit();
-        this._scaleThumbs();
-        clearTimeout(this._railAnimTimer);
-        this._railAnimTimer = setTimeout(() => this.removeAttribute('data-rail-anim'), 220);
+        this._setRailVisible(d.on, { animate: true, persist: true });
       }
       if (d && d.type === '__omelette_rail_enabled') this._enableRail();
     }
@@ -1420,6 +1469,7 @@
       // translateX hide leaves thumbs (tabIndex=0) in the tab order —
       // inert keeps them unfocusable while the rail is off-screen.
       this._rail.inert = hard || !this._railVisible;
+      this._syncRailToggle();
     }
 
     _onTap(e) {
