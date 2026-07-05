@@ -573,6 +573,7 @@
       this._onSlotChange = this._onSlotChange.bind(this);
       this._onMouseMove = this._onMouseMove.bind(this);
       this._onTap = this._onTap.bind(this);
+      this._onEdgeClick = this._onEdgeClick.bind(this);
       this._onMessage = this._onMessage.bind(this);
       this._onHashChange = this._onHashChange.bind(this);
       this._onTouchStart = this._onTouchStart.bind(this);
@@ -607,6 +608,7 @@
       window.addEventListener('mousemove', this._onMouseMove, { passive: true });
       window.addEventListener('message', this._onMessage);
       window.addEventListener('click', this._onDocClick, true);
+      window.addEventListener('click', this._onEdgeClick, true);
       window.addEventListener('hashchange', this._onHashChange);
       this.addEventListener('click', this._onTap);
       // 觸控手勢（手機左右滑動切換投影片）
@@ -801,6 +803,7 @@
       window.removeEventListener('mousemove', this._onMouseMove);
       window.removeEventListener('message', this._onMessage);
       window.removeEventListener('click', this._onDocClick, true);
+      window.removeEventListener('click', this._onEdgeClick, true);
       window.removeEventListener('hashchange', this._onHashChange);
       this.removeEventListener('click', this._onTap);
       this.removeEventListener('touchstart', this._onTouchStart);
@@ -1495,6 +1498,37 @@
       if (!dir) return;
       e.preventDefault();
       this._advance(dir, FINE_POINTER_MQ.matches ? 'click' : 'tap');
+    }
+
+    _onEdgeClick(e) {
+      if (e.defaultPrevented || (e.button != null && e.button !== 0)) return;
+      const path = e.composedPath ? e.composedPath() : [];
+      if (!path.includes(this)) return;
+      if (this._eventHitsChrome(path)) return;
+      if (this._eventHitsInteractive(path)) return;
+      const dir = this._edgeNavDirection(e.clientX);
+      if (!dir) return;
+      e.preventDefault();
+      e.stopPropagation();
+      this._advance(dir, 'click');
+    }
+
+    _eventHitsChrome(path) {
+      return path.some((n) =>
+        n === this._overlay ||
+        n === this._rail ||
+        n === this._resize ||
+        n === this._menu ||
+        n === this._confirm
+      );
+    }
+
+    _eventHitsInteractive(path) {
+      for (const n of path) {
+        if (n === this._stage || n === this) break;
+        if (n.matches && n.matches(INTERACTIVE_SEL)) return true;
+      }
+      return false;
     }
 
     _edgeNavDirection(clientX) {
