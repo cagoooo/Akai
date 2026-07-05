@@ -76,6 +76,9 @@
   const VALIDATE_ATTR = 'no_overflowing_text,no_overlapping_text,slide_sized_text';
   const FINE_POINTER_MQ = matchMedia('(hover: hover) and (pointer: fine)');
   const NARROW_MQ = matchMedia('(max-width: 640px)');
+  const EDGE_NAV_RATIO = 0.16;
+  const EDGE_NAV_MIN = 96;
+  const EDGE_NAV_MAX = 240;
   // Slide-authored controls that should keep a tap instead of it navigating.
   const INTERACTIVE_SEL = 'a[href], button, input, select, textarea, summary, label, video[controls], audio[controls], [role="button"], [onclick], [tabindex]:not([tabindex^="-"]), [contenteditable]:not([contenteditable="false" i])';
 
@@ -1473,8 +1476,8 @@
     }
 
     _onTap(e) {
-      // Touch-only — keyboard + the overlay toolbar cover nav on desktop.
-      if (FINE_POINTER_MQ.matches) return;
+      // Edge clicks/taps navigate; the center stays available for slide content.
+      if (e.button != null && e.button !== 0) return;
       // Only taps that land on the stage (slide content or letterbox); the
       // overlay / rail / menus are siblings with their own click handlers.
       const path = e.composedPath();
@@ -1488,10 +1491,23 @@
         if (n === this._stage) break;
         if (n.matches && n.matches(INTERACTIVE_SEL)) return;
       }
+      const dir = this._edgeNavDirection(e.clientX);
+      if (!dir) return;
       e.preventDefault();
-      const rw = this._railWidth();
-      const mid = rw + (window.innerWidth - rw) / 2;
-      this._advance(e.clientX < mid ? -1 : 1, 'tap');
+      this._advance(dir, FINE_POINTER_MQ.matches ? 'click' : 'tap');
+    }
+
+    _edgeNavDirection(clientX) {
+      const rect = this._stage ? this._stage.getBoundingClientRect() : null;
+      const left = rect ? rect.left : this._railWidth();
+      const width = rect ? rect.width : (window.innerWidth - left);
+      if (!width) return 0;
+      const edge = Math.max(EDGE_NAV_MIN, Math.min(EDGE_NAV_MAX, width * EDGE_NAV_RATIO));
+      const x = clientX - left;
+      if (x < 0 || x > width) return 0;
+      if (x <= edge) return -1;
+      if (x >= width - edge) return 1;
+      return 0;
     }
 
     _onKey(e) {
