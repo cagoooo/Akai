@@ -28,7 +28,7 @@ const PLATFORMS: Platform[] = [
   {
     emoji: '🐙',
     name: 'GitHub Pages',
-    count: 75,
+    count: 77,
     desc: '主力作品集，cagoooo/* 80+ repo',
     color: tokens.note.blue,
     pinColor: '#3b82f6',
@@ -58,7 +58,7 @@ const PLATFORMS: Platform[] = [
   {
     emoji: '🔥',
     name: 'Firebase Hosting',
-    count: 8,
+    count: 7,
     desc: '學校自訂 subdomain',
     color: tokens.note.green,
     pinColor: '#16a34a',
