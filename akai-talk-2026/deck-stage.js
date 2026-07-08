@@ -75,7 +75,10 @@
   const OVERLAY_HIDE_MS = 1800;
   const VALIDATE_ATTR = 'no_overflowing_text,no_overlapping_text,slide_sized_text';
   const FINE_POINTER_MQ = matchMedia('(hover: hover) and (pointer: fine)');
-  const NARROW_MQ = matchMedia('(max-width: 640px)');
+  const COMPACT_VIEW_MQ = matchMedia('(max-width: 640px), (hover: none) and (pointer: coarse)');
+  const EDGE_NAV_RATIO = 0.16;
+  const EDGE_NAV_MIN = 96;
+  const EDGE_NAV_MAX = 240;
   // Slide-authored controls that should keep a tap instead of it navigating.
   const INTERACTIVE_SEL = 'a[href], button, input, select, textarea, summary, label, video[controls], audio[controls], [role="button"], [onclick], [tabindex]:not([tabindex^="-"]), [contenteditable]:not([contenteditable="false" i])';
 
@@ -154,13 +157,13 @@
     .overlay {
       position: fixed;
       left: 50%;
-      bottom: 22px;
-      transform: translate(-50%, 6px) scale(0.92);
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 4px);
+      transform: translate(-50%, 4px) scale(0.94);
       filter: blur(6px);
       display: flex;
       align-items: center;
-      gap: 4px;
-      padding: 4px;
+      gap: 3px;
+      padding: 3px;
       background: #000;
       color: #fff;
       border-radius: 999px;
@@ -194,8 +197,8 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      height: 28px;
-      min-width: 28px;
+      height: 26px;
+      min-width: 26px;
       border-radius: 999px;
       color: rgba(255,255,255,0.72);
       transition: background 140ms ease, color 140ms ease;
@@ -228,6 +231,20 @@
       color: rgba(255,255,255,0.88);
       background: rgba(255,255,255,0.12);
       border-radius: 4px;
+    }
+    .btn.rail-toggle {
+      color: rgba(255,255,255,0.78);
+    }
+    .btn.rail-toggle[aria-pressed="false"] {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+    :host([no-rail]) .btn.rail-toggle,
+    :host([noscale]) .btn.rail-toggle {
+      display: none;
+    }
+    @media (max-width: 640px), (hover: none) and (pointer: coarse) {
+      .btn.rail-toggle { display: none; }
     }
 
     .count {
@@ -289,7 +306,7 @@
     :host([no-rail]) .rail,
     :host([noscale]) .rail { display: none; }
     .rail[data-presenting] { display: none; }
-    @media (max-width: 640px) {
+    @media (max-width: 640px), (hover: none) and (pointer: coarse) {
       .rail, .rail-resize { display: none; }
     }
     /* User-driven show/hide (the TweaksPanel toggle) slides instead of
@@ -556,6 +573,7 @@
       this._onSlotChange = this._onSlotChange.bind(this);
       this._onMouseMove = this._onMouseMove.bind(this);
       this._onTap = this._onTap.bind(this);
+      this._onEdgeClick = this._onEdgeClick.bind(this);
       this._onMessage = this._onMessage.bind(this);
       this._onHashChange = this._onHashChange.bind(this);
       this._onTouchStart = this._onTouchStart.bind(this);
@@ -590,6 +608,7 @@
       window.addEventListener('mousemove', this._onMouseMove, { passive: true });
       window.addEventListener('message', this._onMessage);
       window.addEventListener('click', this._onDocClick, true);
+      window.addEventListener('click', this._onEdgeClick, true);
       window.addEventListener('hashchange', this._onHashChange);
       this.addEventListener('click', this._onTap);
       // 觸控手勢（手機左右滑動切換投影片）
@@ -784,6 +803,7 @@
       window.removeEventListener('mousemove', this._onMouseMove);
       window.removeEventListener('message', this._onMessage);
       window.removeEventListener('click', this._onDocClick, true);
+      window.removeEventListener('click', this._onEdgeClick, true);
       window.removeEventListener('hashchange', this._onHashChange);
       this.removeEventListener('click', this._onTap);
       this.removeEventListener('touchstart', this._onTouchStart);
@@ -848,11 +868,22 @@
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>
         </button>
         <span class="divider"></span>
+        <button class="btn rail-toggle" type="button" aria-label="Hide slide sidebar" aria-pressed="true" title="Hide slide sidebar">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2.5" y="3" width="11" height="10" rx="1.6"></rect>
+            <path d="M6 3v10"></path>
+            <path d="M4 5.8h.4M4 8h.4M4 10.2h.4"></path>
+          </svg>
+        </button>
         <button class="btn reset" type="button" aria-label="Reset to first slide" title="Reset (R)">Reset<span class="kbd">R</span></button>
       `;
 
       overlay.querySelector('.prev').addEventListener('click', () => this._advance(-1, 'click'));
       overlay.querySelector('.next').addEventListener('click', () => this._advance(1, 'click'));
+      overlay.querySelector('.rail-toggle').addEventListener('click', () => {
+        this._setRailVisible(!this._railVisible, { animate: true, persist: true });
+        this._flashOverlay();
+      });
       overlay.querySelector('.reset').addEventListener('click', () => this._go(0, 'click'));
 
       // Thumbnail rail + context menu. Thumbnails are populated in
@@ -956,6 +987,7 @@
       this._confirm = confirm;
       this._countEl = overlay.querySelector('.current');
       this._totalEl = overlay.querySelector('.total');
+      this._railToggleBtn = overlay.querySelector('.rail-toggle');
 
       // Restore persisted rail width.
       let rw = 188;
@@ -965,6 +997,42 @@
       } catch (err) {}
       this._setRailWidth(rw);
       this._syncRailHidden();
+    }
+
+    _setRailVisible(on, { animate = true, persist = true } = {}) {
+      const next = !!on;
+      if (next === this._railVisible) {
+        this._syncRailToggle();
+        return;
+      }
+      this._railVisible = next;
+      if (persist) {
+        try { localStorage.setItem('deck-stage.railVisible', next ? '1' : '0'); } catch (e) {}
+      }
+      if (animate) {
+        this.setAttribute('data-rail-anim', '');
+        void (this._rail && this._rail.offsetHeight);
+      }
+      this._syncRailHidden();
+      this._fit();
+      this._scaleThumbs();
+      if (animate) {
+        clearTimeout(this._railAnimTimer);
+        this._railAnimTimer = setTimeout(() => this.removeAttribute('data-rail-anim'), 220);
+      }
+    }
+
+    _syncRailToggle() {
+      if (!this._railToggleBtn) return;
+      const visible = !!this._railVisible && !this._railWidthHardHidden();
+      this._railToggleBtn.setAttribute('aria-pressed', visible ? 'true' : 'false');
+      this._railToggleBtn.setAttribute('aria-label', visible ? 'Hide slide sidebar' : 'Show slide sidebar');
+      this._railToggleBtn.title = visible ? 'Hide slide sidebar' : 'Show slide sidebar';
+    }
+
+    _railWidthHardHidden() {
+      return !this._railEnabled || this.hasAttribute('no-rail') || this.hasAttribute('noscale') ||
+        this._presenting || this._previewMode || COMPACT_VIEW_MQ.matches;
     }
 
     _setRailWidth(px) {
@@ -1182,6 +1250,9 @@
           @media (max-width: 768px) {
             .akai-deck-mnav { display: block; }
           }
+          @media (max-width: 768px) and (orientation: portrait) {
+            .akai-deck-mnav { display: none; }
+          }
           /* 全螢幕簡報模式下隱藏（presenting 時 host post __omelette_presenting）*/
           .akai-deck-mnav[data-presenting] { display: none !important; }
           /* 列印時隱藏 */
@@ -1309,9 +1380,7 @@
       // rail has had layout on some load paths, and a 0 there paints the
       // slide full-width for one frame before the post-slotchange _fit()
       // corrects it.
-      if (!this._railEnabled || !this._railVisible || this.hasAttribute('no-rail')
-          || this.hasAttribute('noscale') || this._presenting || this._previewMode
-          || NARROW_MQ.matches) return 0;
+      if (!this._railVisible || this._railWidthHardHidden()) return 0;
       return this._railPx || 0;
     }
 
@@ -1389,18 +1458,7 @@
       // whether the Tweaks panel itself is open — closing the panel
       // doesn't change rail visibility. Persists alongside rail width.
       if (d && d.type === '__deck_rail_visible' && typeof d.on === 'boolean') {
-        if (d.on === this._railVisible) return;
-        this._railVisible = d.on;
-        try { localStorage.setItem('deck-stage.railVisible', d.on ? '1' : '0'); } catch (e) {}
-        // Arm the transition, commit it, then flip state — otherwise the
-        // browser coalesces both writes and nothing animates on show.
-        this.setAttribute('data-rail-anim', '');
-        void (this._rail && this._rail.offsetHeight);
-        this._syncRailHidden();
-        this._fit();
-        this._scaleThumbs();
-        clearTimeout(this._railAnimTimer);
-        this._railAnimTimer = setTimeout(() => this.removeAttribute('data-rail-anim'), 220);
+        this._setRailVisible(d.on, { animate: true, persist: true });
       }
       if (d && d.type === '__omelette_rail_enabled') this._enableRail();
     }
@@ -1420,11 +1478,12 @@
       // translateX hide leaves thumbs (tabIndex=0) in the tab order —
       // inert keeps them unfocusable while the rail is off-screen.
       this._rail.inert = hard || !this._railVisible;
+      this._syncRailToggle();
     }
 
     _onTap(e) {
-      // Touch-only — keyboard + the overlay toolbar cover nav on desktop.
-      if (FINE_POINTER_MQ.matches) return;
+      // Edge clicks/taps navigate; the center stays available for slide content.
+      if (e.button != null && e.button !== 0) return;
       // Only taps that land on the stage (slide content or letterbox); the
       // overlay / rail / menus are siblings with their own click handlers.
       const path = e.composedPath();
@@ -1438,10 +1497,54 @@
         if (n === this._stage) break;
         if (n.matches && n.matches(INTERACTIVE_SEL)) return;
       }
+      const dir = this._edgeNavDirection(e.clientX);
+      if (!dir) return;
       e.preventDefault();
-      const rw = this._railWidth();
-      const mid = rw + (window.innerWidth - rw) / 2;
-      this._advance(e.clientX < mid ? -1 : 1, 'tap');
+      this._advance(dir, FINE_POINTER_MQ.matches ? 'click' : 'tap');
+    }
+
+    _onEdgeClick(e) {
+      if (e.defaultPrevented || (e.button != null && e.button !== 0)) return;
+      const path = e.composedPath ? e.composedPath() : [];
+      if (!path.includes(this)) return;
+      if (this._eventHitsChrome(path)) return;
+      if (this._eventHitsInteractive(path)) return;
+      const dir = this._edgeNavDirection(e.clientX);
+      if (!dir) return;
+      e.preventDefault();
+      e.stopPropagation();
+      this._advance(dir, 'click');
+    }
+
+    _eventHitsChrome(path) {
+      return path.some((n) =>
+        n === this._overlay ||
+        n === this._rail ||
+        n === this._resize ||
+        n === this._menu ||
+        n === this._confirm
+      );
+    }
+
+    _eventHitsInteractive(path) {
+      for (const n of path) {
+        if (n === this._stage || n === this) break;
+        if (n.matches && n.matches(INTERACTIVE_SEL)) return true;
+      }
+      return false;
+    }
+
+    _edgeNavDirection(clientX) {
+      const rect = this._stage ? this._stage.getBoundingClientRect() : null;
+      const left = rect ? rect.left : this._railWidth();
+      const width = rect ? rect.width : (window.innerWidth - left);
+      if (!width) return 0;
+      const edge = Math.max(EDGE_NAV_MIN, Math.min(EDGE_NAV_MAX, width * EDGE_NAV_RATIO));
+      const x = clientX - left;
+      if (x < 0 || x > width) return 0;
+      if (x <= edge) return -1;
+      if (x >= width - edge) return 1;
+      return 0;
     }
 
     _onKey(e) {

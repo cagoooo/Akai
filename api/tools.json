@@ -222,10 +222,11 @@
     "id": 14,
     "title": "點亮詩意~『早安長輩圖產生器』",
     "description": "輕鬆製作溫馨的早安問候圖片",
-    "url": "https://poet.smes.tyc.edu.tw/",
+    "url": "https://cagoooo.github.io/PhotoPoet/",
     "icon": "Image",
     "category": "utilities",
     "previewUrl": "/previews/tool_14.webp",
+    "upgradeToId": 91,
     "tags": [
       "長輩圖",
       "早安",
@@ -1654,6 +1655,7 @@
   },
   {
     "id": 91,
+    "upgradeFromId": 14,
     "title": "✨ 點亮詩意 Pro ✨早安長輩圖",
     "description": "阿凱老師打造的 AI 詩詞照片生成器，上傳一張照片就能 10 秒產出一首契合畫面意境的繁體中文詩詞與「早安長輩圖」，銀髮族、語文教師、創意寫作者都能輕鬆把日常影像變成有溫度的圖文作品。",
     "detailedDescription": "「PhotoPoet Pro · 點亮詩意（早安長輩圖產生器）」是阿凱老師「**同源雙部署策略**」第 5 案例 — 跟 [#14 poet.smes Firebase Hosting 版](/tool/14) 是**同個 cagoooo/PhotoPoet repo 的姊妹進階版**，**SSRF 防護 + Cloudflare Turnstile + Gemini 2.0 Flash 繁中詩生成**，**個人作品也做企業級安全**。\n\n## 🎯 核心特色\n\n- 📸 **上傳照片 → Gemini 2.0 Flash 生成繁體中文詩 → 一鍵下載長輩圖**\n- 🔒 **三層安全防護（工程紮實度爆表）**：\n  - **1️⃣ Gemini API Key 嚴格限制** — 受限只能呼叫 `generativelanguage.googleapis.com`，存於 **Firebase Secret Manager**，即使洩漏也只能呼叫 Gemini\n  - **2️⃣ SSRF 防護（神細節）** — `proxyImage` Cloud Function 配完整防護：🚫 **私有 IP 黑名單**（防打內網）+ 🔁 **redirect 重檢**（防 301 跳內網）+ ✅ **Content-Type 白名單**（只接圖片 MIME）+ 📦 **10MB 上限**（防 DoS）+ ⏱️ **8 秒 timeout**（防 hang）— SSRF 是後端打外部 URL 最大的資安風險，**這是企業級工程紀律**\n  - **3️⃣ Cloudflare Turnstile 人機驗證** — `generatePoem` 受 Turnstile 保護，**無 token 直接 403**\n- 📚 **5 個 markdown 完整工程文件** — `docs/USAGE.md` / `OPERATIONS.md` / `ROADMAP.md` / `MIGRATION_AND_OPTIMIZATION.md` / `blueprint.md`\n- 🚀 **CI/CD 完整流程** — push 到 `main` → GitHub Actions 自動 deploy 到 Firebase\n\n## 💡 設計理念\n\n**Next.js 15 (static export) + Firebase Hosting + Cloud Functions (gen2, asia-east1) + Genkit AI 編排 + Cloudflare Turnstile + Gemini 2.0 Flash**。線上版 `photopoet-ha364.web.app`（Firebase Hosting 預設域名，第三個部署位置）。**「個人作品也要做企業級安全」** — 對工程師：SSRF 防護完整程式碼可學 / API Key 限制範圍最佳實踐 / Turnstile 整合案例 / Cloud Functions gen2 + Genkit 架構；對教育圈：「老師做的工具也可以這麼專業」+ 個資隱私意識（學生長輩照片不會被亂打 API）+ 不會被當免費 API 消耗點。\n\n## 🎒 適合情境\n\n阿凱**同源雙部署 5 案例**：\n- PIRLS：[#4 pirlss.smes](/tool/4) / [#87 cagoooo/pirls-questioncraft](/tool/87)\n- Aura 5W1H：[#13 5w1h.smes](/tool/13) / [#92 cagoooo/Aura](/tool/92)\n- 領域共備 GO：[#15 report.smes](/tool/15) / [#84 domain-meeting-go](/tool/84)\n- 詩意長輩圖：[#14 poet.smes](/tool/14) / **#91 PhotoPoet Pro（本工具）**\n\n跟 #14 差別：#91 Pro 是「**企業級工程紀律的 #14**」— 同款 use case 但安全防護升 5 個檔次，**大量學生上傳照片時 Turnstile 擋 bot 不會把 quota 耗光**。適合國中小綜合活動 / 道德教育老師（孝親月）、想看「SSRF 防護完整程式碼」的後端工程師、重視「個人作品工程紀律」的學習者。MIT 授權，cagoooo/PhotoPoet 開源。",
@@ -2176,6 +2178,97 @@
       "石門國小"
     ],
     "addedAt": "2026-06-21T23:48:41.160Z"
+  },
+  {
+    "id": 113,
+    "title": "PaGamO 素養教材班級授權填報",
+    "description": "專為學校行政與導師設計的 PaGamO 素養教材授權填報系統。簡化繁瑣的班級名單與授權核對流程，一鍵填報、即時彙整，大幅提升行政作業效率，讓素養學習推廣更輕鬆！",
+    "detailedDescription": "「PaGamO 素養教材班級授權填報」是專為中小學推廣 PaGamO 素養教材所開發的行政輔助平台。在過往，學校行政人員與各班導師在核對學生名單、確認授權狀態以及進行統一填報時，常面臨資料凌亂、重複核對等耗時問題。本工具提供直覺的填報介面與即時彙整功能，導師能迅速填寫班級的授權需求，系統則自動彙整並進行格式檢查，確保填報資料百分之百正確。平台採用輕量化純前端設計，無痛整合學校現有行政流程，並支援與 Excel 格式互轉，讓行政人員在匯出與提報至 PaGamO 官方時能一鍵完成。免費、免安裝且支援跨裝置，是學校落實數位行政轉型、推動科技輔助自主學習的最佳行政利器。",
+    "url": "https://cagoooo.github.io/PaGamO/",
+    "icon": "ClipboardCheck",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_113.webp",
+    "ogPreviewUrl": "/previews/og/tool_113.webp",
+    "tags": [
+      "PaGamO",
+      "素養教材",
+      "授權填報",
+      "行政工具",
+      "國小教育",
+      "石門國小",
+      "班級管理",
+      "表單統計"
+    ],
+    "addedAt": "2026-06-28T13:30:44.278Z"
+  },
+  {
+    "id": 114,
+    "title": "學生名單校對平台",
+    "description": "專為學校行政與導師設計的學生名單校對平台。一鍵匯入名單與核對檔，智慧比對學號、姓名及班級差異，自動揪出錯漏字與重疊名單，讓繁瑣的學籍核對作業變得輕鬆又精準！",
+    "detailedDescription": "「學生名單校對平台」是為了解決學校每學期初或各項活動中，最磨人的「名單核對」痛點而開發的智能比對工具。在行政作業中，將教務系統匯出的名單與導師手上的名單進行核對，經常需要人工逐字比對學號、姓名，極易因字形相似、多打空格或簡繁體差異而產生漏網之魚。本平台提供直壓的比對介面，使用者只需分別拖入或貼上兩份名單，系統即可秒級進行交叉比對，並以醒目的顏色標示出「僅在名單 A 出現」、「姓名不一致」或「學號重複」等異常資料。純前端輕量化設計，資料完全在瀏覽器本地處理，不上傳至任何雲端伺服器，百分之百保障學生個資隱私。免安裝、隨開即用，是提升學校學籍管理與行政效率的防呆神助手。",
+    "url": "https://cagoooo.github.io/student-list-checker/",
+    "icon": "UserCheck",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_114.webp",
+    "ogPreviewUrl": "/previews/og/tool_114.webp",
+    "tags": [
+      "名單校對",
+      "學生名單",
+      "行政效率",
+      "名單核對",
+      "國小教育",
+      "石門國小",
+      "班級管理",
+      "防呆校對"
+    ],
+    "addedAt": "2026-06-28T13:36:55.594Z"
+  },
+  {
+    "id": 115,
+    "title": "萌獸數學道館",
+    "description": "把四則運算練習變成萌獸道館挑戰，學生在闖關、蒐集徽章與升級回饋中，一題一題練出數學手感。",
+    "detailedDescription": "「萌獸數學道館」是阿凱老師把數學練習包裝成遊戲化闖關的班級工具，讓學生不只是寫題目，而是在可愛萌獸陪伴的道館挑戰中累積徽章、升級成就，重新找回練習四則運算的動力。\n\n## 🎯 核心特色\n\n- 🏟️ **道館式闖關節奏** — 用挑戰關卡取代單調題庫，適合課堂暖身、分站練習與課後補強\n- 🧮 **數學練習主軸清楚** — 聚焦國小常見運算練習，讓學生在遊戲情境中反覆熟悉題型\n- 🏅 **徽章與成就回饋** — 用可視化獎勵降低挫折感，讓「再做一題」變得自然\n- 🎮 **原創萌獸學習情境** — 用孩子喜歡的冒險與收集語感，搭配原創角色視覺，讓數學課多一點期待感\n- 📱 **GitHub Pages 即開即用** — 不用安裝、不用帳號，老師貼連結或投影就能開始\n\n## 💡 設計理念\n\n很多孩子不是不會數學，而是對反覆練習先失去耐心。這張工具卡把「練習」轉譯成「挑戰」：題目是關卡、答對是推進、徽章是努力的可視化證明。老師可以把它放在課堂開頭當暖身，也可以在學生完成主要任務後作為自主練習站。\n\n## 🎒 適合情境\n\n適合國小中高年級數學課、補救教學、課後班、自主學習時間與班級活動。特別適合需要讓學生大量練習但又不想讓氣氛變成「又要寫一張練習卷」的場合。",
+    "url": "https://cagoooo.github.io/Poke/",
+    "icon": "Gamepad2",
+    "category": "games",
+    "previewUrl": "/previews/tool_115.webp",
+    "ogPreviewUrl": "/previews/og/tool_115.webp",
+    "tags": [
+      "萌獸",
+      "數學道館",
+      "四則運算",
+      "數學遊戲",
+      "闖關學習",
+      "徽章成就",
+      "國小數學",
+      "遊戲化學習",
+      "自主練習",
+      "GitHub Pages",
+      "石門國小"
+    ],
+    "addedAt": "2026-07-02T00:00:00.000Z"
+  },
+  {
+    "id": 116,
+    "title": "考卷格式自動校正系統",
+    "description": "把考卷排版檢查交給自動化流程，快速標出題號、選項、答案區與版面格式問題，讓老師在列印前先完成一次穩穩的格式健檢。",
+    "detailedDescription": "考卷格式自動校正系統是一個替老師省下反覆校稿時間的實用工具，專注處理考卷在正式輸出前最容易漏看的格式細節：題號是否連續、選項排列是否一致、答案欄位是否清楚、版面間距是否適合列印，以及整份卷面是否維持可讀又整齊的結構。\n\n## 主要亮點\n\n- **格式健檢更快**：協助檢查題號、選項、段落與答案區，減少人工逐行巡看的負擔。\n- **列印前更安心**：在輸出前先抓出可能造成學生作答混亂的版面問題。\n- **適合教學現場**：用簡單明確的校正流程，讓老師把時間留給題目品質與學生學習。\n- **已建置完成**：可直接開啟使用，適合考前複查、段考卷整理與平時測驗卷微調。\n\n這張工具卡片歸在實用工具類，因為它處理的是教學文件製作流程中的最後一哩路：把已經完成的考卷，再整理成更穩定、更容易閱讀、更適合發給學生的版本。",
+    "url": "https://cagoooo.github.io/exam-format-app/",
+    "icon": "ClipboardCheck",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_116.webp",
+    "ogPreviewUrl": "/previews/og/tool_116.webp",
+    "tags": [
+      "考卷格式",
+      "自動校正",
+      "試卷排版",
+      "教師工具",
+      "列印前檢查",
+      "AI 輔助",
+      "文件處理",
+      "已建置完成"
+    ],
+    "addedAt": "2026-07-09T00:00:00.000Z"
   },
   {
     "id": 100,

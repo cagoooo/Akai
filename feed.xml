@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 112+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 116+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Mon, 22 Jun 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Sat, 27 Jun 2026 08:17:36 GMT</lastBuildDate>
+    <pubDate>Thu, 09 Jul 2026 00:00:00 GMT</pubDate>
+    <lastBuildDate>Wed, 08 Jul 2026 22:28:08 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,81 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：考卷格式自動校正系統</title>
+      <link>https://cagoooo.github.io/Akai/tool/116</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/116</guid>
+      <pubDate>Thu, 09 Jul 2026 00:00:00 GMT</pubDate>
+      <description>把考卷排版檢查交給自動化流程，快速標出題號、選項、答案區與版面格式問題，讓老師在列印前先完成一次穩穩的格式健檢。</description>
+      <category>考卷格式</category>
+      <category>自動校正</category>
+      <category>試卷排版</category>
+      <category>教師工具</category>
+      <category>列印前檢查</category>
+    </item>
+    <item>
+      <title>🆕 新工具：萌獸數學道館</title>
+      <link>https://cagoooo.github.io/Akai/tool/115</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/115</guid>
+      <pubDate>Thu, 02 Jul 2026 00:00:00 GMT</pubDate>
+      <description>把四則運算練習變成萌獸道館挑戰，學生在闖關、蒐集徽章與升級回饋中，一題一題練出數學手感。</description>
+      <category>萌獸</category>
+      <category>數學道館</category>
+      <category>四則運算</category>
+      <category>數學遊戲</category>
+      <category>闖關學習</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#115 把四則運算變成道館挑戰：萌獸數學道館的練習動機設計</title>
+      <link>https://cagoooo.github.io/Akai/blog/math-beast-gym-115-arithmetic-battle</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/math-beast-gym-115-arithmetic-battle</guid>
+      <pubDate>Thu, 02 Jul 2026 00:00:00 GMT</pubDate>
+      <description>四則運算練習最難的不是出題，而是讓學生願意一題接一題做下去。#115 萌獸數學道館把加減乘除包裝成原創萌獸對戰，用 ATG 節奏、關主挑戰與即時回饋，讓練習變成一場全班都看得懂的數學冒險。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>🆕 新工具：學生名單校對平台</title>
+      <link>https://cagoooo.github.io/Akai/tool/114</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/114</guid>
+      <pubDate>Sun, 28 Jun 2026 13:36:55 GMT</pubDate>
+      <description>專為學校行政與導師設計的學生名單校對平台。一鍵匯入名單與核對檔，智慧比對學號、姓名及班級差異，自動揪出錯漏字與重疊名單，讓繁瑣的學籍核對作業變得輕鬆又精準！</description>
+      <category>名單校對</category>
+      <category>學生名單</category>
+      <category>行政效率</category>
+      <category>名單核對</category>
+      <category>國小教育</category>
+    </item>
+    <item>
+      <title>🆕 新工具：PaGamO 素養教材班級授權填報</title>
+      <link>https://cagoooo.github.io/Akai/tool/113</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/113</guid>
+      <pubDate>Sun, 28 Jun 2026 13:30:44 GMT</pubDate>
+      <description>專為學校行政與導師設計的 PaGamO 素養教材授權填報系統。簡化繁瑣的班級名單與授權核對流程，一鍵填報、即時彙整，大幅提升行政作業效率，讓素養學習推廣更輕鬆！</description>
+      <category>PaGamO</category>
+      <category>素養教材</category>
+      <category>授權填報</category>
+      <category>行政工具</category>
+      <category>國小教育</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#113 告別 Excel 地獄！PaGamO 素養教材授權填報的行政數位轉型</title>
+      <link>https://cagoooo.github.io/Akai/blog/pagamo-license-113-school-enrollment</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/pagamo-license-113-school-enrollment</guid>
+      <pubDate>Sun, 28 Jun 2026 00:00:00 GMT</pubDate>
+      <description>專為學校導師與行政開發的 PaGamO 授權填報工具，一鍵彙整班級名單，讓繁瑣的素養教材開通流程省時 90%！</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#114 告別人工肉眼比對！學生名單校對平台的個資安全與智慧防呆防線</title>
+      <link>https://cagoooo.github.io/Akai/blog/student-list-checker-114-roster-verification</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/student-list-checker-114-roster-verification</guid>
+      <pubDate>Sun, 28 Jun 2026 00:00:00 GMT</pubDate>
+      <description>每學期初核對幾百名學生名單，用肉眼看字形相似又容易出錯？#114 學生名單校對平台，雙欄智慧比對一秒揪出學號姓名錯漏，資料完全在本地處理，行政效率與個資安全雙贏！</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
     <item>
       <title>📖 教學情境：#112 皮卡丘天空大冒險：經典飛翔小鳥結合寶可夢，鍛鍊學生專注度與挫折容忍度</title>
       <link>https://cagoooo.github.io/Akai/blog/pikachu-sky-adventure-112-flappy-bird-game</link>
@@ -260,75 +335,6 @@
       <category>Three.js</category>
       <category>光球收集</category>
       <category>全班排行榜</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#101 3D 迷宮冒險遊戲：第一人稱光球收集 × 紅怪閃避 × 全班排行榜，瀏覽器跑 3D 的下課十分鐘</title>
-      <link>https://cagoooo.github.io/Akai/blog/maze-3d-101-first-person-orb-collection</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/maze-3d-101-first-person-orb-collection</guid>
-      <pubDate>Thu, 28 May 2026 00:00:00 GMT</pubDate>
-      <description>#101 3D 迷宮冒險遊戲是阿凱寫給孩子玩的第一人稱探索遊戲：React + Three.js 純瀏覽器跑 3D，收集藍色光球、躲避紅色巡守者、與時間賽跑，4 段難度 7×7 到 17×17 噩夢級，桌機 + iPad 觸控全支援，內建全班 / 全校排行榜。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>🆕 新工具：考試卷生圖 Studio — AI 黑白線稿插圖生成</title>
-      <link>https://cagoooo.github.io/Akai/tool/99</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/99</guid>
-      <pubDate>Sun, 24 May 2026 06:05:54 GMT</pubDate>
-      <description>備課時想加一張剛剛好的學習單插畫？輸入四個欄位（標題、對話、角色、場景），10–20 秒生成兩張 1024×1024 黑白線稿 PNG，列印不吃墨水、可當著色頁、支援中文精準渲染。內建 4 組教學情境範例 + AI Prompt 可複製轉用 ChatGPT / Bing。</description>
-      <category>試卷插圖</category>
-      <category>學習單插畫</category>
-      <category>AI 線稿生成</category>
-      <category>黑白線稿</category>
-      <category>著色頁</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#99 考試卷生圖 Studio：四欄位 20 秒生兩張黑白線稿，列印不吃墨水的備課救星</title>
-      <link>https://cagoooo.github.io/Akai/blog/exam-illustration-99-ai-line-art-studio</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/exam-illustration-99-ai-line-art-studio</guid>
-      <pubDate>Sun, 24 May 2026 00:00:00 GMT</pubDate>
-      <description>#99 考試卷生圖 Studio 是阿凱寫給自己備課用的 AI 插圖工具：填四個欄位（標題、對話、角色、場景），按一鍵 20 秒生兩張 1024×1024 純黑白線稿 PNG，校園黑白印表機友善、可當著色頁、中文精準渲染，每天免費 5 次。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：🎉 100 工具達成：阿凱老師教育工具集兩年實驗筆記</title>
-      <link>https://cagoooo.github.io/Akai/blog/milestone-100-tools-achieved</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/milestone-100-tools-achieved</guid>
-      <pubDate>Sun, 24 May 2026 00:00:00 GMT</pubDate>
-      <description>從 2024 年第 1 個工具到 2026 年 5 月 24 日的第 100 個 — 一位國小資訊老師的兩年實驗筆記。沒有融資、沒有團隊、沒有商業計畫，只有 5 大部署平台、7 大分類、99 篇手寫長文、和一個信念：把上課真的用得到的工具寫出來，免費送出去。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>🆕 新工具：教室小幫手 — 老師的每日課堂工具</title>
-      <link>https://cagoooo.github.io/Akai/tool/98</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/98</guid>
-      <pubDate>Fri, 22 May 2026 08:08:52 GMT</pubDate>
-      <description>阿凱老師為導師日常打造的「教室百寶箱」，一頁集合 26 個課堂小工具：情緒打卡、班級 To-Do、彩虹能量卡、出勤、跑馬燈、抽號、計時器、分組、座位表、生日榜、積點榜、月度報告、班費、AI 評語草擬⋯六大分組任你切換。免登入、不上傳、可離線、PWA 一鍵裝成桌面 App。</description>
-      <category>教室百寶箱</category>
-      <category>情緒打卡</category>
-      <category>隨機抽號</category>
-      <category>教室計時器</category>
-      <category>隨機分組</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#98 教室小幫手：26 個課堂小工具裝進一個分頁，免登入不上傳的導師百寶箱</title>
-      <link>https://cagoooo.github.io/Akai/blog/classroom-kit-98-daily-teacher-toolkit</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/classroom-kit-98-daily-teacher-toolkit</guid>
-      <pubDate>Fri, 22 May 2026 00:00:00 GMT</pubDate>
-      <description>#98 教室小幫手把導師每天分散在 8 個分頁的小工具（情緒打卡、點名、抽號、計時器、跑馬燈、分組、座位表、生日榜⋯）合進一頁 PWA，設定班級名單一次 26 工具自動帶入，所有資料只存瀏覽器本機 IndexedDB，不上傳任何雲端。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#100 工具索引神器升級 AI build log：從 fuse.js 字面比對到 Gemini 語意搜尋</title>
-      <link>https://cagoooo.github.io/Akai/blog/tool-100-gemini-embedding-build-log</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/tool-100-gemini-embedding-build-log</guid>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>工具索引神器（#100）原本用 fuse.js 字面比對 — 「水的三態」找不到「自然科實驗」。升級 Gemini Embedding 語意搜尋後，連「我想讓害羞學生敢開口」這類抽象描述都能找到對的工具。完整 build log + 架構設計分享。</description>
-      <category>blog</category>
-      <category>教學情境</category>
     </item>
   </channel>
 </rss>

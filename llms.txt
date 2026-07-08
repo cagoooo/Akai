@@ -1,6 +1,6 @@
 # 阿凱老師 · 科技教育創新專區
 
-> 一位桃園市龍潭區石門國民小學的國小老師（阿凱老師），兩年內獨立完成 112 款免費教育工具與 113 篇手寫深度長文。所有工具與內容皆為 MIT 開源、永久免費、無需註冊。專案聚焦於用 AI / 科技解決真實國小教學現場的痛點：班級互動、行政自動化、語文閱讀、教育遊戲、親師溝通、互動體驗。
+> 一位桃園市龍潭區石門國民小學的國小老師（阿凱老師），兩年內獨立完成 116 款免費教育工具與 116 篇手寫深度長文。所有工具與內容皆為 MIT 開源、永久免費、無需註冊。專案聚焦於用 AI / 科技解決真實國小教學現場的痛點：班級互動、行政自動化、語文閱讀、教育遊戲、親師溝通、互動體驗。
 
 **站點**：https://cagoooo.github.io/Akai/  
 **作者**：阿凱老師（GitHub: cagoooo）  
@@ -11,161 +11,168 @@
 
 ## 主要頁面
 
-- [首頁工具集](https://cagoooo.github.io/Akai/): 互動公佈欄首頁，呈現全部 112 款工具的拍立得拼貼 + 分類篩選 + 許願池
-- [部落格](https://cagoooo.github.io/Akai/blog): 113 篇阿凱老師手寫的教學情境深度長文，每篇講一個熱門工具如何解決真實教學現場的問題
+- [首頁工具集](https://cagoooo.github.io/Akai/): 互動公佈欄首頁，呈現全部 116 款工具的拍立得拼貼 + 分類篩選 + 許願池
+- [部落格](https://cagoooo.github.io/Akai/blog): 116 篇阿凱老師手寫的教學情境深度長文，每篇講一個熱門工具如何解決真實教學現場的問題
 - [100 工具達成宣傳影片](https://cagoooo.github.io/Akai/share/100.html): 5:32 宣傳影片（含旁白與同步字幕）
 - [許願池](https://cagoooo.github.io/Akai/wish/): 蒐集老師、家長、學生對下一個工具的需求
 - [GitHub Repository](https://github.com/cagoooo/Akai): 完整原始碼，可自由 fork 自架
 
 ## 給 AI 助手的提示
 
-本檔案（`llms.txt`）是 **索引版**，僅含工具標題與簡述。若需要完整內容（每個工具的詳細描述、每篇部落格的完整內文），請改抓：
+本檔案（`llms.txt`）是 **索引版**，僅含工具標題、站內工具頁、實際工具網址與簡述。若需要完整內容（每個工具的詳細描述、每篇部落格的完整內文），請改抓：
 
 > **完整版**：[https://cagoooo.github.io/Akai/llms-full.txt](https://cagoooo.github.io/Akai/llms-full.txt)
 
 完整版約 500-800 KB，適合 OpenAI custom GPT / Claude Project / Perplexity Spaces 等需要深度 ingest 的場景。
 
-## 工具集（112 款，按分類）
+## 工具集（116 款，按分類）
 
 每款工具都是阿凱老師親手打造的單一用途網頁，可在瀏覽器直接開啟，無需安裝。
 
-### 實用工具（36 款）
+### 實用工具（39 款）
 
-- [#2 行政業務協調系統](https://cagoooo.github.io/staff/): 阿凱老師打造的學校行政業務協調系統，整合共用日曆、跨部門行程管理與 LINE 推播提醒，讓教務、學務、總務、輔導各處室一站搞定協作排程。
-- [#5 校園點餐系統](https://cagoooo.github.io/vendor/): 阿凱老師打造的校慶園遊會點餐系統，各班攤位上線開菜單，買家手機點餐取號，廚房後台一鍵管理訂單，告別現場排隊吼價的混亂。
-- [#10 班級小管家](https://cagoooo.github.io/class/): 阿凱老師打造的班級小管家全方位課堂工具箱，整合學生名單、加扣分、抽籤分組、計時器、聯絡簿、作業檢查、考試監考共八大功能，多班級資料自動隔離。
-- [#14 點亮詩意~『早安長輩圖產生器』](https://poet.smes.tyc.edu.tw/): 輕鬆製作溫馨的早安問候圖片
-- [#15 社群領域會議報告產出平台](https://report.smes.tyc.edu.tw/): 快速產生會議報告的協作工具
-- [#17 單一抽籤系統](https://www.smes.tyc.edu.tw/smes_html/gogogo.html): 簡單快速的單一抽籤工具
-- [#18 大量抽籤系統](https://www.smes.tyc.edu.tw/smes_html/random.html): 支援大量抽籤的進階工具
-- [#19 設計自己的專屬客服](https://document-ai-companion-ipad4.replit.app/): 自訂專屬的智能客服系統
-- [#24 教師午會記錄報告站](https://sites.google.com/mail2.smes.tyc.edu.tw/114teacher/): 教師午會紀錄與報告分享平台
-- [#27 ⬅️好用小工具(許願池)](https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/): 各種好用的教學小工具集合與許願池
-- [#40 Padlet行政宣導動態牆](https://padlet.com/2104340/padlet-rl3l5wi9wmebku2k): 即時更新的行政宣導公告牆，方便資訊傳達
-- [#42 兒童臉部隱私保護工具](https://cagoooo.github.io/child-face-privacy/): 阿凱老師打造的兒童臉部隱私保護工具，自動偵測照片臉孔並用 emoji、馬賽克或模糊遮蓋，可設定只擋 12 歲以下兒童，圖片全程在瀏覽器處理不外傳。
-- [#46 禮堂&專科教室&IPAD平板車預約系統](https://cagoooo.github.io/schedule/): 阿凱老師打造的禮堂、專科教室、平板車預約系統，整合 Gemini AI 自動撰寫學期使用報告、LINE 推播通知、熱力圖統計，行政管理場地一站搞定。
-- [#47 學生肖像使用授權同意書線上簽名](https://cagoooo.github.io/signature/): 阿凱老師打造的家長線上電子簽名系統，家長手機就能簽「學生活動肖像授權同意書」，自動寄 PDF 通知信給家長，行政端 Excel 一鍵匯出統整。
-- [#48 動態表單自動回報系統](https://cagoooo.github.io/form/): 阿凱老師打造的動態表單系統，視覺化拖曳建表、即時 Google Chat 推播通知、CSV 匯出與儀表板分析，用 Firebase 取代笨重的 Google Forms。
-- [#51 自動排課系統](https://cagoooo.github.io/course/): 智能化的自動排課系統協助學校快速生成課表最佳化資源分配解決排課難題。
-- [#53 智慧校園報修系統](https://cagoooo.github.io/repair/): 專為校園打造的智慧報修平台簡化修繕申請流程讓校園維護更加即時與透明。
-- [#57 選擇障礙專用 - 餐廳命運轉盤](https://cagoooo.github.io/food/): 為選擇障礙打造的餐廳抽籤工具，幫助你迅速決定今天要吃什麼美食！
-- [#68 手作課程照片影片作品上傳平台](https://cagoooo.github.io/files/): 專為手作課程設計的作品展示與分享平台，支援高畫質相片與影片上傳，讓每件精心創作的作品都能完美呈現。
-- [#72 動支及黏存單自動產生系統](https://cagoooo.github.io/budget/): 智慧化的經費動支與黏存單自動產生平台，簡化繁瑣的行政核銷流程，只需輸入基本資訊即可快速產出標準格式表單，大幅提升行政作業效率與精確度。
-- [#73 國小期中考成績篩選工具](https://cagoooo.github.io/filter/): 專為國小教師設計的期中考成績分析助手，輕鬆篩選分佈情況。
-- [#75 影片&PDF批次轉圖片](https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E5%BD%B1%E7%89%87pdf%E8%BD%89%E5%9C%96%E7%89%87?authuser=0): 將影片與 PDF 檔案批次轉換為圖片，快速擷取所需畫面，大幅提升工作與備課效率
-- [#78 桃園市115學年度國小課程計畫AI審查工具](https://cagoooo.github.io/curriculum/): 專為國小課程計畫審閱設計的 AI 輔助工具，能自動比對計畫內容並給予審查建議，大幅節省行政與教務端審查的時間，提升計畫品質。
-- [#80 114石小教師會議報告集合站 (下學期)](https://sites.google.com/mail2.smes.tyc.edu.tw/114teacher-2/): 專為 114 學年度下學期設計的石門國小教師會議報告彙整平台。集中管理各式會議記錄、行政宣導與進度回報，提升行政溝通效率。
-- [#82 教室資訊設備盤點系統](https://cagoooo.github.io/smes-inventory/): 高效率的校園資訊設備盤點平台，支援逐間教室清查電腦、投影機、網路設備等 IT 資產，即時統計盤點進度與設備狀態，讓學校資產管理透明化、數位化。
-- [#83 本土語分班配對系統](https://cagoooo.github.io/local/): 智慧化的本土語分班配對工具，依學生語言志願（台語、客語、原住民族語等）自動完成跨班配對與分班作業，讓行政流程省時省力，落實多元文化語言教育。
-- [#84 會議記錄自動產出平台 (Pro版)](https://cagoooo.github.io/domain-meeting-go/): 專為校務會議、教學研討設計的 AI 會議記錄小幫手。錄音上傳後自動轉寫逐字稿、智慧摘要重點與行動事項，並一鍵匯出 Word / PDF，讓繁瑣的會議紀錄從此省下大半時間。
-- [#86 3D Q版貼圖生成器](https://cagoooo.github.io/TieTu/): 上傳一張自拍照，輸入主題與 24 個文字，AI 一鍵生成 4×6 共 24 張 3D Q 版公仔貼圖，下載即得 LINE 上架專用的 ZIP 包，老師、家長、學生都能秒做專屬貼圖。
-- [#88 桃園市115學年度國中課程計畫AI審查工具](https://cagoooo.github.io/JHScurriculum/): 阿凱老師打造的國中版課程計畫 AI 審查工具，上傳 PDF 即依教育局 40+ 審查標準逐項自動比對給建議，支援 Gemini / OpenAI 雙引擎，領域課程、彈性課程、特殊班全涵蓋。
-- [#95 桃園市115年語文競賽龍潭區複賽資訊站](https://cagoooo.github.io/Language-Competitions/): 阿凱老師為 2026 桃園市 115 年語文競賽龍潭區複賽（石門國小承辦）打造的賽事資訊站，整合 33 場賽事的賽程查詢、報到抽題時間計算、互動校園地圖與三身份須知，選手、家長、工作人員當天滑手機就能掌握全場節奏。
-- [#98 教室小幫手 — 老師的每日課堂工具](https://cagoooo.github.io/coolclass/): 阿凱老師為導師日常打造的「教室百寶箱」，一頁集合 26 個課堂小工具：情緒打卡、班級 To-Do、彩虹能量卡、出勤、跑馬燈、抽號、計時器、分組、座位表、生日榜、積點榜、月度報告、班費、AI 評語草擬⋯六大分組任你切換。免登入、不上傳、可離線、PWA 一鍵裝成桌面 App。
-- [#100 工具索引神器 · 智能推薦](https://cagoooo.github.io/Akai/Akai/tool/100): 第 100 個工具是「為其他 99 個工具找路」的智能推薦器：用一句話描述你的教學情境（例：我下週要上水的三態），fuse.js 從標題 / 標籤 / 描述加權比對，挑出最匹配的 5 個工具組合。
-- [#104 台灣官方資料庫 Twinkle-Hub — 把台灣官方資料接進 AI 助教](https://cagoooo.github.io/twinkle-hub-guide/): 讓 AI 助教「直接查台灣官方來源再回答」的資料橋 MCP 服務：國定假日補班、農曆節氣、簡繁轉換、地址郵遞區號、身分證／統編格式驗證、6.4 萬份國家考試考古題與政府開放資料，65 個現成工具一次到位。申請金鑰 → 一鍵安裝 → 重開即用，老師備課出題、學生查在地資料都更踏實。相容任何支援 MCP 的 AI 客戶端，基本查詢免費。
-- [#107 學生教育雲帳號更新工具](https://cagoooo.github.io/edu-cloud-updater/): 每學年初校務行政最磨人的雜事之一：教育雲帳號總表要跟教育局新名冊對齊——誰轉走了、誰轉進來、誰升年級換了班級座號。#107 讓你上傳舊帳密總表與教育局新名冊，自動比對轉入轉出、偵測末四碼撞號、跨學年保留帳密只更新座號，一鍵產出更新後總表、異動清冊與新生通知單。全程純前端、個資絕不上傳，所有運算只在你這台電腦的瀏覽器裡完成。
-- [#109 數位內容與教學軟體需求調查填報](https://cagoooo.github.io/smes-soft-survey/): 每年學校要彙整老師的教學軟體採購需求，總是一張 Excel 在處室間傳來傳去、誰填了誰漏了理不清。#109 是石門國小教務處的線上實名填報系統：老師勾選統購與自主需求軟體，依數位內容／課堂教學／遠距教學三領域篩選，全校即時統計勾選人數、自動排出前 5 名提報教育局。已大量採購的軟體自動標示「免填」，班級教師學生數系統去重統計，承辦不用再對 Excel 對到天荒地老。
-- [#110 智慧自動化照片成果轉影片產生器](https://cagoooo.github.io/PhotoLibrary/): 辦完活動，幾十張照片躺在資料夾裡，要剪成一支有旁白、有音樂、有字幕的成果影片，光想到就累。#110 讓你只要上傳活動照片，多模態 AI 自動看懂每張照片在做什麼、編寫前後連貫的繁體中文旁白與字幕、配上微軟 Neural 高品質人聲、挑好轉場與背景音樂，最後一鍵錄製匯出相容 iPhone/Safari 的 MP4。純前端、金鑰只存在你的瀏覽器，照片不外傳。
+- [#2 行政業務協調系統](https://cagoooo.github.io/Akai/tool/2): 阿凱老師打造的學校行政業務協調系統，整合共用日曆、跨部門行程管理與 LINE 推播提醒，讓教務、學務、總務、輔導各處室一站搞定協作排程。 標籤：行政、協調、校務、管理。 實際工具：https://cagoooo.github.io/staff/。教學情境文章：https://cagoooo.github.io/Akai/blog/staff-2-admin-coordination
+- [#5 校園點餐系統](https://cagoooo.github.io/Akai/tool/5): 阿凱老師打造的校慶園遊會點餐系統，各班攤位上線開菜單，買家手機點餐取號，廚房後台一鍵管理訂單，告別現場排隊吼價的混亂。 標籤：點餐、午餐、訂餐、校園、便利。 實際工具：https://cagoooo.github.io/vendor/。教學情境文章：https://cagoooo.github.io/Akai/blog/vendor-5-campus-food-order
+- [#10 班級小管家](https://cagoooo.github.io/Akai/tool/10): 阿凱老師打造的班級小管家全方位課堂工具箱，整合學生名單、加扣分、抽籤分組、計時器、聯絡簿、作業檢查、考試監考共八大功能，多班級資料自動隔離。 標籤：班級、管理、導師、學生、事務。 實際工具：https://cagoooo.github.io/class/。教學情境文章：https://cagoooo.github.io/Akai/blog/class-helper-10-daily-routine
+- [#14 點亮詩意~『早安長輩圖產生器』](https://cagoooo.github.io/Akai/tool/14): 輕鬆製作溫馨的早安問候圖片 標籤：長輩圖、早安、圖片、問候、詩詞。 實際工具：https://cagoooo.github.io/PhotoPoet/。教學情境文章：https://cagoooo.github.io/Akai/blog/poet-14-elder-greeting-image
+- [#15 社群領域會議報告產出平台](https://cagoooo.github.io/Akai/tool/15): 快速產生會議報告的協作工具 標籤：會議、報告、社群、記錄、產出。 實際工具：https://report.smes.tyc.edu.tw/。教學情境文章：https://cagoooo.github.io/Akai/blog/report-15-domain-meeting-go
+- [#17 單一抽籤系統](https://cagoooo.github.io/Akai/tool/17): 簡單快速的單一抽籤工具 標籤：抽籤、隨機、點名、簡單、快速。 實際工具：https://www.smes.tyc.edu.tw/smes_html/gogogo.html。教學情境文章：https://cagoooo.github.io/Akai/blog/draw-17-creative-lottery
+- [#18 大量抽籤系統](https://cagoooo.github.io/Akai/tool/18): 支援大量抽籤的進階工具 標籤：抽籤、隨機、大量、分組、進階。 實際工具：https://www.smes.tyc.edu.tw/smes_html/random.html。教學情境文章：https://cagoooo.github.io/Akai/blog/student-pick-18-main-alternate
+- [#19 設計自己的專屬客服](https://cagoooo.github.io/Akai/tool/19): 自訂專屬的智能客服系統 標籤：客服、AI、機器人、自訂、智能。 實際工具：https://document-ai-companion-ipad4.replit.app/。教學情境文章：https://cagoooo.github.io/Akai/blog/replit-19-design-your-own
+- [#24 教師午會記錄報告站](https://cagoooo.github.io/Akai/tool/24): 教師午會紀錄與報告分享平台 標籤：午會、記錄、教師、報告、行政。 實際工具：https://sites.google.com/mail2.smes.tyc.edu.tw/114teacher/。教學情境文章：https://cagoooo.github.io/Akai/blog/meeting-24-end-semester-record
+- [#27 ⬅️好用小工具(許願池)](https://cagoooo.github.io/Akai/tool/27): 各種好用的教學小工具集合與許願池 標籤：工具、集合、許願、小工具、瑞士刀。 實際工具：https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/。教學情境文章：https://cagoooo.github.io/Akai/blog/swissknife-27-tool-vault
+- [#40 Padlet行政宣導動態牆](https://cagoooo.github.io/Akai/tool/40): 即時更新的行政宣導公告牆，方便資訊傳達 標籤：Padlet、公告、行政、宣導、動態牆。 實際工具：https://padlet.com/2104340/padlet-rl3l5wi9wmebku2k。教學情境文章：https://cagoooo.github.io/Akai/blog/padlet-40-admin-board
+- [#42 兒童臉部隱私保護工具](https://cagoooo.github.io/Akai/tool/42): 阿凱老師打造的兒童臉部隱私保護工具，自動偵測照片臉孔並用 emoji、馬賽克或模糊遮蓋，可設定只擋 12 歲以下兒童，圖片全程在瀏覽器處理不外傳。 標籤：隱私、兒童、模糊、臉部、保護。 實際工具：https://cagoooo.github.io/child-face-privacy/。教學情境文章：https://cagoooo.github.io/Akai/blog/privacy-42-child-face
+- [#46 禮堂&專科教室&IPAD平板車預約系統](https://cagoooo.github.io/Akai/tool/46): 阿凱老師打造的禮堂、專科教室、平板車預約系統，整合 Gemini AI 自動撰寫學期使用報告、LINE 推播通知、熱力圖統計，行政管理場地一站搞定。 標籤：預約、禮堂、校務、管理、行政、場地。 實際工具：https://cagoooo.github.io/schedule/。教學情境文章：https://cagoooo.github.io/Akai/blog/venue-46-no-more-paper-form
+- [#47 學生肖像使用授權同意書線上簽名](https://cagoooo.github.io/Akai/tool/47): 阿凱老師打造的家長線上電子簽名系統，家長手機就能簽「學生活動肖像授權同意書」，自動寄 PDF 通知信給家長，行政端 Excel 一鍵匯出統整。 標籤：線上簽名、肖像授權、行政、無紙化、安全、效率。 實際工具：https://cagoooo.github.io/signature/。教學情境文章：https://cagoooo.github.io/Akai/blog/signature-47-consent-form
+- [#48 動態表單自動回報系統](https://cagoooo.github.io/Akai/tool/48): 阿凱老師打造的動態表單系統，視覺化拖曳建表、即時 Google Chat 推播通知、CSV 匯出與儀表板分析，用 Firebase 取代笨重的 Google Forms。 標籤：表單、自動回報、行政、資料收集、效率、智慧化。 實際工具：https://cagoooo.github.io/form/。教學情境文章：https://cagoooo.github.io/Akai/blog/form-48-dynamic-builder
+- [#51 自動排課系統](https://cagoooo.github.io/Akai/tool/51): 智能化的自動排課系統協助學校快速生成課表最佳化資源分配解決排課難題。 標籤：排課、自動化、課表、行政、效率。 實際工具：https://cagoooo.github.io/course/。教學情境文章：https://cagoooo.github.io/Akai/blog/auto-schedule-51-curriculum-planner
+- [#53 智慧校園報修系統](https://cagoooo.github.io/Akai/tool/53): 專為校園打造的智慧報修平台簡化修繕申請流程讓校園維護更加即時與透明。 標籤：報修、校務、修繕、管理、效率。 實際工具：https://cagoooo.github.io/repair/。教學情境文章：https://cagoooo.github.io/Akai/blog/repair-53-paperless-school-maintenance
+- [#57 選擇障礙專用 - 餐廳命運轉盤](https://cagoooo.github.io/Akai/tool/57): 為選擇障礙打造的餐廳抽籤工具，幫助你迅速決定今天要吃什麼美食！ 標籤：餐廳、抽籤、轉盤、美食、選擇障礙。 實際工具：https://cagoooo.github.io/food/。教學情境文章：https://cagoooo.github.io/Akai/blog/food-57-restaurant-wheel
+- [#68 手作課程照片影片作品上傳平台](https://cagoooo.github.io/Akai/tool/68): 專為手作課程設計的作品展示與分享平台，支援高畫質相片與影片上傳，讓每件精心創作的作品都能完美呈現。 標籤：手作課程、作品上傳、照片影片、學習歷程、數位作品集、創意教學。 實際工具：https://cagoooo.github.io/files/。教學情境文章：https://cagoooo.github.io/Akai/blog/student-portfolio-68-handcraft-uploads
+- [#72 動支及黏存單自動產生系統](https://cagoooo.github.io/Akai/tool/72): 智慧化的經費動支與黏存單自動產生平台，簡化繁瑣的行政核銷流程，只需輸入基本資訊即可快速產出標準格式表單，大幅提升行政作業效率與精確度。 標籤：動支單、黏存單、經費核銷、自動生成、行政效率、智慧化。 實際工具：https://cagoooo.github.io/budget/。教學情境文章：https://cagoooo.github.io/Akai/blog/expense-voucher-72-auto-generator
+- [#73 國小期中考成績篩選工具](https://cagoooo.github.io/Akai/tool/73): 專為國小教師設計的期中考成績分析助手，輕鬆篩選分佈情況。 標籤：成績、篩選、分析、期中考、行政效率、教學助理。 實際工具：https://cagoooo.github.io/filter/。教學情境文章：https://cagoooo.github.io/Akai/blog/grade-filter-73-find-students-need-help
+- [#75 影片&PDF批次轉圖片](https://cagoooo.github.io/Akai/tool/75): 將影片與 PDF 檔案批次轉換為圖片，快速擷取所需畫面，大幅提升工作與備課效率 標籤：轉檔、影片轉圖、PDF轉圖、批次處理、教學工具、行政效率。 實際工具：https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E5%BD%B1%E7%89%87pdf%E8%BD%89%E5%9C%96%E7%89%87?authuser=0。教學情境文章：https://cagoooo.github.io/Akai/blog/slide-extractor-75-video-pdf-images
+- [#78 桃園市115學年度國小課程計畫AI審查工具](https://cagoooo.github.io/Akai/tool/78): 專為國小課程計畫審閱設計的 AI 輔助工具，能自動比對計畫內容並給予審查建議，大幅節省行政與教務端審查的時間，提升計畫品質。 標籤：課程計畫、AI審查、教務、行政工具、115學年度、桃園市。 實際工具：https://cagoooo.github.io/curriculum/。教學情境文章：https://cagoooo.github.io/Akai/blog/curriculum-78-elementary-review
+- [#80 114石小教師會議報告集合站 (下學期)](https://cagoooo.github.io/Akai/tool/80): 專為 114 學年度下學期設計的石門國小教師會議報告彙整平台。集中管理各式會議記錄、行政宣導與進度回報，提升行政溝通效率。 標籤：會議記錄、行政報告、教師資源、石門國小、114學年度、教務系統。 實際工具：https://sites.google.com/mail2.smes.tyc.edu.tw/114teacher-2/。教學情境文章：https://cagoooo.github.io/Akai/blog/meeting-80-spring-semester-week13
+- [#82 教室資訊設備盤點系統](https://cagoooo.github.io/Akai/tool/82): 高效率的校園資訊設備盤點平台，支援逐間教室清查電腦、投影機、網路設備等 IT 資產，即時統計盤點進度與設備狀態，讓學校資產管理透明化、數位化。 標籤：設備盤點、資產管理、資訊設備、行政效率、校園數位化、IT管理。 實際工具：https://cagoooo.github.io/smes-inventory/。教學情境文章：https://cagoooo.github.io/Akai/blog/inventory-82-classroom-equipment
+- [#83 本土語分班配對系統](https://cagoooo.github.io/Akai/tool/83): 智慧化的本土語分班配對工具，依學生語言志願（台語、客語、原住民族語等）自動完成跨班配對與分班作業，讓行政流程省時省力，落實多元文化語言教育。 標籤：本土語、分班配對、台語、客語、原住民族語、多元文化。 實際工具：https://cagoooo.github.io/local/。教學情境文章：https://cagoooo.github.io/Akai/blog/native-language-83-class-grouping
+- [#84 會議記錄自動產出平台 (Pro版)](https://cagoooo.github.io/Akai/tool/84): 專為校務會議、教學研討設計的 AI 會議記錄小幫手。錄音上傳後自動轉寫逐字稿、智慧摘要重點與行動事項，並一鍵匯出 Word / PDF，讓繁瑣的會議紀錄從此省下大半時間。 標籤：會議記錄、AI 轉寫、自動摘要、領域會議、導師會議、校務會議。 實際工具：https://cagoooo.github.io/domain-meeting-go/。教學情境文章：https://cagoooo.github.io/Akai/blog/meeting-84-domain-go-pro
+- [#86 3D Q版貼圖生成器](https://cagoooo.github.io/Akai/tool/86): 上傳一張自拍照，輸入主題與 24 個文字，AI 一鍵生成 4×6 共 24 張 3D Q 版公仔貼圖，下載即得 LINE 上架專用的 ZIP 包，老師、家長、學生都能秒做專屬貼圖。 標籤：AI 貼圖生成、3D Q版、LINE 貼圖、Gemini AI、自拍變貼圖、原創貼圖上架。 實際工具：https://cagoooo.github.io/TieTu/。教學情境文章：https://cagoooo.github.io/Akai/blog/tietu-86-chibi-sticker
+- [#88 桃園市115學年度國中課程計畫AI審查工具](https://cagoooo.github.io/Akai/tool/88): 阿凱老師打造的國中版課程計畫 AI 審查工具，上傳 PDF 即依教育局 40+ 審查標準逐項自動比對給建議，支援 Gemini / OpenAI 雙引擎，領域課程、彈性課程、特殊班全涵蓋。 標籤：課程計畫、AI審查、國中、教務、行政工具、115學年度。 實際工具：https://cagoooo.github.io/JHScurriculum/。教學情境文章：https://cagoooo.github.io/Akai/blog/curriculum-88-ai-junior-high-review
+- [#95 桃園市115年語文競賽龍潭區複賽資訊站](https://cagoooo.github.io/Akai/tool/95): 阿凱老師為 2026 桃園市 115 年語文競賽龍潭區複賽（石門國小承辦）打造的賽事資訊站，整合 33 場賽事的賽程查詢、報到抽題時間計算、互動校園地圖與三身份須知，選手、家長、工作人員當天滑手機就能掌握全場節奏。 標籤：語文競賽、龍潭區複賽、石門國小、賽程查詢、互動校園地圖、桃園市115年。 實際工具：https://cagoooo.github.io/Language-Competitions/。教學情境文章：https://cagoooo.github.io/Akai/blog/language-95-longtan-competition
+- [#98 教室小幫手 — 老師的每日課堂工具](https://cagoooo.github.io/Akai/tool/98): 阿凱老師為導師日常打造的「教室百寶箱」，一頁集合 26 個課堂小工具：情緒打卡、班級 To-Do、彩虹能量卡、出勤、跑馬燈、抽號、計時器、分組、座位表、生日榜、積點榜、月度報告、班費、AI 評語草擬⋯六大分組任你切換。免登入、不上傳、可離線、PWA 一鍵裝成桌面 App。 標籤：教室百寶箱、情緒打卡、隨機抽號、教室計時器、隨機分組、座位表。 實際工具：https://cagoooo.github.io/coolclass/。教學情境文章：https://cagoooo.github.io/Akai/blog/classroom-kit-98-daily-teacher-toolkit
+- [#100 工具索引神器 · 智能推薦](https://cagoooo.github.io/Akai/tool/100): 第 100 個工具是「為其他 99 個工具找路」的智能推薦器：用一句話描述你的教學情境（例：我下週要上水的三態），fuse.js 從標題 / 標籤 / 描述加權比對，挑出最匹配的 5 個工具組合。 標籤：工具索引、智能推薦、100 工具達成、AI 助手、破百慶祝、fuse.js。 實際工具：https://cagoooo.github.io/Akai/Akai/tool/100。教學情境文章：https://cagoooo.github.io/Akai/blog/milestone-100-tools-achieved
+- [#104 台灣官方資料庫 Twinkle-Hub — 把台灣官方資料接進 AI 助教](https://cagoooo.github.io/Akai/tool/104): 讓 AI 助教「直接查台灣官方來源再回答」的資料橋 MCP 服務：國定假日補班、農曆節氣、簡繁轉換、地址郵遞區號、身分證／統編格式驗證、6.4 萬份國家考試考古題與政府開放資料，65 個現成工具一次到位。申請金鑰 → 一鍵安裝 → 重開即用，老師備課出題、學生查在地資料都更踏實。相容任何支援 MCP 的 AI 客戶端，基本查詢免費。 標籤：台灣官方資料、MCP 服務、AI 助教、國考考古題、國定假日、農曆節氣。 實際工具：https://cagoooo.github.io/twinkle-hub-guide/。教學情境文章：https://cagoooo.github.io/Akai/blog/twinkle-hub-104-taiwan-official-data-mcp
+- [#107 學生教育雲帳號更新工具](https://cagoooo.github.io/Akai/tool/107): 每學年初校務行政最磨人的雜事之一：教育雲帳號總表要跟教育局新名冊對齊——誰轉走了、誰轉進來、誰升年級換了班級座號。#107 讓你上傳舊帳密總表與教育局新名冊，自動比對轉入轉出、偵測末四碼撞號、跨學年保留帳密只更新座號，一鍵產出更新後總表、異動清冊與新生通知單。全程純前端、個資絕不上傳，所有運算只在你這台電腦的瀏覽器裡完成。 標籤：教育雲帳號、OpenID、學生帳號管理、帳密總表、轉入轉出比對、末四碼撞號。 實際工具：https://cagoooo.github.io/edu-cloud-updater/。教學情境文章：https://cagoooo.github.io/Akai/blog/edu-cloud-account-updater-107-openid-roster
+- [#109 數位內容與教學軟體需求調查填報](https://cagoooo.github.io/Akai/tool/109): 每年學校要彙整老師的教學軟體採購需求，總是一張 Excel 在處室間傳來傳去、誰填了誰漏了理不清。#109 是石門國小教務處的線上實名填報系統：老師勾選統購與自主需求軟體，依數位內容／課堂教學／遠距教學三領域篩選，全校即時統計勾選人數、自動排出前 5 名提報教育局。已大量採購的軟體自動標示「免填」，班級教師學生數系統去重統計，承辦不用再對 Excel 對到天荒地老。 標籤：軟體需求調查、數位學習、教學軟體、數位內容、線上填報、即時排行榜。 實際工具：https://cagoooo.github.io/smes-soft-survey/。教學情境文章：https://cagoooo.github.io/Akai/blog/digital-software-survey-109-firestore-needs-poll
+- [#110 智慧自動化照片成果轉影片產生器](https://cagoooo.github.io/Akai/tool/110): 辦完活動，幾十張照片躺在資料夾裡，要剪成一支有旁白、有音樂、有字幕的成果影片，光想到就累。#110 讓你只要上傳活動照片，多模態 AI 自動看懂每張照片在做什麼、編寫前後連貫的繁體中文旁白與字幕、配上微軟 Neural 高品質人聲、挑好轉場與背景音樂，最後一鍵錄製匯出相容 iPhone/Safari 的 MP4。純前端、金鑰只存在你的瀏覽器，照片不外傳。 標籤：照片轉影片、活動紀錄影片、AI 自動剪輯、多模態視覺辨識、AI 旁白腳本、Neural 語音。 實際工具：https://cagoooo.github.io/PhotoLibrary/。教學情境文章：https://cagoooo.github.io/Akai/blog/photo-to-video-110-ai-event-recap-generator
+- [#113 PaGamO 素養教材班級授權填報](https://cagoooo.github.io/Akai/tool/113): 專為學校行政與導師設計的 PaGamO 素養教材授權填報系統。簡化繁瑣的班級名單與授權核對流程，一鍵填報、即時彙整，大幅提升行政作業效率，讓素養學習推廣更輕鬆！ 標籤：PaGamO、素養教材、授權填報、行政工具、國小教育、石門國小。 實際工具：https://cagoooo.github.io/PaGamO/。教學情境文章：https://cagoooo.github.io/Akai/blog/pagamo-license-113-school-enrollment
+- [#114 學生名單校對平台](https://cagoooo.github.io/Akai/tool/114): 專為學校行政與導師設計的學生名單校對平台。一鍵匯入名單與核對檔，智慧比對學號、姓名及班級差異，自動揪出錯漏字與重疊名單，讓繁瑣的學籍核對作業變得輕鬆又精準！ 標籤：名單校對、學生名單、行政效率、名單核對、國小教育、石門國小。 實際工具：https://cagoooo.github.io/student-list-checker/。教學情境文章：https://cagoooo.github.io/Akai/blog/student-list-checker-114-roster-verification
+- [#116 考卷格式自動校正系統](https://cagoooo.github.io/Akai/tool/116): 把考卷排版檢查交給自動化流程，快速標出題號、選項、答案區與版面格式問題，讓老師在列印前先完成一次穩穩的格式健檢。 標籤：考卷格式、自動校正、試卷排版、教師工具、列印前檢查、AI 輔助。 實際工具：https://cagoooo.github.io/exam-format-app/。教學情境文章：https://cagoooo.github.io/Akai/blog/tool-116
 
 ### 教學設計（21 款）
 
-- [#7 點「石」成金🐝(評語優化)](https://line.me/R/ti/p/@733oiboa?oat_content=url&ts=05120012): 創新的學生評語優化工具，協助教師撰寫更正向、積極且個人化的學生評語
-- [#8 12年教案有14](https://lin.ee/pCqnVhT): 豐富的教案資源分享平台，提供多元化的教學素材和靈感
-- [#11 剛好學：課堂互動so easy](https://cagoooo.github.io/Akailao/): 阿凱老師與阿剛老師共同打造的剛好學課堂互動平台，13 種互動模式涵蓋投票、QA、閱讀測驗、繪圖題、文字雲、相片牆，學生掃 QR Code 就能加入。
-- [#13 5W1H 靈感發射器 🚀](https://5w1h.smes.tyc.edu.tw/): 創意思維激發工具，協助發想教學內容
-- [#23 點石成金蜂🐝 評語優化網頁版](https://cagoooo.github.io/comments/): 阿凱老師打造的「點石成金蜂」教師評語生成應用，協助老師快速產出個人化、貼近學生特質的成績單評語，告別罐頭句子。
-- [#26 九九乘法表練習器](https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E4%B9%9D%E4%B9%9D%E4%B9%98%E6%B3%95%E8%A1%A8%E7%B7%B4%E7%BF%92%E5%99%A8?authuser=0): 互動式九九乘法表練習工具
-- [#29 太陽系探索者](https://www.smes.tyc.edu.tw/smes_html/3d-space.html): 3D 太陽系探索互動學習工具
-- [#44 數學加減法練習器](https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E6%95%B8%E5%AD%B8%E5%8A%A0%E6%B8%9B%E6%B3%95%E7%B7%B4%E7%BF%92%E5%99%A8): 互動式數學加減法練習工具，幫助學生熟練基礎運算能力
-- [#49 教務處寶藏庫](https://sites.google.com/mail2.smes.tyc.edu.tw/academic/): 教務處精心彙整的豐富資源平台，集結課程計畫、評量工具、教學表單及行政公告等寶貴資料，是教師備課與行政作業的最佳後盾
-- [#54 臉盲教師救星 - 識生學坊](https://cagoooo.github.io/recognize/): 專為教師設計的學生辨識訓練工坊透過遊戲化測驗強化對學生面孔的記憶。
-- [#58 教師數位備課教案小幫手](https://cagoooo.github.io/prepare/): 專為老師設計的 AI 數位備課工具，能快速生成優質教案與教學活動設計，大幅節省行政與備課時間。
-- [#64 簡譜節拍節奏大師](https://cagoooo.github.io/music/): 學習簡譜與節奏的互動學習工具，幫助初學者輕鬆掌握音樂節拍與旋律。
-- [#65 AI 影片創作與教學整合資源](https://cagoooo.github.io/Grok-Canva/): 阿凱老師整理的 AI 影片創作教學資源中心，串接 ChatGPT 寫腳本 → Grok 動圖化 → Canva 剪輯的三步驟工作流，內建 12+ 範例影片合集。
-- [#66 Sora AI 旅遊全記錄教學網](https://cagoooo.github.io/Sora/): 探索 Sora AI 與旅遊記錄的完美結合，掌握如何利用 AI 技術捕捉、編輯並分享您的旅遊點滴，打造個人專屬的高質感全記錄教學平台。
-- [#76 WebSlide Pro 簡報播放器](https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/webslide-%E7%B0%A1%E5%A0%B1%E6%92%AD%E6%94%BE%E5%99%A8?authuser=0): 專業流暢的網頁版簡報播放器，支援多種互動功能，無需安裝軟體即可隨時隨地開啟完美簡報。
-- [#81 國小資訊科技教學駕駛艙入口網](https://cagoooo.github.io/it-cockpit/): 阿凱老師打造的國小資訊科技課全學期教學駕駛艙，三、五、六年級十三大互動教學艙，從電腦入門、Scratch、micro:bit，到 AI 創作與媒體識讀，一站式翻轉資訊課堂。
-- [#90 繪本 → Google表單 一條龍工作坊](https://cagoooo.github.io/storytell/): 阿凱老師打造的整合式 AI 教學工作坊，把 Gemini 生成的繪本圖文、Google Doc 整理、Apps Script 表單產生、QR Code 派發、NotebookLM 學習資源一條龍串成六步驟，5 分鐘把繪本變成可派發的互動表單。
-- [#92 5W1H 靈感發射器 PRO版](https://cagoooo.github.io/Aura/): 桃園市石門國小資訊組打造、阿凱老師上架的 AI 創意思考小幫手 PRO 版，用 5W1H（What／Who／When／Where／Why／How）框架幫老師結構化發想教學設計、改寫學生評語，還能建立專屬的客製化思考助手。
-- [#99 考試卷生圖 Studio — AI 黑白線稿插圖生成](https://cagoooo.github.io/picture-master/): 備課時想加一張剛剛好的學習單插畫？輸入四個欄位（標題、對話、角色、場景），10–20 秒生成兩張 1024×1024 黑白線稿 PNG，列印不吃墨水、可當著色頁、支援中文精準渲染。內建 4 組教學情境範例 + AI Prompt 可複製轉用 ChatGPT / Bing。
-- [#103 AI Agent 的 Web 技能雙引擎 — Playwright × Webwright 一頁讀懂](https://cagoooo.github.io/PlayRight/): 一頁讀懂 AI Agent 怎麼「看得懂、做得到、做完有回報」地操作網頁！Playwright 負責動手執行、Webwright 負責動腦規劃，兩大引擎合起來才是完整的 Web Agent。含自動填 Google 表單、電子公文自動歸檔等真實自動化情境，阿凱老師用日記體一路帶你從零看懂這兩個關鍵字，松鼠吉祥物 + 大量 emoji 降低技術門檻。
-- [#105 臺灣主權 AI 訓練語料庫 × 石門國小 — 把國家級本土語料變成校園教材](https://cagoooo.github.io/taic-edu/): 國家耗十年、集 265 個機關蒐集的 6 億 tokens 本土語料，從「只拿來餵 AI」變成「師生家長共用的教材庫」。九大教育主題、4,554 筆語料一鍵探索，每筆都標課綱領域與授權來源；還能用自備的免費 Gemini 金鑰，即時生成台語／客語／國語學習單與繪本腳本。數位發展部 × 桃園市龍潭區石門國民小學阿凱老師打造的「鱻本土 AI 共學站」。
+- [#7 點「石」成金🐝(評語優化)](https://cagoooo.github.io/Akai/tool/7): 創新的學生評語優化工具，協助教師撰寫更正向、積極且個人化的學生評語 標籤：評語、AI、LINE、正向、學生。 實際工具：https://line.me/R/ti/p/@733oiboa?oat_content=url&ts=05120012。教學情境文章：https://cagoooo.github.io/Akai/blog/comment-7-ai-positive-language
+- [#8 12年教案有14](https://cagoooo.github.io/Akai/tool/8): 豐富的教案資源分享平台，提供多元化的教學素材和靈感 標籤：教案、十二年國教、課綱、資源、分享。 實際工具：https://lin.ee/pCqnVhT。教學情境文章：https://cagoooo.github.io/Akai/blog/line-bot-8-lesson-plans
+- [#11 剛好學：課堂互動so easy](https://cagoooo.github.io/Akai/tool/11): 阿凱老師與阿剛老師共同打造的剛好學課堂互動平台，13 種互動模式涵蓋投票、QA、閱讀測驗、繪圖題、文字雲、相片牆，學生掃 QR Code 就能加入。 標籤：互動、課堂、即時、教學、問答。 實際工具：https://cagoooo.github.io/Akailao/。教學情境文章：https://cagoooo.github.io/Akai/blog/classroom-interaction-11-easy
+- [#13 5W1H 靈感發射器 🚀](https://cagoooo.github.io/Akai/tool/13): 創意思維激發工具，協助發想教學內容 標籤：5W1H、創意、靈感、思維、發想。 實際工具：https://5w1h.smes.tyc.edu.tw/。教學情境文章：https://cagoooo.github.io/Akai/blog/aura-13-firebase-mirror
+- [#23 點石成金蜂🐝 評語優化網頁版](https://cagoooo.github.io/Akai/tool/23): 阿凱老師打造的「點石成金蜂」教師評語生成應用，協助老師快速產出個人化、貼近學生特質的成績單評語，告別罐頭句子。 標籤：評語、AI、正向、學生、網頁版。 實際工具：https://cagoooo.github.io/comments/。教學情境文章：https://cagoooo.github.io/Akai/blog/comments-23-web-version
+- [#26 九九乘法表練習器](https://cagoooo.github.io/Akai/tool/26): 互動式九九乘法表練習工具 標籤：數學、乘法、九九、練習、計算。 實際工具：https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E4%B9%9D%E4%B9%9D%E4%B9%98%E6%B3%95%E8%A1%A8%E7%B7%B4%E7%BF%92%E5%99%A8?authuser=0。教學情境文章：https://cagoooo.github.io/Akai/blog/multiplication-26-adventure
+- [#29 太陽系探索者](https://cagoooo.github.io/Akai/tool/29): 3D 太陽系探索互動學習工具 標籤：太陽系、3D、太空、行星、自然。 實際工具：https://www.smes.tyc.edu.tw/smes_html/3d-space.html。教學情境文章：https://cagoooo.github.io/Akai/blog/solar-29-system-explorer
+- [#44 數學加減法練習器](https://cagoooo.github.io/Akai/tool/44): 互動式數學加減法練習工具，幫助學生熟練基礎運算能力 標籤：數學、加法、減法、練習、基礎運算。 實際工具：https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E6%95%B8%E5%AD%B8%E5%8A%A0%E6%B8%9B%E6%B3%95%E7%B7%B4%E7%BF%92%E5%99%A8。教學情境文章：https://cagoooo.github.io/Akai/blog/math-adventure-44-grade-one
+- [#49 教務處寶藏庫](https://cagoooo.github.io/Akai/tool/49): 教務處精心彙整的豐富資源平台，集結課程計畫、評量工具、教學表單及行政公告等寶貴資料，是教師備課與行政作業的最佳後盾 標籤：教務、資源庫、課程計畫、評量、行政、表單。 實際工具：https://sites.google.com/mail2.smes.tyc.edu.tw/academic/。教學情境文章：https://cagoooo.github.io/Akai/blog/academic-49-treasure-trove
+- [#54 臉盲教師救星 - 識生學坊](https://cagoooo.github.io/Akai/tool/54): 專為教師設計的學生辨識訓練工坊透過遊戲化測驗強化對學生面孔的記憶。 標籤：臉盲、學生辨識、記憶訓練、師生互動、教學輔助。 實際工具：https://cagoooo.github.io/recognize/。教學情境文章：https://cagoooo.github.io/Akai/blog/face-recognition-54-teacher-savior
+- [#58 教師數位備課教案小幫手](https://cagoooo.github.io/Akai/tool/58): 專為老師設計的 AI 數位備課工具，能快速生成優質教案與教學活動設計，大幅節省行政與備課時間。 標籤：AI、備課、教案生成、教學設計、數位轉型、效率工具。 實際工具：https://cagoooo.github.io/prepare/。教學情境文章：https://cagoooo.github.io/Akai/blog/prepare-58-lesson-plan
+- [#64 簡譜節拍節奏大師](https://cagoooo.github.io/Akai/tool/64): 學習簡譜與節奏的互動學習工具，幫助初學者輕鬆掌握音樂節拍與旋律。 標籤：音樂、簡譜、節拍、節奏、樂理、互動學習。 實際工具：https://cagoooo.github.io/music/。教學情境文章：https://cagoooo.github.io/Akai/blog/music-64-rhythm-beat-master
+- [#65 AI 影片創作與教學整合資源](https://cagoooo.github.io/Akai/tool/65): 阿凱老師整理的 AI 影片創作教學資源中心，串接 ChatGPT 寫腳本 → Grok 動圖化 → Canva 剪輯的三步驟工作流，內建 12+ 範例影片合集。 標籤：AI、影片創作、教學、Canva、Grok。 實際工具：https://cagoooo.github.io/Grok-Canva/。教學情境文章：https://cagoooo.github.io/Akai/blog/ai-video-65-creator-hub
+- [#66 Sora AI 旅遊全記錄教學網](https://cagoooo.github.io/Akai/tool/66): 探索 Sora AI 與旅遊記錄的完美結合，掌握如何利用 AI 技術捕捉、編輯並分享您的旅遊點滴，打造個人專屬的高質感全記錄教學平台。 標籤：Sora AI、旅遊記錄、AI 影片、教學資源、生活記錄、影像創作。 實際工具：https://cagoooo.github.io/Sora/。教學情境文章：https://cagoooo.github.io/Akai/blog/sora-66-travel-record
+- [#76 WebSlide Pro 簡報播放器](https://cagoooo.github.io/Akai/tool/76): 專業流暢的網頁版簡報播放器，支援多種互動功能，無需安裝軟體即可隨時隨地開啟完美簡報。 標籤：簡報、播放器、教學工具、WebSlide、展示、線上簡報。 實際工具：https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/webslide-%E7%B0%A1%E5%A0%B1%E6%92%AD%E6%94%BE%E5%99%A8?authuser=0。教學情境文章：https://cagoooo.github.io/Akai/blog/webslide-76-cross-device-presenter
+- [#81 國小資訊科技教學駕駛艙入口網](https://cagoooo.github.io/Akai/tool/81): 阿凱老師打造的國小資訊科技課全學期教學駕駛艙，三、五、六年級十三大互動教學艙，從電腦入門、Scratch、micro:bit，到 AI 創作與媒體識讀，一站式翻轉資訊課堂。 標籤：資訊科技、教學入口、儀表板、國小教育、工具整合、駕駛艙。 實際工具：https://cagoooo.github.io/it-cockpit/。教學情境文章：https://cagoooo.github.io/Akai/blog/cockpit-81-info-tech-class
+- [#90 繪本 → Google表單 一條龍工作坊](https://cagoooo.github.io/Akai/tool/90): 阿凱老師打造的整合式 AI 教學工作坊，把 Gemini 生成的繪本圖文、Google Doc 整理、Apps Script 表單產生、QR Code 派發、NotebookLM 學習資源一條龍串成六步驟，5 分鐘把繪本變成可派發的互動表單。 標籤：繪本教學、Google 表單、AI 工作坊、Apps Script、Gemini AI、NotebookLM。 實際工具：https://cagoooo.github.io/storytell/。教學情境文章：https://cagoooo.github.io/Akai/blog/storytell-90-picturebook-form
+- [#92 5W1H 靈感發射器 PRO版](https://cagoooo.github.io/Akai/tool/92): 桃園市石門國小資訊組打造、阿凱老師上架的 AI 創意思考小幫手 PRO 版，用 5W1H（What／Who／When／Where／Why／How）框架幫老師結構化發想教學設計、改寫學生評語，還能建立專屬的客製化思考助手。 標籤：5W1H、創意思考、教學設計、評語優化、AI 助手、教師工具。 實際工具：https://cagoooo.github.io/Aura/。教學情境文章：https://cagoooo.github.io/Akai/blog/inspire-92-5w1h-pro-writing
+- [#99 考試卷生圖 Studio — AI 黑白線稿插圖生成](https://cagoooo.github.io/Akai/tool/99): 備課時想加一張剛剛好的學習單插畫？輸入四個欄位（標題、對話、角色、場景），10–20 秒生成兩張 1024×1024 黑白線稿 PNG，列印不吃墨水、可當著色頁、支援中文精準渲染。內建 4 組教學情境範例 + AI Prompt 可複製轉用 ChatGPT / Bing。 標籤：試卷插圖、學習單插畫、AI 線稿生成、黑白線稿、著色頁、備課工具。 實際工具：https://cagoooo.github.io/picture-master/。教學情境文章：https://cagoooo.github.io/Akai/blog/exam-illustration-99-ai-line-art-studio
+- [#103 AI Agent 的 Web 技能雙引擎 — Playwright × Webwright 一頁讀懂](https://cagoooo.github.io/Akai/tool/103): 一頁讀懂 AI Agent 怎麼「看得懂、做得到、做完有回報」地操作網頁！Playwright 負責動手執行、Webwright 負責動腦規劃，兩大引擎合起來才是完整的 Web Agent。含自動填 Google 表單、電子公文自動歸檔等真實自動化情境，阿凱老師用日記體一路帶你從零看懂這兩個關鍵字，松鼠吉祥物 + 大量 emoji 降低技術門檻。 標籤：AI Agent、Playwright、Webwright、網頁自動化、瀏覽器自動化、自動填表。 實際工具：https://cagoooo.github.io/PlayRight/。教學情境文章：https://cagoooo.github.io/Akai/blog/web-skill-dual-engine-103-playwright-webwright
+- [#105 臺灣主權 AI 訓練語料庫 × 石門國小 — 把國家級本土語料變成校園教材](https://cagoooo.github.io/Akai/tool/105): 國家耗十年、集 265 個機關蒐集的 6 億 tokens 本土語料，從「只拿來餵 AI」變成「師生家長共用的教材庫」。九大教育主題、4,554 筆語料一鍵探索，每筆都標課綱領域與授權來源；還能用自備的免費 Gemini 金鑰，即時生成台語／客語／國語學習單與繪本腳本。數位發展部 × 桃園市龍潭區石門國民小學阿凱老師打造的「鱻本土 AI 共學站」。 標籤：臺灣主權 AI、本土語料庫、國家級開放資料、教學素材庫、數位發展部、石門國小。 實際工具：https://cagoooo.github.io/taic-edu/。教學情境文章：https://cagoooo.github.io/Akai/blog/taiwan-sovereign-ai-corpus-105-shimen-edu
 
-### 趣味遊戲（20 款）
+### 趣味遊戲（21 款）
 
-- [#6 蜂類配對消消樂](https://cagoooo.github.io/bee/): 阿凱老師打造的記憶配對消消樂遊戲，三種難度搭配注音、唐詩、英單、水果等六大主題包，老師改 JSON 就能新增主題，純靜態 PWA 離線可玩。
-- [#9 超級瑪莉歐冒險](https://cagoooo.github.io/mario-game/): 阿凱老師打造的瀏覽器版超級瑪莉歐冒險遊戲，支援鍵盤＋觸控雙模式操作，內建關卡選擇、計分、金幣與成就系統，純前端開瀏覽器就能玩。
-- [#28 瑪莉歐風格平台跳躍遊戲](https://www.smes.tyc.edu.tw/smes_html/mariojump.html): 經典瑪莉歐風格的平台跳躍遊戲
-- [#30 小遊戲大集合](https://www.smes.tyc.edu.tw/smes_html/little_games/): 多款趣味小遊戲合集
-- [#31 互動遊戲抓抓樂](https://www.smes.tyc.edu.tw/claw-machine-game.html): 趣味夾娃娃機互動遊戲
-- [#32 遊戲觸屏碰碰碰](https://www.smes.tyc.edu.tw/smes_html/touch.html): 觸屏互動碰撞遊戲
-- [#33 讓聲音具現化吧！](https://www.smes.tyc.edu.tw/smes_html/sound.html): 聲音視覺化互動體驗
-- [#34 互動式影像聲音遊戲區](https://www.smes.tyc.edu.tw/smes_html/go.html): 結合影像與聲音的互動遊戲
-- [#35 觸屏點點塗鴉區](https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2856): 觸屏塗鴉創作工具
-- [#36 貪食蛇互動遊戲](https://www.smes.tyc.edu.tw/smes_html/snake_game.html): 經典貪食蛇遊戲
-- [#37 聲波擴散360小遊戲](https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2863): 聲波視覺化互動遊戲
-- [#38 聲音互動小遊戲](https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2859): 透過聲音控制的互動遊戲
-- [#39 孔明神算：心靈感應預言魔術](https://claude.ai/public/artifacts/982f7b1c-8302-4112-a05f-342ad24bd421): 神奇的心靈感應預言魔術遊戲
-- [#50 童趣學園](https://cagoooo.github.io/kids/): 阿凱老師打造的童趣樂園 KidsZone 兒童學習平台，13 款繁中互動遊戲涵蓋顏色、數學、英單、注音、時鐘、程式設計，搭配星星幣經濟與頭像系統。
-- [#56 元宵猜燈謎闖關遊戲](https://cagoooo.github.io/lantern/): 充滿節慶氣氛的元宵猜燈謎互動遊戲，讓學生在趣味闖關中學習傳統文化。
-- [#69 猴子丟香蕉-投擲大戰爭](https://cagoooo.github.io/monkey/): 是一款充滿趣味與挑戰的互動投擲遊戲！玩家將化身為靈活的小猴子，在熱帶叢林中展開一場香蕉大戰。
-- [#85 南極大冒險 - 企鵝跑酷](https://cagoooo.github.io/penguin/): 操控可愛企鵝在南極冰原上奔馳，閃避冰柱與裂縫、收集鮮魚與星星，挑戰最遠距離與最高分數的休閒跑酷小遊戲，輕鬆訓練反應力與專注力。
-- [#101 3D 迷宮冒險遊戲 — 第一人稱光球收集 × 全班排行榜](https://cagoooo.github.io/maze-3d-game/): 第一人稱 3D 迷宮探索遊戲：收集藍色光球、躲避紅色巡守者、與時間賽跑。React + Three.js 純瀏覽器跑 3D，桌機鍵盤滑鼠 + iPad 觸控全支援，內建全班 / 全校排行榜，下課十分鐘剛好打一輪。
-- [#102 外星人入侵·保衛石門 — 復古太空射擊 × 全校排行榜](https://cagoooo.github.io/alien-invasion/): 駕駛地球最後一艘戰機，擊退一波波外星艦隊！復古像素風太空射擊：三種難度、王關 Boss 母艦、火力強化與護盾道具、連擊加成。石門校徽開場 +「保衛石門」主題，可加入主畫面當 App、離線可玩，內建全校跨裝置排行榜。桌機鍵盤 + 手機觸控全支援，下課十分鐘剛好打一輪。
-- [#112 皮卡丘天空大冒險](https://cagoooo.github.io/pikachu-flappy-bird/): 精緻好玩的皮卡丘天空冒險遊戲！結合 Flappy Bird 經典玩法，在躲避障礙的過程中鍛鍊專注力與手眼協調，非常適合用於課堂破冰、班級競賽或下課休閒。
+- [#6 蜂類配對消消樂](https://cagoooo.github.io/Akai/tool/6): 阿凱老師打造的記憶配對消消樂遊戲，三種難度搭配注音、唐詩、英單、水果等六大主題包，老師改 JSON 就能新增主題，純靜態 PWA 離線可玩。 標籤：遊戲、蜜蜂、配對、消消樂、自然。 實際工具：https://cagoooo.github.io/bee/。教學情境文章：https://cagoooo.github.io/Akai/blog/bee-6-pair-game
+- [#9 超級瑪莉歐冒險](https://cagoooo.github.io/Akai/tool/9): 阿凱老師打造的瀏覽器版超級瑪莉歐冒險遊戲，支援鍵盤＋觸控雙模式操作，內建關卡選擇、計分、金幣與成就系統，純前端開瀏覽器就能玩。 標籤：遊戲、瑪莉歐、冒險、跳躍、經典。 實際工具：https://cagoooo.github.io/mario-game/。教學情境文章：https://cagoooo.github.io/Akai/blog/mario-9-platformer-adventure
+- [#28 瑪莉歐風格平台跳躍遊戲](https://cagoooo.github.io/Akai/tool/28): 經典瑪莉歐風格的平台跳躍遊戲 標籤：遊戲、瑪莉歐、跳躍、平台、經典。 實際工具：https://www.smes.tyc.edu.tw/smes_html/mariojump.html。教學情境文章：https://cagoooo.github.io/Akai/blog/mario-28-jump-platform
+- [#30 小遊戲大集合](https://cagoooo.github.io/Akai/tool/30): 多款趣味小遊戲合集 標籤：遊戲、合集、趣味、休閒、多款。 實際工具：https://www.smes.tyc.edu.tw/smes_html/little_games/。教學情境文章：https://cagoooo.github.io/Akai/blog/games-30-collection-12-in-1
+- [#31 互動遊戲抓抓樂](https://cagoooo.github.io/Akai/tool/31): 趣味夾娃娃機互動遊戲 標籤：遊戲、夾娃娃、互動、趣味、獎品。 實際工具：https://www.smes.tyc.edu.tw/claw-machine-game.html。教學情境文章：https://cagoooo.github.io/Akai/blog/claw-31-machine-game
+- [#32 遊戲觸屏碰碰碰](https://cagoooo.github.io/Akai/tool/32): 觸屏互動碰撞遊戲 標籤：遊戲、觸屏、碰撞、互動、觸控。 實際工具：https://www.smes.tyc.edu.tw/smes_html/touch.html。教學情境文章：https://cagoooo.github.io/Akai/blog/touch-32-bombbombbomb
+- [#33 讓聲音具現化吧！](https://cagoooo.github.io/Akai/tool/33): 聲音視覺化互動體驗 標籤：聲音、視覺化、互動、音樂、波形。 實際工具：https://www.smes.tyc.edu.tw/smes_html/sound.html。教學情境文章：https://cagoooo.github.io/Akai/blog/sound-33-visualizer
+- [#34 互動式影像聲音遊戲區](https://cagoooo.github.io/Akai/tool/34): 結合影像與聲音的互動遊戲 標籤：遊戲、影像、聲音、互動、多媒體。 實際工具：https://www.smes.tyc.edu.tw/smes_html/go.html。教學情境文章：https://cagoooo.github.io/Akai/blog/interactive-34-image-sound
+- [#35 觸屏點點塗鴉區](https://cagoooo.github.io/Akai/tool/35): 觸屏塗鴉創作工具 標籤：塗鴉、觸屏、繪畫、創作、藝術。 實際工具：https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2856。教學情境文章：https://cagoooo.github.io/Akai/blog/doodle-35-touch-canvas
+- [#36 貪食蛇互動遊戲](https://cagoooo.github.io/Akai/tool/36): 經典貪食蛇遊戲 標籤：遊戲、貪食蛇、經典、休閒、懷舊。 實際工具：https://www.smes.tyc.edu.tw/smes_html/snake_game.html。教學情境文章：https://cagoooo.github.io/Akai/blog/snake-36-game
+- [#37 聲波擴散360小遊戲](https://cagoooo.github.io/Akai/tool/37): 聲波視覺化互動遊戲 標籤：遊戲、聲波、視覺化、360、互動。 實際工具：https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2863。教學情境文章：https://cagoooo.github.io/Akai/blog/soundwave-37-360-game
+- [#38 聲音互動小遊戲](https://cagoooo.github.io/Akai/tool/38): 透過聲音控制的互動遊戲 標籤：遊戲、聲音、控制、互動、麥克風。 實際工具：https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2859。教學情境文章：https://cagoooo.github.io/Akai/blog/sound-38-interactive-game
+- [#39 孔明神算：心靈感應預言魔術](https://cagoooo.github.io/Akai/tool/39): 神奇的心靈感應預言魔術遊戲 標籤：魔術、預言、心靈感應、神奇、表演。 實際工具：https://claude.ai/public/artifacts/982f7b1c-8302-4112-a05f-342ad24bd421。教學情境文章：https://cagoooo.github.io/Akai/blog/magic-39-mind-reading
+- [#50 童趣學園](https://cagoooo.github.io/Akai/tool/50): 阿凱老師打造的童趣樂園 KidsZone 兒童學習平台，13 款繁中互動遊戲涵蓋顏色、數學、英單、注音、時鐘、程式設計，搭配星星幣經濟與頭像系統。 標籤：兒童、遊戲、學習、探索、樂園、互動。 實際工具：https://cagoooo.github.io/kids/。教學情境文章：https://cagoooo.github.io/Akai/blog/kids-50-zone-learning
+- [#56 元宵猜燈謎闖關遊戲](https://cagoooo.github.io/Akai/tool/56): 充滿節慶氣氛的元宵猜燈謎互動遊戲，讓學生在趣味闖關中學習傳統文化。 標籤：元宵節、猜燈謎、傳統文化、遊戲、節慶、教育。 實際工具：https://cagoooo.github.io/lantern/。教學情境文章：https://cagoooo.github.io/Akai/blog/lantern-56-festival-riddles
+- [#69 猴子丟香蕉-投擲大戰爭](https://cagoooo.github.io/Akai/tool/69): 是一款充滿趣味與挑戰的互動投擲遊戲！玩家將化身為靈活的小猴子，在熱帶叢林中展開一場香蕉大戰。 標籤：遊戲、猴子、香蕉、投擲、互動、物理。 實際工具：https://cagoooo.github.io/monkey/。教學情境文章：https://cagoooo.github.io/Akai/blog/monkey-69-pixel-clash
+- [#85 南極大冒險 - 企鵝跑酷](https://cagoooo.github.io/Akai/tool/85): 操控可愛企鵝在南極冰原上奔馳，閃避冰柱與裂縫、收集鮮魚與星星，挑戰最遠距離與最高分數的休閒跑酷小遊戲，輕鬆訓練反應力與專注力。 標籤：跑酷遊戲、企鵝、南極、冒險、休閒小遊戲、反應力訓練。 實際工具：https://cagoooo.github.io/penguin/。教學情境文章：https://cagoooo.github.io/Akai/blog/penguin-85-runner
+- [#101 3D 迷宮冒險遊戲 — 第一人稱光球收集 × 全班排行榜](https://cagoooo.github.io/Akai/tool/101): 第一人稱 3D 迷宮探索遊戲：收集藍色光球、躲避紅色巡守者、與時間賽跑。React + Three.js 純瀏覽器跑 3D，桌機鍵盤滑鼠 + iPad 觸控全支援，內建全班 / 全校排行榜，下課十分鐘剛好打一輪。 標籤：3D 迷宮、第一人稱、Three.js、光球收集、全班排行榜、iPad 觸控。 實際工具：https://cagoooo.github.io/maze-3d-game/。教學情境文章：https://cagoooo.github.io/Akai/blog/maze-3d-101-first-person-orb-collection
+- [#102 外星人入侵·保衛石門 — 復古太空射擊 × 全校排行榜](https://cagoooo.github.io/Akai/tool/102): 駕駛地球最後一艘戰機，擊退一波波外星艦隊！復古像素風太空射擊：三種難度、王關 Boss 母艦、火力強化與護盾道具、連擊加成。石門校徽開場 +「保衛石門」主題，可加入主畫面當 App、離線可玩，內建全校跨裝置排行榜。桌機鍵盤 + 手機觸控全支援，下課十分鐘剛好打一輪。 標籤：太空射擊、外星人入侵、復古像素、全校排行榜、PWA 離線、手機觸控。 實際工具：https://cagoooo.github.io/alien-invasion/。教學情境文章：https://cagoooo.github.io/Akai/blog/alien-invasion-102-defend-shihmen-space-shooter
+- [#112 皮卡丘天空大冒險](https://cagoooo.github.io/Akai/tool/112): 精緻好玩的皮卡丘天空冒險遊戲！結合 Flappy Bird 經典玩法，在躲避障礙的過程中鍛鍊專注力與手眼協調，非常適合用於課堂破冰、班級競賽或下課休閒。 標籤：皮卡丘、Flappy Bird、飛翔的小鳥、天空冒險、網頁遊戲、班級活動。 實際工具：https://cagoooo.github.io/pikachu-flappy-bird/。教學情境文章：https://cagoooo.github.io/Akai/blog/pikachu-sky-adventure-112-flappy-bird-game
+- [#115 萌獸數學道館](https://cagoooo.github.io/Akai/tool/115): 把四則運算練習變成萌獸道館挑戰，學生在闖關、蒐集徽章與升級回饋中，一題一題練出數學手感。 標籤：萌獸、數學道館、四則運算、數學遊戲、闖關學習、徽章成就。 實際工具：https://cagoooo.github.io/Poke/。教學情境文章：https://cagoooo.github.io/Akai/blog/math-beast-gym-115-arithmetic-battle
 
 ### 語言學習（13 款）
 
-- [#20 英打練習](https://www.smes.tyc.edu.tw/smes_html/typeEN.html): 英文打字練習工具，提升打字速度與準確度
-- [#21 中打練習](https://www.smes.tyc.edu.tw/smes_html/typeCC.html): 中文打字練習工具，提升中文輸入能力
-- [#22 成語中打練習](https://www.smes.tyc.edu.tw/smes_html/typeTC.html): 透過成語練習中文打字，邊打邊學成語
-- [#25 國語演說培訓班](https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E5%9C%8B%E8%AA%9E%E6%BC%94%E8%AA%AA%E7%B7%B4%E7%BF%92%E5%B0%8F%E5%B7%A5%E5%85%B7?authuser=0): 國語演說練習與培訓工具
-- [#43 課程計畫英文轉寫小精靈](https://bilingual.smes.tyc.edu.tw/): 上傳中文課程計畫 (PDF, DOCX)，轉寫小精靈將自動翻譯並整理成 Markdown 表格
-- [#55 ㄅㄆㄇ注音大挑戰](https://cagoooo.github.io/zhuyin/): 專為兒童設計的注音學習挑戰透過趣味互動讓孩子輕鬆掌握ㄅㄆㄇ。
-- [#61 英打打字超互動遊戲](https://cagoooo.github.io/typeEN/): 互動式英文打字學習遊戲，透過趣味關卡幫助學生提升英文打字速度與準確度，在遊戲中輕鬆掌握鍵盤位置。
-- [#67 國語演說比賽訓練平台 (pro版)](https://cagoooo.github.io/speech/): 專為國語演說比賽設計的專業訓練平台，提供全方位的技巧培訓、各類講稿庫與實戰模擬演練，助力學生在賽場上自信發揮，奪取佳績。
-- [#70 中文注音打字遊戲 (pro版)](https://cagoooo.github.io/typeCC/): 進階版中文注音打字練習遊戲，提供更豐富有趣的打字挑戰，全面提升中文輸入速度與準確度。
-- [#71 成語填空大挑戰](https://cagoooo.github.io/typeTC/): 專為提升成語能力設計的互動填空遊戲，透過趣味挑戰強化辭彙運用與文學素養。
-- [#77 石門國小雙語教育宣導網站](https://english.smes.tyc.edu.tw/): 石門國小雙語教育宣導專屬平台，整合雙語課程介紹、英語學習資源與校園國際化推廣資訊，讓師生與家長輕鬆掌握學校雙語教育發展方向。
-- [#79 漢語新解](https://cagoooo.github.io/words/): 以 AI 為驅動的創意漢語詮釋工具，用幽默、諷刺與機智的視角為你解讀日常詞彙的「新意」，讓語言學習更有趣，讓漢字充滿新生命！
-- [#91 ✨ 點亮詩意 Pro ✨早安長輩圖](https://cagoooo.github.io/PhotoPoet/): 阿凱老師打造的 AI 詩詞照片生成器，上傳一張照片就能 10 秒產出一首契合畫面意境的繁體中文詩詞與「早安長輩圖」，銀髮族、語文教師、創意寫作者都能輕鬆把日常影像變成有溫度的圖文作品。
+- [#20 英打練習](https://cagoooo.github.io/Akai/tool/20): 英文打字練習工具，提升打字速度與準確度 標籤：打字、英文、練習、鍵盤、速度。 實際工具：https://www.smes.tyc.edu.tw/smes_html/typeEN.html。教學情境文章：https://cagoooo.github.io/Akai/blog/typing-20-english-letters-falling
+- [#21 中打練習](https://cagoooo.github.io/Akai/tool/21): 中文打字練習工具，提升中文輸入能力 標籤：打字、中文、練習、注音、輸入法。 實際工具：https://www.smes.tyc.edu.tw/smes_html/typeCC.html。教學情境文章：https://cagoooo.github.io/Akai/blog/typing-21-zhuyin-keymap
+- [#22 成語中打練習](https://cagoooo.github.io/Akai/tool/22): 透過成語練習中文打字，邊打邊學成語 標籤：打字、成語、中文、學習、國語。 實際工具：https://www.smes.tyc.edu.tw/smes_html/typeTC.html。教學情境文章：https://cagoooo.github.io/Akai/blog/idiom-22-fill-blank-game
+- [#25 國語演說培訓班](https://cagoooo.github.io/Akai/tool/25): 國語演說練習與培訓工具 標籤：演說、國語、口說、培訓、比賽。 實際工具：https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E5%9C%8B%E8%AA%9E%E6%BC%94%E8%AA%AA%E7%B7%B4%E7%BF%92%E5%B0%8F%E5%B7%A5%E5%85%B7?authuser=0。教學情境文章：https://cagoooo.github.io/Akai/blog/speech-25-training-class-entry
+- [#43 課程計畫英文轉寫小精靈](https://cagoooo.github.io/Akai/tool/43): 上傳中文課程計畫 (PDF, DOCX)，轉寫小精靈將自動翻譯並整理成 Markdown 表格 標籤：翻譯、雙語、課程計畫、Markdown、PDF。 實際工具：https://bilingual.smes.tyc.edu.tw/。教學情境文章：https://cagoooo.github.io/Akai/blog/bilingual-43-lingua-lesson
+- [#55 ㄅㄆㄇ注音大挑戰](https://cagoooo.github.io/Akai/tool/55): 專為兒童設計的注音學習挑戰透過趣味互動讓孩子輕鬆掌握ㄅㄆㄇ。 標籤：注音、ㄅㄆㄇ、國語、幼童、拼音。 實際工具：https://cagoooo.github.io/zhuyin/。教學情境文章：https://cagoooo.github.io/Akai/blog/zhuyin-55-bopomofo-challenge
+- [#61 英打打字超互動遊戲](https://cagoooo.github.io/Akai/tool/61): 互動式英文打字學習遊戲，透過趣味關卡幫助學生提升英文打字速度與準確度，在遊戲中輕鬆掌握鍵盤位置。 標籤：打字、英文、鍵盤、練習、互動、遊戲。 實際工具：https://cagoooo.github.io/typeEN/。教學情境文章：https://cagoooo.github.io/Akai/blog/typeEN-61-pro
+- [#67 國語演說比賽訓練平台 (pro版)](https://cagoooo.github.io/Akai/tool/67): 專為國語演說比賽設計的專業訓練平台，提供全方位的技巧培訓、各類講稿庫與實戰模擬演練，助力學生在賽場上自信發揮，奪取佳績。 標籤：國語演說、比賽培訓、口語表達、專業版、講稿庫、教育科技。 實際工具：https://cagoooo.github.io/speech/。教學情境文章：https://cagoooo.github.io/Akai/blog/speech-67-training-pro
+- [#70 中文注音打字遊戲 (pro版)](https://cagoooo.github.io/Akai/tool/70): 進階版中文注音打字練習遊戲，提供更豐富有趣的打字挑戰，全面提升中文輸入速度與準確度。 標籤：打字、中文、注音、練習、進階、遊戲。 實際工具：https://cagoooo.github.io/typeCC/。教學情境文章：https://cagoooo.github.io/Akai/blog/typing-70-zhuyin-pro
+- [#71 成語填空大挑戰](https://cagoooo.github.io/Akai/tool/71): 專為提升成語能力設計的互動填空遊戲，透過趣味挑戰強化辭彙運用與文學素養。 標籤：成語、填空、國語、學習、遊戲、辭彙。 實際工具：https://cagoooo.github.io/typeTC/。教學情境文章：https://cagoooo.github.io/Akai/blog/idiom-71-typeTC-challenge
+- [#77 石門國小雙語教育宣導網站](https://cagoooo.github.io/Akai/tool/77): 石門國小雙語教育宣導專屬平台，整合雙語課程介紹、英語學習資源與校園國際化推廣資訊，讓師生與家長輕鬆掌握學校雙語教育發展方向。 標籤：雙語教育、英語學習、石門國小、國際化、雙語課程、英語沉浸。 實際工具：https://english.smes.tyc.edu.tw/。教學情境文章：https://cagoooo.github.io/Akai/blog/bilingual-77-english-promotion
+- [#79 漢語新解](https://cagoooo.github.io/Akai/tool/79): 以 AI 為驅動的創意漢語詮釋工具，用幽默、諷刺與機智的視角為你解讀日常詞彙的「新意」，讓語言學習更有趣，讓漢字充滿新生命！ 標籤：漢語、文字遊戲、AI創意、幽默詮釋、語言學習、國語文。 實際工具：https://cagoooo.github.io/words/。教學情境文章：https://cagoooo.github.io/Akai/blog/words-79-sarcastic-dictionary
+- [#91 ✨ 點亮詩意 Pro ✨早安長輩圖](https://cagoooo.github.io/Akai/tool/91): 阿凱老師打造的 AI 詩詞照片生成器，上傳一張照片就能 10 秒產出一首契合畫面意境的繁體中文詩詞與「早安長輩圖」，銀髮族、語文教師、創意寫作者都能輕鬆把日常影像變成有溫度的圖文作品。 標籤：AI 詩詞、早安長輩圖、照片生成、繁體中文詩、語文創作、銀髮數位。 實際工具：https://cagoooo.github.io/PhotoPoet/。教學情境文章：https://cagoooo.github.io/Akai/blog/photopoet-91-pro
 
 ### 即時互動（13 款）
 
-- [#3 學生即時投票系統](https://cagoooo.github.io/vote/): 阿凱老師打造的課堂即時投票系統，老師建立題目產生 QR Code，學生掃碼就能即時作答，搭配截圖白板標註工具，連投影片題目也能秒變互動題。
-- [#41 吉他彈唱🎸點歌系統🎵](https://cagoooo.github.io/song/): 阿凱老師打造的吉他彈唱即時點唱平台，觀眾掃碼投票點歌、看排行榜、收到「正在彈奏中」的即時通知，把表演現場變成互動社群。
-- [#45 文字雲即時互動](https://cagoooo.github.io/cloud): 阿凱老師打造的即時互動文字雲應用，多人共建房間即時投稿，Top 1-3 詞彙會跳出流光漸層特效，QR Code 一掃就能加入腦力激盪。
-- [#52 創價・教育 EXPO 線上選課](https://cagoooo.github.io/soka/): 專為創價・教育 EXPO 打造的線上選課平台提供流暢的課程探索與即時報名體驗讓學習參與更簡單。
-- [#60 專屬創意 3D 畫廊](https://cagoooo.github.io/3D/): 沈浸式 3D 互動畫廊體驗，在星空宇宙背景中展覽你的專屬創意作品，支援雲端同步、多主題背景、圖片標籤篩選與個人化 3D 場景設定。
-- [#63 Email 帳密記憶遊樂園](https://cagoooo.github.io/email/): 旨在幫助使用者安全且趣味地記憶 Email 帳號與密碼組合的互動式遊樂園。透過遊戲化記憶法，讓登入資訊的管理不再枯燥，並提升資安意識。
-- [#93 自治小市長-即時計票監票系統](https://cagoooo.github.io/Little-Mayer/): 阿凱老師為國小自治市市長選舉打造的即時計票監票系統，唱票員後台按 +1 唱票，全校班級的公開監票畫面同步更新長條圖與排名，讓選舉開票公開、透明、不漏拍。
-- [#94 封面串故事 · 音樂影片分鏡產生器](https://cagoooo.github.io/music-cover-storyboard/): 阿凱老師打造的 AI 音樂影片分鏡擴寫工具，把 Suno / Gemini Veo / Runway 等平台做出來的 MV 拖進瀏覽器，AI 自動抓封面幀、幫你寫出後 15-30 秒的運鏡與故事分鏡 prompt，貼回影片平台繼續生成，最後在瀏覽器內 FFmpeg 串成一支完整短片。
-- [#96 DFC 行動方案即時投票系統](https://cagoooo.github.io/Lungtan-DFC/): 阿凱老師為桃園市龍潭國民小學第 123 屆自治市小市長選舉打造的「DFC 行動方案即時投票系統」，把候選人的行動方案搬上線，全校班級同步觀看票數、長條圖與排名，讓學童在公開、即時、可監督的環境中學民主。
-- [#97 MBTI 校園奇遇記](https://cagoooo.github.io/MBTI/): 阿凱老師為國小高年級到國中量身設計的 MBTI 互動故事測驗，學生扮演主角從開學第一天走到校慶大結局，30+ 場景、4 條支線、16 種結局，玩出屬於自己的 16 型人格 + SEL 情緒因應風格，比制式問卷更有共鳴。
-- [#106 石門國小 第103屆畢業典禮｜啟程・感恩・祝福](https://cagoooo.github.io/smes-graduation-103/): 石門國小第103屆畢業典禮的數位主場：典禮資訊、YouTube 直播、校園巡禮、畢業歌〈風箏〉、家長祝福一站到齊。最大亮點是「即時祝福牆」——家長掃 QR 留言、老師 LINE 一鍵審核，祝福立刻飛上現場大螢幕的星空投影，剛寫完抬頭就看到自己。啟程・感恩・祝福，陪每個孩子勇敢啟程。
-- [#108 資安特攻隊：釣魚郵件偵蒐](https://cagoooo.github.io/security-squad-cockpit/): 一封看起來像銀行、像老師、像官方的訊息，到底是真的還是釣魚陷阱？#108 把資安教育變成一場闖關遊戲：學生扮演「鱻盾資安特攻隊」資安新兵，跟 NotebookLM 的阿盾教官對話，一封封揪出釣魚破綻，用「五看口訣」拆穿詐騙，集滿 5 枚徽章晉升正式隊員。附老師導覽五步驟、AI 即時生成教材，一節課帶孩子練成數位防身術。
-- [#111 狼人殺冠軍賽](https://cagoooo.github.io/smes-werewolf-rules/): 把狼人殺變成一場有規則、有賽程、有主持節奏的班級冠軍賽，讓學生在推理、辯論、聆聽與團隊合作中玩出高品質互動。
+- [#3 學生即時投票系統](https://cagoooo.github.io/Akai/tool/3): 阿凱老師打造的課堂即時投票系統，老師建立題目產生 QR Code，學生掃碼就能即時作答，搭配截圖白板標註工具，連投影片題目也能秒變互動題。 標籤：投票、互動、課堂、即時、民主。 實際工具：https://cagoooo.github.io/vote/。教學情境文章：https://cagoooo.github.io/Akai/blog/live-vote-3-classroom-democracy
+- [#41 吉他彈唱🎸點歌系統🎵](https://cagoooo.github.io/Akai/tool/41): 阿凱老師打造的吉他彈唱即時點唱平台，觀眾掃碼投票點歌、看排行榜、收到「正在彈奏中」的即時通知，把表演現場變成互動社群。 標籤：音樂、吉他、點歌、彈唱、歌曲。 實際工具：https://cagoooo.github.io/song/。教學情境文章：https://cagoooo.github.io/Akai/blog/song-41-akai-night-tape-magazine
+- [#45 文字雲即時互動](https://cagoooo.github.io/Akai/tool/45): 阿凱老師打造的即時互動文字雲應用，多人共建房間即時投稿，Top 1-3 詞彙會跳出流光漸層特效，QR Code 一掃就能加入腦力激盪。 標籤：文字雲、即時互動、協作、腦力激盪、視覺化、課堂互動。 實際工具：https://cagoooo.github.io/cloud。教學情境文章：https://cagoooo.github.io/Akai/blog/wordcloud-45-realtime-interactive
+- [#52 創價・教育 EXPO 線上選課](https://cagoooo.github.io/Akai/tool/52): 專為創價・教育 EXPO 打造的線上選課平台提供流暢的課程探索與即時報名體驗讓學習參與更簡單。 標籤：創價、教育 EXPO、線上選課、課程選擇、互動體驗。 實際工具：https://cagoooo.github.io/soka/。教學情境文章：https://cagoooo.github.io/Akai/blog/soka-52-expo-registration
+- [#60 專屬創意 3D 畫廊](https://cagoooo.github.io/Akai/tool/60): 沈浸式 3D 互動畫廊體驗，在星空宇宙背景中展覽你的專屬創意作品，支援雲端同步、多主題背景、圖片標籤篩選與個人化 3D 場景設定。 標籤：3D、畫廊、創意展覽、沈浸式、個人化、雲端同步。 實際工具：https://cagoooo.github.io/3D/。教學情境文章：https://cagoooo.github.io/Akai/blog/3d-60-gallery-carousel
+- [#63 Email 帳密記憶遊樂園](https://cagoooo.github.io/Akai/tool/63): 旨在幫助使用者安全且趣味地記憶 Email 帳號與密碼組合的互動式遊樂園。透過遊戲化記憶法，讓登入資訊的管理不再枯燥，並提升資安意識。 標籤：Email、帳號密碼、記憶遊樂園、資安意識、互動遊戲、密碼安全。 實際工具：https://cagoooo.github.io/email/。教學情境文章：https://cagoooo.github.io/Akai/blog/email-63-memory-park
+- [#93 自治小市長-即時計票監票系統](https://cagoooo.github.io/Akai/tool/93): 阿凱老師為國小自治市市長選舉打造的即時計票監票系統，唱票員後台按 +1 唱票，全校班級的公開監票畫面同步更新長條圖與排名，讓選舉開票公開、透明、不漏拍。 標籤：自治市選舉、即時計票、公開監票、民主教育、唱票系統、校園選舉。 實際工具：https://cagoooo.github.io/Little-Mayer/。教學情境文章：https://cagoooo.github.io/Akai/blog/mayor-93-little-mayor
+- [#94 封面串故事 · 音樂影片分鏡產生器](https://cagoooo.github.io/Akai/tool/94): 阿凱老師打造的 AI 音樂影片分鏡擴寫工具，把 Suno / Gemini Veo / Runway 等平台做出來的 MV 拖進瀏覽器，AI 自動抓封面幀、幫你寫出後 15-30 秒的運鏡與故事分鏡 prompt，貼回影片平台繼續生成，最後在瀏覽器內 FFmpeg 串成一支完整短片。 標籤：AI 影片、MV 創作、分鏡腳本、影像敘事、Gemini Veo、Suno。 實際工具：https://cagoooo.github.io/music-cover-storyboard/。教學情境文章：https://cagoooo.github.io/Akai/blog/music-cover-storyboard-94
+- [#96 DFC 行動方案即時投票系統](https://cagoooo.github.io/Akai/tool/96): 阿凱老師為桃園市龍潭國民小學第 123 屆自治市小市長選舉打造的「DFC 行動方案即時投票系統」，把候選人的行動方案搬上線，全校班級同步觀看票數、長條圖與排名，讓學童在公開、即時、可監督的環境中學民主。 標籤：DFC 行動方案、龍潭國小、自治市選舉、第123屆、即時計票、公開監票。 實際工具：https://cagoooo.github.io/Lungtan-DFC/。教學情境文章：https://cagoooo.github.io/Akai/blog/lungtan-96-dfc-voting
+- [#97 MBTI 校園奇遇記](https://cagoooo.github.io/Akai/tool/97): 阿凱老師為國小高年級到國中量身設計的 MBTI 互動故事測驗，學生扮演主角從開學第一天走到校慶大結局，30+ 場景、4 條支線、16 種結局，玩出屬於自己的 16 型人格 + SEL 情緒因應風格，比制式問卷更有共鳴。 標籤：MBTI 人格測驗、16 型人格、SEL 情緒教育、故事化測驗、班級輔導、生涯探索。 實際工具：https://cagoooo.github.io/MBTI/。教學情境文章：https://cagoooo.github.io/Akai/blog/mbti-97-campus-adventure-rpg
+- [#106 石門國小 第103屆畢業典禮｜啟程・感恩・祝福](https://cagoooo.github.io/Akai/tool/106): 石門國小第103屆畢業典禮的數位主場：典禮資訊、YouTube 直播、校園巡禮、畢業歌〈風箏〉、家長祝福一站到齊。最大亮點是「即時祝福牆」——家長掃 QR 留言、老師 LINE 一鍵審核，祝福立刻飛上現場大螢幕的星空投影，剛寫完抬頭就看到自己。啟程・感恩・祝福，陪每個孩子勇敢啟程。 標籤：畢業典禮、石門國小、即時祝福牆、星空投影、掃碼互動、QR Code。 實際工具：https://cagoooo.github.io/smes-graduation-103/。教學情境文章：https://cagoooo.github.io/Akai/blog/graduation-103-shimen-wishwall-106
+- [#108 資安特攻隊：釣魚郵件偵蒐](https://cagoooo.github.io/Akai/tool/108): 一封看起來像銀行、像老師、像官方的訊息，到底是真的還是釣魚陷阱？#108 把資安教育變成一場闖關遊戲：學生扮演「鱻盾資安特攻隊」資安新兵，跟 NotebookLM 的阿盾教官對話，一封封揪出釣魚破綻，用「五看口訣」拆穿詐騙，集滿 5 枚徽章晉升正式隊員。附老師導覽五步驟、AI 即時生成教材，一節課帶孩子練成數位防身術。 標籤：資安教育、釣魚郵件、反詐騙、數位素養、資訊安全、五看口訣。 實際工具：https://cagoooo.github.io/security-squad-cockpit/。教學情境文章：https://cagoooo.github.io/Akai/blog/security-squad-phishing-108-it-cockpit
+- [#111 狼人殺冠軍賽](https://cagoooo.github.io/Akai/tool/111): 把狼人殺變成一場有規則、有賽程、有主持節奏的班級冠軍賽，讓學生在推理、辯論、聆聽與團隊合作中玩出高品質互動。 標籤：狼人殺、冠軍賽、推理遊戲、班級活動、口語表達、邏輯推理。 實際工具：https://cagoooo.github.io/smes-werewolf-rules/。教學情境文章：https://cagoooo.github.io/Akai/blog/werewolf-championship-111-classroom-deduction-game
 
 ### 親師溝通（6 款）
 
-- [#1 線上即時客服](https://document-ai-companion-ipad4.replit.app/shared/A4uyH5OdHI): 提供即時的線上教育支援和諮詢服務，協助解決學習過程中的問題
-- [#16 親師溝通小幫手](https://talk.smes.tyc.edu.tw/): 促進親師溝通的便捷平台
-- [#59 小智鈴 AI 客服系統](https://cagoooo.github.io/smes/): 智慧型 AI 客服助理，提供 24/7 全天候即時諮詢與教育支援，精準回答各類常見問題。
-- [#62 桃園市龍潭區石門國民小學114學年度親職教育日](https://cagoooo.github.io/114_Parent/): 親職教育日（家長日）活動資訊分享與線上互動平台，旨在加強學校與家庭的聯繫，共同關注孩子的成長。包含活動議程、教育宣導與親師溝通資源。
-- [#74 2026 親職日場地配置圖](https://sites.google.com/mail2.smes.tyc.edu.tw/academic/2026%E8%A6%AA%E8%81%B7%E6%97%A5%E5%A0%B4%E5%9C%B0%E9%85%8D%E7%BD%AE): 提供 2026 親職日的完整場地配置與動線規劃進度，協助親師快速掌握活動空間分布，讓年度盛事進行更順暢。
-- [#89 教師回覆小幫手 Pro版](https://cagoooo.github.io/Message/): 阿凱老師為幼小中各級教師打造的親師溝通 AI 輔助工具，貼上家長訊息或截圖、選情境調語氣，10 秒內生成兼具同理心與專業度的客製化回覆，告別字斟句酌的深夜煩惱。
+- [#1 線上即時客服](https://cagoooo.github.io/Akai/tool/1): 提供即時的線上教育支援和諮詢服務，協助解決學習過程中的問題 標籤：客服、即時通訊、問答、支援。 實際工具：https://document-ai-companion-ipad4.replit.app/shared/A4uyH5OdHI。教學情境文章：https://cagoooo.github.io/Akai/blog/replit-1-online-customer-service
+- [#16 親師溝通小幫手](https://cagoooo.github.io/Akai/tool/16): 促進親師溝通的便捷平台 標籤：親師、溝通、家長、聯絡、通知。 實際工具：https://talk.smes.tyc.edu.tw/。教學情境文章：https://cagoooo.github.io/Akai/blog/talk-16-teacher-helper
+- [#59 小智鈴 AI 客服系統](https://cagoooo.github.io/Akai/tool/59): 智慧型 AI 客服助理，提供 24/7 全天候即時諮詢與教育支援，精準回答各類常見問題。 標籤：AI 客服、智慧對話、即時支援、24/7、行政自動化、教育科技。 實際工具：https://cagoooo.github.io/smes/。教學情境文章：https://cagoooo.github.io/Akai/blog/smes-59-ai-customer-service
+- [#62 桃園市龍潭區石門國民小學114學年度親職教育日](https://cagoooo.github.io/Akai/tool/62): 親職教育日（家長日）活動資訊分享與線上互動平台，旨在加強學校與家庭的聯繫，共同關注孩子的成長。包含活動議程、教育宣導與親師溝通資源。 標籤：桃園市、石門國小、親職教育日、114學年度、學校活動、互動資訊。 實際工具：https://cagoooo.github.io/114_Parent/。教學情境文章：https://cagoooo.github.io/Akai/blog/parent-day-62-114-activity
+- [#74 2026 親職日場地配置圖](https://cagoooo.github.io/Akai/tool/74): 提供 2026 親職日的完整場地配置與動線規劃進度，協助親師快速掌握活動空間分布，讓年度盛事進行更順暢。 標籤：2026、親職日、場地配置、校園地圖、活動規劃、親師溝通。 實際工具：https://sites.google.com/mail2.smes.tyc.edu.tw/academic/2026%E8%A6%AA%E8%81%B7%E6%97%A5%E5%A0%B4%E5%9C%B0%E9%85%8D%E7%BD%AE。教學情境文章：https://cagoooo.github.io/Akai/blog/parent-day-74-venue-map
+- [#89 教師回覆小幫手 Pro版](https://cagoooo.github.io/Akai/tool/89): 阿凱老師為幼小中各級教師打造的親師溝通 AI 輔助工具，貼上家長訊息或截圖、選情境調語氣，10 秒內生成兼具同理心與專業度的客製化回覆，告別字斟句酌的深夜煩惱。 標籤：親師溝通、家長訊息、AI回覆、教師工具、同理心溝通、OCR圖片辨識。 實際工具：https://cagoooo.github.io/Message/。教學情境文章：https://cagoooo.github.io/Akai/blog/teacher-reply-89-pro-parent-message
 
 ### 閱讀理解（3 款）
 
-- [#4 PIRLS閱讀理解生成](https://pirlss.smes.tyc.edu.tw/): 專業的閱讀理解評估工具，幫助提升學生的閱讀能力
-- [#12 PIRLS閱讀理解網](https://read.smes.tyc.edu.tw/smes/PIRLS/): 完整的 PIRLS 閱讀理解資源平台
-- [#87 PIRLS 閱讀理解生成站 PRO](https://cagoooo.github.io/pirls-questioncraft/): 升級版 PIRLS 閱讀理解出題平台，老師貼上課文或上傳文本，AI 依四層次（直接提取、直接推論、詮釋整合、檢驗評估）自動產生提問與答案說明，國小語文評量、補救教學、素養命題一氣呵成。
+- [#4 PIRLS閱讀理解生成](https://cagoooo.github.io/Akai/tool/4): 專業的閱讀理解評估工具，幫助提升學生的閱讀能力 標籤：PIRLS、閱讀理解、評估、生成、AI。 實際工具：https://pirlss.smes.tyc.edu.tw/。教學情境文章：https://cagoooo.github.io/Akai/blog/pirls-4-firebase-mirror
+- [#12 PIRLS閱讀理解網](https://cagoooo.github.io/Akai/tool/12): 完整的 PIRLS 閱讀理解資源平台 標籤：PIRLS、閱讀、理解、資源、評量。 實際工具：https://read.smes.tyc.edu.tw/smes/PIRLS/。教學情境文章：https://cagoooo.github.io/Akai/blog/reading-12-portal-page
+- [#87 PIRLS 閱讀理解生成站 PRO](https://cagoooo.github.io/Akai/tool/87): 升級版 PIRLS 閱讀理解出題平台，老師貼上課文或上傳文本，AI 依四層次（直接提取、直接推論、詮釋整合、檢驗評估）自動產生提問與答案說明，國小語文評量、補救教學、素養命題一氣呵成。 標籤：PIRLS、閱讀理解、AI 出題、四層次提問、國小語文、素養命題。 實際工具：https://cagoooo.github.io/pirls-questioncraft/。教學情境文章：https://cagoooo.github.io/Akai/blog/pirls-87-questioncraft-rewrite
 
-## 教學情境深度長文（113 篇）
+## 教學情境深度長文（116 篇）
 
 每篇文章 5-10 分鐘閱讀，包含真實教學現場數據、學生回饋、實作思路、與其他工具的搭配建議。
 
+- [#115 把四則運算變成道館挑戰：萌獸數學道館的練習動機設計](https://cagoooo.github.io/Akai/blog/math-beast-gym-115-arithmetic-battle) (2026-07-02): 四則運算練習最難的不是出題，而是讓學生願意一題接一題做下去。#115 萌獸數學道館把加減乘除包裝成原創萌獸對戰，用 ATG 節奏、關主挑戰與即時回饋，讓練習變成一場全班都看得懂的數學冒險。
+- [#113 告別 Excel 地獄！PaGamO 素養教材授權填報的行政數位轉型](https://cagoooo.github.io/Akai/blog/pagamo-license-113-school-enrollment) (2026-06-28): 專為學校導師與行政開發的 PaGamO 授權填報工具，一鍵彙整班級名單，讓繁瑣的素養教材開通流程省時 90%！
+- [#114 告別人工肉眼比對！學生名單校對平台的個資安全與智慧防呆防線](https://cagoooo.github.io/Akai/blog/student-list-checker-114-roster-verification) (2026-06-28): 每學期初核對幾百名學生名單，用肉眼看字形相似又容易出錯？#114 學生名單校對平台，雙欄智慧比對一秒揪出學號姓名錯漏，資料完全在本地處理，行政效率與個資安全雙贏！
 - [#112 皮卡丘天空大冒險：經典飛翔小鳥結合寶可夢，鍛鍊學生專注度與挫折容忍度](https://cagoooo.github.io/Akai/blog/pikachu-sky-adventure-112-flappy-bird-game) (2026-06-22): 下課十分鐘，學生圍在電腦前只能玩充滿廣告的雜亂網頁遊戲？#112 提供一個純前端、無廣告、隨開即玩的「皮卡丘天空大冒險」，結合經典的 Flappy Bird 玩法，在躲避綠色水管的飛行挑戰中，無痛訓練孩子的手眼協調力與專注度。
 - [#110 活動辦完，照片就躺在資料夾裡發霉？上傳照片，AI 幫你剪成一支有旁白有配樂的成果影片](https://cagoooo.github.io/Akai/blog/photo-to-video-110-ai-event-recap-generator) (2026-06-17): 運動會、校外教學、創意實作課辦得精彩，幾十張照片拍回來卻只能丟成無聲的相片輪播——因為剪影片要想旁白、要配音、要上字幕、要選轉場，光想就累。#110 讓你只要上傳照片，多模態 AI 自動看懂每張照片在做什麼、編寫前後連貫的繁體中文旁白與字幕、配上微軟 Neural 人聲與背景音樂
 - [#111 狼人殺冠軍賽：把班級同樂變成一場有規則、有推理、有掌聲的口語表達競賽](https://cagoooo.github.io/Akai/blog/werewolf-championship-111-classroom-deduction-game) (2026-06-17): 狼人殺最怕的不是學生太投入，而是規則講不清、節奏控不住、發言變成一團混戰。#111 把角色、流程、勝利條件與比賽提醒整理成一個可投影、可分享的冠軍賽規則頁，讓班級活動從「大家玩一下」升級成有主持、有推理、有團隊合作的互動賽事。
@@ -282,7 +289,7 @@
 
 ## 關於阿凱老師
 
-阿凱老師（cagoooo）是桃園市龍潭區石門國民小學的資訊組長與導師，自 2024 年起獨立開發教育工具，到 2026 年 5 月已達成 112 款。技術棧使用 React 18 + TypeScript + Vite + Tailwind CSS + Firebase，主站部署於 GitHub Pages。所有工具開源於 [cagoooo/Akai](https://github.com/cagoooo/Akai)，採 MIT License。
+阿凱老師（cagoooo）是桃園市龍潭區石門國民小學的資訊組長（科任＋行政），自 2024 年起獨立開發教育工具，至今已達成 116 款。技術棧使用 React 18 + TypeScript + Vite + Tailwind CSS + Firebase，主站部署於 GitHub Pages。所有工具開源於 [cagoooo/Akai](https://github.com/cagoooo/Akai)，採 MIT License。
 
 **石門國小（smes ≠ 新明！）**：「smes」是 Shih Men Elementary School 縮寫，學校全名為「桃園市龍潭區石門國民小學」，校網 https://www.smes.tyc.edu.tw/
 
