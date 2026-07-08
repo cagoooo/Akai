@@ -75,7 +75,7 @@
   const OVERLAY_HIDE_MS = 1800;
   const VALIDATE_ATTR = 'no_overflowing_text,no_overlapping_text,slide_sized_text';
   const FINE_POINTER_MQ = matchMedia('(hover: hover) and (pointer: fine)');
-  const NARROW_MQ = matchMedia('(max-width: 640px)');
+  const COMPACT_VIEW_MQ = matchMedia('(max-width: 640px), (hover: none) and (pointer: coarse)');
   const EDGE_NAV_RATIO = 0.16;
   const EDGE_NAV_MIN = 96;
   const EDGE_NAV_MAX = 240;
@@ -243,7 +243,7 @@
     :host([noscale]) .btn.rail-toggle {
       display: none;
     }
-    @media (max-width: 640px) {
+    @media (max-width: 640px), (hover: none) and (pointer: coarse) {
       .btn.rail-toggle { display: none; }
     }
 
@@ -306,7 +306,7 @@
     :host([no-rail]) .rail,
     :host([noscale]) .rail { display: none; }
     .rail[data-presenting] { display: none; }
-    @media (max-width: 640px) {
+    @media (max-width: 640px), (hover: none) and (pointer: coarse) {
       .rail, .rail-resize { display: none; }
     }
     /* User-driven show/hide (the TweaksPanel toggle) slides instead of
@@ -1032,7 +1032,7 @@
 
     _railWidthHardHidden() {
       return !this._railEnabled || this.hasAttribute('no-rail') || this.hasAttribute('noscale') ||
-        this._presenting || this._previewMode || NARROW_MQ.matches;
+        this._presenting || this._previewMode || COMPACT_VIEW_MQ.matches;
     }
 
     _setRailWidth(px) {
