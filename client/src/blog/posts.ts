@@ -14021,6 +14021,82 @@ const POST_113: BlogPost = {
 `,
 };
 
+const POST_116: BlogPost = {
+  slug: 'exam-format-116-auto-proofreading',
+  title: '#116 考卷格式自動校正系統：出題完成後，老師最需要的其實是「列印前最後一雙眼睛」',
+  excerpt:
+    '考卷題目寫完，不代表可以安心列印。題號跳號、選項沒對齊、答案區太擠、版面斷在奇怪的位置，常常都是印出來才發現。#116 考卷格式自動校正系統，就是把這些列印前的格式健檢自動化，讓老師不用再靠肉眼一頁一頁巡。',
+  publishedAt: '2026-07-09',
+  readingMinutes: 5,
+  tags: ['考卷格式', '自動校正', '試卷排版', '教師工具', '文件處理'],
+  toolIds: [116, 99, 78],
+  coverEmoji: '📝',
+  coverColor: 'yellow',
+  body: `## 題目寫完後，真正折磨老師的是格式
+
+老師出考卷最耗心力的地方，不一定是「想題目」本身。
+
+題目想完、答案確認完、難易度也調過了，最後還有一段很容易被低估的工作：**格式檢查**。
+
+- 題號有沒有跳號？
+- 選項 A/B/C/D 有沒有對齊？
+- 答案區會不會太小？
+- 圖片、表格、題幹會不會被切到下一頁？
+- 空格、縮排、段落間距是不是讓學生看得懂？
+
+這些問題平常看起來很小，但一旦印出來發到學生手上，就會變成考場裡的真問題。學生問「老師，這題選項是不是少一個？」的那一刻，老師心裡通常都會安靜地嘆一口氣。
+
+[#116 考卷格式自動校正系統](https://cagoooo.github.io/exam-format-app/) 想解的就是這件事：**把考卷列印前的最後一輪格式巡檢，從肉眼苦工變成可重複的自動流程。**
+
+## #116 解決的不是出題，而是出題後的品質控制
+
+很多 AI 工具都在幫老師「生成題目」，但教學現場還有另一個更樸素、也更常發生的需求：題目已經有了，老師只是想確認它能不能被學生順利閱讀、作答、列印。
+
+這套系統的定位很清楚：它不是替老師決定考什麼，而是幫老師檢查考卷在正式輸出前有沒有格式風險。
+
+**題號連續性**  
+考卷最怕的是第 7 題後面突然變第 9 題，或大題、小題層級混在一起。自動校正可以先把這類序列問題標出來，讓老師不用一題一題數。
+
+**選項與答案區一致性**  
+選擇題的 A/B/C/D、填充題的作答線、問答題的答案空間，都是學生能不能順利作答的關鍵。格式亂掉時，學生會把注意力花在「看懂卷面」而不是「思考題目」。
+
+**列印前版面健檢**  
+有些錯誤在螢幕上看還好，印成紙本就很明顯：題幹被分頁切開、圖片太靠邊、答案欄太擠。#116 把這些容易漏看的地方拉回檢查清單。
+
+## 為什麼這值得變成一張工具卡片？
+
+因為它不是華麗功能，而是非常教學現場的痛點。
+
+老師其實不缺「再多一個能產生內容的工具」。老師缺的是：當內容已經差不多完成時，有沒有一個穩定的小助手幫忙檢查最後 5% 的品質。
+
+這 5% 很瑣碎，卻很重要。
+
+- 對學生來說，清楚的卷面降低作答焦慮。
+- 對老師來說，格式穩定代表考試中少一點臨場補救。
+- 對行政或共備團隊來說，統一格式也讓試卷更像正式文件。
+
+所以我把 #116 歸在「實用工具」，不是「遊戲」也不是單純「AI 生成」。它的位置比較像教學文件流程裡的最後一道檢查門。
+
+## 和其他工具怎麼搭？
+
+- [#99 考試卷生圖 Studio](/tool/99)：先幫考卷或學習單產生黑白線稿插圖，再用 #116 檢查版面是否適合列印。
+- [#78 桃園市115學年度國小課程計畫AI審查工具](/tool/78)：同樣屬於「文件送出前的審查」思路，一個看課程計畫，一個看考卷格式。
+- [#116 考卷格式自動校正系統](/tool/116)：本篇主角，處理考卷列印前的格式校對與卷面健檢。
+
+## 適合使用情境
+
+- 段考、平時測驗卷列印前的最後檢查
+- 共備社群產出試卷後，統一格式品質
+- 老師把 AI 生成題目整理成正式考卷前
+- 需要把 Word / PDF / 線上題庫內容整理成可發給學生的版本
+
+## 前往工具
+
+👉 [開啟 #116 考卷格式自動校正系統](https://cagoooo.github.io/exam-format-app/)
+
+我喜歡這個工具的地方是：它很安靜，不搶老師的教學判斷權，只是把「印出來才發現」的風險提前一點攔下來。對老師來說，這種工具不一定最炫，但常常最救命。`,
+};
+
 const POST_115: BlogPost = {
   slug: 'math-beast-gym-115-arithmetic-battle',
   title: '#115 把四則運算變成道館挑戰：萌獸數學道館的練習動機設計',
@@ -14137,7 +14213,7 @@ const POST_114: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+export const POSTS: BlogPost[] = [POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。

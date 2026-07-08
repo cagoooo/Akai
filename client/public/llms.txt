@@ -1,6 +1,6 @@
 # 阿凱老師 · 科技教育創新專區
 
-> 一位桃園市龍潭區石門國民小學的國小老師（阿凱老師），兩年內獨立完成 116 款免費教育工具與 116 篇手寫深度長文。所有工具與內容皆為 MIT 開源、永久免費、無需註冊。專案聚焦於用 AI / 科技解決真實國小教學現場的痛點：班級互動、行政自動化、語文閱讀、教育遊戲、親師溝通、互動體驗。
+> 一位桃園市龍潭區石門國民小學的國小老師（阿凱老師），兩年內獨立完成 116 款免費教育工具與 117 篇手寫深度長文。所有工具與內容皆為 MIT 開源、永久免費、無需註冊。專案聚焦於用 AI / 科技解決真實國小教學現場的痛點：班級互動、行政自動化、語文閱讀、教育遊戲、親師溝通、互動體驗。
 
 **站點**：https://cagoooo.github.io/Akai/  
 **作者**：阿凱老師（GitHub: cagoooo）  
@@ -12,7 +12,7 @@
 ## 主要頁面
 
 - [首頁工具集](https://cagoooo.github.io/Akai/): 互動公佈欄首頁，呈現全部 116 款工具的拍立得拼貼 + 分類篩選 + 許願池
-- [部落格](https://cagoooo.github.io/Akai/blog): 116 篇阿凱老師手寫的教學情境深度長文，每篇講一個熱門工具如何解決真實教學現場的問題
+- [部落格](https://cagoooo.github.io/Akai/blog): 117 篇阿凱老師手寫的教學情境深度長文，每篇講一個熱門工具如何解決真實教學現場的問題
 - [100 工具達成宣傳影片](https://cagoooo.github.io/Akai/share/100.html): 5:32 宣傳影片（含旁白與同步字幕）
 - [許願池](https://cagoooo.github.io/Akai/wish/): 蒐集老師、家長、學生對下一個工具的需求
 - [GitHub Repository](https://github.com/cagoooo/Akai): 完整原始碼，可自由 fork 自架
@@ -69,7 +69,7 @@
 - [#110 智慧自動化照片成果轉影片產生器](https://cagoooo.github.io/Akai/tool/110): 辦完活動，幾十張照片躺在資料夾裡，要剪成一支有旁白、有音樂、有字幕的成果影片，光想到就累。#110 讓你只要上傳活動照片，多模態 AI 自動看懂每張照片在做什麼、編寫前後連貫的繁體中文旁白與字幕、配上微軟 Neural 高品質人聲、挑好轉場與背景音樂，最後一鍵錄製匯出相容 iPhone/Safari 的 MP4。純前端、金鑰只存在你的瀏覽器，照片不外傳。 標籤：照片轉影片、活動紀錄影片、AI 自動剪輯、多模態視覺辨識、AI 旁白腳本、Neural 語音。 實際工具：https://cagoooo.github.io/PhotoLibrary/。教學情境文章：https://cagoooo.github.io/Akai/blog/photo-to-video-110-ai-event-recap-generator
 - [#113 PaGamO 素養教材班級授權填報](https://cagoooo.github.io/Akai/tool/113): 專為學校行政與導師設計的 PaGamO 素養教材授權填報系統。簡化繁瑣的班級名單與授權核對流程，一鍵填報、即時彙整，大幅提升行政作業效率，讓素養學習推廣更輕鬆！ 標籤：PaGamO、素養教材、授權填報、行政工具、國小教育、石門國小。 實際工具：https://cagoooo.github.io/PaGamO/。教學情境文章：https://cagoooo.github.io/Akai/blog/pagamo-license-113-school-enrollment
 - [#114 學生名單校對平台](https://cagoooo.github.io/Akai/tool/114): 專為學校行政與導師設計的學生名單校對平台。一鍵匯入名單與核對檔，智慧比對學號、姓名及班級差異，自動揪出錯漏字與重疊名單，讓繁瑣的學籍核對作業變得輕鬆又精準！ 標籤：名單校對、學生名單、行政效率、名單核對、國小教育、石門國小。 實際工具：https://cagoooo.github.io/student-list-checker/。教學情境文章：https://cagoooo.github.io/Akai/blog/student-list-checker-114-roster-verification
-- [#116 考卷格式自動校正系統](https://cagoooo.github.io/Akai/tool/116): 把考卷排版檢查交給自動化流程，快速標出題號、選項、答案區與版面格式問題，讓老師在列印前先完成一次穩穩的格式健檢。 標籤：考卷格式、自動校正、試卷排版、教師工具、列印前檢查、AI 輔助。 實際工具：https://cagoooo.github.io/exam-format-app/。教學情境文章：https://cagoooo.github.io/Akai/blog/tool-116
+- [#116 考卷格式自動校正系統](https://cagoooo.github.io/Akai/tool/116): 把考卷排版檢查交給自動化流程，快速標出題號、選項、答案區與版面格式問題，讓老師在列印前先完成一次穩穩的格式健檢。 標籤：考卷格式、自動校正、試卷排版、教師工具、列印前檢查、AI 輔助。 實際工具：https://cagoooo.github.io/exam-format-app/。教學情境文章：https://cagoooo.github.io/Akai/blog/exam-format-116-auto-proofreading
 
 ### 教學設計（21 款）
 
@@ -166,10 +166,11 @@
 - [#12 PIRLS閱讀理解網](https://cagoooo.github.io/Akai/tool/12): 完整的 PIRLS 閱讀理解資源平台 標籤：PIRLS、閱讀、理解、資源、評量。 實際工具：https://read.smes.tyc.edu.tw/smes/PIRLS/。教學情境文章：https://cagoooo.github.io/Akai/blog/reading-12-portal-page
 - [#87 PIRLS 閱讀理解生成站 PRO](https://cagoooo.github.io/Akai/tool/87): 升級版 PIRLS 閱讀理解出題平台，老師貼上課文或上傳文本，AI 依四層次（直接提取、直接推論、詮釋整合、檢驗評估）自動產生提問與答案說明，國小語文評量、補救教學、素養命題一氣呵成。 標籤：PIRLS、閱讀理解、AI 出題、四層次提問、國小語文、素養命題。 實際工具：https://cagoooo.github.io/pirls-questioncraft/。教學情境文章：https://cagoooo.github.io/Akai/blog/pirls-87-questioncraft-rewrite
 
-## 教學情境深度長文（116 篇）
+## 教學情境深度長文（117 篇）
 
 每篇文章 5-10 分鐘閱讀，包含真實教學現場數據、學生回饋、實作思路、與其他工具的搭配建議。
 
+- [#116 考卷格式自動校正系統：出題完成後，老師最需要的其實是「列印前最後一雙眼睛」](https://cagoooo.github.io/Akai/blog/exam-format-116-auto-proofreading) (2026-07-09): 考卷題目寫完，不代表可以安心列印。題號跳號、選項沒對齊、答案區太擠、版面斷在奇怪的位置，常常都是印出來才發現。#116 考卷格式自動校正系統，就是把這些列印前的格式健檢自動化，讓老師不用再靠肉眼一頁一頁巡。
 - [#115 把四則運算變成道館挑戰：萌獸數學道館的練習動機設計](https://cagoooo.github.io/Akai/blog/math-beast-gym-115-arithmetic-battle) (2026-07-02): 四則運算練習最難的不是出題，而是讓學生願意一題接一題做下去。#115 萌獸數學道館把加減乘除包裝成原創萌獸對戰，用 ATG 節奏、關主挑戰與即時回饋，讓練習變成一場全班都看得懂的數學冒險。
 - [#113 告別 Excel 地獄！PaGamO 素養教材授權填報的行政數位轉型](https://cagoooo.github.io/Akai/blog/pagamo-license-113-school-enrollment) (2026-06-28): 專為學校導師與行政開發的 PaGamO 授權填報工具，一鍵彙整班級名單，讓繁瑣的素養教材開通流程省時 90%！
 - [#114 告別人工肉眼比對！學生名單校對平台的個資安全與智慧防呆防線](https://cagoooo.github.io/Akai/blog/student-list-checker-114-roster-verification) (2026-06-28): 每學期初核對幾百名學生名單，用肉眼看字形相似又容易出錯？#114 學生名單校對平台，雙欄智慧比對一秒揪出學號姓名錯漏，資料完全在本地處理，行政效率與個資安全雙贏！
