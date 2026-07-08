@@ -8,7 +8,7 @@
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
     <pubDate>Thu, 09 Jul 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Wed, 08 Jul 2026 22:28:08 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 08 Jul 2026 22:41:10 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -29,6 +29,15 @@
       <category>試卷排版</category>
       <category>教師工具</category>
       <category>列印前檢查</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#116 考卷格式自動校正系統：出題完成後，老師最需要的其實是「列印前最後一雙眼睛」</title>
+      <link>https://cagoooo.github.io/Akai/blog/exam-format-116-auto-proofreading</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/exam-format-116-auto-proofreading</guid>
+      <pubDate>Thu, 09 Jul 2026 00:00:00 GMT</pubDate>
+      <description>考卷題目寫完，不代表可以安心列印。題號跳號、選項沒對齊、答案區太擠、版面斷在奇怪的位置，常常都是印出來才發現。#116 考卷格式自動校正系統，就是把這些列印前的格式健檢自動化，讓老師不用再靠肉眼一頁一頁巡。</description>
+      <category>blog</category>
+      <category>教學情境</category>
     </item>
     <item>
       <title>🆕 新工具：萌獸數學道館</title>
@@ -323,18 +332,6 @@
       <description>#102 外星人入侵是阿凱寫給孩子的復古太空射擊遊戲：純 HTML5 Canvas 單檔零相依，三種難度、王關 Boss 母艦、火力道具與連擊加成，石門校徽開場、可加入主畫面當 App、離線也能玩，內建全校跨裝置排行榜，桌機鍵盤 + 手機觸控全支援。</description>
       <category>blog</category>
       <category>教學情境</category>
-    </item>
-    <item>
-      <title>🆕 新工具：3D 迷宮冒險遊戲 — 第一人稱光球收集 × 全班排行榜</title>
-      <link>https://cagoooo.github.io/Akai/tool/101</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/101</guid>
-      <pubDate>Thu, 28 May 2026 00:00:00 GMT</pubDate>
-      <description>第一人稱 3D 迷宮探索遊戲：收集藍色光球、躲避紅色巡守者、與時間賽跑。React + Three.js 純瀏覽器跑 3D，桌機鍵盤滑鼠 + iPad 觸控全支援，內建全班 / 全校排行榜，下課十分鐘剛好打一輪。</description>
-      <category>3D 迷宮</category>
-      <category>第一人稱</category>
-      <category>Three.js</category>
-      <category>光球收集</category>
-      <category>全班排行榜</category>
     </item>
   </channel>
 </rss>
