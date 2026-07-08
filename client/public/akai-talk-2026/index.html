@@ -276,6 +276,7 @@
     position: absolute;
     bottom: 80px; left: 140px; right: 140px;
     display: flex; justify-content: space-between; align-items: flex-end;
+    gap: 42px;
     color: rgba(250,247,240,0.7);
   }
   .s-title .center {
@@ -362,6 +363,7 @@
     display: flex;
     gap: 24px;
     align-items: center;
+    min-width: 0;
   }
 
   .s-title .portal-cta {
@@ -506,6 +508,151 @@
     font-size: 15px;
     color: rgba(250, 247, 240, 0.6);
     margin-top: 4px;
+  }
+
+  @media (max-width: 700px), (orientation: portrait) {
+    .s-title .center {
+      top: 170px;
+      bottom: 400px;
+      right: 560px;
+    }
+
+    .s-title h1 {
+      font-size: 148px;
+    }
+
+    .s-title .subtitle {
+      font-size: 36px;
+      max-width: 980px;
+    }
+
+    .s-title .subtitle-en {
+      font-size: 24px;
+      max-width: 940px;
+    }
+
+    .s-title .portal-qr-card {
+      right: 116px;
+      top: 50%;
+      width: 286px;
+      gap: 14px;
+      padding: 22px;
+      border-radius: 24px;
+      background: rgba(250, 247, 240, 0.08);
+    }
+
+    .s-title .portal-qr-card .pq-qr {
+      width: 226px;
+      height: 226px;
+      padding: 10px;
+      border-radius: 16px;
+    }
+
+    .s-title .portal-qr-card .pq-main {
+      font-size: 24px;
+      letter-spacing: 0.03em;
+    }
+
+    .s-title .portal-qr-card .pq-sub {
+      font-size: 15px;
+    }
+
+    .s-title .portal-qr-card .pq-tag {
+      display: none;
+    }
+
+    .s-title .corner-bot {
+      left: 112px;
+      right: 112px;
+      bottom: 58px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        "meta logo"
+        "cta cta";
+      align-items: center;
+      gap: 20px 32px;
+      padding: 26px 30px 28px;
+      border: 1px solid rgba(250,247,240,0.14);
+      border-top: 2px solid rgba(201,151,68,0.45);
+      border-radius: 26px;
+      background: rgba(15, 42, 30, 0.58);
+      box-shadow: 0 24px 54px rgba(0,0,0,0.28);
+      backdrop-filter: blur(8px);
+    }
+
+    .s-title .corner-bot .meta {
+      grid-area: meta;
+      align-self: center !important;
+      padding: 0 !important;
+      line-height: 1.45;
+    }
+
+    .s-title .corner-bot .meta strong {
+      font-size: 34px !important;
+    }
+
+    .s-title .corner-bot .meta span {
+      font-size: 23px !important;
+    }
+
+    .s-title .corner-bot .meta .italic-en {
+      font-size: 20px !important;
+    }
+
+    .s-title .cta-group {
+      grid-area: cta;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      width: 100%;
+    }
+
+    .s-title .video-cta,
+    .s-title .portal-cta {
+      width: 100%;
+      min-height: 78px;
+      justify-content: flex-start;
+      box-sizing: border-box;
+      border-radius: 22px;
+      background: rgba(201,151,68,0.16);
+    }
+
+    .s-title .video-cta {
+      padding: 14px 22px 14px 16px;
+    }
+
+    .s-title .portal-cta {
+      padding: 12px 22px 12px 14px;
+    }
+
+    .s-title .video-cta .vc-play,
+    .s-title .portal-cta .pc-qr {
+      width: 48px;
+      height: 48px;
+    }
+
+    .s-title .video-cta .vc-main,
+    .s-title .portal-cta .pc-main {
+      font-size: 26px;
+      line-height: 1.12;
+      white-space: nowrap;
+    }
+
+    .s-title .video-cta .vc-sub,
+    .s-title .portal-cta .pc-sub {
+      font-size: 17px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .s-title .logo-mark {
+      grid-area: logo;
+      width: 96px;
+      height: 96px;
+      padding: 8px;
+    }
   }
 
   /* === SLIDE 02: Hello / Intro === */
@@ -1904,6 +2051,123 @@
     font-weight: 700;
   }
   .deck-hint .sep { color: rgba(250,247,240,0.4); margin: 0 8px; }
+
+  .mobile-title-actions {
+    display: none;
+  }
+
+  @media (max-width: 700px), (orientation: portrait) {
+    .deck-hint {
+      display: none;
+    }
+
+    .mobile-title-actions {
+      position: fixed;
+      left: 18px;
+      right: 18px;
+      top: calc(50% + min(30vw, 142px));
+      z-index: 2147482400;
+      max-width: 460px;
+      margin: 0 auto;
+      padding: 16px;
+      box-sizing: border-box;
+      color: var(--cream);
+      background: rgba(20, 53, 38, 0.94);
+      border: 1px solid rgba(201,151,68,0.38);
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.38);
+      backdrop-filter: blur(14px);
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity .24s ease, transform .24s ease;
+    }
+
+    .mobile-title-actions[data-visible="true"] {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .mobile-title-actions .mobile-kicker {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      color: var(--orange);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .mobile-title-actions .mobile-title {
+      margin: 0 0 12px;
+      font-family: var(--sans);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--cream);
+    }
+
+    .mobile-title-actions .mobile-action-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .mobile-title-actions .mobile-action {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 54px;
+      padding: 10px 12px;
+      box-sizing: border-box;
+      border: 1px solid rgba(201,151,68,0.55);
+      border-radius: 14px;
+      background: rgba(201,151,68,0.14);
+      color: var(--cream);
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .mobile-title-actions .mobile-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--orange);
+      color: var(--navy);
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .mobile-title-actions .mobile-text {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      line-height: 1.25;
+    }
+
+    .mobile-title-actions .mobile-main {
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--cream);
+    }
+
+    .mobile-title-actions .mobile-sub {
+      font-family: var(--sans);
+      font-size: 12px;
+      color: rgba(250,247,240,0.68);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
   .s-live h2 {
     font-family: var(--serif); font-weight: 700;
     font-size: 96px; line-height: 1.1; color: var(--navy);
@@ -3069,6 +3333,26 @@
   </section>
 
 </deck-stage>
+<div class="mobile-title-actions" aria-label="封面功能入口">
+  <div class="mobile-kicker">手機快速入口</div>
+  <p class="mobile-title">封面功能入口</p>
+  <div class="mobile-action-grid">
+    <a class="mobile-action" href="https://youtu.be/DvMSGrO98CI" target="_blank" rel="noopener">
+      <span class="mobile-icon">▶</span>
+      <span class="mobile-text">
+        <span class="mobile-main">觀看影片導讀</span>
+        <span class="mobile-sub">阿凱老師親自口說 · 全片 14 分鐘</span>
+      </span>
+    </a>
+    <a class="mobile-action" href="https://cagoooo.github.io/Akai/" target="_blank" rel="noopener">
+      <span class="mobile-icon">↗</span>
+      <span class="mobile-text">
+        <span class="mobile-main">教育科技創新專區</span>
+        <span class="mobile-sub">cagoooo.github.io/Akai/</span>
+      </span>
+    </a>
+  </div>
+</div>
 <div id="tweaks-root"></div>
 <!-- v3.6.66 預編譯：tweaks-app.jsx 已合併進 tweaks-bundle.js（在 <head> 內 defer 載入） -->
 <script>
@@ -3094,10 +3378,16 @@
   function init() {
     const stage = document.querySelector('deck-stage');
     if (!stage) { setTimeout(init, 80); return; }
+    const mobileTitleActions = document.querySelector('.mobile-title-actions');
+    const syncMobileTitleActions = (slide = stage.querySelector('[data-deck-active]')) => {
+      if (!mobileTitleActions) return;
+      mobileTitleActions.dataset.visible = slide?.classList.contains('s-title') ? 'true' : 'false';
+    };
 
     // Initial active slide
     const active = stage.querySelector('[data-deck-active]');
     if (active) animateCounters(active);
+    syncMobileTitleActions(active);
 
     // Watch every slide for attribute changes
     const observer = new MutationObserver((muts) => {
@@ -3105,6 +3395,7 @@
         if (m.type === 'attributes' && m.attributeName === 'data-deck-active') {
           if (m.target.hasAttribute('data-deck-active')) {
             animateCounters(m.target);
+            syncMobileTitleActions(m.target);
           }
         }
       });
