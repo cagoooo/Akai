@@ -1250,6 +1250,9 @@
           @media (max-width: 768px) {
             .akai-deck-mnav { display: block; }
           }
+          @media (max-width: 768px) and (orientation: portrait) {
+            .akai-deck-mnav { display: none; }
+          }
           /* 全螢幕簡報模式下隱藏（presenting 時 host post __omelette_presenting）*/
           .akai-deck-mnav[data-presenting] { display: none !important; }
           /* 列印時隱藏 */
