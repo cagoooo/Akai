@@ -354,11 +354,11 @@ const POST_46: BlogPost = {
 
 const POST_10: BlogPost = {
   slug: 'class-helper-10-daily-routine',
-  title: '#10 班級小管家：加扣分 × 抽籤 × 計時器 × 多班切換 × 考試監考的 31 模組單檔神器（沒有點名，純班級經營）',
+  title: '#10 班級小管家：加扣分 × 抽籤 × 計時器 × 多班切換 × 考試監考的 53 模組單檔神器（沒有點名，純班級經營）',
   excerpt:
-    '#10 不是「點名 + 行政記錄」工具 — 是阿凱純手寫 31 個 JS 模組、197 KB 單檔 classnew.html 的班級經營系統。加扣分系統 + 抽籤分組 + 計時器 + 考試監考 + 學期封存 + 多班級切換，Firebase + localStorage 雙層儲存，跨裝置 Google 同步。v3.1.6 累計 12 keys × 4 路徑同步稽核到 100%。',
+    '#10 不是「點名 + 行政記錄」工具 — 是阿凱純手寫 53 個 JS 模組、242 KB 單檔 classnew.html 的班級經營系統。加扣分系統 + 抽籤分組 + 計時器 + 考試監考 + 學期封存 + 多班級切換，Firebase + localStorage + IndexedDB 三層儲存，跨裝置 Google 同步。v3.12.17 累計 12 keys 完整同步稽核、版本健康診斷面板與內建 WebView 自動逃脫防護。',
   publishedAt: '2026-05-20',
-  readingMinutes: 6,
+  readingMinutes: 7,
   tags: ['班級經營', '加扣分', '導師工具', '多班級切換', '考試監考'],
   toolIds: [10, 89, 56],
   coverEmoji: '👨‍🏫',
@@ -382,14 +382,14 @@ const POST_10: BlogPost = {
 
 ## #10 怎麼解？（真實技術細節）
 
-**功能 A：學生管理（純手動 key，沒有 Excel 匯入）**
+**功能 A：學生管理（支援 Excel 一鍵匯入）**
 - 新增 / 編輯 / 刪除學生
 - 每位可設 emoji 頭像（👦👧🧒）+ 角色標籤「班長 / 小老師 / 課輔 / 特殊需求」
-- **沒有 Excel 匯入學生功能**（純手動建檔）
+- **支援 Excel 匯入學生功能**：支援一鍵匯入 \`.xlsx\`, \`.xls\`, \`.csv\` 檔案進行預覽與快速建檔。
 
 **功能 B：加扣分系統（核心主軸！）**
 - 即時加減分 + 完整 \`pointsHistory\` 歷史記錄
-- **半年用會撐爆 localStorage**（v3.1.4 真實事故）
+- **半年用會撐爆 localStorage**（v3.1.4 真實事故，目前已採用 IndexedDB + 序列化佇列優化）
 
 **功能 C：抽籤 + 隨機分組**
 - 單人 / 多人 / 分組三模式
@@ -399,7 +399,7 @@ const POST_10: BlogPost = {
 - 作業科目分類標籤 + 繳交狀態追蹤
 
 **功能 E：計時器 + 全螢幕時鐘**
-- 倒數 / 正數計時 + 多種時鐘樣式
+- 倒數 / 正數計時 + 多種時鐘樣式，且 RWD 完美自適應手機螢幕不溢出。
 
 **功能 F：考試監考工具**（exam-proctor.js + exam-sounds.js）
 - 含「考試多日預設」examDayPresets
@@ -421,17 +421,34 @@ const POST_10: BlogPost = {
 - 三層修復：緊急清理 + 智能備份輪替 + 優雅降級
 
 **功能 K：同步完整性稽核（v3.1.6）**
-- 12 個共享 keys × 4 條同步路徑 = **48 個檢查點**
-- 從 93% 升到 **100%**（工程師等級細心）
+- 12 個共享 keys × 4 條同步路徑 = **48 個檢查點**，達到 100% 稽核完整性。
+
+**功能 L：版本健康診斷面板 (v3.12.1)**
+- 點擊左上角版本徽章即可開啟診斷面板，一眼看清 App 版本、Service Worker 狀態、上次同步時間、登入帳號（未登入時以橘字顯眼警示）、本地與雲端班級數，並支援一鍵「複製診斷資訊」供除錯使用。
+
+**功能 M：App 內建瀏覽器 (WebView) 登入防護 (v3.12.16)**
+- 解決老師在 LINE/FB/IG 等內建瀏覽器點開連結時，因 Google 限制導致 OAuth 登入跳轉 403 失敗的痛點。LINE 點入自動帶 \`?openExternalBrowser=1\` 逃脫跳轉至系統瀏覽器，FB/IG 等則會顯示全版教學引導畫面。
+
+**功能 N：iPad Safari IndexedDB 交易佇列化 (v3.12.15)**
+- 修復了 iPad / Safari 在並發讀寫多個 IndexedDB 交易時容易提前結束導致 crash 的 Bug，引進序列化交易佇列 \`enqueueOp()\` 確保穩定順暢。
+
+**功能 O：雲端多班級自我修復與空白覆蓋安全護欄 (v3.12.0)**
+- 在雲端班級寫入 \`name/icon/color\` 自我修復 marker，防止名冊名單被意外覆蓋；加入「空白裝置自動上傳護欄 (\`looksLikeBlankDevice\` )」與「較新版本防寫保護」，徹底杜絕舊裝置覆蓋洗掉雲端資料的悲劇，並提供「班級健檢與修復」按鈕供教師自助修復。
+
+**功能 P：雲端定期自動備份**
+- 啟用 Firestore 原生排程備份，每日備份保留 7 天，每週日備份保留 14 週，可利用 CLI 隨時回溯備份。
+
+**功能 Q：流量 Beacon 統計對接 (v3.6.70)**
+- 獨立運行的 \`classnew.html\` 內嵌流量統計 beacon，不論從何處（LINE / 桌面捷徑 / 直連）登入，流量皆會直接對接並計入 Akai 主站的排行榜。
 
 ## 真實技術棧
 
-- **單檔巨型 HTML**：classnew.html **197 KB**（近 5000 行）
-- **31 個 JS 模組** + **8 個 CSS 檔**（純 vanilla JS，沒框架）
-- **Firebase Firestore + Auth (Google Sign-In)**（**主要資料層仍是 localStorage**，Firebase 是雲端備份 / 跨裝置同步）
-- 部署：**Firebase Hosting**（不是 GitHub Pages，因為需 Auth）
+- **單檔巨型 HTML**：classnew.html **242 KB**（約 4500 行）
+- **53 個 JS 模組** + **7 個 CSS 檔**（純 vanilla JS，無框架）
+- **Firebase Firestore + Auth (Google Sign-In) + IndexedDB / localStorage 混合本地端儲存**（主要數據讀寫於本地端高速運行，Firebase 提供跨裝置同步與雲端定期備份）
+- 部署：**Firebase Hosting**（因為需要 Auth 登入功能）
 - 編譯時佔位機制（apply-secrets.py / restore-placeholders.py）防 API Key 外洩
-- 當前 **v3.1.6** + CHANGELOG 達 **59 KB**（極度認真寫變更紀錄）
+- 當前 **v3.12.17** + CHANGELOG 達 **68 KB**（持續且認真地記錄每一次的修正與演進）
 
 ## 配對工具推薦
 
