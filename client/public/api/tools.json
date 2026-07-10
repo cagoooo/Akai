@@ -176,6 +176,31 @@
   },
   {
     "id": 6,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "creative-learning",
+        "accessibility"
+      ],
+      "priority": 84,
+      "reasons": {
+        "teacher": "可用注音、唐詩、英文等主題包安排低中年級的短時練習與課間活動。",
+        "student": "以配對挑戰複習注音、詞語與英文，還可依自己的節奏離線遊玩。",
+        "homeroom": "適合晨光、課後與班級獎勵時間的主題化小活動。",
+        "subject": "國語、英文或特教課可依教學主題選擇合適題材。"
+      }
+    },
     "title": "蜂類配對消消樂",
     "description": "阿凱老師打造的記憶配對消消樂遊戲，三種難度搭配注音、唐詩、英單、水果等六大主題包，老師改 JSON 就能新增主題，純靜態 PWA 離線可玩。",
     "detailedDescription": "「🐝 蜂勤耘友配對消消樂」是阿凱老師為國小低中年級打造的 **記憶配對 PWA 遊戲**，專門解決「想找一個能離線玩、又能客製主題符合課程內容的小遊戲」的需求。\n\n## 🎯 核心特色\n\n- 🐝 **6 主題 × 3 難度 = 18 種組合** — 蜂勤耘友圖片 / 注音符號 / 唐詩名句 / 英文單字 / 數字英文 / 水果英文，每關 5 對共 10 張卡\n- 🛠️ **themes.json 可擴充不寫程式** — 老師可自製校內主題（校徽 / 老師頭像 / 學校歷史人物），改 JSON 即可新增\n- ⌨️ **鍵盤無障礙** — Tab + Enter / Space 全鍵盤操作，**特教學生 / 肢體不便學生友善**\n- 🎉 **彩帶慶祝動畫 + 最佳紀錄** — 過關 confetti 儀式感 + 每組合獨立計時紀錄\n- 🚀 **WebP 圖片省 50% + `<link rel=\"preload\">`** — 不卡頓\n- 📴 **PWA 離線可玩** — manifest.webmanifest + sw.js，加到主畫面零安裝\n\n## 💡 設計理念\n\n阿凱用「**配對遊戲機制 + 教學主題包**」反向設計：純前端 ES Modules 切成 game.js / theme.js / board.js / ui.js / audio.js / storage.js 六個模組，**無 React / Vue 框架**，OG 圖用 Python Pillow 自動生成 1200×630。同樣的遊戲機制換 themes.json 就能服務一年級「注音」、三年級「唐詩」、四年級「水果英文」 — **一個遊戲全年用，老師備課省力 10 倍**。\n\n## 🎒 適合情境\n\n- 一年級導師：認注音（ㄅㄆㄇ）\n- 中高年級英文老師：水果 / 數字 / 單字\n- 國語老師：唐詩名句\n- 特教 / 融合教育老師：鍵盤無障礙操作\n- 校內活動：自製「校徽配對」「歷史人物配對」\n- 想做主題化遊戲的開發者參考架構\n\n部署在 `cagoooo.github.io/bee/`。建議**初階 + 注音符號**起手，全 MIT 授權，源碼開放可自由 fork 改主題。配對 [#9 超級瑪莉歐冒險](/tool/9)、[#30 遊戲集合](/tool/30)、[#50 童樂學園](/tool/50) 食用更完整。",
@@ -261,6 +286,31 @@
   },
   {
     "id": 9,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "digital-literacy"
+      ],
+      "priority": 48,
+      "reasons": {
+        "teacher": "可作為短暫課間獎勵，或示範網頁遊戲的關卡與成就設計。",
+        "student": "可在無廣告環境挑戰關卡、累積分數與成就。",
+        "homeroom": "適合作為班級完成任務後的短時獎勵。",
+        "subject": "資訊課可從操作與關卡設計認識 Canvas 遊戲製作。"
+      }
+    },
     "title": "超級瑪莉歐冒險",
     "description": "阿凱老師打造的瀏覽器版超級瑪莉歐冒險遊戲，支援鍵盤＋觸控雙模式操作，內建關卡選擇、計分、金幣與成就系統，純前端開瀏覽器就能玩。",
     "detailedDescription": "「🍄 超級冒險 Mario Style Platformer v2.33.0」是阿凱老師移植到瀏覽器的 **多關卡 Canvas 2D 平台跳躍遊戲**，為 [#28 早期單關版](/tool/28) 的 Pro 進化版，專門解決「下課想讓學生放鬆 5 分鐘、又不想他們連到亂七八糟廣告網站」的選擇困難。\n\n## 🎯 核心特色\n\n- 🌍 **多世界選擇 SELECT WORLD** — NES retro style text menu，「↑↓ 選擇｜Enter / 點擊 進入」+ Stage Clear 結算頁（「★ STAGE CLEAR ★ World 1-1 SCORE: 0」）+ 過關解鎖下一關\n- 🎮 **6 種完整操作** — ⬅️➡️ 移動、空白跳躍、⬇️/S 蹲下、Shift 衝刺、**牆壁 + 跳 = 蹬牆跳**（瑪莉歐風格進階技）\n- 📱 **手機觸控雙模式** — 點擊移動 + 點擊跳躍，平板手機也能玩\n- 📊 **完整統計** — 💀 擊殺 / 🪙 金幣 / 👑 分數 / 🏅 成就（含 modal 顯示「X/Y」進度）\n- ⏸️ **教室友善按鈕** — 🔊 音效開關、⚙️ 音效設定、⛶ 全螢幕、⏸️ 暫停、📖 重看教學，上課鐘響可立刻暫停\n- 📦 **PWA 完整** — manifest.json + 多尺寸 icon + apple-mobile-web-app-capable\n\n## 💡 設計理念\n\n阿凱在遊戲開發上偏好 **Canvas 2D「完整可控自製遊戲」** 哲學 — #9 / [#28 早期版](/tool/28) / [#36 貪食蛇](/tool/36) / [#31 抓抓樂](/tool/31) 全用純 Canvas，不依賴 Phaser 引擎物理系統，自己寫更輕（v2.33.0 累積這麼多功能還在純 Canvas）。CSS 版本控制用 `style.css?v=2.33.0` query string 強制清快取，無 LLM、無後端、localStorage 存進度，部署在 `cagoooo.github.io/mario-game/`。\n\n## 🎒 適合情境\n\n資訊科技課示範「多關卡 + 成就系統 + 蹬牆跳 = 純 Canvas + JS 也能做」、五六年級程式設計單元開 DevTools 看 v2.33.0 一路迭代史。下課休閒比商業遊戲入口網親民 100 倍，學生可正面挑戰多關卡。配對 [#28 瑪莉歐早期版](/tool/28) / [#30 12-in-1 遊戲集合](/tool/30) / [#85 致敬 Konami 的企鵝跑酷](/tool/85)。**MIT 授權，按 SELECT WORLD 進關卡試試 Shift 衝刺 + 蹬牆跳，比 #28 有層次得多**。",
@@ -973,6 +1023,31 @@
   },
   {
     "id": 28,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "digital-literacy"
+      ],
+      "priority": 42,
+      "reasons": {
+        "teacher": "可提供短時課間活動，也能作為單檔 Canvas 遊戲的入門示例。",
+        "student": "可免登入遊玩平台跳躍挑戰，累積自己的最高分。",
+        "homeroom": "適合班級任務完成後的短時休閒。",
+        "subject": "資訊課可用來拆解鍵盤控制、碰撞與計分等基礎概念。"
+      }
+    },
     "title": "瑪莉歐風格平台跳躍遊戲",
     "description": "經典瑪莉歐風格的平台跳躍遊戲",
     "url": "https://www.smes.tyc.edu.tw/smes_html/mariojump.html",
@@ -1029,6 +1104,31 @@
   },
   {
     "id": 30,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "digital-literacy"
+      ],
+      "priority": 50,
+      "reasons": {
+        "teacher": "可為課間或班級獎勵準備多種無廣告的短時遊戲選擇。",
+        "student": "可依喜好選擇益智、反應、記憶或消除遊戲。",
+        "homeroom": "適合雨天午休、班級獎勵與課後時間。",
+        "subject": "資訊課可觀察不同遊戲規則與互動設計。"
+      }
+    },
     "title": "小遊戲大集合",
     "description": "多款趣味小遊戲合集",
     "url": "https://www.smes.tyc.edu.tw/smes_html/little_games/",
@@ -1046,6 +1146,31 @@
   },
   {
     "id": 31,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "classroom-management"
+      ],
+      "priority": 46,
+      "reasons": {
+        "teacher": "可安排一輪一分鐘的班級挑戰，作為課間活動或獎勵。",
+        "student": "可在限時夾取與最高分挑戰中練習專注與反應。",
+        "homeroom": "可用於班會、期末活動與完成任務後的班級挑戰。",
+        "subject": "可作為討論遊戲計時、計分與互動回饋的素材。"
+      }
+    },
     "title": "互動遊戲抓抓樂",
     "description": "趣味夾娃娃機互動遊戲",
     "url": "https://www.smes.tyc.edu.tw/claw-machine-game.html",
@@ -1063,6 +1188,31 @@
   },
   {
     "id": 32,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "subject",
+        "admin"
+      ],
+      "departments": [
+        "student-affairs",
+        "general-affairs"
+      ],
+      "painPoints": [
+        "creative-learning",
+        "student-practice"
+      ],
+      "priority": 58,
+      "reasons": {
+        "teacher": "能把大型觸控螢幕轉為多人互動與藝術探索空間。",
+        "student": "可透過觸碰與同伴共同創作即時互動畫面。",
+        "subject": "適合藝術與人文課討論互動藝術與觀眾參與。",
+        "admin": "適合在走廊、圖書館或活動現場規劃觸控互動體驗。"
+      }
+    },
     "title": "遊戲觸屏碰碰碰",
     "description": "觸屏互動碰撞遊戲",
     "url": "https://www.smes.tyc.edu.tw/smes_html/touch.html",
@@ -1080,6 +1230,30 @@
   },
   {
     "id": 33,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "creative-learning"
+      ],
+      "priority": 78,
+      "reasons": {
+        "teacher": "可把音量、頻率等抽象概念即時可視化，支援自然與音樂教學。",
+        "student": "能用自己的聲音觀察大小聲與高低音造成的數值變化。",
+        "homeroom": "可用於班級生活教育與音量覺察活動。",
+        "subject": "自然與音樂課可直接示範聲音的分貝與頻率。"
+      }
+    },
     "title": "讓聲音具現化吧！",
     "description": "聲音視覺化互動體驗",
     "url": "https://www.smes.tyc.edu.tw/smes_html/sound.html",
@@ -1097,6 +1271,33 @@
   },
   {
     "id": 34,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "subject",
+        "admin"
+      ],
+      "departments": [
+        "academic",
+        "student-affairs",
+        "general-affairs"
+      ],
+      "painPoints": [
+        "creative-learning",
+        "digital-literacy",
+        "event-management"
+      ],
+      "priority": 60,
+      "reasons": {
+        "teacher": "可用多媒體互動內容營造課間、展示或藝術探索情境。",
+        "student": "可在按鈕、拍照、全景與跑酷互動中探索不同數位媒體。",
+        "subject": "適合藝術、資訊融入課展示影像、互動與 AI 全景的結合。",
+        "admin": "可作為校園展示、親職日或學習角的觸控內容。"
+      }
+    },
     "title": "互動式影像聲音遊戲區",
     "description": "結合影像與聲音的互動遊戲",
     "url": "https://www.smes.tyc.edu.tw/smes_html/go.html",
@@ -1114,6 +1315,32 @@
   },
   {
     "id": 35,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "subject",
+        "admin"
+      ],
+      "departments": [
+        "student-affairs",
+        "general-affairs"
+      ],
+      "painPoints": [
+        "creative-learning",
+        "student-practice",
+        "event-management"
+      ],
+      "priority": 58,
+      "reasons": {
+        "teacher": "可用大型觸控螢幕帶領學生進行集體塗鴉與互動藝術活動。",
+        "student": "可用手指或觸控筆和同伴共同完成即時塗鴉。",
+        "subject": "適合藝術與人文課的互動藝術與共同創作活動。",
+        "admin": "適合校慶、親職日與校園公共空間的互動佈置。"
+      }
+    },
     "title": "觸屏點點塗鴉區",
     "description": "觸屏塗鴉創作工具",
     "url": "https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2856",
@@ -1131,6 +1358,29 @@
   },
   {
     "id": 36,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "subject"
+      ],
+      "painPoints": [
+        "digital-literacy",
+        "student-practice"
+      ],
+      "priority": 54,
+      "reasons": {
+        "teacher": "可用經典貪食蛇示範小型 Canvas 遊戲的核心程式設計概念。",
+        "student": "可在短局挑戰中練習專注、判斷並突破自己的最高分。",
+        "subject": "資訊課可拆解網格、鍵盤事件、碰撞與計分機制。"
+      }
+    },
     "title": "貪食蛇互動遊戲",
     "description": "經典貪食蛇遊戲",
     "url": "https://www.smes.tyc.edu.tw/smes_html/snake_game.html",
@@ -1148,6 +1398,30 @@
   },
   {
     "id": 37,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "creative-learning"
+      ],
+      "priority": 76,
+      "reasons": {
+        "teacher": "可讓學生以聲波視覺化理解音量、頻率與生活中的聲音規範。",
+        "student": "可用自己的聲音看見360度擴散的圖像變化。",
+        "homeroom": "可結合班級音量覺察與生活教育活動。",
+        "subject": "自然、音樂與藝術課可延伸聲音特性與視覺表現。"
+      }
+    },
     "title": "聲波擴散360小遊戲",
     "description": "聲波視覺化互動遊戲",
     "url": "https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2863",
@@ -1165,6 +1439,28 @@
   },
   {
     "id": 38,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "accessibility",
+        "creative-learning"
+      ],
+      "priority": 74,
+      "reasons": {
+        "teacher": "能用聲音作為控制器，帶出低門檻且全班可參與的動態活動。",
+        "student": "可用喊聲與音高控制遊戲，體驗身體、聲音與數位互動。",
+        "homeroom": "適合班級破冰、課間活動與融合教育情境。",
+        "subject": "音樂、表演藝術、體育或特教課可用於聲音與律動活動。"
+      }
+    },
     "title": "聲音互動小遊戲",
     "description": "透過聲音控制的互動遊戲",
     "url": "https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2859",
@@ -1182,6 +1478,31 @@
   },
   {
     "id": 39,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "creative-learning"
+      ],
+      "priority": 72,
+      "reasons": {
+        "teacher": "可先以數學魔術引起好奇，再引導學生理解規律與代數恆等式。",
+        "student": "可在互動預言中發現數字規律，並嘗試解開魔術原理。",
+        "homeroom": "適合晨光、班級活動與跨領域數學小挑戰。",
+        "subject": "數學課可作為規律、未知數與代數入門的引起動機。"
+      }
+    },
     "title": "孔明神算：心靈感應預言魔術",
     "description": "神奇的心靈感應預言魔術遊戲",
     "url": "https://claude.ai/public/artifacts/982f7b1c-8302-4112-a05f-342ad24bd421",
@@ -1566,6 +1887,31 @@
   },
   {
     "id": 50,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "creative-learning",
+        "digital-literacy"
+      ],
+      "priority": 88,
+      "reasons": {
+        "teacher": "以多款繁中遊戲、成就與星星幣，提供低中年級可持續使用的遊戲化學習入口。",
+        "student": "可在繁中遊戲、頭像與星星幣回饋中練習數學、識字、節奏與基礎數位操作。",
+        "homeroom": "可安排晨光、課後或完成任務後的自主學習與班級獎勵。",
+        "subject": "資訊、數學、語文或音樂課可挑選適合的遊戲作為練習站。"
+      }
+    },
     "title": "童趣學園",
     "description": "阿凱老師打造的童趣樂園 KidsZone 兒童學習平台，13 款繁中互動遊戲涵蓋顏色、數學、英單、注音、時鐘、程式設計，搭配星星幣經濟與頭像系統。",
     "detailedDescription": "「KidsZone Learning Games（童樂學園）v1.5.0」是阿凱老師為國小低中年級打造的 **完整兒童遊戲學習生態系**，包含遊戲 + 經濟 + 頭像 + 商店，是低年級遊戲化學習平台的最終形態。\n\n## 🎯 核心特色\n\n- 💰 **星星幣經濟系統（v1.5.0 最新）** — 每日簽到 +10 金幣、遊玩遊戲分數/10 金幣，首頁金幣餘額顯示 + 遊戲結算獲得金幣動畫\n- 🛍️ **快樂商店** — 💎 限定頭像 + 🎁 驚喜貼紙包，讓小朋友**學習儲蓄 vs 消費抉擇**\n- 🧑‍🚀 **20+ 個人化角色頭像（v1.4.0）** — 太空人 / 公主 / 超人 / 小動物，搭配貼紙裝飾（皇冠 / 星星）= 學生獨有形象\n- 🎶 **節奏達人新遊戲（v1.4.0）** — 跟著《小星星》與《兩隻老虎》節奏點擊音符，達成 Perfect 連擊獲高分\n- 🃏 **記憶翻牌 2.0 三級分（v1.3.0）** — Level 1 經典圖案配對（幼-G1）/ Level 2 圖案對單字 🦁 vs 獅子（G1-G2 識字）/ Level 3 數學挑戰 2+3 vs 5（G2-G3 心算）\n- 🇹🇼 **全繁體中文** — 避免簡體 / 英文介面對低年級的學習門檻\n\n## 💡 設計理念\n\n星星幣經濟不是普通虛擬幣，是**真實兒童經濟學教育**：賺錢（簽到=勤勞 + 遊戲=努力）、儲蓄（累積金幣等限定頭像）、消費、**延遲滿足**（想要好頭像要存好幾天）、價值判斷（限定頭像 vs 貼紙包要哪個）— 比公民課講「理財」抽象 10 倍直觀。1 月 30 日一天連 push 3 版（v1.3 → v1.4 → v1.5），是阿凱爆速迭代力的代表。跟 [#6 蜂類配對消消樂](/tool/6) / [#30 12-in-1 遊戲集合](/tool/30) 形成兒童遊戲三件套：#6 單一遊戲 × 6 主題、#30 純玩無學習機制、**#50 ecosystem 最完整**。\n\n## 🎒 適合情境\n\n一年級電腦課 16 週設計：W1 建帳號選頭像 → W2-4 玩記憶翻牌 L1 → W5-8 升 L2（識字）+ 節奏達人 → W9-12 每日簽到累積金幣 → W13-16 開始消費學儲蓄。安親班 / 課輔自由時間用 #50 比 YouTube 好太多，學生主動學習。配對 [#63 Email 帳密記憶遊樂園](/tool/63) 教資訊素養基礎、[#64 簡譜節拍師太鼓達人風](/tool/64) 進階節奏訓練。**讓孩子先簽到 + 玩 1 局看「金幣 +10」獲得感動，自然想再玩**。",
@@ -1758,6 +2104,35 @@
   },
   {
     "id": 56,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "admin"
+      ],
+      "departments": [
+        "student-affairs"
+      ],
+      "painPoints": [
+        "event-management",
+        "student-practice",
+        "creative-learning"
+      ],
+      "priority": 80,
+      "reasons": {
+        "teacher": "可把元宵燈謎活動數位化，讓學生掃碼即答並即時得到回饋。",
+        "student": "可在節慶闖關中練習字謎、諧音與傳統文化知識。",
+        "homeroom": "適合元宵班會、班級競賽與親子同樂。",
+        "admin": "學務活動承辦可用於走廊、節慶或全校猜燈謎活動。"
+      }
+    },
     "title": "元宵猜燈謎闖關遊戲",
     "description": "充滿節慶氣氛的元宵猜燈謎互動遊戲，讓學生在趣味闖關中學習傳統文化。",
     "url": "https://cagoooo.github.io/lantern/",
@@ -2186,6 +2561,26 @@
   },
   {
     "id": 69,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "digital-literacy",
+        "creative-learning"
+      ],
+      "priority": 68,
+      "reasons": {
+        "teacher": "可從拋物線、風力與遊戲架構切入自然或資訊跨域示範。",
+        "student": "可透過輪流投擲與調整角度，直觀觀察風力和拋物線的影響。",
+        "subject": "自然與資訊課可延伸物理模擬、經典遊戲重製與排行榜設計。"
+      }
+    },
     "title": "猴子丟香蕉-投擲大戰爭",
     "description": "是一款充滿趣味與挑戰的互動投擲遊戲！玩家將化身為靈活的小猴子，在熱帶叢林中展開一場香蕉大戰。",
     "detailedDescription": "「🐒 猴子投擲大戰 (Monkey Pixel-Art Clash)」是阿凱老師**致敬 1991 年 QBASIC 經典 GORILLAS.BAS** 的 React 重製版 — 那是無數工程師的程式設計啟蒙遊戲（兩隻大猩猩在城市天際線互丟爆炸香蕉），阿凱把它改成 pixel-art 猴子 + 現代化雲端功能。\n\n## 🎯 核心特色\n\n- 🎯 **拋物線物理拖曳發射** — 受**重力 + 風力**影響，兩人輪流出招（同電腦對戰）\n- 💥 **地形破壞** — 爆炸**挖洞改變戰場地形**\n- 🎁 **4 種道具系統** — **10X 巨大化** / **ACID 強酸穿透地形** / **流星雨**天降多顆 / **雷射**直線攻擊\n- 🌬️ **風力視覺化三層指示（神細節）** — 雲層 + 旗幟 + HUD，學生**看得到風的存在**\n- 🏆 **Firebase Firestore 雲端排行榜** — **含防刷分 Rules**，全國學生 PK\n- 🔊 **Web Audio API 8-bit 音效即時合成** — 撞擊 / 爆炸 / 風聲都自合成（不放 mp3）\n- 📱 **PWA 可離線玩 + 加入主畫面**\n- 📐 **直立 / 橫向皆可玩**\n\n## 💡 設計理念\n\n**React 19 + TypeScript + Vite**，App.tsx ~1590 行（B1 拆分後），架構：`App.tsx` 主編排 + `main.tsx` audio unlock + SW 註冊 + `pwa.ts` 更新提示 + `firebase.ts` Firestore 排行榜 API + `game/constants.ts` 物理 / 道具 / 顏色常數 + `game/types.ts` GameState / Building / Particle 型別。`.env` 填 Firebase config，GitHub Actions 自動 CI/CD，部署 `cagoooo.github.io/monkey/`。**從大猩猩 → 改成猴子（pixel-art 風格更可愛）、從 QBASIC text mode → Canvas + React 像素美學**。\n\n## 🎒 適合情境\n\n阿凱「**致敬經典遊戲系列**」：\n- **#69 猴子投擲（本工具）** — 1991 QBASIC GORILLAS.BAS（React + Firebase）\n- [#85 企鵝跑酷](/tool/85) — 1983 Konami Antarctic Adventure（React 19）\n- [#9 瑪莉歐冒險](/tool/9) — 任天堂 Mario（Canvas 純前端）\n- [#28 瑪莉歐風格平台跳躍](/tool/28) — 早期版\n\n適合：\n- 自然科「拋物線運動」單元（**水平 + 垂直分速度**抽象 → 玩遊戲看香蕉飛）\n- 資訊課「程式設計史」單元（講 1991 QBASIC 經典）\n- 想看「React + Firebase 遊戲架構」的開發者\n- 想看「1991 QBASIC 經典重製」的懷舊玩家\n\n兩人開玩 — **看誰先學會「逆風該怎麼瞄」**。MIT 授權，cagoooo/monkey 開源。",
@@ -2804,6 +3199,27 @@
   },
   {
     "id": 85,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "digital-literacy"
+      ],
+      "priority": 46,
+      "reasons": {
+        "teacher": "可用於短時班級獎勵，或示範經典遊戲重製與行動載具互動設計。",
+        "student": "可在跑酷挑戰中練習反應、專注並探索經典遊戲彩蛋。",
+        "homeroom": "適合作為完成班級任務後的短時活動。",
+        "subject": "資訊課可從 React 遊戲、觸控操作與經典遊戲史延伸討論。"
+      }
+    },
     "title": "南極大冒險 - 企鵝跑酷",
     "description": "操控可愛企鵝在南極冰原上奔馳，閃避冰柱與裂縫、收集鮮魚與星星，挑戰最遠距離與最高分數的休閒跑酷小遊戲，輕鬆訓練反應力與專注力。",
     "detailedDescription": "「🐧 南極大冒險：企鵝跑酷」是阿凱老師**致敬 Konami 1983 年經典《Antarctic Adventure》的 React 19 重製版**，副標寫明「**由阿凱老師為石門國小學生製作**」 — 1983 年 Konami 在 MSX 平台推出的橫向卷軸跑酷遊戲，影響後來的「跑酷類」遊戲。\n\n## 🎯 核心特色\n\n- 🎮 **4 鍵操作極簡** — ← / → 切換車道 + **↑ / Space** 跳躍 + ↓ 減速；手機長按左右切車道並加速、輕點跳躍\n- 🥚 **隱藏彩蛋：經典 Konami Code God Mode** — **在開始畫面依序按 `↑↑↓↓←←→→AB` 啟動 God Mode**！這是 Konami 三十年來在自家遊戲埋的密技 `↑↑↓↓←←→→BA` 變奏版，**阿凱致敬到骨子裡**，懂的學生 / 老師會心一笑\n- 🎵 **Émile Waldteufel《Les Patineurs / Skater's Waltz》1882 公版音樂** — 法文「溜冰圓舞曲」跟企鵝在冰上溜的視覺**音畫合一**，**版權意識選 1882 公版避開 Konami 原版音樂版權**\n- 🎉 **Canvas Confetti 過關撒花**\n- 🍎 **起源：Google AI Studio Remix 模板** — 阿凱用 Google AI Studio 的 Remix 功能起手 + 改成自己的版本\n\n## 💡 設計理念\n\n**React 19（最新版！）+ TypeScript 5.8 + Vite 6 + Tailwind CSS v4 + Motion + Lucide Icons + Canvas Confetti**，部署 `cagoooo.github.io/penguin/`。多 AI 工具混搭再次驗證：[#76 WebSlide](/tool/76) 用 Gemini 寫 / [#77 雙語宣導網](/tool/77) 用 Manus 建立 / **#85 企鵝跑酷用 Google AI Studio Remix 模板**。\n\n## 🎒 適合情境\n\n阿凱「**致敬經典遊戲系列**」對比：\n- **#85 企鵝跑酷（本工具）** — Konami 1983 Antarctic Adventure（React 19 + Konami Code 彩蛋）\n- [#69 猴子投擲](/tool/69) — 1991 QBASIC GORILLAS.BAS（React + Firebase）\n- [#9 瑪莉歐冒險](/tool/9) — 任天堂 Mario（Canvas 純前端）\n- [#28 瑪莉歐風格平台跳躍](/tool/28) — 早期版\n\n適合：\n- 國中小所有任課老師（下課小遊戲）\n- 資訊課（遊戲開發史 / React 案例）\n- 體育課暖身（體育館投影學生看企鵝跑酷自己也想動）\n- 家長親子（「**爸爸我給你看 30 年前的遊戲**」+ 親子共玩講遊戲史）\n- 想看「React 19 + Konami 致敬遊戲」的開發者\n\n第一次玩 — **試試 `↑↑↓↓←←→→AB` Konami Code → 啟動 God Mode 後就無敵了，懂的人會心一笑**。MIT 授權，cagoooo/penguin 開源。",
@@ -3358,6 +3774,31 @@
   },
   {
     "id": 101,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "digital-literacy",
+        "creative-learning"
+      ],
+      "priority": 64,
+      "reasons": {
+        "teacher": "可作為高年級資訊課的3D互動示例，或安排短時班級挑戰。",
+        "student": "可在3D迷宮中練習空間定位、路線判斷與目標規劃。",
+        "homeroom": "適合作為班級獎勵或成果展示中的短時挑戰。",
+        "subject": "資訊課可從 Three.js、第一人稱視角與排行榜設計認識3D遊戲。"
+      }
+    },
     "title": "3D 迷宮冒險遊戲 — 第一人稱光球收集 × 全班排行榜",
     "description": "第一人稱 3D 迷宮探索遊戲：收集藍色光球、躲避紅色巡守者、與時間賽跑。React + Three.js 純瀏覽器跑 3D，桌機鍵盤滑鼠 + iPad 觸控全支援，內建全班 / 全校排行榜，下課十分鐘剛好打一輪。",
     "detailedDescription": "「3D 迷宮冒險遊戲」是阿凱老師為國小高年級資訊課與下課十分鐘打造的 **第一人稱 3D 探索遊戲**，解決「想用瀏覽器玩 3D 遊戲卻要灌一堆軟體 / 想讓孩子玩有教育意義的遊戲卻找不到免費版本」的痛點。\n\n## 🎯 核心玩法\n\n- 🔵 **收集藍色光球** — 散落在迷宮裡的關鍵目標，蒐集數會即時計分\n- 🔴 **躲避紅色巡守者** — 場上巡邏的紅怪會追你，碰到就 GG\n- ⏱️ **與時間賽跑** — 計時開跑，挑戰最短秒數通關\n- 🏆 **全班 / 全校排行榜** — 通關後自動上榜，看自己班 / 全校排名\n- 📱 **桌機 + iPad 觸控全支援** — 桌機 WASD + 滑鼠視角；iPad / 手機左下虛擬搖桿 + 右下視角拖曳\n- 🎮 **第一人稱沉浸視角** — 走廊透視 + 動態光源，3D 空間感十足\n\n## 💡 技術亮點\n\n- **React + Three.js + react-three-fiber (R3F)** 純前端跑 3D，無後端伺服器\n- **PWA 可安裝** — manifest.webmanifest + Service Worker，iPad / Chrome / Edge 可加入桌面\n- **WebGL 硬體加速** — 在學校老舊電腦也能 30 FPS 流暢跑\n- **Schema.org VideoGame Structured Data** — Google 搜尋會跳 Rich Result 卡片\n- **完整 OG / Twitter Card** — 轉貼 LINE / FB 自動顯示走廊透視預覽圖\n- **深色 sci-fi 配色** — Inter + Noto Sans TC + JetBrains Mono 字型組合，介面質感像獨立遊戲\n\n## 🎒 教學情境\n\n國小高年級資訊課「3D 與遊戲設計」單元的實作範例（學生可看到「React + Three.js 真的能跑 3D」）、下課十分鐘的健康放電（取代孩子滑手機）、班級獎勵活動（達標後開放打 5 分鐘 + 上排行榜）、資訊週成果展（投影到大螢幕老師示範第一人稱探索）、特教 / 資源班視覺空間訓練（3D 空間定位與決策練習）、家長日攤位（讓家長體驗孩子在課堂玩什麼）。\n\n## 🎓 為什麼適合放教室\n\n**全班排行榜會自然產生競爭感**，但因為「光球數 + 時間」雙因子，**孩子不容易作弊**（光球少時間短、光球多時間長都會被排序）。**第一人稱視角讓孩子專注**，不會像平面遊戲那樣分心。**免登入直接玩** — 點開網址就開始，不用註冊帳號、不用裝 app、不用付費，學校 Chromebook / iPad 都跑得動。",
@@ -3384,6 +3825,30 @@
   },
   {
     "id": 102,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "digital-literacy"
+      ],
+      "priority": 58,
+      "reasons": {
+        "teacher": "可提供無廣告的短時班級挑戰，也能作為 Canvas 遊戲互動設計示例。",
+        "student": "可在不同難度的射擊與閃避挑戰中練習專注與即時判斷。",
+        "homeroom": "適合作為班級達標後的短時獎勵活動。",
+        "subject": "資訊課可觀察 Canvas、PWA、排行榜與道具系統的遊戲設計。"
+      }
+    },
     "title": "外星人入侵·保衛石門 — 復古太空射擊 × 全校排行榜",
     "description": "駕駛地球最後一艘戰機，擊退一波波外星艦隊！復古像素風太空射擊：三種難度、王關 Boss 母艦、火力強化與護盾道具、連擊加成。石門校徽開場 +「保衛石門」主題，可加入主畫面當 App、離線可玩，內建全校跨裝置排行榜。桌機鍵盤 + 手機觸控全支援，下課十分鐘剛好打一輪。",
     "detailedDescription": "「外星人入侵·保衛石門」是阿凱老師為國小資訊課與下課十分鐘打造的 **復古風太空射擊遊戲**，解決「想讓孩子玩有教育意義、免費、又能跟全校一起拚名次的遊戲」的痛點。\n\n## 🎯 核心玩法\n\n- 🚀 **駕駛戰機擊退外星艦隊** — 自動開火，專心走位閃彈、瞄準\n- 👾 **三種外星人** — 偵察兵 / 戰鬥機 / 轟炸機，經典整隊橫移、越打越快\n- ⚠️ **王關 Boss 母艦** — 每 5 波出現，三種彈幕型態 + 血條\n- 💪 **道具系統** — 火力強化、急速射擊、能量護盾、增加戰機\n- 🔥 **連擊加成** — 連續擊殺不失誤，分數倍率往上疊\n- 🏆 **全校跨裝置排行榜** — 留名上傳，全校同學看同一份 TOP 5\n\n## 💡 技術亮點\n\n- **純 HTML5 Canvas + 原生 JavaScript** — 單檔零相依、零建置，任何瀏覽器點開即玩\n- **PWA 可安裝 + 離線可玩** — manifest.webmanifest + Service Worker，平板可加入主畫面當 App\n- **Firebase 匿名登入 + Firestore** — 全校跨裝置即時排行榜（離線時自動退回本機榜）\n- **三種難度** — 簡單 5 命 / 普通 3 命 / 困難 2 命，不同年級都玩得起來\n- **石門校徽 Canvas 重繪** — 開場校徽 +「保衛石門」主題，向量繪製任何尺寸都清晰不破圖\n- **合成音效 + 爆炸粒子 + 星空視差** — Web Audio 即時合成，復古街機質感\n\n## 🎒 教學情境\n\n下課十分鐘的健康放電（取代滑手機）、資訊課「遊戲與互動設計」單元的 Canvas 實作範例（孩子看到「網頁真的能做遊戲」）、班級獎勵活動（達標後開放打一輪 + 上排行榜）、資訊週成果展投影示範。桌機鍵盤 + 手機觸控全支援，學校 Chromebook / iPad 都跑得動，免登入、免安裝、免付費，點開網址直接玩。",
@@ -3756,6 +4221,30 @@
   },
   {
     "id": 112,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "classroom-management"
+      ],
+      "priority": 52,
+      "reasons": {
+        "teacher": "可安排短時破冰或班級分數挑戰，支援電子白板與學生載具。",
+        "student": "可在飛行閃避挑戰中練習專注、節奏與手眼協調。",
+        "homeroom": "適合班級破冰、課間休閒與限時挑戰。",
+        "subject": "資訊課可用於討論鍵盤、觸控與即時回饋的互動設計。"
+      }
+    },
     "title": "皮卡丘天空大冒險",
     "description": "精緻好玩的皮卡丘天空冒險遊戲！結合 Flappy Bird 經典玩法，在躲避障礙的過程中鍛鍊專注力與手眼協調，非常適合用於課堂破冰、班級競賽或下課休閒。",
     "detailedDescription": "「皮卡丘天空大冒險」是一款專為國小學生設計的網頁趣味遊戲，改編自經典的 Flappy Bird 玩法。學生將控制皮卡丘在天空中飛翔，避開重重障礙物以獲得高分。遊戲不僅畫面生動可愛，還能有效鍛鍊學生的手眼協調能力、專注力與挫折容容度。教師可以將這款遊戲應用於資訊課的「滑鼠/鍵盤點擊練習」、班級課間的「破冰與專注力訓練」，或是作為班級活動的「限時分數挑戰賽」，激發學生的榮譽感與互動樂趣。網站採純前端 HTML5 設計，免安裝且支援各類載具，適合在電子白板或學生載具上即時投影與遊玩。",
@@ -3863,6 +4352,31 @@
   },
   {
     "id": 115,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "assessment",
+        "creative-learning"
+      ],
+      "priority": 91,
+      "reasons": {
+        "teacher": "可把四則運算練習轉為有關卡與徽章回饋的自主學習活動。",
+        "student": "可在萌獸闖關與徽章成就中反覆練習四則運算。",
+        "homeroom": "適合班級暖身、分站活動與課後補強。",
+        "subject": "數學課可作為基本運算練習與差異化自主學習站。"
+      }
+    },
     "title": "萌獸數學道館",
     "description": "把四則運算練習變成萌獸道館挑戰，學生在闖關、蒐集徽章與升級回饋中，一題一題練出數學手感。",
     "detailedDescription": "「萌獸數學道館」是阿凱老師把數學練習包裝成遊戲化闖關的班級工具，讓學生不只是寫題目，而是在可愛萌獸陪伴的道館挑戰中累積徽章、升級成就，重新找回練習四則運算的動力。\n\n## 🎯 核心特色\n\n- 🏟️ **道館式闖關節奏** — 用挑戰關卡取代單調題庫，適合課堂暖身、分站練習與課後補強\n- 🧮 **數學練習主軸清楚** — 聚焦國小常見運算練習，讓學生在遊戲情境中反覆熟悉題型\n- 🏅 **徽章與成就回饋** — 用可視化獎勵降低挫折感，讓「再做一題」變得自然\n- 🎮 **原創萌獸學習情境** — 用孩子喜歡的冒險與收集語感，搭配原創角色視覺，讓數學課多一點期待感\n- 📱 **GitHub Pages 即開即用** — 不用安裝、不用帳號，老師貼連結或投影就能開始\n\n## 💡 設計理念\n\n很多孩子不是不會數學，而是對反覆練習先失去耐心。這張工具卡把「練習」轉譯成「挑戰」：題目是關卡、答對是推進、徽章是努力的可視化證明。老師可以把它放在課堂開頭當暖身，也可以在學生完成主要任務後作為自主練習站。\n\n## 🎒 適合情境\n\n適合國小中高年級數學課、補救教學、課後班、自主學習時間與班級活動。特別適合需要讓學生大量練習但又不想讓氣氛變成「又要寫一張練習卷」的場合。",

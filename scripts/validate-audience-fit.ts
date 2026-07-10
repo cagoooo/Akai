@@ -21,8 +21,7 @@ const RECOMMENDATION_LIMIT = 6;
  * 以避免 progressive 模式意外放行新工具。
  */
 export const LEGACY_MISSING_AUDIENCE_IDS: ReadonlySet<number> = new Set([
-  3, 6, 9, 28, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 41, 45, 50, 52, 56,
-  60, 63, 69, 80, 85, 93, 94, 96, 97, 101, 102, 106, 108, 111, 112, 115,
+  3, 41, 45, 52, 60, 63, 80, 93, 94, 96, 97, 106, 108, 111,
 ]);
 
 export const REQUIRED_PROFILES: readonly AudienceProfile[] = [
