@@ -17,9 +17,31 @@ export function readAudienceProfile(): StoredAudienceProfile | null {
     if (!raw) return null;
     const value: unknown = JSON.parse(raw);
     if (!value || typeof value !== 'object' || (value as { version?: unknown }).version !== 1) return null;
-    const profile = value as StoredAudienceProfile;
-    return (profile.audience === 'teacher' || profile.audience === 'student') ? profile : null;
+    const profile = value as Record<string, unknown>;
+    if (typeof profile.completedAt !== 'string' || Number.isNaN(Date.parse(profile.completedAt))) return null;
+    if (profile.audience === 'student') {
+      return profile.schoolLevel === undefined && profile.teacherRole === undefined && profile.department === undefined
+        ? profile as unknown as StoredAudienceProfile
+        : null;
+    }
+    if (profile.audience !== 'teacher' || !isSchoolLevel(profile.schoolLevel) || !isTeacherRole(profile.teacherRole)) return null;
+    if (profile.teacherRole === 'admin') {
+      return isDepartment(profile.department) ? profile as unknown as StoredAudienceProfile : null;
+    }
+    return profile.department === undefined ? profile as unknown as StoredAudienceProfile : null;
   } catch { return null; }
+}
+
+function isSchoolLevel(value: unknown): value is AudienceProfile['schoolLevel'] {
+  return value === 'elementary' || value === 'junior' || value === 'senior';
+}
+
+function isTeacherRole(value: unknown): value is AudienceProfile['teacherRole'] {
+  return value === 'homeroom' || value === 'subject' || value === 'admin';
+}
+
+function isDepartment(value: unknown): value is NonNullable<AudienceProfile['department']> {
+  return value === 'academic' || value === 'student-affairs' || value === 'general-affairs' || value === 'counseling' || value === 'other';
 }
 
 export function dismissAudienceWizardForSession(): void {

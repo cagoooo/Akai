@@ -16,4 +16,13 @@ describe('audienceProfileStorage', () => {
   it.each(['q=搜尋', 'category=games', 'favorites=1', 'wish=1'])('保留深連結 %s', (query) => {
     expect(shouldAutoOpenAudienceWizard(new URLSearchParams(query))).toBe(false);
   });
+  it.each([
+    { version: 1, audience: 'teacher', completedAt: '2026-07-10T00:00:00.000Z' },
+    { version: 1, audience: 'teacher', schoolLevel: 'elementary', teacherRole: 'admin', completedAt: 'not-a-date' },
+    { version: 1, audience: 'teacher', schoolLevel: 'elementary', teacherRole: 'admin', completedAt: '2026-07-10T00:00:00.000Z' },
+    { version: 1, audience: 'student', schoolLevel: 'elementary', completedAt: '2026-07-10T00:00:00.000Z' },
+  ])('rejects malformed stored profiles', (invalid) => {
+    localStorage.setItem(AUDIENCE_PROFILE_KEY, JSON.stringify(invalid));
+    expect(readAudienceProfile()).toBeNull();
+  });
 });

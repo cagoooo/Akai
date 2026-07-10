@@ -15,4 +15,11 @@ describe('audienceWizardReducer', () => {
     expect(state.step).toBe('results');
     expect(reduce(state, { type: 'BACK' })).toEqual(initialAudienceWizardState);
   });
+  it('rejects choices that do not belong to the current step', () => {
+    expect(reduce(initialAudienceWizardState, { type: 'SELECT_SCHOOL_LEVEL', value: 'elementary' })).toBe(initialAudienceWizardState);
+    const teacher = reduce(initialAudienceWizardState, { type: 'SELECT_AUDIENCE', value: 'teacher' });
+    expect(reduce(teacher, { type: 'SELECT_DEPARTMENT', value: 'academic' })).toBe(teacher);
+    const level = reduce(teacher, { type: 'SELECT_SCHOOL_LEVEL', value: 'elementary' });
+    expect(reduce(level, { type: 'SELECT_DEPARTMENT', value: 'academic' })).toBe(level);
+  });
 });

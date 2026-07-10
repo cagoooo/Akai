@@ -15,13 +15,19 @@ export const initialAudienceWizardState: AudienceWizardState = { step: 'audience
 export function audienceWizardReducer(state: AudienceWizardState, action: AudienceWizardAction): AudienceWizardState {
   switch (action.type) {
     case 'SELECT_AUDIENCE':
+      if (state.step !== 'audience') return state;
       return action.value === 'student'
         ? { step: 'results', profile: { audience: 'student' } }
         : { step: 'school-level', profile: { audience: 'teacher' } };
-    case 'SELECT_SCHOOL_LEVEL': return { step: 'teacher-role', profile: { ...state.profile, schoolLevel: action.value } };
+    case 'SELECT_SCHOOL_LEVEL':
+      if (state.step !== 'school-level' || state.profile.audience !== 'teacher') return state;
+      return { step: 'teacher-role', profile: { ...state.profile, schoolLevel: action.value } };
     case 'SELECT_TEACHER_ROLE':
+      if (state.step !== 'teacher-role' || state.profile.audience !== 'teacher' || !state.profile.schoolLevel) return state;
       return { step: action.value === 'admin' ? 'department' : 'results', profile: { ...state.profile, teacherRole: action.value } };
-    case 'SELECT_DEPARTMENT': return { step: 'results', profile: { ...state.profile, department: action.value } };
+    case 'SELECT_DEPARTMENT':
+      if (state.step !== 'department' || state.profile.audience !== 'teacher' || state.profile.teacherRole !== 'admin') return state;
+      return { step: 'results', profile: { ...state.profile, department: action.value } };
     case 'BACK':
       if (state.step === 'results' && state.profile.audience === 'student') return initialAudienceWizardState;
       if (state.step === 'results' && state.profile.teacherRole !== 'admin') return { step: 'teacher-role', profile: omit(state.profile, 'teacherRole', 'department') };
