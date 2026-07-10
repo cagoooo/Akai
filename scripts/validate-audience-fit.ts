@@ -22,8 +22,7 @@ const RECOMMENDATION_LIMIT = 6;
  */
 export const LEGACY_MISSING_AUDIENCE_IDS: ReadonlySet<number> = new Set([
   3, 6, 9, 28, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 41, 45, 50, 52, 56,
-  60, 63, 69, 73, 75, 78, 80, 82, 83, 84, 85, 86, 88, 93, 94, 95, 96, 97, 98,
-  101, 102, 104, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116,
+  60, 63, 69, 85, 93, 94, 96, 97, 101, 102, 106, 108, 111, 112, 115,
 ]);
 
 export const REQUIRED_PROFILES: readonly AudienceProfile[] = [
