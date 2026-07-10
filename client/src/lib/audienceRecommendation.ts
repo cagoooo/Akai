@@ -21,17 +21,55 @@ const BASE_SLOT_TARGETS: ReadonlyArray<readonly [Exclude<RecommendationSlot, 'di
   ['stage', 1],
 ];
 
-function getToolFamilyId(tool: EducationalTool): number {
-  const upgradeFromId = tool.upgradeFromId;
-  return typeof upgradeFromId === 'number' && Number.isInteger(upgradeFromId) && upgradeFromId > 0
-    ? upgradeFromId
-    : tool.id;
+function isValidToolId(id: unknown): id is number {
+  return typeof id === 'number' && Number.isInteger(id) && id > 0;
 }
 
-function dedupeRankedFamilies(ranked: AudienceRecommendation[]): AudienceRecommendation[] {
+function buildToolFamilyIds(tools: readonly EducationalTool[]): Map<number, number> {
+  const parent = new Map<number, number>();
+
+  for (const tool of tools) {
+    if (isValidToolId(tool.id)) parent.set(tool.id, tool.id);
+  }
+
+  const find = (id: number): number => {
+    const currentParent = parent.get(id);
+    if (currentParent === undefined || currentParent === id) return id;
+    const root = find(currentParent);
+    parent.set(id, root);
+    return root;
+  };
+
+  const union = (left: number, right: number): void => {
+    if (!parent.has(left) || !parent.has(right)) return;
+    const leftRoot = find(left);
+    const rightRoot = find(right);
+    if (leftRoot === rightRoot) return;
+    parent.set(Math.max(leftRoot, rightRoot), Math.min(leftRoot, rightRoot));
+  };
+
+  for (const tool of tools) {
+    for (const linkedId of [tool.upgradeFromId, tool.upgradeToId]) {
+      if (isValidToolId(linkedId)) union(tool.id, linkedId);
+    }
+  }
+
+  const familyIds = new Map<number, number>();
+  parent.forEach((_, id) => familyIds.set(id, find(id)));
+  return familyIds;
+}
+
+function getToolFamilyId(tool: EducationalTool, familyIds: ReadonlyMap<number, number>): number {
+  return familyIds.get(tool.id) ?? tool.id;
+}
+
+function dedupeRankedFamilies(
+  ranked: AudienceRecommendation[],
+  toolFamilyIds: ReadonlyMap<number, number>,
+): AudienceRecommendation[] {
   const familyIds = new Set<number>();
   return ranked.filter((recommendation) => {
-    const familyId = getToolFamilyId(recommendation.tool);
+    const familyId = getToolFamilyId(recommendation.tool, toolFamilyIds);
     if (familyIds.has(familyId)) return false;
     familyIds.add(familyId);
     return true;
@@ -137,6 +175,7 @@ function rankTool(tool: EducationalTool, fit: AudienceFit, profile: AudienceProf
 function composeRecommendationSlots(
   ranked: AudienceRecommendation[],
   limit: number,
+  familyIds: ReadonlyMap<number, number>,
 ): AudienceRecommendation[] {
   const selected: AudienceRecommendation[] = [];
   const selectedIds = new Set<number>();
@@ -144,13 +183,13 @@ function composeRecommendationSlots(
 
   const isSelected = (recommendation: AudienceRecommendation): boolean => (
     selectedIds.has(recommendation.tool.id)
-    || selectedFamilyIds.has(getToolFamilyId(recommendation.tool))
+    || selectedFamilyIds.has(getToolFamilyId(recommendation.tool, familyIds))
   );
 
   const select = (recommendation: AudienceRecommendation): void => {
     selected.push(recommendation);
     selectedIds.add(recommendation.tool.id);
-    selectedFamilyIds.add(getToolFamilyId(recommendation.tool));
+    selectedFamilyIds.add(getToolFamilyId(recommendation.tool, familyIds));
   };
 
   for (const [slot, target] of BASE_SLOT_TARGETS) {
@@ -185,6 +224,8 @@ export function recommendTools(
 ): AudienceRecommendation[] {
   if (!Number.isInteger(limit) || limit <= 0) return [];
 
+  const familyIds = buildToolFamilyIds(tools);
+
   const ranked = tools
     .flatMap((tool) => {
       if (tool.isInternal || !tool.audienceFit || !isEligible(tool.audienceFit, profile)) return [];
@@ -192,5 +233,5 @@ export function recommendTools(
     })
     .sort((left, right) => right.score - left.score || left.tool.id - right.tool.id);
 
-  return composeRecommendationSlots(dedupeRankedFamilies(ranked), limit);
+  return composeRecommendationSlots(dedupeRankedFamilies(ranked, familyIds), limit, familyIds);
 }

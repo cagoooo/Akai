@@ -267,4 +267,37 @@ describe('recommendTools', () => {
     expect(recommendTools(standaloneTools, { audience: 'teacher' }, 6)
       .map(({ tool }) => tool.id)).toEqual([300, 301, 302, 303, 304, 305]);
   });
+
+  it('treats a base-only upgradeToId as the same family as its pro tool', () => {
+    const base = makeTool(4, makeFit({ priority: 70 }), { upgradeToId: 87 });
+    const pro = makeTool(87, makeFit({ priority: 90 }));
+
+    expect(recommendTools([base, pro], { audience: 'teacher' }, 2)
+      .map(({ tool }) => tool.id)).toEqual([87]);
+  });
+
+  it('treats a pro-only upgradeFromId as the same family as its base tool', () => {
+    const base = makeTool(4, makeFit({ priority: 70 }));
+    const pro = makeTool(87, makeFit({ priority: 90 }), { upgradeFromId: 4 });
+
+    expect(recommendTools([base, pro], { audience: 'teacher' }, 2)
+      .map(({ tool }) => tool.id)).toEqual([87]);
+  });
+
+  it('deduplicates every generation in an upgrade chain', () => {
+    const base = makeTool(4, makeFit({ priority: 70 }), { upgradeToId: 87 });
+    const pro = makeTool(87, makeFit({ priority: 80 }), { upgradeFromId: 4, upgradeToId: 120 });
+    const latest = makeTool(120, makeFit({ priority: 90 }), { upgradeFromId: 87 });
+
+    expect(recommendTools([base, pro, latest], { audience: 'teacher' }, 3)
+      .map(({ tool }) => tool.id)).toEqual([120]);
+  });
+
+  it('does not merge existing tools through an upgrade link to a missing tool', () => {
+    const first = makeTool(4, makeFit({ priority: 90 }), { upgradeToId: 999 });
+    const second = makeTool(87, makeFit({ priority: 80 }), { upgradeToId: 999 });
+
+    expect(recommendTools([first, second], { audience: 'teacher' }, 2)
+      .map(({ tool }) => tool.id)).toEqual([4, 87]);
+  });
 });
