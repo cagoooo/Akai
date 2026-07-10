@@ -3166,13 +3166,12 @@
     "id": 113,
     "audienceFit": {
       "audiences": ["teacher"],
-      "teacherRoles": ["homeroom", "admin"],
+      "teacherRoles": ["homeroom"],
       "painPoints": ["administration", "teacher-workload", "communication"],
       "priority": 84,
       "reasons": {
         "teacher": "導師可快速完成班級 PaGamO 授權填報與名單核對。",
-        "homeroom": "填報班級資料與確認學生授權狀態更省時。",
-        "admin": "教務承辦可即時彙整全校授權資料，減少來回催收。"
+        "homeroom": "填報班級資料與確認學生授權狀態更省時。"
       }
     },
     "title": "PaGamO 素養教材班級授權填報",
