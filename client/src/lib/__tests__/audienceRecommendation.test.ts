@@ -6,7 +6,7 @@ import { recommendTools } from '../audienceRecommendation';
 
 const makeFit = (overrides: Partial<AudienceFit> = {}): AudienceFit => ({
   audiences: ['teacher'],
-  painPoints: ['test-need'],
+  painPoints: ['resource-discovery'],
   priority: 50,
   reasons: { teacher: '這項工具適合老師使用。' },
   ...overrides,
@@ -38,7 +38,7 @@ const meetingTool = makeTool(84, makeFit({
 const universalFillers = Array.from({ length: 8 }, (_, index) => makeTool(
   index + 120,
   makeFit({
-    painPoints: [`need-${index}`],
+    painPoints: ['resource-discovery'],
     priority: 50 - index,
     reasons: { teacher: `老師推薦理由 ${index}` },
   }),
@@ -237,5 +237,34 @@ describe('recommendTools', () => {
   it('同分時依 tool.id 升序', () => {
     expect(recommendTools([makeTool(2), makeTool(1)], { audience: 'teacher' }, 2)
       .map(({ tool }) => tool.id)).toEqual([1, 2]);
+  });
+
+  it('同一家族只保留高分 Pro，並以其他家族補滿六席', () => {
+    const base = makeTool(4, makeFit({ priority: 70 }), { upgradeToId: 87 });
+    const pro = makeTool(87, makeFit({ priority: 90 }), { upgradeFromId: 4 });
+    const otherFamilies = Array.from({ length: 6 }, (_, index) => makeTool(
+      200 + index,
+      makeFit({ priority: 60 - index }),
+    ));
+
+    const result = recommendTools([base, pro, ...otherFamilies], { audience: 'teacher' }, 6);
+    const ids = result.map(({ tool }) => tool.id);
+    const familyIds = result.map(({ tool }) => tool.upgradeFromId ?? tool.id);
+
+    expect(ids).toContain(87);
+    expect(ids).not.toContain(4);
+    expect(result).toHaveLength(6);
+    expect(new Set(ids).size).toBe(6);
+    expect(new Set(familyIds).size).toBe(6);
+  });
+
+  it('沒有 upgrade metadata 的不同工具不會被誤判為同一家族', () => {
+    const standaloneTools = Array.from({ length: 6 }, (_, index) => makeTool(
+      300 + index,
+      makeFit({ priority: 80 - index }),
+    ));
+
+    expect(recommendTools(standaloneTools, { audience: 'teacher' }, 6)
+      .map(({ tool }) => tool.id)).toEqual([300, 301, 302, 303, 304, 305]);
   });
 });

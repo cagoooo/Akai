@@ -1,6 +1,7 @@
 import {
   AUDIENCE_TYPES,
   DEPARTMENTS,
+  PAIN_POINTS,
   SCHOOL_LEVELS,
   TEACHER_ROLES,
 } from './audienceProfile';
@@ -117,6 +118,11 @@ export function validateAudienceFit(input: unknown): string[] {
   }
   if (painPoints?.some((painPoint) => !PAIN_POINT_PATTERN.test(painPoint))) {
     errors.push('painPoints 只能使用小寫英數與 dash');
+  }
+  for (const painPoint of painPoints ?? []) {
+    if (PAIN_POINT_PATTERN.test(painPoint) && !(PAIN_POINTS as readonly string[]).includes(painPoint)) {
+      errors.push(`不支援的 painPoint：${painPoint}`);
+    }
   }
 
   if (!hasOwn(input, 'priority')) {

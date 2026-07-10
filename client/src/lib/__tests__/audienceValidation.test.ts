@@ -26,7 +26,7 @@ describe('validateAudienceFit', () => {
       schoolLevels: 'elementary',
       teacherRoles: [1],
       departments: false,
-      painPoints: ['practice', null],
+      painPoints: ['student-practice', null],
       priority: '90',
       reasons: [],
     };
@@ -51,7 +51,7 @@ describe('validateAudienceFit', () => {
       schoolLevels: [],
       teacherRoles: [],
       departments: [],
-      painPoints: ['practice'],
+      painPoints: ['student-practice'],
       priority: 60,
       reasons: { student: '協助學生練習' },
     });
@@ -70,7 +70,7 @@ describe('validateAudienceFit', () => {
     expect(
       validateAudienceFit({
         audiences: ['student'],
-        painPoints: ['practice'],
+        painPoints: ['student-practice'],
         priority: 60,
         reasons: { admin: '方便管理者設定活動' },
       }),
@@ -112,7 +112,7 @@ describe('validateAudienceFit', () => {
       audiences: ['teacher'],
       teacherRoles: ['admin'],
       departments: ['academic'],
-      painPoints: ['school-management'],
+      painPoints: ['administration'],
       priority: 85,
     };
 
@@ -132,7 +132,7 @@ describe('validateAudienceFit', () => {
       validateAudienceFit({
         audiences: ['teacher', 'student'],
         schoolLevels: ['elementary'],
-        painPoints: ['classroom-activity'],
+        painPoints: ['creative-learning'],
         priority: 75,
         reasons: { teacher: '方便老師帶領活動', student: '   ' },
       }),
@@ -142,7 +142,7 @@ describe('validateAudienceFit', () => {
       validateAudienceFit({
         audiences: ['teacher', 'student'],
         schoolLevels: ['elementary'],
-        painPoints: ['classroom-activity'],
+        painPoints: ['creative-learning'],
         priority: 75,
         reasons: { student: '讓學生參與活動' },
       }),
@@ -156,7 +156,7 @@ describe('validateAudienceFit', () => {
         schoolLevels: ['elementary', 'junior', 'senior'],
         teacherRoles: ['homeroom', 'subject', 'admin'],
         departments: ['academic', 'student-affairs'],
-        painPoints: ['meeting-notes'],
+        painPoints: ['meeting-productivity'],
         priority: 90,
         reasons: { teacher: '適合不同學段與職務的老師使用' },
       }),
@@ -168,7 +168,7 @@ describe('validateAudienceFit', () => {
       validateAudienceFit({
         audiences: ['student'],
         teacherRoles: ['homeroom'],
-        painPoints: ['practice'],
+        painPoints: ['student-practice'],
         priority: 60,
         reasons: { student: '協助學生練習' },
       }),
@@ -192,7 +192,7 @@ describe('validateAudienceFit', () => {
     );
   });
 
-  it('拒絕不符合格式的痛點鍵與重複陣列值', () => {
+  it('拒絕不符合格式或 taxonomy 的痛點鍵與重複陣列值', () => {
     const errors = validateAudienceFit({
       audiences: ['teacher', 'teacher'],
       schoolLevels: ['elementary', 'elementary'],
@@ -211,13 +211,34 @@ describe('validateAudienceFit', () => {
     );
   });
 
+  it('接受 taxonomy 中的多個 painPoints', () => {
+    expect(validateAudienceFit({
+      audiences: ['teacher', 'student'],
+      painPoints: ['lesson-planning', 'student-practice', 'accessibility'],
+      priority: 80,
+      reasons: { teacher: '協助老師備課。', student: '協助學生自主練習。' },
+    })).toEqual([]);
+  });
+
+  it.each(['meeting-notes', 'classroom-activity', 'school-management'])(
+    '拒絕格式合法但不在 taxonomy 的近義痛點鍵：%s',
+    (painPoint) => {
+      expect(validateAudienceFit({
+        audiences: ['teacher'],
+        painPoints: [painPoint],
+        priority: 70,
+        reasons: { teacher: '適合老師使用。' },
+      })).toContain(`不支援的 painPoint：${painPoint}`);
+    },
+  );
+
   it('只有行政職務或未限定老師職務時可設定處室', () => {
     expect(
       validateAudienceFit({
         audiences: ['teacher'],
         teacherRoles: ['subject'],
         departments: ['academic'],
-        painPoints: ['curriculum-planning'],
+        painPoints: ['lesson-planning'],
         priority: 70,
         reasons: { subject: '協助科任老師備課' },
       }),
@@ -227,7 +248,7 @@ describe('validateAudienceFit', () => {
       validateAudienceFit({
         audiences: ['teacher'],
         departments: ['academic'],
-        painPoints: ['school-management'],
+        painPoints: ['administration'],
         priority: 80,
         reasons: { academic: '協助教務行政' },
       }),

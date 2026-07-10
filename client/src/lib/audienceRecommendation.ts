@@ -21,6 +21,23 @@ const BASE_SLOT_TARGETS: ReadonlyArray<readonly [Exclude<RecommendationSlot, 'di
   ['stage', 1],
 ];
 
+function getToolFamilyId(tool: EducationalTool): number {
+  const upgradeFromId = tool.upgradeFromId;
+  return typeof upgradeFromId === 'number' && Number.isInteger(upgradeFromId) && upgradeFromId > 0
+    ? upgradeFromId
+    : tool.id;
+}
+
+function dedupeRankedFamilies(ranked: AudienceRecommendation[]): AudienceRecommendation[] {
+  const familyIds = new Set<number>();
+  return ranked.filter((recommendation) => {
+    const familyId = getToolFamilyId(recommendation.tool);
+    if (familyIds.has(familyId)) return false;
+    familyIds.add(familyId);
+    return true;
+  });
+}
+
 function includesProfileValue<T extends string>(
   restrictions: readonly T[] | undefined,
   profileValue: T | undefined,
@@ -123,30 +140,39 @@ function composeRecommendationSlots(
 ): AudienceRecommendation[] {
   const selected: AudienceRecommendation[] = [];
   const selectedIds = new Set<number>();
+  const selectedFamilyIds = new Set<number>();
+
+  const isSelected = (recommendation: AudienceRecommendation): boolean => (
+    selectedIds.has(recommendation.tool.id)
+    || selectedFamilyIds.has(getToolFamilyId(recommendation.tool))
+  );
+
+  const select = (recommendation: AudienceRecommendation): void => {
+    selected.push(recommendation);
+    selectedIds.add(recommendation.tool.id);
+    selectedFamilyIds.add(getToolFamilyId(recommendation.tool));
+  };
 
   for (const [slot, target] of BASE_SLOT_TARGETS) {
     if (selected.length >= limit) break;
     for (const recommendation of ranked) {
-      if (recommendation.slot !== slot || selectedIds.has(recommendation.tool.id)) continue;
-      selected.push(recommendation);
-      selectedIds.add(recommendation.tool.id);
+      if (recommendation.slot !== slot || isSelected(recommendation)) continue;
+      select(recommendation);
       if (selected.length >= limit || selected.filter((item) => item.slot === slot).length >= target) break;
     }
   }
 
   if (selected.length < limit) {
-    const discovery = ranked.find((recommendation) => !selectedIds.has(recommendation.tool.id));
+    const discovery = ranked.find((recommendation) => !isSelected(recommendation));
     if (discovery) {
-      selected.push({ ...discovery, slot: 'discovery' });
-      selectedIds.add(discovery.tool.id);
+      select({ ...discovery, slot: 'discovery' });
     }
   }
 
   for (const recommendation of ranked) {
     if (selected.length >= limit) break;
-    if (selectedIds.has(recommendation.tool.id)) continue;
-    selected.push(recommendation);
-    selectedIds.add(recommendation.tool.id);
+    if (isSelected(recommendation)) continue;
+    select(recommendation);
   }
 
   return selected;
@@ -166,5 +192,5 @@ export function recommendTools(
     })
     .sort((left, right) => right.score - left.score || left.tool.id - right.tool.id);
 
-  return composeRecommendationSlots(ranked, limit);
+  return composeRecommendationSlots(dedupeRankedFamilies(ranked), limit);
 }

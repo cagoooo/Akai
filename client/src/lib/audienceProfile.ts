@@ -8,11 +8,34 @@ export const DEPARTMENTS = [
   'counseling',
   'other',
 ] as const;
+export const PAIN_POINTS = [
+  'lesson-planning',
+  'assessment',
+  'classroom-management',
+  'student-practice',
+  'teacher-workload',
+  'communication',
+  'administration',
+  'meeting-productivity',
+  'content-creation',
+  'presentation',
+  'language-learning',
+  'reading-literacy',
+  'digital-literacy',
+  'creative-learning',
+  'event-management',
+  'it-support',
+  'media-production',
+  'professional-learning',
+  'accessibility',
+  'resource-discovery',
+] as const;
 
 export type AudienceType = (typeof AUDIENCE_TYPES)[number];
 export type SchoolLevel = (typeof SCHOOL_LEVELS)[number];
 export type TeacherRole = (typeof TEACHER_ROLES)[number];
 export type Department = (typeof DEPARTMENTS)[number];
+export type PainPoint = (typeof PAIN_POINTS)[number];
 
 export interface AudienceProfile {
   audience: AudienceType;
@@ -26,7 +49,7 @@ export interface AudienceFit {
   schoolLevels?: SchoolLevel[];
   teacherRoles?: TeacherRole[];
   departments?: Department[];
-  painPoints: string[];
+  painPoints: PainPoint[];
   priority: number;
   reasons: Partial<Record<AudienceType | TeacherRole | Department, string>>;
 }
