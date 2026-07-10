@@ -86,7 +86,29 @@
       "課堂",
       "即時",
       "民主"
-    ]
+    ],
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "assessment",
+        "classroom-management",
+        "student-practice"
+      ],
+      "priority": 92,
+      "reasons": {
+        "teacher": "可用即時題目、QR Code 與全班回覆快速掌握理解狀況，讓不敢舉手的學生也能參與。",
+        "student": "掃描 QR Code 就能匿名或即時作答、投票與分享想法。",
+        "homeroom": "班會、班級事務票選與晨間暖身都能快速蒐集全班意見。",
+        "subject": "可把投影片題目轉成即時檢核，作為課堂提問與形成性評量。"
+      }
+    }
   },
   {
     "id": 4,
@@ -1554,7 +1576,29 @@
       "點歌",
       "彈唱",
       "歌曲"
-    ]
+    ],
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "creative-learning",
+        "event-management",
+        "presentation"
+      ],
+      "priority": 53,
+      "reasons": {
+        "teacher": "可為校慶、社團成果發表或班級活動建立有互動感的點歌與舞台流程。",
+        "student": "掃描 QR Code 就能點歌、投票與追蹤演出中的歌曲，參與現場音樂活動。",
+        "homeroom": "適合班級活動或親師活動的暖場與共同參與。",
+        "subject": "音樂與藝能課可延伸討論演出企劃、歌單設計與觀眾互動。"
+      }
+    }
   },
   {
     "id": 42,
@@ -1688,7 +1732,29 @@
       "腦力激盪",
       "視覺化",
       "課堂互動"
-    ]
+    ],
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "creative-learning",
+        "classroom-management"
+      ],
+      "priority": 86,
+      "reasons": {
+        "teacher": "可用匿名即時投稿把全班想法視覺化，快速開啟討論並收斂重點。",
+        "student": "掃描 QR Code 就能投稿、看見全班共識，也能從不同觀點繼續思考。",
+        "homeroom": "適合班級經營、晨間提問與活動回饋，讓每位學生都有發聲機會。",
+        "subject": "國語、社會、自然與綜合課可用開放提問蒐集觀察、關鍵詞與多元觀點。"
+      }
+    }
   },
   {
     "id": 46,
@@ -1961,7 +2027,22 @@
       "線上選課",
       "課程選擇",
       "互動體驗"
-    ]
+    ],
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "painPoints": [
+        "resource-discovery",
+        "professional-learning"
+      ],
+      "priority": 25,
+      "reasons": {
+        "teacher": "可作為教育活動的課程探索與線上選課流程參考。",
+        "student": "可依興趣瀏覽活動課程並完成線上選課。"
+      }
+    }
   },
   {
     "id": 53,
@@ -2242,7 +2323,29 @@
       "雲端同步",
       "WebGL",
       "互動體驗"
-    ]
+    ],
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "creative-learning",
+        "content-creation",
+        "presentation"
+      ],
+      "priority": 61,
+      "reasons": {
+        "teacher": "可把學生作品整理成沉浸式線上展覽，增加成果發表的儀式感。",
+        "student": "可用個人化 3D 場景展示自己的創作與收藏作品。",
+        "homeroom": "適合班級主題成果展、畢業紀念與作品分享。",
+        "subject": "美術、資訊與跨域課程可把創作歷程轉為可互動瀏覽的展覽。"
+      }
+    }
   },
   {
     "id": 61,
@@ -2343,7 +2446,20 @@
       "互動遊戲",
       "密碼安全",
       "趣味學習"
-    ]
+    ],
+    "audienceFit": {
+      "audiences": [
+        "student"
+      ],
+      "painPoints": [
+        "digital-literacy",
+        "accessibility"
+      ],
+      "priority": 69,
+      "reasons": {
+        "student": "可透過遊戲化方式練習記住自己的帳號資訊，並建立不隨意分享密碼的習慣。"
+      }
+    }
   },
   {
     "id": 64,
@@ -3554,7 +3670,29 @@
       "Firebase 即時同步",
       "班聯會",
       "免費工具"
-    ]
+    ],
+    "audienceFit": {
+      "audiences": [
+        "teacher"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "admin"
+      ],
+      "departments": [
+        "student-affairs"
+      ],
+      "painPoints": [
+        "event-management",
+        "administration"
+      ],
+      "priority": 20,
+      "reasons": {
+        "student-affairs": "可參考自治市選舉的公開唱票、即時看板與監票流程設計；此頁為既有活動案例。"
+      }
+    }
   },
   {
     "id": 94,
@@ -3577,7 +3715,29 @@
       "FFmpeg 合成",
       "媒體素養",
       "免費工具"
-    ]
+    ],
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "media-production",
+        "content-creation",
+        "creative-learning"
+      ],
+      "priority": 71,
+      "reasons": {
+        "teacher": "可帶領學生從音樂、封面與鏡頭語言規劃一支有故事的短片作品。",
+        "student": "可把音樂影片延伸成自己的故事分鏡與後續鏡頭創作。",
+        "homeroom": "適合班級主題影片、畢業紀念或社團成果的創作發想。",
+        "subject": "藝能、資訊與國文課可討論分鏡、影像敘事與 AI 生成素材的使用。"
+      }
+    }
   },
   {
     "id": 95,
@@ -3639,7 +3799,29 @@
       "Firebase 即時同步",
       "校園選舉",
       "免費工具"
-    ]
+    ],
+    "audienceFit": {
+      "audiences": [
+        "teacher"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "admin"
+      ],
+      "departments": [
+        "student-affairs"
+      ],
+      "painPoints": [
+        "event-management",
+        "administration"
+      ],
+      "priority": 18,
+      "reasons": {
+        "student-affairs": "可參考小市長行動方案票選的公開資訊呈現與即時監票設計；此頁為既有活動案例。"
+      }
+    }
   },
   {
     "id": 97,
@@ -3662,7 +3844,38 @@
       "國中輔導",
       "互動故事",
       "免費工具"
-    ]
+    ],
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject",
+        "admin"
+      ],
+      "departments": [
+        "counseling"
+      ],
+      "painPoints": [
+        "student-practice",
+        "creative-learning",
+        "accessibility"
+      ],
+      "priority": 80,
+      "reasons": {
+        "teacher": "可用故事式選擇題帶學生認識差異與情緒因應，作為討論的暖身而非診斷工具。",
+        "student": "可在校園故事中做選擇、探索自己的偏好與情緒因應風格。",
+        "homeroom": "適合班級經營與互相理解活動的開場，後續可引導尊重不同特質。",
+        "subject": "可搭配閱讀、表達或資訊課討論角色選擇與互動敘事。",
+        "counseling": "可作為輔導活動的低壓暖身素材，協助學生開啟自我覺察與同理討論。"
+      }
+    }
   },
   {
     "id": 98,
@@ -4007,6 +4220,28 @@
       "GAS 後端",
       "第103屆"
     ],
+    "audienceFit": {
+      "audiences": [
+        "teacher"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "admin"
+      ],
+      "departments": [
+        "student-affairs"
+      ],
+      "painPoints": [
+        "event-management",
+        "presentation"
+      ],
+      "priority": 12,
+      "reasons": {
+        "student-affairs": "可參考畢業典禮資訊整合、直播與祝福牆的活動設計；此頁為石門國小既有典禮案例。"
+      }
+    },
     "addedAt": "2026-06-05T06:02:49.344Z"
   },
   {
@@ -4080,6 +4315,28 @@
       "資安徽章",
       "石門國小"
     ],
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "digital-literacy",
+        "student-practice",
+        "creative-learning"
+      ],
+      "priority": 93,
+      "reasons": {
+        "teacher": "可把辨識釣魚郵件與反詐騙觀念轉成有情境、徽章與即時回饋的一節課活動。",
+        "student": "可跟著任務找出釣魚郵件破綻，用五看口訣練習保護自己。",
+        "homeroom": "適合班級數位安全與反詐騙主題活動，能直接連結日常訊息情境。",
+        "subject": "資訊與綜合課可用闖關任務討論網址、寄件者、連結與個資安全。"
+      }
+    },
     "addedAt": "2026-06-12T03:52:45.497Z"
   },
   {
@@ -4195,6 +4452,32 @@
       "互動遊戲",
       "石門國小"
     ],
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "creative-learning",
+        "student-practice",
+        "classroom-management"
+      ],
+      "priority": 76,
+      "reasons": {
+        "teacher": "可用清楚賽程、角色規則與主持節奏，把推理遊戲帶成有品質的班級互動。",
+        "student": "可在角色扮演與推理辯論中練習表達、傾聽與團隊合作。",
+        "homeroom": "適合作為高年級或國中班級的團隊活動，並事先建立尊重與發言規則。",
+        "subject": "國文、綜合或社團活動可延伸到論證、敘事與合作策略討論。"
+      }
+    },
     "addedAt": "2026-06-17T08:19:31.418Z"
   },
   {
