@@ -90,13 +90,17 @@ function classifySlot(fit: AudienceFit, profile: AudienceProfile): Recommendatio
 }
 
 function rankTool(tool: EducationalTool, fit: AudienceFit, profile: AudienceProfile): AudienceRecommendation {
-  const roleMatch = fit.teacherRoles !== undefined
+  const isTeacherProfile = profile.audience === 'teacher';
+  const roleMatch = isTeacherProfile
+    && fit.teacherRoles !== undefined
     && profile.teacherRole !== undefined
     && fit.teacherRoles.includes(profile.teacherRole);
-  const departmentMatch = fit.departments !== undefined
+  const departmentMatch = isTeacherProfile
+    && fit.departments !== undefined
     && profile.department !== undefined
     && fit.departments.includes(profile.department);
-  const stageMatch = fit.schoolLevels !== undefined
+  const stageMatch = isTeacherProfile
+    && fit.schoolLevels !== undefined
     && profile.schoolLevel !== undefined
     && fit.schoolLevels.includes(profile.schoolLevel);
   const reason = resolveReason(fit, profile);

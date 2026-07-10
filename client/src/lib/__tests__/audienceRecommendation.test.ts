@@ -121,7 +121,12 @@ describe('recommendTools', () => {
       reasons: { teacher: '適合教師。', student: '適合學生自主練習。' },
     }));
 
-    expect(recommendTools([mixed], { audience: 'student' })).toEqual([
+    expect(recommendTools([mixed], {
+      audience: 'student',
+      schoolLevel: 'senior',
+      teacherRole: 'admin',
+      department: 'academic',
+    })).toEqual([
       expect.objectContaining({
         tool: mixed,
         reason: '適合學生自主練習。',
