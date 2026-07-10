@@ -1039,7 +1039,7 @@
       "audiences": ["teacher"],
       "teacherRoles": ["homeroom", "subject", "admin"],
       "departments": ["student-affairs", "counseling"],
-      "painPoints": ["accessibility", "media-production", "digital-literacy"],
+      "painPoints": ["media-production", "digital-literacy"],
       "priority": 80,
       "reasons": {
         "teacher": "分享活動照片前可先遮蔽兒童臉部，兼顧作品呈現與隱私。",
@@ -1447,7 +1447,7 @@
     "id": 57,
     "audienceFit": {
       "audiences": ["teacher", "student"],
-      "painPoints": ["resource-discovery", "creative-learning"],
+      "painPoints": ["resource-discovery"],
       "priority": 38,
       "reasons": {
         "teacher": "教師共餐或班級活動需要快速決定選項時，可用轉盤破除僵局。",

@@ -1270,7 +1270,6 @@
         "counseling"
       ],
       "painPoints": [
-        "accessibility",
         "media-production",
         "digital-literacy"
       ],
@@ -1783,8 +1782,7 @@
         "student"
       ],
       "painPoints": [
-        "resource-discovery",
-        "creative-learning"
+        "resource-discovery"
       ],
       "priority": 38,
       "reasons": {
