@@ -4,13 +4,14 @@ import type { EducationalTool } from '@/lib/data';
 
 interface Props {
   tools: EducationalTool[];
+  highlightedToolId?: number | null;
 }
 
 /**
  * 拍立得工具網格：每張卡有略微隨機的傾斜與圖釘色，營造手工公佈欄感
  * 使用工具 ID 作為傾斜種子，確保每次渲染相同卡片的傾斜一致（避免閃爍）
  */
-export function BulletinToolGrid({ tools }: Props) {
+export function BulletinToolGrid({ tools, highlightedToolId = null }: Props) {
   // 依 ID 計算穩定的傾斜角度 (-3 ~ +3 度)
   const cardVariants = useMemo(() => {
     return tools.map((t) => ({
@@ -52,6 +53,7 @@ export function BulletinToolGrid({ tools }: Props) {
         <BulletinToolCard
           key={tool.id}
           tool={tool}
+          highlighted={tool.id === highlightedToolId}
           tilt={cardVariants[i]?.tilt ?? 0}
           pinColorIndex={cardVariants[i]?.pinColorIndex ?? 0}
         />

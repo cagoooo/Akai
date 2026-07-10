@@ -18,13 +18,14 @@ interface Props {
   tool: EducationalTool;
   tilt?: number;
   pinColorIndex?: number;
+  highlighted?: boolean;
 }
 
 /**
  * 拍立得風格工具卡（整合版）
  * 保留視覺設計，但使用真實的收藏雲端同步與點擊追蹤
  */
-export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0 }: Props) {
+export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0, highlighted = false }: Props) {
   const { isFavorite, toggleFavorite } = useFavorites();
   const { trackToolUsage } = useToolTracking();
 
@@ -99,7 +100,10 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0 }: Props) {
 
   return (
     <article
-      className="sticker-card bulletin-tool-card"
+      className={`sticker-card bulletin-tool-card${highlighted ? ' audience-tool-highlight' : ''}`}
+      data-tool-id={tool.id}
+      data-testid="tool-card"
+      tabIndex={-1}
       aria-label={tool.title}
       role="article"
       style={{

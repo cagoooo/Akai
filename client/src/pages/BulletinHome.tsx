@@ -35,8 +35,17 @@ import { BulletinSearchBar } from '@/components/bulletin/BulletinSearchBar';
 import { BulletinCategoryFilter } from '@/components/bulletin/BulletinCategoryFilter';
 import { BulletinToolGrid } from '@/components/bulletin/BulletinToolGrid';
 import { BulletinFooter } from '@/components/bulletin/BulletinFooter';
+import { AudienceOnboardingWizard } from '@/components/audience/AudienceOnboardingWizard';
+import { AudienceProfileBadge } from '@/components/audience/AudienceProfileBadge';
 import { tokens } from '@/design/tokens';
 import { markHomeEntryForEngagementNotifications } from '@/lib/analytics';
+import type { AudienceProfile } from '@/lib/audienceProfile';
+import {
+  dismissAudienceWizardForSession,
+  readAudienceProfile,
+  saveAudienceProfile,
+  shouldAutoOpenAudienceWizard,
+} from '@/lib/audienceProfileStorage';
 
 const KeyboardShortcutsDialog = lazy(() =>
   import('@/components/KeyboardShortcutsDialog').then((m) => ({ default: m.KeyboardShortcutsDialog }))
@@ -84,6 +93,11 @@ export function BulletinHome() {
   const [showShortcutsDialog, setShowShortcutsDialog] = useState(false);
   const [showWishingWellFromShortcut, setShowWishingWellFromShortcut] = useState(false);
   const [selectedToolIndex, setSelectedToolIndex] = useState(0);
+  const [audienceProfile, setAudienceProfile] = useState(() => readAudienceProfile());
+  const [showAudienceWizard, setShowAudienceWizard] = useState(() =>
+    shouldAutoOpenAudienceWizard(new URLSearchParams(window.location.search))
+  );
+  const [highlightedToolId, setHighlightedToolId] = useState<number | null>(null);
 
   useEffect(() => {
     markHomeEntryForEngagementNotifications();
@@ -234,6 +248,38 @@ export function BulletinHome() {
     scrollToGrid();
   }, [scrollToGrid]);
 
+  const dismissAudienceWizard = useCallback(() => {
+    dismissAudienceWizardForSession();
+    setShowAudienceWizard(false);
+  }, []);
+
+  const completeAudienceProfile = useCallback((profile: AudienceProfile) => {
+    const storedProfile = saveAudienceProfile(profile);
+    setAudienceProfile(storedProfile);
+  }, []);
+
+  const locateRecommendedTool = useCallback((toolId: number) => {
+    setSearchQuery('');
+    setSelectedCategory(null);
+    setShowFavorites(false);
+    setShowAudienceWizard(false);
+    setHighlightedToolId(toolId);
+    window.requestAnimationFrame(() => {
+      window.setTimeout(() => {
+        const card = document.querySelector<HTMLElement>(`[data-tool-id="${toolId}"]`);
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        card?.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'center' });
+        card?.focus({ preventScroll: true });
+      }, 120);
+    });
+    window.setTimeout(() => setHighlightedToolId(null), 2400);
+  }, []);
+
+  const reselectAudience = useCallback(() => {
+    setHighlightedToolId(null);
+    setShowAudienceWizard(true);
+  }, []);
+
   return (
     <BulletinBoard>
       <BulletinHeader />
@@ -241,6 +287,12 @@ export function BulletinHome() {
       <BulletinSpeechBanner />
       <BulletinHero toolCount={toolsWithStats.length} />
       <BulletinQuickNav />
+
+      {audienceProfile && (
+        <div className="audience-profile-badge-wrap">
+          <AudienceProfileBadge profile={audienceProfile} onReselect={reselectAudience} />
+        </div>
+      )}
 
       {/* 排行榜 + 工具地圖 + 許願池 */}
       <div
@@ -337,7 +389,7 @@ export function BulletinHome() {
             📌 正在把工具釘上公佈欄…
           </div>
         ) : (
-          <BulletinToolGrid tools={sortedTools} />
+          <BulletinToolGrid tools={sortedTools} highlightedToolId={highlightedToolId} />
         )}
       </div>
 
@@ -367,6 +419,14 @@ export function BulletinHome() {
           <KeyboardShortcutsDialog open={showShortcutsDialog} onOpenChange={setShowShortcutsDialog} />
         </Suspense>
       )}
+
+      <AudienceOnboardingWizard
+        open={showAudienceWizard}
+        tools={toolsWithStats}
+        onComplete={completeAudienceProfile}
+        onDismiss={dismissAudienceWizard}
+        onLocateTool={locateRecommendedTool}
+      />
     </BulletinBoard>
   );
 }
