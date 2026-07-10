@@ -2,6 +2,114 @@ import { describe, expect, it } from 'vitest';
 import { validateAudienceFit } from '@/lib/audienceValidation';
 
 describe('validateAudienceFit', () => {
+  it.each([
+    [undefined, '客群資料必須是非 null 物件'],
+    [null, '客群資料必須是非 null 物件'],
+  ])('輸入為 %s 時回報穩定錯誤且不拋例外', (input, expectedError) => {
+    expect(() => validateAudienceFit(input)).not.toThrow();
+    expect(validateAudienceFit(input)).toContain(expectedError);
+  });
+
+  it('回報缺少的必要欄位', () => {
+    expect(validateAudienceFit({ audiences: ['teacher'] })).toEqual(
+      expect.arrayContaining([
+        '缺少必要欄位：painPoints',
+        '缺少必要欄位：priority',
+        '缺少必要欄位：reasons',
+      ]),
+    );
+  });
+
+  it('回報錯誤欄位型別且不拋例外', () => {
+    const input = {
+      audiences: 'teacher',
+      schoolLevels: 'elementary',
+      teacherRoles: [1],
+      departments: false,
+      painPoints: ['practice', null],
+      priority: '90',
+      reasons: [],
+    };
+
+    expect(() => validateAudienceFit(input)).not.toThrow();
+    expect(validateAudienceFit(input)).toEqual(
+      expect.arrayContaining([
+        'audiences 必須是字串陣列',
+        'schoolLevels 必須是字串陣列',
+        'teacherRoles 必須是字串陣列',
+        'departments 必須是字串陣列',
+        'painPoints 必須是字串陣列',
+        'priority 必須是數字',
+        'reasons 必須是物件',
+      ]),
+    );
+  });
+
+  it('拒絕空 audiences 與明確存在的空選填陣列', () => {
+    const errors = validateAudienceFit({
+      audiences: [],
+      schoolLevels: [],
+      teacherRoles: [],
+      departments: [],
+      painPoints: ['practice'],
+      priority: 60,
+      reasons: { student: '協助學生練習' },
+    });
+
+    expect(errors).toEqual(
+      expect.arrayContaining([
+        'audiences 至少需要一項',
+        'schoolLevels 若無限制請省略欄位',
+        'teacherRoles 若無限制請省略欄位',
+        'departments 若無限制請省略欄位',
+      ]),
+    );
+  });
+
+  it('學生客群需要學生理由，不能只提供行政理由', () => {
+    expect(
+      validateAudienceFit({
+        audiences: ['student'],
+        painPoints: ['practice'],
+        priority: 60,
+        reasons: { admin: '方便管理者設定活動' },
+      }),
+    ).toContain('學生客群至少需要一則非空白的學生理由');
+  });
+
+  it('老師客群需要老師、職務或處室理由，不能只提供學生理由', () => {
+    expect(
+      validateAudienceFit({
+        audiences: ['teacher'],
+        painPoints: ['lesson-planning'],
+        priority: 80,
+        reasons: { student: '協助學生練習' },
+      }),
+    ).toContain('老師客群至少需要一則非空白的老師、職務或處室理由');
+  });
+
+  it('同時面向老師與學生時，兩邊都必須有可用理由', () => {
+    expect(
+      validateAudienceFit({
+        audiences: ['teacher', 'student'],
+        schoolLevels: ['elementary'],
+        painPoints: ['classroom-activity'],
+        priority: 75,
+        reasons: { teacher: '方便老師帶領活動', student: '   ' },
+      }),
+    ).toContain('學生客群至少需要一則非空白的學生理由');
+
+    expect(
+      validateAudienceFit({
+        audiences: ['teacher', 'student'],
+        schoolLevels: ['elementary'],
+        painPoints: ['classroom-activity'],
+        priority: 75,
+        reasons: { student: '讓學生參與活動' },
+      }),
+    ).toContain('老師客群至少需要一則非空白的老師、職務或處室理由');
+  });
+
   it('允許跨學段與跨職務的老師工具', () => {
     expect(
       validateAudienceFit({
