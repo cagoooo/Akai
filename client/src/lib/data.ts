@@ -1,3 +1,7 @@
+import type { AudienceFit } from './audienceProfile';
+
+export type { AudienceFit } from './audienceProfile';
+
 export type ToolCategory = 'communication' | 'teaching' | 'language' | 'reading' | 'utilities' | 'games' | 'interactive';
 
 export interface EducationalTool {
@@ -8,6 +12,7 @@ export interface EducationalTool {
   url: string;
   icon: string;
   category: ToolCategory;
+  audienceFit?: AudienceFit;
   previewUrl?: string;
   ogPreviewUrl?: string;         // 1200×630 社群分享 OG 圖（由 generate-unified-og.mjs 產出）
   tags?: string[];               // 標籤
