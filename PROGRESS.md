@@ -3245,7 +3245,7 @@ b21a41f 🎨 簡報頁加 favicon + OG 分享卡 + Schema.org
 | **P1-3** | **結合「最近使用」去重 + 探索** | S–M | `useRecentTools` 已在收「最近用過的工具」。推薦時把已用過的降權或標「你用過」，把版面留給沒探索過的工具，避免每次都推同幾個。 |
 | **P1-4** | **推薦權重集中成 config 常數表** | S | `POPULARITY_WEIGHT=28`、role `+30`、dept `+25`、stage `+15`、reason `+10` 目前散在 `rankTool` 內。抽成一張有註解的 `WEIGHTS` 常數表，日後調參一目了然、也方便 P0-4 的資料驅動校準。 |
 | **P1-5** | **新工具 freshness 曝光期加分** | S | 新上架工具若 `priority` 不高就永遠沉底。給「上架 N 天內」的工具一段時間衰減的 freshness bonus，讓新品有保證曝光窗口。需要工具帶首次上架日期（可從 tools.json 補 `addedAt` 或用 id 遞增近似）。 |
-| **P1-6** | **分眾推薦成效 admin dashboard** | M–L | 給 admin（ipad@）看：每個客群 segment 的推薦點擊率、哪些工具「常被推卻沒人點」（→ 該改 reason 或降權）、哪些「一推就中」。把 P0-4 的埋點資料視覺化，形成「量測→調權重→再量測」的閉環。 |
+| **P1-6** | **分眾推薦成效 admin dashboard** | M–L | ✅ **完成於 2026-07-10**（commit [`e62bec2`](https://github.com/cagoooo/Akai/commit/e62bec2)）。精靈曝光/點擊在 GA 之外同步聚合寫進 `analytics/recoStats`（`recordRecoImpression` / `recordRecoClick`，nested increment）；admin 儀表板新增「推薦」分頁 `RecommendationStatsPanel`：KPI（總曝光/點擊/CTR/痛點佔比）、分眾表、slot 點擊分布、工具被推薦成效（橘底標記「常被推卻沒人點」）。形成「量測→調權重→再量測」閉環。 |
 
 ### 🟦 P2（大型 / 實驗性）
 
