@@ -3227,14 +3227,14 @@ b21a41f 🎨 簡報頁加 favicon + OG 分享卡 + Schema.org
 > 核心檔案：`client/src/lib/audienceRecommendation.ts`（演算法）、
 > `client/src/components/audience/`（wizard UI）、`client/src/lib/audienceProfile.ts`（型別/欄位）。
 
-### 🟥 P0（近期、高效益或 quick win）
+### 🟥 P0（近期、高效益或 quick win）— ✅ 全數完成於 2026-07-10（commit [`b6a1510`](https://github.com/cagoooo/Akai/commit/b6a1510)）
 
-| 編號 | 項目 | Effort | 說明與預期效益 |
-|---|---|---|---|
-| **P0-1** | **推薦卡片顯示「為什麼推」徽章** | S | `slot`（universal/role/stage/**popular**/discovery）已經算好但 `AudienceRecommendationResults.tsx` 完全沒用到，只顯示編號+標題+reason。加上小徽章（🔥 熱門排行 / 🎯 最貼近你的職務 / 📚 同學段熱推 / ✨ 為你發掘），讓使用者秒懂推薦邏輯、提升信任感與點擊率。走站內 cork 便利貼視覺。 |
-| **P0-2** | **啟用 painPoints 痛點匹配（最大個人化槓桿）** | M | `AudienceFit.painPoints` 已存在於全部 115 個工具資料，`PAIN_POINTS`（20 種：備課／評量／班級經營／親師溝通…）也定義好了，**但推薦演算法完全沒用到**。在 wizard 加一題「你最想解決什麼？」（多選 2-3 個），命中痛點的工具給 +bonus。這是把「靜態職務推薦」升級成「情境化推薦」的關鍵一步。 |
-| **P0-3** | **近 7 日竄升（trending）訊號** | S–M | 目前人氣只吃 all-time `totalClicks`，新爆紅工具要很久才追上老牌工具。`useToolClickStats` 已經算出 `deltas7d`（近 7 日新增點擊）。把 trending 當第二訊號：可做「trending 加分」或再開一個 `trending` 保底席，讓「這週最紅」的工具也保證露出。 |
-| **P0-4** | **推薦成效埋點（沒量測就無法調權重）** | S | 目前無法知道推薦到底有沒有被點。在 `onLocateTool` / 推薦卡片點擊時上報 `{segment, toolId, slot, rank}` 到 Firestore/GA（可複用既有 `notifyEngagementAfterHomeEntry`）。有了 CTR 才能回頭校準 `POPULARITY_WEIGHT` 等權重，避免拍腦袋。 |
+| 編號 | 項目 | Effort | 狀態 | 落地方式 |
+|---|---|---|---|---|
+| **P0-1** | 推薦卡片顯示「為什麼推」徽章 | S | ✅ 完成 | `AudienceRecommendationResults.tsx` 依 slot + 痛點命中顯示 🎯命中需求 / 🔥熱門排行 / 👤貼近職務 / 📚同學段 / ✨為你發掘 / ⭐廣受好評，走 cork 便利貼視覺 |
+| **P0-2** | 啟用 painPoints 痛點匹配（最大個人化槓桿） | M | ✅ 完成 | wizard 新增「你最想解決什麼」複選步驟（教師 8 選／學生 6 選、上限 3），命中 `audienceFit.painPoints` 每個 +22（上限 2）。班級小管家等工具改由情境浮現 |
+| **P0-3** | 近 7 日竄升（trending）訊號 | S–M | ✅ 完成 | `deltas7d` 合併成 `tool.recentClicks`，加 sqrt trending 加分（權重 20）；熱門保底席改用混合熱度（累計 + 2×近 7 日），新爆紅工具不必等累計追上就能露出 |
+| **P0-4** | 推薦成效埋點（沒量測就無法調權重） | S | ✅ 完成 | results 曝光發 `audience_reco_impression`、點擊發 `audience_reco_click`（含 segment / slot / rank / matched_pains）。**下一步：P1-6 用這批資料做 admin dashboard** |
 
 ### 🟧 P1（中期可做）
 
