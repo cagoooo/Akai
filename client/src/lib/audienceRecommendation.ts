@@ -53,7 +53,7 @@ function readReason(fit: AudienceFit, key: keyof AudienceFit['reasons'] | undefi
 function resolveReason(fit: AudienceFit, profile: AudienceProfile): ReasonResolution {
   if (profile.audience === 'student') {
     return {
-      reason: readReason(fit, 'student') ?? readReason(fit, 'teacher') ?? '這項工具符合你的使用情境。',
+      reason: readReason(fit, 'student') ?? '這項工具符合你的使用情境。',
       isPrecise: false,
     };
   }

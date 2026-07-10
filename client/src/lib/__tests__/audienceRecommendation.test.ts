@@ -136,6 +136,30 @@ describe('recommendTools', () => {
     ]);
   });
 
+  it('學生理由缺失時使用中性 fallback，不退回教師理由', () => {
+    const mixed = makeTool(6, makeFit({
+      audiences: ['teacher', 'student'],
+      reasons: {
+        teacher: '這是僅供教師的推薦理由。',
+        student: '   ',
+        admin: '這是行政人員理由。',
+        academic: '這是教務處理由。',
+      },
+    }));
+
+    const [result] = recommendTools([mixed], {
+      audience: 'student',
+      schoolLevel: 'senior',
+      teacherRole: 'admin',
+      department: 'academic',
+    });
+
+    expect(result.reason).toBe('這項工具符合你的使用情境。');
+    expect(result.reason).not.toContain('教師');
+    expect(result.reason).not.toContain('行政');
+    expect(result.reason).not.toContain('教務處');
+  });
+
   it('正確套用教師學段、職務與行政處室限制', () => {
     const stage = makeTool(10, makeFit({ schoolLevels: ['junior'] }));
     const role = makeTool(11, makeFit({ teacherRoles: ['subject'] }));
