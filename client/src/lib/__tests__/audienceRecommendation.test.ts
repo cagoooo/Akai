@@ -299,6 +299,59 @@ describe('recommendTools', () => {
     expect(scopedScore).toBeGreaterThan(hotTeacherScore);
   });
 
+  it('痛點命中：勾選的痛點命中越多分數越高，並標記 matchedPainPoints', () => {
+    const twoMatch = makeTool(1, makeFit({
+      priority: 50, painPoints: ['classroom-management', 'assessment'],
+    }));
+    const oneMatch = makeTool(2, makeFit({
+      priority: 50, painPoints: ['assessment', 'administration'],
+    }));
+    const noMatch = makeTool(3, makeFit({
+      priority: 50, painPoints: ['media-production'],
+    }));
+    const result = recommendTools([twoMatch, oneMatch, noMatch], {
+      audience: 'teacher', schoolLevel: 'elementary', teacherRole: 'subject',
+      painPoints: ['classroom-management', 'assessment'],
+    }, 3);
+
+    const byId = new Map(result.map((r) => [r.tool.id, r]));
+    expect(byId.get(1)!.matchedPainPoints).toBe(2);
+    expect(byId.get(2)!.matchedPainPoints).toBe(1);
+    expect(byId.get(3)!.matchedPainPoints).toBe(0);
+    expect(byId.get(1)!.score).toBeGreaterThan(byId.get(2)!.score);
+    expect(byId.get(2)!.score).toBeGreaterThan(byId.get(3)!.score);
+  });
+
+  it('沒勾選痛點時不影響分數（既有行為），matchedPainPoints 為 0', () => {
+    const tool = makeTool(1, makeFit({ priority: 70, painPoints: ['assessment'] }));
+    const [result] = recommendTools([tool], { audience: 'teacher' }, 1);
+    expect(result.score).toBe(70);
+    expect(result.matchedPainPoints).toBe(0);
+  });
+
+  it('trending 加分：同 priority、同累計點擊下，近 7 日竄升的工具分數更高', () => {
+    const studentFit = makeFit({ audiences: ['teacher', 'student'], priority: 50, reasons: { student: 'x' } });
+    const surging = makeTool(1, studentFit, { totalClicks: 100, recentClicks: 100 });
+    const flat = makeTool(2, studentFit, { totalClicks: 100, recentClicks: 0 });
+    const result = recommendTools([surging, flat], { audience: 'student' }, 2);
+    const byId = new Map(result.map((r) => [r.tool.id, r]));
+    expect(byId.get(1)!.score).toBeGreaterThan(byId.get(2)!.score);
+  });
+
+  it('熱門保底席混合熱度：累計點擊相同時，近 7 日竄升者搶下 popular 席', () => {
+    const studentFit = makeFit({ audiences: ['teacher', 'student'], priority: 30, reasons: { student: 'x' } });
+    const surging = makeTool(9, studentFit, { totalClicks: 100, recentClicks: 100 });
+    const flat = makeTool(10, studentFit, { totalClicks: 100, recentClicks: 0 });
+    // 高 priority fillers 佔滿前面的 universal 名額，把保底席留給熱度競爭
+    const fillers = Array.from({ length: 6 }, (_, i) => makeTool(
+      200 + i, makeFit({ audiences: ['teacher', 'student'], priority: 95 - i, reasons: { student: 'x' } }),
+      { totalClicks: 0, recentClicks: 0 },
+    ));
+    const result = recommendTools([surging, flat, ...fillers], { audience: 'student' }, 6);
+    const popular = result.find((r) => r.slot === 'popular');
+    expect(popular?.tool.id).toBe(9);
+  });
+
   it('沒有任何點擊資料時，第六席退回 discovery（維持既有行為）', () => {
     const tools = Array.from({ length: 8 }, (_, index) => makeTool(
       100 + index,

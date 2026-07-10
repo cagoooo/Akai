@@ -118,7 +118,27 @@
 .audience-wizard__choice small, .audience-wizard__recommendation small { display: block; color: var(--ink-soft); font-size: 13px; line-height: 1.5; }
 .audience-wizard__choice > span:last-child, .audience-wizard__go { display: block; margin-top: 17px; color: var(--olive-deep); font-size: 13px; font-weight: 900; }
 .audience-wizard__later { display: block; margin: 28px auto 0; padding: 8px 14px; color: var(--muted2); background: transparent; border: 0; text-decoration: underline; cursor: pointer; font-family: inherit; }
-.audience-wizard__results { text-align: center; }.audience-wizard__results h2 { margin: 12px 0 7px; font-size: clamp(24px, 3.5vw, 34px); }.audience-wizard__recommendations { margin-top: 24px; text-align: left; }.audience-wizard__recommendation { min-height: 150px; padding-top: 18px; }.audience-wizard__recommendation .audience-wizard__pin { position: absolute; right: 12px; top: 11px; background: var(--pin-green); width: 10px; height: 10px; }.audience-wizard__number { display: block; color: var(--olive-deep); font-family: var(--font-mono); font-size: 11px; font-weight: 900; }.audience-wizard__recommendation strong { display: block; margin: 6px 0 4px; font-size: 17px; }
+.audience-wizard__results { text-align: center; }.audience-wizard__results h2 { margin: 12px 0 7px; font-size: clamp(24px, 3.5vw, 34px); }.audience-wizard__recommendations { margin-top: 24px; text-align: left; }.audience-wizard__recommendation { min-height: 150px; padding-top: 18px; }.audience-wizard__recommendation .audience-wizard__pin { position: absolute; left: 12px; top: 11px; background: var(--pin-green); width: 10px; height: 10px; }.audience-wizard__number { display: block; color: var(--olive-deep); font-family: var(--font-mono); font-size: 11px; font-weight: 900; }.audience-wizard__recommendation strong { display: block; margin: 6px 0 4px; font-size: 17px; }
+/* 痛點勾選（P0-2）：便利貼風 chip 多選 */
+.audience-wizard__pains { max-width: 640px; margin: 4px auto 0; }
+.audience-wizard__pain-chips { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.audience-wizard__pain-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 9px 15px; color: var(--ink); background: var(--paper-warm); border: 2px solid var(--ink); border-radius: 999px; box-shadow: 2px 3px 0 rgba(0,0,0,.2); cursor: pointer; font-family: inherit; font-size: 14px; font-weight: 700; transition: transform .15s ease, background .15s ease, box-shadow .15s ease; }
+.audience-wizard__pain-chip:hover:not(:disabled) { transform: translateY(-2px); }
+.audience-wizard__pain-chip.is-active { background: var(--note-yellow); box-shadow: inset 0 0 0 1px var(--ink), 3px 4px 0 rgba(0,0,0,.26); transform: rotate(-1deg); }
+.audience-wizard__pain-chip:disabled { opacity: .42; cursor: not-allowed; }
+.audience-wizard__pain-confirm { display: block; margin: 26px auto 0; padding: 12px 26px; color: var(--ink); background: var(--olive); border: 2px solid var(--ink); border-radius: 8px; box-shadow: var(--shadow-note); cursor: pointer; font-family: inherit; font-size: 15px; font-weight: 900; transition: transform .18s ease, box-shadow .18s ease; }
+.audience-wizard__pain-confirm:hover { transform: translateY(-3px) rotate(-.5deg); box-shadow: 6px 8px 0 rgba(0,0,0,.24); }
+
+/* 推薦「為什麼推」徽章（P0-1） */
+.audience-wizard__badge { position: absolute; top: 10px; right: 10px; display: inline-block; padding: 3px 8px; border: 1.5px solid var(--ink); border-radius: 999px; font-size: 10.5px; font-weight: 900; letter-spacing: .01em; line-height: 1.5; transform: rotate(1.5deg); box-shadow: 1px 2px 0 rgba(0,0,0,.2); white-space: nowrap; }
+.audience-wizard__badge--painpoint { background: #ffd34a; }
+.audience-wizard__badge--popular { background: #ff9d6b; }
+.audience-wizard__badge--role { background: var(--note-green); }
+.audience-wizard__badge--stage { background: #a7d3ff; }
+.audience-wizard__badge--discovery { background: #e6c7ff; }
+.audience-wizard__badge--universal { background: var(--paper-warm); }
+.audience-wizard__recommendation { padding-top: 34px; }
+
 .audience-profile-badge-wrap { display: flex; justify-content: center; padding: 0 20px 14px; }
 .audience-profile-badge { display: inline-flex; align-items: center; flex-wrap: wrap; justify-content: center; gap: 7px; padding: 8px 12px; color: var(--ink); background: var(--note-green); border: 2px solid var(--ink); border-radius: 6px; box-shadow: 3px 3px 0 rgba(0,0,0,.22); font-family: var(--font-tc); font-size: 13px; font-weight: 800; transform: rotate(-.6deg); }
 .audience-profile-badge button { min-height: 32px; padding: 4px 9px; color: var(--olive-deep); background: var(--paper-warm); border: 1px solid var(--ink); border-radius: 999px; cursor: pointer; font: inherit; font-size: 12px; }

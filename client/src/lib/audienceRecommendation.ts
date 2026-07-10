@@ -8,6 +8,8 @@ export interface AudienceRecommendation {
   reason: string;
   score: number;
   slot: RecommendationSlot;
+  /** 此工具命中使用者所選痛點的數量（用於推薦卡片「🎯 命中需求」徽章） */
+  matchedPainPoints: number;
 }
 
 type ReasonResolution = {
@@ -29,14 +31,56 @@ const BASE_SLOT_TARGETS: ReadonlyArray<readonly [Exclude<RecommendationSlot, 'po
 // 交給下方的「熱門保底席」，不必靠加分硬壓過職務配對。
 const POPULARITY_WEIGHT = 28;
 
+// Trending 加分權重（P0-3）：以「近 7 日新增點擊」（tool.recentClicks，來自 deltas7d）
+// 相對「合格工具中最高的近期點擊」做 sqrt 正規化。讓這週剛竄升的新工具不必等
+// all-time 累積追上老牌工具就能浮現。權重略低於 all-time 人氣（穩定訊號優先）。
+const TRENDING_WEIGHT = 20;
+
+// 痛點命中加分（P0-2）：使用者在精靈勾選「想解決的痛點」後，工具 audienceFit.painPoints
+// 每命中一個 +PAINPOINT_WEIGHT，最多累計 PAINPOINT_MAX_MATCHES 個。這是最強的情境化訊號
+// （命中 2 個 ≈ 44 分，可勝過職務配對），把「靜態職務推薦」升級成「情境化推薦」。
+const PAINPOINT_WEIGHT = 22;
+const PAINPOINT_MAX_MATCHES = 2;
+
+// 熱門保底席的「熱度」混合權重：近期點擊乘上此倍率再加上 all-time，
+// 讓「剛爆紅但累積還不高」的新工具也能競爭保底席（P0-3）。
+const HOTNESS_TREND_MULTIPLIER = 2;
+
 function getToolClicks(tool: EducationalTool): number {
   const clicks = tool.totalClicks;
   return typeof clicks === 'number' && Number.isFinite(clicks) && clicks > 0 ? clicks : 0;
 }
 
+function getToolRecentClicks(tool: EducationalTool): number {
+  const clicks = tool.recentClicks;
+  return typeof clicks === 'number' && Number.isFinite(clicks) && clicks > 0 ? clicks : 0;
+}
+
+/** 熱門保底席用的混合熱度：兼顧 all-time 累積與近期竄升 */
+function getToolHotness(tool: EducationalTool): number {
+  return getToolClicks(tool) + HOTNESS_TREND_MULTIPLIER * getToolRecentClicks(tool);
+}
+
 function popularityBonus(tool: EducationalTool, maxClicks: number): number {
   if (maxClicks <= 0) return 0;
   return Math.round(POPULARITY_WEIGHT * Math.sqrt(getToolClicks(tool) / maxClicks));
+}
+
+function trendingBonus(tool: EducationalTool, maxRecentClicks: number): number {
+  if (maxRecentClicks <= 0) return 0;
+  return Math.round(TRENDING_WEIGHT * Math.sqrt(getToolRecentClicks(tool) / maxRecentClicks));
+}
+
+/** 計算工具 painPoints 與使用者所選痛點的交集數量 */
+function countMatchedPainPoints(fit: AudienceFit, profile: AudienceProfile): number {
+  const chosen = profile.painPoints;
+  if (!chosen || chosen.length === 0 || !fit.painPoints || fit.painPoints.length === 0) return 0;
+  const chosenSet = new Set(chosen);
+  let matched = 0;
+  for (const pain of fit.painPoints) {
+    if (chosenSet.has(pain)) matched += 1;
+  }
+  return matched;
 }
 
 function isValidToolId(id: unknown): id is number {
@@ -175,6 +219,7 @@ function rankTool(
   fit: AudienceFit,
   profile: AudienceProfile,
   maxClicks: number,
+  maxRecentClicks: number,
 ): AudienceRecommendation {
   const isTeacherProfile = profile.audience === 'teacher';
   const roleMatch = isTeacherProfile
@@ -190,6 +235,8 @@ function rankTool(
     && profile.schoolLevel !== undefined
     && fit.schoolLevels.includes(profile.schoolLevel);
   const reason = resolveReason(fit, profile);
+  const matchedPainPoints = countMatchedPainPoints(fit, profile);
+  const painPointScore = Math.min(matchedPainPoints, PAINPOINT_MAX_MATCHES) * PAINPOINT_WEIGHT;
 
   return {
     tool,
@@ -199,8 +246,11 @@ function rankTool(
       + (departmentMatch ? 25 : 0)
       + (stageMatch ? 15 : 0)
       + (reason.isPrecise ? 10 : 0)
-      + popularityBonus(tool, maxClicks),
+      + painPointScore
+      + popularityBonus(tool, maxClicks)
+      + trendingBonus(tool, maxRecentClicks),
     slot: classifySlot(fit, profile),
+    matchedPainPoints,
   };
 }
 
@@ -233,17 +283,18 @@ function composeRecommendationSlots(
     }
   }
 
-  // 熱門保底席：從尚未入選的合格工具中，挑點擊數最高者（排行榜常勝軍），
+  // 熱門保底席：從尚未入選的合格工具中，挑「混合熱度」最高者。
+  // 熱度 = all-time 累積點擊 + 近 7 日竄升點擊 × 倍率，兼顧排行榜常勝軍與這週爆紅新品（P0-3），
   // 確保熱門工具至少露出一個，即使它的手工 priority 偏低。
   // 若沒有任何工具帶點擊資料（如單元測試情境），退回原本的 discovery（取剩餘最高分）。
   if (selected.length < limit) {
     let popular: AudienceRecommendation | undefined;
-    let popularClicks = 0;
+    let popularHotness = 0;
     for (const recommendation of ranked) {
       if (isSelected(recommendation)) continue;
-      const clicks = getToolClicks(recommendation.tool);
-      if (clicks > popularClicks) {
-        popularClicks = clicks;
+      const hotness = getToolHotness(recommendation.tool);
+      if (hotness > popularHotness) {
+        popularHotness = hotness;
         popular = recommendation;
       }
     }
@@ -280,9 +331,10 @@ export function recommendTools(
     (tool) => !tool.isInternal && tool.audienceFit && isEligible(tool.audienceFit, profile),
   );
   const maxClicks = eligible.reduce((max, tool) => Math.max(max, getToolClicks(tool)), 0);
+  const maxRecentClicks = eligible.reduce((max, tool) => Math.max(max, getToolRecentClicks(tool)), 0);
 
   const ranked = eligible
-    .map((tool) => rankTool(tool, tool.audienceFit!, profile, maxClicks))
+    .map((tool) => rankTool(tool, tool.audienceFit!, profile, maxClicks, maxRecentClicks))
     .sort((left, right) => right.score - left.score || left.tool.id - right.tool.id);
 
   return composeRecommendationSlots(dedupeRankedFamilies(ranked, familyIds), limit, familyIds);

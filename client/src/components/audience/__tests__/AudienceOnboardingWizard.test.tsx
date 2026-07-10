@@ -14,14 +14,18 @@ function renderWizard(open = true, onComplete = vi.fn(), onDismiss = vi.fn()) {
 }
 
 describe('AudienceOnboardingWizard', () => {
-  it('completes a profile once and lets a visitor return from results', async () => {
+  it('completes a profile once (after pain-point step) and lets a visitor return from results', async () => {
     const user = userEvent.setup();
     const { onComplete } = renderWizard();
     await user.click(screen.getByRole('button', { name: /我是老師/ }));
     await user.click(screen.getByRole('button', { name: /國小/ }));
     await user.click(screen.getByRole('button', { name: /班級導師/ }));
+    // 進到痛點步驟，尚未完成
+    expect(onComplete).toHaveBeenCalledTimes(0);
+    await user.click(screen.getByRole('button', { name: /直接看推薦/ }));
     expect(onComplete).toHaveBeenCalledTimes(1);
-    expect(screen.getByRole('button', { name: /上一步/ })).toBeInTheDocument();
+    // 從結果返回會先回到痛點步驟，再返回才回到職務步驟
+    await user.click(screen.getByRole('button', { name: /上一步/ }));
     await user.click(screen.getByRole('button', { name: /上一步/ }));
     expect(screen.getByRole('button', { name: /行政人員/ })).toBeInTheDocument();
     expect(onComplete).toHaveBeenCalledTimes(1);

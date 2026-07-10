@@ -42,6 +42,8 @@ export interface AudienceProfile {
   schoolLevel?: SchoolLevel;
   teacherRole?: TeacherRole;
   department?: Department;
+  /** 使用者在推薦精靈勾選的「想解決的痛點」（可複選，可為空） */
+  painPoints?: PainPoint[];
 }
 
 export interface AudienceFit {

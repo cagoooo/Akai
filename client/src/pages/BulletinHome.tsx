@@ -159,14 +159,16 @@ export function BulletinHome() {
   });
 
   // 將 Firestore 即時點擊數合併進 tools 陣列（每張卡片的 👆 顯示才能即時更新）
+  // 同時合併「近 7 日新增點擊」(deltas7d) 供推薦精靈的 trending 訊號使用（P0-3）
   const toolsWithStats = useMemo(() => {
     if (!toolsData) return [];
-    if (clicksById.size === 0) return toolsData;
+    if (clicksById.size === 0 && deltas7d.size === 0) return toolsData;
     return toolsData.map((tool) => ({
       ...tool,
       totalClicks: clicksById.get(tool.id) ?? tool.totalClicks ?? 0,
+      recentClicks: deltas7d.get(tool.id) ?? tool.recentClicks ?? 0,
     }));
-  }, [toolsData, clicksById]);
+  }, [toolsData, clicksById, deltas7d]);
 
   // 計算各分類工具數量
   const categoryCounts = useMemo(() => {

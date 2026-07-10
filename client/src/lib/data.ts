@@ -16,7 +16,8 @@ export interface EducationalTool {
   previewUrl?: string;
   ogPreviewUrl?: string;         // 1200×630 社群分享 OG 圖（由 generate-unified-og.mjs 產出）
   tags?: string[];               // 標籤
-  totalClicks?: number;          // 來自 API 的統計數據
+  totalClicks?: number;          // 來自 API 的統計數據（累計點擊）
+  recentClicks?: number;         // 近 7 日新增點擊（來自 useToolClickStats 的 deltas7d，用於 trending 推薦）
   /**
    * 是否為「站內專屬工具」（如 #100 工具索引神器）。
    * - true → 不計入工具總數、不參與 featuredTools 推薦、家族樹不顯示

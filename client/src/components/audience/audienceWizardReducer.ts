@@ -1,39 +1,60 @@
-import type { AudienceProfile, AudienceType, Department, SchoolLevel, TeacherRole } from '@/lib/audienceProfile';
+import type { AudienceProfile, AudienceType, Department, PainPoint, SchoolLevel, TeacherRole } from '@/lib/audienceProfile';
 
-export type AudienceWizardStep = 'audience' | 'school-level' | 'teacher-role' | 'department' | 'results';
+export type AudienceWizardStep = 'audience' | 'school-level' | 'teacher-role' | 'department' | 'pain-points' | 'results';
 export type AudienceWizardState = { step: AudienceWizardStep; profile: Partial<AudienceProfile> };
 export type AudienceWizardAction =
   | { type: 'SELECT_AUDIENCE'; value: AudienceType }
   | { type: 'SELECT_SCHOOL_LEVEL'; value: SchoolLevel }
   | { type: 'SELECT_TEACHER_ROLE'; value: TeacherRole }
   | { type: 'SELECT_DEPARTMENT'; value: Department }
+  | { type: 'TOGGLE_PAIN_POINT'; value: PainPoint }
+  | { type: 'CONFIRM_PAIN_POINTS' }
   | { type: 'BACK' }
   | { type: 'RESET' };
 
 export const initialAudienceWizardState: AudienceWizardState = { step: 'audience', profile: {} };
+
+/** 勾選上限：避免使用者全選導致痛點訊號失去區辨力 */
+export const PAIN_POINT_SELECTION_LIMIT = 3;
+
+function togglePainPoint(current: PainPoint[] | undefined, value: PainPoint): PainPoint[] {
+  const list = current ?? [];
+  if (list.includes(value)) return list.filter((item) => item !== value);
+  if (list.length >= PAIN_POINT_SELECTION_LIMIT) return list; // 達上限則忽略新增
+  return [...list, value];
+}
 
 export function audienceWizardReducer(state: AudienceWizardState, action: AudienceWizardAction): AudienceWizardState {
   switch (action.type) {
     case 'SELECT_AUDIENCE':
       if (state.step !== 'audience') return state;
       return action.value === 'student'
-        ? { step: 'results', profile: { audience: 'student' } }
+        ? { step: 'pain-points', profile: { audience: 'student' } }
         : { step: 'school-level', profile: { audience: 'teacher' } };
     case 'SELECT_SCHOOL_LEVEL':
       if (state.step !== 'school-level' || state.profile.audience !== 'teacher') return state;
       return { step: 'teacher-role', profile: { ...state.profile, schoolLevel: action.value } };
     case 'SELECT_TEACHER_ROLE':
       if (state.step !== 'teacher-role' || state.profile.audience !== 'teacher' || !state.profile.schoolLevel) return state;
-      return { step: action.value === 'admin' ? 'department' : 'results', profile: { ...state.profile, teacherRole: action.value } };
+      return { step: action.value === 'admin' ? 'department' : 'pain-points', profile: { ...state.profile, teacherRole: action.value } };
     case 'SELECT_DEPARTMENT':
       if (state.step !== 'department' || state.profile.audience !== 'teacher' || state.profile.teacherRole !== 'admin') return state;
-      return { step: 'results', profile: { ...state.profile, department: action.value } };
+      return { step: 'pain-points', profile: { ...state.profile, department: action.value } };
+    case 'TOGGLE_PAIN_POINT':
+      if (state.step !== 'pain-points') return state;
+      return { ...state, profile: { ...state.profile, painPoints: togglePainPoint(state.profile.painPoints, action.value) } };
+    case 'CONFIRM_PAIN_POINTS':
+      if (state.step !== 'pain-points') return state;
+      return { step: 'results', profile: state.profile };
     case 'BACK':
-      if (state.step === 'results' && state.profile.audience === 'student') return initialAudienceWizardState;
-      if (state.step === 'results' && state.profile.teacherRole !== 'admin') return { step: 'teacher-role', profile: omit(state.profile, 'teacherRole', 'department') };
-      if (state.step === 'results') return { step: 'department', profile: omit(state.profile, 'department') };
-      if (state.step === 'department') return { step: 'teacher-role', profile: omit(state.profile, 'teacherRole', 'department') };
-      if (state.step === 'teacher-role') return { step: 'school-level', profile: omit(state.profile, 'schoolLevel', 'teacherRole', 'department') };
+      if (state.step === 'results') return { step: 'pain-points', profile: state.profile };
+      if (state.step === 'pain-points') {
+        if (state.profile.audience === 'student') return initialAudienceWizardState;
+        if (state.profile.teacherRole === 'admin') return { step: 'department', profile: omit(state.profile, 'department', 'painPoints') };
+        return { step: 'teacher-role', profile: omit(state.profile, 'teacherRole', 'department', 'painPoints') };
+      }
+      if (state.step === 'department') return { step: 'teacher-role', profile: omit(state.profile, 'teacherRole', 'department', 'painPoints') };
+      if (state.step === 'teacher-role') return { step: 'school-level', profile: omit(state.profile, 'schoolLevel', 'teacherRole', 'department', 'painPoints') };
       if (state.step === 'school-level') return initialAudienceWizardState;
       return state;
     case 'RESET': return initialAudienceWizardState;
@@ -47,8 +68,10 @@ function omit(profile: Partial<AudienceProfile>, ...keys: (keyof AudienceProfile
 }
 
 export function toAudienceProfile(state: AudienceWizardState): AudienceProfile | null {
-  const { audience, schoolLevel, teacherRole, department } = state.profile;
-  if (audience === 'student') return { audience };
+  const { audience, schoolLevel, teacherRole, department, painPoints } = state.profile;
+  const withPains = (base: AudienceProfile): AudienceProfile =>
+    painPoints && painPoints.length > 0 ? { ...base, painPoints } : base;
+  if (audience === 'student') return withPains({ audience });
   if (audience !== 'teacher' || !schoolLevel || !teacherRole || (teacherRole === 'admin' && !department)) return null;
-  return { audience, schoolLevel, teacherRole, ...(department ? { department } : {}) };
+  return withPains({ audience, schoolLevel, teacherRole, ...(department ? { department } : {}) });
 }
