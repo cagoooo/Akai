@@ -17,7 +17,7 @@
 
 import type { Metric } from 'web-vitals';
 import { db } from '@/lib/firebase';
-import { addDoc, collection, doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection, doc, setDoc, serverTimestamp, increment } from 'firebase/firestore';
 
 // ── gtag wrapper ─────────────────────────────────────────────
 type GtagFn = (command: 'event' | 'config' | 'js' | 'set', ...args: unknown[]) => void;
@@ -167,6 +167,56 @@ export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
   } catch (err) {
     console.error('[engagement notify] 寫入失敗:', err);
     if (import.meta.env.DEV) console.warn('[engagement notify]', err);
+  }
+}
+
+// ── 推薦精靈成效聚合（P1-6：分眾推薦 dashboard 的資料來源） ──────────────
+// 為什麼用「單一聚合 doc + nested increment」而非寫 raw event：
+//   - 精靈完成頻率低，單 doc 綽綽有餘（segments ~22、tools ~116、都在 1MB 內）
+//   - dashboard 只要 getDoc 一次就能算 CTR，不必掃幾千筆 raw event 再前端 aggregate
+//   - analytics/{docId} 規則已是「所有人可讀、認證者可寫」→ 無需改 rules
+// 結構：analytics/recoStats
+//   { totalImpressions, totalClicks, updatedAt,
+//     tools: { [toolId]: { imp, clk } },
+//     segments: { [segment]: { imp, clk } },
+//     slotClicks: { [slot]: n }, painClicks }
+const RECO_STATS_DOC = ['analytics', 'recoStats'] as const;
+
+/** 推薦結果曝光：每個被展示的工具 +1 imp，該 segment +1 imp，總曝光 +1 */
+export async function recordRecoImpression(params: { segment: string; toolIds: number[] }) {
+  if (!db || !params.segment || params.toolIds.length === 0) return;
+  try {
+    const { ensureSignedIn } = await import('@/lib/authService');
+    await ensureSignedIn();
+    const tools: Record<string, { imp: ReturnType<typeof increment> }> = {};
+    for (const id of params.toolIds) tools[String(id)] = { imp: increment(1) };
+    await setDoc(doc(db, ...RECO_STATS_DOC), {
+      totalImpressions: increment(1),
+      updatedAt: serverTimestamp(),
+      tools,
+      segments: { [params.segment]: { imp: increment(1) } },
+    }, { merge: true });
+  } catch (err) {
+    if (import.meta.env.DEV) console.warn('[reco stats] impression 寫入失敗:', err);
+  }
+}
+
+/** 推薦點擊：該工具 +1 clk，該 segment +1 clk，該 slot +1，總點擊 +1 */
+export async function recordRecoClick(params: { segment: string; toolId: number; slot: string; matchedPains: number }) {
+  if (!db || !params.segment) return;
+  try {
+    const { ensureSignedIn } = await import('@/lib/authService');
+    await ensureSignedIn();
+    await setDoc(doc(db, ...RECO_STATS_DOC), {
+      totalClicks: increment(1),
+      updatedAt: serverTimestamp(),
+      tools: { [String(params.toolId)]: { clk: increment(1) } },
+      segments: { [params.segment]: { clk: increment(1) } },
+      slotClicks: { [params.slot]: increment(1) },
+      ...(params.matchedPains > 0 ? { painClicks: increment(1) } : {}),
+    }, { merge: true });
+  } catch (err) {
+    if (import.meta.env.DEV) console.warn('[reco stats] click 寫入失敗:', err);
   }
 }
 

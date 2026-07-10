@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import {
   Calendar, Download, Activity, Users, TrendingUp,
   MousePointer, Eye, Clock, BarChart2, PieChart as PieChartIcon,
-  Home, ArrowLeft
+  Home, ArrowLeft, Target
 } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "wouter";
@@ -14,6 +14,7 @@ import type { VisitorStats, ToolUsageStat } from "@/types/analytics";
 import { WishingWellAdmin } from "@/components/admin/WishingWellAdmin";
 import { ToolFlowAnalysisPanel } from "@/components/admin/ToolFlowAnalysisPanel";
 import { HealthCheckPanel } from "@/components/admin/HealthCheckPanel";
+import { RecommendationStatsPanel } from "@/components/admin/RecommendationStatsPanel";
 import {
   DateRangePicker,
   presetToRange,
@@ -699,7 +700,7 @@ export function AnalyticsDashboard() {
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList
-            className="grid grid-cols-3 sm:grid-cols-6 mb-4 w-full h-auto gap-1.5 sm:gap-2"
+            className="grid grid-cols-3 sm:grid-cols-7 mb-4 w-full h-auto gap-1.5 sm:gap-2"
             style={{
               background: 'rgba(255,255,255,.55)',
               padding: 6,
@@ -715,6 +716,7 @@ export function AnalyticsDashboard() {
               { value: 'heatmap', icon: <PieChartIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: '熱力' },
               { value: 'calendar', icon: <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: '日曆' },
               { value: 'wishes', icon: <span className="text-sm">✨</span>, label: '許願池' },
+              { value: 'reco', icon: <Target className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: '推薦' },
             ].map(tab => (
               <TabsTrigger
                 key={tab.value}
@@ -1020,6 +1022,10 @@ export function AnalyticsDashboard() {
                 <WishingWellAdmin />
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="reco">
+            <RecommendationStatsPanel />
           </TabsContent>
 
           <TabsContent value="tools">

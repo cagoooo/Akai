@@ -4,7 +4,7 @@ import type { EducationalTool } from '@/lib/data';
 import type { AudienceProfile, Department, PainPoint, SchoolLevel, TeacherRole } from '@/lib/audienceProfile';
 import { buildAudienceSegmentKey } from '@/lib/audienceProfile';
 import { recommendTools } from '@/lib/audienceRecommendation';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, recordRecoImpression, recordRecoClick } from '@/lib/analytics';
 import { AudienceRecommendationResults } from './AudienceRecommendationResults';
 import { audienceWizardReducer, initialAudienceWizardState, toAudienceProfile, PAIN_POINT_SELECTION_LIMIT } from './audienceWizardReducer';
 
@@ -66,25 +66,27 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
     const key = JSON.stringify(profile);
     if (impressionRef.current === key) return;
     impressionRef.current = key;
+    const segment = buildAudienceSegmentKey(profile);
     trackEvent('audience_reco_impression', {
-      segment: buildAudienceSegmentKey(profile),
+      segment,
       pain_points: (profile.painPoints ?? []).join('|') || 'none',
       tool_ids: recommendations.map((r) => r.tool.id).join(','),
       slots: recommendations.map((r) => r.slot).join(','),
     });
+    // 同步聚合到 Firestore，供 admin 推薦成效 dashboard 計算 CTR（P1-6）
+    recordRecoImpression({ segment, toolIds: recommendations.map((r) => r.tool.id) });
   }, [state.step, profile, recommendations]);
   // P0-4：推薦點擊埋點（含 slot / 名次 / 命中痛點數），再交給既有的定位邏輯
   const handleLocate = useCallback((toolId: number) => {
     if (profile) {
       const rank = recommendations.findIndex((r) => r.tool.id === toolId);
       const rec = rank >= 0 ? recommendations[rank] : undefined;
-      trackEvent('audience_reco_click', {
-        segment: buildAudienceSegmentKey(profile),
-        tool_id: toolId,
-        slot: rec?.slot ?? 'unknown',
-        rank: rank + 1,
-        matched_pains: rec?.matchedPainPoints ?? 0,
-      });
+      const segment = buildAudienceSegmentKey(profile);
+      const slot = rec?.slot ?? 'unknown';
+      const matchedPains = rec?.matchedPainPoints ?? 0;
+      trackEvent('audience_reco_click', { segment, tool_id: toolId, slot, rank: rank + 1, matched_pains: matchedPains });
+      // 同步聚合到 Firestore（P1-6）
+      recordRecoClick({ segment, toolId, slot, matchedPains });
     }
     onLocateTool(toolId);
   }, [profile, recommendations, onLocateTool]);
