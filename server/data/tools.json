@@ -1,6 +1,15 @@
 [
   {
     "id": 1,
+    "audienceFit": {
+      "audiences": ["teacher", "student"],
+      "painPoints": ["educational-support", "learning-questions", "tool-help"],
+      "priority": 68,
+      "reasons": {
+        "teacher": "可即時詢問教學工具、學校系統與教育應用問題，適合作為一般支援入口。",
+        "student": "遇到作業、自學或教育工具操作問題時，可取得即時的初步引導。"
+      }
+    },
     "title": "線上即時客服",
     "description": "提供即時的線上教育支援和諮詢服務，協助解決學習過程中的問題",
     "url": "https://document-ai-companion-ipad4.replit.app/shared/A4uyH5OdHI",
@@ -50,6 +59,19 @@
   },
   {
     "id": 4,
+    "audienceFit": {
+      "audiences": ["teacher", "student"],
+      "schoolLevels": ["elementary"],
+      "teacherRoles": ["homeroom", "subject"],
+      "painPoints": ["reading-assessment", "question-generation", "student-practice"],
+      "priority": 90,
+      "reasons": {
+        "teacher": "可把課文快速轉成 PIRLS 四層次題組，支援國小閱讀評量、備課與補救教學。",
+        "student": "可透過老師分享的測驗連結或 QR Code 進行閱讀理解作答練習。",
+        "homeroom": "適合導師安排班級閱讀練習、回家作業與補救教學。",
+        "subject": "國語文教師可用於素養命題、課文分析與閱讀評量。"
+      }
+    },
     "title": "PIRLS閱讀理解生成",
     "description": "專業的閱讀理解評估工具，幫助提升學生的閱讀能力",
     "url": "https://pirlss.smes.tyc.edu.tw/",
@@ -186,6 +208,18 @@
   },
   {
     "id": 12,
+    "audienceFit": {
+      "audiences": ["teacher", "student"],
+      "schoolLevels": ["elementary"],
+      "painPoints": ["reading-resources", "resource-discovery", "school-reading-promotion"],
+      "priority": 66,
+      "reasons": {
+        "teacher": "可集中查找校內 PIRLS 工具與閱讀推廣資源，方便教學導入與資源分享。",
+        "student": "可從單一入口找到學校提供的閱讀理解工具與學習資源。",
+        "admin": "可作為校級閱讀推動資源的統一入口與對外展示頁。",
+        "academic": "適合彙整閱讀教育資源並支援校內閱讀推廣。"
+      }
+    },
     "title": "PIRLS閱讀理解網",
     "description": "完整的 PIRLS 閱讀理解資源平台",
     "url": "https://read.smes.tyc.edu.tw/smes/PIRLS/",
@@ -255,6 +289,17 @@
   },
   {
     "id": 16,
+    "audienceFit": {
+      "audiences": ["teacher"],
+      "schoolLevels": ["elementary", "junior"],
+      "teacherRoles": ["homeroom"],
+      "painPoints": ["parent-communication", "message-drafting", "teacher-workload"],
+      "priority": 84,
+      "reasons": {
+        "teacher": "可將家長訊息轉成可再修改的回覆草稿，減少親師溝通的文字負擔。",
+        "homeroom": "適合需要頻繁處理家長聯絡訊息的班級導師快速起草回覆。"
+      }
+    },
     "title": "親師溝通小幫手",
     "description": "促進親師溝通的便捷平台",
     "url": "https://talk.smes.tyc.edu.tw/",
@@ -995,6 +1040,16 @@
   },
   {
     "id": 59,
+    "audienceFit": {
+      "audiences": ["teacher", "student"],
+      "painPoints": ["school-it-support", "account-help", "self-service-support"],
+      "priority": 76,
+      "reasons": {
+        "teacher": "可先查詢校內帳號、設備與資訊系統常見問題，減少等待資訊人員回覆。",
+        "student": "遇到學校帳號或教育工具操作問題時，可先依校內常見問答自行排除。",
+        "admin": "可用常見問答分流重複的校務資訊支援需求。"
+      }
+    },
     "title": "小智鈴 AI 客服系統",
     "description": "智慧型 AI 客服助理，提供 24/7 全天候即時諮詢與教育支援，精準回答各類常見問題。",
     "url": "https://cagoooo.github.io/smes/",
@@ -1053,6 +1108,17 @@
   },
   {
     "id": 62,
+    "audienceFit": {
+      "audiences": ["teacher"],
+      "teacherRoles": ["homeroom", "admin"],
+      "painPoints": ["event-communication", "parent-engagement", "event-information"],
+      "priority": 58,
+      "reasons": {
+        "teacher": "可用數位通知頁集中傳達親職教育日議程、場地與聯絡資訊。",
+        "homeroom": "可將固定網址或 QR Code 分享給班級家長，減少紙本遺失與訊息洗版。",
+        "admin": "可參考其內容架構製作校級活動通知並保留歷年活動紀錄。"
+      }
+    },
     "title": "桃園市龍潭區石門國民小學114學年度親職教育日",
     "description": "親職教育日（家長日）活動資訊分享與線上互動平台，旨在加強學校與家庭的聯繫，共同關注孩子的成長。包含活動議程、教育宣導與親師溝通資源。",
     "detailedDescription": "「桃園市龍潭區石門國民小學 114 學年度親職教育日活動通知函」是阿凱老師為 **石門國小 114 學年度親職教育日**做的 **活動專屬網站**（EZPage 部署 + 純靜態 HTML），把傳統紙本通知函升級成永久可看的數位海報。\n\n## 🎯 核心特色\n\n- 📜 **完整通知函格式** — 「桃園市龍潭區石門國民小學 114 學年度親職教育日活動通知函」官方文體\n- 📌 **5 大區塊** — 活動邀請 / 活動時程表 / 精彩活動快覽 / 場地配置 / 聯絡資訊\n- 📱 **行動裝置優先** — 家長拿手機就能滑，不用印一大本\n- 🏫 **石門國小校級活動** — 學校官方資訊整合，不是補習班廣告\n- 💾 **EZPage 一鍵部署** — 不用會 git，複製貼 HTML 就部署，5 分鐘上線\n- 🎁 **活動結束保留作紀念** — 永久公開連結，明年承辦看「去年怎麼做」\n\n## 💡 設計理念\n\n**EZPage 部署 + 純靜態 32 KB 單檔 HTML**，沒有後端 / 沒有 LLM，部署在 `cagoooo.github.io/114_Parent/`。為什麼用 EZPage？對「活動通知函」這 use case 完美：不需複雜後端 / 不需長期維護 / 活動結束保留作紀念。屬於阿凱「親職日專屬系列」：**活動前 #62 通知函 → 當天 [#74 場地配置](/tool/74)**完整流程。\n\n## 🎒 適合情境\n\n屬於阿凱「單一活動專屬網」6 件套之一：**#62 親職日 114 + [#74 1150328 場地配置](/tool/74) + [#56 2026 元宵猜燈謎](/tool/56) + [#80 114 下學期教師會議](/tool/80) + [#95 龍潭區語文競賽](/tool/95) + [#52 創價・教育 EXPO](/tool/52)**。傳統發紙本通知 → 一半家長丟掉；LINE 群組訊息被洗；Email 沒人看。**專屬網站 + QR Code 推到群組 → 永久可看 + 視覺化呈現** — 學校的歷史就被一年年數位化記錄下來。下次你校辦親職日用 EZPage 5 分鐘做專屬通知網。",
@@ -1291,6 +1357,17 @@
   },
   {
     "id": 74,
+    "audienceFit": {
+      "audiences": ["teacher"],
+      "teacherRoles": ["homeroom", "admin"],
+      "painPoints": ["event-wayfinding", "venue-planning", "event-communication"],
+      "priority": 62,
+      "reasons": {
+        "teacher": "可用互動分區圖快速查找親職日班級、攤位與活動位置。",
+        "homeroom": "可在活動前把場地資訊分享給班級家長，降低現場帶位與重複詢問。",
+        "admin": "可作為校園大型活動場地配置與行動版導覽的實作參考。"
+      }
+    },
     "title": "2026 親職日場地配置圖",
     "description": "提供 2026 親職日的完整場地配置與動線規劃進度，協助親師快速掌握活動空間分布，讓年度盛事進行更順暢。",
     "detailedDescription": "「1150328 親職日場地配置互動網」是阿凱老師為**石門國小 115 年 3 月 28 日親職教育日**打造的 **Tailwind + Lucide 純前端 SPA 場地圖**，把傳統印 A3 大張平面圖貼公佈欄的紙本配置改成「**手機掃 QR → 4 個 tab 即時切換 → 找攤位 10 秒到位**」。\n\n## 🎯 核心特色\n\n- 🗺️ **4 個 tab 分區切換** — 🏀 戶外班級區 / 🚪 1-3 年級教室區 / 🎪 攤位展區 / 📍 其他區域\n- 🏀 **戶外籃球場配置** — 4 年級與幼兒園區域 / 5、6 年級區域 / 「4-2 / 4-3 / 4-4」班級對應按鈕\n- 🇬🇧 **教室活動區英語闖關** — 1-3 年級教室分區整合英語闖關活動\n- 🎪 **攤位展區四大主題** — 🎓 石門國中升學輔導（給六年級家長看的銜接資訊）/ 🌈 性平教育展（重要課綱主題）/ 🎁 家庭教育有獎徵答 / ✨ 星空計畫作品展示\n- 📱 **34,595 字元單檔 HTML** — 嵌進 `sites.google.com/mail2.smes.tyc.edu.tw/academic/2026親職日場地配置`，由 Google sandbox iframe 執行\n- 🔄 **改一行程式碼即更新** — 不像紙本要重印、家長還沒到校就能預先看\n\n## 💡 設計理念\n\n屬於 [#49 教務處寶藏庫 academic 子站](/tool/49) 的 3 個子頁之一（另兩個是 2026 英語歌唱比賽網站 + 班級榮譽榜名單調查）。跟 [#62 親職教育日活動通知函](/tool/62) 組成親職日專屬系列：**活動前 → #62 通知函（家長 LINE 看）、活動當天 → #74 場地配置（家長手機掃 QR 找攤位）**。配置反映「現代化親職日 = 全方位家校共學」 — 🎓 升學銜接 + 🌈 議題教育 + 🎁 家庭教育 + ✨ 學生展能 + 🇬🇧 雙語推動 + 🏀 班級表演。\n\n## 🎒 適合情境\n\n國中小教導處 / 學務處親職日承辦、各班導師親職日場地預告、想做數位化校園活動的學校。配對 [#62 親職日通知函](/tool/62) 活動前推播 + [#49 教務處寶藏庫](/tool/49) academic 子站總目錄 + [#46 場地預約系統](/tool/46) 平日場地調度。**下次你校親職日 — 用 Gemini 寫好 SPA + 貼 Google Sites Embedded HTML 一條龍，5 分鐘搞定**。",
@@ -1563,6 +1640,19 @@
   },
   {
     "id": 87,
+    "audienceFit": {
+      "audiences": ["teacher", "student"],
+      "schoolLevels": ["elementary", "junior"],
+      "teacherRoles": ["homeroom", "subject"],
+      "painPoints": ["reading-assessment", "question-generation", "student-practice"],
+      "priority": 94,
+      "reasons": {
+        "teacher": "可由課文或圖片自動產生 PIRLS 四層次題組，並匯出多種教學與評量格式。",
+        "student": "可掃描老師分享的 QR Code 線上作答，或使用學生作答 PDF 練習閱讀理解。",
+        "homeroom": "可快速安排班級閱讀作業、補救教學與即時作答活動。",
+        "subject": "國語文教師可用於課文分析、素養命題與閱讀評量。"
+      }
+    },
     "title": "PIRLS 閱讀理解生成站 PRO",
     "description": "升級版 PIRLS 閱讀理解出題平台，老師貼上課文或上傳文本，AI 依四層次（直接提取、直接推論、詮釋整合、檢驗評估）自動產生提問與答案說明，國小語文評量、補救教學、素養命題一氣呵成。",
     "detailedDescription": "「PIRLS QuestionCraft Pro」是阿凱老師把舊版 [#4 PIRLS](/tool/4) 純 HTML 單檔站**完全砍掉重練的 serverless 重構版** — Next.js 15 + Cloud Functions + Gemini 2.5 Flash 架構，月費實測 **< 0.25 美金**。對齊 PIRLS 國際閱讀素養評量「**訊息提取 / 直接推論 / 詮釋整合 / 評估批判**」四層次。\n\n## 🎯 核心特色\n\n- 📷 **雙輸入模式** — 圖片 OCR（拖放最多 4 張、**支援 Ctrl+V 直接貼截圖**，拍課本一頁就行，自動壓縮 1600px / JPEG 0.85）或文字模式（**server-side 強制 `articleContent = input.text` 覆蓋，AI 偷改原文也沒用**）\n- 🤖 **Gemini 2.5 Flash + Genkit 編排** — Handlebars 模板做 prompt engineering + Zod schema 強制 JSON 結構，**8 題模式四層次各 2 題；10 題模式 3/3/2/2**，規定每題的 question + explanation 都要**「引用文章關鍵字」**老師可驗證\n- 📤 **6 種匯出格式（殺手鐧）** — PDF（嵌入 Noto Sans TC 6 種字重）/ Excel 題庫 / **PaGamO 單題格式** / **PaGamO 題組格式**（真的對到平台批量上傳範本）/ 站內測驗模式 / 學生作答 PDF\n- 📲 **學生 QR 即時作答** — 老師按「分享」→ Firestore 開 **1 小時 TTL 測驗連結** → 學生掃 QR 填班級座號姓名即時答 → 老師 `/dashboard/?id=xxx` 看全班成績（**隱私 + 成本雙保險**：1 小時自動清資料）\n- 🛡️ **三層成本護欄** — Cloudflare Turnstile 無感人機驗證 + 5 RPM / IP 速率限制 + Cloud Functions `maxInstances=10`（**月費 < 7 元台幣，200x 安全餘量**）\n- 👨‍🏫 **老師後台 `/admin/`** — Bearer auth + 5 RPM，看使用次數 / Gemini 花費，**LINE Messaging 每週日 21:00 自動推週報**\n\n## 💡 設計理念\n\n架構升級：舊版純 HTML 單檔 + client 端塞 API Key + 要自己掛 VM → 新版 **Next.js 15 + React 19 + Cloud Functions v2（Node 22）+ GitHub Pages**。Gemini 模型從 1.5 → 2.0 → 2.5-lite → 2.5 **一路追模型**（請參考 skill `gemini-api-integration` 避免棄用陷阱）。一篇文章出 8 題從 **1.5-2 小時手寫 → 3 分鐘 AI 自動分配**，四層次比例從憑感覺 → 嚴格 2/2/2/2 自動分配。\n\n## 🎒 適合情境\n\n阿凱 PIRLS 三件套：\n- [#4 PIRLS 閱讀理解生成](/tool/4) — 舊版（pirlss.smes Firebase Hosting 學校自訂域名）\n- [#12 PIRLS 閱讀理解網](/tool/12) — 石門國小閱推入口網\n- **#87 PIRLS Pro（本工具）** — GitHub Pages 完全 serverless 重構版\n\n適合國小三到六年級國語老師、國中國文老師（會考閱讀理解相通）、補救教學老師（出簡單版題組超快）、所有用 PaGamO 的老師（題組匯出格式直接吃）、閱讀素養課程設計研究者。**第一次用建議從「拍課本兩頁照片」開始 — 3 分鐘讓你看到完整 8 題 PIRLS 四層次題組吐出來，會回不去手寫**。配對 [#99 考試卷生圖 Studio](/tool/99) 出題後配圖一條龍。MIT 授權，cagoooo/pirls-questioncraft 開源。",
@@ -1609,6 +1699,17 @@
   },
   {
     "id": 89,
+    "audienceFit": {
+      "audiences": ["teacher"],
+      "painPoints": ["parent-communication", "message-drafting", "communication-tone"],
+      "priority": 95,
+      "reasons": {
+        "teacher": "可依家長訊息與情境產生具同理心、專業且可再調整的回覆草稿。",
+        "homeroom": "適合頻繁處理親師聯絡、學生行為與學習狀況訊息的班級導師。",
+        "subject": "可協助科任教師回覆課業、缺交作業、活動與一般詢問。",
+        "admin": "可協助行政教師起草涉及活動、健康或校務詢問的家長回覆。"
+      }
+    },
     "title": "教師回覆小幫手 Pro版",
     "description": "阿凱老師為幼小中各級教師打造的親師溝通 AI 輔助工具，貼上家長訊息或截圖、選情境調語氣，10 秒內生成兼具同理心與專業度的客製化回覆，告別字斟句酌的深夜煩惱。",
     "detailedDescription": "「教師回覆小幫手 Pro 版」是阿凱老師為國中小班導打造的 **親師溝通智慧助理 Pro**，解決「家長半夜傳訊 → 老師字斟句酌想到睡不著 → 每則訊息 8-15 分鐘 → 一週 20-30 則就 5+ 小時」的情緒勞動 + 文書 + 法律三合一痛點。\n\n## 🎯 核心特色\n\n- 🎯 **12 種情境分類（老師手選不是 AI 判斷）** — 🩹 孩童受傷 / ⚡ 嚴重衝突 / 🌪 回應不理性訊息 / 📘 學業問題 / 🧭 行為問題 / 🌱 家長正面回饋 / 會面 / 缺交作業 / 活動詢問 / 健康問題 / 一般詢問 / 其他\n- 🔧 **產生 + 微調兩段式工作流** — 第一次貼訊息 + 選情境 → AI 出 Markdown 回覆稿；第二次四種微調按鈕反覆磨：「再溫和一點 / 再正式一點 / 縮短 / 加更多細節」\n- 📷 **對話截圖辨識（Gemini multimodal）** — 可貼 LINE 截圖（jpeg / png / webp），前端壓縮 < 1MB，Gemini 直接讀截圖內容\n- 🏫 **進階補充資訊（摺疊區塊）** — 學校名 / 老師姓名 / 學生年級 / 其他備註，填了會自動加「○○老師 敬上」署名\n- 📊 **管理員密碼後台 `/stats`** — Firestore `stats_daily` 集合 30 天儀表板：各情境統計 + refine 比例 + 有附圖比例 + 平均字數\n- 🛡️ **三層防護** — Cloudflare Turnstile（沒過直接 throw 不耗 quota）+ CORS 白名單（只認 cagoooo.github.io + localhost）+ maxInstances 上限\n- 🔒 **隱私意識強** — Firestore 只記 `count / scenario / mode / replyLength`，**家長原訊息和 AI 回覆都不入庫**\n\n## 💡 設計理念\n\n技術棧 Next.js 15.2（App Router + static export）+ React 18 + TypeScript + Tailwind + shadcn/ui + Motion + react-markdown + **Google Genkit 1.8 + Gemini 2.5 Flash**（不是 1.5）+ Firebase Cloud Functions v2（Node 20, asia-east1, maxInstances=10）。**主 prompt 訂死「老師本人視角」**（不是教師助理）+ 署名規則「絕對不要自稱『教師助理 / AI 助手 / 小幫手』」（顯然踩過這個雷）+ 503/429/overload 偵測 + 1s→2s exponential backoff retry 2 次。設計藍圖淡紫主色 #E6E6FA，主打 calm + trustworthy。跟 [#16 親師溝通小幫手基礎版](/tool/16) 是「**基礎入門 vs Pro 資深**」並存設計（同款「漸進式工具家族」哲學亦見於 [#4/#87 PIRLS](/tool/4)、[#13/#92 5W1H](/tool/13)）。\n\n## 🎒 適合情境\n\n國中小所有班導每天回訊息、補習班 / 安親班老師（家長訊息更密集）、幼兒園老師（每天「今日寶寶日誌」要回）。**石門國小 115 上學期實測：單則訊息 8-15 分 → 2 分鐘、一週親師訊息 5+ 小時 → 1 小時、老師下班時間 21:00 → 18:30、家長滿意度 4.0 → 4.6**。配對 [#16 基礎版](/tool/16) 新手老師入門 + [#10 班級小管家](/tool/10) 學生狀況日誌（回家長更有料）+ [#7 點石成金評語優化](/tool/7) 期末評語。**把今天還沒回的家長訊息貼進去 → 1 分鐘給你 3 個版本 → 挑一個改一改送出就行**。",
