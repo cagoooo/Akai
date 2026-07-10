@@ -93,21 +93,25 @@ function formatTool(tool: EducationalTool): string {
   return `#${tool.id} ${tool.title}`;
 }
 
+function hasAudienceFit(tool: EducationalTool): boolean {
+  return Object.prototype.hasOwnProperty.call(tool, 'audienceFit');
+}
+
 function run(): void {
   const options = parseOptions(process.argv.slice(2));
   const tools = loadTools(options.toolsFile);
   const externalTools = tools.filter((tool) => !tool.isInternal);
-  const missingAudienceFit = externalTools.filter((tool) => !tool.audienceFit);
+  const missingAudienceFit = externalTools.filter((tool) => !hasAudienceFit(tool));
   const legacyMissing = missingAudienceFit.filter((tool) => LEGACY_MISSING_AUDIENCE_IDS.has(tool.id));
   const newMissing = missingAudienceFit.filter((tool) => !LEGACY_MISSING_AUDIENCE_IDS.has(tool.id));
   const metadataErrors = externalTools
-    .filter((tool) => tool.audienceFit)
+    .filter(hasAudienceFit)
     .flatMap((tool) => validateAudienceFit(tool.audienceFit).map(
       (message) => `${formatTool(tool)}: ${message}`,
     ));
   const staleBaseline = externalTools.filter((tool) =>
     LEGACY_MISSING_AUDIENCE_IDS.has(tool.id)
-    && tool.audienceFit
+    && hasAudienceFit(tool)
     && validateAudienceFit(tool.audienceFit).length === 0,
   );
 
