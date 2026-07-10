@@ -1190,16 +1190,11 @@
     "id": 32,
     "audienceFit": {
       "audiences": [
-        "teacher",
-        "student"
+        "teacher"
       ],
       "teacherRoles": [
         "subject",
         "admin"
-      ],
-      "departments": [
-        "student-affairs",
-        "general-affairs"
       ],
       "painPoints": [
         "creative-learning",
@@ -1208,7 +1203,6 @@
       "priority": 58,
       "reasons": {
         "teacher": "能把大型觸控螢幕轉為多人互動與藝術探索空間。",
-        "student": "可透過觸碰與同伴共同創作即時互動畫面。",
         "subject": "適合藝術與人文課討論互動藝術與觀眾參與。",
         "admin": "適合在走廊、圖書館或活動現場規劃觸控互動體驗。"
       }
@@ -1273,17 +1267,11 @@
     "id": 34,
     "audienceFit": {
       "audiences": [
-        "teacher",
-        "student"
+        "teacher"
       ],
       "teacherRoles": [
         "subject",
         "admin"
-      ],
-      "departments": [
-        "academic",
-        "student-affairs",
-        "general-affairs"
       ],
       "painPoints": [
         "creative-learning",
@@ -1293,7 +1281,6 @@
       "priority": 60,
       "reasons": {
         "teacher": "可用多媒體互動內容營造課間、展示或藝術探索情境。",
-        "student": "可在按鈕、拍照、全景與跑酷互動中探索不同數位媒體。",
         "subject": "適合藝術、資訊融入課展示影像、互動與 AI 全景的結合。",
         "admin": "可作為校園展示、親職日或學習角的觸控內容。"
       }
@@ -1317,16 +1304,11 @@
     "id": 35,
     "audienceFit": {
       "audiences": [
-        "teacher",
-        "student"
+        "teacher"
       ],
       "teacherRoles": [
         "subject",
         "admin"
-      ],
-      "departments": [
-        "student-affairs",
-        "general-affairs"
       ],
       "painPoints": [
         "creative-learning",
@@ -1336,7 +1318,6 @@
       "priority": 58,
       "reasons": {
         "teacher": "可用大型觸控螢幕帶領學生進行集體塗鴉與互動藝術活動。",
-        "student": "可用手指或觸控筆和同伴共同完成即時塗鴉。",
         "subject": "適合藝術與人文課的互動藝術與共同創作活動。",
         "admin": "適合校慶、親職日與校園公共空間的互動佈置。"
       }
@@ -2116,9 +2097,6 @@
       "teacherRoles": [
         "homeroom",
         "admin"
-      ],
-      "departments": [
-        "student-affairs"
       ],
       "painPoints": [
         "event-management",
