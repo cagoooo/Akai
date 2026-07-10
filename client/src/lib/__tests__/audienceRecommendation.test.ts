@@ -211,6 +211,28 @@ describe('recommendTools', () => {
     });
   });
 
+  it('only awards the precise reason bonus when the role is explicitly scoped', () => {
+    const universal = makeTool(22, makeFit({
+      priority: 70,
+      reasons: { teacher: '通用教師理由', homeroom: '導師專用文案' },
+    }));
+    const scoped = makeTool(23, makeFit({
+      priority: 70,
+      teacherRoles: ['homeroom'],
+      reasons: { teacher: '通用教師理由', homeroom: '導師專用文案' },
+    }));
+    const profile: AudienceProfile = {
+      audience: 'teacher', schoolLevel: 'elementary', teacherRole: 'homeroom',
+    };
+
+    expect(recommendTools([universal], profile)[0]).toMatchObject({
+      reason: '導師專用文案', score: 70, slot: 'universal',
+    });
+    expect(recommendTools([scoped], profile)[0]).toMatchObject({
+      reason: '導師專用文案', score: 110, slot: 'role',
+    });
+  });
+
   it('依 2 universal、2 role、1 stage、1 discovery 取席，bucket 不足時以全體排名補滿', () => {
     const tools = [
       makeTool(1, makeFit({ priority: 90 })),

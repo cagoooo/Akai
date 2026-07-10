@@ -114,10 +114,18 @@ function resolveReason(fit: AudienceFit, profile: AudienceProfile): ReasonResolu
   }
 
   const departmentReason = readReason(fit, profile.department);
-  if (departmentReason) return { reason: departmentReason, isPrecise: true };
+  if (departmentReason) {
+    const isDepartmentScoped = fit.departments?.includes(profile.department!)
+      && (fit.teacherRoles === undefined || fit.teacherRoles.includes('admin'));
+    return { reason: departmentReason, isPrecise: Boolean(isDepartmentScoped) };
+  }
 
   const roleReason = readReason(fit, profile.teacherRole);
-  if (roleReason) return { reason: roleReason, isPrecise: true };
+  if (roleReason) {
+    const isRoleScoped = profile.teacherRole !== undefined
+      && fit.teacherRoles?.includes(profile.teacherRole);
+    return { reason: roleReason, isPrecise: Boolean(isRoleScoped) };
+  }
 
   return {
     reason: readReason(fit, 'teacher') ?? '這項工具符合你的教學或行政情境。',

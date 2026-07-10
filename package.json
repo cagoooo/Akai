@@ -12,6 +12,7 @@
     "gen:llms-txt": "node scripts/generate-llms-txt.mjs",
     "sync-tools-json": "node scripts/sync-tools-json.mjs",
     "validate:audience": "tsx scripts/validate-audience-fit.ts",
+    "validate:audience:strict": "tsx scripts/validate-audience-fit.ts --strict",
     "bump-sw": "node scripts/bump-sw-version.mjs",
     "new-tool": "node scripts/new-tool.mjs",
     "gen:favicon": "node scripts/generate-favicon.mjs",

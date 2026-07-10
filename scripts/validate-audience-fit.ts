@@ -15,6 +15,7 @@ import { validateAudienceFit } from '../client/src/lib/audienceValidation';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SOURCE = resolve(ROOT, 'server', 'data', 'tools.json');
 const RECOMMENDATION_LIMIT = 6;
+const isStrict = process.argv.includes('--strict');
 
 export const REQUIRED_PROFILES: readonly AudienceProfile[] = [
   { audience: 'student' },
@@ -36,14 +37,19 @@ function loadTools(): EducationalTool[] {
   return JSON.parse(readFileSync(SOURCE, 'utf8')) as EducationalTool[];
 }
 
+function formatToolIds(tools: readonly EducationalTool[]): string {
+  return tools.map((tool) => `#${tool.id}`).join(', ');
+}
+
 function run(): void {
   const tools = loadTools();
   const externalTools = tools.filter((tool) => !tool.isInternal);
-  const metadataErrors = externalTools.flatMap((tool) =>
-    validateAudienceFit(tool.audienceFit).map(
+  const missingAudienceFit = externalTools.filter((tool) => !tool.audienceFit);
+  const metadataErrors = externalTools
+    .filter((tool) => tool.audienceFit)
+    .flatMap((tool) => validateAudienceFit(tool.audienceFit).map(
       (message) => `#${tool.id} ${tool.title}: ${message}`,
-    ),
-  );
+    ));
 
   if (metadataErrors.length > 0) {
     console.error(metadataErrors.join('\n'));
@@ -51,6 +57,20 @@ function run(): void {
       `audienceFit 驗證失敗：${externalTools.length} 個外部工具中共有 ${metadataErrors.length} 個錯誤；已略過 segment 覆蓋檢查。`,
     );
     process.exitCode = 1;
+    return;
+  }
+
+  if (missingAudienceFit.length > 0) {
+    const missingSummary = `缺少 audienceFit：${missingAudienceFit.length} 個既有工具（範圍 #${missingAudienceFit[0].id}～#${missingAudienceFit.at(-1)?.id}；IDs：${formatToolIds(missingAudienceFit)}）。`;
+    if (isStrict) {
+      console.error(missingSummary);
+      console.error('嚴格模式要求所有外部工具完整回填 audienceFit。');
+      process.exitCode = 1;
+      return;
+    }
+
+    console.warn(`警告：${missingSummary}`);
+    console.warn('已略過 22 個 profile 的推薦覆蓋檢查；請執行 npm run validate:audience:strict 強制完整回填。');
     return;
   }
 
@@ -72,7 +92,7 @@ function run(): void {
   }
 
   console.log(
-    `audienceFit 驗證成功：${externalTools.length} 個外部工具，${REQUIRED_PROFILES.length} 個 profiles。`,
+    `audienceFit 驗證成功：${externalTools.length} 個外部工具已完整回填，${REQUIRED_PROFILES.length} 個 profiles。`,
   );
   for (const { key, count } of segmentCounts) {
     console.log(`${key}: ${count}`);
