@@ -1,7 +1,7 @@
 import type { AudienceFit, AudienceProfile } from './audienceProfile';
 import type { EducationalTool } from './data';
 
-export type RecommendationSlot = 'universal' | 'role' | 'stage' | 'discovery';
+export type RecommendationSlot = 'universal' | 'role' | 'stage' | 'popular' | 'discovery';
 
 export interface AudienceRecommendation {
   tool: EducationalTool;
@@ -15,11 +15,29 @@ type ReasonResolution = {
   isPrecise: boolean;
 };
 
-const BASE_SLOT_TARGETS: ReadonlyArray<readonly [Exclude<RecommendationSlot, 'discovery'>, number]> = [
+const BASE_SLOT_TARGETS: ReadonlyArray<readonly [Exclude<RecommendationSlot, 'popular' | 'discovery'>, number]> = [
   ['universal', 2],
   ['role', 2],
   ['stage', 1],
 ];
+
+// 人氣加分權重（v3.6.x）：把排行榜的真實點擊數（tool.totalClicks）納入排序，
+// 讓熱門工具（如馬力歐遊戲、班級小管家）不會只因手工 priority 偏低就永遠沉底。
+// 以「該工具點擊 ÷ 合格工具中的最高點擊」做 sqrt 正規化 → 曲線前段陡、後段緩，
+// 讓中段熱度的工具也吃得到明顯加成，最熱門者最多 +POPULARITY_WEIGHT。
+// 權重刻意略低於一個職務配對（+30）：個人化仍險勝純人氣，熱門工具的「保證露出」
+// 交給下方的「熱門保底席」，不必靠加分硬壓過職務配對。
+const POPULARITY_WEIGHT = 28;
+
+function getToolClicks(tool: EducationalTool): number {
+  const clicks = tool.totalClicks;
+  return typeof clicks === 'number' && Number.isFinite(clicks) && clicks > 0 ? clicks : 0;
+}
+
+function popularityBonus(tool: EducationalTool, maxClicks: number): number {
+  if (maxClicks <= 0) return 0;
+  return Math.round(POPULARITY_WEIGHT * Math.sqrt(getToolClicks(tool) / maxClicks));
+}
 
 function isValidToolId(id: unknown): id is number {
   return typeof id === 'number' && Number.isInteger(id) && id > 0;
@@ -152,7 +170,12 @@ function classifySlot(fit: AudienceFit, profile: AudienceProfile): Recommendatio
   return 'universal';
 }
 
-function rankTool(tool: EducationalTool, fit: AudienceFit, profile: AudienceProfile): AudienceRecommendation {
+function rankTool(
+  tool: EducationalTool,
+  fit: AudienceFit,
+  profile: AudienceProfile,
+  maxClicks: number,
+): AudienceRecommendation {
   const isTeacherProfile = profile.audience === 'teacher';
   const roleMatch = isTeacherProfile
     && fit.teacherRoles !== undefined
@@ -175,7 +198,8 @@ function rankTool(tool: EducationalTool, fit: AudienceFit, profile: AudienceProf
       + (roleMatch ? 30 : 0)
       + (departmentMatch ? 25 : 0)
       + (stageMatch ? 15 : 0)
-      + (reason.isPrecise ? 10 : 0),
+      + (reason.isPrecise ? 10 : 0)
+      + popularityBonus(tool, maxClicks),
     slot: classifySlot(fit, profile),
   };
 }
@@ -209,10 +233,28 @@ function composeRecommendationSlots(
     }
   }
 
+  // 熱門保底席：從尚未入選的合格工具中，挑點擊數最高者（排行榜常勝軍），
+  // 確保熱門工具至少露出一個，即使它的手工 priority 偏低。
+  // 若沒有任何工具帶點擊資料（如單元測試情境），退回原本的 discovery（取剩餘最高分）。
   if (selected.length < limit) {
-    const discovery = ranked.find((recommendation) => !isSelected(recommendation));
-    if (discovery) {
-      select({ ...discovery, slot: 'discovery' });
+    let popular: AudienceRecommendation | undefined;
+    let popularClicks = 0;
+    for (const recommendation of ranked) {
+      if (isSelected(recommendation)) continue;
+      const clicks = getToolClicks(recommendation.tool);
+      if (clicks > popularClicks) {
+        popularClicks = clicks;
+        popular = recommendation;
+      }
+    }
+
+    if (popular) {
+      select({ ...popular, slot: 'popular' });
+    } else {
+      const discovery = ranked.find((recommendation) => !isSelected(recommendation));
+      if (discovery) {
+        select({ ...discovery, slot: 'discovery' });
+      }
     }
   }
 
@@ -234,11 +276,13 @@ export function recommendTools(
 
   const familyIds = buildToolFamilyIds(tools);
 
-  const ranked = tools
-    .flatMap((tool) => {
-      if (tool.isInternal || !tool.audienceFit || !isEligible(tool.audienceFit, profile)) return [];
-      return [rankTool(tool, tool.audienceFit, profile)];
-    })
+  const eligible = tools.filter(
+    (tool) => !tool.isInternal && tool.audienceFit && isEligible(tool.audienceFit, profile),
+  );
+  const maxClicks = eligible.reduce((max, tool) => Math.max(max, getToolClicks(tool)), 0);
+
+  const ranked = eligible
+    .map((tool) => rankTool(tool, tool.audienceFit!, profile, maxClicks))
     .sort((left, right) => right.score - left.score || left.tool.id - right.tool.id);
 
   return composeRecommendationSlots(dedupeRankedFamilies(ranked, familyIds), limit, familyIds);

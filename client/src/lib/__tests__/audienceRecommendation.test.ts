@@ -252,6 +252,63 @@ describe('recommendTools', () => {
     ]);
   });
 
+  it('熱門保底席：即使 priority 偏低，排行榜最熱門的合格工具仍會露出', () => {
+    // 模擬「馬力歐遊戲」情境：priority 低但點擊數全站最高
+    const popularGame = makeTool(9, makeFit({
+      audiences: ['teacher', 'student'],
+      priority: 42,
+      reasons: { teacher: '課間獎勵遊戲。', student: '挑戰關卡累積分數。' },
+    }), { totalClicks: 5000 });
+    const higherPriority = Array.from({ length: 6 }, (_, index) => makeTool(
+      200 + index,
+      makeFit({ priority: 95 - index }),
+      { totalClicks: 10 },
+    ));
+
+    const result = recommendTools([popularGame, ...higherPriority], {
+      audience: 'teacher', schoolLevel: 'elementary', teacherRole: 'homeroom',
+    });
+
+    expect(result.map(({ tool }) => tool.id)).toContain(9);
+    expect(result.find(({ tool }) => tool.id === 9)?.slot).toBe('popular');
+  });
+
+  it('人氣加分讓同 priority 的熱門工具分數更高，但個人化職務配對仍勝過純人氣', () => {
+    const studentFit = (priority: number) => makeFit({
+      audiences: ['teacher', 'student'], priority,
+      reasons: { teacher: '老師理由。', student: '學生理由。' },
+    });
+    const hot = makeTool(1, studentFit(60), { totalClicks: 4000 });
+    const cold = makeTool(2, studentFit(60), { totalClicks: 0 });
+
+    const result = recommendTools([hot, cold], { audience: 'student' }, 2);
+    const hotScore = result.find(({ tool }) => tool.id === 1)!.score;
+    const coldScore = result.find(({ tool }) => tool.id === 2)!.score;
+    expect(hotScore).toBeGreaterThan(coldScore); // 人氣有加成
+
+    // 職務配對（+30）仍應勝過純人氣加分（≤28）：同 priority 下，
+    // 有職務配對但零點擊的工具分數，應高於零配對但全站最熱門的工具。
+    const scopedCold = makeTool(3, makeFit({
+      teacherRoles: ['subject'], priority: 60,
+    }), { totalClicks: 0 });
+    const scopedResult = recommendTools([hot, scopedCold], {
+      audience: 'teacher', schoolLevel: 'elementary', teacherRole: 'subject',
+    }, 2);
+    const hotTeacherScore = scopedResult.find(({ tool }) => tool.id === 1)!.score;
+    const scopedScore = scopedResult.find(({ tool }) => tool.id === 3)!.score;
+    expect(scopedScore).toBeGreaterThan(hotTeacherScore);
+  });
+
+  it('沒有任何點擊資料時，第六席退回 discovery（維持既有行為）', () => {
+    const tools = Array.from({ length: 8 }, (_, index) => makeTool(
+      100 + index,
+      makeFit({ priority: 90 - index }),
+    ));
+    const result = recommendTools(tools, { audience: 'teacher' });
+    expect(result.some(({ slot }) => slot === 'popular')).toBe(false);
+    expect(result.some(({ slot }) => slot === 'discovery')).toBe(true);
+  });
+
   it.each([0, -1, 1.5, Number.NaN, Number.POSITIVE_INFINITY])('非正整數 limit %s 回傳空陣列', (limit) => {
     expect(recommendTools([meetingTool], { audience: 'teacher' }, limit)).toEqual([]);
   });
