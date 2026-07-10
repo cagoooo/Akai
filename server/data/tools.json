@@ -368,6 +368,28 @@
   },
   {
     "id": 20,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "typing-practice",
+        "keyboard-familiarity",
+        "student-practice"
+      ],
+      "priority": 78,
+      "reasons": {
+        "teacher": "可用落下字母與手指提示安排英打入門、課堂挑戰或回家練習。",
+        "student": "可免登入反覆挑戰 26 個英文字母，練習鍵位、正確指法與輸入準確度。",
+        "homeroom": "可作為班級早自習、資訊融入活動或假期練習。",
+        "subject": "資訊與英語教師可用於鍵盤指法教學及字母辨識練習。"
+      }
+    },
     "title": "英打練習",
     "description": "英文打字練習工具，提升打字速度與準確度",
     "url": "https://www.smes.tyc.edu.tw/smes_html/typeEN.html",
@@ -385,6 +407,28 @@
   },
   {
     "id": 21,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "zhuyin-typing",
+        "keyboard-familiarity",
+        "student-practice"
+      ],
+      "priority": 79,
+      "reasons": {
+        "teacher": "可用限時落字玩法帶領注音鍵位與中文輸入練習，並安排班內挑戰。",
+        "student": "可在 180 秒挑戰中反覆練習注音符號、聲調與鍵盤位置。",
+        "homeroom": "可安排早自習、回家作業或班級中打挑戰。",
+        "subject": "資訊與語文教師可用於中文輸入法入門及注音鍵位教學。"
+      }
+    },
     "title": "中打練習",
     "description": "中文打字練習工具，提升中文輸入能力",
     "url": "https://www.smes.tyc.edu.tw/smes_html/typeCC.html",
@@ -402,6 +446,32 @@
   },
   {
     "id": 22,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "idiom-practice",
+        "vocabulary-learning",
+        "student-practice"
+      ],
+      "priority": 75,
+      "reasons": {
+        "teacher": "可用 50 題成語填空與白話釋義安排國語文複習、補救或延伸活動。",
+        "student": "可透過限時填空練習常用成語，答題時同步理解成語意思。",
+        "homeroom": "可安排早自習、班級闖關或親子共學活動。",
+        "subject": "國語文教師可在成語單元後用於課堂鞏固與補救教學。"
+      }
+    },
     "title": "成語中打練習",
     "description": "透過成語練習中文打字，邊打邊學成語",
     "url": "https://www.smes.tyc.edu.tw/smes_html/typeTC.html",
@@ -453,6 +523,31 @@
   },
   {
     "id": 25,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "speech-training",
+        "competition-preparation",
+        "student-practice"
+      ],
+      "priority": 76,
+      "reasons": {
+        "teacher": "可用隨機題庫與 AI 講稿建議建立國小演說選手的入門訓練流程。",
+        "student": "可自行抽題、練習口頭演說並參考 AI 回饋調整講稿。",
+        "homeroom": "可帶領班級口語表達活動或協助校內語文競賽選手練習。",
+        "subject": "語文教師可用於演說教學、比賽培訓與講稿修訂。"
+      }
+    },
     "title": "國語演說培訓班",
     "description": "國語演說練習與培訓工具",
     "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E5%9C%8B%E8%AA%9E%E6%BC%94%E8%AA%AA%E7%B7%B4%E7%BF%92%E5%B0%8F%E5%B7%A5%E5%85%B7?authuser=0",
@@ -759,6 +854,24 @@
   },
   {
     "id": 43,
+    "audienceFit": {
+      "audiences": [
+        "teacher"
+      ],
+      "painPoints": [
+        "curriculum-translation",
+        "lesson-planning",
+        "document-formatting"
+      ],
+      "priority": 87,
+      "reasons": {
+        "teacher": "可將中文課程計畫轉寫成符合教學語境的英文內容與 Markdown 表格，減少翻譯及重排工時。",
+        "homeroom": "需要整理跨領域或班級雙語課程時，可快速取得可再編修的英文計畫草稿。",
+        "subject": "雙語學科教師可把既有中文教案轉為含專業用語與教學句型的英文版本。",
+        "admin": "可協助彙整雙語計畫、校際交流與送審所需的英文課程文件。",
+        "academic": "適合教務與雙語推動人員整理課程計畫、審查資料及對外交流文件。"
+      }
+    },
     "title": "課程計畫英文轉寫小精靈",
     "description": "上傳中文課程計畫 (PDF, DOCX)，轉寫小精靈將自動翻譯並整理成 Markdown 表格",
     "url": "https://bilingual.smes.tyc.edu.tw/",
@@ -969,6 +1082,31 @@
   },
   {
     "id": 55,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "zhuyin-learning",
+        "phonics-practice",
+        "student-practice"
+      ],
+      "priority": 84,
+      "reasons": {
+        "teacher": "可用六個漸進關卡、虛擬鍵盤與學習回顧帶領國小注音教學及補強。",
+        "student": "可自主拼出聲母、韻母與聲調，透過關卡解鎖和錯題回顧熟悉注音。",
+        "homeroom": "低年級導師可安排注音密集學習期的課堂、早自習與回家練習。",
+        "subject": "國語文教師可用於注音符號教學、個別補救與闖關活動。"
+      }
+    },
     "title": "ㄅㄆㄇ注音大挑戰",
     "description": "專為兒童設計的注音學習挑戰透過趣味互動讓孩子輕鬆掌握ㄅㄆㄇ。",
     "url": "https://cagoooo.github.io/zhuyin/",
@@ -1088,6 +1226,28 @@
   },
   {
     "id": 61,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "typing-practice",
+        "touch-typing",
+        "student-practice"
+      ],
+      "priority": 82,
+      "reasons": {
+        "teacher": "可用虛擬雙手的手指提示示範標準英打指法，並安排課堂或課後挑戰。",
+        "student": "可跟著亮起的虛擬手指輸入落下字母，建立正確鍵位與指法肌肉記憶。",
+        "homeroom": "可作為早自習、班級挑戰或假期自主練習。",
+        "subject": "資訊與英語教師可用於英打入門、指法示範與操作練習。"
+      }
+    },
     "title": "英打打字超互動遊戲",
     "description": "互動式英文打字學習遊戲，透過趣味關卡幫助學生提升英文打字速度與準確度，在遊戲中輕鬆掌握鍵盤位置。",
     "detailedDescription": "「英打打字超互動遊戲 GitHub 版」是阿凱老師為國小三年級資訊課英打單元打造的 **純靜態單檔 HTML 打字遊戲**，部署在 `cagoooo.github.io/typeEN/`。與 [#20 XOOPS VM 版](/tool/20) 是同源雙部署 — XOOPS 走學校網域信任度、GitHub Pages 走公開易分享。\n\n## 🎯 核心特色\n\n- 🖐️ **虛擬雙手亮起對應手指** — 字母 'A' 落下時左手小拇指發光、'J' 落下時右手食指發光，幫學生建立**正確 11 區指法肌肉記憶**（不是兩指神功）\n- 🎲 **隨機順序 + 隨機顏色 + 隨機 X 軸** — 26 個英文字母每次都不一樣，第二次玩不會跟第一次完全一樣\n- 📦 **純靜態無依賴單檔** — 單一 `typeEN.html` 即可運行，直接點開就能玩，零後端零 npm\n- 🎨 **Tailwind CSS CDN 快速排版** — 無 build step，畫面簡潔明瞭\n- 📱 **RWD 響應式基礎** — 不同螢幕尺寸維持基本可用性\n- 💰 **完全免費 + GitHub Pages 自動部署** — git push 自動上線\n\n## 💡 設計理念\n\n技術棧採 Vanilla JS + Tailwind CDN，**無框架、無後端、無 LLM**。標準英打指法分 11 個區域（QAZ 左小指 / WSX 左無名指 / EDC 左中指 / RFVTGB 左食指 / YHNUJM 右食指 / IK, 右中指 / OL. 右無名指 / P;/ 右小指）— #61 把這整套指法視覺化，學生看到字母 → 不會去找鍵盤 → 自然建立肌肉記憶 → 三個月後閉眼睛也能打。**「漸進式工具家族」**又一案例（前 7 個：PIRLS / Aura / 教師回覆 / 演說 / 瑪莉歐 / 課程計畫 / 點石成金）：[#20 XOOPS 版](/tool/20) 走學校網域信任度，#61 GitHub 版走公開易分享，**同源不同受眾**。\n\n## 🎒 適合情境\n\n- **三年級英打單元第一週**：老師講「手指對應字母」抽象 → 學生記不住 → 用 #61 看虛擬手指亮 → 5 分鐘立刻會用對的手指打\n- **早自習補強**：每天玩 5 分鐘，累積一週手指肌肉記憶建立\n- **家長親子練英打**：「爸爸我打了 X 秒」變家庭遊戲\n- **寒暑假作業**：「全班挑戰破紀錄」分享自己的最佳成績\n\n適合國小三年級資訊課老師、中年級英文老師、補習班美語老師、家長親子練英打。第一次玩：**正坐 + 雙手放 ASDF JKL; 起始位置 → 開始 → 觀察虛擬手指亮起 → 用對的手指按** → 這比看打字教科書快 100 倍。配對 [#21 中文注音打字](/tool/21) 與 [#70 中文注音打字 Pro](/tool/70) 形成完整打字訓練線。",
@@ -1214,6 +1374,25 @@
   },
   {
     "id": 67,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "painPoints": [
+        "speech-training",
+        "competition-preparation",
+        "speaking-feedback"
+      ],
+      "priority": 92,
+      "reasons": {
+        "teacher": "可用歷屆題庫、正式計時、逐字稿、AI 雷達評分與教師量表建立完整演說培訓流程。",
+        "student": "可自主抽題、模擬正式演說、查看逐字稿與多維回饋，反覆調整內容和表達。",
+        "homeroom": "可用於班級口語表達活動，或陪伴校內語文競賽選手持續練習。",
+        "subject": "語文與表演相關教師可用題庫、講稿及評分工具進行專業指導。",
+        "admin": "承辦語文競賽或校隊培訓時，可用紀錄、評分單與進度功能管理訓練。"
+      }
+    },
     "title": "國語演說比賽訓練平台 (pro版)",
     "description": "專為國語演說比賽設計的專業訓練平台，提供全方位的技巧培訓、各類講稿庫與實戰模擬演練，助力學生在賽場上自信發揮，奪取佳績。",
     "detailedDescription": "「國語演說比賽訓練 Pro」是阿凱老師為桃園市 / 全國語文競賽選手與指導老師打造的 **單檔 5705 行 HTML / 322 KB 自製培訓系統**，部署在 `cagoooo.github.io/speech/`，當前 **v2.7.2 累計 57 項功能**、進度表獨立 113 KB HTML 檔。從 [#25 入門版](/tool/25)（Google Sites Embedded）升級重構而來，是「**漸進式工具家族**」最完整的案例之一。\n\n## 🎯 核心特色\n\n- 📚 **107 道題庫 × 7 大分類** — 品格道德 / 生活體驗 / 自然環境 / 夢想未來 / 社會關懷 / 科技創新 / 文化傳承，**真實比賽題目彙整**含「113 年新北市語文競賽國語演說參考題庫」等官方資料連結，不是 AI 即時亂生\n- ⏱️ **雙階段計時器（正式比賽規格）** — 準備倒數 5/10/20/30 分鐘可選（對應正式賽 30 分鐘）+ 演說計時 3/4-5 分鐘 + 真實扣分規則內建（每少超 30 秒扣 1 分）+ 4 分鐘 🟢 5 分鐘 🔴 燈號 + Web Audio 合成倒數最後 1 分鐘三音階漸強提示音\n- 🎤 **Web Speech API 即時逐字稿**（殺手鐧）— `webkitSpeechRecognition` zh-TW 連續辨識 + `onend` 自動重啟 + interim 灰字即時顯示，演說結束後 Gemini 依逐字稿產雷達圖，**辨識準確度 90%+**\n- 📊 **Gemini 2.5 Flash 四維雷達圖評分** — 內容組織 45% + 語音表達 40% + 台風儀態 10% + 時間控制，**雷達圖用 Canvas 純手繪**（沒用 Chart.js）\n- ✨ **AI 四大產出 + 舞台指示標記** — 演說大綱（含時間配置條視覺化）+ 完整逐字稿 + 5 個創意方向 + 名言金句，**Prompt 強制要求至少 5 處** `(停頓 0.5 秒)` `(語氣激昂)` `(手勢上揚)` `(重音：xx)`\n- 🎓 **三層年級分級 Prompt 工程** — 3-4 年級避艱深成語句不超過 20 字、5-6 年級成語名言社會議題、中高混合切換按鈕改 system instruction\n- 📋 **老師現場評分量表（雙身分設計）** — 五大維度滑桿（內容 / 語音 / 表達 / 臺風 / 儀態）即時加總、長處短處 textarea、可列印正式評分單\n- 💌 **家長通知信 AI 一鍵生成** — 含「情感色彩四維分析」（激勵感 / 溫情感 / 說服力 / 邏輯感 JSON 回傳）\n- ☁️ **Supabase Google OAuth 雲端同步** — 抽籤紀錄 vs 完整練習紀錄分開統計、四層保險網（停止鈕 / 安全網重置 / 硬上限自動停 / `beforeunload` keepalive）\n\n## 💡 設計理念\n\n技術棧**單檔 HTML 純手寫 5705 行 / 322 KB，無 React/Vue/Next、零 npm 依賴** + Gemini API（`gemini-2.5-flash-lite` 預設）+ Supabase JS SDK v2 + Web Speech API + Web Audio API。**神細節**：Service Worker 偵測到演說進行中會**延後 30 秒再提示更新**避免學生練到一半被打斷 — 這種「真懂用戶」的工程考量是 #67 最動人之處。在阿凱「語文競賽三件套」中：[#25 入門版](/tool/25) 給新手老師、**#67 Pro 給比賽選手與正式賽事規格**、[#95 龍潭區複賽資訊站](/tool/95) 給承辦學校。石門國小帶選手實測：老師親自陪練比率從 100% 降到 30%（其他用 AI 自練）、講稿迭代次數從 8-10 次飆到 20 次。\n\n## 🎒 適合情境\n\n- **國小高年級 / 國中 / 高中演說比賽選手** — 平日自主練習、不用等老師有空\n- **帶語文競賽的老師**（語文教師、導師、社團指導）— Web Speech 自動轉文字省 80% 校對時間\n- **想練口語表達的成人** — 演講、簡報、訪問都通用\n- **補習班 / 寒暑假營隊講師** — 學生自學 + AI 評分\n\n第一次用建議從歷屆題庫抽 3 題練 → 看 AI 評分穩定後再進階。MIT 授權可 fork。",
@@ -1275,6 +1454,28 @@
   },
   {
     "id": 70,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "zhuyin-typing",
+        "typing-fluency",
+        "student-practice"
+      ],
+      "priority": 85,
+      "reasons": {
+        "teacher": "可用四級難度、排行榜與成績單安排循序中打教學、班級競賽及進步追蹤。",
+        "student": "可從單字逐步挑戰詞語與成語，透過排行榜和成績單持續練習中文輸入。",
+        "homeroom": "可安排班級中打挑戰、回家作業或假期自主練習。",
+        "subject": "資訊教師可建立分級中打課程，並用排行與成績分享提高練習動機。"
+      }
+    },
     "title": "中文注音打字遊戲 (pro版)",
     "description": "進階版中文注音打字練習遊戲，提供更豐富有趣的打字挑戰，全面提升中文輸入速度與準確度。",
     "detailedDescription": "「中文注音打字遊戲 Pro」（Zhuyin Challenge Pro）是阿凱老師為國小中年級資訊課中打單元打造的 **Vite + Tailwind 模組化版本**，部署在 `cagoooo.github.io/typeCC/`，當前 **v1.3.0**。從 [#21 早期 XOOPS VM 版](/tool/21) 升級重構而來，是「**漸進式工具家族**」案例之一（前 5 個：PIRLS / Aura / 教師回覆 / 演說 / 瑪莉歐）。\n\n## 🎯 核心特色\n\n- 🎯 **4 級難度系統** — 初學者（常見單字）/ 入門（常用漢字）/ 進階（常用詞語）/ **大師（四字成語）**，隨難度提升詞長變長\n- 🏆 **全球排行榜** — 挑戰世界各地玩家、留下名字看排名，跟 [#69 猴子投擲](/tool/69) 同款全球 PK 機制\n- 📸 **成績單分享圖片** — 一鍵生成精美成績單分享 LINE / IG / FB，學生愛炫耀進步\n- 📱 **PWA 支援** — 離線遊玩、可安裝桌面像原生 App\n- ⚡ **Vite + Tailwind CSS** — 現代化響應式介面，桌面手機都好用\n- 📚 **常用漢字 + 詞語 + 四字成語詞庫** — 從單字到成語循序漸進\n- 📦 **MIT 授權純 JavaScript** — 無大型框架、可 fork 改造\n\n## 💡 設計理念\n\n#70 跟 [#21 XOOPS VM 版](/tool/21) 是 **Pro 版升級** 同源雙部署：#21 純前端單檔 / #70 Vite 模組化、#21 早期單版 / #70 v1.3.0 持續打磨、#21 單一模式 / #70 4 級難度、#21 字元落下 / #70 常用漢字 + 詞語 + 四字成語、#21 無排行 / #70 全球榜、#21 截圖 / #70 一鍵生成精美成績單圖片、#21 無 PWA / #70 可離線玩 + 安裝桌面。為什麼全球排行榜這麼重要？對國小學生：動機（想看自己世界第幾）+ 比較（同學間 PK）+ 進步追蹤；對老師：資料（看全班排名分布）+ 獎勵（這週進步最多得貼紙）+ 班內競賽（分組挑戰）。跟 [#71 成語填空大挑戰](/tool/71) 是姊妹工具 — `typeCC` 速度導向 vs `typeTC`（成語）知識導向，repo 命名都呼應。\n\n## 🎒 適合情境\n\n- **資訊課中打單元 5 節課完整流程**：第 1 節用 [#21](/tool/21) 入門熟悉鍵位 → 第 2 節玩 #70「初學者」第一張成績單 → 第 3 節升「入門」「進階」→ 第 4 節挑戰「大師」級四字成語 → 第 5 節班內 PK 大賽全球榜競爭\n- **期末挑戰**：全班同學分享成績單到家長 LINE 群，看誰一學期進步最多\n- **家長假日陪練**：「今天破我中打紀錄」變家庭遊戲\n\n適合國小三四年級資訊課老師、注音輸入入門訓練、想長期堆疊打字訓練的學校。搭配 [#55 ㄅㄆㄇ 注音大挑戰](/tool/55)（一年級虛擬鍵盤拼注音）+ [#61 英打 GitHub 版](/tool/61) 形成「**打字訓練三段式**」完整教程。",
@@ -1296,6 +1497,32 @@
   },
   {
     "id": 71,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "idiom-practice",
+        "vocabulary-learning",
+        "student-engagement"
+      ],
+      "priority": 81,
+      "reasons": {
+        "teacher": "可用成語填空、排行榜與 PWA 安排國語文課後鞏固、早自習或班級挑戰。",
+        "student": "可透過隨機填空與榮譽榜反覆練習成語，並離線自主挑戰。",
+        "homeroom": "可安排早自習、班級成語王競賽或親子共學活動。",
+        "subject": "國語文教師可在成語單元後用於互動練習與學習動機提升。"
+      }
+    },
     "title": "成語填空大挑戰",
     "description": "專為提升成語能力設計的互動填空遊戲，透過趣味挑戰強化辭彙運用與文學素養。",
     "detailedDescription": "「成語填空大挑戰 (TypeTC) v1.3.1」是阿凱老師為國小高年級 / 國中國文打造的 **進階成語互動學習工具**，是 [#22 成語填空遊戲](/tool/22) 的進階版 — 從 XOOPS 純單檔 HTML 升級到 Vite + Tailwind + Firebase。\n\n## 🎯 核心特色\n\n- 🎭 **Neon Heritage（Red/Gold Theme）+ Glassmorphism 霓虹古韻視覺** — 「融合現代與東方美學」設計定位\n- 🎵 **隨機國樂背景音樂** — 教室氛圍寧靜不吵\n- 🌸 **櫻花落下特效** — 大氣氛圍，「體驗如原生 App」\n- 🏆 **Firebase Firestore 全球排行榜** — Anonymous Auth 不需註冊，即時更新榮譽榜\n- 🧩 **隨機成語挖空強化記憶** — 跟 [#22 成語填空遊戲](/tool/22) 同款核心機制\n- 📱 **PWA 支援** — 離線啟動 + 加入手機主畫面\n- 🔒 **2026-03-06 API Key 零洩漏規範** — `index.html` 用 `__PLACEHOLDER__` 不含真實 API Key，透過 GitHub Secrets + `.github/inject.py` 部署階段注入\n\n## 💡 設計理念\n\n**Vite + Vanilla JS + Tailwind CSS（沒用 React）** + Firebase Firestore（Anonymous Auth）+ GitHub Actions + GitHub Pages，repo `cagoooo/typeTC`。跟 [#70 中打 Pro](/tool/70) 是姊妹工具，repo 命名呼應：**`typeCC` = Zhuyin Challenge Classic、`typeTC` = Type Chengyu** — 阿凱「寫一次基礎模組 → 換主題複製做不同工具」的策略再 +1 案例。**Neon Heritage 視覺呼應主題**：成語本身就是傳統文化的現代化呈現。\n\n## 🎒 適合情境\n\n國語高年級成語單元上完課堂教學後鞏固（學生看 Neon Heritage 視覺覺得「成語也可以這麼酷」比看課本好玩 100 倍）、早自習語文素養（國樂背景 + 教室氛圍寧靜不吵）、期末班級成語王挑戰（全球排行榜 PK）、家長親子（中秋 / 春節傳統節日陪小孩玩 + 櫻花特效 + 國樂很有節日氛圍）。可搭配 [#22 成語填空遊戲](/tool/22) 早期 XOOPS 版、[#70 中打 Pro](/tool/70) 姊妹中打版、[#79 漢語新解](/tool/79) AI 諷刺式新解。「打開 → 配上隨機國樂背景音樂 → 看櫻花落下 → 挑戰全球榮譽榜 — 這比 Kahoot 有質感 10 倍」。",
@@ -1428,6 +1655,24 @@
   },
   {
     "id": 77,
+    "audienceFit": {
+      "audiences": [
+        "teacher"
+      ],
+      "painPoints": [
+        "bilingual-promotion",
+        "school-showcase",
+        "stakeholder-communication"
+      ],
+      "priority": 61,
+      "reasons": {
+        "teacher": "可參考其雙語課程、外師與學生展能的雙語展示架構，支援校內分享及對外交流。",
+        "homeroom": "可將學校雙語課程與成果頁分享給家長，協助說明班級參與的學習內容。",
+        "subject": "雙語學科教師可參考課程案例與成果呈現方式，支援公開觀議課及校際交流。",
+        "admin": "可作為雙語政策宣導、教育局訪視、家長溝通與學校成果展示的網站範例。",
+        "academic": "適合教務與雙語推動人員規劃課程宣導、公開觀議課及校際聯盟交流。"
+      }
+    },
     "title": "石門國小雙語教育宣導網站",
     "description": "石門國小雙語教育宣導專屬平台，整合雙語課程介紹、英語學習資源與校園國際化推廣資訊，讓師生與家長輕鬆掌握學校雙語教育發展方向。",
     "detailedDescription": "「石門國小雙語教育宣導網站」是阿凱老師用 **Manus AI 平台** 為石門國小 **114 學年度雙語聯盟學校暨雙語課程亮點學校** 公開觀議課打造的 **對外宣傳平台**，部署在 `english.smes.tyc.edu.tw` 學校自訂域名 Firebase Hosting。**支援中英文雙語切換**，是阿凱「多 AI 工具混搭」最佳案例之一。\n\n## 🎯 核心特色\n\n- 🌐 **中英文雙語切換** — 一鍵語言切換，家長 / 教育局 / 國際合作學校都看得懂\n- 📚 **雙語教育課程規劃介紹** — 不只「上英文課」，是把英語融入自然 / 體育 / 藝術等學科\n- 👨‍🏫 **外師介紹專頁** — 學校聘的英文外籍教師背景與教學專長公開展示\n- 🎯 **主題課程活動** — 用英文教學科的實際案例與成果\n- 🌟 **學生展能** — 學生雙語成果作品 / 影片 / 演出公開呈現\n- 🤖 **Manus AI 5 分鐘建站** — 自然語言描述需求 → AI 生成完整網站\n- 🏫 **學校自訂域名** — 掛 `english.smes.tyc.edu.tw` 增加教育單位信任度\n\n## 💡 設計理念\n\n桃園市推動「雙語聯盟學校」+「雙語課程亮點學校」政策，入選學校要做公開觀議課（邀請其他學校來觀摩）+ 對外宣傳（讓教育局家長合作學校看到成果）+ 課程規劃 / 外師 / 學生展能展示。傳統痛點：學校官網太雜亂讓雙語成果埋在公告底下、印刷宣傳冊過時、Word 排版不專業、IT 預算養不起品牌設計師。阿凱反向用 **Manus AI 描述需求 → 5 分鐘生成專屬網站 → 配 Firebase Hosting + 學校網域**。**這是「阿凱會看場景選工具」的最佳印證**：AI 出題 → Gemini + Next.js、互動藝術 → Canvas + 純 JS、**展示型網站 → Manus AI**、觸控螢幕 → 純單檔 HTML。在「雙語政策三件套」中：[#43 LinguaLesson 轉寫小精靈](/tool/43) 給老師備課（中翻英）、[#88 課程計畫 AI 審查](/tool/88) 給校內預審、**#77 對外宣傳給教育局家長合作學校**。\n\n## 🎒 適合情境\n\n- **公開觀議課邀請其他學校來**：邀請函附 #77 連結，其他校老師先看「石門國小雙語做了什麼」有共同背景才能討論\n- **教育局督學訪視**：給 #77 連結讓督學自己瀏覽，不用拿一堆資料夾\n- **家長關心**：家長 LINE 群組「我們學校的雙語亮點看這裡」，比給 PDF 檔好（手機看也順）\n- **校際雙語聯盟交流**：8 個聯盟校互看彼此網站、分享成功經驗\n\n適合雙語聯盟學校 / 雙語亮點學校、教導主任 / 教學組長（規劃雙語推動）、想做對外宣導網站的學校、想看 Manus AI 建站案例的開發者。如果你校也是雙語聯盟學校 — **用 Manus 描述需求 → 5 分鐘有專屬網站 → 配 Firebase Hosting + 學校網域**。",
@@ -1471,6 +1716,28 @@
   },
   {
     "id": 79,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "creative-writing",
+        "critical-thinking",
+        "classroom-discussion"
+      ],
+      "priority": 74,
+      "reasons": {
+        "teacher": "可用 AI 諷刺式詞彙新解引發語文、社會議題與真實經驗的討論及仿寫。",
+        "student": "可輸入日常詞彙探索不同觀點，並把新解當作討論、思辨或創作靈感。",
+        "homeroom": "可在班級經營或社會情緒學習中討論詞語背後的感受與價值。",
+        "subject": "國語文教師可設計字典義、新解與個人經驗比較，延伸到批判閱讀及仿寫。"
+      }
+    },
     "title": "漢語新解",
     "description": "以 AI 為驅動的創意漢語詮釋工具，用幽默、諷刺與機智的視角為你解讀日常詞彙的「新意」，讓語言學習更有趣，讓漢字充滿新生命！",
     "detailedDescription": "「漢語新解」是阿凱老師為國語文延伸打造的 **AI 諷刺式詞彙詮釋工具**，靈感來自李繼剛同名概念，**絕對不是查字典工具** — 而是 AI 用王爾德 + 魯迅 + 羅永浩三人格混合，給你一段 150 字諷刺式新解 + 水墨蓋章畫卷，**揭露語言背後的真相**。\n\n## 🎯 核心特色\n\n- 🎭 **三人格混合風格** — System prompt 訂死「年輕人、批判現實、思考深刻、語言風趣，風格王爾德 / 魯迅 / 羅永浩」+ 五條規則（隱喻 / 諷刺 / 批評現實 / 趣味性 / 150 字內 / 台灣繁體）+ 強制 JSON schema `{explanation, mood}`\n- 🖌️ **Bento Grid 三格 + 水墨蓋章畫卷** — 核心金句 / 衛星補述 / 落款 + 紅色印章「啪」一聲蓋章動效 + SVG 水墨擴散濾鏡（feTurbulence + feDisplacementMap）+ 宣紙紋理背景 + 蓋章音效\n- 🌡️ **情感感應背景** — AI 回傳 `mood` 欄位（positive / negative / neutral）→ 背景水墨景物自動切換（竹 / 枯樹 / 山）\n- 🇹🇼 **OpenCC `cn→twp` 強制轉繁** — Gemini 偶爾吐簡體這層自動清掉\n- 🏷️ **個人化印章** — 可改 2-4 字 + Noto Serif TC 標楷 / Ma Shan Zheng 毛筆字體可選 + html2canvas 一鍵輸出 PNG 畫卷分享\n- ✨ **示範新解** — 輸入「委婉」AI 回：「**刺向他人時，決定在劍刃上撒上止痛藥**」\n\n## 💡 設計理念\n\n技術棧純 HTML + Vanilla JS + GitHub Pages（PWA）+ Firebase Cloud Functions v2 + **Gemini 2.0 Flash** + Firestore + IndexedDB 雙寫存歷史，響應強制 `responseMimeType: \"application/json\"`。PROGRESS.md 寫已迭代到 v3.4.2（含 Firebase 遷移、PWA、Bento Grid、3D 傾斜卡片、水墨噴濺濾鏡）— **這是阿凱持續打磨的個人作品，不是一次性 demo**。**不適合**低年級當字典查（會看不懂諷刺），**適合**中高年級語文延伸 + SEL（社會情緒學習）。\n\n## 🎒 適合情境\n\n國語延伸教案：講「努力」字面義 → 播 #79 諷刺新解 → 三欄比較（字典定義 / AI 新解 / 你的真實體驗）→ 小組討論「哪個最接近真相」→ 學生挑詞輸入（建議：合群 / 成熟 / 乖 / 聽話）→ 仿寫作業。**石門國小六年級實測：學生發言意願 30% → 85%、小組討論觸及「為什麼」「誰得益」、寫作從應付造句 → 自發創作仿寫**。配對 [#92 5W1H 靈感發射器 PRO](/tool/92) 引導寫作 + [#7 點石成金評語優化](/tool/7) 同款隱喻諷刺風格。**第一次用建議輸入「乖」 — 你會看到 AI 給的答案讓全班沉默 5 秒**。",
@@ -1756,6 +2023,29 @@
   },
   {
     "id": 91,
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "poetry-writing",
+        "image-creation",
+        "digital-creativity",
+        "family-engagement"
+      ],
+      "priority": 72,
+      "reasons": {
+        "teacher": "可把照片轉成繁體詩詞與圖文作品，運用於語文創作、節慶問候或孝親主題活動。",
+        "student": "可上傳日常照片取得詩詞靈感，並製作可分享的圖文作品。",
+        "homeroom": "可安排孝親月、節氣問候、班級作品牆或家庭互動活動。",
+        "subject": "語文與藝術教師可用於看圖寫詩、意境討論及數位圖文創作。"
+      }
+    },
     "upgradeFromId": 14,
     "title": "✨ 點亮詩意 Pro ✨早安長輩圖",
     "description": "阿凱老師打造的 AI 詩詞照片生成器，上傳一張照片就能 10 秒產出一首契合畫面意境的繁體中文詩詞與「早安長輩圖」，銀髮族、語文教師、創意寫作者都能輕鬆把日常影像變成有溫度的圖文作品。",
