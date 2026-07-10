@@ -3856,11 +3856,7 @@
       ],
       "teacherRoles": [
         "homeroom",
-        "subject",
-        "admin"
-      ],
-      "departments": [
-        "counseling"
+        "subject"
       ],
       "painPoints": [
         "student-practice",
@@ -3872,8 +3868,7 @@
         "teacher": "可用故事式選擇題帶學生認識差異與情緒因應，作為討論的暖身而非診斷工具。",
         "student": "可在校園故事中做選擇、探索自己的偏好與情緒因應風格。",
         "homeroom": "適合班級經營與互相理解活動的開場，後續可引導尊重不同特質。",
-        "subject": "可搭配閱讀、表達或資訊課討論角色選擇與互動敘事。",
-        "counseling": "可作為輔導活動的低壓暖身素材，協助學生開啟自我覺察與同理討論。"
+        "subject": "可搭配閱讀、表達或資訊課討論角色選擇與互動敘事。"
       }
     }
   },
