@@ -144,6 +144,27 @@
     "id": 7,
     "title": "點「石」成金🐝(評語優化)",
     "description": "創新的學生評語優化工具，協助教師撰寫更正向、積極且個人化的學生評語",
+    "audienceFit": {
+      "audiences": [
+        "teacher"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom"
+      ],
+      "painPoints": [
+        "student-comment-writing",
+        "student-feedback",
+        "teacher-workload"
+      ],
+      "priority": 89,
+      "reasons": {
+        "teacher": "可依學生特質快速產生正向、個人化且能再調整的評語，減輕期末大量撰寫負擔。",
+        "homeroom": "適合國小導師處理成績單綜合評語、聯絡簿回饋與班級學生紀錄。"
+      }
+    },
     "url": "https://line.me/R/ti/p/@733oiboa?oat_content=url&ts=05120012",
     "icon": "MessageSquare",
     "category": "teaching",
@@ -161,6 +182,20 @@
     "id": 8,
     "title": "12年教案有14",
     "description": "豐富的教案資源分享平台，提供多元化的教學素材和靈感",
+    "audienceFit": {
+      "audiences": [
+        "teacher"
+      ],
+      "painPoints": [
+        "lesson-planning",
+        "teaching-resources",
+        "resource-discovery"
+      ],
+      "priority": 72,
+      "reasons": {
+        "teacher": "可透過 LINE 快速查找十二年國教各年級與領域教案，支援備課、研習及教學資源分享。"
+      }
+    },
     "url": "https://lin.ee/pCqnVhT",
     "icon": "Files",
     "category": "teaching",
@@ -212,6 +247,22 @@
     "id": 11,
     "title": "剛好學：課堂互動so easy",
     "description": "阿凱老師與阿剛老師共同打造的剛好學課堂互動平台，13 種互動模式涵蓋投票、QA、閱讀測驗、繪圖題、文字雲、相片牆，學生掃 QR Code 就能加入。",
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "painPoints": [
+        "classroom-interaction",
+        "formative-assessment",
+        "student-engagement"
+      ],
+      "priority": 94,
+      "reasons": {
+        "teacher": "可用多種即時題型、進度追蹤與結果匯出掌握全班理解狀況並提升參與率。",
+        "student": "可掃描 QR Code 加入課堂，以投票、繪圖、問答與閱讀測驗等方式即時作答。"
+      }
+    },
     "detailedDescription": "「剛好學 Akailao v3.8.9」是阿凱老師與阿剛老師合作打造的 **九大互動模式整合 SaaS**，主打「**Kahoot + Quizizz + Mentimeter 合體 + 老師自架 Firebase 資料自主**」，解決「全班 30 人只有 5 個舉手、剩 25 個到底懂不懂」的課堂提問困境。\n\n## 🎯 核心特色\n\n- 🎯 **九大互動模式合體** — 🚨 快速搶答 / 🎨 繪圖板（手機畫布作答）/ ✅ 是非 / 🔢 選擇 / 📝 問答 / 👥 互評 / 📚 **PIRLS 招牌閱讀測驗** / 🔀 排序 / 🔗 配對（拖拉 + SVG 連線）\n- 🤖 **Gemini 2.5 Flash 拍照出題（v3.6.0）** — 老師直接拍課本一頁，AI 自動辨識生 PIRLS 四層次題組\n- 📦 **單檔 234 KB 神器** — 整個系統在 `index.html` 一個檔案 + `set.html` Firebase 配置生成器（降門檻不寫程式）\n- 🔐 **每位老師自架 Firebase（資料自主）** — 不是 SaaS 鎖定，學生作答資料在每位老師自己的 Firestore + 匿名 Auth，Spark 免費方案 30-40 人班完全在 50K reads / 20K writes / day 內\n- 🔒 **作答後永久鎖定** — 學生不能重複投，自訂 3 碼課堂代碼進場\n- 🎮 **v3.7.15 等待中彩蛋** — 學生答完玩記憶配對 + 看即時排行榜 + 同學完成通知\n- 👀 **老師端進度追蹤** — 注意力監控 + 分心警告 + 靜音模式 + 即時加扣分排行榜 + 抽籤 + CSV 匯出\n\n## 💡 設計理念\n\n技術棧 TailwindCSS + D3.js（統計圖表）+ JSZip + FileSaver.js + QRCode.js + canvas-confetti + Vite + Tailwind build，但仍輸出單檔 HTML。跟 [#3 vote 即時投票](/tool/3) 是「**單一投票 vs 九大模式整合 SaaS**」差別 — #3 純前端 Firestore 對標 Mentimeter Lite，#11 對標完整教學互動 SaaS；跟 [#87 PIRLS QuestionCraft Pro](/tool/87) 是姊妹工具（同出題引擎理念）。`DEVELOPMENT_PROGRESS.md` 118 KB 深挖版本演進史。**石門國小 5 年級實測：發言參與率從 17% → 97%，內向學生發言次數從 0-1 次 → 5-8 次**。\n\n## 🎒 適合情境\n\n老師建立 Firebase 專案 → 用 `set.html` 貼配置下載專屬 `index.html` → 部署 GitHub Pages（推薦 EZPage 一鍵發布，連 git 都不用會）→ 上課自訂 3 碼代碼開始。配對 [#45 WordCloud 文字雲](/tool/45) 做開放式討論 + [#76 WebSlide Pro 簡報播放器](/tool/76) 嵌入互動 + [#81 國小資訊科技教學駕駛艙](/tool/81) 一鍵啟動。**第一次上課建議從「3 個選項投票」開始，5 分鐘搞定 → 學生瞬間眼睛亮起來**。",
     "url": "https://cagoooo.github.io/Akailao/",
     "icon": "GraduationCap",
@@ -267,6 +318,32 @@
     "id": 13,
     "title": "5W1H 靈感發射器 🚀",
     "description": "創意思維激發工具，協助發想教學內容",
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "creative-writing",
+        "idea-generation",
+        "writing-scaffolding"
+      ],
+      "priority": 86,
+      "reasons": {
+        "teacher": "可用 5W1H 六格與分級難度建立寫作鷹架，帶領學生發想、檢查一致性並完成故事。",
+        "student": "可隨機、修改或鎖定六項故事元素，從沒有靈感逐步組合成完整內容。",
+        "homeroom": "可用於班級作文、晨光創作或跨領域故事活動。",
+        "subject": "國語文教師可依年級難度安排創意寫作、敘事結構與修訂練習。"
+      }
+    },
     "url": "https://5w1h.smes.tyc.edu.tw/",
     "icon": "Rocket",
     "category": "teaching",
@@ -530,6 +607,30 @@
     "id": 23,
     "title": "點石成金蜂🐝 評語優化網頁版",
     "description": "阿凱老師打造的「點石成金蜂」教師評語生成應用，協助老師快速產出個人化、貼近學生特質的成績單評語，告別罐頭句子。",
+    "audienceFit": {
+      "audiences": [
+        "teacher"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "admin"
+      ],
+      "painPoints": [
+        "student-comment-writing",
+        "student-feedback",
+        "teacher-workload"
+      ],
+      "priority": 93,
+      "reasons": {
+        "teacher": "可依學生特質、語氣與字數需求批次產生可再編修的個人化評語。",
+        "homeroom": "適合班導師在期末集中撰寫全班成績單評語及親師會前回饋。",
+        "admin": "教學行政人員可用於考核評語、評語範本整理與新進教師支持。"
+      }
+    },
     "detailedDescription": "「點石成金蜂🐝 評語優化網頁版」是阿凱老師為國中小教師期末打評語打造的 **React Web App**，部署在 `cagoooo.github.io/comments/`，當前版本 **v2.9.1 持續更新**。與 [#7 LINE Bot 版](/tool/7) 是「同源雙形式」設計 — 同一個 AI 核心，提供 LINE 對話與網頁兩種介面服務不同情境。\n\n## 🎯 核心特色\n\n- 🤖 **Gemini 2.5 Flash API** — 採用 Google 最新模型生成高品質評語，速度與品質兼具\n- 🎨 **多元風格切換** — 一次看「質性描述」「量化分析」「鼓勵激勵」等多種版本，挑最合適的學生面向\n- 📏 **字數與語氣精細調整** — 自訂評語長度與正式程度，期末手冊欄位塞得進去\n- 🏷️ **豐富成語庫分類** — 涵蓋資賦 / 學業 / 品德 / 人際 / 服務等，依使用頻率自動排序\n- 👤 **帳號隔離儲存** — 每位教師獨立保存常用成語紀錄，不會互相干擾\n- ⚛️ **React 18.3 + Firebase 12.7 技術棧** — 桌面完整功能體驗，支援多人協作\n\n## 💡 設計理念\n\n「同源雙形式」是阿凱對 AI 工具的特殊堅持 — 同一個評語 AI 引擎，提供 LINE Bot 與 Web 兩種介面。**沒有一種介面服務所有人**：50+ 歲資深老師偏好 LINE Bot（介面熟悉），30-40 歲中堅老師偏好 Web 版（功能完整），補教安親班用 LINE 即時溝通，學校行政組長用 Web 正式撰寫。兩個版本同源但不互斥，最大化使用者覆蓋。這跟「同源雙部署」（Firebase Hosting + GitHub Pages）不同 — 這是「同源雙介面」（LINE 對話 vs 完整 Web App）。\n\n## 🎒 適合情境\n\n- **期末打評語高峰期（12 月 / 6 月）**：桌面開 #23 → 全班 30 個學生逐一生成 → 多元風格切換挑最適合的 → 字數語氣調整 → 一鍵複製到校務系統\n- **期中校際分享**：用 #23 寫評語 + 在校內群組推薦 [#7 LINE Bot 版](/tool/7) 給其他學校老師手機用\n- **新進老師補救教學**：看 AI 提供的多元風格範本，快速建立寫評語的標準\n- **家長親師會前**：批次生成 5-10 個學生的重點段落，再自己微調潤色\n\n適合國中小所有班導、教學主任、教務組長、補教安親班教師。期末打評語建議**「#23 桌面正式寫 + #7 手機快速修」** 雙形式組合 → 完整覆蓋所有場景。",
     "url": "https://cagoooo.github.io/comments/",
     "icon": "Sparkles",
@@ -606,6 +707,31 @@
     "id": 26,
     "title": "九九乘法表練習器",
     "description": "互動式九九乘法表練習工具",
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "multiplication-practice",
+        "math-fluency",
+        "student-practice"
+      ],
+      "priority": 82,
+      "reasons": {
+        "teacher": "可依乘法段數安排課堂、補救教學或回家練習，讓學生反覆建立九九乘法熟練度。",
+        "student": "可自行選擇乘法範圍連續答題，透過即時音效與結算分數反覆練習。",
+        "homeroom": "適合二、三年級導師安排早自習、數學課與課後補強。",
+        "subject": "數學及課輔教師可用於分段練習、個別補救與熟練度挑戰。"
+      }
+    },
     "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E4%B9%9D%E4%B9%9D%E4%B9%98%E6%B3%95%E8%A1%A8%E7%B7%B4%E7%BF%92%E5%99%A8?authuser=0",
     "icon": "Calculator",
     "category": "teaching",
@@ -657,6 +783,29 @@
     "id": 29,
     "title": "太陽系探索者",
     "description": "3D 太陽系探索互動學習工具",
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "subject"
+      ],
+      "painPoints": [
+        "science-visualization",
+        "solar-system-learning",
+        "interactive-exploration"
+      ],
+      "priority": 76,
+      "reasons": {
+        "teacher": "可用中文 3D 模型示範行星位置、軌道與速度，將抽象的太陽系概念視覺化。",
+        "student": "可自行旋轉、縮放、切換視角並點選行星資料，進行互動探索與分組報告。",
+        "subject": "國小自然與資訊教師可用於太陽系單元或 Three.js 互動視覺化案例教學。"
+      }
+    },
     "url": "https://www.smes.tyc.edu.tw/smes_html/3d-space.html",
     "icon": "Globe",
     "category": "teaching",
@@ -930,6 +1079,31 @@
     "id": 44,
     "title": "數學加減法練習器",
     "description": "互動式數學加減法練習工具，幫助學生熟練基礎運算能力",
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "addition-subtraction-practice",
+        "math-fluency",
+        "student-practice"
+      ],
+      "priority": 86,
+      "reasons": {
+        "teacher": "可依 10 或 20 以內加減法分級安排課堂、早自習、課輔與補救練習。",
+        "student": "可自行選擇關卡連續答題，透過即時回饋與撒花獎勵熟練基礎運算。",
+        "homeroom": "特別適合一年級導師配合上下學期課程進度安排練習。",
+        "subject": "數學與課輔教師可依能力分組選擇關卡，進行個別補強。"
+      }
+    },
     "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E6%95%B8%E5%AD%B8%E5%8A%A0%E6%B8%9B%E6%B3%95%E7%B7%B4%E7%BF%92%E5%99%A8",
     "icon": "Calculator",
     "category": "teaching",
@@ -1019,6 +1193,31 @@
     "id": 49,
     "title": "教務處寶藏庫",
     "description": "教務處精心彙整的豐富資源平台，集結課程計畫、評量工具、教學表單及行政公告等寶貴資料，是教師備課與行政作業的最佳後盾",
+    "audienceFit": {
+      "audiences": [
+        "teacher"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "admin"
+      ],
+      "departments": [
+        "academic"
+      ],
+      "painPoints": [
+        "academic-administration",
+        "event-information",
+        "school-resource-hub"
+      ],
+      "priority": 70,
+      "reasons": {
+        "teacher": "可集中查詢校內教務活動、比賽、場地與名單調查資訊，減少散落公告與重複詢問。",
+        "admin": "適合國小教務行政人員維護學期事件看板、調查表與校務公開資訊。",
+        "academic": "可作為教務處彙整課程活動、競賽、榮譽榜及教師所需表單的統一入口。"
+      }
+    },
     "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/academic/",
     "icon": "FolderOpen",
     "category": "teaching",
@@ -1106,6 +1305,26 @@
     "id": 54,
     "title": "臉盲教師救星 - 識生學坊",
     "description": "專為教師設計的學生辨識訓練工坊透過遊戲化測驗強化對學生面孔的記憶。",
+    "audienceFit": {
+      "audiences": [
+        "teacher"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-recognition",
+        "name-learning",
+        "teacher-student-rapport"
+      ],
+      "priority": 88,
+      "reasons": {
+        "teacher": "可用照片、姓名、記憶特徵與遊戲化測驗加速記熟學生，改善新學期師生互動。",
+        "homeroom": "新接班導師可在開學前後練習班級學生姓名與面孔，快速建立信任。",
+        "subject": "跨班、跨年級授課的科任教師可分班反覆特訓，降低叫錯學生姓名的情況。"
+      }
+    },
     "url": "https://cagoooo.github.io/recognize/",
     "icon": "ScanFace",
     "category": "teaching",
@@ -1200,6 +1419,20 @@
     "id": 58,
     "title": "教師數位備課教案小幫手",
     "description": "專為老師設計的 AI 數位備課工具，能快速生成優質教案與教學活動設計，大幅節省行政與備課時間。",
+    "audienceFit": {
+      "audiences": [
+        "teacher"
+      ],
+      "painPoints": [
+        "lesson-planning",
+        "curriculum-alignment",
+        "document-generation"
+      ],
+      "priority": 91,
+      "reasons": {
+        "teacher": "可依十二年國教架構快速產生含核心素養、教學活動、多元評量與議題融入的完整教案，適用各學段與職務的備課及送審需求。"
+      }
+    },
     "detailedDescription": "「十二年國教教案生成器 (Lesson Plan Generator)」是阿凱老師**用 Python Flask 寫的**（跟其他大多 Node 工具不同！）AI 教案生成系統，解決 108 課綱「**寫一份完整教案 2-3 小時手寫、一學期 18 個單元共 36 小時**」的備課壓力。\n\n## 🎯 核心特色\n\n- 🤖 **Gemini 1.5 Flash 一鍵生成 20 項目完整教案** — 核心素養（A1 身心素質 / A2 系統思考⋯）+ 學習重點（學習表現 + 學習內容）+ 教學活動（引起動機 → 發展 → 綜合）+ 議題融入 + 多元評量\n- 📄 **python-docx Word 一鍵下載** — 業界標準 Word 生成套件（比 Node 版穩定），渲染標準 `.docx` 格式\n- 📧 **Flask-Mail Email 自動發送** — 生成後自動格式化並寄送到指定信箱，方便存檔與分享\n- 🇹🇼 **十二年國教完全適配** — 詞彙與邏輯符合台灣教育架構，**不是直接套通用教案模板**\n\n## 💡 設計理念\n\n技術棧：**Python / Flask + Google Gemini API + python-docx + Flask-Mail + HTML / Vanilla CSS / JavaScript**。部署因為有 Flask 後端**不能用 GitHub Pages**，要用 Render.com / Google Cloud Run / Railway.app。**「用對工具是工程師的修養」** — Python 在「生 Word 文件 + Email + AI」工作流上有先天優勢。⚠️ README 寫 `gemini-1.5-flash` 已在 2024 下半被 Google 棄用，建議升級到 `gemini-2.0-flash` 或 `gemini-2.5-flash`（若仍跑得起來可能是 Google grace period）。\n\n## 🎒 適合情境\n\n阿凱教案 / 課程計畫家族：\n- **#58 教案生成器（本工具）** — 單元教案 20 項目，任何學科老師\n- [#88 國中課程計畫 AI 審查](/tool/88) — 國中整學期計畫送審\n- [#78 國小課程計畫 AI 審查](/tool/78) — 國小整學期計畫送審\n- [#8 12 年教案有 14（LINE Bot）](/tool/8) — 加 LINE 好友找現成教案\n\n適合新進老師（學寫教案）、資深老師量產（每單元省 1.5 小時）、校際分享 / 觀課（Email 自動寄送）、送教育局 / 督學訪視（確保 20 項目齊備）。也適合想看「**Python Flask + Gemini + python-docx**」案例的開發者。MIT 授權。",
     "url": "https://cagoooo.github.io/prepare/",
     "icon": "Wand2",
@@ -1376,6 +1609,30 @@
     "id": 64,
     "title": "簡譜節拍節奏大師",
     "description": "學習簡譜與節奏的互動學習工具，幫助初學者輕鬆掌握音樂節拍與旋律。",
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "subject"
+      ],
+      "painPoints": [
+        "rhythm-practice",
+        "music-notation",
+        "student-engagement"
+      ],
+      "priority": 78,
+      "reasons": {
+        "teacher": "可用四段難度與即時判定設計簡譜、節拍、直笛或音樂社團的課堂練習。",
+        "student": "可透過 1 至 7 按鍵、連擊與最高分反覆練習簡譜音高及節奏反應。",
+        "subject": "音樂與樂器指導教師可依程度安排暖身、分級挑戰及節奏訓練。"
+      }
+    },
     "detailedDescription": "「簡譜節拍師 Rhythm Beat Master」是阿凱老師為國小音樂課簡譜節奏訓練打造的 **太鼓達人風格節奏遊戲**，部署在 `cagoooo.github.io/music/`，當前 **v2.6** UI/UX 視覺升級。\n\n## 🎯 核心特色\n\n- 🎮 **7 鍵 Do Re Mi Fa Sol La Si 玩法** — 1~7 對應七音，音符從右往左捲動，在判定線（菱形光柱）按下對應數字鍵\n- ⭐ **三種判定：PERFECT（金色）/ GOOD（綠色）/ MISS（紅色）+ COMBO 連擊** — 太鼓達人的爽感、學生愛不釋手\n- 🎯 **4 段難度調整** — 初學 / 一般 / 高手 / 地獄，改變 Perfect / Good 判定視窗\n- 🎵 **Web Audio API 即時合成背景旋律**（神細節）— 不放 mp3、單檔即用、可程式控制音高時長、跟倒數計時同步啟動 0 延遲、iOS Safari 也能跑\n- 💾 **LocalStorage 最高分** — 每首歌 × 每個難度分別記錄，選曲卡片顯示 PB 徽章\n- 📱 **觸控虛擬按鍵 + 多指同時觸控** — 手機平板都能玩\n- 📦 **ES Module 模組化重構** — `game.js` / `input.js` / `index.js` 拆分，純前端無 React/Vue\n\n## 💡 設計理念\n\n音樂課抓不到節奏是老師最痛的點 — 拍手節奏太抽象、節拍器看不到、老師打節拍學生看老師沒看譜、商業節奏遊戲（太鼓達人）沒有簡譜版。阿凱反向：**太鼓達人 × 簡譜 = 7 鍵 Do Re Mi 節奏遊戲**。為什麼用 Web Audio API 合成而不放 mp3？載入快、單檔即用、可程式控制、0 延遲同步 — 跟 [#33 讓聲音具現化吧](/tool/33) 與 [#26 九九乘法大冒險](/tool/26) 是「**Web Audio API 三件套**」案例，**用對工具是工程師的修養**（阿凱多次驗證）。\n\n## 🎒 適合情境\n\n- **音樂課節奏訓練單元（4 節課）**：第 1 節初學 → 第 2 節一般 → 第 3 節高手 → 第 4 節地獄級 PK\n- **直笛課暖身**：上直笛課前 10 分鐘玩 #64 建立 1234567 鍵盤反應，接著吹直笛更順\n- **音樂社 / 直笛社 / 烏克麗麗社**：自由時間看誰連擊最高\n- **家庭親子假日**：「昨天連擊 50，今天破紀錄」變家庭遊戲\n\n適合國中小音樂課老師、直笛 / 烏克麗麗 / 鋼琴指導老師、音樂社團指導、想看 Web Audio API + 太鼓達人案例的開發者。打開選「初學」→ 跟著音符按 1234567 → 看 PERFECT 金光連擊 → 比商業節奏遊戲免費 + 中文友善。搭配 [#41 阿凱彈唱之夜](/tool/41) 與 [#50 童樂學園節奏達人](/tool/50) 是完整音樂遊戲化套組。",
     "url": "https://cagoooo.github.io/music/",
     "icon": "Music",
@@ -1394,6 +1651,22 @@
     "id": 65,
     "title": "AI 影片創作與教學整合資源",
     "description": "阿凱老師整理的 AI 影片創作教學資源中心，串接 ChatGPT 寫腳本 → Grok 動圖化 → Canva 剪輯的三步驟工作流，內建 12+ 範例影片合集。",
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "painPoints": [
+        "ai-video-workflow",
+        "media-creation",
+        "tool-discovery"
+      ],
+      "priority": 73,
+      "reasons": {
+        "teacher": "可用三步驟工作流、操作指南與作品範例規劃 AI 影片課程或自主學習任務。",
+        "student": "可依腳本、動畫化與剪輯路徑自主選擇工具，參考範例完成 AI 影片作品。"
+      }
+    },
     "detailedDescription": "「AI Creator Hub 影片創作與教學整合資源」是阿凱老師為老師與學生整理的 **AI 影片創作教學入口頁**，不是另一個 AI 工具，而是把 ChatGPT / Grok / Sora / Runway / Pika / Hailuo / Canva / 剪映 / CapCut / NotebookLM / Padlet 等碎片化工具串成一條清晰工作流路徑圖。\n\n## 🎯 核心特色\n\n- 🎬 **三步驟工作流** — ChatGPT 寫腳本與文案 → Grok 把靜態圖片動畫化 → Canva / 剪映 拖拉式剪輯後製\n- 🔗 **官方工具快速連結** — Canva、Grok、ChatGPT 一鍵直達，含清楚操作指南\n- 📺 **12+ 部 YouTube 創意作品範例合集** — 可收合介面 ▶️「AI 影片創作範例合集」，老師依需求展開觀摩\n- 🎨 **進階搭配建議** — NotebookLM 知識圖卡、Padlet 分享作品\n- 🚀 **EZPage 部署** — README 寫「Deployed by EZPage」，純前端教學資源彙整頁，沒有特殊後端\n\n## 💡 設計理念\n\n部署在 `cagoooo.github.io/Grok-Canva/`，repo `cagoooo/Grok-Canva`。跟 [#66 Sora AI 旅遊全記錄教學網](/tool/66) / [#94 封面接故事](/tool/94) 組成 AI 影片三件套：**#65 是「為什麼用 + 工作流入口」、#66 是「用 Sora（進階選擇）」、#94 是「動手做（MV 封面 + AI 分鏡 + 瀏覽器內 ffmpeg.wasm 串成短片）」** — 完整 AI 影片教學鏈。對教育系最大意義：老師最痛的不是學會某個工具，而是「**這麼多 AI 工具到底怎麼串起來**」— #65 提供路徑圖。\n\n## 🎒 適合情境\n\n藝術與人文「AI 影片創作」單元 6 節課設計：第 1 節開 #65 看 12+ 範例引起動機 → 第 2 節分組照三步驟 → 第 3 節 ChatGPT 寫腳本 → 第 4 節 Grok 動畫化 → 第 5 節 Canva 剪輯 → 第 6 節成果發表 + 反思。自主學習計畫指導老師可讓學生看 #65 自己挑工具學，不用逐步帶。配對 [#86 TieTu 3D Q版貼圖](/tool/86) 同款 AI 圖像生成、[#94 封面接故事](/tool/94) 實作工具。**下次帶 AI 影片創作 — 先給學生看 12+ 範例合集 → 再分組照三步驟做**。",
     "url": "https://cagoooo.github.io/Grok-Canva/",
     "icon": "Clapperboard",
@@ -1411,6 +1684,22 @@
     "id": 66,
     "title": "Sora AI 旅遊全記錄教學網",
     "description": "探索 Sora AI 與旅遊記錄的完美結合，掌握如何利用 AI 技術捕捉、編輯並分享您的旅遊點滴，打造個人專屬的高質感全記錄教學平台。",
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "painPoints": [
+        "ai-video-learning",
+        "prompt-writing",
+        "travel-storytelling"
+      ],
+      "priority": 68,
+      "reasons": {
+        "teacher": "可用旅遊主題、提示詞結構與影像敘事案例設計 AI 影片、家鄉文化或媒體創作課程。",
+        "student": "可從熟悉的旅行經驗練習描述主體、場景、鏡頭與情緒，規劃 AI 旅遊短片。"
+      }
+    },
     "detailedDescription": "「Sora AI 旅遊全記錄教學網」是阿凱老師針對 **OpenAI Sora 影片生成工具**做的旅遊主題教學資源庫，把「Sora 是新世代 AI 影片代表，但學生不知道怎麼用」這個鴻溝補上。\n\n## 🎯 核心特色\n\n- ✈️ **旅遊主題切入** — 不是泛泛 Sora 教學，聚焦旅行紀錄場景（每個學生都有出去玩的經驗）\n- ✍️ **提示詞撰寫技巧** — 從「初步的提示詞」到「**後期的高細節生成**」完整教學\n- 🎞️ **零散素材 → 電影質感全記錄短片** — 把家族旅遊 / 校外教學 / 畢業旅行素材**轉化為具備電影質感的全記錄短片**\n- 📖 **敘事節奏 + 視覺呈現雙軸優化** — 透過 AI 工具優化\n- 🤖 **OpenAI 官方 Sora（文字 → 影片）** — 一段 prompt 生成 60 秒以上電影級短片（物理運動 / 鏡頭運動 / 角色一致性都自動處理）\n\n## 💡 設計理念\n\n**EZPage 部署**（README 寫「Deployed by EZPage」），純前端教學資源頁，**沒有後端**，部署 `cagoooo.github.io/Sora/`。對國中小教學「**旅遊**」比抽象的「AI 影片創作」更有切入點 — 「**用 AI 把我的旅遊變成電影**」聽起來夢幻。Sora prompt 關鍵：明確主體（誰 / 什麼）+ 場景細節（時間 / 地點）+ 鏡頭運動（推進 / 拉遠 / 旋轉）+ 質感風格 + 情緒氛圍。\n\n## 🎒 適合情境\n\n阿凱 AI 影片三件套：\n- [#65 AI Creator Hub](/tool/65) — 「**為什麼用**」三步驟工作流入口（ChatGPT → Grok → Canva）\n- **#66 Sora 旅遊（本工具）** — 「**用 Sora**」OpenAI 專屬進階\n- [#94 封面接故事](/tool/94) — 「**動手做**」MV 封面 → AI 分鏡 → 串短片\n\n適合社會課「家鄉文化」單元（用手機拍家鄉景物 → Sora prompt 轉「家鄉影像詩」）、畢業旅行回顧（全班合作每人寫 1 個 Sora prompt 拼成畢旅紀錄，畢業典禮播放）、影音社 / 媒體社團指導（比商業 prompt 教學課程便宜，**免費**）。建議先看 [#65 三步驟入門](/tool/65) 再深入 Sora。MIT 授權。",
     "url": "https://cagoooo.github.io/Sora/",
     "icon": "Plane",
@@ -1701,6 +1990,20 @@
     "id": 76,
     "title": "WebSlide Pro 簡報播放器",
     "description": "專業流暢的網頁版簡報播放器，支援多種互動功能，無需安裝軟體即可隨時隨地開啟完美簡報。",
+    "audienceFit": {
+      "audiences": [
+        "teacher"
+      ],
+      "painPoints": [
+        "presentation-playback",
+        "format-compatibility",
+        "classroom-presentation"
+      ],
+      "priority": 80,
+      "reasons": {
+        "teacher": "可直接播放 ZIP 網頁簡報或 PDF，利用預載、轉場與全螢幕功能降低跨裝置展示出錯，普遍適用各學段教學、研習與行政報告。"
+      }
+    },
     "detailedDescription": "「WebSlide Pro 簡報播放器」是阿凱老師**早期用 Gemini 寫程式 + 嵌進 Google Sites 的隱藏自製神器** — 800+ 行 JS/CSS/HTML 單檔 web app，整份程式碼活在 Google Sites 後台的 `data-code` 屬性內（GitHub 上找不到），由 Google sandbox iframe 執行。\n\n## 🎯 核心特色\n\n- 📦 **雙格式輸入** — 上傳 `.zip`（內含 HTML 簡報）或 `.pdf`，**PDF.js 3.11.174** 自動把每頁 render 成圖片包進 iframe\n- 🎬 **17 種電影級 3D 轉場動畫** — fade / slide（4 向）/ zoom / flip / cube / blurZoom / spin⋯ 程式碼 line 211-260 全列出 keyframes，**特效開關 toggle**（btn-fx）一鍵切純翻頁 vs 動畫\n- 🎞️ **雙 iframe `frame-a` / `frame-b` 無閃爍翻頁** — 輪流預載 + `sandbox=\"allow-scripts allow-same-origin\"` 安全限制 → 翻頁如電影般滑順\n- 👆 **左右 1/6 寬點擊翻頁區** — 演講時手點螢幕邊緣換頁，不用簡報筆\n- 🖥️ **全螢幕模式 + `.fake-fullscreen` CSS fallback** — **不依賴瀏覽器 fullscreen API**（避開相容性坑）\n- 📤 **jsPDF 2.5.1 匯出 PDF** — 演講後留檔給觀課老師\n- 📊 **進度 modal + 頁碼 HUD** — 處理 PDF / ZIP 顯示百分比 + spinner\n\n## 💡 設計理念\n\n純前端單檔 HTML web app **完全自寫程式碼**（不是 Glide / Bolt / Lovable / EZPage 等 no-code 平台產物）：**Tailwind CSS（CDN）+ JSZip 3.10.1 + jsPDF 2.5.1 + PDF.js 3.11.174 + Lucide Icons + Noto Sans TC**。**部署方式特殊**：不在 GitHub，而是嵌在 `sites.google.com/mail2.smes.tyc.edu.tw/swissknife/webslide-簡報播放器` 內 — 阿凱說「**這也是我自製的，只是當時還不熟 GitHub 所以建在其他平台**」。用 PPT 跨機器 50% 出包（字型跑掉 / 影片不能播 / 動畫亂跳 / 超連結失效），用 #76 是 **0% 出包**。\n\n## 🎒 適合情境\n\n- 要上公開課 / 教甄面試 / 校外研習的老師（**完全沒帶 USB 也能播**）\n- 行政人員（校務會議、研習報告）\n- 補習班 / 安親班教師\n- 想做出「老派 PPT 沒有的互動」的演講者\n\n配對 [#81 國小資訊科技教學駕駛艙](/tool/81) 入口網把所有簡報集中、[#11 剛好學課堂互動](/tool/11) 簡報中插入即時投票、[#27 swissknife 許願池](/tool/27) 看阿凱完整 13 個 Google Sites Embedded 工具集。把上週做的 PPT 丟進去 → 5 分鐘變網頁版 → **再也不怕字跑掉**。",
     "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/webslide-%E7%B0%A1%E5%A0%B1%E6%92%AD%E6%94%BE%E5%99%A8?authuser=0",
     "icon": "Presentation",
@@ -1845,6 +2148,29 @@
     "id": 81,
     "title": "國小資訊科技教學駕駛艙入口網",
     "description": "阿凱老師打造的國小資訊科技課全學期教學駕駛艙，三、五、六年級十三大互動教學艙，從電腦入門、Scratch、micro:bit，到 AI 創作與媒體識讀，一站式翻轉資訊課堂。",
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "subject"
+      ],
+      "painPoints": [
+        "it-curriculum-hub",
+        "lesson-navigation",
+        "digital-literacy"
+      ],
+      "priority": 96,
+      "reasons": {
+        "teacher": "可從單一入口帶領國小三至六年級資訊科技課程，集中簡報、影片、互動關卡與評量。",
+        "student": "可依年級與單元進入完整駕駛艙，自學閱讀、觀看示範、操作關卡並完成評量。",
+        "subject": "專為國小資訊科技科任教師整學期授課、單元切換與缺課補學設計。"
+      }
+    },
     "detailedDescription": "「IT COCKPIT｜國小資訊科技教學駕駛艙」是阿凱老師為 **石門國小三到六年級完整資訊科技課程** 打造的 **25 個獨立駕駛艙 × 飛行儀表板入口網**，部署在 `cagoooo.github.io/it-cockpit/`，5 週累積 **84 個 commits**。Footer Powered by **NOTEBOOKLM × CLAUDE CODE**，不是入口連結牆 — 是**整個三到六年級資訊課程系統**。\n\n## 🎯 核心特色\n\n- 🛩️ **飛行員儀表板首頁** — `COCKPIT.HORIZON · ALT 2026 / HDG NW / SPD · 25 · FLIGHT PLAN · MISSIONS 25 / GRADES 4 / SUBJECTS 12 · 🔴 LIVE`，按 ← / → 切換、Esc 兩段式退出，真的是飛行員操作邏輯\n- 📚 **25 個駕駛艙覆蓋 G3-G6 全年級** — 三年級資訊基礎 4 個（電腦入門 / Win98 風 Windows / 英打 / PaGamO）、四年級 AI 創作入門 3 個（Canva / PhotoCap / PaGamO 桃園版）、五年級程式設計 5 個（數位安全 / Scratch / 水果接接樂 / Inkscape Risograph 雙色印刷風 / micro:bit Circuit-glow 電路霓光風）、六年級 AI 與媒體素養 12 個（Gemini × Canva 影片 / AI 音樂 / AI 中文生圖 196,608 種 prompt 組合 / Nano Banana 2 故事生圖 / **AI 假影片偵探社** / **假訊息偵探社** / Gemini PARTS 引導學習 / AR/VR 穿戴 / 麥昆小車 / Blogger × AI / Suno 班級神曲 / 痞客邦 Scrapbook 手帳風）+ 教師研習 A2 PaGamO（中央大學師培演講）\n- 🎨 **每單元獨立視覺主題梗** — Retro Win98 / Circuit-glow / Risograph / Scrapbook / 暖橘奶油，**不是套模板** — 讓學生視覺記憶綁定單元\n- 📊 **演講簡報模式 lecture-slides.html** — 23 個單元一次升級加上，NotebookLM 風 demo 模式給老師上課切換\n- 🚀 **PWA 自製 sw.js 68 行** — network-first HTML + cache-first 靜態 + 前景頁面 5 分鐘 polling 一次跳「🚀 偵測到新版」toast 自動 reload\n- 📝 **CACHE_VERSION 命名梗** — `'2026-05-19-microbit-fix'` 直白記錄每次 bump 原因\n- 📦 **零框架 / 零 build step / 零 LLM API / 零 Firebase** — 純 HTML + vanilla JS（手寫 `el()` createElement helper）+ 內嵌 `<style>` CSS + Google Fonts（Noto Sans TC + Inter Tight + JetBrains Mono 駕駛艙等寬字體）\n\n## 💡 設計理念\n\n108 課綱強調「學生主導 + 教師引導 + 多元素養」。傳統做法：老師發紙本講義、連到不同網站上課、學生記不住網址。阿凱反向 — **每個單元 = 一個獨立駕駛艙**，學生掃進去就能看 NotebookLM 投影片自學閱讀、看 YouTube 嵌入影片、玩 Canvas 互動關卡（每單元 4-6 個 STAGE）、寫評量題（每單元 8-18 題）、老師用演講簡報模式上課。**「**為什麼這樣設計**」**：每個駕駛艙獨立視覺主題不是炫技 — 是讓學生視覺記憶綁定單元，回家被家長問「今天上什麼」會記得「就那個霓虹電路的」「就那個 Win98 的」。Footer 學校網域 `smes.tyc.edu.tw/?account=ipad`（**石門國小**，有 commit 記錄修正過誤寫的學校名）。\n\n## 🎒 適合情境\n\n石門國小 5 年級 micro:bit 單元實測：學生記網址從 8 個（散落各平台）降到 **1 個**、老師上課切換工具從 5-6 次降到 **0 次**、缺課學生回家補課從找不到資料變成「網址打開就完整補完」。\n\n- **國小資訊科技老師** — 直接 fork 用或當教學範本\n- **教務組長 / 學年主任** — 看完整課程設計\n- **教師研習講師** — 演講簡報模式即用\n- **校長 / 主任** — 看 108 課綱資訊融入完整實作\n- **教育系研究者** — 一線老師如何用 NotebookLM × Claude Code 打造課程系統\n\n第一次推薦從六年級「**AI 假影片偵探社**」進（最熱門也最具話題性的單元），看完你會理解「教學駕駛艙」這個隱喻有多到位。搭配 [#100 工具索引神器](/tool/100)（找其他工具）+ [#80 教師會議報告集合](/tool/80) + [#11 剛好學課堂互動](/tool/11)（駕駛艙內可嵌入即時投票）。",
     "url": "https://cagoooo.github.io/it-cockpit/",
     "icon": "LayoutDashboard",
@@ -2085,6 +2411,29 @@
     "id": 90,
     "title": "繪本 → Google表單 一條龍工作坊",
     "description": "阿凱老師打造的整合式 AI 教學工作坊，把 Gemini 生成的繪本圖文、Google Doc 整理、Apps Script 表單產生、QR Code 派發、NotebookLM 學習資源一條龍串成六步驟，5 分鐘把繪本變成可派發的互動表單。",
+    "audienceFit": {
+      "audiences": [
+        "teacher"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "picture-book-workflow",
+        "form-creation",
+        "reading-activities"
+      ],
+      "priority": 78,
+      "reasons": {
+        "teacher": "可把 AI 繪本、Google 文件、表單、Apps Script 與 QR Code 串成可派發的閱讀活動。",
+        "homeroom": "可快速製作班級閱讀理解、親子共讀與主題活動表單。",
+        "subject": "語文、閱讀與資訊教師可依六步驟建立圖文教材、測驗及數位派發流程。"
+      }
+    },
     "detailedDescription": "「📚 繪本 → Google 表單 一條龍工作坊」（v0.6.7）是阿凱老師為國小老師打造的 **整合式 AI 教學工作坊平台**，把「Gemini 畫繪本 → Google Doc → Apps Script → Google 表單 → QR Code 給學生」**6 個服務 30+ 分鐘的工作流收進一個網頁 5 分鐘搞定**。\n\n## 🎯 核心特色\n\n- 📖 **6 步驟一條龍** — Gemini 畫繪本 → Google Doc 整理 → 發布共用 → 圖片網址轉換（Drive 直連格式）→ Apps Script 自動建表單 → QR Code 派發\n- 🎨 **視覺化編輯模式** — 從圖片直接拼頁產出 Apps Script，省去 Gemini Canvas 步驟\n- 🔗 **Drive 圖片 URL 直連轉換** — 自動把 `id=xxx` → `uc?export=view&id=xxx` 直連格式\n- 💻 **動態生成 Apps Script 程式碼** — 教老師如何貼上，**不用學 Apps Script**\n- 📲 **QR Code 自動生成發給學生** — 表單 URL → QR 圖片\n- 🚀 **零安裝 + 單檔網頁 + 離線可用** — 開瀏覽器即用\n- 📚 **5 分鐘上手指南** — `cagoooo.github.io/storytell/快速上手.html` 持續迭代中\n\n## 💡 設計理念\n\n單檔網頁推測純前端 + 整合 Gemini API + Google Drive API + Apps Script API，部署在 `cagoooo.github.io/storytell/`。阿凱「**串接的工程**」比寫一個獨立工具難 10 倍 — 要解決 AI 圖片下載 + 嵌入 / OAuth 權限設定 / Drive 直連格式 / 動態生成 Apps Script / Google 表單 API 自動建立 / QR 生成等多個技術挑戰。\n\n## 🎒 適合情境\n\n國小閱讀理解單元（老師用 Gemini 畫 5 頁繪本如「小貓上學記」→ #90 一條龍 → QR Code 貼黑板 → 學生掃 QR 看繪本圖 + 答題）、期末閱讀競賽（快速做 10 份不同主題）、家長親子閱讀活動、校內閱讀推動（圖書館每月主題繪本配套測驗）。屬於阿凱「AI 創作工具家族」：[#65 AI Creator Hub](/tool/65)（影片三步驟）、[#94 封面接故事](/tool/94)（MV 創作）、**#90 圖文 + 測驗**、[#86 TieTu 3D Q版貼圖](/tool/86)（圖像批次）。下次做繪本測驗 30 分鐘 → 5 分鐘，老師備課時間救回來。",
     "url": "https://cagoooo.github.io/storytell/",
     "icon": "BookOpen",
@@ -2155,6 +2504,32 @@
     "id": 92,
     "title": "5W1H 靈感發射器 PRO版",
     "description": "桃園市石門國小資訊組打造、阿凱老師上架的 AI 創意思考小幫手 PRO 版，用 5W1H（What／Who／When／Where／Why／How）框架幫老師結構化發想教學設計、改寫學生評語，還能建立專屬的客製化思考助手。",
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "creative-writing",
+        "idea-generation",
+        "writing-scaffolding"
+      ],
+      "priority": 88,
+      "reasons": {
+        "teacher": "可依年級難度用 5W1H、風格、鎖定與一致性檢查建立可操作的寫作鷹架。",
+        "student": "可與 AI 反覆調整六項故事元素、避開重複題材並合成可分享的完整作品。",
+        "homeroom": "可安排班級作文、晨光創作、成果分享或跨領域故事活動。",
+        "subject": "國語文教師可用於敘事結構、創意發想、修訂與寫作測驗練習。"
+      }
+    },
     "detailedDescription": "「5W1H 靈感發射器 PRO（Aura）」是阿凱老師為國小中高年級作文課打造的 **AI 創意寫作神器**，部署在 `cagoooo.github.io/Aura/`，用 Next.js 15.2.3 (App Router) + Firebase Cloud Functions v2 + Genkit 1.8 + `gemini-2.0-flash` 打造。和 [#13 5W1H 靈感發射器](/tool/13) 是**同 repo 雙部署**（GitHub Pages PRO 版 vs Firebase Hosting 學校網域版）。\n\n## 🎯 核心特色\n\n- 🎲 **6 格同時呈現任意順序操作**（不是分步引導！）— Who / What / When / Where / Why / How 同時呈現，每張卡片可手動編輯 / 個別隨機 / 🔒 鎖定（鎖定後「全部隨機」「潤飾」都跳過該欄），**進站自動撒花**為 6 格各跑一次 AI 不會看到空白卡片發呆\n- 🎬 **四顆主操作按鈕 = 4 條獨立 Genkit flow** — 全部隨機 / 潤飾語法（在地化台灣用語）/ 檢查一致性（找邏輯打架）/ 合成內容（**整合成短篇故事 + 自動下標題**不是輸出靈感清單）\n- 🚫 **Prompt 防 LLM 爛梗**（最神細節）— prompt 內**列名禁止**「外星人 / 時間旅行 / AI / 預言 / 神祇」這些 LLM 最愛吐的科幻爛梗，強迫探索「日常微妙、心理、荒謬、職人題材、藝術音樂飲食」\n- 🔁 **Prompt 防重複機制** — 每次 random 都把 `constants.ts` 預設 10 個範例 + **本次 session 最近 5 次產出**塞進 `existingOptions`，明令「不可改寫、不可像、不可同主題」，**`temperature: 1.0`** 逼極致發散\n- 📖 **6 種故事風格** — 童話 / 武俠 / 科幻 / 推理 / 校園 / 民間故事（**含媽祖、土地公、虎姑婆等台灣在地角色**）+ 自由\n- 🎓 **5 段年級難度** — 低年級（1500 字內、句 10 字內）/ 中年級 / 高年級 / 國中 / auto，每段嚴格規範字數與用詞複雜度\n- 🌟 **永久分享連結 + 名人堂 Discover** — 學生作品有短連結（如 `/Aura/#/s/abcd123456`），TTL 90 天，opt-in 進 Discover 名人堂讓他班同學能看，Firebase Admin SDK + Firestore + 10 字英數短碼\n- 🛡️ **三層防爆** — Cloudflare Turnstile 每次 callable 都驗 token + Gemini `safetySettings` 四類全開 BLOCK_LOW_AND_ABOVE（合成多加 `CIVIC_INTEGRITY`）+ Firestore TTL + `maxInstances: 5`\n- 🔌 **fallback 機制** — AI 被擋或網路爆掉時 fallback 回 constants.ts 預設 10 句，畫面**絕不空白**\n\n## 💡 設計理念\n\n技術棧 Next.js 15 App Router + React 18 + Tailwind 3 + shadcn 靜態匯出 GitHub Pages + Firebase Cloud Functions v2（`asia-east1` / `maxInstances: 5` / `concurrency: 1` / 512MiB）。10:00 開始寫作文 10:30 還在咬筆 — 全班 1/3 學生「老師我不知道要寫什麼」。傳統老師喊「想一想 5W1H」學生還是不會用。#92 反向 — **6 格同時呈現 + AI 自動撒花 + 防 LLM 爛梗 + 強迫日常題材** 把 5W1H 鷹架做成可玩可改可鎖的互動，學生跟 AI 聊 10 分鐘就有滿滿靈感。MIGRATION.md 詳細記錄從 Firebase App Hosting 遷移到 GitHub Pages + Functions 過程，是阿凱「**Firebase Studio 靜態遷移**」最佳實戰。\n\n## 🎒 適合情境\n\n石門國小四年級國語課實測：一節課完成率（200 字）從 60% 拉到 **95%**、段落數從 2.5 段拉到 **4 段**、字數中位數從 180 字飆到 **350 字**、描述細節（5W1H 完整度）從 2/6 項拉到 **5/6 項**、學生「寫作快樂指數」自評從 5/10 拉到 **8/10**。\n\n- **國小中高年級國語老師** — 每週都要上作文\n- **安親班 / 補習班作文班老師** — 一對多教學鷹架\n- **國中國文老師** — 寫作測驗模考\n- **自學家長** — 陪小孩寫作業\n- **想練筆的成人** — 職場寫作也通用\n\n第一次用建議讓學生**「跟 AI 聊 10 分鐘」再開始寫** — 你會看到他們眼睛發亮。搭配 [#13 基礎版](/tool/13)（低年級啟蒙）+ [#4 PIRLS 閱讀理解生成](/tool/4)（讀完文章再寫更有素材）+ [#79 漢語新解](/tool/79)（語文延伸）形成完整寫作鷹架生態。",
     "url": "https://cagoooo.github.io/Aura/",
     "icon": "Lightbulb",
@@ -2319,6 +2694,20 @@
     "id": 99,
     "title": "考試卷生圖 Studio — AI 黑白線稿插圖生成",
     "description": "備課時想加一張剛剛好的學習單插畫？輸入四個欄位（標題、對話、角色、場景），10–20 秒生成兩張 1024×1024 黑白線稿 PNG，列印不吃墨水、可當著色頁、支援中文精準渲染。內建 4 組教學情境範例 + AI Prompt 可複製轉用 ChatGPT / Bing。",
+    "audienceFit": {
+      "audiences": [
+        "teacher"
+      ],
+      "painPoints": [
+        "worksheet-illustration",
+        "assessment-design",
+        "printable-resources"
+      ],
+      "priority": 89,
+      "reasons": {
+        "teacher": "可快速產生省墨、可列印且含中文文字的黑白線稿，普遍適用各學段與職務製作試卷、學習單、簡報及活動素材。"
+      }
+    },
     "detailedDescription": "「考試卷生圖 Studio」是阿凱老師為國小教師打造的 **AI 插圖快速生成工具**，專門解決「試卷需要插圖但找不到合適免費圖、又不想付錢買圖庫」的備課痛點。\n\n## 🎯 核心特色\n\n- 🎨 **純黑白線稿風格** — 1024×1024 PNG，列印超省墨水（校園黑白印表機友善）\n- 📝 **四欄位精準描述** — T 標題（大寫粗體）/ D 對話內容（氣泡）/ C 角色描述（必填）/ S 背景場景\n- 🤖 **OpenAI gpt-image-2 模型** — 中文精準渲染 ✓，每次一鍵生成 2 張任挑\n- 📚 **4 組教學範例** — 點「↑ 載入」直接套用情境題、英文對話、科學觀察、農場場景等預設\n- 🔁 **Prompt 可複製轉用** — 不滿意可把 AI Prompt 複製到 ChatGPT / Bing Image Creator 換引擎再試\n- 🎯 **學生著色頁友善** — 線稿正好給孩子塗色，「考試插圖」秒變「課後著色教具」\n- 💰 **每日免費 5 次（10 張）** — 適合每天備一張試卷的節奏\n\n## 💡 設計理念\n\n黑板 × 工作室主題，仿教室佈告欄風格，跟阿凱其他教學工具視覺一致。生成的圖可直接拖進 Word / Google 文件 / Canva 試卷編排版面，**無浮水印、可商用於校內教學**。\n\n## 🎒 適合情境\n\n英語對話題（兩個小孩在公園聊天）、社會課情境題（市場買賣、博物館參觀）、自然觀察題（昆蟲、植物、實驗器材）、數學應用題的「看圖列式」、生活課的角色扮演對話框、注音識字練習配圖、繪本式作業單等。完全免費、無註冊、無浮水印，純線稿格式上 PowerPoint / Keynote / Canva 都能直接著色換色變主題色。",
     "url": "https://cagoooo.github.io/picture-master/",
     "icon": "Palette",
@@ -2397,6 +2786,20 @@
     "id": 103,
     "title": "AI Agent 的 Web 技能雙引擎 — Playwright × Webwright 一頁讀懂",
     "description": "一頁讀懂 AI Agent 怎麼「看得懂、做得到、做完有回報」地操作網頁！Playwright 負責動手執行、Webwright 負責動腦規劃，兩大引擎合起來才是完整的 Web Agent。含自動填 Google 表單、電子公文自動歸檔等真實自動化情境，阿凱老師用日記體一路帶你從零看懂這兩個關鍵字，松鼠吉祥物 + 大量 emoji 降低技術門檻。",
+    "audienceFit": {
+      "audiences": [
+        "teacher"
+      ],
+      "painPoints": [
+        "ai-agent-literacy",
+        "web-automation",
+        "professional-learning"
+      ],
+      "priority": 60,
+      "reasons": {
+        "teacher": "可用白話案例理解 Playwright 與 Webwright 的分工，作為 AI Agent、網頁自動化與行政流程研習的入門材料。"
+      }
+    },
     "detailedDescription": "「AI Agent 的 Web 技能雙引擎」是阿凱老師做的一頁式科普解說頁，用最白話的方式講清楚 **Playwright** 與 **Webwright** 這兩個讓 AI Agent 能操作網頁的關鍵字，解決「常聽到這些名詞、卻不知道差在哪、到底能幹嘛」的痛點。\n\n## 🎭 Playwright — 動手操作的那台引擎\n\n- 微軟開源的瀏覽器自動化框架\n- 跨瀏覽器（Chromium / Firefox / WebKit）、自動等待、強大元素定位（Locator）\n- 多語言支援（Python / TypeScript / .NET / Java）\n- 一句話：**「你給明確步驟，我精準執行」**\n\n## 🤖 Webwright — 動腦規劃的那台引擎\n\n- 微軟研究院提出的「AI 驅動瀏覽器任務代理框架」\n- 自然語言理解 → 自動拆解任務 → 生成 Playwright 程式 → 執行後自我修正\n- 可擴充成 Agent 技能模組\n- 一句話：**「你說需求，AI 幫你完成」**\n\n## 🧩 為什麼是「雙引擎」\n\n一個負責**動手操作**、一個負責**動腦規劃**，合起來才是完整的 Web Agent —— 任務看得懂、做得到、做完還有回報。\n\n## 📋 真實自動化情境\n\n- ✍️ 自動填寫 Google 表單（只改 `profile.json` 設定檔、不動程式就能擴充欄位）\n- 📂 電子公文自動歸檔（讓 Agent 自動點按、歸檔長官決行的公文）\n- 🛒 電商比價、📊 資料擷取、🏢 企業內部流程與報表自動化\n\n日記體娓娓道來、漸進式向下捲動逐段揭露，松鼠吉祥物與大量 emoji 把硬核技術講得親切好懂。給想入門 AI 網頁自動化的老師、想知道「AI Agent 怎麼幫我做網頁雜事」的人，一頁就看懂兩個關鍵字。",
     "url": "https://cagoooo.github.io/PlayRight/",
     "icon": "Bot",
@@ -2449,6 +2852,31 @@
     "id": 105,
     "title": "臺灣主權 AI 訓練語料庫 × 石門國小 — 把國家級本土語料變成校園教材",
     "description": "國家耗十年、集 265 個機關蒐集的 6 億 tokens 本土語料，從「只拿來餵 AI」變成「師生家長共用的教材庫」。九大教育主題、4,554 筆語料一鍵探索，每筆都標課綱領域與授權來源；還能用自備的免費 Gemini 金鑰，即時生成台語／客語／國語學習單與繪本腳本。數位發展部 × 桃園市龍潭區石門國民小學阿凱老師打造的「鱻本土 AI 共學站」。",
+    "audienceFit": {
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "local-culture-resources",
+        "curriculum-materials",
+        "source-literacy"
+      ],
+      "priority": 88,
+      "reasons": {
+        "teacher": "可依主題、年段、課綱領域與授權狀態查找本土語料，並生成可再審閱的學習單或繪本腳本。",
+        "student": "可探索台灣在地文化與本土語素材，進行來源可追溯的探究學習及 AI 共創。",
+        "homeroom": "可用於班級家鄉探究、交通安全、媒體素養與親子共讀活動。",
+        "subject": "語文、社會與資訊教師可依課綱領域選材，帶領本土語、資料來源與 AI 素養學習。"
+      }
+    },
     "detailedDescription": "「臺灣主權 AI 訓練語料庫 × 石門國小」是阿凱老師打造的 **「鱻本土 AI 共學站」**，回答一個很大的問題：**國家花十年、集 265 個機關蒐集的 6 億 tokens 本土語料，除了拿去訓練 AI 模型，還能為校園做什麼？** 答案是——把它變成「師生家長都能用」的本土學習平台。\n\n## 🐟 它在做什麼\n\n這是數位發展部「臺灣主權 AI」語料庫的**教育轉化版**。原始語料庫是給 AI 訓練用的冷資料，阿凱老師把它重新編排成**九大國小教育主題**（海洋、本土語、在地文化、交通安全、媒體素養⋯），每一筆語料都標上**建議年段、課綱領域議題、授權狀態與政府來源**，讓老師備課時「點得到、用得懂、查得到出處」。\n\n## 📊 語料規模\n\n- **4,554 筆**語料集，可全站搜尋\n- **265 個**提供機關\n- **6 億+ tokens** 本土文本\n- **9 大**國小教育主題分類\n\n## 👨‍🏫👧👨‍👩‍👧 三方共學設計\n\n- **老師**：備課素材庫快速篩選、AI 生成教材（繪本、台語朗讀稿、探究提問）、課綱對應標示、跨校共享\n- **學生**：家鄉探究式自主學習、本土語闖關、與 AI 共創在地故事繪本、培養資訊素養\n- **家長**：親子共讀素材、交安與媒體素養延伸、學習可視化、政府素材來源可追溯\n\n## 🤖 兩階段功能\n\n**階段一・語料導覽站（現況可用）**：九大主題互動探索器、4,554 筆全站搜尋、開放／需申請標示、課綱領域與議題對應。\n\n**階段二・本土 AI 教學助理（進行中）**：\n- **問 AI** — 依「主題／年段／領域」提問，從 4,554 筆台灣語料檢索並標註引用來源\n- **生成學習單** — 自動產出台語／客語／國語版本，分低中高年級，可調 4–8 頁\n- **生成繪本腳本** — 輸入領域與課綱單元，自動產出繪本內容結構\n- **語料配對（免金鑰）** — 輸入課綱單元或關鍵字，立即檢索相關素材\n\n## 🔐 隱私與授權\n\n- AI 功能採**使用者自備免費 Gemini 金鑰**，資料僅存瀏覽器 localStorage，**不上傳、不共用**（免費額度約每天 1,500 次）\n- **開放資料約 1,154 筆**：加註來源即可用於教學與公開分享\n- **需申請約 3,400 筆**：用於 AI 訓練與校本應用，引用前先確認授權範圍\n- AI 生成內容僅供參考，請老師審閱後再使用\n\n## 🧰 技術特色\n\n純靜態 HTML + GitHub Pages 部署、前端直連 Gemini API（零後端、零成本）、九大主題互動探索器、全站語料搜尋。**主辦：數位發展部、桃園市龍潭區石門國民小學（鱻魚特色學園）；核心開發：阿凱老師。** 讓國家級的本土語料，真正走進台灣的教室。",
     "url": "https://cagoooo.github.io/taic-edu/",
     "icon": "Brain",
