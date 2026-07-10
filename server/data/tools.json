@@ -26,6 +26,17 @@
   },
   {
     "id": 2,
+    "audienceFit": {
+      "audiences": ["teacher"],
+      "teacherRoles": ["admin"],
+      "departments": ["academic", "student-affairs", "general-affairs", "counseling", "other"],
+      "painPoints": ["administration", "communication", "meeting-productivity"],
+      "priority": 92,
+      "reasons": {
+        "teacher": "集中校內公告與行事，減少跨處室資訊落差。",
+        "admin": "整合跨處室行程與提醒，讓行政協調更有共同版本。"
+      }
+    },
     "title": "行政業務協調系統",
     "description": "阿凱老師打造的學校行政業務協調系統，整合共用日曆、跨部門行程管理與 LINE 推播提醒，讓教務、學務、總務、輔導各處室一站搞定協作排程。",
     "detailedDescription": "「行政業務協調系統」是阿凱老師為石門國小行政團隊打造的 **校內公告與重要行事協調平台**，掛在 `cagoooo/staff` repo，部署在 `cagoooo.github.io/staff/`，專門解決「處室訊息靠 LINE 散布被洗版、紙本公告沒人看、行事各人版本不同」的痛點。\n\n## 🎯 核心特色\n\n- 🔐 **帳號登入 / 建立帳號** — Firebase Authentication，新進老師 / 新組長首次到任即可建檔，集中管理權限\n- 📢 **最新公告集中區** — 取代 LINE 群組散布，公告再也不會被早安貼圖洗掉\n- ⭐ **重要行事標註** — 全校節點一次標清楚，不會「OO 主任你跟我說過了嗎？沒有啊？」\n- 🏫 **校長室 / 教務 / 學務 / 總務 / 輔導五大處室共用** — 跨處室同步同一份事實版本\n- 🪶 **純前端輕量化** — 無 React/Vue bundle，Tailwind CDN + 純 HTML 39.7 KB，老電腦也跑得動\n- 📦 **GitHub Pages 免費部署** — git push 自動上線，學校不用花錢養伺服器\n\n## 💡 設計理念\n\n大家把「對外資訊」（學校網站、Google Sites）數位化得很好，**對內溝通**反而還停留在 LINE 與紙本。#2 反向專攻「校內」這條冷門但痛點極深的路 — 用 Firebase Auth + 公告 + 行事三件套，把處室之間「資訊不對稱」這個老問題一次解掉。和 [#15 領域共備 GO](/tool/15)（教師社群會議記錄 AI）、[#49 教務處寶藏庫](/tool/49)（對全校公開的教務子站）合組成阿凱的「學校行政協調三件套」 — **#2 對內教職員 / #49 對外學生家長 / #15 服務領域社群**，分工明確。\n\n## 🎒 適合情境\n\n- **新進老師入職第一週**：校長一句「請去 #2 建立帳號」就能讓新人快速看見完整公告與行事，無痛跟上學校節奏\n- **處室主任早會**：大家打開 #2 同步今日行事，不用問「今天有什麼事」\n- **校長視導 / 督學訪視**：打開 #2 一目了然，比翻 LINE 群組專業 100 倍\n- **教務 / 學務 / 總務 / 輔導組長**：跨處室同步活動撞期、共用月曆\n\n適合任何想做「校內溝通數位轉型」但不想花錢買企業版 Notion / Slack 的學校。免費、開源、可 fork 改成自己學校版本。",
@@ -90,6 +101,19 @@
   },
   {
     "id": 5,
+    "audienceFit": {
+      "audiences": ["teacher", "student"],
+      "teacherRoles": ["homeroom", "admin"],
+      "departments": ["student-affairs", "general-affairs"],
+      "painPoints": ["event-management", "classroom-management", "student-practice"],
+      "priority": 82,
+      "reasons": {
+        "teacher": "園遊會可用即時點餐與叫號，減少攤位排隊與人工統計。",
+        "homeroom": "帶班籌備班級攤位時，能清楚管理菜單與訂單。",
+        "admin": "大型校園活動可集中掌握各班攤位的作業流程。",
+        "student": "參與班級攤位時，可體驗接單、備餐與叫號的分工。"
+      }
+    },
     "title": "校園點餐系統",
     "description": "阿凱老師打造的校慶園遊會點餐系統，各班攤位上線開菜單，買家手機點餐取號，廚房後台一鍵管理訂單，告別現場排隊吼價的混亂。",
     "detailedDescription": "「校園點餐系統 (Campus Food Order) v3.4.2」是阿凱老師為校慶園遊會打造的 **Firebase + React 三端分離點餐平台**，專門解決「100-200 個攤位排隊找零亂、紙板菜單會掉、廚房不知道誰是顧客、老師統計營收要熬一整晚」的混亂痛點。\n\n## 🎯 核心特色\n\n- 🔀 **三端完全分離** — `/order/:classId` 顧客點餐、`/kitchen` 廚房管理、`/display/:classId` 大螢幕叫號各自獨立路由，互不干擾\n- 🏫 **多班級獨立庫存（v3.0.0 大改版）** — 每班一個攤位、各自菜單與庫存，店長可在後台一鍵切換班級\n- ⚡ **Firestore 即時同步** — 訂單狀態 Pending / Preparing / Completed / Paid / Cancelled 全裝置秒級更新\n- 🔐 **OAuth 三層權限** — owner（完整權限可清資料）/ staff（接單調庫存）/ none（防無權人員亂改）\n- 📱 **PWA 就緒** — 可安裝主畫面、前端 localStorage 快取支援離線\n- 🎫 **動態取餐叫號** — 大螢幕顯示「602 班 - 第 12 號餐已完成」，全程無紙本、無人工算錢\n\n## 💡 設計理念\n\n本系統由 [#27 swissknife 許願池](/tool/27) 早期的「校園點餐後台」+「取餐叫號區」**漸進式升級**而來。v1.0 期 Google Sites Embedded → v3.4.2 期 GitHub Pages + Firebase Hosting 三端分離架構，是阿凱「工具家族漸進升級」的代表案例（同款邏輯也見於 [#87 PIRLS Pro 升級自 #4](/tool/87)）。技術棧 React + Vite + TypeScript + Zustand + Firebase Firestore + Authentication，Cloud Functions 選用提供 `/getMenu` `/getTrending` `/placeOrder` `/getStats` 等 API 端點。\n\n## 🎒 適合情境\n\n校慶園遊會單日 4-6 小時運作：顧客掃 QR 進 `/order/602` 點 602 班攤位、廚房學生在 `/kitchen` 接單、大螢幕掛 `/display/602` 自動叫號。期末用 `/admin` 一鍵看全校營收 + 哪班最熱銷 + 平均等待時間。配對 [#48 動態表單系統](/tool/48) 處理一般報名、[#3 即時投票](/tool/3) 用同款 Firebase 即時架構辦活動投票。**MIT 授權，歡迎其他學校 fork 改成自己的版本**。",
@@ -195,6 +219,17 @@
   },
   {
     "id": 10,
+    "audienceFit": {
+      "audiences": ["teacher"],
+      "teacherRoles": ["homeroom", "subject"],
+      "painPoints": ["classroom-management", "teacher-workload", "student-practice"],
+      "priority": 95,
+      "reasons": {
+        "teacher": "把課堂常用的分組、計時、作業與學生資料整合在同一處。",
+        "homeroom": "可長期追蹤班級加扣分、聯絡簿與作業狀況。",
+        "subject": "多班切換、抽籤分組與計時器能直接支援課堂節奏。"
+      }
+    },
     "title": "班級小管家",
     "description": "阿凱老師打造的班級小管家全方位課堂工具箱，整合學生名單、加扣分、抽籤分組、計時器、聯絡簿、作業檢查、考試監考共八大功能，多班級資料自動隔離。",
     "detailedDescription": "「班級小管家 v3.1.6」是阿凱老師為班級導師、科任老師純手寫的 **班級經營一站式工具**，**完全沒有點名功能**（不是出缺勤系統）— 真正的核心是「加扣分系統 + 抽籤分組 + 計時器 + 考試監考 + 多班級切換」。\n\n## 🎯 核心特色\n\n- ⭐ **加扣分系統（核心主軸）** — 即時加減分 + 完整 `pointsHistory` 歷史記錄，含 emoji 頭像 + 角色標籤（班長 / 小老師 / 課輔 / 特殊需求）\n- 🎲 **抽籤 + 隨機分組** — 單人 / 多人 / 分組三模式，告別人情壓力\n- 📔 **聯絡簿 + 作業檢查** — 優先級標記 + 科目分類 + 繳交狀態追蹤\n- ⏱️ **計時器 + 全螢幕時鐘 + 番茄鐘** — 倒數 / 正數 / 多時鐘樣式\n- 📝 **exam-proctor.js 考試監考工具** — 含「考試多日預設」examDayPresets + exam-sounds.js\n- 🏫 **多班級切換** — class-profiles 一位老師可建多個班級，class-aware-storage.js 自動 namespace\n- ☁️ **Firebase + localStorage 雙層儲存** — Google Sign-In 跨裝置同步，**主要資料層仍是 localStorage**\n- 📊 **學生報告卡 + Excel 匯出（SheetJS）** — 含 emoji 頭像 + 加減分統計 + 圖表\n- 🗄️ **學期封存 semester-archive.js** — 一鍵歸檔\n\n## 💡 設計理念\n\n單檔巨型 HTML `classnew.html` **197 KB / 近 5000 行** + **31 個 JS 模組** + **8 個 CSS 檔**（純 vanilla JS，無框架）。v3.1.4 解決教室電腦半年後 localStorage **quota exceeded** 三層修復（緊急清理 + 智能備份輪替 + 優雅降級）；v3.1.6 完成 **12 個共享 keys × 4 條同步路徑 = 48 個檢查點**從 93% → **100% 稽核完整性**（工程師等級細心）。編譯時佔位機制（apply-secrets.py / restore-placeholders.py）防 API Key 外洩，CHANGELOG 達 **59 KB**，部署在 **Firebase Hosting**（不是 GitHub Pages，因需 Auth）。\n\n## 🎒 適合情境\n\n- 班級導師全學年班級經營\n- 科任老師多班切換\n- 特教 / 補救教學老師（emoji 頭像角色標籤）\n- 想做「上課工具」的開發者參考 vanilla JS 巨型單檔架構\n\n配對 [#89 教師回覆小幫手 Pro](/tool/89) 學生狀況日誌 + 親師訊息一條龍、[#68 學生作品集](/tool/68) 學期末成果整理。MIT 授權，cagoooo/class 開源。",
@@ -298,6 +333,16 @@
   },
   {
     "id": 14,
+    "audienceFit": {
+      "audiences": ["teacher", "student"],
+      "teacherRoles": ["homeroom", "subject"],
+      "painPoints": ["creative-learning", "content-creation"],
+      "priority": 58,
+      "reasons": {
+        "teacher": "可快速設計孝親、節慶與家庭教育活動素材。",
+        "student": "用自己的文字與心意製作祝福圖，練習溫暖表達。"
+      }
+    },
     "title": "點亮詩意~『早安長輩圖產生器』",
     "description": "輕鬆製作溫馨的早安問候圖片",
     "url": "https://cagoooo.github.io/PhotoPoet/",
@@ -316,6 +361,17 @@
   },
   {
     "id": 15,
+    "audienceFit": {
+      "audiences": ["teacher"],
+      "teacherRoles": ["homeroom", "subject", "admin"],
+      "painPoints": ["meeting-productivity", "professional-learning", "teacher-workload"],
+      "priority": 93,
+      "reasons": {
+        "teacher": "把會議重點快速整理成可交付的正式紀錄。",
+        "subject": "領域共備後可迅速完成社群會議記錄。",
+        "admin": "彙整校內教師社群與研習紀錄時更省時。"
+      }
+    },
     "title": "社群領域會議報告產出平台",
     "description": "快速產生會議報告的協作工具",
     "url": "https://report.smes.tyc.edu.tw/",
@@ -361,6 +417,16 @@
   },
   {
     "id": 17,
+    "audienceFit": {
+      "audiences": ["teacher", "student"],
+      "teacherRoles": ["homeroom", "subject"],
+      "painPoints": ["classroom-management", "student-practice"],
+      "priority": 78,
+      "reasons": {
+        "teacher": "課堂抽問或分組時可快速公平地抽出人選。",
+        "student": "活動中可用透明的隨機方式決定代表或順序。"
+      }
+    },
     "title": "單一抽籤系統",
     "description": "簡單快速的單一抽籤工具",
     "url": "https://www.smes.tyc.edu.tw/smes_html/gogogo.html",
@@ -378,6 +444,18 @@
   },
   {
     "id": 18,
+    "audienceFit": {
+      "audiences": ["teacher", "student"],
+      "teacherRoles": ["homeroom", "admin"],
+      "departments": ["academic", "student-affairs", "counseling"],
+      "painPoints": ["event-management", "classroom-management", "student-practice"],
+      "priority": 76,
+      "reasons": {
+        "teacher": "可一次完成正取與備取抽選，保留清楚結果。",
+        "admin": "辦理競賽、校隊或獎助抽選時，流程更透明可追溯。",
+        "student": "參與選拔或活動抽選時，可看見公開公平的結果。"
+      }
+    },
     "title": "大量抽籤系統",
     "description": "支援大量抽籤的進階工具",
     "url": "https://www.smes.tyc.edu.tw/smes_html/random.html",
@@ -395,6 +473,17 @@
   },
   {
     "id": 19,
+    "audienceFit": {
+      "audiences": ["teacher"],
+      "teacherRoles": ["homeroom", "subject", "admin"],
+      "painPoints": ["communication", "it-support", "teacher-workload"],
+      "priority": 75,
+      "reasons": {
+        "teacher": "不用從零寫程式，也能建立自己的常見問題客服。",
+        "subject": "可把學科常見提問整理成學生可隨時使用的客服。",
+        "admin": "可為校務 FAQ 建立一致的對外說明入口。"
+      }
+    },
     "title": "設計自己的專屬客服",
     "description": "自訂專屬的智能客服系統",
     "url": "https://document-ai-companion-ipad4.replit.app/",
@@ -560,6 +649,16 @@
   },
   {
     "id": 24,
+    "audienceFit": {
+      "audiences": ["teacher"],
+      "teacherRoles": ["homeroom", "subject", "admin"],
+      "painPoints": ["meeting-productivity", "communication", "administration"],
+      "priority": 81,
+      "reasons": {
+        "teacher": "可隨時查閱校務會議重點，避免漏接重要訊息。",
+        "admin": "把午會與校務紀錄集中呈現，方便全校溝通與追蹤。"
+      }
+    },
     "title": "教師午會記錄報告站",
     "description": "教師午會紀錄與報告分享平台",
     "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/114teacher/",
@@ -649,6 +748,16 @@
   },
   {
     "id": 27,
+    "audienceFit": {
+      "audiences": ["teacher", "student"],
+      "teacherRoles": ["homeroom", "subject", "admin"],
+      "painPoints": ["resource-discovery", "digital-literacy"],
+      "priority": 62,
+      "reasons": {
+        "teacher": "可從工具集合快速找到可用的小幫手，也能提出需求。",
+        "student": "可探索適合課堂與生活使用的小工具。"
+      }
+    },
     "title": "⬅️好用小工具(許願池)",
     "description": "各種好用的教學小工具集合與許願池",
     "url": "https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/",
@@ -882,6 +991,16 @@
   },
   {
     "id": 40,
+    "audienceFit": {
+      "audiences": ["teacher"],
+      "teacherRoles": ["admin"],
+      "departments": ["academic", "student-affairs", "general-affairs", "counseling", "other"],
+      "painPoints": ["communication", "administration"],
+      "priority": 78,
+      "reasons": {
+        "admin": "以動態公告牆即時傳達處室訊息，降低資訊被淹沒的機會。"
+      }
+    },
     "title": "Padlet行政宣導動態牆",
     "description": "即時更新的行政宣導公告牆，方便資訊傳達",
     "url": "https://padlet.com/2104340/padlet-rl3l5wi9wmebku2k",
@@ -916,6 +1035,17 @@
   },
   {
     "id": 42,
+    "audienceFit": {
+      "audiences": ["teacher"],
+      "teacherRoles": ["homeroom", "subject", "admin"],
+      "departments": ["student-affairs", "counseling"],
+      "painPoints": ["accessibility", "media-production", "digital-literacy"],
+      "priority": 80,
+      "reasons": {
+        "teacher": "分享活動照片前可先遮蔽兒童臉部，兼顧作品呈現與隱私。",
+        "admin": "處理校務影像時能快速降低學生肖像外流風險。"
+      }
+    },
     "title": "兒童臉部隱私保護工具",
     "description": "阿凱老師打造的兒童臉部隱私保護工具，自動偵測照片臉孔並用 emoji、馬賽克或模糊遮蓋，可設定只擋 12 歲以下兒童，圖片全程在瀏覽器處理不外傳。",
     "detailedDescription": "「🛡️ 兒童臉部隱私保護工具 (Child Face Privacy Tool)」是阿凱老師為學校老師、班級導師、家長打造的 **照片去識別化工具**，專門解決「**沒簽授權的學生臉要打碼，遺漏一個就違法**」的班級活動照分享焦慮。\n\n## 🎯 核心特色\n\n- 🔍 **SSD MobileNet 自動偵測** — 更精準的臉部偵測模型（Single Shot Detector + MobileNet 輕量 backbone），側臉 / 多人合照都抓得到\n- 🎭 **三種遮蓋類型** — Emoji / 馬賽克 / 高斯模糊任選\n- 📐 **Emoji 隨臉部角度旋轉（神細節！）** — 偵測臉部 5 點關鍵點（兩眼 + 鼻 + 嘴角）計算旋轉角度，Emoji 跟著轉 → 看起來像「**Emoji 黏在那張臉上**」\n- ✏️ **手動編輯** — 新增 / 移除 / 調整遮蓋\n- 🔄 **對比滑桿** — 拖曳比較原圖與處理後\n- 📦 **批次處理 + 單張 PNG 或批次 ZIP 下載** — 一次上傳多張照片\n- 📱 **PWA 離線可用** — 可安裝為 App\n- 📴 **完全在瀏覽器內處理 = 照片不上傳第三方**\n\n## 💡 設計理念\n\n純前端 + SSD MobileNet（推測用 TensorFlow.js），跟 [#54 識生學坊用 MediaPipe Face Detection](/tool/54) 同款思路 — **臉部偵測純瀏覽器跑保護隱私**。傳統 Emoji 遮蓋學生歪頭時直立 Emoji 看起來不自然，#42 計算旋轉角度後比馬賽克生動、比模糊清楚，**適合社群分享不會嚇到家長**。部署在 `cagoooo.github.io/child-face-privacy/`。\n\n## 🎒 適合情境\n\n阿凱的「**兒童隱私保護**」工具組三件套：\n- 活動前 → [#47 同意書線上簽名](/tool/47) 收授權\n- 活動拍照 → **#42 本工具**遮蓋未同意的孩子\n- 活動後 → [#68 學生作品集](/tool/68) 限學校域名看\n\n適合校外教學紀念照分享（拍 100 張自動遮蓋）、校刊 / 學校官網編輯（比 Photoshop 快 100 倍）、班導畢業冊（處理 1000 張照片）、家長 PO IG 不想露其他小孩。MIT 授權，下次班級活動 — **拍完所有照片 → 拖進 #42 → 批次 ZIP → 安心傳家長群**。",
@@ -1016,6 +1146,18 @@
   },
   {
     "id": 46,
+    "audienceFit": {
+      "audiences": ["teacher"],
+      "teacherRoles": ["homeroom", "subject", "admin"],
+      "departments": ["academic", "student-affairs", "general-affairs", "counseling"],
+      "painPoints": ["administration", "event-management", "teacher-workload"],
+      "priority": 90,
+      "reasons": {
+        "teacher": "借用場地、專科教室或平板車時，可即時查看空檔與衝突。",
+        "admin": "集中調度校園資源並取得使用統計，減少人工協調。",
+        "general-affairs": "管理場地與設備時，可快速掌握預約與使用狀況。"
+      }
+    },
     "title": "禮堂&專科教室&IPAD平板車預約系統",
     "description": "阿凱老師打造的禮堂、專科教室、平板車預約系統，整合 Gemini AI 自動撰寫學期使用報告、LINE 推播通知、熱力圖統計，行政管理場地一站搞定。",
     "detailedDescription": "「禮堂&專科教室&IPAD平板車預約系統」是阿凱老師為校園行政打造的 **學校場地中央調度系統**（v2.50.6，從 v1.0 累積 50+ 版本），徹底告別紙本月曆貼公佈欄的混亂。**「禮堂」只是招牌** — 骨子裡是 10 個場地統一調度。\n\n## 🎯 核心特色\n\n- 🏫 **10 個場地統一調度** — 禮堂、智慧教室 C304、2 間電腦教室、森林小屋、**4 台 IPAD 平板車（三~六年級）**、校史室\n- ⏰ **學校節次制（不是 Google Calendar 半小時格！）** — 採真實節次：晨間 / 第一節~第七節 / 午休 / 打掃約 12 個 slot\n- 🚫 **完全沒有審核流程（最反直覺設計）** — 任何人打開就能預約，只靠 **deviceId + Rate Limiting**（每小時 30 次、每天 100 次）+ 30 秒 Undo 把關\n- 🤖 **AI 智慧衝突解析（v2.33.1）** — 被擋時一鍵呼叫 Gemini 1.5 Flash 同時建議鄰近日期/換場地/換時段三種替代方案\n- 📱 **LINE Messaging API 三階段整合** — 帳號綁定 / 即時推 Flex Message / 使用前 30 分鐘自動提醒 + 異常活動偵測（批次取消 ≥ 10 次/h 就告警）\n- 📊 **AI 學期報告** — 管理員一鍵讓 Gemini 寫 4 段白皮書上傳 Storage + LINE 推連結給校長\n\n## 💡 設計理念\n\n**純 HTML + Vanilla JS + CSS**（沒框架），**app.js 高達 214 KB 單檔**，配 Firebase Firestore + Cloud Functions Node 20 + Auth + Storage + @line/bot-sdk + @google/generative-ai。PWA + IndexedDB 持久化讓 **Firestore 月讀取量降 60-70%**。8 篇開發文件（PROGRESS.md 68KB / FUTURE_PROPOSAL.md 60KB / OPTIMIZATION_PLAYBOOK.md 41KB）— **這不是普通工具，是當生產級教學產品在經營**。\n\n## 🎒 適合情境\n\n兩個月實測：平均預約時間 **30 秒**（vs 紙本 5-10 分）、時段衝突糾紛 **0 件/月**（vs 紙本 2-3 件）、預約總量 **90 場/月（+200%）**、校外借用 **6-8 件/月**（vs 紙本 1-2 件）。校內運轉超過一年，到現在每月還在被預約。可搭配 [#84 會議記錄自動產出 Pro](/tool/84) 禮堂用完直接生成記錄、[#80 教師會議報告集合站](/tool/80) 整學期統整。CC0 / 教育用途免費。",
@@ -1034,6 +1176,17 @@
   },
   {
     "id": 47,
+    "audienceFit": {
+      "audiences": ["teacher"],
+      "teacherRoles": ["homeroom", "admin"],
+      "departments": ["academic", "student-affairs", "counseling"],
+      "painPoints": ["administration", "communication", "teacher-workload"],
+      "priority": 86,
+      "reasons": {
+        "homeroom": "收集班級活動同意書時，家長可直接用手機完成簽署。",
+        "admin": "活動承辦可集中追蹤授權狀態並匯出統整資料。"
+      }
+    },
     "title": "學生肖像使用授權同意書線上簽名",
     "description": "阿凱老師打造的家長線上電子簽名系統，家長手機就能簽「學生活動肖像授權同意書」，自動寄 PDF 通知信給家長，行政端 Excel 一鍵匯出統整。",
     "detailedDescription": "「學生活動肖像使用授權同意書 - 線上簽名系統」v2.3 是阿凱老師為學校解決紙本同意書「**每學期 200+ 張紙、家長忘簽連環追、教育局審查翻箱倒櫃找**」打造的 **電子簽署平台**，從活動肖像授權到戶外教學、課後社團一站搞定。\n\n## 🎯 核心特色\n\n- ✍️ **react-signature-canvas 流暢書寫** — 提供接近紙筆的手感，手機 / 平板 / 電腦都能簽\n- 🛡️ **嚴格資料驗證** — 年級 / 班級 / 座號僅能輸入數字 + **簽名筆畫複雜度檢查**防家長亂畫敷衍\n- 📐 **簽名圖檔自動壓縮標準化 600×300** — 節省 Firebase Storage 流量\n- ✅ **v2.3 同意 / 不同意單選按鈕** — 強制家長明確選，PDF 與 Email 同步顯示意願（**同意綠色 / 不同意紅色**）\n- 📄 **v2.2 PDF 自動生成 + 永久存 Firebase Storage** — 完整條款 + 簽名 + 縣市 + 學校資訊\n- 📧 **v2.2 Email 通知含 PDF 下載連結** — 家長與學校各保留一份\n- 📊 **後台 2.0 繽紛漸層 + 手機自動切卡片視圖** — 批次刪除 + Excel 匯出 + 視覺化徽章\n- 🏫 **v2.1 跨校支援** — 縣市篩選 + 學校搜尋，一套系統服務多校\n\n## 💡 設計理念\n\n**React 19 + TypeScript + Vite + Tailwind CSS 4 + Framer Motion + React Router v7**，後端用 Firebase 全家桶（Firestore + Storage + Authentication），管理員登入用 Firebase Auth Email/Password，訪問 `/admin/login` 進後台。**Firebase Security Rules 嚴格把關**，部署 `cagoooo.github.io/signature/`。**收件率從 70% → 100%**，教育局審查要看 → 給 Firebase Storage 連結 5 秒搞定，5 年保存規定自動永久存。\n\n## 🎒 適合情境\n\n阿凱的學校行政數位轉型姊妹工具：\n- **#47 同意書（本工具）** — 電子簽名 + PDF 法律效力\n- [#48 動態表單系統](/tool/48) — 拖曳式問卷 / 報名\n\n適合學期初肖像授權收件（家長手機 3 分鐘簽完）、戶外教學前夕（深夜也能簽）、v2.3 同意 / 不同意按鈕讓不同意的學生**不會被拍進團體照**（法律效力 + 隱私保護雙贏）、跨校教師研習報名。也適合補習班 / 安親班 / 才藝中心家長簽合約。MIT 授權，cagoooo/signature 開源。",
@@ -1052,6 +1205,18 @@
   },
   {
     "id": 48,
+    "audienceFit": {
+      "audiences": ["teacher"],
+      "teacherRoles": ["homeroom", "subject", "admin"],
+      "departments": ["academic", "student-affairs", "general-affairs", "counseling", "other"],
+      "painPoints": ["administration", "communication", "event-management"],
+      "priority": 87,
+      "reasons": {
+        "teacher": "可快速建立報名、調查與回饋表單，並即時掌握填答。",
+        "homeroom": "班級問卷與家長回覆能集中收集，不必反覆整理紙本。",
+        "admin": "辦理研習與校務活動時，可用模板建表、通知與匯出。"
+      }
+    },
     "title": "動態表單自動回報系統",
     "description": "阿凱老師打造的動態表單系統，視覺化拖曳建表、即時 Google Chat 推播通知、CSV 匯出與儀表板分析，用 Firebase 取代笨重的 Google Forms。",
     "detailedDescription": "「Form System 動態表單自動回報系統」是阿凱老師打造的 **現代化 Google 表單替代品**，部署在 `cagoooo.github.io/form/` 或 Firebase Hosting，README 第一行就明確定位「**旨在取代舊有的 Google Apps Script 表單**」。當前 v1.2.4，已有 PWA 支援可安裝到桌面。\n\n## 🎯 核心特色\n\n- 🎨 **Glassmorphism 毛玻璃 UI + 動態流體背景** — 視覺差距比 Google 表單拉開 10 倍，學生家長一看就想填\n- 🖱️ **拖曳式表單編輯器** — v1.2.4 視覺大升級新增，視覺化建立各類表單不用寫程式\n- 💬 **Google Chat Webhook 即時通知** — 學生家長填完表單自動推 Chat 群組，老師不用一直回 Google Sheet 看新填\n- 📊 **數據分析儀表板** — 填答數量 / 時間分布 / 選項統計視覺化\n- 📚 **表單模板庫** — 班級報名 / 民調 / 戶外教學 / 研習報名 / 滿意度問卷現成範本，5 分鐘上線比從零做快 10 倍\n- 🎨 **藍 / 綠 / 粉三主題色** — 行政表單用藍、活動報名用粉，氛圍切換無痛\n- 📥 **CSV 一鍵匯出** — 全部填表資料 Excel 處理或寄行政\n- 🔐 **Admin / Editor 權限分級** — 環境變數設定管理員憑證避免敏感資訊外洩\n- 📱 **PWA 可安裝桌面** — v1.2.2 工程進化、CI/CD 自動化部署\n\n## 💡 設計理念\n\n技術棧採 React + Vite + Tailwind + Firebase（Firestore + Authentication）+ Lucide React，明確定位「反 Google 表單」。Google 表單功能完整但 UI 從 2008 沒大改、手機體驗差、沒即時通知（要回 Sheet 看）、後台醜，想做拖曳表單還要寫 Google Apps Script。阿凱反向：**現代化 UI + 拖曳編輯 + 即時通知 + 模板庫**，把痛點一次解掉。和 [#47 學生肖像授權同意書](/tool/47)（法律效力簽名 + PDF）是姊妹工具 — **#47 法律文件 / #48 一般問卷**，服務不同需求。\n\n## 🎒 適合情境\n\n- **學期初家長問卷**：拖曳建表單 → 家長填完 → Google Chat 通知老師，不用回 Sheet 看\n- **教師研習報名**：用模板建表單 → 全校老師掃 QR 填 → CSV 匯出給人事\n- **學生意見調查**：粉色主題（學生友善）→ 拖曳改欄位「我最想要的校外教學地點」→ 即時看儀表板\n- **校外活動報名**：跨班活動多選核取方塊，Glassmorphism UI 比 Google 表單漂亮\n\n適合國中小所有任課老師、教務 / 學務組、教師研習承辦、補習班安親班。下次要做表單試試 → 你不會想回去 Google 表單。",
@@ -1119,6 +1284,17 @@
   },
   {
     "id": 51,
+    "audienceFit": {
+      "audiences": ["teacher"],
+      "teacherRoles": ["admin"],
+      "departments": ["academic"],
+      "painPoints": ["administration", "teacher-workload"],
+      "priority": 94,
+      "reasons": {
+        "admin": "教務排課可把多日人工排程與衝突檢查壓縮成可調整的結果。",
+        "academic": "面對全校課程與師資限制時，可快速產生並優化課表。"
+      }
+    },
     "title": "自動排課系統",
     "description": "智能化的自動排課系統協助學校快速生成課表最佳化資源分配解決排課難題。",
     "url": "https://cagoooo.github.io/course/",
@@ -1153,6 +1329,18 @@
   },
   {
     "id": 53,
+    "audienceFit": {
+      "audiences": ["teacher", "student"],
+      "teacherRoles": ["homeroom", "subject", "admin"],
+      "departments": ["general-affairs", "other"],
+      "painPoints": ["administration", "it-support", "communication"],
+      "priority": 85,
+      "reasons": {
+        "teacher": "發現校園設備問題時，可在地圖上快速回報並追蹤處理。",
+        "admin": "總務與資訊端可依類別接收報修，縮短派工與維修時間。",
+        "student": "發現教室或校園設備問題時，可用清楚方式協助回報。"
+      }
+    },
     "title": "智慧校園報修系統",
     "description": "專為校園打造的智慧報修平台簡化修繕申請流程讓校園維護更加即時與透明。",
     "url": "https://cagoooo.github.io/repair/",
@@ -1257,6 +1445,15 @@
   },
   {
     "id": 57,
+    "audienceFit": {
+      "audiences": ["teacher", "student"],
+      "painPoints": ["resource-discovery", "creative-learning"],
+      "priority": 38,
+      "reasons": {
+        "teacher": "教師共餐或班級活動需要快速決定選項時，可用轉盤破除僵局。",
+        "student": "聚餐或小組活動面對多個選項時，可用轉盤快速做決定。"
+      }
+    },
     "title": "選擇障礙專用 - 餐廳命運轉盤",
     "description": "為選擇障礙打造的餐廳抽籤工具，幫助你迅速決定今天要吃什麼美食！",
     "url": "https://cagoooo.github.io/food/",
@@ -1565,6 +1762,16 @@
   },
   {
     "id": 68,
+    "audienceFit": {
+      "audiences": ["teacher", "student"],
+      "teacherRoles": ["homeroom", "subject"],
+      "painPoints": ["media-production", "creative-learning", "student-practice"],
+      "priority": 83,
+      "reasons": {
+        "teacher": "可讓學生自行上傳課程作品，減少教師整理照片與影片的負擔。",
+        "student": "用學校帳號上傳並保存自己的手作照片與影片作品。"
+      }
+    },
     "title": "手作課程照片影片作品上傳平台",
     "description": "專為手作課程設計的作品展示與分享平台，支援高畫質相片與影片上傳，讓每件精心創作的作品都能完美呈現。",
     "detailedDescription": "「手作課程照片影片作品上傳平台」（v3.2，2026-03-19）是阿凱老師為 **石門國小六年級手作課**打造的 **Google Drive 班級資料夾中繼導引頁** — 不是自建上傳系統，而是用學校 Workspace 帳號權限做隔離的精緻入口頁。\n\n## 🎯 核心特色\n\n- 🏫 **6 張班級卡（601~606）** — 對應 6 個硬編碼 Drive folder ID，從 `DRIVE_CONFIG` 物件讀取真實 ID\n- 🚪 **`go.html` 中繼頁（核心智慧）** — 學生點班級卡 → 提示用 `@mail2.smes.tyc.edu.tw` 學校信箱登入 → 自動打開該班 Drive 資料夾\n- 📱 **解兩個經典踩雷** — (1) Google `continue` 參數只吃 Google 網域 (2) 手機 OS 攔截 `drive.google.com` 跳 Drive App\n- 🔒 **校園信箱權限隔離** — Drive folder 只開放 `@mail2.smes.tyc.edu.tw` domain 內成員，無公開分享連結\n- 📷 **QR Code 產生器** — 教室牆上貼一張即可\n- 📊 **GA4 事件追蹤** — 看哪班最常上傳\n- 💾 **PWA manifest + Intersection Observer 滾動動畫** — Fredoka + Nunito 俏皮字型\n\n## 💡 設計理念\n\n**純 vanilla HTML + CSS + JS**，儲存完全靠 Google Drive（學校 Google Workspace 帳號），登入機制完全靠 Google OAuth 跳轉**無自建後端**，沒用 Firebase Storage / Supabase / Cloudinary。部署在 `cagoooo.github.io/files/`（不是獨立 repo，是 cagoooo.github.io monorepo 的 `/files/` 子目錄）。學生肖像保護**靠 Workspace domain 權限隔離**，不對外公開。\n\n## 🎒 適合情境\n\n兩個月實測：老師拍照工時 **0 分鐘**（學生自己拍，vs 過去每節 8-12 分鐘）、列印成本 **0 張 A4**（vs 每學期 800 張）、家長看作品比率 **100%**（vs 不到 30%）、學期末作品集製作 **1 鍵生成**（vs 老師連續 3 晚加班）。適用國小 / 國中藝術與人文、綜合活動領域，任何「需要保留學生作品」的課（家政、STEAM、社團）。可搭配 [#90 繪本 → Google 表單一條龍工作坊](/tool/90) 連手作課回饋表單一起做、[#10 班級小管家](/tool/10) 學期末做學期報告。",
@@ -1695,6 +1902,18 @@
   },
   {
     "id": 72,
+    "audienceFit": {
+      "audiences": ["teacher"],
+      "teacherRoles": ["homeroom", "admin"],
+      "departments": ["academic", "student-affairs", "general-affairs", "counseling", "other"],
+      "painPoints": ["administration", "teacher-workload"],
+      "priority": 91,
+      "reasons": {
+        "teacher": "班級經費報支可從報價單快速產生符合格式的表單。",
+        "homeroom": "處理班級費與採購核銷時，能減少反覆排版與退件。",
+        "admin": "各處室辦理採購核銷時，可統一產出制式動支與黏存單。"
+      }
+    },
     "title": "動支及黏存單自動產生系統",
     "description": "智慧化的經費動支與黏存單自動產生平台，簡化繁瑣的行政核銷流程，只需輸入基本資訊即可快速產出標準格式表單，大幅提升行政作業效率與精確度。",
     "detailedDescription": "「動支及黏存單自動產生系統 v1.4.0」是阿凱老師為學校行政人員與教師打造的 **PDF.js 自動解析 → 官方 Excel 範本一鍵填入工具**，專門解決公立國小「**光排版那張動支單就 40 分鐘 + 會計退件率 30%**」的吞噬空堂黑洞。\n\n## 🎯 核心特色\n\n- 📄 **拖廠商報價 PDF 自動解析（核心）** — PDF.js 3.11.174 座標式擷取自動辨識品名規格 / 數量 / 單價、正確合併跨行品名，掃描版走 **Tesseract.js 4.x OCR fallback**（按需載入、支援繁中）\n- 📋 **官方制式 Excel 範本 1:1 保留** — `template/template.xlsx` 內含「預算內」「代收代辦」**兩個工作表**（會計法規分開帳）+ 動支單 + 黏存單合一\n- 🔀 **雙模式部署同樣品質** — 🟢 本地模式（`python run.py` + openpyxl）/ 🟡 GitHub Pages 靜態模式（**JSZip 3.10.1 直接修補 xlsx XML**，v1.3.0 為根除 ExcelJS 產出損壞改用）\n- 🔢 **教育部歲出政事別三碼代號內建** — 一級科目 11 類 / 二級近 40 項，113 職員薪金 / 241 印刷裝訂 / 322 報章 / 514 機械設備 / 521 電腦軟體完整下拉\n- 🏫 **石門國小客製單位別** — 9 個處室寫死（總務 / 教務 / 學務 / 輔導 / 人事 / 會計 / 出納 / 午餐秘書 / 幼兒園），README 明說「換 template + 改 fill_excel.py 即可移植」\n- 💾 **LocalStorage 記憶老師偏好** — 上次單位別 / 表單類型 / 預算科目，免重複選\n- 🔒 **隱私 first** — 純瀏覽器端 + 純本機處理，**PDF 不傳任何外部 server**\n\n## 💡 設計理念\n\n純 HTML/CSS/JS 無框架、RWD 適配到 375px，字型 Noto Sans TC。**重要釐清**：「動支單 +「黏存單」是同一張」（學校採購後廠商收據 / 發票黏在「黏存單」上送會計、動支單是「同意動用此筆預算」的內部簽呈，**這份 Excel 範本把兩者合一**列印一張搞定）。品項列固定 8 筆（範本列號 [15, 17, 19, 21, 23, 25, 27, 29] 中間夾空白做視覺分隔，超過 UI 警告）。\n\n## 🎒 適合情境\n\n國中小所有導師年年要報班級費、行政組長採購大量設備、學校會計 / 出納收件少 = 工作量少。**石門國小 115 上學期實測：單筆排版時間 40 分鐘 → 5 分鐘、會計退件率 30% → 2%、老師空堂被報帳吞噬比例 30% → 5%**。配對 [#2 行政業務協調系統](/tool/2) 跨處室公文追蹤 + [#84 會議記錄 Pro 版](/tool/84) 行政會議記錄一條龍。**第一次用建議從「圖書 / 文具」這種簡單品項開始 — 5 分鐘就能感受到效率躍進**。",
