@@ -7,9 +7,8 @@
         "student"
       ],
       "painPoints": [
-        "educational-support",
-        "learning-questions",
-        "tool-help"
+        "it-support",
+        "resource-discovery"
       ],
       "priority": 68,
       "reasons": {
@@ -66,6 +65,7 @@
   },
   {
     "id": 4,
+    "upgradeToId": 87,
     "audienceFit": {
       "audiences": [
         "teacher",
@@ -79,8 +79,8 @@
         "subject"
       ],
       "painPoints": [
-        "reading-assessment",
-        "question-generation",
+        "reading-literacy",
+        "assessment",
         "student-practice"
       ],
       "priority": 90,
@@ -142,6 +142,7 @@
   },
   {
     "id": 7,
+    "upgradeToId": 23,
     "title": "點「石」成金🐝(評語優化)",
     "description": "創新的學生評語優化工具，協助教師撰寫更正向、積極且個人化的學生評語",
     "audienceFit": {
@@ -155,8 +156,7 @@
         "homeroom"
       ],
       "painPoints": [
-        "student-comment-writing",
-        "student-feedback",
+        "communication",
         "teacher-workload"
       ],
       "priority": 89,
@@ -188,7 +188,6 @@
       ],
       "painPoints": [
         "lesson-planning",
-        "teaching-resources",
         "resource-discovery"
       ],
       "priority": 72,
@@ -253,9 +252,9 @@
         "student"
       ],
       "painPoints": [
-        "classroom-interaction",
-        "formative-assessment",
-        "student-engagement"
+        "classroom-management",
+        "assessment",
+        "student-practice"
       ],
       "priority": 94,
       "reasons": {
@@ -287,9 +286,8 @@
         "elementary"
       ],
       "painPoints": [
-        "reading-resources",
-        "resource-discovery",
-        "school-reading-promotion"
+        "reading-literacy",
+        "resource-discovery"
       ],
       "priority": 66,
       "reasons": {
@@ -316,6 +314,7 @@
   },
   {
     "id": 13,
+    "upgradeToId": 92,
     "title": "5W1H 靈感發射器 🚀",
     "description": "創意思維激發工具，協助發想教學內容",
     "audienceFit": {
@@ -332,9 +331,8 @@
         "subject"
       ],
       "painPoints": [
-        "creative-writing",
-        "idea-generation",
-        "writing-scaffolding"
+        "creative-learning",
+        "student-practice"
       ],
       "priority": 86,
       "reasons": {
@@ -406,8 +404,7 @@
         "homeroom"
       ],
       "painPoints": [
-        "parent-communication",
-        "message-drafting",
+        "communication",
         "teacher-workload"
       ],
       "priority": 84,
@@ -494,8 +491,7 @@
         "subject"
       ],
       "painPoints": [
-        "typing-practice",
-        "keyboard-familiarity",
+        "language-learning",
         "student-practice"
       ],
       "priority": 78,
@@ -533,8 +529,7 @@
         "subject"
       ],
       "painPoints": [
-        "zhuyin-typing",
-        "keyboard-familiarity",
+        "language-learning",
         "student-practice"
       ],
       "priority": 79,
@@ -576,8 +571,7 @@
         "subject"
       ],
       "painPoints": [
-        "idiom-practice",
-        "vocabulary-learning",
+        "language-learning",
         "student-practice"
       ],
       "priority": 75,
@@ -605,6 +599,7 @@
   },
   {
     "id": 23,
+    "upgradeFromId": 7,
     "title": "點石成金蜂🐝 評語優化網頁版",
     "description": "阿凱老師打造的「點石成金蜂」教師評語生成應用，協助老師快速產出個人化、貼近學生特質的成績單評語，告別罐頭句子。",
     "audienceFit": {
@@ -616,19 +611,16 @@
         "junior"
       ],
       "teacherRoles": [
-        "homeroom",
-        "admin"
+        "homeroom"
       ],
       "painPoints": [
-        "student-comment-writing",
-        "student-feedback",
+        "communication",
         "teacher-workload"
       ],
-      "priority": 93,
+      "priority": 82,
       "reasons": {
         "teacher": "可依學生特質、語氣與字數需求批次產生可再編修的個人化評語。",
-        "homeroom": "適合班導師在期末集中撰寫全班成績單評語及親師會前回饋。",
-        "admin": "教學行政人員可用於考核評語、評語範本整理與新進教師支持。"
+        "homeroom": "適合班導師在期末集中撰寫全班成績單評語及親師會前回饋。"
       }
     },
     "detailedDescription": "「點石成金蜂🐝 評語優化網頁版」是阿凱老師為國中小教師期末打評語打造的 **React Web App**，部署在 `cagoooo.github.io/comments/`，當前版本 **v2.9.1 持續更新**。與 [#7 LINE Bot 版](/tool/7) 是「同源雙形式」設計 — 同一個 AI 核心，提供 LINE 對話與網頁兩種介面服務不同情境。\n\n## 🎯 核心特色\n\n- 🤖 **Gemini 2.5 Flash API** — 採用 Google 最新模型生成高品質評語，速度與品質兼具\n- 🎨 **多元風格切換** — 一次看「質性描述」「量化分析」「鼓勵激勵」等多種版本，挑最合適的學生面向\n- 📏 **字數與語氣精細調整** — 自訂評語長度與正式程度，期末手冊欄位塞得進去\n- 🏷️ **豐富成語庫分類** — 涵蓋資賦 / 學業 / 品德 / 人際 / 服務等，依使用頻率自動排序\n- 👤 **帳號隔離儲存** — 每位教師獨立保存常用成語紀錄，不會互相干擾\n- ⚛️ **React 18.3 + Firebase 12.7 技術棧** — 桌面完整功能體驗，支援多人協作\n\n## 💡 設計理念\n\n「同源雙形式」是阿凱對 AI 工具的特殊堅持 — 同一個評語 AI 引擎，提供 LINE Bot 與 Web 兩種介面。**沒有一種介面服務所有人**：50+ 歲資深老師偏好 LINE Bot（介面熟悉），30-40 歲中堅老師偏好 Web 版（功能完整），補教安親班用 LINE 即時溝通，學校行政組長用 Web 正式撰寫。兩個版本同源但不互斥，最大化使用者覆蓋。這跟「同源雙部署」（Firebase Hosting + GitHub Pages）不同 — 這是「同源雙介面」（LINE 對話 vs 完整 Web App）。\n\n## 🎒 適合情境\n\n- **期末打評語高峰期（12 月 / 6 月）**：桌面開 #23 → 全班 30 個學生逐一生成 → 多元風格切換挑最適合的 → 字數語氣調整 → 一鍵複製到校務系統\n- **期中校際分享**：用 #23 寫評語 + 在校內群組推薦 [#7 LINE Bot 版](/tool/7) 給其他學校老師手機用\n- **新進老師補救教學**：看 AI 提供的多元風格範本，快速建立寫評語的標準\n- **家長親師會前**：批次生成 5-10 個學生的重點段落，再自己微調潤色\n\n適合國中小所有班導、教學主任、教務組長、補教安親班教師。期末打評語建議**「#23 桌面正式寫 + #7 手機快速修」** 雙形式組合 → 完整覆蓋所有場景。",
@@ -676,8 +668,7 @@
         "subject"
       ],
       "painPoints": [
-        "speech-training",
-        "competition-preparation",
+        "language-learning",
         "student-practice"
       ],
       "priority": 76,
@@ -720,9 +711,8 @@
         "subject"
       ],
       "painPoints": [
-        "multiplication-practice",
-        "math-fluency",
-        "student-practice"
+        "student-practice",
+        "assessment"
       ],
       "priority": 82,
       "reasons": {
@@ -795,9 +785,8 @@
         "subject"
       ],
       "painPoints": [
-        "science-visualization",
-        "solar-system-learning",
-        "interactive-exploration"
+        "digital-literacy",
+        "student-practice"
       ],
       "priority": 76,
       "reasons": {
@@ -1046,10 +1035,15 @@
       "audiences": [
         "teacher"
       ],
+      "teacherRoles": [
+        "homeroom",
+        "subject",
+        "admin"
+      ],
       "painPoints": [
-        "curriculum-translation",
+        "language-learning",
         "lesson-planning",
-        "document-formatting"
+        "teacher-workload"
       ],
       "priority": 87,
       "reasons": {
@@ -1092,9 +1086,8 @@
         "subject"
       ],
       "painPoints": [
-        "addition-subtraction-practice",
-        "math-fluency",
-        "student-practice"
+        "student-practice",
+        "assessment"
       ],
       "priority": 86,
       "reasons": {
@@ -1207,9 +1200,9 @@
         "academic"
       ],
       "painPoints": [
-        "academic-administration",
-        "event-information",
-        "school-resource-hub"
+        "administration",
+        "event-management",
+        "resource-discovery"
       ],
       "priority": 70,
       "reasons": {
@@ -1314,9 +1307,8 @@
         "subject"
       ],
       "painPoints": [
-        "student-recognition",
-        "name-learning",
-        "teacher-student-rapport"
+        "teacher-workload",
+        "classroom-management"
       ],
       "priority": 88,
       "reasons": {
@@ -1353,8 +1345,7 @@
         "subject"
       ],
       "painPoints": [
-        "zhuyin-learning",
-        "phonics-practice",
+        "language-learning",
         "student-practice"
       ],
       "priority": 84,
@@ -1425,8 +1416,7 @@
       ],
       "painPoints": [
         "lesson-planning",
-        "curriculum-alignment",
-        "document-generation"
+        "teacher-workload"
       ],
       "priority": 91,
       "reasons": {
@@ -1456,9 +1446,8 @@
         "student"
       ],
       "painPoints": [
-        "school-it-support",
-        "account-help",
-        "self-service-support"
+        "it-support",
+        "resource-discovery"
       ],
       "priority": 76,
       "reasons": {
@@ -1515,8 +1504,7 @@
         "subject"
       ],
       "painPoints": [
-        "typing-practice",
-        "touch-typing",
+        "language-learning",
         "student-practice"
       ],
       "priority": 82,
@@ -1551,20 +1539,20 @@
       "audiences": [
         "teacher"
       ],
+      "schoolLevels": [
+        "elementary"
+      ],
       "teacherRoles": [
-        "homeroom",
-        "admin"
+        "homeroom"
       ],
       "painPoints": [
-        "event-communication",
-        "parent-engagement",
-        "event-information"
+        "event-management",
+        "communication"
       ],
-      "priority": 58,
+      "priority": 55,
       "reasons": {
         "teacher": "可用數位通知頁集中傳達親職教育日議程、場地與聯絡資訊。",
-        "homeroom": "可將固定網址或 QR Code 分享給班級家長，減少紙本遺失與訊息洗版。",
-        "admin": "可參考其內容架構製作校級活動通知並保留歷年活動紀錄。"
+        "homeroom": "可將固定網址或 QR Code 分享給班級家長，減少紙本遺失與訊息洗版。"
       }
     },
     "title": "桃園市龍潭區石門國民小學114學年度親職教育日",
@@ -1622,9 +1610,8 @@
         "subject"
       ],
       "painPoints": [
-        "rhythm-practice",
-        "music-notation",
-        "student-engagement"
+        "student-practice",
+        "creative-learning"
       ],
       "priority": 78,
       "reasons": {
@@ -1657,9 +1644,9 @@
         "student"
       ],
       "painPoints": [
-        "ai-video-workflow",
-        "media-creation",
-        "tool-discovery"
+        "media-production",
+        "content-creation",
+        "resource-discovery"
       ],
       "priority": 73,
       "reasons": {
@@ -1690,9 +1677,9 @@
         "student"
       ],
       "painPoints": [
-        "ai-video-learning",
-        "prompt-writing",
-        "travel-storytelling"
+        "media-production",
+        "content-creation",
+        "creative-learning"
       ],
       "priority": 68,
       "reasons": {
@@ -1723,18 +1710,20 @@
         "teacher",
         "student"
       ],
-      "painPoints": [
-        "speech-training",
-        "competition-preparation",
-        "speaking-feedback"
+      "teacherRoles": [
+        "homeroom",
+        "subject"
       ],
-      "priority": 92,
+      "painPoints": [
+        "language-learning",
+        "student-practice"
+      ],
+      "priority": 76,
       "reasons": {
         "teacher": "可用歷屆題庫、正式計時、逐字稿、AI 雷達評分與教師量表建立完整演說培訓流程。",
         "student": "可自主抽題、模擬正式演說、查看逐字稿與多維回饋，反覆調整內容和表達。",
         "homeroom": "可用於班級口語表達活動，或陪伴校內語文競賽選手持續練習。",
-        "subject": "語文與表演相關教師可用題庫、講稿及評分工具進行專業指導。",
-        "admin": "承辦語文競賽或校隊培訓時，可用紀錄、評分單與進度功能管理訓練。"
+        "subject": "語文與表演相關教師可用題庫、講稿及評分工具進行專業指導。"
       }
     },
     "title": "國語演說比賽訓練平台 (pro版)",
@@ -1808,8 +1797,7 @@
         "subject"
       ],
       "painPoints": [
-        "zhuyin-typing",
-        "typing-fluency",
+        "language-learning",
         "student-practice"
       ],
       "priority": 85,
@@ -1855,9 +1843,8 @@
         "subject"
       ],
       "painPoints": [
-        "idiom-practice",
-        "vocabulary-learning",
-        "student-engagement"
+        "language-learning",
+        "student-practice"
       ],
       "priority": 81,
       "reasons": {
@@ -1932,20 +1919,20 @@
       "audiences": [
         "teacher"
       ],
+      "schoolLevels": [
+        "elementary"
+      ],
       "teacherRoles": [
-        "homeroom",
-        "admin"
+        "homeroom"
       ],
       "painPoints": [
-        "event-wayfinding",
-        "venue-planning",
-        "event-communication"
+        "event-management",
+        "communication"
       ],
-      "priority": 62,
+      "priority": 60,
       "reasons": {
         "teacher": "可用互動分區圖快速查找親職日班級、攤位與活動位置。",
-        "homeroom": "可在活動前把場地資訊分享給班級家長，降低現場帶位與重複詢問。",
-        "admin": "可作為校園大型活動場地配置與行動版導覽的實作參考。"
+        "homeroom": "可在活動前把場地資訊分享給班級家長，降低現場帶位與重複詢問。"
       }
     },
     "title": "2026 親職日場地配置圖",
@@ -1995,9 +1982,7 @@
         "teacher"
       ],
       "painPoints": [
-        "presentation-playback",
-        "format-compatibility",
-        "classroom-presentation"
+        "presentation"
       ],
       "priority": 80,
       "reasons": {
@@ -2027,9 +2012,9 @@
         "teacher"
       ],
       "painPoints": [
-        "bilingual-promotion",
-        "school-showcase",
-        "stakeholder-communication"
+        "language-learning",
+        "communication",
+        "resource-discovery"
       ],
       "priority": 61,
       "reasons": {
@@ -2093,9 +2078,9 @@
         "subject"
       ],
       "painPoints": [
-        "creative-writing",
-        "critical-thinking",
-        "classroom-discussion"
+        "language-learning",
+        "creative-learning",
+        "student-practice"
       ],
       "priority": 74,
       "reasons": {
@@ -2160,9 +2145,8 @@
         "subject"
       ],
       "painPoints": [
-        "it-curriculum-hub",
-        "lesson-navigation",
-        "digital-literacy"
+        "digital-literacy",
+        "resource-discovery"
       ],
       "priority": 96,
       "reasons": {
@@ -2297,6 +2281,7 @@
   },
   {
     "id": 87,
+    "upgradeFromId": 4,
     "audienceFit": {
       "audiences": [
         "teacher",
@@ -2311,8 +2296,8 @@
         "subject"
       ],
       "painPoints": [
-        "reading-assessment",
-        "question-generation",
+        "reading-literacy",
+        "assessment",
         "student-practice"
       ],
       "priority": 94,
@@ -2373,12 +2358,16 @@
       "audiences": [
         "teacher"
       ],
-      "painPoints": [
-        "parent-communication",
-        "message-drafting",
-        "communication-tone"
+      "teacherRoles": [
+        "homeroom",
+        "subject",
+        "admin"
       ],
-      "priority": 95,
+      "painPoints": [
+        "communication",
+        "teacher-workload"
+      ],
+      "priority": 90,
       "reasons": {
         "teacher": "可依家長訊息與情境產生具同理心、專業且可再調整的回覆草稿。",
         "homeroom": "適合頻繁處理親師聯絡、學生行為與學習狀況訊息的班級導師。",
@@ -2423,9 +2412,9 @@
         "subject"
       ],
       "painPoints": [
-        "picture-book-workflow",
-        "form-creation",
-        "reading-activities"
+        "reading-literacy",
+        "assessment",
+        "lesson-planning"
       ],
       "priority": 78,
       "reasons": {
@@ -2465,10 +2454,9 @@
         "subject"
       ],
       "painPoints": [
-        "poetry-writing",
-        "image-creation",
-        "digital-creativity",
-        "family-engagement"
+        "creative-learning",
+        "media-production",
+        "language-learning"
       ],
       "priority": 72,
       "reasons": {
@@ -2502,6 +2490,7 @@
   },
   {
     "id": 92,
+    "upgradeFromId": 13,
     "title": "5W1H 靈感發射器 PRO版",
     "description": "桃園市石門國小資訊組打造、阿凱老師上架的 AI 創意思考小幫手 PRO 版，用 5W1H（What／Who／When／Where／Why／How）框架幫老師結構化發想教學設計、改寫學生評語，還能建立專屬的客製化思考助手。",
     "audienceFit": {
@@ -2518,9 +2507,8 @@
         "subject"
       ],
       "painPoints": [
-        "creative-writing",
-        "idea-generation",
-        "writing-scaffolding"
+        "creative-learning",
+        "student-practice"
       ],
       "priority": 88,
       "reasons": {
@@ -2699,9 +2687,8 @@
         "teacher"
       ],
       "painPoints": [
-        "worksheet-illustration",
-        "assessment-design",
-        "printable-resources"
+        "assessment",
+        "content-creation"
       ],
       "priority": 89,
       "reasons": {
@@ -2791,8 +2778,7 @@
         "teacher"
       ],
       "painPoints": [
-        "ai-agent-literacy",
-        "web-automation",
+        "digital-literacy",
         "professional-learning"
       ],
       "priority": 60,
@@ -2865,9 +2851,9 @@
         "subject"
       ],
       "painPoints": [
-        "local-culture-resources",
-        "curriculum-materials",
-        "source-literacy"
+        "resource-discovery",
+        "digital-literacy",
+        "content-creation"
       ],
       "priority": 88,
       "reasons": {
