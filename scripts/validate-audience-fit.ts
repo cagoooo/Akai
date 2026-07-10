@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync, statSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -15,7 +15,17 @@ import { validateAudienceFit } from '../client/src/lib/audienceValidation';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SOURCE = resolve(ROOT, 'server', 'data', 'tools.json');
 const RECOMMENDATION_LIMIT = 6;
-const isStrict = process.argv.includes('--strict');
+
+/**
+ * 已存在、尚待分批回填 audienceFit 的外部工具。每批回填完成時，必須同步移除對應 ID，
+ * 以避免 progressive 模式意外放行新工具。
+ */
+export const LEGACY_MISSING_AUDIENCE_IDS: ReadonlySet<number> = new Set([
+  2, 3, 5, 6, 9, 10, 14, 15, 17, 18, 19, 24, 27, 28, 30, 31, 32, 33, 34, 35,
+  36, 37, 38, 39, 40, 41, 42, 45, 46, 47, 48, 50, 51, 52, 53, 56, 57, 60, 63,
+  68, 69, 72, 73, 75, 78, 80, 82, 83, 84, 85, 86, 88, 93, 94, 95, 96, 97, 98,
+  101, 102, 104, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116,
+]);
 
 export const REQUIRED_PROFILES: readonly AudienceProfile[] = [
   { audience: 'student' },
@@ -33,44 +43,111 @@ export const REQUIRED_PROFILES: readonly AudienceProfile[] = [
   ),
 ];
 
-function loadTools(): EducationalTool[] {
-  return JSON.parse(readFileSync(SOURCE, 'utf8')) as EducationalTool[];
+interface Options {
+  strict: boolean;
+  toolsFile: string;
 }
 
-function formatToolIds(tools: readonly EducationalTool[]): string {
-  return tools.map((tool) => `#${tool.id}`).join(', ');
+function parseOptions(args: readonly string[]): Options {
+  let strict = false;
+  let toolsFile = SOURCE;
+
+  for (let index = 0; index < args.length; index += 1) {
+    const arg = args[index];
+    if (arg === '--strict') {
+      strict = true;
+      continue;
+    }
+    if (arg === '--tools-file') {
+      const suppliedPath = args[index + 1];
+      if (!suppliedPath || suppliedPath.startsWith('--')) {
+        throw new Error('--tools-file 必須提供 JSON 檔案路徑。');
+      }
+      toolsFile = resolve(process.cwd(), suppliedPath);
+      index += 1;
+      continue;
+    }
+    throw new Error(`不支援的參數：${arg}`);
+  }
+
+  if (!existsSync(toolsFile) || !statSync(toolsFile).isFile()) {
+    throw new Error(`找不到 tools JSON 檔案：${toolsFile}`);
+  }
+  return { strict, toolsFile };
+}
+
+function loadTools(toolsFile: string): EducationalTool[] {
+  try {
+    const data: unknown = JSON.parse(readFileSync(toolsFile, 'utf8'));
+    if (!Array.isArray(data)) {
+      throw new Error('根節點不是工具陣列。');
+    }
+    return data as EducationalTool[];
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`無法讀取 tools JSON：${toolsFile}（${message}）`);
+  }
+}
+
+function formatTool(tool: EducationalTool): string {
+  return `#${tool.id} ${tool.title}`;
 }
 
 function run(): void {
-  const tools = loadTools();
+  const options = parseOptions(process.argv.slice(2));
+  const tools = loadTools(options.toolsFile);
   const externalTools = tools.filter((tool) => !tool.isInternal);
   const missingAudienceFit = externalTools.filter((tool) => !tool.audienceFit);
+  const legacyMissing = missingAudienceFit.filter((tool) => LEGACY_MISSING_AUDIENCE_IDS.has(tool.id));
+  const newMissing = missingAudienceFit.filter((tool) => !LEGACY_MISSING_AUDIENCE_IDS.has(tool.id));
   const metadataErrors = externalTools
     .filter((tool) => tool.audienceFit)
     .flatMap((tool) => validateAudienceFit(tool.audienceFit).map(
-      (message) => `#${tool.id} ${tool.title}: ${message}`,
+      (message) => `${formatTool(tool)}: ${message}`,
     ));
+  const staleBaseline = externalTools.filter((tool) =>
+    LEGACY_MISSING_AUDIENCE_IDS.has(tool.id)
+    && tool.audienceFit
+    && validateAudienceFit(tool.audienceFit).length === 0,
+  );
 
   if (metadataErrors.length > 0) {
     console.error(metadataErrors.join('\n'));
-    console.error(
-      `audienceFit 驗證失敗：${externalTools.length} 個外部工具中共有 ${metadataErrors.length} 個錯誤；已略過 segment 覆蓋檢查。`,
-    );
+  }
+  if (staleBaseline.length > 0) {
+    for (const tool of staleBaseline) {
+      console.error(
+        `${formatTool(tool)}: 已有合法 audienceFit，請從 LEGACY_MISSING_AUDIENCE_IDS 移除。`,
+      );
+    }
+  }
+  if (newMissing.length > 0) {
+    for (const tool of newMissing) {
+      console.error(`${formatTool(tool)}: 新工具不可缺少 audienceFit`);
+    }
+  }
+  if (options.strict && legacyMissing.length > 0) {
+    for (const tool of legacyMissing) {
+      console.error(`${formatTool(tool)}: legacy 工具不可缺少 audienceFit（--strict）`);
+    }
+  }
+
+  const hasBlockingMetadataError = metadataErrors.length > 0
+    || staleBaseline.length > 0
+    || newMissing.length > 0
+    || (options.strict && legacyMissing.length > 0);
+  if (hasBlockingMetadataError) {
     process.exitCode = 1;
     return;
   }
 
-  if (missingAudienceFit.length > 0) {
-    const missingSummary = `缺少 audienceFit：${missingAudienceFit.length} 個既有工具（範圍 #${missingAudienceFit[0].id}～#${missingAudienceFit.at(-1)?.id}；IDs：${formatToolIds(missingAudienceFit)}）。`;
-    if (isStrict) {
-      console.error(missingSummary);
-      console.error('嚴格模式要求所有外部工具完整回填 audienceFit。');
-      process.exitCode = 1;
-      return;
+  if (legacyMissing.length > 0) {
+    for (const tool of legacyMissing) {
+      console.warn(`${formatTool(tool)}: legacy 工具尚缺 audienceFit（暫時允許）`);
     }
-
-    console.warn(`警告：${missingSummary}`);
-    console.warn('已略過 22 個 profile 的推薦覆蓋檢查；請執行 npm run validate:audience:strict 強制完整回填。');
+    console.warn(
+      `已略過 ${legacyMissing.length} 個 legacy 工具；待全部回填後才會檢查 ${REQUIRED_PROFILES.length} 個 profile 的推薦覆蓋。`,
+    );
     return;
   }
 
@@ -80,23 +157,29 @@ function run(): void {
   }));
   const coverageErrors = segmentCounts
     .filter(({ count }) => count < RECOMMENDATION_LIMIT)
-    .map(({ key, count }) => `${key} 僅 ${count} 個推薦（至少需要 ${RECOMMENDATION_LIMIT} 個）`);
+    .map(({ key, count }) => `${key} 僅有 ${count} 個推薦結果，低於 ${RECOMMENDATION_LIMIT} 個。`);
 
   if (coverageErrors.length > 0) {
     console.error(coverageErrors.join('\n'));
     console.error(
-      `audienceFit 覆蓋驗證失敗：${REQUIRED_PROFILES.length} 個 profiles 中有 ${coverageErrors.length} 個不足 ${RECOMMENDATION_LIMIT} 項推薦。`,
+      `audienceFit 覆蓋檢查失敗：${REQUIRED_PROFILES.length} 個 profile 中有 ${coverageErrors.length} 個不足 ${RECOMMENDATION_LIMIT} 個推薦結果。`,
     );
     process.exitCode = 1;
     return;
   }
 
   console.log(
-    `audienceFit 驗證成功：${externalTools.length} 個外部工具已完整回填，${REQUIRED_PROFILES.length} 個 profiles。`,
+    `audienceFit 驗證通過：${externalTools.length} 個外部工具、${REQUIRED_PROFILES.length} 個 profile。`,
   );
   for (const { key, count } of segmentCounts) {
     console.log(`${key}: ${count}`);
   }
 }
 
-run();
+try {
+  run();
+} catch (error) {
+  const message = error instanceof Error ? error.message : String(error);
+  console.error(`audienceFit 驗證失敗：${message}`);
+  process.exitCode = 1;
+}
