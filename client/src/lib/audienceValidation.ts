@@ -153,7 +153,10 @@ export function validateAudienceFit(input: unknown): string[] {
     if (audiences?.includes('student') && !hasUsableReason(reasons, ['student'])) {
       errors.push('學生客群至少需要一則非空白的學生理由');
     }
-    const teacherReasonKeys = ['teacher', ...TEACHER_ROLES, ...DEPARTMENTS];
+    const applicableRoleKeys = teacherRoles ?? TEACHER_ROLES;
+    const canUseDepartmentReasons = teacherRoles === undefined || teacherRoles.includes('admin');
+    const applicableDepartmentKeys = canUseDepartmentReasons ? (departments ?? DEPARTMENTS) : [];
+    const teacherReasonKeys = ['teacher', ...applicableRoleKeys, ...applicableDepartmentKeys];
     if (audiences?.includes('teacher') && !hasUsableReason(reasons, teacherReasonKeys)) {
       errors.push('老師客群至少需要一則非空白的老師、職務或處室理由');
     }

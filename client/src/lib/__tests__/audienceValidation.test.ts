@@ -88,6 +88,45 @@ describe('validateAudienceFit', () => {
     ).toContain('老師客群至少需要一則非空白的老師、職務或處室理由');
   });
 
+  it('限定科任老師時，行政理由不能滿足老師客群理由', () => {
+    const fit = {
+      audiences: ['teacher'],
+      teacherRoles: ['subject'],
+      painPoints: ['lesson-planning'],
+      priority: 80,
+    };
+
+    expect(validateAudienceFit({ ...fit, reasons: { admin: '方便行政管理' } })).toContain(
+      '老師客群至少需要一則非空白的老師、職務或處室理由',
+    );
+    expect(
+      validateAudienceFit({
+        ...fit,
+        reasons: { admin: '方便行政管理', subject: '協助科任老師備課' },
+      }),
+    ).toEqual([]);
+  });
+
+  it('限定行政處室時，其他處室理由不能滿足老師客群理由', () => {
+    const fit = {
+      audiences: ['teacher'],
+      teacherRoles: ['admin'],
+      departments: ['academic'],
+      painPoints: ['school-management'],
+      priority: 85,
+    };
+
+    expect(validateAudienceFit({ ...fit, reasons: { counseling: '協助輔導室業務' } })).toContain(
+      '老師客群至少需要一則非空白的老師、職務或處室理由',
+    );
+    expect(
+      validateAudienceFit({
+        ...fit,
+        reasons: { counseling: '協助輔導室業務', academic: '協助教務行政' },
+      }),
+    ).toEqual([]);
+  });
+
   it('同時面向老師與學生時，兩邊都必須有可用理由', () => {
     expect(
       validateAudienceFit({
