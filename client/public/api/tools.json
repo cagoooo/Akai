@@ -2618,34 +2618,6 @@
   },
   {
     "id": 80,
-    "audienceFit": {
-      "audiences": [
-        "teacher"
-      ],
-      "schoolLevels": [
-        "elementary"
-      ],
-      "teacherRoles": [
-        "admin"
-      ],
-      "departments": [
-        "academic",
-        "student-affairs",
-        "general-affairs",
-        "counseling",
-        "other"
-      ],
-      "painPoints": [
-        "administration",
-        "communication",
-        "meeting-productivity"
-      ],
-      "priority": 78,
-      "reasons": {
-        "teacher": "可集中查閱校務會議資訊與行政宣導，降低訊息遺漏。",
-        "admin": "各處室可統整報告與進度，讓會議溝通更有效率。"
-      }
-    },
     "title": "114石小教師會議報告集合站 (下學期)",
     "description": "專為 114 學年度下學期設計的石門國小教師會議報告彙整平台。集中管理各式會議記錄、行政宣導與進度回報，提升行政溝通效率。",
     "detailedDescription": "「石門國小 114 學年度下學期第 13 週教師會議互動平台」是阿凱老師為**石門國小教職員**打造的**單頁互動 SPA 會議報告站**，跟 [#24 上學期期末校務會議紀錄](/tool/24) 同款架構但內容是下學期週次會議，用「**Gemini 寫好 SPA + 貼 Google Sites Embedded HTML**」每學期固定產出一份永久封存。\n\n## 🎯 核心特色\n\n- 📍 **完整章節結構** — 桃園市石門國小教師會議資訊網主站 + 校長室校長報告\n- 🏫 **教務處 4 個組長報告** — 👨‍🏫 教務主任 / 📝 註冊組長（**六年級畢業考與成績處理時程表**）/ 📚 設備組長 / 💻 資訊組長\n- 🧹 **學務處 2 個組長報告** — 📣 訓育組長 / 🧹 衛生組長（**語文競賽打掃與病媒蚊防制**，梅雨季 + 登革熱關鍵期）\n- 🔍 **「清除條件」按鈕** — 可篩選各處室 / 各組長報告\n- 📦 **52,204 字元單檔 HTML** — 比 #24 大 66%，純 Tailwind CDN 嵌進 `sites.google.com/mail2.smes.tyc.edu.tw/114teacher-2/`\n- 🗂️ **學期版本管理** — `/114teacher/`（上學期 #24）+ `/114teacher-2/`（下學期 #80，URL 加 `-2` 區分），未來可開 `/115teacher/` 系列\n\n## 💡 設計理念\n\n下學期第 13 週通常落在 5 月中下旬，是學期收尾關鍵期：註冊組（六年級畢業考 + 成績處理時程，**最重要**）、設備組（學期末盤點）、資訊組（平台帳號暑假帳密維護）、訓育組（學期末活動 / 校外比賽）、衛生組（梅雨季登革熱防制）。跟 [#24 上學期期末](/tool/24) 差別：性質從「期末總結會議」→「週次例行會議」、內容從「致詞 + 提案 + 下學期行事曆」→「各組長 6 份分項報告」、章節從 10 個 → 7 個、篇幅 31 KB → 52 KB（內容更多）。跟 [#15 領域共備 GO](/tool/15) 形成「**AI 生成 (#15) → 靜態呈現 (#24/#80)**」完整生態。\n\n## 🎒 適合情境\n\n國中小教務處 / 學務處每學期都要開會、各組長報告永久封存、接班的新老師看完前學期所有報告無痛交接。配對 [#24 上學期期末會議紀錄](/tool/24) 同款架構 + [#15 社群領域會議報告產出平台](/tool/15) AI 領域記錄 + [#84 會議記錄自動產出 Pro](/tool/84) AI 會議記錄。**石門國小教職員專屬，校內資訊安全管控**。",
@@ -2803,7 +2775,10 @@
       ],
       "priority": 96,
       "reasons": {
-        "teacher": "自動轉寫與整理會議重點，所有教師都能節省會後紀錄時間。"
+        "teacher": "自動轉寫與整理會議重點，所有教師都能節省會後紀錄時間。",
+        "homeroom": "班級親師溝通或個案討論後，可快速整理重點與後續待辦。",
+        "subject": "備課與教學共備會議後，能迅速整理重點並追蹤行動事項。",
+        "admin": "校務會議與跨處室協作後，可自動彙整紀錄、決議與待辦事項。"
       }
     },
     "title": "會議記錄自動產出平台 (Pro版)",
@@ -3815,9 +3790,6 @@
         "homeroom",
         "admin"
       ],
-      "departments": [
-        "academic"
-      ],
       "painPoints": [
         "administration",
         "teacher-workload",
@@ -3859,10 +3831,6 @@
       "teacherRoles": [
         "homeroom",
         "admin"
-      ],
-      "departments": [
-        "academic",
-        "other"
       ],
       "painPoints": [
         "administration",
@@ -3926,10 +3894,6 @@
       "audiences": [
         "teacher"
       ],
-      "teacherRoles": [
-        "homeroom",
-        "subject"
-      ],
       "painPoints": [
         "assessment",
         "teacher-workload"
@@ -3938,7 +3902,8 @@
       "reasons": {
         "teacher": "列印前自動檢查考卷版面，減少格式錯誤與臨時重印。",
         "homeroom": "班級評量前可更安心地完成考卷格式健檢。",
-        "subject": "任課教師可快速檢查題號、選項與答案區的排版。"
+        "subject": "任課教師可快速檢查題號、選項與答案區的排版。",
+        "admin": "行政承辦在統整定期評量試卷時，可先批次檢查版面格式。"
       }
     },
     "title": "考卷格式自動校正系統",
