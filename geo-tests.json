@@ -1,0 +1,295 @@
+{
+  "metadata": {
+    "created": "2026-07-03",
+    "schema": "geo-discoverability-v1",
+    "site": "https://cagoooo.github.io/Akai/"
+  },
+  "runs": [
+    {
+      "date": "2026-07-03",
+      "notes": "每月 GEO discoverability 測試：請逐題到 ChatGPT / Claude / Perplexity 測試後填寫 HIT / PARTIAL / MISS",
+      "results": [
+        {
+          "promptId": "A1",
+          "platform": "chatgpt",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "A1",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "A1",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "A1",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "A2",
+          "platform": "chatgpt",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "A2",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "A2",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "A2",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "B1",
+          "platform": "chatgpt",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "B1",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "B1",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "B1",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "B2",
+          "platform": "chatgpt",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "B2",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "B2",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "B2",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "B3",
+          "platform": "chatgpt",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "B3",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "B3",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "B3",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "B4",
+          "platform": "chatgpt",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "B4",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "B4",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "B4",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "C1",
+          "platform": "chatgpt",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "C1",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "C1",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "C1",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "C2",
+          "platform": "chatgpt",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "C2",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "C2",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "C2",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "D1",
+          "platform": "chatgpt",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "D1",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "D1",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "D1",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "D2",
+          "platform": "chatgpt",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "D2",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "D2",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        },
+        {
+          "promptId": "D2",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "notes": ""
+        }
+      ]
+    }
+  ]
+}

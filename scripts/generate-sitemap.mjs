@@ -23,23 +23,44 @@ urls.push({
 
 // ⚠️ 不列入 sitemap 的頁面（與 generate-og-pages.mjs 的 noindex 決策對齊）：
 //   - /wish/              → OG 分享頁，<meta robots="noindex">（純導流，真人 JS 導回主站）
-//   - /tool/{id}          → OG 分享頁，<meta robots="noindex">（每個工具的可索引內容改由 /blog/tool-{id} 迷你長文承接）
 //   - /share/heatmap.html → 首頁 OG 變體，noindex + canonical 指向首頁
 // sitemap 列出 noindex 網址會讓 Search Console 報「已提交網址被標記為 noindex」矛盾警告，故一律排除。
-// 工具仍可被搜尋到：靠下方的 blog 長文 / 迷你 blog landing + 外部 app 實際網址。
+//
+// v3.6.89 GEO 策略更新：
+//   - /tool/{id} 已改為可索引的站內工具摘要頁（generate-og-pages.mjs 產出 index, follow）
+//   - /blog/{slug} 承接教學情境與長尾查詢
+//   - 外部工具 URL 保留在 sitemap，讓搜尋引擎也能找到實際可使用頁
+// 這三層讓 AI 搜尋可以穩定建立「工具摘要頁 → 使用情境文章 → 實際工具」關係。
+
+// 站內工具詳情頁（科技教育專區 canonical 工具節點）
+// isInternal（例如 #100 工具索引神器）也保留，因為它有明確站內路由與內容。
+let toolDetailCount = 0;
+for (const tool of tools) {
+    urls.push({
+        loc: `${SITE_URL}/tool/${tool.id}`,
+        lastmod: tool.addedAt ? tool.addedAt.slice(0, 10) : TODAY,
+        changefreq: tool.addedAt ? 'monthly' : 'yearly',
+        priority: tool.isInternal ? '0.72' : '0.78',
+    });
+    toolDetailCount++;
+}
+console.log(`🧭 站內工具詳情頁：${toolDetailCount} 頁`);
 
 // External tool URLs（指向工具實際運作的 GitHub Pages / Replit 等）
 // isInternal 工具不對外（沒 url 或 url 是內部路徑），跳過
+let externalToolCount = 0;
 for (const tool of tools) {
     if (tool.url && !tool.isInternal && /^https?:\/\//.test(tool.url)) {
         urls.push({
             loc: tool.url,
             lastmod: TODAY,
             changefreq: 'monthly',
-            priority: '0.7',
+            priority: '0.62',
         });
+        externalToolCount++;
     }
 }
+console.log(`🔗 實際工具外部網址：${externalToolCount} 頁`);
 
 // Blog 教學情境長文 — 從 client/src/blog/posts.ts 解析
 const postsPath = resolve(__dirname, '../client/src/blog/posts.ts');

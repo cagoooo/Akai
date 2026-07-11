@@ -254,6 +254,7 @@ export function BlogPost() {
         readingMinutes={post.readingMinutes}
         body={post.body}
         tags={post.tags}
+        relatedTools={relatedTools}
       />
 
       <BulletinHeader />

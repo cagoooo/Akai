@@ -81,10 +81,10 @@ function generateToolPageHtml(tool) {
   <!-- LINE -->
   <meta property="og:image:secure_url" content="${imageUrl}">
 
-  <!-- Robots：本頁為社群爬蟲 OG 用 landing，一般使用者會 JS redirect 到 SPA。
-       告訴 Google 不索引此 OG 頁，避免 Search Console 報「頁面會重新導向 / 已檢索未索引」。
-       follow 保留，讓 Google 仍跟著連結到 SPA 主頁與其他工具。社群爬蟲不理會 noindex。-->
-  <meta name="robots" content="noindex, follow">
+  <!-- Robots：v3.6.89 起，本頁不只是社群 OG landing，也作為搜尋引擎與 AI 爬蟲
+       可索引的站內工具摘要頁。一般使用者仍會被 JS redirect 到 SPA 體驗；
+       Googlebot / Bingbot / 社群爬蟲會停留讀取 meta 與 JSON-LD。-->
+  <meta name="robots" content="index, follow">
 
   <!-- Canonical -->
   <link rel="canonical" href="${pageUrl}">
@@ -94,18 +94,29 @@ function generateToolPageHtml(tool) {
   ${JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
+    '@id': `${pageUrl}#software`,
     name: tool.title,
     description: tool.description,
     applicationCategory: 'EducationalApplication',
     operatingSystem: 'Web Browser',
     url: pageUrl,
+    sameAs: tool.url,
     image: imageUrl,
+    isAccessibleForFree: true,
+    educationalUse: ['teaching', 'classroom activity', 'elementary education'],
+    audience: {
+      '@type': 'EducationalAudience',
+      educationalRole: 'teacher',
+    },
     author: {
       '@type': 'Person',
+      '@id': `${SITE_URL}/#akai`,
       name: '阿凱老師',
       affiliation: {
         '@type': 'EducationalOrganization',
         name: '桃園市龍潭區石門國民小學',
+        alternateName: 'Shih Men Elementary School',
+        url: 'https://www.smes.tyc.edu.tw/',
       },
     },
     offers: {

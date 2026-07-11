@@ -14,6 +14,7 @@
  *
  * 用法：
  *   node scripts/test-geo-discoverability.mjs          # 列出測試 prompts
+ *   node scripts/test-geo-discoverability.mjs --new-run # 建立本月 PENDING 測試紀錄
  *   node scripts/test-geo-discoverability.mjs --report # 看歷史 hit rate 趨勢
  *
  * 建議頻率：每月跑一次（每月 1 號），記錄 GEO 改善趨勢
@@ -164,6 +165,38 @@ function buildBaselineIfMissing() {
   return true;
 }
 
+function saveRecords(data) {
+  writeFileSync(RECORD_FILE, JSON.stringify(data, null, 2) + '\n', 'utf-8');
+}
+
+function createPendingRun() {
+  const data = loadRecords();
+  const today = new Date().toISOString().split('T')[0];
+  data.runs ||= [];
+  const existing = data.runs.find((run) => run.date === today);
+  if (existing) {
+    console.log(`\nℹ️  ${today} 已有一筆 GEO 測試紀錄，未重複建立。\n`);
+    return;
+  }
+
+  data.runs.push({
+    date: today,
+    notes: '每月 GEO discoverability 測試：請逐題到 ChatGPT / Claude / Perplexity 測試後填寫 HIT / PARTIAL / MISS',
+    results: TEST_PROMPTS.flatMap((p) =>
+      AI_PLATFORMS.map((plat) => ({
+        promptId: p.id,
+        platform: plat.id,
+        result: 'PENDING',
+        citation: null,
+        notes: '',
+      }))
+    ),
+  });
+  saveRecords(data);
+  console.log(`\n✨ 已建立 ${today} 的 GEO PENDING 測試紀錄：${RECORD_FILE}`);
+  console.log('👉 測完後把 result 改成 HIT / PARTIAL / MISS，再跑 `node scripts/test-geo-discoverability.mjs --report`\n');
+}
+
 function printReport() {
   const data = loadRecords();
   if (!data.runs || data.runs.length === 0) {
@@ -205,7 +238,10 @@ function printReport() {
 // ── Main ─────────────────────────────────────────────────
 const args = process.argv.slice(2);
 const created = buildBaselineIfMissing();
-if (args.includes('--report') || args.includes('-r')) {
+if (args.includes('--new-run')) {
+  createPendingRun();
+  printPrompts();
+} else if (args.includes('--report') || args.includes('-r')) {
   printReport();
 } else {
   printPrompts();

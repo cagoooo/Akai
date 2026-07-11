@@ -39,7 +39,7 @@ interface HomeProps extends BaseProps {
 
 interface ToolProps extends BaseProps {
   mode: 'tool';
-  tool: Pick<EducationalTool, 'id' | 'title' | 'description'> & {
+  tool: Pick<EducationalTool, 'id' | 'title' | 'description' | 'url'> & {
     previewUrl?: string;
     ogPreviewUrl?: string;
     tags?: string[];
@@ -95,18 +95,29 @@ export function PageHead(props: Props) {
     const softwareSchema = {
       '@context': 'https://schema.org',
       '@type': 'SoftwareApplication',
+      '@id': `${url}#software`,
       name: tool.title,
       description: tool.description,
       applicationCategory: 'EducationalApplication',
       operatingSystem: 'Web Browser',
       url,
+      sameAs: tool.url,
       image: image || undefined,
+      isAccessibleForFree: true,
+      educationalUse: ['teaching', 'classroom activity', 'elementary education'],
+      audience: {
+        '@type': 'EducationalAudience',
+        educationalRole: 'teacher',
+      },
       author: {
         '@type': 'Person',
+        '@id': `${SITE_URL}/#akai`,
         name: '阿凱老師',
         affiliation: {
           '@type': 'EducationalOrganization',
           name: '桃園市龍潭區石門國民小學',
+          alternateName: 'Shih Men Elementary School',
+          url: 'https://www.smes.tyc.edu.tw/',
         },
       },
       offers: {
