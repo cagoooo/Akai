@@ -3313,10 +3313,10 @@ b21a41f 🎨 簡報頁加 favicon + OG 分享卡 + Schema.org
 | 編號 | 項目 | Effort | 說明與預期效益 |
 |---|---|---|---|
 | **P1-1** | 「換一批推薦」 | M | ✅ **完成於 2026-07-11**（commit [`9d91c0a`](https://github.com/cagoooo/Akai/commit/9d91c0a)）。`recommendTools` 加 `excludeIds`（連同家族一併排除），結果頁「🔄 換一批推薦」按鈕每按一次給全新一波不重複清單，看完整輪自動重洗（無限換）。實測批次 1→2→3 零重複、連點 20 次不空白。 |
-| **P1-2** | 學生端細分（年級 + 興趣科目） | M | 學生端仍是 `return true` 全給、零個人化。加低/中/高年級 + 科目興趣，配 `schoolLevels` 與科目 tag。需先替遊戲/學習類工具補年級與科目標籤。 |
-| **P1-3** | 結合「最近使用」去重 + 探索 | S–M | `useRecentTools` 已在收。把用過的降權或標「你用過」，版面留給沒探索過的工具。 |
-| **P1-5** | 新工具 freshness 曝光期加分 | S | 新品若 priority 不高就沉底。給「上架 N 天內」時間衰減 bonus（`tool.addedAt` 已有欄位可用）。 |
-| **P1-7** | **持久化「為你推薦」首頁條**（新增） | M–L | 精靈完成後 profile 已存 localStorage，但只用在「一次性 modal」。改成在首頁常駐一條「為你推薦」橫幅（用已存 profile 即時算），把一次性引導變成每日回訪都有的個人化入口。**讓精靈的投資產生長期價值。** |
+| **P1-2** | 學生端學段細分 | M | ✅ **完成 2026-07-11**（[`7fa2890`](https://github.com/cagoooo/Akai/commit/7fa2890)）。學生也先選學段（國小／國中），`isEligible` 據 `schoolLevels` 過濾（國小學生不再看到國中專屬工具）；科目/興趣由既有痛點步驟涵蓋。備註：逐工具「低/中/高年級」資料未建，故年級細分以學段（國小/國中）落地。 |
+| **P1-3** | 結合「最近使用」去重 + 探索 | S–M | ✅ **完成 2026-07-11**（[`7fa2890`](https://github.com/cagoooo/Akai/commit/7fa2890)）。`recommendTools` 加 `recentlyUsedIds` 參數，近期用過的工具降權 −24（不排除）；wizard 與首頁條都吃 `useRecentTools`。 |
+| **P1-5** | 新工具 freshness 曝光期加分 | S | ✅ **完成 2026-07-11**（[`7fa2890`](https://github.com/cagoooo/Akai/commit/7fa2890)）。`addedAt` 45 天內線性衰減加分（最多 +18），無 addedAt/過期則 0。 |
+| **P1-7** | 持久化「為你推薦」首頁條 | M–L | ✅ **完成 2026-07-11**（[`7fa2890`](https://github.com/cagoooo/Akai/commit/7fa2890)）。`AudienceRecommendationStrip` 依已存 profile 即時算 4 個推薦（含最近使用去重），完成精靈的回訪者首頁常駐，把一次性 modal 變成每次回訪的個人化入口。 |
 | **P1-8** | **精靈完成率 / 跳過率漏斗**（新增） | S–M | 目前只量到「看到 results 之後」的 CTR，量不到「多少人開了精靈卻中途關掉」「痛點步驟多少人略過」。每個 step 補一個輕量埋點，dashboard 加一個漏斗，找出流失在哪一步。 |
 
 ### 🟦 P2（大型 / 實驗性）
