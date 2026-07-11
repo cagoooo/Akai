@@ -2,8 +2,14 @@
   {
     "id": 1,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "painPoints": ["it-support", "resource-discovery"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "painPoints": [
+        "it-support",
+        "resource-discovery"
+      ],
       "priority": 68,
       "reasons": {
         "teacher": "可即時詢問教學工具、學校系統與教育應用問題，適合作為一般支援入口。",
@@ -27,10 +33,24 @@
   {
     "id": 2,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "teacherRoles": ["admin"],
-      "departments": ["academic", "student-affairs", "general-affairs", "counseling", "other"],
-      "painPoints": ["administration", "communication", "meeting-productivity"],
+      "audiences": [
+        "teacher"
+      ],
+      "teacherRoles": [
+        "admin"
+      ],
+      "departments": [
+        "academic",
+        "student-affairs",
+        "general-affairs",
+        "counseling",
+        "other"
+      ],
+      "painPoints": [
+        "administration",
+        "communication",
+        "meeting-productivity"
+      ],
       "priority": 92,
       "reasons": {
         "teacher": "集中校內公告與行事，減少跨處室資訊落差。",
@@ -68,9 +88,19 @@
       "民主"
     ],
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["assessment", "classroom-management", "student-practice"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "assessment",
+        "classroom-management",
+        "student-practice"
+      ],
       "priority": 92,
       "reasons": {
         "teacher": "可用即時題目、QR Code 與全班回覆快速掌握理解狀況，讓不敢舉手的學生也能參與。",
@@ -84,10 +114,22 @@
     "id": 4,
     "upgradeToId": 87,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["reading-literacy", "assessment", "student-practice"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "reading-literacy",
+        "assessment",
+        "student-practice"
+      ],
       "priority": 90,
       "reasons": {
         "teacher": "可把課文快速轉成 PIRLS 四層次題組，支援國小閱讀評量、備課與補救教學。",
@@ -114,10 +156,23 @@
   {
     "id": 5,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "teacherRoles": ["homeroom", "admin"],
-      "departments": ["student-affairs", "general-affairs"],
-      "painPoints": ["event-management", "classroom-management", "student-practice"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "admin"
+      ],
+      "departments": [
+        "student-affairs",
+        "general-affairs"
+      ],
+      "painPoints": [
+        "event-management",
+        "classroom-management",
+        "student-practice"
+      ],
       "priority": 82,
       "reasons": {
         "teacher": "園遊會可用即時點餐與叫號，減少攤位排隊與人工統計。",
@@ -144,10 +199,22 @@
   {
     "id": 6,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["student-practice", "creative-learning", "accessibility"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "creative-learning",
+        "accessibility"
+      ],
       "priority": 84,
       "reasons": {
         "teacher": "可用注音、唐詩、英文等主題包安排低中年級的短時練習與課間活動。",
@@ -177,10 +244,19 @@
     "title": "點「石」成金🐝(評語優化)",
     "description": "創新的學生評語優化工具，協助教師撰寫更正向、積極且個人化的學生評語",
     "audienceFit": {
-      "audiences": ["teacher"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["homeroom"],
-      "painPoints": ["communication", "teacher-workload"],
+      "audiences": [
+        "teacher"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom"
+      ],
+      "painPoints": [
+        "communication",
+        "teacher-workload"
+      ],
       "priority": 89,
       "reasons": {
         "teacher": "可依學生特質快速產生正向、個人化且能再調整的評語，減輕期末大量撰寫負擔。",
@@ -205,8 +281,13 @@
     "title": "12年教案有14",
     "description": "豐富的教案資源分享平台，提供多元化的教學素材和靈感",
     "audienceFit": {
-      "audiences": ["teacher"],
-      "painPoints": ["lesson-planning", "resource-discovery"],
+      "audiences": [
+        "teacher"
+      ],
+      "painPoints": [
+        "lesson-planning",
+        "resource-discovery"
+      ],
       "priority": 72,
       "reasons": {
         "teacher": "可透過 LINE 快速查找十二年國教各年級與領域教案，支援備課、研習及教學資源分享。"
@@ -228,10 +309,22 @@
   {
     "id": 9,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary", "junior"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["student-practice", "digital-literacy"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "digital-literacy"
+      ],
       "priority": 48,
       "reasons": {
         "teacher": "可作為短暫課間獎勵，或示範網頁遊戲的關卡與成就設計。",
@@ -258,9 +351,18 @@
   {
     "id": 10,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["classroom-management", "teacher-workload", "student-practice"],
+      "audiences": [
+        "teacher"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "classroom-management",
+        "teacher-workload",
+        "student-practice"
+      ],
       "priority": 95,
       "reasons": {
         "teacher": "把課堂常用的分組、計時、作業與學生資料整合在同一處。",
@@ -288,8 +390,15 @@
     "title": "剛好學：課堂互動so easy",
     "description": "阿凱老師與阿剛老師共同打造的剛好學課堂互動平台，13 種互動模式涵蓋投票、QA、閱讀測驗、繪圖題、文字雲、相片牆，學生掃 QR Code 就能加入。",
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "painPoints": ["classroom-management", "assessment", "student-practice"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "painPoints": [
+        "classroom-management",
+        "assessment",
+        "student-practice"
+      ],
       "priority": 94,
       "reasons": {
         "teacher": "可用多種即時題型、進度追蹤與結果匯出掌握全班理解狀況並提升參與率。",
@@ -312,9 +421,17 @@
   {
     "id": 12,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary"],
-      "painPoints": ["reading-literacy", "resource-discovery"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "painPoints": [
+        "reading-literacy",
+        "resource-discovery"
+      ],
       "priority": 66,
       "reasons": {
         "teacher": "可集中查找校內 PIRLS 工具與閱讀推廣資源，方便教學導入與資源分享。",
@@ -344,10 +461,22 @@
     "title": "5W1H 靈感發射器 🚀",
     "description": "創意思維激發工具，協助發想教學內容",
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary", "junior"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["creative-learning", "student-practice"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "creative-learning",
+        "student-practice"
+      ],
       "priority": 86,
       "reasons": {
         "teacher": "可用 5W1H 六格與分級難度建立寫作鷹架，帶領學生發想、檢查一致性並完成故事。",
@@ -372,9 +501,18 @@
   {
     "id": 14,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["creative-learning", "content-creation"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "creative-learning",
+        "content-creation"
+      ],
       "priority": 58,
       "reasons": {
         "teacher": "可快速設計孝親、節慶與家庭教育活動素材。",
@@ -400,9 +538,19 @@
   {
     "id": 15,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "teacherRoles": ["homeroom", "subject", "admin"],
-      "painPoints": ["meeting-productivity", "professional-learning", "teacher-workload"],
+      "audiences": [
+        "teacher"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject",
+        "admin"
+      ],
+      "painPoints": [
+        "meeting-productivity",
+        "professional-learning",
+        "teacher-workload"
+      ],
       "priority": 93,
       "reasons": {
         "teacher": "把會議重點快速整理成可交付的正式紀錄。",
@@ -428,10 +576,20 @@
   {
     "id": 16,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "schoolLevels": ["elementary", "junior"],
-      "teacherRoles": ["homeroom"],
-      "painPoints": ["communication", "teacher-workload"],
+      "audiences": [
+        "teacher"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom"
+      ],
+      "painPoints": [
+        "communication",
+        "teacher-workload"
+      ],
       "priority": 84,
       "reasons": {
         "teacher": "可將家長訊息轉成可再修改的回覆草稿，減少親師溝通的文字負擔。",
@@ -456,9 +614,18 @@
   {
     "id": 17,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["classroom-management", "student-practice"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "classroom-management",
+        "student-practice"
+      ],
       "priority": 78,
       "reasons": {
         "teacher": "課堂抽問或分組時可快速公平地抽出人選。",
@@ -483,10 +650,24 @@
   {
     "id": 18,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "teacherRoles": ["homeroom", "admin"],
-      "departments": ["academic", "student-affairs", "counseling"],
-      "painPoints": ["event-management", "classroom-management", "student-practice"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "admin"
+      ],
+      "departments": [
+        "academic",
+        "student-affairs",
+        "counseling"
+      ],
+      "painPoints": [
+        "event-management",
+        "classroom-management",
+        "student-practice"
+      ],
       "priority": 76,
       "reasons": {
         "teacher": "可一次完成正取與備取抽選，保留清楚結果。",
@@ -512,9 +693,19 @@
   {
     "id": 19,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "teacherRoles": ["homeroom", "subject", "admin"],
-      "painPoints": ["communication", "it-support", "teacher-workload"],
+      "audiences": [
+        "teacher"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject",
+        "admin"
+      ],
+      "painPoints": [
+        "communication",
+        "it-support",
+        "teacher-workload"
+      ],
       "priority": 75,
       "reasons": {
         "teacher": "不用從零寫程式，也能建立自己的常見問題客服。",
@@ -662,10 +853,20 @@
     "title": "點石成金蜂🐝 評語優化網頁版",
     "description": "阿凱老師打造的「點石成金蜂」教師評語生成應用，協助老師快速產出個人化、貼近學生特質的成績單評語，告別罐頭句子。",
     "audienceFit": {
-      "audiences": ["teacher"],
-      "schoolLevels": ["elementary", "junior"],
-      "teacherRoles": ["homeroom"],
-      "painPoints": ["communication","teacher-workload"],
+      "audiences": [
+        "teacher"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom"
+      ],
+      "painPoints": [
+        "communication",
+        "teacher-workload"
+      ],
       "priority": 82,
       "reasons": {
         "teacher": "可依學生特質、語氣與字數需求批次產生可再編修的個人化評語。",
@@ -688,9 +889,19 @@
   {
     "id": 24,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "teacherRoles": ["homeroom", "subject", "admin"],
-      "painPoints": ["meeting-productivity", "communication", "administration"],
+      "audiences": [
+        "teacher"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject",
+        "admin"
+      ],
+      "painPoints": [
+        "meeting-productivity",
+        "communication",
+        "administration"
+      ],
       "priority": 81,
       "reasons": {
         "teacher": "可隨時查閱校務會議重點，避免漏接重要訊息。",
@@ -759,10 +970,21 @@
     "title": "九九乘法表練習器",
     "description": "互動式九九乘法表練習工具",
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["student-practice","assessment"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "assessment"
+      ],
       "priority": 82,
       "reasons": {
         "teacher": "可依乘法段數安排課堂、補救教學或回家練習，讓學生反覆建立九九乘法熟練度。",
@@ -787,9 +1009,19 @@
   {
     "id": 27,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "teacherRoles": ["homeroom", "subject", "admin"],
-      "painPoints": ["resource-discovery", "digital-literacy"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject",
+        "admin"
+      ],
+      "painPoints": [
+        "resource-discovery",
+        "digital-literacy"
+      ],
       "priority": 62,
       "reasons": {
         "teacher": "可從工具集合快速找到可用的小幫手，也能提出需求。",
@@ -814,10 +1046,22 @@
   {
     "id": 28,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary", "junior"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["student-practice", "digital-literacy"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "digital-literacy"
+      ],
       "priority": 42,
       "reasons": {
         "teacher": "可提供短時課間活動，也能作為單檔 Canvas 遊戲的入門示例。",
@@ -846,10 +1090,20 @@
     "title": "太陽系探索者",
     "description": "3D 太陽系探索互動學習工具",
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["subject"],
-      "painPoints": ["digital-literacy","student-practice"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "subject"
+      ],
+      "painPoints": [
+        "digital-literacy",
+        "student-practice"
+      ],
       "priority": 76,
       "reasons": {
         "teacher": "可用中文 3D 模型示範行星位置、軌道與速度，將抽象的太陽系概念視覺化。",
@@ -873,10 +1127,22 @@
   {
     "id": 30,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary", "junior"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["student-practice", "digital-literacy"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "digital-literacy"
+      ],
       "priority": 50,
       "reasons": {
         "teacher": "可為課間或班級獎勵準備多種無廣告的短時遊戲選擇。",
@@ -903,10 +1169,22 @@
   {
     "id": 31,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary", "junior"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["student-practice", "classroom-management"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "classroom-management"
+      ],
       "priority": 46,
       "reasons": {
         "teacher": "可安排一輪一分鐘的班級挑戰，作為課間活動或獎勵。",
@@ -933,9 +1211,17 @@
   {
     "id": 32,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "teacherRoles": ["subject", "admin"],
-      "painPoints": ["creative-learning", "student-practice"],
+      "audiences": [
+        "teacher"
+      ],
+      "teacherRoles": [
+        "subject",
+        "admin"
+      ],
+      "painPoints": [
+        "creative-learning",
+        "student-practice"
+      ],
       "priority": 58,
       "reasons": {
         "teacher": "能把大型觸控螢幕轉為多人互動與藝術探索空間。",
@@ -961,10 +1247,21 @@
   {
     "id": 33,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["student-practice", "creative-learning"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "creative-learning"
+      ],
       "priority": 78,
       "reasons": {
         "teacher": "可把音量、頻率等抽象概念即時可視化，支援自然與音樂教學。",
@@ -991,9 +1288,18 @@
   {
     "id": 34,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "teacherRoles": ["subject", "admin"],
-      "painPoints": ["creative-learning", "digital-literacy", "event-management"],
+      "audiences": [
+        "teacher"
+      ],
+      "teacherRoles": [
+        "subject",
+        "admin"
+      ],
+      "painPoints": [
+        "creative-learning",
+        "digital-literacy",
+        "event-management"
+      ],
       "priority": 60,
       "reasons": {
         "teacher": "可用多媒體互動內容營造課間、展示或藝術探索情境。",
@@ -1019,9 +1325,18 @@
   {
     "id": 35,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "teacherRoles": ["subject", "admin"],
-      "painPoints": ["creative-learning", "student-practice", "event-management"],
+      "audiences": [
+        "teacher"
+      ],
+      "teacherRoles": [
+        "subject",
+        "admin"
+      ],
+      "painPoints": [
+        "creative-learning",
+        "student-practice",
+        "event-management"
+      ],
       "priority": 58,
       "reasons": {
         "teacher": "可用大型觸控螢幕帶領學生進行集體塗鴉與互動藝術活動。",
@@ -1047,10 +1362,21 @@
   {
     "id": 36,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary", "junior"],
-      "teacherRoles": ["subject"],
-      "painPoints": ["digital-literacy", "student-practice"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "subject"
+      ],
+      "painPoints": [
+        "digital-literacy",
+        "student-practice"
+      ],
       "priority": 54,
       "reasons": {
         "teacher": "可用經典貪食蛇示範小型 Canvas 遊戲的核心程式設計概念。",
@@ -1076,10 +1402,21 @@
   {
     "id": 37,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["student-practice", "creative-learning"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "creative-learning"
+      ],
       "priority": 76,
       "reasons": {
         "teacher": "可讓學生以聲波視覺化理解音量、頻率與生活中的聲音規範。",
@@ -1106,9 +1443,19 @@
   {
     "id": 38,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["student-practice", "accessibility", "creative-learning"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "accessibility",
+        "creative-learning"
+      ],
       "priority": 74,
       "reasons": {
         "teacher": "能用聲音作為控制器，帶出低門檻且全班可參與的動態活動。",
@@ -1135,10 +1482,22 @@
   {
     "id": 39,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary", "junior"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["student-practice", "creative-learning"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "creative-learning"
+      ],
       "priority": 72,
       "reasons": {
         "teacher": "可先以數學魔術引起好奇，再引導學生理解規律與代數恆等式。",
@@ -1165,10 +1524,23 @@
   {
     "id": 40,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "teacherRoles": ["admin"],
-      "departments": ["academic", "student-affairs", "general-affairs", "counseling", "other"],
-      "painPoints": ["communication", "administration"],
+      "audiences": [
+        "teacher"
+      ],
+      "teacherRoles": [
+        "admin"
+      ],
+      "departments": [
+        "academic",
+        "student-affairs",
+        "general-affairs",
+        "counseling",
+        "other"
+      ],
+      "painPoints": [
+        "communication",
+        "administration"
+      ],
       "priority": 78,
       "reasons": {
         "admin": "以動態公告牆即時傳達處室訊息，降低資訊被淹沒的機會。"
@@ -1206,9 +1578,19 @@
       "歌曲"
     ],
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["creative-learning", "event-management", "presentation"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "creative-learning",
+        "event-management",
+        "presentation"
+      ],
       "priority": 53,
       "reasons": {
         "teacher": "可為校慶、社團成果發表或班級活動建立有互動感的點歌與舞台流程。",
@@ -1221,10 +1603,22 @@
   {
     "id": 42,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "teacherRoles": ["homeroom", "subject", "admin"],
-      "departments": ["student-affairs", "counseling"],
-      "painPoints": ["media-production", "digital-literacy"],
+      "audiences": [
+        "teacher"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject",
+        "admin"
+      ],
+      "departments": [
+        "student-affairs",
+        "counseling"
+      ],
+      "painPoints": [
+        "media-production",
+        "digital-literacy"
+      ],
       "priority": 80,
       "reasons": {
         "teacher": "分享活動照片前可先遮蔽兒童臉部，兼顧作品呈現與隱私。",
@@ -1286,10 +1680,21 @@
     "title": "數學加減法練習器",
     "description": "互動式數學加減法練習工具，幫助學生熟練基礎運算能力",
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["student-practice","assessment"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "assessment"
+      ],
       "priority": 86,
       "reasons": {
         "teacher": "可依 10 或 20 以內加減法分級安排課堂、早自習、課輔與補救練習。",
@@ -1329,9 +1734,19 @@
       "課堂互動"
     ],
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["student-practice", "creative-learning", "classroom-management"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "creative-learning",
+        "classroom-management"
+      ],
       "priority": 86,
       "reasons": {
         "teacher": "可用匿名即時投稿把全班想法視覺化，快速開啟討論並收斂重點。",
@@ -1344,10 +1759,25 @@
   {
     "id": 46,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "teacherRoles": ["homeroom", "subject", "admin"],
-      "departments": ["academic", "student-affairs", "general-affairs", "counseling"],
-      "painPoints": ["administration", "event-management", "teacher-workload"],
+      "audiences": [
+        "teacher"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject",
+        "admin"
+      ],
+      "departments": [
+        "academic",
+        "student-affairs",
+        "general-affairs",
+        "counseling"
+      ],
+      "painPoints": [
+        "administration",
+        "event-management",
+        "teacher-workload"
+      ],
       "priority": 90,
       "reasons": {
         "teacher": "借用場地、專科教室或平板車時，可即時查看空檔與衝突。",
@@ -1374,10 +1804,23 @@
   {
     "id": 47,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "teacherRoles": ["homeroom", "admin"],
-      "departments": ["academic", "student-affairs", "counseling"],
-      "painPoints": ["administration", "communication", "teacher-workload"],
+      "audiences": [
+        "teacher"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "admin"
+      ],
+      "departments": [
+        "academic",
+        "student-affairs",
+        "counseling"
+      ],
+      "painPoints": [
+        "administration",
+        "communication",
+        "teacher-workload"
+      ],
       "priority": 86,
       "reasons": {
         "homeroom": "收集班級活動同意書時，家長可直接用手機完成簽署。",
@@ -1403,10 +1846,26 @@
   {
     "id": 48,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "teacherRoles": ["homeroom", "subject", "admin"],
-      "departments": ["academic", "student-affairs", "general-affairs", "counseling", "other"],
-      "painPoints": ["administration", "communication", "event-management"],
+      "audiences": [
+        "teacher"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject",
+        "admin"
+      ],
+      "departments": [
+        "academic",
+        "student-affairs",
+        "general-affairs",
+        "counseling",
+        "other"
+      ],
+      "painPoints": [
+        "administration",
+        "communication",
+        "event-management"
+      ],
       "priority": 87,
       "reasons": {
         "teacher": "可快速建立報名、調查與回饋表單，並即時掌握填答。",
@@ -1435,11 +1894,23 @@
     "title": "教務處寶藏庫",
     "description": "教務處精心彙整的豐富資源平台，集結課程計畫、評量工具、教學表單及行政公告等寶貴資料，是教師備課與行政作業的最佳後盾",
     "audienceFit": {
-      "audiences": ["teacher"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["admin"],
-      "departments": ["academic"],
-      "painPoints": ["administration","event-management","resource-discovery"],
+      "audiences": [
+        "teacher"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "admin"
+      ],
+      "departments": [
+        "academic"
+      ],
+      "painPoints": [
+        "administration",
+        "event-management",
+        "resource-discovery"
+      ],
       "priority": 70,
       "reasons": {
         "teacher": "可集中查詢校內教務活動、比賽、場地與名單調查資訊，減少散落公告與重複詢問。",
@@ -1464,10 +1935,22 @@
   {
     "id": 50,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["student-practice", "creative-learning", "digital-literacy"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "creative-learning",
+        "digital-literacy"
+      ],
       "priority": 88,
       "reasons": {
         "teacher": "以多款繁中遊戲、成就與星星幣，提供低中年級可持續使用的遊戲化學習入口。",
@@ -1495,10 +1978,19 @@
   {
     "id": 51,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "teacherRoles": ["admin"],
-      "departments": ["academic"],
-      "painPoints": ["administration", "teacher-workload"],
+      "audiences": [
+        "teacher"
+      ],
+      "teacherRoles": [
+        "admin"
+      ],
+      "departments": [
+        "academic"
+      ],
+      "painPoints": [
+        "administration",
+        "teacher-workload"
+      ],
       "priority": 94,
       "reasons": {
         "admin": "教務排課可把多日人工排程與衝突檢查壓縮成可調整的結果。",
@@ -1537,8 +2029,14 @@
       "互動體驗"
     ],
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "painPoints": ["resource-discovery", "professional-learning"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "painPoints": [
+        "resource-discovery",
+        "professional-learning"
+      ],
       "priority": 25,
       "reasons": {
         "teacher": "可作為教育活動的課程探索與線上選課流程參考。",
@@ -1549,10 +2047,24 @@
   {
     "id": 53,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "teacherRoles": ["homeroom", "subject", "admin"],
-      "departments": ["general-affairs", "other"],
-      "painPoints": ["administration", "it-support", "communication"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject",
+        "admin"
+      ],
+      "departments": [
+        "general-affairs",
+        "other"
+      ],
+      "painPoints": [
+        "administration",
+        "it-support",
+        "communication"
+      ],
       "priority": 85,
       "reasons": {
         "teacher": "發現校園設備問題時，可在地圖上快速回報並追蹤處理。",
@@ -1580,9 +2092,17 @@
     "title": "臉盲教師救星 - 識生學坊",
     "description": "專為教師設計的學生辨識訓練工坊透過遊戲化測驗強化對學生面孔的記憶。",
     "audienceFit": {
-      "audiences": ["teacher"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["teacher-workload","classroom-management"],
+      "audiences": [
+        "teacher"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "teacher-workload",
+        "classroom-management"
+      ],
       "priority": 88,
       "reasons": {
         "teacher": "可用照片、姓名、記憶特徵與遊戲化測驗加速記熟學生，改善新學期師生互動。",
@@ -1647,10 +2167,23 @@
   {
     "id": 56,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary", "junior"],
-      "teacherRoles": ["homeroom", "admin"],
-      "painPoints": ["event-management", "student-practice", "creative-learning"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "admin"
+      ],
+      "painPoints": [
+        "event-management",
+        "student-practice",
+        "creative-learning"
+      ],
       "priority": 80,
       "reasons": {
         "teacher": "可把元宵燈謎活動數位化，讓學生掃碼即答並即時得到回饋。",
@@ -1678,8 +2211,13 @@
   {
     "id": 57,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "painPoints": ["resource-discovery"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "painPoints": [
+        "resource-discovery"
+      ],
       "priority": 38,
       "reasons": {
         "teacher": "教師共餐或班級活動需要快速決定選項時，可用轉盤破除僵局。",
@@ -1706,8 +2244,13 @@
     "title": "教師數位備課教案小幫手",
     "description": "專為老師設計的 AI 數位備課工具，能快速生成優質教案與教學活動設計，大幅節省行政與備課時間。",
     "audienceFit": {
-      "audiences": ["teacher"],
-      "painPoints": ["lesson-planning","teacher-workload"],
+      "audiences": [
+        "teacher"
+      ],
+      "painPoints": [
+        "lesson-planning",
+        "teacher-workload"
+      ],
       "priority": 91,
       "reasons": {
         "teacher": "可依十二年國教架構快速產生含核心素養、教學活動、多元評量與議題融入的完整教案，適用各學段與職務的備課及送審需求。"
@@ -1731,8 +2274,14 @@
   {
     "id": 59,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "painPoints": ["it-support","resource-discovery"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "painPoints": [
+        "it-support",
+        "resource-discovery"
+      ],
       "priority": 76,
       "reasons": {
         "teacher": "可先查詢校內帳號、設備與資訊系統常見問題，減少等待資訊人員回覆。",
@@ -1776,9 +2325,19 @@
       "互動體驗"
     ],
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["creative-learning", "content-creation", "presentation"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "creative-learning",
+        "content-creation",
+        "presentation"
+      ],
       "priority": 61,
       "reasons": {
         "teacher": "可把學生作品整理成沉浸式線上展覽，增加成果發表的儀式感。",
@@ -1832,10 +2391,19 @@
   {
     "id": 62,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["homeroom"],
-      "painPoints": ["event-management","communication"],
+      "audiences": [
+        "teacher"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom"
+      ],
+      "painPoints": [
+        "event-management",
+        "communication"
+      ],
       "priority": 55,
       "reasons": {
         "teacher": "可用數位通知頁集中傳達親職教育日議程、場地與聯絡資訊。",
@@ -1880,8 +2448,13 @@
       "趣味學習"
     ],
     "audienceFit": {
-      "audiences": ["student"],
-      "painPoints": ["digital-literacy", "accessibility"],
+      "audiences": [
+        "student"
+      ],
+      "painPoints": [
+        "digital-literacy",
+        "accessibility"
+      ],
       "priority": 69,
       "reasons": {
         "student": "可透過遊戲化方式練習記住自己的帳號資訊，並建立不隨意分享密碼的習慣。"
@@ -1893,10 +2466,21 @@
     "title": "簡譜節拍節奏大師",
     "description": "學習簡譜與節奏的互動學習工具，幫助初學者輕鬆掌握音樂節拍與旋律。",
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary", "junior"],
-      "teacherRoles": ["subject"],
-      "painPoints": ["student-practice","creative-learning"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "creative-learning"
+      ],
       "priority": 78,
       "reasons": {
         "teacher": "可用四段難度與即時判定設計簡譜、節拍、直笛或音樂社團的課堂練習。",
@@ -1923,8 +2507,15 @@
     "title": "AI 影片創作與教學整合資源",
     "description": "阿凱老師整理的 AI 影片創作教學資源中心，串接 ChatGPT 寫腳本 → Grok 動圖化 → Canva 剪輯的三步驟工作流，內建 12+ 範例影片合集。",
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "painPoints": ["media-production","content-creation","resource-discovery"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "painPoints": [
+        "media-production",
+        "content-creation",
+        "resource-discovery"
+      ],
       "priority": 73,
       "reasons": {
         "teacher": "可用三步驟工作流、操作指南與作品範例規劃 AI 影片課程或自主學習任務。",
@@ -1949,8 +2540,15 @@
     "title": "Sora AI 旅遊全記錄教學網",
     "description": "探索 Sora AI 與旅遊記錄的完美結合，掌握如何利用 AI 技術捕捉、編輯並分享您的旅遊點滴，打造個人專屬的高質感全記錄教學平台。",
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "painPoints": ["media-production","content-creation","creative-learning"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "painPoints": [
+        "media-production",
+        "content-creation",
+        "creative-learning"
+      ],
       "priority": 68,
       "reasons": {
         "teacher": "可用旅遊主題、提示詞結構與影像敘事案例設計 AI 影片、家鄉文化或媒體創作課程。",
@@ -1980,7 +2578,10 @@
         "teacher",
         "student"
       ],
-      "teacherRoles": ["homeroom", "subject"],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
       "painPoints": [
         "language-learning",
         "student-practice"
@@ -2015,9 +2616,19 @@
   {
     "id": 68,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["media-production", "creative-learning", "student-practice"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "media-production",
+        "creative-learning",
+        "student-practice"
+      ],
       "priority": 83,
       "reasons": {
         "teacher": "可讓學生自行上傳課程作品，減少教師整理照片與影片的負擔。",
@@ -2045,9 +2656,18 @@
   {
     "id": 69,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "teacherRoles": ["subject"],
-      "painPoints": ["student-practice", "digital-literacy", "creative-learning"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "digital-literacy",
+        "creative-learning"
+      ],
       "priority": 68,
       "reasons": {
         "teacher": "可從拋物線、風力與遊戲架構切入自然或資訊跨域示範。",
@@ -2166,10 +2786,24 @@
   {
     "id": 72,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "teacherRoles": ["homeroom", "admin"],
-      "departments": ["academic", "student-affairs", "general-affairs", "counseling", "other"],
-      "painPoints": ["administration", "teacher-workload"],
+      "audiences": [
+        "teacher"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "admin"
+      ],
+      "departments": [
+        "academic",
+        "student-affairs",
+        "general-affairs",
+        "counseling",
+        "other"
+      ],
+      "painPoints": [
+        "administration",
+        "teacher-workload"
+      ],
       "priority": 91,
       "reasons": {
         "teacher": "班級經費報支可從報價單快速產生符合格式的表單。",
@@ -2198,11 +2832,23 @@
   {
     "id": 73,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["admin"],
-      "departments": ["academic"],
-      "painPoints": ["assessment", "administration", "teacher-workload"],
+      "audiences": [
+        "teacher"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "admin"
+      ],
+      "departments": [
+        "academic"
+      ],
+      "painPoints": [
+        "assessment",
+        "administration",
+        "teacher-workload"
+      ],
       "priority": 88,
       "reasons": {
         "teacher": "快速整理全校期中考成績分布，協助掌握評量結果。",
@@ -2230,10 +2876,19 @@
   {
     "id": 74,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["homeroom"],
-      "painPoints": ["event-management","communication"],
+      "audiences": [
+        "teacher"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom"
+      ],
+      "painPoints": [
+        "event-management",
+        "communication"
+      ],
       "priority": 60,
       "reasons": {
         "teacher": "可用互動分區圖快速查找親職日班級、攤位與活動位置。",
@@ -2261,8 +2916,13 @@
   {
     "id": 75,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "painPoints": ["content-creation", "teacher-workload"],
+      "audiences": [
+        "teacher"
+      ],
+      "painPoints": [
+        "content-creation",
+        "teacher-workload"
+      ],
       "priority": 72,
       "reasons": {
         "teacher": "可批次擷取影片與 PDF 畫面，快速備製教材與活動素材。"
@@ -2291,8 +2951,12 @@
     "title": "WebSlide Pro 簡報播放器",
     "description": "專業流暢的網頁版簡報播放器，支援多種互動功能，無需安裝軟體即可隨時隨地開啟完美簡報。",
     "audienceFit": {
-      "audiences": ["teacher"],
-      "painPoints": ["presentation"],
+      "audiences": [
+        "teacher"
+      ],
+      "painPoints": [
+        "presentation"
+      ],
       "priority": 80,
       "reasons": {
         "teacher": "可直接播放 ZIP 網頁簡報或 PDF，利用預載、轉場與全螢幕功能降低跨裝置展示出錯，普遍適用各學段教學、研習與行政報告。"
@@ -2357,11 +3021,22 @@
   {
     "id": 78,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["admin"],
-      "departments": ["academic"],
-      "painPoints": ["administration", "teacher-workload"],
+      "audiences": [
+        "teacher"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "admin"
+      ],
+      "departments": [
+        "academic"
+      ],
+      "painPoints": [
+        "administration",
+        "teacher-workload"
+      ],
       "priority": 92,
       "reasons": {
         "teacher": "協助國小課程計畫審閱與修正，減少反覆比對文件的時間。",
@@ -2455,10 +3130,20 @@
     "title": "國小資訊科技教學駕駛艙入口網",
     "description": "阿凱老師打造的國小資訊科技課全學期教學駕駛艙，三、五、六年級十三大互動教學艙，從電腦入門、Scratch、micro:bit，到 AI 創作與媒體識讀，一站式翻轉資訊課堂。",
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["subject"],
-      "painPoints": ["digital-literacy","resource-discovery"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "subject"
+      ],
+      "painPoints": [
+        "digital-literacy",
+        "resource-discovery"
+      ],
       "priority": 96,
       "reasons": {
         "teacher": "可從單一入口帶領國小三至六年級資訊科技課程，集中簡報、影片、互動關卡與評量。",
@@ -2483,10 +3168,21 @@
   {
     "id": 82,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "teacherRoles": ["admin"],
-      "departments": ["general-affairs", "academic", "other"],
-      "painPoints": ["administration", "it-support"],
+      "audiences": [
+        "teacher"
+      ],
+      "teacherRoles": [
+        "admin"
+      ],
+      "departments": [
+        "general-affairs",
+        "academic",
+        "other"
+      ],
+      "painPoints": [
+        "administration",
+        "it-support"
+      ],
       "priority": 82,
       "reasons": {
         "teacher": "協助校園資訊設備盤點，讓教室設備狀態更容易掌握。",
@@ -2514,11 +3210,22 @@
   {
     "id": 83,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["admin"],
-      "departments": ["academic"],
-      "painPoints": ["administration", "teacher-workload"],
+      "audiences": [
+        "teacher"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "admin"
+      ],
+      "departments": [
+        "academic"
+      ],
+      "painPoints": [
+        "administration",
+        "teacher-workload"
+      ],
       "priority": 86,
       "reasons": {
         "teacher": "減少本土語選課與跨班分組的人工作業。",
@@ -2547,8 +3254,14 @@
   {
     "id": 84,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "painPoints": ["meeting-productivity", "teacher-workload", "administration"],
+      "audiences": [
+        "teacher"
+      ],
+      "painPoints": [
+        "meeting-productivity",
+        "teacher-workload",
+        "administration"
+      ],
       "priority": 96,
       "reasons": {
         "teacher": "自動轉寫與整理會議重點，所有教師都能節省會後紀錄時間。",
@@ -2581,9 +3294,18 @@
   {
     "id": 85,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["student-practice", "digital-literacy"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "digital-literacy"
+      ],
       "priority": 46,
       "reasons": {
         "teacher": "可用於短時班級獎勵，或示範經典遊戲重製與行動載具互動設計。",
@@ -2616,8 +3338,14 @@
   {
     "id": 86,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "painPoints": ["creative-learning", "content-creation"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "painPoints": [
+        "creative-learning",
+        "content-creation"
+      ],
       "priority": 72,
       "reasons": {
         "teacher": "可快速製作班級活動、教學或社群使用的原創貼圖素材。",
@@ -2649,10 +3377,23 @@
     "id": 87,
     "upgradeFromId": 4,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary", "junior"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["reading-literacy","assessment","student-practice"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "reading-literacy",
+        "assessment",
+        "student-practice"
+      ],
       "priority": 94,
       "reasons": {
         "teacher": "可由課文或圖片自動產生 PIRLS 四層次題組，並匯出多種教學與評量格式。",
@@ -2685,11 +3426,22 @@
   {
     "id": 88,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "schoolLevels": ["junior"],
-      "teacherRoles": ["admin"],
-      "departments": ["academic"],
-      "painPoints": ["administration", "teacher-workload"],
+      "audiences": [
+        "teacher"
+      ],
+      "schoolLevels": [
+        "junior"
+      ],
+      "teacherRoles": [
+        "admin"
+      ],
+      "departments": [
+        "academic"
+      ],
+      "painPoints": [
+        "administration",
+        "teacher-workload"
+      ],
       "priority": 92,
       "reasons": {
         "teacher": "協助國中課程計畫審閱，快速發現待修正項目。",
@@ -2720,8 +3472,13 @@
   {
     "id": 89,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "painPoints": ["communication","teacher-workload"],
+      "audiences": [
+        "teacher"
+      ],
+      "painPoints": [
+        "communication",
+        "teacher-workload"
+      ],
       "priority": 88,
       "reasons": {
         "teacher": "可依家長訊息與情境產生具同理心、專業且可再調整的回覆草稿。",
@@ -2756,10 +3513,21 @@
     "title": "繪本 → Google表單 一條龍工作坊",
     "description": "阿凱老師打造的整合式 AI 教學工作坊，把 Gemini 生成的繪本圖文、Google Doc 整理、Apps Script 表單產生、QR Code 派發、NotebookLM 學習資源一條龍串成六步驟，5 分鐘把繪本變成可派發的互動表單。",
     "audienceFit": {
-      "audiences": ["teacher"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["reading-literacy","assessment","lesson-planning"],
+      "audiences": [
+        "teacher"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "reading-literacy",
+        "assessment",
+        "lesson-planning"
+      ],
       "priority": 78,
       "reasons": {
         "teacher": "可把 AI 繪本、Google 文件、表單、Apps Script 與 QR Code 串成可派發的閱讀活動。",
@@ -2838,10 +3606,22 @@
     "title": "5W1H 靈感發射器 PRO版",
     "description": "桃園市石門國小資訊組打造、阿凱老師上架的 AI 創意思考小幫手 PRO 版，用 5W1H（What／Who／When／Where／Why／How）框架幫老師結構化發想教學設計、改寫學生評語，還能建立專屬的客製化思考助手。",
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary", "junior"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["creative-learning","student-practice"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "creative-learning",
+        "student-practice"
+      ],
       "priority": 88,
       "reasons": {
         "teacher": "可依年級難度用 5W1H、風格、鎖定與一致性檢查建立可操作的寫作鷹架。",
@@ -2892,11 +3672,22 @@
       "免費工具"
     ],
     "audienceFit": {
-      "audiences": ["teacher"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["admin"],
-      "departments": ["student-affairs"],
-      "painPoints": ["event-management", "administration"],
+      "audiences": [
+        "teacher"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "admin"
+      ],
+      "departments": [
+        "student-affairs"
+      ],
+      "painPoints": [
+        "event-management",
+        "administration"
+      ],
       "priority": 20,
       "reasons": {
         "student-affairs": "可參考自治市選舉的公開唱票、即時看板與監票流程設計；此頁為既有活動案例。"
@@ -2926,9 +3717,19 @@
       "免費工具"
     ],
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["media-production", "content-creation", "creative-learning"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "media-production",
+        "content-creation",
+        "creative-learning"
+      ],
       "priority": 71,
       "reasons": {
         "teacher": "可帶領學生從音樂、封面與鏡頭語言規劃一支有故事的短片作品。",
@@ -2941,8 +3742,15 @@
   {
     "id": 95,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "painPoints": ["event-management", "communication", "resource-discovery"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "painPoints": [
+        "event-management",
+        "communication",
+        "resource-discovery"
+      ],
       "priority": 82,
       "reasons": {
         "teacher": "帶隊與承辦人員可迅速確認賽程、場地與選手個人指引。",
@@ -2993,11 +3801,22 @@
       "免費工具"
     ],
     "audienceFit": {
-      "audiences": ["teacher"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["admin"],
-      "departments": ["student-affairs"],
-      "painPoints": ["event-management", "administration"],
+      "audiences": [
+        "teacher"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "admin"
+      ],
+      "departments": [
+        "student-affairs"
+      ],
+      "painPoints": [
+        "event-management",
+        "administration"
+      ],
       "priority": 18,
       "reasons": {
         "student-affairs": "可參考小市長行動方案票選的公開資訊呈現與即時監票設計；此頁為既有活動案例。"
@@ -3027,10 +3846,23 @@
       "免費工具"
     ],
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary", "junior"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["student-practice", "creative-learning", "accessibility"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "creative-learning",
+        "accessibility"
+      ],
       "priority": 80,
       "reasons": {
         "teacher": "可用故事式選擇題帶學生認識差異與情緒因應，作為討論的暖身而非診斷工具。",
@@ -3043,10 +3875,20 @@
   {
     "id": 98,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["homeroom"],
-      "painPoints": ["classroom-management", "teacher-workload", "communication"],
+      "audiences": [
+        "teacher"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom"
+      ],
+      "painPoints": [
+        "classroom-management",
+        "teacher-workload",
+        "communication"
+      ],
       "priority": 94,
       "reasons": {
         "teacher": "把常用課堂管理小工具整合在同一頁，降低日常切換負擔。",
@@ -3082,8 +3924,13 @@
     "title": "考試卷生圖 Studio — AI 黑白線稿插圖生成",
     "description": "備課時想加一張剛剛好的學習單插畫？輸入四個欄位（標題、對話、角色、場景），10–20 秒生成兩張 1024×1024 黑白線稿 PNG，列印不吃墨水、可當著色頁、支援中文精準渲染。內建 4 組教學情境範例 + AI Prompt 可複製轉用 ChatGPT / Bing。",
     "audienceFit": {
-      "audiences": ["teacher"],
-      "painPoints": ["assessment","content-creation"],
+      "audiences": [
+        "teacher"
+      ],
+      "painPoints": [
+        "assessment",
+        "content-creation"
+      ],
       "priority": 89,
       "reasons": {
         "teacher": "可快速產生省墨、可列印且含中文文字的黑白線稿，普遍適用各學段與職務製作試卷、學習單、簡報及活動素材。"
@@ -3114,10 +3961,22 @@
   {
     "id": 101,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["student-practice", "digital-literacy", "creative-learning"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "digital-literacy",
+        "creative-learning"
+      ],
       "priority": 64,
       "reasons": {
         "teacher": "可作為高年級資訊課的3D互動示例，或安排短時班級挑戰。",
@@ -3153,10 +4012,21 @@
   {
     "id": 102,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["student-practice", "digital-literacy"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "digital-literacy"
+      ],
       "priority": 58,
       "reasons": {
         "teacher": "可提供無廣告的短時班級挑戰，也能作為 Canvas 遊戲互動設計示例。",
@@ -3194,8 +4064,13 @@
     "title": "AI Agent 的 Web 技能雙引擎 — Playwright × Webwright 一頁讀懂",
     "description": "一頁讀懂 AI Agent 怎麼「看得懂、做得到、做完有回報」地操作網頁！Playwright 負責動手執行、Webwright 負責動腦規劃，兩大引擎合起來才是完整的 Web Agent。含自動填 Google 表單、電子公文自動歸檔等真實自動化情境，阿凱老師用日記體一路帶你從零看懂這兩個關鍵字，松鼠吉祥物 + 大量 emoji 降低技術門檻。",
     "audienceFit": {
-      "audiences": ["teacher"],
-      "painPoints": ["digital-literacy","professional-learning"],
+      "audiences": [
+        "teacher"
+      ],
+      "painPoints": [
+        "digital-literacy",
+        "professional-learning"
+      ],
       "priority": 60,
       "reasons": {
         "teacher": "可用白話案例理解 Playwright 與 Webwright 的分工，作為 AI Agent、網頁自動化與行政流程研習的入門材料。"
@@ -3226,8 +4101,15 @@
   {
     "id": 104,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "painPoints": ["resource-discovery", "digital-literacy", "it-support"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "painPoints": [
+        "resource-discovery",
+        "digital-literacy",
+        "it-support"
+      ],
       "priority": 74,
       "reasons": {
         "teacher": "備課與出題時可讓 AI 查詢可信的台灣官方資料來源。",
@@ -3263,10 +4145,22 @@
     "title": "臺灣主權 AI 訓練語料庫 × 石門國小 — 把國家級本土語料變成校園教材",
     "description": "國家耗十年、集 265 個機關蒐集的 6 億 tokens 本土語料，從「只拿來餵 AI」變成「師生家長共用的教材庫」。九大教育主題、4,554 筆語料一鍵探索，每筆都標課綱領域與授權來源；還能用自備的免費 Gemini 金鑰，即時生成台語／客語／國語學習單與繪本腳本。數位發展部 × 桃園市龍潭區石門國民小學阿凱老師打造的「鱻本土 AI 共學站」。",
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["resource-discovery","digital-literacy","content-creation"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "resource-discovery",
+        "digital-literacy",
+        "content-creation"
+      ],
       "priority": 88,
       "reasons": {
         "teacher": "可依主題、年段、課綱領域與授權狀態查找本土語料，並生成可再審閱的學習單或繪本腳本。",
@@ -3322,11 +4216,22 @@
       "第103屆"
     ],
     "audienceFit": {
-      "audiences": ["teacher"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["admin"],
-      "departments": ["student-affairs"],
-      "painPoints": ["event-management", "presentation"],
+      "audiences": [
+        "teacher"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "admin"
+      ],
+      "departments": [
+        "student-affairs"
+      ],
+      "painPoints": [
+        "event-management",
+        "presentation"
+      ],
       "priority": 12,
       "reasons": {
         "student-affairs": "可參考畢業典禮資訊整合、直播與祝福牆的活動設計；此頁為石門國小既有典禮案例。"
@@ -3337,10 +4242,20 @@
   {
     "id": 107,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "teacherRoles": ["admin"],
-      "departments": ["academic", "other"],
-      "painPoints": ["administration", "teacher-workload"],
+      "audiences": [
+        "teacher"
+      ],
+      "teacherRoles": [
+        "admin"
+      ],
+      "departments": [
+        "academic",
+        "other"
+      ],
+      "painPoints": [
+        "administration",
+        "teacher-workload"
+      ],
       "priority": 90,
       "reasons": {
         "teacher": "開學前可快速整理教育雲帳號異動，避免人工比對出錯。",
@@ -3396,9 +4311,19 @@
       "石門國小"
     ],
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["digital-literacy", "student-practice", "creative-learning"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "digital-literacy",
+        "student-practice",
+        "creative-learning"
+      ],
       "priority": 93,
       "reasons": {
         "teacher": "可把辨識釣魚郵件與反詐騙觀念轉成有情境、徽章與即時回饋的一節課活動。",
@@ -3412,10 +4337,20 @@
   {
     "id": 109,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "teacherRoles": ["admin"],
-      "departments": ["academic"],
-      "painPoints": ["administration", "communication", "teacher-workload"],
+      "audiences": [
+        "teacher"
+      ],
+      "teacherRoles": [
+        "admin"
+      ],
+      "departments": [
+        "academic"
+      ],
+      "painPoints": [
+        "administration",
+        "communication",
+        "teacher-workload"
+      ],
       "priority": 86,
       "reasons": {
         "teacher": "可清楚填報需要的教學軟體，避免需求在表單間遺漏。",
@@ -3449,8 +4384,15 @@
   {
     "id": 110,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "painPoints": ["media-production", "content-creation", "creative-learning"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "painPoints": [
+        "media-production",
+        "content-creation",
+        "creative-learning"
+      ],
       "priority": 80,
       "reasons": {
         "teacher": "可把活動照片快速整理成具旁白與字幕的成果影片。",
@@ -3506,10 +4448,23 @@
       "石門國小"
     ],
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary", "junior"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["creative-learning", "student-practice", "classroom-management"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary",
+        "junior"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "creative-learning",
+        "student-practice",
+        "classroom-management"
+      ],
       "priority": 76,
       "reasons": {
         "teacher": "可用清楚賽程、角色規則與主持節奏，把推理遊戲帶成有品質的班級互動。",
@@ -3523,10 +4478,21 @@
   {
     "id": 112,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["student-practice", "classroom-management"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "classroom-management"
+      ],
       "priority": 52,
       "reasons": {
         "teacher": "可安排短時破冰或班級分數挑戰，支援電子白板與學生載具。",
@@ -3562,9 +4528,17 @@
   {
     "id": 113,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "teacherRoles": ["homeroom"],
-      "painPoints": ["administration", "teacher-workload", "communication"],
+      "audiences": [
+        "teacher"
+      ],
+      "teacherRoles": [
+        "homeroom"
+      ],
+      "painPoints": [
+        "administration",
+        "teacher-workload",
+        "communication"
+      ],
       "priority": 84,
       "reasons": {
         "teacher": "導師可快速完成班級 PaGamO 授權填報與名單核對。",
@@ -3594,9 +4568,17 @@
   {
     "id": 114,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "teacherRoles": ["homeroom", "admin"],
-      "painPoints": ["administration", "teacher-workload"],
+      "audiences": [
+        "teacher"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "admin"
+      ],
+      "painPoints": [
+        "administration",
+        "teacher-workload"
+      ],
       "priority": 86,
       "reasons": {
         "teacher": "可迅速核對名單差異，減少開學與活動前的重複校正。",
@@ -3627,10 +4609,22 @@
   {
     "id": 115,
     "audienceFit": {
-      "audiences": ["teacher", "student"],
-      "schoolLevels": ["elementary"],
-      "teacherRoles": ["homeroom", "subject"],
-      "painPoints": ["student-practice", "assessment", "creative-learning"],
+      "audiences": [
+        "teacher",
+        "student"
+      ],
+      "schoolLevels": [
+        "elementary"
+      ],
+      "teacherRoles": [
+        "homeroom",
+        "subject"
+      ],
+      "painPoints": [
+        "student-practice",
+        "assessment",
+        "creative-learning"
+      ],
       "priority": 91,
       "reasons": {
         "teacher": "可把四則運算練習轉為有關卡與徽章回饋的自主學習活動。",
@@ -3665,8 +4659,13 @@
   {
     "id": 116,
     "audienceFit": {
-      "audiences": ["teacher"],
-      "painPoints": ["assessment", "teacher-workload"],
+      "audiences": [
+        "teacher"
+      ],
+      "painPoints": [
+        "assessment",
+        "teacher-workload"
+      ],
       "priority": 82,
       "reasons": {
         "teacher": "列印前自動檢查考卷版面，減少格式錯誤與臨時重印。",
@@ -3694,5 +4693,48 @@
       "已建置完成"
     ],
     "addedAt": "2026-07-09T00:00:00.000Z"
+  },
+  {
+    "id": 117,
+    "audienceFit": {
+      "audiences": [
+        "teacher"
+      ],
+      "painPoints": [
+        "administration",
+        "teacher-workload"
+      ],
+      "priority": 88,
+      "reasons": {
+        "teacher": "臨時請假或要喬課時，登入點選節次就能媒合代課或調課、一鍵同意受邀，不用再一間一間辦公室去問。",
+        "homeroom": "導師臨時有事請假，系統會依同班／同科智慧排出可代課人選，出單與通知一次搞定。",
+        "subject": "科任跨班調課時，系統自動交叉比對雙方空堂，找出可互換的節次，不用再靠人工翻全校課表。",
+        "admin": "教學組可代任何老師直接建單、以 Google Chat 即時收到通知，A5 三聯通知單列印與兼代課鐘點費結算一站完成。",
+        "academic": "全校課表與調代課單據集中在同一資料源，出單狀態機與鐘點結算自動化，教務行政大幅減負。"
+      }
+    },
+    "title": "石門國小線上調代課系統",
+    "description": "阿凱老師為石門國小打造的全校課表與線上調代課系統：老師點選節次即可智慧媒合代課或調課、一鍵同意受邀，教學組能代出單、列印 A5 三聯通知單並自動結算兼代課鐘點費，告別紙本喬課的來回奔波。",
+    "detailedDescription": "石門國小線上調代課系統是阿凱老師為桃園市龍潭區石門國民小學打造的全校課表與調代課管理平台，改良自新北市中和高中教學組詩穎老師公開的線上調代課模板，並依國小教學現場情境重新設計，讓「找代課、喬調課、出通知單、結鐘點費」這條又瑣碎又容易出錯的行政流水線，一次在線上完成。\n\n## 主要功能\n\n- **教師視角週課表**：老師登入後看到自己整週課表，點選任一節次即可發起「代課」或「調課」。\n- **智慧媒合**：代課依同班／同科排序建議可代人選；調課自動交叉比對雙方空堂，找出可互換的節次。\n- **邀請與狀態機**：提交後自動寄邀請信給受邀老師，一鍵同意／拒絕，單據依「待確認 → 可出單 → 已出單」流轉。\n- **教學組管理**：管理員可代任何老師直接建單，並透過 Google Chat webhook 即時接收通知。\n- **A5 三聯通知單**：一鍵列印教師聯、班級聯、留存聯，連續節次自動合併。\n- **兼代課鐘點結算**：輸入月份自動產出代課教師應領總表、自費代課對帳表與逐筆明細。\n\n## 技術特色\n\n純靜態前端部署於 GitHub Pages，採 Google Identity Services 登入，老師不需授權任何敏感權限；後端以 Google Apps Script 提供 JSON API，驗證身分後依授權名單控管；所有課表、單據與名單集中在 Google 試算表這個單一資料源。支援 PWA 加到手機／電腦桌面，下次點選即可像獨立 App 一樣快速啟動。",
+    "url": "https://cagoooo.github.io/smes-substitute/",
+    "icon": "CalendarCheck",
+    "category": "utilities",
+    "previewUrl": "/previews/tool_117.webp",
+    "ogPreviewUrl": "/previews/og/tool_117.webp",
+    "tags": [
+      "線上調代課",
+      "代課媒合",
+      "調課比對",
+      "全校課表",
+      "教師請假",
+      "教學組",
+      "A5通知單",
+      "鐘點結算",
+      "Google登入",
+      "PWA",
+      "石門國小",
+      "已建置完成"
+    ],
+    "addedAt": "2026-07-11T00:00:00.000Z"
   }
 ]

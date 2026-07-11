@@ -14230,7 +14230,81 @@ const POST_114: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+const POST_117: BlogPost = {
+  slug: 'substitute-117-online-class-swap',
+  title: '#117 石門國小線上調代課系統：從紙本喬課到點兩下媒合，把教學組最累的行政流水線搬上線',
+  excerpt:
+    '老師臨時請假，過去要跑辦公室一間間問誰能代、手寫調代課單、再讓教學組結鐘點費。#117 把這條流水線整條搬上線：點課表節次就智慧媒合、一鍵同意、A5 三聯單一鍵印、鐘點費自動結算。',
+  publishedAt: '2026-07-11',
+  readingMinutes: 6,
+  tags: ['線上調代課', '校園行政', '教務系統', 'Google Apps Script', '石門國小'],
+  toolIds: [117, 2, 46],
+  coverEmoji: '🗓️',
+  coverColor: 'green',
+  body: `## 場景：一張調代課單，背後是半天的奔波
+
+老師臨時要請假，看似只是「找個人代課」，實際上是一連串瑣碎又容易出錯的行政動作：
+
+先翻全校課表，看那幾節有誰是空堂；再一間辦公室一間辦公室去問「這節你方便幫我代嗎？」；喬定之後手寫一張調代課單，跑去給對方簽名、再送教學組蓋章；月底教學組還要把整個月的代課逐筆算成鐘點費、分出「有給職代課」與「自費代課」，做對帳表。
+
+哪一步漏了、字寫錯了、連續兩節忘記合併，單子就得重來。**教學組每個月最累的行政流水線之一，就卡在這裡。**
+
+石門國小線上調代課系統（#117）做的事，就是把這整條流水線——找人、喬課、出單、通知、結算——搬到線上，讓老師點兩下就完成，讓教學組不必再當人工排課引擎。
+
+## #117 怎麼解？把「喬課」變成點課表
+
+這套系統改良自新北市中和高中教學組**詩穎老師**公開分享的線上調代課模板，阿凱老師依國小教學現場情境重新設計。核心是「老師視角的週課表」——登入後你看到的就是自己整週的課，點下任何一節，系統就接手後面所有事：
+
+**智慧媒合代課或調課** — 選「代課」，系統依同班／同科排序，直接建議此節有空、最適合的可代人選；選「調課」，系統自動把你和對方的空堂交叉比對，找出兩人可以互換的節次，不用再靠人工翻全校課表對格子。
+
+**邀請與狀態機** — 提交後系統自動寄邀請信給受邀老師，對方一鍵同意或拒絕；單據狀態依「待確認 → 可出單 → 已出單」清楚流轉，誰還沒回、哪張可以印了，一目了然。
+
+**教學組代建單＋即時通知** — 管理員（教學組）可以代任何一位老師直接建單，處理臨時狀況；每有新單成立，Google Chat webhook 立刻推到教學組手機，不必盯著信箱。
+
+**A5 三聯通知單一鍵印** — 教師聯、班級聯、留存聯三聯一次列印，連續節次自動合併成一張，不會印出一堆零散單子。
+
+**兼代課鐘點費自動結算** — 輸入月份，系統自動產出「代課教師應領總表」、「自費代課對帳表」與逐筆明細，月底結算不再靠手動加總。
+
+## 真實技術棧：老師零授權、資料單一來源
+
+- **前端**：純靜態頁面部署在 GitHub Pages，採 Google Identity Services 登入。老師只是用學校 Google 帳號證明身分，**不需要授權任何敏感權限**，登入即用。
+- **後端**：Google Apps Script 以 JSON API 提供服務，驗證身分後依「授權名單」控管誰能進、誰是管理員。
+- **資料庫**：所有課表、單據、名單集中在一份 Google 試算表——**單一資料來源**，出單與鐘點結算都由試算表選單完成，不會有「多份檔案對不起來」的問題。
+- **PWA**：支援加到手機／電腦桌面，下次點一下就像獨立 App 一樣開啟。
+
+這套「GitHub Pages ＋ Google 登入 ＋ Apps Script ＋ 試算表」的組合，也是阿凱老師許多校園系統共用的低成本、零伺服器架構。
+
+## 教學現場：誰會用到、怎麼用
+
+- **臨時請假的導師**：早上孩子發燒要請假，手機打開系統，點下今天的課，系統排出可代人選、送出邀請，人在路上就把代課喬好。
+- **要跨班調課的科任老師**：想跟同領域老師換節上公開課，選「調課」讓系統比對兩人空堂，找出可互換的那一格。
+- **教學組（教務處）**：全校調代課單集中管理、代老師出單、月底一鍵結算鐘點費——把每月最花時間的行政雜務，壓縮成幾個點擊。
+
+> 這類「把紙本行政搬上線」的工具，最有價值的地方不是炫技，而是**讓老師和行政都少走冤枉路**，把時間還給教學本身。
+
+## 配對工具推薦
+
+同樣是把校園行政數位化、幫老師與行政減負的一組工具：
+
+- [#2 行政業務協調系統](/tool/2)：整合共用日曆與跨處室行程，讓教務、學務、總務、輔導的協作有同一個版本。
+- [#46 禮堂＆專科教室＆平板車預約系統](/tool/46)：場地與設備借用線上化，即時查空檔、避免衝突。
+- [#117 石門國小線上調代課系統](/tool/117)：本篇主角，調代課與鐘點結算一站搞定。
+
+## 適用對象
+
+- 需要臨時請假、找代課或跨班調課的**班級導師與科任老師**。
+- 負責統籌全校調代課、出單與鐘點費結算的**教學組／教務處行政人員**。
+- 想把校內紙本行政流程數位化、又不想養伺服器的**其他學校教務團隊**（此為公開可參考的架構）。
+
+## 想試試？
+
+→ [前往 #117 石門國小線上調代課系統](https://cagoooo.github.io/smes-substitute/)
+
+（需以學校授權的 Google 帳號登入；若無法進入，請聯繫教學組確認是否在授權名單內。）把「一間間辦公室問誰能代課」的半天，換成「打開課表點兩下」的兩分鐘——這，就是把行政時間還給教學的樣子。
+`,
+};
+
+export const POSTS: BlogPost[] = [POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。
