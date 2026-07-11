@@ -99,9 +99,13 @@ export function BulletinHome() {
     shouldAutoOpenAudienceWizard(new URLSearchParams(window.location.search))
   );
   const [highlightedToolId, setHighlightedToolId] = useState<number | null>(null);
+  const highlightTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     markHomeEntryForEngagementNotifications();
+  }, []);
+  useEffect(() => () => {
+    if (highlightTimeoutRef.current !== null) window.clearTimeout(highlightTimeoutRef.current);
   }, []);
 
   // 自動開啟許願池對話框：支援三種觸發來源
@@ -266,6 +270,7 @@ export function BulletinHome() {
     setSelectedCategory(null);
     setShowFavorites(false);
     setShowAudienceWizard(false);
+    if (highlightTimeoutRef.current !== null) window.clearTimeout(highlightTimeoutRef.current);
     setHighlightedToolId(toolId);
     window.requestAnimationFrame(() => {
       window.setTimeout(() => {
@@ -275,7 +280,10 @@ export function BulletinHome() {
         card?.focus({ preventScroll: true });
       }, 120);
     });
-    window.setTimeout(() => setHighlightedToolId(null), 2400);
+    highlightTimeoutRef.current = window.setTimeout(() => {
+      setHighlightedToolId(null);
+      highlightTimeoutRef.current = null;
+    }, 6000);
   }, []);
 
   const reselectAudience = useCallback(() => {

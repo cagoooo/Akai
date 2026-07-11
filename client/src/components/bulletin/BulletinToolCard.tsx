@@ -123,6 +123,7 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0, highlighte
       } as React.CSSProperties}
     >
       <Pin color={pinColor} size={22} style={{ top: -11, left: '50%', marginLeft: -11, zIndex: 10 }} />
+      {highlighted && <span className="audience-tool-highlight__label" role="status">📍 你正在找的推薦工具</span>}
 
       {/* 照片區（預覽圖優先，無圖時退回 emoji + icon） */}
       <Link href={`/tool/${tool.id}`}>
