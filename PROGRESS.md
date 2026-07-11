@@ -3299,14 +3299,14 @@ b21a41f 🎨 簡報頁加 favicon + OG 分享卡 + Schema.org
 > 核心檔案：`client/src/lib/audienceRecommendation.ts`、`client/src/components/audience/`、
 > `client/src/components/admin/RecommendationStatsPanel.tsx`、`client/src/lib/analytics.ts`。
 
-### 🟥 P0（近期、高效益或 quick win；含一項資料品質修正）
+### 🟥 P0（第二波）— ✅ 全數完成於 2026-07-11（commit [`b718e20`](https://github.com/cagoooo/Akai/commit/b718e20)）
 
-| 編號 | 項目 | Effort | 說明與預期效益 |
-|---|---|---|---|
-| **P0-A** | **修正曝光重複計數（保護剛建好的 dashboard 資料品質）** | S | 目前 impression 去重用的 `impressionRef` 在精靈關閉時被重置，使用者「關掉再開／從結果按上一步再回來」會重發一次曝光，灌水 `totalImpressions`。改成以 profile key 在同一次 session 內持久去重（或只在「首次抵達 results」計一次），讓 CTR 分母準確。**沒修的話 dashboard 數字一開始就偏誤。** |
-| **P0-B** | **痛點感知的推薦理由** | S–M | 命中痛點的工具目前仍顯示通用 reason（如「多班切換…」），卡片卻掛著「🎯 命中你的需求」徽章，兩者對不上。讓 reason 動態帶出使用者勾的痛點（例：「你想解決『班級經營』——這個工具正好把分組、計時、加扣分整合在一起」）。CP 值極高，直接強化「命中需求」的說服力。 |
-| **P0-C** | **推薦權重集中成 config 常數表（原 P1-4，因量測就位而升級）** | S | `POPULARITY_WEIGHT=28`、`TRENDING_WEIGHT=20`、`PAINPOINT_WEIGHT=22`、role `+30`、dept `+25`、stage `+15`、reason `+10` 目前散在 `rankTool`。抽成一張有註解的 `WEIGHTS` 表。**現在 dashboard 會給 CTR，調權重才有意義 → 這是啟動調參閉環的前置。** |
-| **P0-D** | **dashboard 加「近 7 日」時間維度** | M | `analytics/recoStats` 目前只有 all-time 累計，看不出「這週 CTR 有沒有變好」。加每日 bucket（`daily.{YYYY-MM-DD}` 或 sub-collection），dashboard 上可切「全部 / 近 7 日 / 近 30 日」。調權重後才能對照前後 CTR 差異。 |
+| 編號 | 項目 | Effort | 狀態 | 落地方式 |
+|---|---|---|---|---|
+| **P0-A** | 修正曝光重複計數 | S | ✅ 完成 | 曝光去重從 `impressionRef` 改成 **sessionStorage**（依 profile 簽章）→ 關開精靈、上一步返回、dev StrictMode 重掛都只計一次。瀏覽器實測 back→forward 同 profile `totalImpressions` 維持 1 |
+| **P0-B** | 痛點感知的推薦理由 | S–M | ✅ 完成 | 命中痛點的卡片理由改為點名所選痛點（「對應你想解決的『班級經營』：…」），與 🎯 命中需求 徽章名實相符。新增 `PAIN_POINT_LABELS` |
+| **P0-C** | 權重集中成 config 表（原 P1-4 升級） | S | ✅ 完成 | 7 個權重從 `rankTool` 內聯抽成有註解的 `WEIGHTS` 常數表（純重構，既有分數斷言全不變），方便對照 dashboard CTR 調參 |
+| **P0-D** | dashboard 加「近 7 日」時間維度 | M | ✅ 完成 | `recordReco*` 加寫 `daily.{YYYY-MM-DD}` buckets（imp/clk/painClk）；`RecommendationStatsPanel` KPI 加「全部／近 7 日／近 30 日」切換，可對照調權重前後 CTR。明細表維持累計並標註 |
 
 ### 🟧 P1（中期可做）
 
