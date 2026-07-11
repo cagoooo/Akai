@@ -49,6 +49,8 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
   const [state, dispatch] = useReducer(audienceWizardReducer, initialAudienceWizardState);
   const closeRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
+  const firstRecommendationRef = useRef<HTMLButtonElement | null>(null);
+  const reshufflePendingRef = useRef(false);
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const completedRef = useRef<string | null>(null);
   const wasOpenRef = useRef(false);
@@ -71,16 +73,29 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
     [tools, profile, excludeSet, recentSet],
   );
   useEffect(() => {
+    if (!reshufflePendingRef.current || state.step !== 'results') return;
+    reshufflePendingRef.current = false;
+    const frame = requestAnimationFrame(() => {
+      firstRecommendationRef.current?.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        block: 'start',
+      });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [recommendations, state.step]);
+  useEffect(() => {
     if (open && !wasOpenRef.current) {
       previouslyFocusedRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
       dispatch({ type: 'RESET' });
       completedRef.current = null;
+      reshufflePendingRef.current = false;
       setSeenIds([]);
       requestAnimationFrame(() => closeRef.current?.focus());
     }
     if (!open && wasOpenRef.current) {
       dispatch({ type: 'RESET' });
       completedRef.current = null;
+      reshufflePendingRef.current = false;
       setSeenIds([]);
       previouslyFocusedRef.current?.focus();
       previouslyFocusedRef.current = null;
@@ -122,6 +137,7 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
   // P1-1：換一批 — 把目前這批加進「已看過」，下一波排除它們；看完一輪就重新洗牌
   const handleReshuffle = useCallback(() => {
     if (!profile || recommendations.length === 0) return;
+    reshufflePendingRef.current = true;
     const currentIds = recommendations.map((r) => r.tool.id);
     const nextSeen = [...seenIds, ...currentIds];
     const nextBatch = recommendTools(tools, profile, 6, new Set(nextSeen), recentSet);
@@ -189,7 +205,7 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
         toolCount={tools.length}
         onDone={() => dispatch({ type: 'THINKING_DONE' })}
       />}
-      {state.step === 'results' && <AudienceRecommendationResults recommendations={recommendations} onLocateTool={handleLocate} onReshuffle={handleReshuffle} />}
+      {state.step === 'results' && <AudienceRecommendationResults recommendations={recommendations} onLocateTool={handleLocate} onReshuffle={handleReshuffle} firstRecommendationRef={firstRecommendationRef} />}
       {state.step !== 'thinking' && <button type="button" className="audience-wizard__later" onClick={onDismiss}>稍後再說，先逛逛</button>}
     </div>
   </div>;

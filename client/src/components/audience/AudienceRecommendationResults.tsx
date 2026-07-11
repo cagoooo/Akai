@@ -1,3 +1,4 @@
+import type { Ref } from 'react';
 import type { AudienceRecommendation, RecommendationSlot } from '@/lib/audienceRecommendation';
 
 // P0-1：把已算好的 slot / 痛點命中轉成「為什麼推」徽章，讓使用者秒懂推薦邏輯。
@@ -15,7 +16,7 @@ export function badgeFor(rec: AudienceRecommendation): { label: string; kind: st
   return SLOT_BADGES[rec.slot] ?? SLOT_BADGES.universal;
 }
 
-export function AudienceRecommendationResults({ recommendations, onLocateTool, onReshuffle }: { recommendations: AudienceRecommendation[]; onLocateTool: (toolId: number) => void; onReshuffle?: () => void }) {
+export function AudienceRecommendationResults({ recommendations, onLocateTool, onReshuffle, firstRecommendationRef }: { recommendations: AudienceRecommendation[]; onLocateTool: (toolId: number) => void; onReshuffle?: () => void; firstRecommendationRef?: Ref<HTMLButtonElement> }) {
   return <section className="audience-wizard__results" aria-labelledby="audience-results-title">
     <div className="audience-wizard__tape">為你精選</div>
     <h2 id="audience-results-title">這些工具，現在就很好用</h2>
@@ -24,7 +25,7 @@ export function AudienceRecommendationResults({ recommendations, onLocateTool, o
       {recommendations.map((rec, index) => {
         const { tool, reason } = rec;
         const badge = badgeFor(rec);
-        return <button key={tool.id} type="button" className="audience-wizard__recommendation is-revealing" style={{ animationDelay: `${index * 75}ms` }} data-tool-id={tool.id} onClick={() => onLocateTool(tool.id)}>
+        return <button ref={index === 0 ? firstRecommendationRef : undefined} key={tool.id} type="button" className="audience-wizard__recommendation is-revealing" style={{ animationDelay: `${index * 75}ms` }} data-tool-id={tool.id} onClick={() => onLocateTool(tool.id)}>
           <span className="audience-wizard__pin" aria-hidden="true" />
           <span className="audience-wizard__number">{String(index + 1).padStart(2, '0')}</span>
           <span className={`audience-wizard__badge audience-wizard__badge--${badge.kind}`}>{badge.label}</span>
