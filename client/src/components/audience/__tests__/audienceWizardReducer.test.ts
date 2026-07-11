@@ -2,33 +2,43 @@ import { describe, expect, it } from 'vitest';
 import { audienceWizardReducer as reduce, initialAudienceWizardState, toAudienceProfile, PAIN_POINT_SELECTION_LIMIT } from '../audienceWizardReducer';
 
 describe('audienceWizardReducer', () => {
-  it('完成行政教師的完整選擇流程（含痛點步驟）', () => {
+  it('完成行政教師的完整選擇流程（含痛點步驟＋思考過場）', () => {
     let state = reduce(initialAudienceWizardState, { type: 'SELECT_AUDIENCE', value: 'teacher' });
     state = reduce(state, { type: 'SELECT_SCHOOL_LEVEL', value: 'elementary' });
     state = reduce(state, { type: 'SELECT_TEACHER_ROLE', value: 'admin' });
     state = reduce(state, { type: 'SELECT_DEPARTMENT', value: 'academic' });
     expect(state.step).toBe('pain-points');
     state = reduce(state, { type: 'CONFIRM_PAIN_POINTS' });
+    expect(state.step).toBe('thinking');
+    state = reduce(state, { type: 'THINKING_DONE' });
     expect(state.step).toBe('results');
     expect(toAudienceProfile(state)).toEqual({ audience: 'teacher', schoolLevel: 'elementary', teacherRole: 'admin', department: 'academic' });
   });
 
-  it('科任教師跳過處室，直接進痛點步驟再到結果', () => {
+  it('科任教師跳過處室，經痛點＋思考過場再到結果', () => {
     let state = reduce(initialAudienceWizardState, { type: 'SELECT_AUDIENCE', value: 'teacher' });
     state = reduce(state, { type: 'SELECT_SCHOOL_LEVEL', value: 'elementary' });
     state = reduce(state, { type: 'SELECT_TEACHER_ROLE', value: 'subject' });
     expect(state.step).toBe('pain-points');
     state = reduce(state, { type: 'CONFIRM_PAIN_POINTS' });
+    expect(state.step).toBe('thinking');
+    state = reduce(state, { type: 'THINKING_DONE' });
     expect(state.step).toBe('results');
     expect(toAudienceProfile(state)).toEqual({ audience: 'teacher', schoolLevel: 'elementary', teacherRole: 'subject' });
   });
 
-  it('學生直接進痛點步驟，勾選後帶進 profile，可返回起點', () => {
+  it('學生直接進痛點步驟，勾選後經思考過場到結果，可返回起點', () => {
     let state = reduce(initialAudienceWizardState, { type: 'SELECT_AUDIENCE', value: 'student' });
     expect(state.step).toBe('pain-points');
     state = reduce(state, { type: 'TOGGLE_PAIN_POINT', value: 'student-practice' });
     state = reduce(state, { type: 'TOGGLE_PAIN_POINT', value: 'creative-learning' });
     state = reduce(state, { type: 'CONFIRM_PAIN_POINTS' });
+    expect(state.step).toBe('thinking');
+    // 思考過場返回會回到痛點步驟並保留勾選
+    const backFromThinking = reduce(state, { type: 'BACK' });
+    expect(backFromThinking.step).toBe('pain-points');
+    expect(backFromThinking.profile.painPoints).toEqual(['student-practice', 'creative-learning']);
+    state = reduce(state, { type: 'THINKING_DONE' });
     expect(state.step).toBe('results');
     expect(toAudienceProfile(state)).toEqual({ audience: 'student', painPoints: ['student-practice', 'creative-learning'] });
     // 從結果返回會回到痛點步驟並保留勾選

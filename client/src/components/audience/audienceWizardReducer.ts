@@ -1,6 +1,6 @@
 import type { AudienceProfile, AudienceType, Department, PainPoint, SchoolLevel, TeacherRole } from '@/lib/audienceProfile';
 
-export type AudienceWizardStep = 'audience' | 'school-level' | 'teacher-role' | 'department' | 'pain-points' | 'results';
+export type AudienceWizardStep = 'audience' | 'school-level' | 'teacher-role' | 'department' | 'pain-points' | 'thinking' | 'results';
 export type AudienceWizardState = { step: AudienceWizardStep; profile: Partial<AudienceProfile> };
 export type AudienceWizardAction =
   | { type: 'SELECT_AUDIENCE'; value: AudienceType }
@@ -9,6 +9,7 @@ export type AudienceWizardAction =
   | { type: 'SELECT_DEPARTMENT'; value: Department }
   | { type: 'TOGGLE_PAIN_POINT'; value: PainPoint }
   | { type: 'CONFIRM_PAIN_POINTS' }
+  | { type: 'THINKING_DONE' }
   | { type: 'BACK' }
   | { type: 'RESET' };
 
@@ -45,9 +46,13 @@ export function audienceWizardReducer(state: AudienceWizardState, action: Audien
       return { ...state, profile: { ...state.profile, painPoints: togglePainPoint(state.profile.painPoints, action.value) } };
     case 'CONFIRM_PAIN_POINTS':
       if (state.step !== 'pain-points') return state;
+      return { step: 'thinking', profile: state.profile };
+    case 'THINKING_DONE':
+      if (state.step !== 'thinking') return state;
       return { step: 'results', profile: state.profile };
     case 'BACK':
-      if (state.step === 'results') return { step: 'pain-points', profile: state.profile };
+      // 結果 / 思考中 返回都回到痛點步驟（思考只是過場，不當作可停留的一站）
+      if (state.step === 'results' || state.step === 'thinking') return { step: 'pain-points', profile: state.profile };
       if (state.step === 'pain-points') {
         if (state.profile.audience === 'student') return initialAudienceWizardState;
         if (state.profile.teacherRole === 'admin') return { step: 'department', profile: omit(state.profile, 'department', 'painPoints') };

@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { ArrowLeft, BookOpen, GraduationCap, ShieldCheck, X } from 'lucide-react';
 import type { EducationalTool } from '@/lib/data';
 import type { AudienceProfile, Department, PainPoint, SchoolLevel, TeacherRole } from '@/lib/audienceProfile';
-import { buildAudienceSegmentKey } from '@/lib/audienceProfile';
+import { buildAudienceSegmentKey, PAIN_POINT_LABELS } from '@/lib/audienceProfile';
 import { recommendTools } from '@/lib/audienceRecommendation';
 import { trackEvent, recordRecoImpression, recordRecoClick } from '@/lib/analytics';
 import { AudienceRecommendationResults } from './AudienceRecommendationResults';
@@ -132,9 +132,9 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
     <div className="audience-wizard__paper" tabIndex={-1}>
       <span className="audience-wizard__pin audience-wizard__pin--top" aria-hidden="true" />
       <button ref={closeRef} type="button" className="audience-wizard__close" onClick={onDismiss} aria-label="稍後再說"><X size={20} /></button>
-      <div className="audience-wizard__progress" aria-label="引導進度"><span style={{ width: `${({ audience: 16, 'school-level': 34, 'teacher-role': 52, department: 68, 'pain-points': 84, results: 100 } as Record<string, number>)[state.step]}%` }} /></div>
-      {state.step !== 'audience' && <button type="button" className="audience-wizard__back" onClick={() => dispatch({ type: 'BACK' })}><ArrowLeft size={17} /> 上一步</button>}
-      <header><span className="audience-wizard__eyebrow">阿凱老師的工具小幫手</span><h1>{heading}</h1><p>{subheading}</p></header>
+      <div className="audience-wizard__progress" aria-label="引導進度"><span style={{ width: `${({ audience: 14, 'school-level': 30, 'teacher-role': 46, department: 60, 'pain-points': 76, thinking: 90, results: 100 } as Record<string, number>)[state.step]}%` }} /></div>
+      {state.step !== 'audience' && state.step !== 'thinking' && <button type="button" className="audience-wizard__back" onClick={() => dispatch({ type: 'BACK' })}><ArrowLeft size={17} /> 上一步</button>}
+      {state.step !== 'thinking' && <header><span className="audience-wizard__eyebrow">阿凱老師的工具小幫手</span><h1>{heading}</h1><p>{subheading}</p></header>}
       {state.step === 'audience' && <Choices choices={[['teacher', '我是老師', '依學段與職務推薦', GraduationCap], ['student', '我是學生／小朋友', '探索好用小工具與遊戲', BookOpen]]} onChoose={(value) => dispatch({ type: 'SELECT_AUDIENCE', value: value as 'teacher' | 'student' })} />}
       {state.step === 'school-level' && <Choices choices={levels.map(([value, label]) => [value, label, '選擇任教學段', ShieldCheck])} onChoose={(value) => dispatch({ type: 'SELECT_SCHOOL_LEVEL', value: value as SchoolLevel })} />}
       {state.step === 'teacher-role' && <Choices choices={roles.map(([value, label]) => [value, label, value === 'admin' ? '再選擇所屬處室' : '直接取得專屬推薦', ShieldCheck])} onChoose={(value) => dispatch({ type: 'SELECT_TEACHER_ROLE', value: value as TeacherRole })} />}
@@ -145,8 +145,13 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
         onToggle={(value) => dispatch({ type: 'TOGGLE_PAIN_POINT', value })}
         onConfirm={() => dispatch({ type: 'CONFIRM_PAIN_POINTS' })}
       />}
+      {state.step === 'thinking' && <ThinkingReveal
+        profile={state.profile}
+        toolCount={tools.length}
+        onDone={() => dispatch({ type: 'THINKING_DONE' })}
+      />}
       {state.step === 'results' && <AudienceRecommendationResults recommendations={recommendations} onLocateTool={handleLocate} />}
-      <button type="button" className="audience-wizard__later" onClick={onDismiss}>稍後再說，先逛逛</button>
+      {state.step !== 'thinking' && <button type="button" className="audience-wizard__later" onClick={onDismiss}>稍後再說，先逛逛</button>}
     </div>
   </div>;
 }
@@ -182,4 +187,80 @@ function Choices({ choices, onChoose }: { choices: [string, string, string, type
   return <div className="audience-wizard__choices">{choices.map(([value, title, note, Icon], index) => <button key={value} type="button" className="audience-wizard__choice" onClick={() => onChoose(value)}>
     <span className="audience-wizard__pin" aria-hidden="true" /><Icon size={28} /><strong>{title}</strong><small>{note}</small><span>{index % 2 ? '選這個 →' : '開始選擇 →'}</span>
   </button>)}</div>;
+}
+
+// ── 「為你量身思考中」過場（專屬族群的分析動畫） ─────────────────────────
+const LEVEL_SHORT: Record<SchoolLevel, string> = { elementary: '國小', junior: '國中', senior: '高中' };
+const ROLE_SHORT: Record<TeacherRole, string> = { homeroom: '導師', subject: '科任老師', admin: '行政人員' };
+const DEPT_SHORT: Record<Department, string> = { academic: '教務處', 'student-affairs': '學務處', 'general-affairs': '總務處', counseling: '輔導室', other: '其他處室' };
+
+/** 產生對使用者可讀的族群短標籤，例如「國小科任老師」「國小教務處行政人員」「學生／小朋友」 */
+function userSegmentLabel(profile: Partial<AudienceProfile>): string {
+  if (profile.audience === 'student') return '學生／小朋友';
+  const lvl = profile.schoolLevel ? LEVEL_SHORT[profile.schoolLevel] : '';
+  if (profile.teacherRole === 'admin') {
+    const dept = profile.department ? DEPT_SHORT[profile.department] : '';
+    return `${lvl}${dept}行政人員`;
+  }
+  const role = profile.teacherRole ? ROLE_SHORT[profile.teacherRole] : '老師';
+  return `${lvl}${role}`;
+}
+
+type ThinkingStep = { icon: string; text: string };
+function buildThinkingSteps(profile: Partial<AudienceProfile>, toolCount: number): ThinkingStep[] {
+  const seg = userSegmentLabel(profile);
+  const pains = (profile.painPoints ?? []).map((p) => PAIN_POINT_LABELS[p]).filter(Boolean);
+  return [
+    { icon: '🔎', text: `讀取你的身分：${seg}` },
+    pains.length > 0
+      ? { icon: '🎯', text: `鎖定你在意的：${pains.join('、')}` }
+      : { icon: '🧭', text: '為你張羅各種好用的小工具' },
+    { icon: '📚', text: `比對 ${toolCount} 個教育工具的適配度` },
+    { icon: '🔥', text: '參考排行榜熱門與這週趨勢' },
+    { icon: '✨', text: '排出最適合你的 6 個' },
+  ];
+}
+
+const THINKING_STEP_MS = 520;
+
+function ThinkingReveal({ profile, toolCount, onDone }: { profile: Partial<AudienceProfile>; toolCount: number; onDone: () => void }) {
+  const steps = useMemo(() => buildThinkingSteps(profile, toolCount), [profile, toolCount]);
+  const [active, setActive] = useState(0); // 已「打勾完成」的步驟數
+  const doneRef = useRef(false);
+  const finish = useCallback(() => { if (!doneRef.current) { doneRef.current = true; onDone(); } }, [onDone]);
+
+  useEffect(() => {
+    const reduce = typeof window === 'undefined' || !window.matchMedia
+      || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) { finish(); return; }
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    for (let i = 0; i < steps.length; i += 1) {
+      timers.push(setTimeout(() => setActive(i + 1), (i + 1) * THINKING_STEP_MS));
+    }
+    timers.push(setTimeout(finish, steps.length * THINKING_STEP_MS + 560));
+    return () => timers.forEach(clearTimeout);
+  }, [steps.length, finish]);
+
+  const seg = userSegmentLabel(profile);
+  return (
+    <section className="audience-wizard__thinking" aria-live="polite" aria-label="正在為你量身推薦">
+      <div className="audience-wizard__thinking-orb" aria-hidden="true">
+        <span className="audience-wizard__thinking-emoji">💡</span>
+      </div>
+      <div className="audience-wizard__thinking-tape">為你量身推薦中</div>
+      <h2 className="audience-wizard__thinking-title">正在為「{seg}」挑工具…</h2>
+      <ol className="audience-wizard__thinking-steps">
+        {steps.map((s, i) => {
+          const state = i < active ? 'done' : i === active ? 'current' : 'pending';
+          return (
+            <li key={i} className={`audience-wizard__thinking-step is-${state}`}>
+              <span className="audience-wizard__thinking-icon" aria-hidden="true">{state === 'done' ? '✓' : s.icon}</span>
+              <span className="audience-wizard__thinking-text">{s.text}</span>
+            </li>
+          );
+        })}
+      </ol>
+      <button type="button" className="audience-wizard__thinking-skip" onClick={finish}>直接看推薦 →</button>
+    </section>
+  );
 }

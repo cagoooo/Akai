@@ -139,6 +139,41 @@
 .audience-wizard__badge--universal { background: var(--paper-warm); }
 .audience-wizard__recommendation { padding-top: 34px; }
 
+/* ── 「為你量身思考中」過場（專屬族群分析動畫） ───────────────── */
+.audience-wizard__thinking { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 14px 0 8px; }
+.audience-wizard__thinking-orb { position: relative; width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 50% 40%, #fff7dc 0%, var(--note-yellow) 60%, #f0c94a 100%); border: 3px solid var(--ink); box-shadow: 4px 5px 0 rgba(0,0,0,.24); animation: audience-orb-pulse 1.5s ease-in-out infinite; }
+.audience-wizard__thinking-orb::before, .audience-wizard__thinking-orb::after { content: ''; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid var(--olive); opacity: 0; animation: audience-orb-ring 1.9s ease-out infinite; }
+.audience-wizard__thinking-orb::after { animation-delay: .8s; }
+.audience-wizard__thinking-emoji { font-size: 42px; animation: audience-orb-bob 1.5s ease-in-out infinite; }
+.audience-wizard__thinking-tape { display: inline-block; margin: 18px 0 0; padding: 5px 14px; background: var(--note-yellow); border: 2px solid var(--ink); font-size: 12px; font-weight: 900; letter-spacing: .1em; transform: rotate(-1.5deg); box-shadow: 2px 2px 0 rgba(0,0,0,.2); }
+.audience-wizard__thinking-title { margin: 14px 0 22px; font-size: clamp(20px, 3vw, 28px); font-weight: 900; letter-spacing: -.03em; color: var(--ink); }
+.audience-wizard__thinking-steps { list-style: none; margin: 0 auto; padding: 0; width: min(430px, 100%); display: flex; flex-direction: column; gap: 11px; text-align: left; }
+.audience-wizard__thinking-step { display: flex; align-items: center; gap: 12px; padding: 11px 15px; border: 2px solid var(--ink); border-radius: 12px; background: rgba(255,255,255,.55); box-shadow: 2px 3px 0 rgba(0,0,0,.14); font-size: 14px; font-weight: 700; color: var(--ink); opacity: 0; transform: translateY(8px); transition: opacity .35s ease, transform .35s ease, background .35s ease, box-shadow .35s ease; }
+.audience-wizard__thinking-step.is-current, .audience-wizard__thinking-step.is-done { opacity: 1; transform: translateY(0); }
+.audience-wizard__thinking-step.is-current { background: var(--note-yellow); box-shadow: 3px 4px 0 rgba(0,0,0,.2); }
+.audience-wizard__thinking-step.is-done { background: rgba(122,140,58,.16); }
+.audience-wizard__thinking-icon { display: grid; place-items: center; width: 28px; height: 28px; flex-shrink: 0; border-radius: 50%; font-size: 15px; }
+.audience-wizard__thinking-step.is-done .audience-wizard__thinking-icon { background: var(--olive); color: #fff; font-weight: 900; border: 2px solid var(--ink); }
+.audience-wizard__thinking-step.is-current .audience-wizard__thinking-icon { animation: audience-icon-pop .35s ease; }
+.audience-wizard__thinking-skip { margin: 22px auto 4px; padding: 7px 16px; background: transparent; border: 0; color: var(--muted2); text-decoration: underline; cursor: pointer; font-family: inherit; font-size: 13px; }
+
+@keyframes audience-orb-pulse { 0%,100% { transform: scale(1) rotate(-2deg); } 50% { transform: scale(1.06) rotate(2deg); } }
+@keyframes audience-orb-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes audience-orb-ring { 0% { opacity: .5; transform: scale(.9); } 100% { opacity: 0; transform: scale(1.35); } }
+@keyframes audience-icon-pop { 0% { transform: scale(.4); } 70% { transform: scale(1.18); } 100% { transform: scale(1); } }
+
+/* 推薦卡片交錯浮現（配合思考過場的揭曉感） */
+.audience-wizard__recommendation.is-revealing { opacity: 0; animation: audience-card-reveal .5s cubic-bezier(.2,.7,.3,1) forwards; }
+@keyframes audience-card-reveal { 0% { opacity: 0; transform: translateY(16px) rotate(-1.5deg) scale(.97); } 100% { opacity: 1; transform: translateY(0) rotate(0) scale(1); } }
+.audience-wizard__recommendation:nth-child(even).is-revealing { animation-name: audience-card-reveal-even; }
+@keyframes audience-card-reveal-even { 0% { opacity: 0; transform: translateY(16px) rotate(1.5deg) scale(.97); } 100% { opacity: 1; transform: translateY(0) rotate(1deg) scale(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .audience-wizard__thinking-orb, .audience-wizard__thinking-orb::before, .audience-wizard__thinking-orb::after, .audience-wizard__thinking-emoji { animation: none; }
+  .audience-wizard__thinking-step { opacity: 1; transform: none; transition: none; }
+  .audience-wizard__recommendation.is-revealing { opacity: 1; animation: none; }
+}
+
 .audience-profile-badge-wrap { display: flex; justify-content: center; padding: 0 20px 14px; }
 .audience-profile-badge { display: inline-flex; align-items: center; flex-wrap: wrap; justify-content: center; gap: 7px; padding: 8px 12px; color: var(--ink); background: var(--note-green); border: 2px solid var(--ink); border-radius: 6px; box-shadow: 3px 3px 0 rgba(0,0,0,.22); font-family: var(--font-tc); font-size: 13px; font-weight: 800; transform: rotate(-.6deg); }
 .audience-profile-badge button { min-height: 32px; padding: 4px 9px; color: var(--olive-deep); background: var(--paper-warm); border: 1px solid var(--ink); border-radius: 999px; cursor: pointer; font: inherit; font-size: 12px; }

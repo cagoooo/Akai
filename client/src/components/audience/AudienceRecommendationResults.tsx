@@ -24,7 +24,7 @@ export function AudienceRecommendationResults({ recommendations, onLocateTool }:
       {recommendations.map((rec, index) => {
         const { tool, reason } = rec;
         const badge = badgeFor(rec);
-        return <button key={tool.id} type="button" className="audience-wizard__recommendation" data-tool-id={tool.id} onClick={() => onLocateTool(tool.id)}>
+        return <button key={tool.id} type="button" className="audience-wizard__recommendation is-revealing" style={{ animationDelay: `${index * 75}ms` }} data-tool-id={tool.id} onClick={() => onLocateTool(tool.id)}>
           <span className="audience-wizard__pin" aria-hidden="true" />
           <span className="audience-wizard__number">{String(index + 1).padStart(2, '0')}</span>
           <span className={`audience-wizard__badge audience-wizard__badge--${badge.kind}`}>{badge.label}</span>
