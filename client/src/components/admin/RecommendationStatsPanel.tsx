@@ -26,6 +26,11 @@ interface RecoStats {
   segments?: Record<string, Counter>;
   slotClicks?: Record<string, number>;
   daily?: Record<string, DailyCounter>;
+  funnel?: Record<string, number>;
+  dismissedAtStep?: Record<string, number>;
+  selections?: Record<string, Record<string, number>>;
+  painPointClicks?: Record<string, number>;
+  surfaces?: Record<string, Counter>;
 }
 
 type RangeKey = 'all' | 'last7' | 'last30';
@@ -75,6 +80,25 @@ function describeSegment(key: string): string {
 const SLOT_LABEL: Record<string, string> = {
   painpoint: '🎯 命中需求', popular: '🔥 熱門排行', role: '👤 貼近職務',
   stage: '📚 同學段', discovery: '✨ 為你發掘', universal: '⭐ 廣受好評', unknown: '其他',
+};
+
+const FUNNEL_LABEL: Record<string, string> = {
+  opened: '開啟精靈', painPointsConfirmed: '確認痛點', resultsShown: '看到推薦結果',
+  dismissed: '中途離開', reshuffled: '換一批推薦',
+};
+const STEP_LABEL: Record<string, string> = {
+  audience: '選身分', 'school-level': '選學段', 'teacher-role': '選職務',
+  department: '選處室', 'pain-points': '選痛點', thinking: '推薦計算中', results: '推薦結果',
+};
+const SELECTION_GROUP_LABEL: Record<string, string> = {
+  audience: '身分', schoolLevels: '學段', teacherRoles: '職務', departments: '行政處室', painPoints: '想解決的情境',
+};
+const SELECTION_VALUE_LABEL: Record<string, string> = {
+  ...TOKEN_LABEL,
+  'lesson-planning': '備課與教材', assessment: '評量與測驗', 'classroom-management': '班級經營',
+  'student-practice': '學生練習', 'teacher-workload': '減輕行政負擔', communication: '親師溝通',
+  administration: '行政工作', 'reading-literacy': '閱讀素養', 'creative-learning': '創意學習',
+  'digital-literacy': '數位素養', 'language-learning': '語言學習', presentation: '簡報表達',
 };
 
 function ctr(clk: number, imp: number): number {
@@ -167,6 +191,27 @@ export function RecommendationStatsPanel() {
       .sort((a, b) => b.clk - a.clk);
   }, [stats]);
 
+  const funnelRows = useMemo(() => Object.entries(stats?.funnel ?? {})
+    .map(([key, count]) => ({ key, label: FUNNEL_LABEL[key] ?? key, count: count ?? 0 }))
+    .sort((a, b) => b.count - a.count), [stats]);
+  const dismissalRows = useMemo(() => Object.entries(stats?.dismissedAtStep ?? {})
+    .map(([key, count]) => ({ key, label: STEP_LABEL[key] ?? key, count: count ?? 0 }))
+    .sort((a, b) => b.count - a.count), [stats]);
+  const selectionGroups = useMemo(() => Object.entries(stats?.selections ?? {})
+    .map(([group, values]) => ({
+      group,
+      label: SELECTION_GROUP_LABEL[group] ?? group,
+      values: Object.entries(values)
+        .map(([value, count]) => ({ value, label: SELECTION_VALUE_LABEL[value] ?? value, count: count ?? 0 }))
+        .sort((a, b) => b.count - a.count),
+    })), [stats]);
+  const painClickRows = useMemo(() => Object.entries(stats?.painPointClicks ?? {})
+    .map(([key, count]) => ({ key, label: SELECTION_VALUE_LABEL[key] ?? key, count: count ?? 0 }))
+    .sort((a, b) => b.count - a.count), [stats]);
+  const surfaceRows = useMemo(() => Object.entries(stats?.surfaces ?? {})
+    .map(([key, value]) => ({ key, label: key === 'wizard' ? '首次推薦精靈' : key === 'strip' ? '首頁常駐推薦' : key, imp: value.imp ?? 0, clk: value.clk ?? 0 }))
+    .sort((a, b) => b.imp - a.imp), [stats]);
+
   // 「常被推卻沒人點」：曝光量前段（≥ 全站平均曝光）但 CTR 偏低（< 整體 CTR 的一半）
   const overallCtr = ctr(totalClk, totalImp);
   const avgImp = toolRows.length > 0 ? toolRows.reduce((s, r) => s + r.imp, 0) / toolRows.length : 0;
@@ -232,6 +277,36 @@ export function RecommendationStatsPanel() {
             {kpiCard(<Percent className="h-3.5 w-3.5" />, 'CTR', fmtPct(rangedCtr), '點擊 ÷ 曝光')}
             {kpiCard(<Target className="h-3.5 w-3.5" />, '痛點點擊佔比', ranged.clk > 0 ? fmtPct((ranged.painClk / ranged.clk) * 100) : '—', '命中痛點的點擊比例')}
           </div>
+
+          <div className="grid gap-4 lg:grid-cols-2">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">精靈流程與離開位置</CardTitle>
+                <CardDescription>用來找出使用者在哪個步驟流失，以及「換一批」是否真的有幫助。</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3 text-sm">
+                {funnelRows.length === 0 ? <div className="text-slate-500">新版流程資料尚在累積。</div> : funnelRows.map((row) => <div key={row.key} className="flex justify-between border-b border-amber-100 pb-1"><span>{row.label}</span><strong>{row.count.toLocaleString()}</strong></div>)}
+                {dismissalRows.length > 0 && <div className="pt-2"><div className="mb-1 text-xs font-bold text-amber-800">中途離開的位置</div>{dismissalRows.map((row) => <div key={row.key} className="flex justify-between text-xs"><span>{row.label}</span><span>{row.count.toLocaleString()}</span></div>)}</div>}
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">推薦版位與痛點回應</CardTitle>
+                <CardDescription>比較首次精靈與首頁常駐推薦的效果，並找出最常促成點擊的痛點。</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3 text-sm">
+                {surfaceRows.map((row) => <div key={row.key} className="flex justify-between border-b border-amber-100 pb-1"><span>{row.label}</span><span>曝光 {row.imp}／點擊 {row.clk}／{fmtPct(ctr(row.clk, row.imp))}</span></div>)}
+                {painClickRows.length > 0 && <div className="pt-2"><div className="mb-1 text-xs font-bold text-amber-800">帶來點擊的使用者痛點</div>{painClickRows.map((row) => <div key={row.key} className="flex justify-between text-xs"><span>{row.label}</span><span>{row.count.toLocaleString()}</span></div>)}</div>}
+              </CardContent>
+            </Card>
+          </div>
+
+          {selectionGroups.length > 0 && <Card>
+            <CardHeader><CardTitle className="text-base">客群與需求選擇分布</CardTitle><CardDescription>每個數字都是匿名加總，不保存個人的帳號或選擇紀錄。</CardDescription></CardHeader>
+            <CardContent className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {selectionGroups.map((group) => <div key={group.group}><div className="mb-1 text-sm font-bold">{group.label}</div>{group.values.map((value) => <div key={value.value} className="flex justify-between border-b border-amber-100 py-1 text-xs"><span>{value.label}</span><span>{value.count.toLocaleString()}</span></div>)}</div>)}
+            </CardContent>
+          </Card>}
 
           <Card>
             <CardHeader><CardTitle className="text-base">分眾成效（累計）</CardTitle><CardDescription>各客群的曝光、點擊與 CTR（依曝光排序；下方三表為全期累計，不受上方區間切換影響）</CardDescription></CardHeader>

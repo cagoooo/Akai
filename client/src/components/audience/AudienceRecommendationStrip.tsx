@@ -1,8 +1,8 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import type { AudienceProfile } from '@/lib/audienceProfile';
 import type { EducationalTool } from '@/lib/data';
 import { recommendTools } from '@/lib/audienceRecommendation';
-import { trackEvent } from '@/lib/analytics';
+import { recordRecoClick, recordRecoImpression, trackEvent } from '@/lib/analytics';
 import { buildAudienceSegmentKey } from '@/lib/audienceProfile';
 import { badgeFor } from './AudienceRecommendationResults';
 
@@ -30,6 +30,20 @@ export function AudienceRecommendationStrip({
     [tools, profile, recentSet],
   );
 
+  useEffect(() => {
+    if (recommendations.length === 0) return;
+    const segment = buildAudienceSegmentKey(profile);
+    const signature = `${segment}:${recommendations.map((rec) => rec.tool.id).join(',')}`;
+    const storageKey = `akai_reco_strip_imp_v1:${signature}`;
+    try {
+      if (sessionStorage.getItem(storageKey) === '1') return;
+      sessionStorage.setItem(storageKey, '1');
+    } catch {
+      // 儲存空間不可用時仍保留本次曝光統計。
+    }
+    void recordRecoImpression({ segment, toolIds: recommendations.map((rec) => rec.tool.id), surface: 'strip' });
+  }, [profile, recommendations]);
+
   if (recommendations.length === 0) return null;
 
   const handleClick = (toolId: number, slot: string, rank: number, matchedPains: number) => {
@@ -39,6 +53,14 @@ export function AudienceRecommendationStrip({
       slot,
       rank,
       matched_pains: matchedPains,
+    });
+    void recordRecoClick({
+      segment: buildAudienceSegmentKey(profile),
+      toolId,
+      slot,
+      matchedPains,
+      painPoints: profile.painPoints,
+      surface: 'strip',
     });
     onLocateTool(toolId);
   };

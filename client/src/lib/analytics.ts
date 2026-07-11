@@ -182,6 +182,9 @@ export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
 //     slotClicks: { [slot]: n }, painClicks,
 //     daily: { [YYYY-MM-DD]: { imp, clk, painClk } } }  ← P0-D 時間維度（事件層級每日總量）
 const RECO_STATS_DOC = ['analytics', 'recoStats'] as const;
+export type RecommendationSurface = 'wizard' | 'strip';
+export type AudienceSelectionDimension = 'audience' | 'schoolLevels' | 'teacherRoles' | 'departments';
+export type AudienceFunnelEvent = 'opened' | 'painPointsConfirmed' | 'resultsShown' | 'dismissed' | 'reshuffled';
 
 /** 本地日期字串 YYYY-MM-DD（與 useToolClickStats 的每日快照對齊，用本地時區） */
 function recoTodayStr(d = new Date()): string {
@@ -191,8 +194,41 @@ function recoTodayStr(d = new Date()): string {
   return `${yyyy}-${mm}-${dd}`;
 }
 
+async function writeRecoStats(payload: Record<string, unknown>) {
+  if (!db) return;
+  try {
+    const { ensureSignedIn } = await import('@/lib/authService');
+    await ensureSignedIn();
+    await setDoc(doc(db, ...RECO_STATS_DOC), { ...payload, updatedAt: serverTimestamp() }, { merge: true });
+  } catch (err) {
+    if (import.meta.env.DEV) console.warn('[reco stats] 寫入失敗:', err);
+  }
+}
+
+/** 僅寫入匿名加總，以找出精靈流程的流失點；不保存個人設定或帳號資料。 */
+export function recordAudienceFunnelEvent(event: AudienceFunnelEvent, step?: string) {
+  return writeRecoStats({
+    funnel: { [event]: increment(1) },
+    ...(step ? { dismissedAtStep: { [step]: increment(1) } } : {}),
+  });
+}
+
+export function recordAudienceSelection(dimension: AudienceSelectionDimension, value: string) {
+  if (!value) return Promise.resolve();
+  return writeRecoStats({ selections: { [dimension]: { [value]: increment(1) } } });
+}
+
+export function recordAudiencePainPointSelection(painPoints: string[]) {
+  const counts: Record<string, ReturnType<typeof increment>> = {};
+  for (const painPoint of painPoints) counts[painPoint] = increment(1);
+  return writeRecoStats({
+    funnel: { painPointsConfirmed: increment(1) },
+    ...(Object.keys(counts).length > 0 ? { selections: { painPoints: counts } } : {}),
+  });
+}
+
 /** 推薦結果曝光：每個被展示的工具 +1 imp，該 segment +1 imp，總曝光 +1，今日 bucket +1 imp */
-export async function recordRecoImpression(params: { segment: string; toolIds: number[] }) {
+export async function recordRecoImpression(params: { segment: string; toolIds: number[]; surface?: RecommendationSurface }) {
   if (!db || !params.segment || params.toolIds.length === 0) return;
   try {
     const { ensureSignedIn } = await import('@/lib/authService');
@@ -204,6 +240,7 @@ export async function recordRecoImpression(params: { segment: string; toolIds: n
       updatedAt: serverTimestamp(),
       tools,
       segments: { [params.segment]: { imp: increment(1) } },
+      surfaces: { [params.surface ?? 'wizard']: { imp: increment(1) } },
       daily: { [recoTodayStr()]: { imp: increment(1) } },
     }, { merge: true });
   } catch (err) {
@@ -212,19 +249,23 @@ export async function recordRecoImpression(params: { segment: string; toolIds: n
 }
 
 /** 推薦點擊：該工具 +1 clk，該 segment +1 clk，該 slot +1，總點擊 +1，今日 bucket +1 clk */
-export async function recordRecoClick(params: { segment: string; toolId: number; slot: string; matchedPains: number }) {
+export async function recordRecoClick(params: { segment: string; toolId: number; slot: string; matchedPains: number; painPoints?: string[]; surface?: RecommendationSurface }) {
   if (!db || !params.segment) return;
   try {
     const { ensureSignedIn } = await import('@/lib/authService');
     await ensureSignedIn();
     const isPain = params.matchedPains > 0;
+    const painPointClicks: Record<string, ReturnType<typeof increment>> = {};
+    for (const painPoint of params.painPoints ?? []) painPointClicks[painPoint] = increment(1);
     await setDoc(doc(db, ...RECO_STATS_DOC), {
       totalClicks: increment(1),
       updatedAt: serverTimestamp(),
       tools: { [String(params.toolId)]: { clk: increment(1) } },
       segments: { [params.segment]: { clk: increment(1) } },
+      surfaces: { [params.surface ?? 'wizard']: { clk: increment(1) } },
       slotClicks: { [params.slot]: increment(1) },
       ...(isPain ? { painClicks: increment(1) } : {}),
+      ...(Object.keys(painPointClicks).length > 0 ? { painPointClicks } : {}),
       daily: { [recoTodayStr()]: { clk: increment(1), ...(isPain ? { painClk: increment(1) } : {}) } },
     }, { merge: true });
   } catch (err) {

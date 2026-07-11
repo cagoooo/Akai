@@ -4,7 +4,7 @@ import type { EducationalTool } from '@/lib/data';
 import type { AudienceProfile, Department, PainPoint, SchoolLevel, TeacherRole } from '@/lib/audienceProfile';
 import { buildAudienceSegmentKey, PAIN_POINT_LABELS } from '@/lib/audienceProfile';
 import { recommendTools } from '@/lib/audienceRecommendation';
-import { trackEvent, recordRecoImpression, recordRecoClick } from '@/lib/analytics';
+import { trackEvent, recordAudienceFunnelEvent, recordAudiencePainPointSelection, recordAudienceSelection, recordRecoImpression, recordRecoClick } from '@/lib/analytics';
 import { AudienceRecommendationResults } from './AudienceRecommendationResults';
 import { audienceWizardReducer, initialAudienceWizardState, toAudienceProfile, PAIN_POINT_SELECTION_LIMIT } from './audienceWizardReducer';
 
@@ -51,6 +51,7 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
   const dialogRef = useRef<HTMLDivElement>(null);
   const firstRecommendationRef = useRef<HTMLButtonElement | null>(null);
   const reshufflePendingRef = useRef(false);
+  const dismissedRef = useRef(false);
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const completedRef = useRef<string | null>(null);
   const wasOpenRef = useRef(false);
@@ -89,7 +90,9 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
       dispatch({ type: 'RESET' });
       completedRef.current = null;
       reshufflePendingRef.current = false;
+      dismissedRef.current = false;
       setSeenIds([]);
+      void recordAudienceFunnelEvent('opened');
       requestAnimationFrame(() => closeRef.current?.focus());
     }
     if (!open && wasOpenRef.current) {
@@ -107,7 +110,7 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
   // dev StrictMode 重掛，都不會重複灌 dashboard 的曝光分母（CTR 才準確）。
   useEffect(() => {
     if (state.step !== 'results' || !profile || recommendations.length === 0) return;
-    const signature = JSON.stringify(profile);
+    const signature = JSON.stringify({ profile, toolIds: recommendations.map((r) => r.tool.id) });
     if (hasFiredImpression(signature)) return;
     markImpressionFired(signature);
     const segment = buildAudienceSegmentKey(profile);
@@ -117,8 +120,9 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
       tool_ids: recommendations.map((r) => r.tool.id).join(','),
       slots: recommendations.map((r) => r.slot).join(','),
     });
+    void recordAudienceFunnelEvent('resultsShown');
     // 同步聚合到 Firestore，供 admin 推薦成效 dashboard 計算 CTR（P1-6）
-    recordRecoImpression({ segment, toolIds: recommendations.map((r) => r.tool.id) });
+    void recordRecoImpression({ segment, toolIds: recommendations.map((r) => r.tool.id), surface: 'wizard' });
   }, [state.step, profile, recommendations]);
   // P0-4：推薦點擊埋點（含 slot / 名次 / 命中痛點數），再交給既有的定位邏輯
   const handleLocate = useCallback((toolId: number) => {
@@ -130,10 +134,17 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
       const matchedPains = rec?.matchedPainPoints ?? 0;
       trackEvent('audience_reco_click', { segment, tool_id: toolId, slot, rank: rank + 1, matched_pains: matchedPains });
       // 同步聚合到 Firestore（P1-6）
-      recordRecoClick({ segment, toolId, slot, matchedPains });
+      void recordRecoClick({ segment, toolId, slot, matchedPains, painPoints: profile.painPoints, surface: 'wizard' });
     }
     onLocateTool(toolId);
   }, [profile, recommendations, onLocateTool]);
+  const handleDismiss = useCallback(() => {
+    if (!dismissedRef.current) {
+      dismissedRef.current = true;
+      void recordAudienceFunnelEvent('dismissed', state.step);
+    }
+    onDismiss();
+  }, [onDismiss, state.step]);
   // P1-1：換一批 — 把目前這批加進「已看過」，下一波排除它們；看完一輪就重新洗牌
   const handleReshuffle = useCallback(() => {
     if (!profile || recommendations.length === 0) return;
@@ -146,13 +157,14 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
       seen_count: nextSeen.length,
       wrapped: nextBatch.length === 0,
     });
+    void recordAudienceFunnelEvent('reshuffled');
     // 沒有更多沒看過的工具 → 清空重來，再洗一輪（無限換一批）
     setSeenIds(nextBatch.length === 0 ? [] : nextSeen);
   }, [profile, recommendations, seenIds, tools, recentSet]);
   useEffect(() => {
     if (!open) return;
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') { event.preventDefault(); onDismiss(); return; }
+      if (event.key === 'Escape') { event.preventDefault(); handleDismiss(); return; }
       if (event.key !== 'Tab') return;
       const focusable = dialogRef.current?.querySelectorAll<HTMLElement>('button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])');
       if (!focusable?.length) return;
@@ -162,7 +174,7 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
       else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
     };
     window.addEventListener('keydown', onKeyDown); return () => window.removeEventListener('keydown', onKeyDown);
-  }, [open, onDismiss]);
+  }, [open, handleDismiss]);
   useEffect(() => {
     if (state.step !== 'results' || !profile) return;
     const key = JSON.stringify(profile);
@@ -181,24 +193,24 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
     : state.step === 'pain-points' ? `勾選最想解決的情境（可複選，最多 ${PAIN_POINT_SELECTION_LIMIT} 個），推薦會更對症下藥。也可以直接略過。`
     : state.step === 'school-level' && isStudent ? '選你的學段，推薦會更符合你的程度。'
     : '每個選擇都能讓推薦更貼近日常需要。';
-  return <div ref={dialogRef} className="audience-wizard" role="dialog" aria-modal="true" aria-label="找到適合你的教育工具" onMouseDown={(e) => { if (e.target === e.currentTarget) onDismiss(); }}>
+  return <div ref={dialogRef} className="audience-wizard" role="dialog" aria-modal="true" aria-label="找到適合你的教育工具" onMouseDown={(e) => { if (e.target === e.currentTarget) handleDismiss(); }}>
     <div className="audience-wizard__paper" tabIndex={-1}>
       <span className="audience-wizard__pin audience-wizard__pin--top" aria-hidden="true" />
-      <button ref={closeRef} type="button" className="audience-wizard__close" onClick={onDismiss} aria-label="稍後再說"><X size={20} /></button>
+      <button ref={closeRef} type="button" className="audience-wizard__close" onClick={handleDismiss} aria-label="稍後再說"><X size={20} /></button>
       <div className="audience-wizard__progress" aria-label="引導進度"><span style={{ width: `${({ audience: 14, 'school-level': 30, 'teacher-role': 46, department: 60, 'pain-points': 76, thinking: 90, results: 100 } as Record<string, number>)[state.step]}%` }} /></div>
       {state.step !== 'audience' && state.step !== 'thinking' && <button type="button" className="audience-wizard__back" onClick={() => dispatch({ type: 'BACK' })}><ArrowLeft size={17} /> 上一步</button>}
       {state.step !== 'thinking' && <header><span className="audience-wizard__eyebrow">阿凱老師的工具小幫手</span><h1>{heading}</h1><p>{subheading}</p></header>}
-      {state.step === 'audience' && <Choices choices={[['teacher', '我是老師', '依學段與職務推薦', GraduationCap], ['student', '我是學生／小朋友', '探索好用小工具與遊戲', BookOpen]]} onChoose={(value) => dispatch({ type: 'SELECT_AUDIENCE', value: value as 'teacher' | 'student' })} />}
+      {state.step === 'audience' && <Choices choices={[['teacher', '我是老師', '依學段與職務推薦', GraduationCap], ['student', '我是學生／小朋友', '探索好用小工具與遊戲', BookOpen]]} onChoose={(value) => { void recordAudienceSelection('audience', value); dispatch({ type: 'SELECT_AUDIENCE', value: value as 'teacher' | 'student' }); }} />}
       {state.step === 'school-level' && (isStudent
-        ? <Choices choices={studentLevels.map(([value, label]) => [value, label, '選你的學段', BookOpen])} onChoose={(value) => dispatch({ type: 'SELECT_SCHOOL_LEVEL', value: value as SchoolLevel })} />
-        : <Choices choices={levels.map(([value, label]) => [value, label, '選擇任教學段', ShieldCheck])} onChoose={(value) => dispatch({ type: 'SELECT_SCHOOL_LEVEL', value: value as SchoolLevel })} />)}
-      {state.step === 'teacher-role' && <Choices choices={roles.map(([value, label]) => [value, label, value === 'admin' ? '再選擇所屬處室' : '直接取得專屬推薦', ShieldCheck])} onChoose={(value) => dispatch({ type: 'SELECT_TEACHER_ROLE', value: value as TeacherRole })} />}
-      {state.step === 'department' && <Choices choices={departments.map(([value, label]) => [value, label, '取得行政工作推薦', ShieldCheck])} onChoose={(value) => dispatch({ type: 'SELECT_DEPARTMENT', value: value as Department })} />}
+        ? <Choices choices={studentLevels.map(([value, label]) => [value, label, '選你的學段', BookOpen])} onChoose={(value) => { void recordAudienceSelection('schoolLevels', value); dispatch({ type: 'SELECT_SCHOOL_LEVEL', value: value as SchoolLevel }); }} />
+        : <Choices choices={levels.map(([value, label]) => [value, label, '選擇任教學段', ShieldCheck])} onChoose={(value) => { void recordAudienceSelection('schoolLevels', value); dispatch({ type: 'SELECT_SCHOOL_LEVEL', value: value as SchoolLevel }); }} />)}
+      {state.step === 'teacher-role' && <Choices choices={roles.map(([value, label]) => [value, label, value === 'admin' ? '再選擇所屬處室' : '直接取得專屬推薦', ShieldCheck])} onChoose={(value) => { void recordAudienceSelection('teacherRoles', value); dispatch({ type: 'SELECT_TEACHER_ROLE', value: value as TeacherRole }); }} />}
+      {state.step === 'department' && <Choices choices={departments.map(([value, label]) => [value, label, '取得行政工作推薦', ShieldCheck])} onChoose={(value) => { void recordAudienceSelection('departments', value); dispatch({ type: 'SELECT_DEPARTMENT', value: value as Department }); }} />}
       {state.step === 'pain-points' && <PainPointPicker
         options={state.profile.audience === 'student' ? studentPains : teacherPains}
         selected={state.profile.painPoints ?? []}
         onToggle={(value) => dispatch({ type: 'TOGGLE_PAIN_POINT', value })}
-        onConfirm={() => dispatch({ type: 'CONFIRM_PAIN_POINTS' })}
+        onConfirm={() => { void recordAudiencePainPointSelection(state.profile.painPoints ?? []); dispatch({ type: 'CONFIRM_PAIN_POINTS' }); }}
       />}
       {state.step === 'thinking' && <ThinkingReveal
         profile={state.profile}
@@ -206,7 +218,7 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
         onDone={() => dispatch({ type: 'THINKING_DONE' })}
       />}
       {state.step === 'results' && <AudienceRecommendationResults recommendations={recommendations} onLocateTool={handleLocate} onReshuffle={handleReshuffle} firstRecommendationRef={firstRecommendationRef} />}
-      {state.step !== 'thinking' && <button type="button" className="audience-wizard__later" onClick={onDismiss}>稍後再說，先逛逛</button>}
+      {state.step !== 'thinking' && <button type="button" className="audience-wizard__later" onClick={handleDismiss}>稍後再說，先逛逛</button>}
     </div>
   </div>;
 }
