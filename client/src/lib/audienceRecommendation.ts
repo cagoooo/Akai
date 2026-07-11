@@ -339,13 +339,24 @@ export function recommendTools(
   tools: EducationalTool[],
   profile: AudienceProfile,
   limit = 6,
+  /**
+   * 「換一批」用：已看過的工具 id。會連同同家族的工具一併排除，
+   * 讓下一波推薦是全新的清單（不重覆、也不出現已看過工具的 Pro/舊版兄弟）。
+   */
+  excludeIds?: ReadonlySet<number>,
 ): AudienceRecommendation[] {
   if (!Number.isInteger(limit) || limit <= 0) return [];
 
   const familyIds = buildToolFamilyIds(tools);
 
+  // 把「已看過的工具」換算成「已看過的家族」，避免下一波冒出同家族兄弟
+  const excludedFamilies = excludeIds && excludeIds.size > 0
+    ? new Set(Array.from(excludeIds, (id) => familyIds.get(id) ?? id))
+    : null;
+
   const eligible = tools.filter(
-    (tool) => !tool.isInternal && tool.audienceFit && isEligible(tool.audienceFit, profile),
+    (tool) => !tool.isInternal && tool.audienceFit && isEligible(tool.audienceFit, profile)
+      && !(excludedFamilies && excludedFamilies.has(familyIds.get(tool.id) ?? tool.id)),
   );
   const maxClicks = eligible.reduce((max, tool) => Math.max(max, getToolClicks(tool)), 0);
   const maxRecentClicks = eligible.reduce((max, tool) => Math.max(max, getToolRecentClicks(tool)), 0);

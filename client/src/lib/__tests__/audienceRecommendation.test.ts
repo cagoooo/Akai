@@ -357,6 +357,35 @@ describe('recommendTools', () => {
     expect(popular?.tool.id).toBe(9);
   });
 
+  it('換一批：excludeIds 讓下一波推薦排除已看過的工具（且不重覆家族）', () => {
+    const pool = Array.from({ length: 10 }, (_, i) => makeTool(
+      100 + i, makeFit({ priority: 90 - i }),
+    ));
+    const first = recommendTools(pool, { audience: 'teacher' }, 6);
+    const firstIds = first.map(({ tool }) => tool.id);
+    expect(firstIds).toHaveLength(6);
+
+    const second = recommendTools(pool, { audience: 'teacher' }, 6, new Set(firstIds));
+    const secondIds = second.map(({ tool }) => tool.id);
+    // 下一波不含任何第一波的工具
+    expect(secondIds.some((id) => firstIds.includes(id))).toBe(false);
+    // 池子剩 4 個 → 第二波拿到 4 個
+    expect(secondIds).toHaveLength(4);
+  });
+
+  it('換一批：排除已看過工具時，其同家族兄弟也不再出現', () => {
+    const base = makeTool(4, makeFit({ priority: 70 }), { upgradeToId: 87 });
+    const pro = makeTool(87, makeFit({ priority: 90 }), { upgradeFromId: 4 });
+    const others = Array.from({ length: 4 }, (_, i) => makeTool(200 + i, makeFit({ priority: 60 - i })));
+
+    // 第一波會用 Pro(87) 代表該家族；把 87 放進 exclude 後，base(4) 也不該出現
+    const next = recommendTools([base, pro, ...others], { audience: 'teacher' }, 6, new Set([87]));
+    const ids = next.map(({ tool }) => tool.id);
+    expect(ids).not.toContain(87);
+    expect(ids).not.toContain(4);
+    expect(ids).toEqual([200, 201, 202, 203]);
+  });
+
   it('沒有任何點擊資料時，第六席退回 discovery（維持既有行為）', () => {
     const tools = Array.from({ length: 8 }, (_, index) => makeTool(
       100 + index,

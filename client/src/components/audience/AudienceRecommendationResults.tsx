@@ -15,7 +15,7 @@ function badgeFor(rec: AudienceRecommendation): { label: string; kind: string } 
   return SLOT_BADGES[rec.slot] ?? SLOT_BADGES.universal;
 }
 
-export function AudienceRecommendationResults({ recommendations, onLocateTool }: { recommendations: AudienceRecommendation[]; onLocateTool: (toolId: number) => void }) {
+export function AudienceRecommendationResults({ recommendations, onLocateTool, onReshuffle }: { recommendations: AudienceRecommendation[]; onLocateTool: (toolId: number) => void; onReshuffle?: () => void }) {
   return <section className="audience-wizard__results" aria-labelledby="audience-results-title">
     <div className="audience-wizard__tape">為你精選</div>
     <h2 id="audience-results-title">這些工具，現在就很好用</h2>
@@ -32,5 +32,10 @@ export function AudienceRecommendationResults({ recommendations, onLocateTool }:
         </button>;
       })}
     </div>
+    {onReshuffle && (
+      <button type="button" className="audience-wizard__reshuffle" onClick={onReshuffle}>
+        🔄 換一批推薦
+      </button>
+    )}
   </section>;
 }

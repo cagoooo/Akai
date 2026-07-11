@@ -50,18 +50,35 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const completedRef = useRef<string | null>(null);
   const wasOpenRef = useRef(false);
+  // P1-1「換一批」：累積已看過的工具 id，讓下一波推薦排除它們（同家族一併排除）
+  const [seenIds, setSeenIds] = useState<number[]>([]);
+  const seenKeyRef = useRef('');
   const profile = toAudienceProfile(state);
-  const recommendations = useMemo(() => profile ? recommendTools(tools, profile, 6) : [], [tools, profile]);
+  const profileKey = profile ? JSON.stringify(profile) : '';
+  // profile 改變（回上一步改答案再確認）→ 清空已看清單，重新從第一波開始
+  useEffect(() => {
+    if (profileKey !== seenKeyRef.current) {
+      seenKeyRef.current = profileKey;
+      setSeenIds([]);
+    }
+  }, [profileKey]);
+  const excludeSet = useMemo(() => new Set(seenIds), [seenIds]);
+  const recommendations = useMemo(
+    () => (profile ? recommendTools(tools, profile, 6, excludeSet) : []),
+    [tools, profile, excludeSet],
+  );
   useEffect(() => {
     if (open && !wasOpenRef.current) {
       previouslyFocusedRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
       dispatch({ type: 'RESET' });
       completedRef.current = null;
+      setSeenIds([]);
       requestAnimationFrame(() => closeRef.current?.focus());
     }
     if (!open && wasOpenRef.current) {
       dispatch({ type: 'RESET' });
       completedRef.current = null;
+      setSeenIds([]);
       previouslyFocusedRef.current?.focus();
       previouslyFocusedRef.current = null;
     }
@@ -99,6 +116,20 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
     }
     onLocateTool(toolId);
   }, [profile, recommendations, onLocateTool]);
+  // P1-1：換一批 — 把目前這批加進「已看過」，下一波排除它們；看完一輪就重新洗牌
+  const handleReshuffle = useCallback(() => {
+    if (!profile || recommendations.length === 0) return;
+    const currentIds = recommendations.map((r) => r.tool.id);
+    const nextSeen = [...seenIds, ...currentIds];
+    const nextBatch = recommendTools(tools, profile, 6, new Set(nextSeen));
+    trackEvent('audience_reco_reshuffle', {
+      segment: buildAudienceSegmentKey(profile),
+      seen_count: nextSeen.length,
+      wrapped: nextBatch.length === 0,
+    });
+    // 沒有更多沒看過的工具 → 清空重來，再洗一輪（無限換一批）
+    setSeenIds(nextBatch.length === 0 ? [] : nextSeen);
+  }, [profile, recommendations, seenIds, tools]);
   useEffect(() => {
     if (!open) return;
     const onKeyDown = (event: KeyboardEvent) => {
@@ -150,7 +181,7 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
         toolCount={tools.length}
         onDone={() => dispatch({ type: 'THINKING_DONE' })}
       />}
-      {state.step === 'results' && <AudienceRecommendationResults recommendations={recommendations} onLocateTool={handleLocate} />}
+      {state.step === 'results' && <AudienceRecommendationResults recommendations={recommendations} onLocateTool={handleLocate} onReshuffle={handleReshuffle} />}
       {state.step !== 'thinking' && <button type="button" className="audience-wizard__later" onClick={onDismiss}>稍後再說，先逛逛</button>}
     </div>
   </div>;

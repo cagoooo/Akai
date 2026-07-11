@@ -139,6 +139,11 @@
 .audience-wizard__badge--universal { background: var(--paper-warm); }
 .audience-wizard__recommendation { padding-top: 34px; }
 
+/* 換一批推薦（P1-1）：結果頁下方，olive 便利貼風按鈕 */
+.audience-wizard__reshuffle { display: block; margin: 22px auto 0; padding: 11px 26px; color: var(--ink); background: var(--note-yellow); border: 2px solid var(--ink); border-radius: 999px; box-shadow: 3px 4px 0 rgba(0,0,0,.22); cursor: pointer; font-family: inherit; font-size: 15px; font-weight: 900; transform: rotate(-.8deg); transition: transform .18s ease, box-shadow .18s ease, background .18s ease; }
+.audience-wizard__reshuffle:hover { transform: translateY(-3px) rotate(0); box-shadow: 5px 7px 0 rgba(0,0,0,.26); background: var(--note-orange, #ffd9a8); }
+.audience-wizard__reshuffle:active { transform: translateY(-1px) rotate(0); }
+
 /* ── 「為你量身思考中」過場（專屬族群分析動畫） ───────────────── */
 .audience-wizard__thinking { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 14px 0 8px; }
 .audience-wizard__thinking-orb { position: relative; width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 50% 40%, #fff7dc 0%, var(--note-yellow) 60%, #f0c94a 100%); border: 3px solid var(--ink); box-shadow: 4px 5px 0 rgba(0,0,0,.24); animation: audience-orb-pulse 1.5s ease-in-out infinite; }
