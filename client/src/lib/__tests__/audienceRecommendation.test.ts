@@ -386,6 +386,47 @@ describe('recommendTools', () => {
     expect(ids).toEqual([200, 201, 202, 203]);
   });
 
+  it('freshness（P1-5）：上架 45 天內的新工具分數更高，過期則不加分', () => {
+    const daysAgo = (n: number) => new Date(Date.now() - n * 86400000).toISOString();
+    const fresh = makeTool(1, makeFit({ priority: 50 }), { addedAt: daysAgo(2) });
+    const old = makeTool(2, makeFit({ priority: 50 }), { addedAt: daysAgo(200) });
+    const noDate = makeTool(3, makeFit({ priority: 50 }));
+    const result = recommendTools([fresh, old, noDate], { audience: 'teacher' }, 3);
+    const byId = new Map(result.map((r) => [r.tool.id, r]));
+    expect(byId.get(1)!.score).toBeGreaterThan(byId.get(2)!.score); // 新工具 > 舊工具
+    expect(byId.get(2)!.score).toBe(50); // 過期不加分
+    expect(byId.get(3)!.score).toBe(50); // 無 addedAt 不加分
+  });
+
+  it('最近使用去重（P1-3）：近期用過的工具被降權，排到沒用過的後面', () => {
+    const used = makeTool(1, makeFit({ priority: 60 }));
+    const fresh = makeTool(2, makeFit({ priority: 50 }));
+    // 沒去重時 used(60) > fresh(50)；標記 used 為最近使用後應反轉
+    const plain = recommendTools([used, fresh], { audience: 'teacher' }, 2);
+    expect(plain[0].tool.id).toBe(1);
+    const withRecent = recommendTools([used, fresh], { audience: 'teacher' }, 2, undefined, new Set([1]));
+    const usedScore = withRecent.find((r) => r.tool.id === 1)!.score;
+    const freshScore = withRecent.find((r) => r.tool.id === 2)!.score;
+    expect(usedScore).toBeLessThan(freshScore);
+  });
+
+  it('學生選了學段（P1-2）：只保留符合學段或跨學段的工具', () => {
+    const elemOnly = makeTool(1, makeFit({ audiences: ['student'], schoolLevels: ['elementary'], reasons: { student: '國小適用。' } }));
+    const juniorOnly = makeTool(2, makeFit({ audiences: ['student'], schoolLevels: ['junior'], reasons: { student: '國中適用。' } }));
+    const crossStage = makeTool(3, makeFit({ audiences: ['student'], reasons: { student: '跨學段。' } }));
+    const ids = recommendTools([elemOnly, juniorOnly, crossStage], { audience: 'student', schoolLevel: 'elementary' }, 10)
+      .map(({ tool }) => tool.id);
+    expect(ids).toContain(1); // 國小
+    expect(ids).toContain(3); // 跨學段
+    expect(ids).not.toContain(2); // 國中專屬被過濾
+  });
+
+  it('學生未選學段時不過濾（回溯相容）', () => {
+    const juniorOnly = makeTool(2, makeFit({ audiences: ['student'], schoolLevels: ['junior'], reasons: { student: '國中適用。' } }));
+    const ids = recommendTools([juniorOnly], { audience: 'student' }, 10).map(({ tool }) => tool.id);
+    expect(ids).toContain(2);
+  });
+
   it('沒有任何點擊資料時，第六席退回 discovery（維持既有行為）', () => {
     const tools = Array.from({ length: 8 }, (_, index) => makeTool(
       100 + index,

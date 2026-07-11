@@ -20,9 +20,10 @@ export function readAudienceProfile(): StoredAudienceProfile | null {
     const profile = value as Record<string, unknown>;
     if (typeof profile.completedAt !== 'string' || Number.isNaN(Date.parse(profile.completedAt))) return null;
     if (profile.audience === 'student') {
-      return profile.schoolLevel === undefined && profile.teacherRole === undefined && profile.department === undefined
-        ? profile as unknown as StoredAudienceProfile
-        : null;
+      // P1-2：學生可選填 schoolLevel（國小／國中），但不得有 teacherRole / department
+      if (profile.teacherRole !== undefined || profile.department !== undefined) return null;
+      if (profile.schoolLevel !== undefined && !isSchoolLevel(profile.schoolLevel)) return null;
+      return profile as unknown as StoredAudienceProfile;
     }
     if (profile.audience !== 'teacher' || !isSchoolLevel(profile.schoolLevel) || !isTeacherRole(profile.teacherRole)) return null;
     if (profile.teacherRole === 'admin') {

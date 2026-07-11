@@ -9,7 +9,7 @@ const SLOT_BADGES: Record<RecommendationSlot, { label: string; kind: string }> =
   universal: { label: '⭐ 廣受好評', kind: 'universal' },
 };
 
-function badgeFor(rec: AudienceRecommendation): { label: string; kind: string } {
+export function badgeFor(rec: AudienceRecommendation): { label: string; kind: string } {
   // 痛點命中最能解釋「為什麼推」，優先顯示
   if (rec.matchedPainPoints > 0) return { label: '🎯 命中你的需求', kind: 'painpoint' };
   return SLOT_BADGES[rec.slot] ?? SLOT_BADGES.universal;

@@ -29,12 +29,13 @@ export function audienceWizardReducer(state: AudienceWizardState, action: Audien
   switch (action.type) {
     case 'SELECT_AUDIENCE':
       if (state.step !== 'audience') return state;
-      return action.value === 'student'
-        ? { step: 'pain-points', profile: { audience: 'student' } }
-        : { step: 'school-level', profile: { audience: 'teacher' } };
+      // 學生與老師都先選學段：學生（國小／國中）→ 痛點；老師 → 職務（P1-2）
+      return { step: 'school-level', profile: { audience: action.value } };
     case 'SELECT_SCHOOL_LEVEL':
-      if (state.step !== 'school-level' || state.profile.audience !== 'teacher') return state;
-      return { step: 'teacher-role', profile: { ...state.profile, schoolLevel: action.value } };
+      if (state.step !== 'school-level' || state.profile.audience === undefined) return state;
+      return state.profile.audience === 'student'
+        ? { step: 'pain-points', profile: { ...state.profile, schoolLevel: action.value } }
+        : { step: 'teacher-role', profile: { ...state.profile, schoolLevel: action.value } };
     case 'SELECT_TEACHER_ROLE':
       if (state.step !== 'teacher-role' || state.profile.audience !== 'teacher' || !state.profile.schoolLevel) return state;
       return { step: action.value === 'admin' ? 'department' : 'pain-points', profile: { ...state.profile, teacherRole: action.value } };
@@ -54,7 +55,7 @@ export function audienceWizardReducer(state: AudienceWizardState, action: Audien
       // 結果 / 思考中 返回都回到痛點步驟（思考只是過場，不當作可停留的一站）
       if (state.step === 'results' || state.step === 'thinking') return { step: 'pain-points', profile: state.profile };
       if (state.step === 'pain-points') {
-        if (state.profile.audience === 'student') return initialAudienceWizardState;
+        if (state.profile.audience === 'student') return { step: 'school-level', profile: omit(state.profile, 'schoolLevel', 'painPoints') };
         if (state.profile.teacherRole === 'admin') return { step: 'department', profile: omit(state.profile, 'department', 'painPoints') };
         return { step: 'teacher-role', profile: omit(state.profile, 'teacherRole', 'department', 'painPoints') };
       }
@@ -76,7 +77,7 @@ export function toAudienceProfile(state: AudienceWizardState): AudienceProfile |
   const { audience, schoolLevel, teacherRole, department, painPoints } = state.profile;
   const withPains = (base: AudienceProfile): AudienceProfile =>
     painPoints && painPoints.length > 0 ? { ...base, painPoints } : base;
-  if (audience === 'student') return withPains({ audience });
+  if (audience === 'student') return withPains(schoolLevel ? { audience, schoolLevel } : { audience });
   if (audience !== 'teacher' || !schoolLevel || !teacherRole || (teacherRole === 'admin' && !department)) return null;
   return withPains({ audience, schoolLevel, teacherRole, ...(department ? { department } : {}) });
 }

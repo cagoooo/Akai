@@ -52,7 +52,25 @@ export const WEIGHTS = {
   trending: 20,
   /** 熱門保底席混合熱度：近期點擊乘此倍率再加 all-time，讓剛爆紅的新工具也能競爭保底席 */
   hotnessTrendMultiplier: 2,
+  /** 新工具 freshness（P1-5）：上架 freshnessDays 天內線性衰減加分，讓新品有曝光窗口 */
+  freshness: 18,
+  freshnessDays: 45,
+  /** 最近使用去重（P1-3）：使用者近期用過的工具降權，把版面留給沒探索過的 */
+  recentlyUsedPenalty: 24,
 } as const;
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+/** 新工具 freshness 加分：上架 freshnessDays 天內線性衰減；無 addedAt 或已過期 → 0 */
+function freshnessBonus(tool: EducationalTool, now: number): number {
+  const addedAt = tool.addedAt;
+  if (typeof addedAt !== 'string') return 0;
+  const ts = Date.parse(addedAt);
+  if (Number.isNaN(ts)) return 0;
+  const ageDays = (now - ts) / DAY_MS;
+  if (ageDays < 0 || ageDays >= WEIGHTS.freshnessDays) return 0;
+  return Math.round(WEIGHTS.freshness * (1 - ageDays / WEIGHTS.freshnessDays));
+}
 
 function getToolClicks(tool: EducationalTool): number {
   const clicks = tool.totalClicks;
@@ -161,7 +179,11 @@ function includesProfileValue<T extends string>(
 
 function isEligible(fit: AudienceFit, profile: AudienceProfile): boolean {
   if (!fit.audiences.includes(profile.audience)) return false;
-  if (profile.audience === 'student') return true;
+  if (profile.audience === 'student') {
+    // P1-2：學生若選了學段（國小／國中）則據此過濾；沒選（含舊 profile）→ 不過濾，維持相容
+    if (profile.schoolLevel === undefined) return true;
+    return includesProfileValue(fit.schoolLevels, profile.schoolLevel);
+  }
 
   if (!includesProfileValue(fit.schoolLevels, profile.schoolLevel)) return false;
   if (!includesProfileValue(fit.teacherRoles, profile.teacherRole)) return false;
@@ -234,6 +256,8 @@ function rankTool(
   profile: AudienceProfile,
   maxClicks: number,
   maxRecentClicks: number,
+  now: number,
+  recentlyUsedIds: ReadonlySet<number> | undefined,
 ): AudienceRecommendation {
   const isTeacherProfile = profile.audience === 'teacher';
   const roleMatch = isTeacherProfile
@@ -254,6 +278,7 @@ function rankTool(
   const painPointScore = Math.min(matchedPainPoints, WEIGHTS.painPointMaxMatches) * WEIGHTS.painPointPerMatch;
   // P0-B：命中痛點時，理由改為點名使用者所選痛點；否則沿用原本的職務/處室理由
   const finalReason = matchedPainPoints > 0 ? painPointReason(matched, reason.reason) : reason.reason;
+  const recentlyUsedPenalty = recentlyUsedIds?.has(tool.id) ? WEIGHTS.recentlyUsedPenalty : 0;
 
   return {
     tool,
@@ -265,7 +290,9 @@ function rankTool(
       + (reason.isPrecise ? WEIGHTS.preciseReason : 0)
       + painPointScore
       + popularityBonus(tool, maxClicks)
-      + trendingBonus(tool, maxRecentClicks),
+      + trendingBonus(tool, maxRecentClicks)
+      + freshnessBonus(tool, now)
+      - recentlyUsedPenalty,
     slot: classifySlot(fit, profile),
     matchedPainPoints,
   };
@@ -344,8 +371,11 @@ export function recommendTools(
    * 讓下一波推薦是全新的清單（不重覆、也不出現已看過工具的 Pro/舊版兄弟）。
    */
   excludeIds?: ReadonlySet<number>,
+  /** 最近使用去重（P1-3）：近期用過的工具會被降權（不排除），把版面留給沒探索過的 */
+  recentlyUsedIds?: ReadonlySet<number>,
 ): AudienceRecommendation[] {
   if (!Number.isInteger(limit) || limit <= 0) return [];
+  const now = Date.now();
 
   const familyIds = buildToolFamilyIds(tools);
 
@@ -362,7 +392,7 @@ export function recommendTools(
   const maxRecentClicks = eligible.reduce((max, tool) => Math.max(max, getToolRecentClicks(tool)), 0);
 
   const ranked = eligible
-    .map((tool) => rankTool(tool, tool.audienceFit!, profile, maxClicks, maxRecentClicks))
+    .map((tool) => rankTool(tool, tool.audienceFit!, profile, maxClicks, maxRecentClicks, now, recentlyUsedIds))
     .sort((left, right) => right.score - left.score || left.tool.id - right.tool.id);
 
   return composeRecommendationSlots(dedupeRankedFamilies(ranked, familyIds), limit, familyIds);

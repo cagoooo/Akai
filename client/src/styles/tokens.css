@@ -179,6 +179,23 @@
   .audience-wizard__recommendation.is-revealing { opacity: 1; animation: none; }
 }
 
+/* P1-7 首頁常駐「為你推薦」條 */
+.audience-strip { max-width: 1180px; margin: 0 auto; padding: 4px 60px 20px; }
+.audience-strip__head { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+.audience-strip__tape { display: inline-block; padding: 5px 13px; background: var(--note-yellow); border: 2px solid var(--ink); font-size: 14px; font-weight: 900; letter-spacing: .04em; transform: rotate(-1.5deg); box-shadow: 2px 2px 0 rgba(0,0,0,.2); }
+.audience-strip__sub { color: var(--muted2); font-size: 13px; font-weight: 700; }
+.audience-strip__reselect { margin-left: auto; padding: 6px 12px; color: var(--olive-deep); background: var(--paper-warm); border: 1.5px solid var(--ink); border-radius: 999px; cursor: pointer; font: inherit; font-size: 12px; font-weight: 800; }
+.audience-strip__reselect:hover { background: var(--note-yellow); }
+.audience-strip__cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.audience-strip__card { position: relative; text-align: left; min-height: 128px; padding: 30px 16px 16px; color: var(--ink); background: var(--note-green); border: 2px solid var(--ink); box-shadow: var(--shadow-note); cursor: pointer; font-family: inherit; transition: transform .18s ease, box-shadow .18s ease; }
+.audience-strip__card:nth-child(even) { background: var(--note-blue); transform: rotate(.8deg); }
+.audience-strip__card:hover { transform: translateY(-4px) rotate(0); box-shadow: 6px 8px 0 rgba(0,0,0,.22); }
+.audience-strip__card strong { display: block; margin: 4px 0 4px; font-size: 16px; line-height: 1.35; }
+.audience-strip__card small { display: block; color: var(--ink-soft); font-size: 12.5px; line-height: 1.5; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+.audience-strip__go { display: block; margin-top: 12px; color: var(--olive-deep); font-size: 12px; font-weight: 900; }
+@media (max-width: 1024px) { .audience-strip { padding: 4px 32px 18px; } .audience-strip__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .audience-strip { padding: 4px 14px 16px; } .audience-strip__cards { grid-template-columns: 1fr; gap: 12px; } .audience-strip__card { min-height: 0; } }
+
 .audience-profile-badge-wrap { display: flex; justify-content: center; padding: 0 20px 14px; }
 .audience-profile-badge { display: inline-flex; align-items: center; flex-wrap: wrap; justify-content: center; gap: 7px; padding: 8px 12px; color: var(--ink); background: var(--note-green); border: 2px solid var(--ink); border-radius: 6px; box-shadow: 3px 3px 0 rgba(0,0,0,.22); font-family: var(--font-tc); font-size: 13px; font-weight: 800; transform: rotate(-.6deg); }
 .audience-profile-badge button { min-height: 32px; padding: 4px 9px; color: var(--olive-deep); background: var(--paper-warm); border: 1px solid var(--ink); border-radius: 999px; cursor: pointer; font: inherit; font-size: 12px; }

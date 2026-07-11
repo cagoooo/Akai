@@ -8,8 +8,10 @@ import { trackEvent, recordRecoImpression, recordRecoClick } from '@/lib/analyti
 import { AudienceRecommendationResults } from './AudienceRecommendationResults';
 import { audienceWizardReducer, initialAudienceWizardState, toAudienceProfile, PAIN_POINT_SELECTION_LIMIT } from './audienceWizardReducer';
 
-type Props = { open: boolean; tools: EducationalTool[]; onComplete: (profile: AudienceProfile) => void; onDismiss: () => void; onLocateTool: (toolId: number) => void };
+type Props = { open: boolean; tools: EducationalTool[]; onComplete: (profile: AudienceProfile) => void; onDismiss: () => void; onLocateTool: (toolId: number) => void; recentToolIds?: number[] };
 const levels: [SchoolLevel, string][] = [['elementary', '國小老師'], ['junior', '國中老師'], ['senior', '高中老師']];
+// P1-2 學生學段（只列有工具資料的國小／國中；影響推薦過濾）
+const studentLevels: [SchoolLevel, string][] = [['elementary', '國小'], ['junior', '國中']];
 const roles: [TeacherRole, string][] = [['homeroom', '班級導師'], ['subject', '科任老師'], ['admin', '行政人員']];
 const departments: [Department, string][] = [['academic', '教務處'], ['student-affairs', '學務處'], ['general-affairs', '總務處'], ['counseling', '輔導室'], ['other', '其他處室']];
 
@@ -43,7 +45,7 @@ function markImpressionFired(signature: string): void {
   try { sessionStorage.setItem(IMPRESSION_DEDUP_PREFIX + signature, '1'); } catch { /* ignore quota */ }
 }
 
-export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, onLocateTool }: Props) {
+export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, onLocateTool, recentToolIds }: Props) {
   const [state, dispatch] = useReducer(audienceWizardReducer, initialAudienceWizardState);
   const closeRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -63,9 +65,10 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
     }
   }, [profileKey]);
   const excludeSet = useMemo(() => new Set(seenIds), [seenIds]);
+  const recentSet = useMemo(() => new Set(recentToolIds ?? []), [recentToolIds]);
   const recommendations = useMemo(
-    () => (profile ? recommendTools(tools, profile, 6, excludeSet) : []),
-    [tools, profile, excludeSet],
+    () => (profile ? recommendTools(tools, profile, 6, excludeSet, recentSet) : []),
+    [tools, profile, excludeSet, recentSet],
   );
   useEffect(() => {
     if (open && !wasOpenRef.current) {
@@ -121,7 +124,7 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
     if (!profile || recommendations.length === 0) return;
     const currentIds = recommendations.map((r) => r.tool.id);
     const nextSeen = [...seenIds, ...currentIds];
-    const nextBatch = recommendTools(tools, profile, 6, new Set(nextSeen));
+    const nextBatch = recommendTools(tools, profile, 6, new Set(nextSeen), recentSet);
     trackEvent('audience_reco_reshuffle', {
       segment: buildAudienceSegmentKey(profile),
       seen_count: nextSeen.length,
@@ -129,7 +132,7 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
     });
     // 沒有更多沒看過的工具 → 清空重來，再洗一輪（無限換一批）
     setSeenIds(nextBatch.length === 0 ? [] : nextSeen);
-  }, [profile, recommendations, seenIds, tools]);
+  }, [profile, recommendations, seenIds, tools, recentSet]);
   useEffect(() => {
     if (!open) return;
     const onKeyDown = (event: KeyboardEvent) => {
@@ -152,12 +155,15 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
     onComplete(profile);
   }, [state.step, profile, onComplete]);
   if (!open) return null;
+  const isStudent = state.profile.audience === 'student';
   const heading = state.step === 'audience' ? '先認識你，推薦會更準'
     : state.step === 'results' ? '為你準備的推薦工具'
     : state.step === 'pain-points' ? '你最想解決什麼？'
+    : state.step === 'school-level' && isStudent ? '你現在是幾年級呢？'
     : '告訴我一點你的工作情境';
   const subheading = state.step === 'audience' ? '花 20 秒，找出最適合你使用的教育科技工具。'
     : state.step === 'pain-points' ? `勾選最想解決的情境（可複選，最多 ${PAIN_POINT_SELECTION_LIMIT} 個），推薦會更對症下藥。也可以直接略過。`
+    : state.step === 'school-level' && isStudent ? '選你的學段，推薦會更符合你的程度。'
     : '每個選擇都能讓推薦更貼近日常需要。';
   return <div ref={dialogRef} className="audience-wizard" role="dialog" aria-modal="true" aria-label="找到適合你的教育工具" onMouseDown={(e) => { if (e.target === e.currentTarget) onDismiss(); }}>
     <div className="audience-wizard__paper" tabIndex={-1}>
@@ -167,7 +173,9 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
       {state.step !== 'audience' && state.step !== 'thinking' && <button type="button" className="audience-wizard__back" onClick={() => dispatch({ type: 'BACK' })}><ArrowLeft size={17} /> 上一步</button>}
       {state.step !== 'thinking' && <header><span className="audience-wizard__eyebrow">阿凱老師的工具小幫手</span><h1>{heading}</h1><p>{subheading}</p></header>}
       {state.step === 'audience' && <Choices choices={[['teacher', '我是老師', '依學段與職務推薦', GraduationCap], ['student', '我是學生／小朋友', '探索好用小工具與遊戲', BookOpen]]} onChoose={(value) => dispatch({ type: 'SELECT_AUDIENCE', value: value as 'teacher' | 'student' })} />}
-      {state.step === 'school-level' && <Choices choices={levels.map(([value, label]) => [value, label, '選擇任教學段', ShieldCheck])} onChoose={(value) => dispatch({ type: 'SELECT_SCHOOL_LEVEL', value: value as SchoolLevel })} />}
+      {state.step === 'school-level' && (isStudent
+        ? <Choices choices={studentLevels.map(([value, label]) => [value, label, '選你的學段', BookOpen])} onChoose={(value) => dispatch({ type: 'SELECT_SCHOOL_LEVEL', value: value as SchoolLevel })} />
+        : <Choices choices={levels.map(([value, label]) => [value, label, '選擇任教學段', ShieldCheck])} onChoose={(value) => dispatch({ type: 'SELECT_SCHOOL_LEVEL', value: value as SchoolLevel })} />)}
       {state.step === 'teacher-role' && <Choices choices={roles.map(([value, label]) => [value, label, value === 'admin' ? '再選擇所屬處室' : '直接取得專屬推薦', ShieldCheck])} onChoose={(value) => dispatch({ type: 'SELECT_TEACHER_ROLE', value: value as TeacherRole })} />}
       {state.step === 'department' && <Choices choices={departments.map(([value, label]) => [value, label, '取得行政工作推薦', ShieldCheck])} onChoose={(value) => dispatch({ type: 'SELECT_DEPARTMENT', value: value as Department })} />}
       {state.step === 'pain-points' && <PainPointPicker

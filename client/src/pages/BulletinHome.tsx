@@ -37,6 +37,7 @@ import { BulletinToolGrid } from '@/components/bulletin/BulletinToolGrid';
 import { BulletinFooter } from '@/components/bulletin/BulletinFooter';
 import { AudienceOnboardingWizard } from '@/components/audience/AudienceOnboardingWizard';
 import { AudienceProfileBadge } from '@/components/audience/AudienceProfileBadge';
+import { AudienceRecommendationStrip } from '@/components/audience/AudienceRecommendationStrip';
 import { tokens } from '@/design/tokens';
 import { markHomeEntryForEngagementNotifications } from '@/lib/analytics';
 import type { AudienceProfile } from '@/lib/audienceProfile';
@@ -130,7 +131,7 @@ export function BulletinHome() {
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const { favorites, toggleFavorite } = useFavorites();
-  const { addToRecent } = useRecentTools();
+  const { recentIds, addToRecent } = useRecentTools();
   const { currentSort, sortTools } = useSortOptions();
   const { clicksById, deltas7d, hasDeltaHistory } = useToolClickStats();
 
@@ -296,6 +297,16 @@ export function BulletinHome() {
         </div>
       )}
 
+      {audienceProfile && (
+        <AudienceRecommendationStrip
+          profile={audienceProfile}
+          tools={toolsWithStats}
+          recentToolIds={recentIds}
+          onLocateTool={locateRecommendedTool}
+          onReselect={reselectAudience}
+        />
+      )}
+
       {/* 排行榜 + 工具地圖 + 許願池 */}
       <div
         id="ranking"
@@ -428,6 +439,7 @@ export function BulletinHome() {
         onComplete={completeAudienceProfile}
         onDismiss={dismissAudienceWizard}
         onLocateTool={locateRecommendedTool}
+        recentToolIds={recentIds}
       />
     </BulletinBoard>
   );

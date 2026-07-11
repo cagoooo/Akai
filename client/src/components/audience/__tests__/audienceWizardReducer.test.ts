@@ -27,8 +27,10 @@ describe('audienceWizardReducer', () => {
     expect(toAudienceProfile(state)).toEqual({ audience: 'teacher', schoolLevel: 'elementary', teacherRole: 'subject' });
   });
 
-  it('學生直接進痛點步驟，勾選後經思考過場到結果，可返回起點', () => {
+  it('學生先選學段再進痛點步驟，勾選後經思考過場到結果，可返回起點', () => {
     let state = reduce(initialAudienceWizardState, { type: 'SELECT_AUDIENCE', value: 'student' });
+    expect(state.step).toBe('school-level'); // P1-2：學生也先選學段
+    state = reduce(state, { type: 'SELECT_SCHOOL_LEVEL', value: 'elementary' });
     expect(state.step).toBe('pain-points');
     state = reduce(state, { type: 'TOGGLE_PAIN_POINT', value: 'student-practice' });
     state = reduce(state, { type: 'TOGGLE_PAIN_POINT', value: 'creative-learning' });
@@ -40,17 +42,20 @@ describe('audienceWizardReducer', () => {
     expect(backFromThinking.profile.painPoints).toEqual(['student-practice', 'creative-learning']);
     state = reduce(state, { type: 'THINKING_DONE' });
     expect(state.step).toBe('results');
-    expect(toAudienceProfile(state)).toEqual({ audience: 'student', painPoints: ['student-practice', 'creative-learning'] });
+    expect(toAudienceProfile(state)).toEqual({ audience: 'student', schoolLevel: 'elementary', painPoints: ['student-practice', 'creative-learning'] });
     // 從結果返回會回到痛點步驟並保留勾選
     const backToPains = reduce(state, { type: 'BACK' });
     expect(backToPains.step).toBe('pain-points');
     expect(backToPains.profile.painPoints).toEqual(['student-practice', 'creative-learning']);
-    // 學生從痛點步驟再返回會回到起點
-    expect(reduce(backToPains, { type: 'BACK' })).toEqual(initialAudienceWizardState);
+    // 學生從痛點步驟返回會回到學段步驟，再返回才回到起點
+    const backToLevel = reduce(backToPains, { type: 'BACK' });
+    expect(backToLevel.step).toBe('school-level');
+    expect(reduce(backToLevel, { type: 'BACK' })).toEqual(initialAudienceWizardState);
   });
 
   it('痛點可重複切換移除，且不超過選擇上限', () => {
     let state = reduce(initialAudienceWizardState, { type: 'SELECT_AUDIENCE', value: 'student' });
+    state = reduce(state, { type: 'SELECT_SCHOOL_LEVEL', value: 'elementary' });
     state = reduce(state, { type: 'TOGGLE_PAIN_POINT', value: 'student-practice' });
     state = reduce(state, { type: 'TOGGLE_PAIN_POINT', value: 'student-practice' }); // 再點一次移除
     expect(state.profile.painPoints).toEqual([]);
