@@ -52,6 +52,7 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
   const firstRecommendationRef = useRef<HTMLButtonElement | null>(null);
   const reshufflePendingRef = useRef(false);
   const dismissedRef = useRef(false);
+  const resultsRecordedRef = useRef(false);
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const completedRef = useRef<string | null>(null);
   const wasOpenRef = useRef(false);
@@ -91,6 +92,7 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
       completedRef.current = null;
       reshufflePendingRef.current = false;
       dismissedRef.current = false;
+      resultsRecordedRef.current = false;
       setSeenIds([]);
       void recordAudienceFunnelEvent('opened');
       requestAnimationFrame(() => closeRef.current?.focus());
@@ -120,9 +122,12 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
       tool_ids: recommendations.map((r) => r.tool.id).join(','),
       slots: recommendations.map((r) => r.slot).join(','),
     });
-    void recordAudienceFunnelEvent('resultsShown');
+    if (!resultsRecordedRef.current) {
+      resultsRecordedRef.current = true;
+      void recordAudienceFunnelEvent('resultsShown');
+    }
     // 同步聚合到 Firestore，供 admin 推薦成效 dashboard 計算 CTR（P1-6）
-    void recordRecoImpression({ segment, toolIds: recommendations.map((r) => r.tool.id), surface: 'wizard' });
+    void recordRecoImpression({ segment, toolIds: recommendations.map((r) => r.tool.id), surface: 'wizard', batch: seenIds.length > 0 ? 'reshuffled' : 'initial' });
   }, [state.step, profile, recommendations]);
   // P0-4：推薦點擊埋點（含 slot / 名次 / 命中痛點數），再交給既有的定位邏輯
   const handleLocate = useCallback((toolId: number) => {
@@ -134,10 +139,10 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
       const matchedPains = rec?.matchedPainPoints ?? 0;
       trackEvent('audience_reco_click', { segment, tool_id: toolId, slot, rank: rank + 1, matched_pains: matchedPains });
       // 同步聚合到 Firestore（P1-6）
-      void recordRecoClick({ segment, toolId, slot, matchedPains, painPoints: profile.painPoints, surface: 'wizard' });
+      void recordRecoClick({ segment, toolId, slot, matchedPains, painPoints: profile.painPoints, surface: 'wizard', batch: seenIds.length > 0 ? 'reshuffled' : 'initial' });
     }
     onLocateTool(toolId);
-  }, [profile, recommendations, onLocateTool]);
+  }, [profile, recommendations, seenIds, onLocateTool]);
   const handleDismiss = useCallback(() => {
     if (!dismissedRef.current) {
       dismissedRef.current = true;

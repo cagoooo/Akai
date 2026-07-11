@@ -31,6 +31,9 @@ interface RecoStats {
   selections?: Record<string, Record<string, number>>;
   painPointClicks?: Record<string, number>;
   surfaces?: Record<string, Counter>;
+  batchStats?: Record<string, Counter>;
+  funnelDaily?: Record<string, Record<string, number>>;
+  segmentDaily?: Record<string, Record<string, Counter>>;
 }
 
 type RangeKey = 'all' | 'last7' | 'last30';
@@ -100,12 +103,23 @@ const SELECTION_VALUE_LABEL: Record<string, string> = {
   administration: '行政工作', 'reading-literacy': '閱讀素養', 'creative-learning': '創意學習',
   'digital-literacy': '數位素養', 'language-learning': '語言學習', presentation: '簡報表達',
 };
+const MIN_ALERT_SAMPLE = 20;
 
 function ctr(clk: number, imp: number): number {
   return imp > 0 ? (clk / imp) * 100 : 0;
 }
 function fmtPct(v: number): string {
   return `${v.toFixed(1)}%`;
+}
+function sumSegmentWindow(daily: RecoStats['segmentDaily'], segment: string, from: Date, to: Date): Counter {
+  const result: Counter = {};
+  for (const [date, segments] of Object.entries(daily ?? {})) {
+    if (date < localDateStr(from) || date > localDateStr(to)) continue;
+    const value = segments[segment];
+    result.imp = (result.imp ?? 0) + (value?.imp ?? 0);
+    result.clk = (result.clk ?? 0) + (value?.clk ?? 0);
+  }
+  return result;
 }
 
 export function RecommendationStatsPanel() {
@@ -211,6 +225,26 @@ export function RecommendationStatsPanel() {
   const surfaceRows = useMemo(() => Object.entries(stats?.surfaces ?? {})
     .map(([key, value]) => ({ key, label: key === 'wizard' ? '首次推薦精靈' : key === 'strip' ? '首頁常駐推薦' : key, imp: value.imp ?? 0, clk: value.clk ?? 0 }))
     .sort((a, b) => b.imp - a.imp), [stats]);
+  const batchRows = useMemo(() => Object.entries(stats?.batchStats ?? {})
+    .map(([key, value]) => ({ key, label: key === 'initial' ? '首次推薦' : '換一批後', imp: value.imp ?? 0, clk: value.clk ?? 0 })), [stats]);
+  const funnelCompletion = useMemo(() => {
+    const opened = stats?.funnel?.opened ?? 0;
+    const completed = stats?.funnel?.resultsShown ?? 0;
+    return { opened, completed, rate: ctr(completed, opened), ready: opened >= MIN_ALERT_SAMPLE };
+  }, [stats]);
+  const segmentAlerts = useMemo(() => {
+    const today = new Date(); const recentStart = new Date(today); recentStart.setDate(today.getDate() - 6);
+    const previousEnd = new Date(today); previousEnd.setDate(today.getDate() - 7);
+    const previousStart = new Date(today); previousStart.setDate(today.getDate() - 13);
+    return Object.keys(stats?.segments ?? {}).flatMap((segment) => {
+      const recent = sumSegmentWindow(stats?.segmentDaily, segment, recentStart, today);
+      const previous = sumSegmentWindow(stats?.segmentDaily, segment, previousStart, previousEnd);
+      const recentImp = recent.imp ?? 0; const previousImp = previous.imp ?? 0;
+      const recentRate = ctr(recent.clk ?? 0, recentImp); const previousRate = ctr(previous.clk ?? 0, previousImp);
+      return recentImp >= MIN_ALERT_SAMPLE && previousImp >= MIN_ALERT_SAMPLE && recentRate < previousRate * .6
+        ? [{ segment, label: describeSegment(segment), recentRate, previousRate }] : [];
+    });
+  }, [stats]);
 
   // 「常被推卻沒人點」：曝光量前段（≥ 全站平均曝光）但 CTR 偏低（< 整體 CTR 的一半）
   const overallCtr = ctr(totalClk, totalImp);
@@ -277,6 +311,15 @@ export function RecommendationStatsPanel() {
             {kpiCard(<Percent className="h-3.5 w-3.5" />, 'CTR', fmtPct(rangedCtr), '點擊 ÷ 曝光')}
             {kpiCard(<Target className="h-3.5 w-3.5" />, '痛點點擊佔比', ranged.clk > 0 ? fmtPct((ranged.painClk / ranged.clk) * 100) : '—', '命中痛點的點擊比例')}
           </div>
+
+          <Card>
+            <CardHeader><CardTitle className="text-base">漏斗轉換與異常提醒</CardTitle><CardDescription>樣本少於 {MIN_ALERT_SAMPLE} 次時只顯示數字，不做品質判定。</CardDescription></CardHeader>
+            <CardContent className="space-y-3 text-sm">
+              <div className="flex justify-between border-b border-amber-100 pb-2"><span>開啟精靈 → 看到推薦結果</span><strong>{funnelCompletion.ready ? fmtPct(funnelCompletion.rate) : `累積 ${funnelCompletion.completed}/${funnelCompletion.opened}（樣本累積中）`}</strong></div>
+              {batchRows.map((row) => <div key={row.key} className="flex justify-between"><span>{row.label}</span><span>曝光 {row.imp}／點擊 {row.clk}／CTR {fmtPct(ctr(row.clk, row.imp))}</span></div>)}
+              {segmentAlerts.length > 0 && <div className="rounded-md border-2 border-red-300 bg-red-50 p-3 text-red-800"><strong>值得檢查的客群 CTR：</strong>{segmentAlerts.map((alert) => <div key={alert.segment}>{alert.label}：近 7 天 {fmtPct(alert.recentRate)}，前 7 天 {fmtPct(alert.previousRate)}</div>)}</div>}
+            </CardContent>
+          </Card>
 
           <div className="grid gap-4 lg:grid-cols-2">
             <Card>

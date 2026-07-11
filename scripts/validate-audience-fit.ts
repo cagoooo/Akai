@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 import {
   DEPARTMENTS,
+  PAIN_POINTS,
   SCHOOL_LEVELS,
   buildAudienceSegmentKey,
   type AudienceProfile,
@@ -169,12 +170,26 @@ function run(): void {
     return;
   }
 
+  const painPointCounts = PAIN_POINTS.map((painPoint) => ({
+    painPoint,
+    count: externalTools.filter((tool) => tool.audienceFit?.painPoints.includes(painPoint)).length,
+  }));
+  const uncoveredPainPoints = painPointCounts.filter(({ count }) => count === 0);
+  const thinPainPoints = painPointCounts.filter(({ count }) => count > 0 && count < 3);
+  if (uncoveredPainPoints.length > 0) {
+    console.warn(`推薦健康檢查：尚無工具覆蓋的痛點：${uncoveredPainPoints.map(({ painPoint }) => painPoint).join(', ')}`);
+  }
+  if (thinPainPoints.length > 0) {
+    console.warn(`推薦健康檢查：覆蓋不足 3 項的痛點：${thinPainPoints.map(({ painPoint, count }) => `${painPoint} (${count})`).join(', ')}`);
+  }
+
   console.log(
     `audienceFit 驗證通過：${externalTools.length} 個外部工具、${REQUIRED_PROFILES.length} 個 profile。`,
   );
   for (const { key, count } of segmentCounts) {
     console.log(`${key}: ${count}`);
   }
+  console.log(`painPoint coverage: ${painPointCounts.map(({ painPoint, count }) => `${painPoint}=${count}`).join(', ')}`);
 }
 
 try {
