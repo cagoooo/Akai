@@ -99,13 +99,16 @@ export function BulletinHome() {
     shouldAutoOpenAudienceWizard(new URLSearchParams(window.location.search))
   );
   const [highlightedToolId, setHighlightedToolId] = useState<number | null>(null);
+  const [toolLocationStatus, setToolLocationStatus] = useState<'locating' | 'not-found' | null>(null);
   const highlightTimeoutRef = useRef<number | null>(null);
+  const locateRetryRef = useRef<number | null>(null);
 
   useEffect(() => {
     markHomeEntryForEngagementNotifications();
   }, []);
   useEffect(() => () => {
     if (highlightTimeoutRef.current !== null) window.clearTimeout(highlightTimeoutRef.current);
+    if (locateRetryRef.current !== null) window.clearTimeout(locateRetryRef.current);
   }, []);
 
   // 自動開啟許願池對話框：支援三種觸發來源
@@ -271,15 +274,28 @@ export function BulletinHome() {
     setShowFavorites(false);
     setShowAudienceWizard(false);
     if (highlightTimeoutRef.current !== null) window.clearTimeout(highlightTimeoutRef.current);
+    if (locateRetryRef.current !== null) window.clearTimeout(locateRetryRef.current);
     setHighlightedToolId(toolId);
-    window.requestAnimationFrame(() => {
-      window.setTimeout(() => {
-        const card = document.querySelector<HTMLElement>(`.bulletin-tool-card[data-tool-id="${toolId}"]`);
-        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        card?.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'center' });
-        card?.focus({ preventScroll: true });
-      }, 120);
-    });
+    setToolLocationStatus('locating');
+    let attempts = 0;
+    const findAndFocus = () => {
+      const card = document.querySelector<HTMLElement>(`.bulletin-tool-card[data-tool-id="${toolId}"]`);
+      if (!card) {
+        attempts += 1;
+        if (attempts < 30) {
+          locateRetryRef.current = window.setTimeout(findAndFocus, 100);
+          return;
+        }
+        setToolLocationStatus('not-found');
+        locateRetryRef.current = window.setTimeout(() => setToolLocationStatus(null), 5000);
+        return;
+      }
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      card.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'center' });
+      card.focus({ preventScroll: true });
+      setToolLocationStatus(null);
+    };
+    locateRetryRef.current = window.setTimeout(findAndFocus, 120);
     highlightTimeoutRef.current = window.setTimeout(() => {
       setHighlightedToolId(null);
       highlightTimeoutRef.current = null;
@@ -405,6 +421,9 @@ export function BulletinHome() {
 
       {/* 工具網格 */}
       <div id="tools" style={{ scrollMarginTop: 20 }}>
+        {toolLocationStatus && <div className={`audience-tool-location-status is-${toolLocationStatus}`} role="status" aria-live="polite">
+          {toolLocationStatus === 'locating' ? '📍 正在帶你找到推薦工具…' : '找不到這張工具卡，請稍後再試一次。'}
+        </div>}
         {isLoading ? (
           <div style={{ textAlign: 'center', padding: 60, color: tokens.muted, fontStyle: 'italic' }}>
             📌 正在把工具釘上公佈欄…

@@ -55,3 +55,42 @@ test.describe('工具卡片互動', () => {
         }
     });
 });
+
+test.describe('Audience recommendation location', () => {
+    test.beforeEach(async ({ page }) => {
+        await page.addInitScript(() => {
+            localStorage.setItem('akai_audience_profile_v1', JSON.stringify({
+                version: 1,
+                audience: 'teacher',
+                schoolLevel: 'elementary',
+                teacherRole: 'homeroom',
+                completedAt: '2026-07-11T00:00:00.000Z',
+            }));
+        });
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        await page.goto('/');
+    });
+
+    test('keeps the target card and its label within the viewport', async ({ page }) => {
+        const recommendation = page.locator('.audience-strip__card').first();
+        await expect(recommendation).toBeVisible({ timeout: 15_000 });
+        const toolId = await recommendation.getAttribute('data-tool-id');
+        expect(toolId).toBeTruthy();
+
+        await recommendation.click();
+        const target = page.locator(`.bulletin-tool-card[data-tool-id="${toolId}"]`);
+        const label = target.locator('.audience-tool-highlight__label');
+        await expect(target).toHaveClass(/audience-tool-highlight/);
+        await expect(label).toBeVisible();
+        await expect.poll(async () => target.evaluate((node) => {
+            const rect = node.getBoundingClientRect();
+            return rect.top >= 0 && rect.bottom <= window.innerHeight;
+        })).toBe(true);
+
+        const labelBounds = await label.boundingBox();
+        expect(labelBounds).not.toBeNull();
+        expect(labelBounds!.x).toBeGreaterThanOrEqual(0);
+        expect(labelBounds!.x + labelBounds!.width).toBeLessThanOrEqual(await page.evaluate(() => window.innerWidth));
+        await expect(target).toHaveCSS('animation-name', 'none');
+    });
+});
