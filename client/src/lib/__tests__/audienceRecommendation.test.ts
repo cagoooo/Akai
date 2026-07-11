@@ -320,6 +320,11 @@ describe('recommendTools', () => {
     expect(byId.get(3)!.matchedPainPoints).toBe(0);
     expect(byId.get(1)!.score).toBeGreaterThan(byId.get(2)!.score);
     expect(byId.get(2)!.score).toBeGreaterThan(byId.get(3)!.score);
+    // P0-B：命中痛點的理由要點名使用者所選痛點；未命中者維持原理由
+    expect(byId.get(1)!.reason).toContain('班級經營');
+    expect(byId.get(1)!.reason).toContain('出題與評量');
+    expect(byId.get(2)!.reason).toContain('出題與評量');
+    expect(byId.get(3)!.reason).not.toContain('對應你想解決');
   });
 
   it('沒勾選痛點時不影響分數（既有行為），matchedPainPoints 為 0', () => {

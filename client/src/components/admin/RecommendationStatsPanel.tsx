@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button';
 import { Loader2, RefreshCw, Target, MousePointer, Eye, Percent } from 'lucide-react';
 
 type Counter = { imp?: number; clk?: number };
+type DailyCounter = { imp?: number; clk?: number; painClk?: number };
 interface RecoStats {
   totalImpressions?: number;
   totalClicks?: number;
@@ -24,6 +25,39 @@ interface RecoStats {
   tools?: Record<string, Counter>;
   segments?: Record<string, Counter>;
   slotClicks?: Record<string, number>;
+  daily?: Record<string, DailyCounter>;
+}
+
+type RangeKey = 'all' | 'last7' | 'last30';
+const RANGE_OPTIONS: { key: RangeKey; label: string; days: number | null }[] = [
+  { key: 'all', label: '全部', days: null },
+  { key: 'last7', label: '近 7 日', days: 7 },
+  { key: 'last30', label: '近 30 日', days: 30 },
+];
+
+function localDateStr(d: Date): string {
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+}
+/** 從 daily buckets 加總指定天數內的曝光/點擊/痛點點擊；days=null 代表全部 */
+function sumDaily(daily: Record<string, DailyCounter> | undefined, days: number | null): { imp: number; clk: number; painClk: number } {
+  const acc = { imp: 0, clk: 0, painClk: 0 };
+  if (!daily) return acc;
+  let fromStr: string | null = null;
+  if (days !== null) {
+    const from = new Date();
+    from.setDate(from.getDate() - (days - 1)); // 含今天共 days 天
+    fromStr = localDateStr(from);
+  }
+  for (const [date, c] of Object.entries(daily)) {
+    if (fromStr !== null && date < fromStr) continue;
+    acc.imp += c.imp ?? 0;
+    acc.clk += c.clk ?? 0;
+    acc.painClk += c.painClk ?? 0;
+  }
+  return acc;
 }
 
 // segment key = [audience, schoolLevel, teacherRole, department].filter(Boolean).join('_')
@@ -55,6 +89,7 @@ export function RecommendationStatsPanel() {
   const [toolTitles, setToolTitles] = useState<Map<number, string>>(new Map());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [range, setRange] = useState<RangeKey>('all');
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -95,6 +130,16 @@ export function RecommendationStatsPanel() {
   const totalImp = stats?.totalImpressions ?? 0;
   const totalClk = stats?.totalClicks ?? 0;
   const painClk = stats?.painClicks ?? 0;
+
+  // P0-D：KPI 依所選區間計算。「全部」用 top-level 累計（含 daily buckets 上線前的歷史）；
+  // 「近 7/30 日」用 daily buckets 加總（時間維度只回溯到 daily 開始累積之後）。
+  const ranged = useMemo(() => {
+    const opt = RANGE_OPTIONS.find((o) => o.key === range) ?? RANGE_OPTIONS[0];
+    if (opt.days === null) return { imp: totalImp, clk: totalClk, painClk };
+    return sumDaily(stats?.daily, opt.days);
+  }, [range, stats, totalImp, totalClk, painClk]);
+  const rangedCtr = ctr(ranged.clk, ranged.imp);
+  const hasDaily = !!stats?.daily && Object.keys(stats.daily).length > 0;
 
   const segmentRows = useMemo(() => {
     const entries = Object.entries(stats?.segments ?? {});
@@ -161,15 +206,35 @@ export function RecommendationStatsPanel() {
 
       {totalImp > 0 && (
         <>
+          {/* P0-D 區間切換：KPI 依「全部 / 近 7 日 / 近 30 日」重算，用來對照調權重前後的 CTR 變化 */}
+          <div style={{ display: 'inline-flex', gap: 4, padding: 4, background: 'rgba(255,255,255,.6)', border: '2px solid #1a1a1a', borderRadius: 10, boxShadow: '2px 2px 0 rgba(0,0,0,.16)' }}>
+            {RANGE_OPTIONS.map((o) => (
+              <button
+                key={o.key}
+                type="button"
+                onClick={() => setRange(o.key)}
+                style={{
+                  padding: '5px 12px', borderRadius: 7, fontSize: 12, fontWeight: 800, cursor: 'pointer',
+                  border: '2px solid ' + (range === o.key ? '#1a1a1a' : 'transparent'),
+                  background: range === o.key ? '#7a8c3a' : 'transparent',
+                  color: range === o.key ? '#fff' : '#5a4a2a',
+                }}
+              >{o.label}</button>
+            ))}
+          </div>
+          {range !== 'all' && !hasDaily && (
+            <div style={{ fontSize: 12, color: '#b45309' }}>（尚無每日資料；時間維度自 P0-D 上線後才開始累積）</div>
+          )}
+
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {kpiCard(<Eye className="h-3.5 w-3.5" />, '總曝光', totalImp.toLocaleString(), '推薦結果被看到的次數')}
-            {kpiCard(<MousePointer className="h-3.5 w-3.5" />, '總點擊', totalClk.toLocaleString(), '推薦卡片被點的次數')}
-            {kpiCard(<Percent className="h-3.5 w-3.5" />, '整體 CTR', fmtPct(overallCtr), '點擊 ÷ 曝光')}
-            {kpiCard(<Target className="h-3.5 w-3.5" />, '痛點點擊佔比', totalClk > 0 ? fmtPct((painClk / totalClk) * 100) : '—', '命中痛點的點擊比例')}
+            {kpiCard(<Eye className="h-3.5 w-3.5" />, '曝光', ranged.imp.toLocaleString(), '推薦結果被看到的次數')}
+            {kpiCard(<MousePointer className="h-3.5 w-3.5" />, '點擊', ranged.clk.toLocaleString(), '推薦卡片被點的次數')}
+            {kpiCard(<Percent className="h-3.5 w-3.5" />, 'CTR', fmtPct(rangedCtr), '點擊 ÷ 曝光')}
+            {kpiCard(<Target className="h-3.5 w-3.5" />, '痛點點擊佔比', ranged.clk > 0 ? fmtPct((ranged.painClk / ranged.clk) * 100) : '—', '命中痛點的點擊比例')}
           </div>
 
           <Card>
-            <CardHeader><CardTitle className="text-base">分眾成效</CardTitle><CardDescription>各客群的曝光、點擊與 CTR（依曝光排序）</CardDescription></CardHeader>
+            <CardHeader><CardTitle className="text-base">分眾成效（累計）</CardTitle><CardDescription>各客群的曝光、點擊與 CTR（依曝光排序；下方三表為全期累計，不受上方區間切換影響）</CardDescription></CardHeader>
             <CardContent>
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', fontSize: 13, borderCollapse: 'collapse' }}>

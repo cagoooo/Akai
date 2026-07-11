@@ -179,10 +179,19 @@ export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
 //   { totalImpressions, totalClicks, updatedAt,
 //     tools: { [toolId]: { imp, clk } },
 //     segments: { [segment]: { imp, clk } },
-//     slotClicks: { [slot]: n }, painClicks }
+//     slotClicks: { [slot]: n }, painClicks,
+//     daily: { [YYYY-MM-DD]: { imp, clk, painClk } } }  ← P0-D 時間維度（事件層級每日總量）
 const RECO_STATS_DOC = ['analytics', 'recoStats'] as const;
 
-/** 推薦結果曝光：每個被展示的工具 +1 imp，該 segment +1 imp，總曝光 +1 */
+/** 本地日期字串 YYYY-MM-DD（與 useToolClickStats 的每日快照對齊，用本地時區） */
+function recoTodayStr(d = new Date()): string {
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+/** 推薦結果曝光：每個被展示的工具 +1 imp，該 segment +1 imp，總曝光 +1，今日 bucket +1 imp */
 export async function recordRecoImpression(params: { segment: string; toolIds: number[] }) {
   if (!db || !params.segment || params.toolIds.length === 0) return;
   try {
@@ -195,25 +204,28 @@ export async function recordRecoImpression(params: { segment: string; toolIds: n
       updatedAt: serverTimestamp(),
       tools,
       segments: { [params.segment]: { imp: increment(1) } },
+      daily: { [recoTodayStr()]: { imp: increment(1) } },
     }, { merge: true });
   } catch (err) {
     if (import.meta.env.DEV) console.warn('[reco stats] impression 寫入失敗:', err);
   }
 }
 
-/** 推薦點擊：該工具 +1 clk，該 segment +1 clk，該 slot +1，總點擊 +1 */
+/** 推薦點擊：該工具 +1 clk，該 segment +1 clk，該 slot +1，總點擊 +1，今日 bucket +1 clk */
 export async function recordRecoClick(params: { segment: string; toolId: number; slot: string; matchedPains: number }) {
   if (!db || !params.segment) return;
   try {
     const { ensureSignedIn } = await import('@/lib/authService');
     await ensureSignedIn();
+    const isPain = params.matchedPains > 0;
     await setDoc(doc(db, ...RECO_STATS_DOC), {
       totalClicks: increment(1),
       updatedAt: serverTimestamp(),
       tools: { [String(params.toolId)]: { clk: increment(1) } },
       segments: { [params.segment]: { clk: increment(1) } },
       slotClicks: { [params.slot]: increment(1) },
-      ...(params.matchedPains > 0 ? { painClicks: increment(1) } : {}),
+      ...(isPain ? { painClicks: increment(1) } : {}),
+      daily: { [recoTodayStr()]: { clk: increment(1), ...(isPain ? { painClk: increment(1) } : {}) } },
     }, { merge: true });
   } catch (err) {
     if (import.meta.env.DEV) console.warn('[reco stats] click 寫入失敗:', err);

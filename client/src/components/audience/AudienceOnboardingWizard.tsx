@@ -33,6 +33,16 @@ const studentPains: [PainPoint, string, string][] = [
   ['presentation', '🎤', '上台報告'],
 ];
 
+// P0-A：曝光去重存 sessionStorage（同一 profile 簽章一個瀏覽器 session 只計一次曝光），
+// 避免關開精靈、上一步返回、dev StrictMode 重掛造成 dashboard 曝光分母灌水。
+const IMPRESSION_DEDUP_PREFIX = 'akai_reco_imp_v1:';
+function hasFiredImpression(signature: string): boolean {
+  try { return sessionStorage.getItem(IMPRESSION_DEDUP_PREFIX + signature) === '1'; } catch { return false; }
+}
+function markImpressionFired(signature: string): void {
+  try { sessionStorage.setItem(IMPRESSION_DEDUP_PREFIX + signature, '1'); } catch { /* ignore quota */ }
+}
+
 export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, onLocateTool }: Props) {
   const [state, dispatch] = useReducer(audienceWizardReducer, initialAudienceWizardState);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -40,7 +50,6 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const completedRef = useRef<string | null>(null);
   const wasOpenRef = useRef(false);
-  const impressionRef = useRef<string | null>(null);
   const profile = toAudienceProfile(state);
   const recommendations = useMemo(() => profile ? recommendTools(tools, profile, 6) : [], [tools, profile]);
   useEffect(() => {
@@ -48,24 +57,24 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
       previouslyFocusedRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
       dispatch({ type: 'RESET' });
       completedRef.current = null;
-      impressionRef.current = null;
       requestAnimationFrame(() => closeRef.current?.focus());
     }
     if (!open && wasOpenRef.current) {
       dispatch({ type: 'RESET' });
       completedRef.current = null;
-      impressionRef.current = null;
       previouslyFocusedRef.current?.focus();
       previouslyFocusedRef.current = null;
     }
     wasOpenRef.current = open;
   }, [open]);
-  // P0-4：推薦曝光埋點（每個 profile 只發一次），供日後校準推薦權重
+  // P0-4 埋點 + P0-A 修正：曝光每個「profile 簽章」在同一瀏覽器 session 內只計一次。
+  // 用 sessionStorage（非 useRef）去重 → 關掉再開、從結果按上一步再回來、
+  // dev StrictMode 重掛，都不會重複灌 dashboard 的曝光分母（CTR 才準確）。
   useEffect(() => {
     if (state.step !== 'results' || !profile || recommendations.length === 0) return;
-    const key = JSON.stringify(profile);
-    if (impressionRef.current === key) return;
-    impressionRef.current = key;
+    const signature = JSON.stringify(profile);
+    if (hasFiredImpression(signature)) return;
+    markImpressionFired(signature);
     const segment = buildAudienceSegmentKey(profile);
     trackEvent('audience_reco_impression', {
       segment,

@@ -37,6 +37,30 @@ export type TeacherRole = (typeof TEACHER_ROLES)[number];
 export type Department = (typeof DEPARTMENTS)[number];
 export type PainPoint = (typeof PAIN_POINTS)[number];
 
+/** 痛點的簡短中文標籤（推薦理由、精靈 chip、dashboard 共用） */
+export const PAIN_POINT_LABELS: Record<PainPoint, string> = {
+  'lesson-planning': '備課與教學設計',
+  assessment: '出題與評量',
+  'classroom-management': '班級經營',
+  'student-practice': '自主練習',
+  'teacher-workload': '減輕行政雜務',
+  communication: '親師溝通',
+  administration: '行政庶務',
+  'meeting-productivity': '開會效率',
+  'content-creation': '內容製作',
+  presentation: '上台報告',
+  'language-learning': '語文學習',
+  'reading-literacy': '閱讀素養',
+  'digital-literacy': '數位素養',
+  'creative-learning': '創意學習',
+  'event-management': '活動籌辦',
+  'it-support': '資訊支援',
+  'media-production': '影音製作',
+  'professional-learning': '專業成長',
+  accessibility: '無障礙輔助',
+  'resource-discovery': '資源探索',
+};
+
 export interface AudienceProfile {
   audience: AudienceType;
   schoolLevel?: SchoolLevel;

@@ -1,4 +1,5 @@
-import type { AudienceFit, AudienceProfile } from './audienceProfile';
+import type { AudienceFit, AudienceProfile, PainPoint } from './audienceProfile';
+import { PAIN_POINT_LABELS } from './audienceProfile';
 import type { EducationalTool } from './data';
 
 export type RecommendationSlot = 'universal' | 'role' | 'stage' | 'popular' | 'discovery';
@@ -23,28 +24,35 @@ const BASE_SLOT_TARGETS: ReadonlyArray<readonly [Exclude<RecommendationSlot, 'po
   ['stage', 1],
 ];
 
-// 人氣加分權重（v3.6.x）：把排行榜的真實點擊數（tool.totalClicks）納入排序，
-// 讓熱門工具（如馬力歐遊戲、班級小管家）不會只因手工 priority 偏低就永遠沉底。
-// 以「該工具點擊 ÷ 合格工具中的最高點擊」做 sqrt 正規化 → 曲線前段陡、後段緩，
-// 讓中段熱度的工具也吃得到明顯加成，最熱門者最多 +POPULARITY_WEIGHT。
-// 權重刻意略低於一個職務配對（+30）：個人化仍險勝純人氣，熱門工具的「保證露出」
-// 交給下方的「熱門保底席」，不必靠加分硬壓過職務配對。
-const POPULARITY_WEIGHT = 28;
-
-// Trending 加分權重（P0-3）：以「近 7 日新增點擊」（tool.recentClicks，來自 deltas7d）
-// 相對「合格工具中最高的近期點擊」做 sqrt 正規化。讓這週剛竄升的新工具不必等
-// all-time 累積追上老牌工具就能浮現。權重略低於 all-time 人氣（穩定訊號優先）。
-const TRENDING_WEIGHT = 20;
-
-// 痛點命中加分（P0-2）：使用者在精靈勾選「想解決的痛點」後，工具 audienceFit.painPoints
-// 每命中一個 +PAINPOINT_WEIGHT，最多累計 PAINPOINT_MAX_MATCHES 個。這是最強的情境化訊號
-// （命中 2 個 ≈ 44 分，可勝過職務配對），把「靜態職務推薦」升級成「情境化推薦」。
-const PAINPOINT_WEIGHT = 22;
-const PAINPOINT_MAX_MATCHES = 2;
-
-// 熱門保底席的「熱度」混合權重：近期點擊乘上此倍率再加上 all-time，
-// 讓「剛爆紅但累積還不高」的新工具也能競爭保底席（P0-3）。
-const HOTNESS_TREND_MULTIPLIER = 2;
+/**
+ * 推薦排序權重總表（P0-C：集中管理，方便對照 dashboard CTR 調參）
+ *
+ * 分數組成：priority（手工基準分）
+ *   + 個人化配對（roleMatch / departmentMatch / stageMatch）
+ *   + 精準理由 preciseReason
+ *   + 痛點命中 painPointPerMatch ×（最多 painPointMaxMatches 個）
+ *   + 人氣 popularity（all-time 點擊 sqrt 正規化）
+ *   + trending（近 7 日點擊 sqrt 正規化）
+ *
+ * 調參原則：
+ *   - 個人化配對（role 30）刻意 ≥ 純人氣（popularity 28）→ 個人化仍險勝人氣，
+ *     熱門工具的「保證露出」交給熱門保底席，不靠加分硬壓過配對。
+ *   - 痛點是最強情境訊號：命中 2 個（44）可勝過一個職務配對。
+ *   - trending（20）略低於 all-time 人氣（28）→ 穩定訊號優先。
+ *   ⚠️ 動這張表會改變推薦排序與單元測試的預期分數，改完務必跑 audienceRecommendation.test.ts。
+ */
+export const WEIGHTS = {
+  roleMatch: 30,
+  departmentMatch: 25,
+  stageMatch: 15,
+  preciseReason: 10,
+  painPointPerMatch: 22,
+  painPointMaxMatches: 2,
+  popularity: 28,
+  trending: 20,
+  /** 熱門保底席混合熱度：近期點擊乘此倍率再加 all-time，讓剛爆紅的新工具也能競爭保底席 */
+  hotnessTrendMultiplier: 2,
+} as const;
 
 function getToolClicks(tool: EducationalTool): number {
   const clicks = tool.totalClicks;
@@ -58,29 +66,35 @@ function getToolRecentClicks(tool: EducationalTool): number {
 
 /** 熱門保底席用的混合熱度：兼顧 all-time 累積與近期竄升 */
 function getToolHotness(tool: EducationalTool): number {
-  return getToolClicks(tool) + HOTNESS_TREND_MULTIPLIER * getToolRecentClicks(tool);
+  return getToolClicks(tool) + WEIGHTS.hotnessTrendMultiplier * getToolRecentClicks(tool);
 }
 
 function popularityBonus(tool: EducationalTool, maxClicks: number): number {
   if (maxClicks <= 0) return 0;
-  return Math.round(POPULARITY_WEIGHT * Math.sqrt(getToolClicks(tool) / maxClicks));
+  return Math.round(WEIGHTS.popularity * Math.sqrt(getToolClicks(tool) / maxClicks));
 }
 
 function trendingBonus(tool: EducationalTool, maxRecentClicks: number): number {
   if (maxRecentClicks <= 0) return 0;
-  return Math.round(TRENDING_WEIGHT * Math.sqrt(getToolRecentClicks(tool) / maxRecentClicks));
+  return Math.round(WEIGHTS.trending * Math.sqrt(getToolRecentClicks(tool) / maxRecentClicks));
 }
 
-/** 計算工具 painPoints 與使用者所選痛點的交集數量 */
-function countMatchedPainPoints(fit: AudienceFit, profile: AudienceProfile): number {
+/** 回傳工具 painPoints 與使用者所選痛點的交集（保序：依 fit.painPoints 順序） */
+function getMatchedPainPoints(fit: AudienceFit, profile: AudienceProfile): PainPoint[] {
   const chosen = profile.painPoints;
-  if (!chosen || chosen.length === 0 || !fit.painPoints || fit.painPoints.length === 0) return 0;
+  if (!chosen || chosen.length === 0 || !fit.painPoints || fit.painPoints.length === 0) return [];
   const chosenSet = new Set(chosen);
-  let matched = 0;
-  for (const pain of fit.painPoints) {
-    if (chosenSet.has(pain)) matched += 1;
-  }
-  return matched;
+  return fit.painPoints.filter((pain) => chosenSet.has(pain));
+}
+
+/**
+ * 痛點感知的推薦理由（P0-B）：命中痛點時，讓理由點名使用者選的痛點，
+ * 讓「🎯 命中你的需求」徽章名實相符。最多點名 2 個痛點，後接原本的理由。
+ */
+function painPointReason(matched: PainPoint[], baseReason: string): string {
+  const labels = matched.slice(0, 2).map((p) => PAIN_POINT_LABELS[p]).filter(Boolean);
+  if (labels.length === 0) return baseReason;
+  return `對應你想解決的「${labels.join('、')}」：${baseReason}`;
 }
 
 function isValidToolId(id: unknown): id is number {
@@ -235,17 +249,20 @@ function rankTool(
     && profile.schoolLevel !== undefined
     && fit.schoolLevels.includes(profile.schoolLevel);
   const reason = resolveReason(fit, profile);
-  const matchedPainPoints = countMatchedPainPoints(fit, profile);
-  const painPointScore = Math.min(matchedPainPoints, PAINPOINT_MAX_MATCHES) * PAINPOINT_WEIGHT;
+  const matched = getMatchedPainPoints(fit, profile);
+  const matchedPainPoints = matched.length;
+  const painPointScore = Math.min(matchedPainPoints, WEIGHTS.painPointMaxMatches) * WEIGHTS.painPointPerMatch;
+  // P0-B：命中痛點時，理由改為點名使用者所選痛點；否則沿用原本的職務/處室理由
+  const finalReason = matchedPainPoints > 0 ? painPointReason(matched, reason.reason) : reason.reason;
 
   return {
     tool,
-    reason: reason.reason,
+    reason: finalReason,
     score: fit.priority
-      + (roleMatch ? 30 : 0)
-      + (departmentMatch ? 25 : 0)
-      + (stageMatch ? 15 : 0)
-      + (reason.isPrecise ? 10 : 0)
+      + (roleMatch ? WEIGHTS.roleMatch : 0)
+      + (departmentMatch ? WEIGHTS.departmentMatch : 0)
+      + (stageMatch ? WEIGHTS.stageMatch : 0)
+      + (reason.isPrecise ? WEIGHTS.preciseReason : 0)
       + painPointScore
       + popularityBonus(tool, maxClicks)
       + trendingBonus(tool, maxRecentClicks),
