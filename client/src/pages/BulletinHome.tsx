@@ -269,7 +269,7 @@ export function BulletinHome() {
     setHighlightedToolId(toolId);
     window.requestAnimationFrame(() => {
       window.setTimeout(() => {
-        const card = document.querySelector<HTMLElement>(`[data-tool-id="${toolId}"]`);
+        const card = document.querySelector<HTMLElement>(`.bulletin-tool-card[data-tool-id="${toolId}"]`);
         const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         card?.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'center' });
         card?.focus({ preventScroll: true });
