@@ -776,7 +776,7 @@ export function BulletinToolDetail() {
                 }}
               >
                 <OptimizedIcon name="BookOpen" size={16} />
-                讀介紹
+                閱讀文章
               </Link>
             )}
             {tool.upgradeToId != null && (

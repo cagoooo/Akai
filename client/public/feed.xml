@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 117+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 118+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Sat, 11 Jul 2026 04:15:18 GMT</lastBuildDate>
+    <pubDate>Mon, 13 Jul 2026 00:00:00 GMT</pubDate>
+    <lastBuildDate>Sun, 12 Jul 2026 23:35:10 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,27 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：石門國小資訊科技駕駛艙：答題快打對戰遊戲</title>
+      <link>https://cagoooo.github.io/Akai/tool/118</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/118</guid>
+      <pubDate>Mon, 13 Jul 2026 00:00:00 GMT</pubDate>
+      <description>把資訊素養題目變成駕駛艙快打對戰：選擇職能角色，在網路安全、程式思維與數位公民任務中答題出招；可單挑 AI、同桌雙人，也能投影成全班討論。</description>
+      <category>答題快打</category>
+      <category>資訊科技</category>
+      <category>網路安全</category>
+      <category>程式思維</category>
+      <category>數位公民</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#118 資訊課複習不用再發一張題目紙：讓孩子在答題快打裡用正確觀念守護校園網路</title>
+      <link>https://cagoooo.github.io/Akai/blog/it-quiz-battle-118-cockpit-knowledge-battle</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/it-quiz-battle-118-cockpit-knowledge-battle</guid>
+      <pubDate>Mon, 13 Jul 2026 00:00:00 GMT</pubDate>
+      <description>網路安全、程式思維、數位公民，講完不等於記住。#118 把資訊素養題目放進駕駛艙對戰：選職能角色、答題發動技能、即時看解析；能單挑 AI、同桌雙人，也能投影成全班的觀念討論。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
     <item>
       <title>🆕 新工具：石門國小線上調代課系統</title>
       <link>https://cagoooo.github.io/Akai/tool/117</link>
@@ -312,24 +333,6 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/web-skill-dual-engine-103-playwright-webwright</guid>
       <pubDate>Thu, 04 Jun 2026 00:00:00 GMT</pubDate>
       <description>#103 是阿凱寫給「聽過名詞、卻不知道差在哪」的人的一頁式科普頁：Playwright 是動手操作的引擎、Webwright 是動腦規劃的引擎，合起來才是完整的 Web Agent。用日記體 + 松鼠吉祥物 + 自動填表、公文歸檔的真實情境，把硬核技術講到國小老師也看得懂。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#104 台灣官方資料庫 Twinkle-Hub：讓 AI 助教「先查官方資料、再回答你」</title>
-      <link>https://cagoooo.github.io/Akai/blog/twinkle-hub-104-taiwan-official-data-mcp</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/twinkle-hub-104-taiwan-official-data-mcp</guid>
-      <pubDate>Thu, 04 Jun 2026 00:00:00 GMT</pubDate>
-      <description>#104 介紹一座「資料橋」MCP 服務 Twinkle Hub：把國定假日、農曆節氣、簡繁轉換、郵遞區號、6.4 萬份國考考古題與政府開放資料接進 Claude 等 AI 助教，65 個現成工具，讓 AI 不再「憑記憶」答錯台灣在地問題。申請金鑰、一鍵安裝、重開即用，老師備課出題、學生查資料都更踏實。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#105 臺灣主權 AI 訓練語料庫 × 石門國小：把「國家拿去訓練 AI 的語料」變成孩子的教材</title>
-      <link>https://cagoooo.github.io/Akai/blog/taiwan-sovereign-ai-corpus-105-shimen-edu</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/taiwan-sovereign-ai-corpus-105-shimen-edu</guid>
-      <pubDate>Thu, 04 Jun 2026 00:00:00 GMT</pubDate>
-      <description>數位發展部花十年、集 265 個機關蒐集了 6 億 tokens 的臺灣本土語料，本來是拿去餵 AI 模型的。#105 是石門國小阿凱老師把它「教育轉化」的共學站：九大主題、4,554 筆語料一鍵探索，每筆標課綱與來源，還能用自備的免費 Gemini 生成台語／客語學習單與繪本腳本。國家的語料，第一次真正走進國小教室。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>

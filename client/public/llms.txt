@@ -1,6 +1,6 @@
 # 阿凱老師 · 科技教育創新專區
 
-> 一位桃園市龍潭區石門國民小學的國小老師（阿凱老師），兩年內獨立完成 117 款免費教育工具與 118 篇手寫深度長文。所有工具與內容皆為 MIT 開源、永久免費、無需註冊。專案聚焦於用 AI / 科技解決真實國小教學現場的痛點：班級互動、行政自動化、語文閱讀、教育遊戲、親師溝通、互動體驗。
+> 一位桃園市龍潭區石門國民小學的國小老師（阿凱老師），兩年內獨立完成 118 款免費教育工具與 119 篇手寫深度長文。所有工具與內容皆為 MIT 開源、永久免費、無需註冊。專案聚焦於用 AI / 科技解決真實國小教學現場的痛點：班級互動、行政自動化、語文閱讀、教育遊戲、親師溝通、互動體驗。
 
 **站點**：https://cagoooo.github.io/Akai/  
 **作者**：阿凱老師（GitHub: cagoooo）  
@@ -11,8 +11,8 @@
 
 ## 主要頁面
 
-- [首頁工具集](https://cagoooo.github.io/Akai/): 互動公佈欄首頁，呈現全部 117 款工具的拍立得拼貼 + 分類篩選 + 許願池
-- [部落格](https://cagoooo.github.io/Akai/blog): 118 篇阿凱老師手寫的教學情境深度長文，每篇講一個熱門工具如何解決真實教學現場的問題
+- [首頁工具集](https://cagoooo.github.io/Akai/): 互動公佈欄首頁，呈現全部 118 款工具的拍立得拼貼 + 分類篩選 + 許願池
+- [部落格](https://cagoooo.github.io/Akai/blog): 119 篇阿凱老師手寫的教學情境深度長文，每篇講一個熱門工具如何解決真實教學現場的問題
 - [100 工具達成宣傳影片](https://cagoooo.github.io/Akai/share/100.html): 5:32 宣傳影片（含旁白與同步字幕）
 - [許願池](https://cagoooo.github.io/Akai/wish/): 蒐集老師、家長、學生對下一個工具的需求
 - [GitHub Repository](https://github.com/cagoooo/Akai): 完整原始碼，可自由 fork 自架
@@ -25,7 +25,7 @@
 
 完整版約 500-800 KB，適合 OpenAI custom GPT / Claude Project / Perplexity Spaces 等需要深度 ingest 的場景。
 
-## 工具集（117 款，按分類）
+## 工具集（118 款，按分類）
 
 每款工具都是阿凱老師親手打造的單一用途網頁，可在瀏覽器直接開啟，無需安裝。
 
@@ -96,7 +96,7 @@
 - [#103 AI Agent 的 Web 技能雙引擎 — Playwright × Webwright 一頁讀懂](https://cagoooo.github.io/Akai/tool/103): 一頁讀懂 AI Agent 怎麼「看得懂、做得到、做完有回報」地操作網頁！Playwright 負責動手執行、Webwright 負責動腦規劃，兩大引擎合起來才是完整的 Web Agent。含自動填 Google 表單、電子公文自動歸檔等真實自動化情境，阿凱老師用日記體一路帶你從零看懂這兩個關鍵字，松鼠吉祥物 + 大量 emoji 降低技術門檻。 標籤：AI Agent、Playwright、Webwright、網頁自動化、瀏覽器自動化、自動填表。 實際工具：https://cagoooo.github.io/PlayRight/。教學情境文章：https://cagoooo.github.io/Akai/blog/web-skill-dual-engine-103-playwright-webwright
 - [#105 臺灣主權 AI 訓練語料庫 × 石門國小 — 把國家級本土語料變成校園教材](https://cagoooo.github.io/Akai/tool/105): 國家耗十年、集 265 個機關蒐集的 6 億 tokens 本土語料，從「只拿來餵 AI」變成「師生家長共用的教材庫」。九大教育主題、4,554 筆語料一鍵探索，每筆都標課綱領域與授權來源；還能用自備的免費 Gemini 金鑰，即時生成台語／客語／國語學習單與繪本腳本。數位發展部 × 桃園市龍潭區石門國民小學阿凱老師打造的「鱻本土 AI 共學站」。 標籤：臺灣主權 AI、本土語料庫、國家級開放資料、教學素材庫、數位發展部、石門國小。 實際工具：https://cagoooo.github.io/taic-edu/。教學情境文章：https://cagoooo.github.io/Akai/blog/taiwan-sovereign-ai-corpus-105-shimen-edu
 
-### 趣味遊戲（21 款）
+### 趣味遊戲（22 款）
 
 - [#6 蜂類配對消消樂](https://cagoooo.github.io/Akai/tool/6): 阿凱老師打造的記憶配對消消樂遊戲，三種難度搭配注音、唐詩、英單、水果等六大主題包，老師改 JSON 就能新增主題，純靜態 PWA 離線可玩。 標籤：遊戲、蜜蜂、配對、消消樂、自然。 實際工具：https://cagoooo.github.io/bee/。教學情境文章：https://cagoooo.github.io/Akai/blog/bee-6-pair-game
 - [#9 超級瑪莉歐冒險](https://cagoooo.github.io/Akai/tool/9): 阿凱老師打造的瀏覽器版超級瑪莉歐冒險遊戲，支援鍵盤＋觸控雙模式操作，內建關卡選擇、計分、金幣與成就系統，純前端開瀏覽器就能玩。 標籤：遊戲、瑪莉歐、冒險、跳躍、經典。 實際工具：https://cagoooo.github.io/mario-game/。教學情境文章：https://cagoooo.github.io/Akai/blog/mario-9-platformer-adventure
@@ -119,6 +119,7 @@
 - [#102 外星人入侵·保衛石門 — 復古太空射擊 × 全校排行榜](https://cagoooo.github.io/Akai/tool/102): 駕駛地球最後一艘戰機，擊退一波波外星艦隊！復古像素風太空射擊：三種難度、王關 Boss 母艦、火力強化與護盾道具、連擊加成。石門校徽開場 +「保衛石門」主題，可加入主畫面當 App、離線可玩，內建全校跨裝置排行榜。桌機鍵盤 + 手機觸控全支援，下課十分鐘剛好打一輪。 標籤：太空射擊、外星人入侵、復古像素、全校排行榜、PWA 離線、手機觸控。 實際工具：https://cagoooo.github.io/alien-invasion/。教學情境文章：https://cagoooo.github.io/Akai/blog/alien-invasion-102-defend-shihmen-space-shooter
 - [#112 皮卡丘天空大冒險](https://cagoooo.github.io/Akai/tool/112): 精緻好玩的皮卡丘天空冒險遊戲！結合 Flappy Bird 經典玩法，在躲避障礙的過程中鍛鍊專注力與手眼協調，非常適合用於課堂破冰、班級競賽或下課休閒。 標籤：皮卡丘、Flappy Bird、飛翔的小鳥、天空冒險、網頁遊戲、班級活動。 實際工具：https://cagoooo.github.io/pikachu-flappy-bird/。教學情境文章：https://cagoooo.github.io/Akai/blog/pikachu-sky-adventure-112-flappy-bird-game
 - [#115 萌獸數學道館](https://cagoooo.github.io/Akai/tool/115): 把四則運算練習變成萌獸道館挑戰，學生在闖關、蒐集徽章與升級回饋中，一題一題練出數學手感。 標籤：萌獸、數學道館、四則運算、數學遊戲、闖關學習、徽章成就。 實際工具：https://cagoooo.github.io/Poke/。教學情境文章：https://cagoooo.github.io/Akai/blog/math-beast-gym-115-arithmetic-battle
+- [#118 石門國小資訊科技駕駛艙：答題快打對戰遊戲](https://cagoooo.github.io/Akai/tool/118): 把資訊素養題目變成駕駛艙快打對戰：選擇職能角色，在網路安全、程式思維與數位公民任務中答題出招；可單挑 AI、同桌雙人，也能投影成全班討論。 標籤：答題快打、資訊科技、網路安全、程式思維、數位公民、AI素養。 實際工具：https://cagoooo.github.io/smes-it-quiz-battle/。教學情境文章：https://cagoooo.github.io/Akai/blog/it-quiz-battle-118-cockpit-knowledge-battle
 
 ### 語言學習（13 款）
 
@@ -167,10 +168,11 @@
 - [#12 PIRLS閱讀理解網](https://cagoooo.github.io/Akai/tool/12): 完整的 PIRLS 閱讀理解資源平台 標籤：PIRLS、閱讀、理解、資源、評量。 實際工具：https://read.smes.tyc.edu.tw/smes/PIRLS/。教學情境文章：https://cagoooo.github.io/Akai/blog/reading-12-portal-page
 - [#87 PIRLS 閱讀理解生成站 PRO](https://cagoooo.github.io/Akai/tool/87): 升級版 PIRLS 閱讀理解出題平台，老師貼上課文或上傳文本，AI 依四層次（直接提取、直接推論、詮釋整合、檢驗評估）自動產生提問與答案說明，國小語文評量、補救教學、素養命題一氣呵成。 標籤：PIRLS、閱讀理解、AI 出題、四層次提問、國小語文、素養命題。 實際工具：https://cagoooo.github.io/pirls-questioncraft/。教學情境文章：https://cagoooo.github.io/Akai/blog/pirls-87-questioncraft-rewrite
 
-## 教學情境深度長文（118 篇）
+## 教學情境深度長文（119 篇）
 
 每篇文章 5-10 分鐘閱讀，包含真實教學現場數據、學生回饋、實作思路、與其他工具的搭配建議。
 
+- [#118 資訊課複習不用再發一張題目紙：讓孩子在答題快打裡用正確觀念守護校園網路](https://cagoooo.github.io/Akai/blog/it-quiz-battle-118-cockpit-knowledge-battle) (2026-07-13): 網路安全、程式思維、數位公民，講完不等於記住。#118 把資訊素養題目放進駕駛艙對戰：選職能角色、答題發動技能、即時看解析；能單挑 AI、同桌雙人，也能投影成全班的觀念討論。
 - [#117 石門國小線上調代課系統：從紙本喬課到點兩下媒合，把教學組最累的行政流水線搬上線](https://cagoooo.github.io/Akai/blog/substitute-117-online-class-swap) (2026-07-11): 老師臨時請假，過去要跑辦公室一間間問誰能代、手寫調代課單、再讓教學組結鐘點費。#117 把這條流水線整條搬上線：點課表節次就智慧媒合、一鍵同意、A5 三聯單一鍵印、鐘點費自動結算。
 - [#116 考卷格式自動校正系統：出題完成後，老師最需要的其實是「列印前最後一雙眼睛」](https://cagoooo.github.io/Akai/blog/exam-format-116-auto-proofreading) (2026-07-09): 考卷題目寫完，不代表可以安心列印。題號跳號、選項沒對齊、答案區太擠、版面斷在奇怪的位置，常常都是印出來才發現。#116 考卷格式自動校正系統，就是把這些列印前的格式健檢自動化，讓老師不用再靠肉眼一頁一頁巡。
 - [#115 把四則運算變成道館挑戰：萌獸數學道館的練習動機設計](https://cagoooo.github.io/Akai/blog/math-beast-gym-115-arithmetic-battle) (2026-07-02): 四則運算練習最難的不是出題，而是讓學生願意一題接一題做下去。#115 萌獸數學道館把加減乘除包裝成原創萌獸對戰，用 ATG 節奏、關主挑戰與即時回饋，讓練習變成一場全班都看得懂的數學冒險。
@@ -292,7 +294,7 @@
 
 ## 關於阿凱老師
 
-阿凱老師（cagoooo）是桃園市龍潭區石門國民小學的資訊組長（科任＋行政），自 2024 年起獨立開發教育工具，至今已達成 117 款。技術棧使用 React 18 + TypeScript + Vite + Tailwind CSS + Firebase，主站部署於 GitHub Pages。所有工具開源於 [cagoooo/Akai](https://github.com/cagoooo/Akai)，採 MIT License。
+阿凱老師（cagoooo）是桃園市龍潭區石門國民小學的資訊組長（科任＋行政），自 2024 年起獨立開發教育工具，至今已達成 118 款。技術棧使用 React 18 + TypeScript + Vite + Tailwind CSS + Firebase，主站部署於 GitHub Pages。所有工具開源於 [cagoooo/Akai](https://github.com/cagoooo/Akai)，採 MIT License。
 
 **石門國小（smes ≠ 新明！）**：「smes」是 Shih Men Elementary School 縮寫，學校全名為「桃園市龍潭區石門國民小學」，校網 https://www.smes.tyc.edu.tw/
 

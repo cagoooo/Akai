@@ -318,7 +318,7 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0, highlighte
             }}
           >
             <OptimizedIcon name="BookOpen" size={14} />
-            讀介紹
+            閱讀文章
           </Link>
         )}
         {tool.upgradeToId != null && (

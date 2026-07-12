@@ -613,7 +613,7 @@ export function ToolDetail() {
                                             aria-label={`閱讀 ${tool.title} 的詳細文章介紹`}
                                         >
                                             <BookOpen className="w-4 h-4" />
-                                            讀介紹
+                                            閱讀文章
                                         </Button>
                                     </Link>
                                 )}
