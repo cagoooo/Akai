@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 118+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 119+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
     <pubDate>Mon, 13 Jul 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Sun, 12 Jul 2026 23:35:10 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 13 Jul 2026 01:49:49 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -29,6 +29,27 @@
       <category>網路安全</category>
       <category>程式思維</category>
       <category>數位公民</category>
+    </item>
+    <item>
+      <title>🆕 新工具：SDGs永續行動遊戲－地球守護隊：能量大作戰</title>
+      <link>https://cagoooo.github.io/Akai/tool/119</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/119</guid>
+      <pubDate>Mon, 13 Jul 2026 00:00:00 GMT</pubDate>
+      <description>把 SDGs 變成九大世界永續任務：組裝能量工具、解決回收、水資源、綠能、森林與海洋難題，讓國小孩子在每一次選擇中練習守護地球的行動力。</description>
+      <category>SDGs</category>
+      <category>永續教育</category>
+      <category>地球守護隊</category>
+      <category>環境教育</category>
+      <category>資源回收</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#119 SDGs 不只背目標：在地球守護隊九大世界，把永續選擇真的做一遍</title>
+      <link>https://cagoooo.github.io/Akai/blog/sdgs-earth-guardian-119-energy-battle</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/sdgs-earth-guardian-119-energy-battle</guid>
+      <pubDate>Mon, 13 Jul 2026 00:00:00 GMT</pubDate>
+      <description>回收、水資源、綠能、森林、食物、海洋與公平合作，孩子常能背出關鍵字，卻不一定知道怎麼選。#119 用九大世界任務、能量工具組裝與永續行動卡，讓 SDGs 變成一場能討論也能帶回生活的冒險。</description>
+      <category>blog</category>
+      <category>教學情境</category>
     </item>
     <item>
       <title>📖 教學情境：#118 資訊課複習不用再發一張題目紙：讓孩子在答題快打裡用正確觀念守護校園網路</title>
@@ -314,27 +335,6 @@
       <category>AI 助教</category>
       <category>國考考古題</category>
       <category>國定假日</category>
-    </item>
-    <item>
-      <title>🆕 新工具：AI Agent 的 Web 技能雙引擎 — Playwright × Webwright 一頁讀懂</title>
-      <link>https://cagoooo.github.io/Akai/tool/103</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/103</guid>
-      <pubDate>Thu, 04 Jun 2026 06:04:45 GMT</pubDate>
-      <description>一頁讀懂 AI Agent 怎麼「看得懂、做得到、做完有回報」地操作網頁！Playwright 負責動手執行、Webwright 負責動腦規劃，兩大引擎合起來才是完整的 Web Agent。含自動填 Google 表單、電子公文自動歸檔等真實自動化情境，阿凱老師用日記體一路帶你從零看懂這兩個關鍵字，松鼠吉祥物 + 大量 emoji 降低技術門檻。</description>
-      <category>AI Agent</category>
-      <category>Playwright</category>
-      <category>Webwright</category>
-      <category>網頁自動化</category>
-      <category>瀏覽器自動化</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#103 AI Agent 的 Web 技能雙引擎：一頁讀懂 Playwright 動手、Webwright 動腦</title>
-      <link>https://cagoooo.github.io/Akai/blog/web-skill-dual-engine-103-playwright-webwright</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/web-skill-dual-engine-103-playwright-webwright</guid>
-      <pubDate>Thu, 04 Jun 2026 00:00:00 GMT</pubDate>
-      <description>#103 是阿凱寫給「聽過名詞、卻不知道差在哪」的人的一頁式科普頁：Playwright 是動手操作的引擎、Webwright 是動腦規劃的引擎，合起來才是完整的 Web Agent。用日記體 + 松鼠吉祥物 + 自動填表、公文歸檔的真實情境，把硬核技術講到國小老師也看得懂。</description>
-      <category>blog</category>
-      <category>教學情境</category>
     </item>
   </channel>
 </rss>

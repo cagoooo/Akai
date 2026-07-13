@@ -28,7 +28,7 @@ const PLATFORMS: Platform[] = [
   {
     emoji: '🐙',
     name: 'GitHub Pages',
-    count: 79,
+    count: 80,
     desc: '主力作品集，cagoooo/* 80+ repo',
     color: tokens.note.blue,
     pinColor: '#3b82f6',
@@ -248,7 +248,7 @@ export function BulletinDeploymentEcosystem() {
         💡 點任一張便利貼 → 看該平台代表作品的深度教學心得長文
         <br />
         <Link href="/blog" style={{ color: tokens.red, fontWeight: 800, textDecoration: 'underline' }}>
-          看全部 119 篇手寫教學心得 →
+          看全部 120 篇手寫教學心得 →
         </Link>
       </div>
     </div>

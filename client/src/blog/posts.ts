@@ -14230,6 +14230,63 @@ const POST_114: BlogPost = {
 `,
 };
 
+const POST_119: BlogPost = {
+  slug: 'sdgs-earth-guardian-119-energy-battle',
+  title: '#119 SDGs 不只背目標：在地球守護隊九大世界，把永續選擇真的做一遍',
+  excerpt:
+    '回收、水資源、綠能、森林、食物、海洋與公平合作，孩子常能背出關鍵字，卻不一定知道怎麼選。#119 用九大世界任務、能量工具組裝與永續行動卡，讓 SDGs 變成一場能討論也能帶回生活的冒險。',
+  publishedAt: '2026-07-13',
+  readingMinutes: 6,
+  tags: ['SDGs', '永續教育', '環境教育', '探究學習', '遊戲化學習'],
+  toolIds: [119, 29, 11],
+  coverEmoji: '🌍',
+  coverColor: 'green',
+  body: `## SDGs 最怕只剩十七個彩色方塊
+
+永續教育的內容很豐富：節能、減塑、保護水資源、照顧森林、避免浪費食物、關心海洋、學習公平合作。但如果只停在看圖卡、背目標或填學習單，學生很容易說得出「要愛地球」，卻還不知道面對真實選擇時可以怎麼做。
+
+[#119 SDGs永續行動遊戲－地球守護隊：能量大作戰](https://cagoooo.github.io/Shoot/) 把這些問題變成九個要親手完成的世界任務。孩子不是旁觀者，而是地球守護隊的一員：要組裝工具、觀察環境、選擇行動，再回頭整理「我這次做了什麼、下次可以怎麼更好」。
+
+## #119 怎麼解？先組裝工具，再進入九大世界
+
+**從工具開始思考取捨** — 遊戲裡的「小光能量槍」不是只為了帥。學生要從能量、發射器、瞄準管、握把、冷卻器與助手等部件選擇組合，觀察力量、省電、距離、好瞄、降溫、輕巧與愛地球之間的差異。這是一個很自然的起點：好方案不只是最強，而是要兼顧需求與資源。
+
+**九大世界，九種永續情境** — 垃圾風暴救援從回收分類與能源選擇開始；水滴守護處理收集、過濾與分配；綠能社區要看懂天氣與儲能排程；之後還會走進種子森林、食物救援、健康泡泡、安心家園、海洋藍光，最後在地球夥伴總動員練習公平分工與合作。每一關對應不同 SDGs，也都有清楚的情境與選項。
+
+**不是點對答案就結束** — 例如森林任務要選出讓土壤保水、保留樹蔭與水源的方法；海洋任務則要分辨潮池安全、海廢回收和不傷害生物的做法。孩子需要在選項之間比較理由，而不是只追求畫面上的過關。
+
+**留下自己的永續行動卡** — 結算會整理回收物、修復設備、守護目標與使用能量，並給出成就徽章與下一次可改善的行動。行動卡刻意不記錄學生姓名、信箱、IP 或裝置資訊，老師可以安心把它作為學習回顧、列印紀錄或班級分享素材。
+
+## 我會怎麼帶課
+
+我會先用「垃圾風暴救援」讓全班熟悉操作。投影後請小組在每個選項前先說一句理由：為什麼這個材料該回收？為什麼這種能源選擇比較好？第一輪不急著搶過關，而是把同學的想法寫在白板上。
+
+接著分組走不同任務：自然課可以選水滴守護或種子森林，社會與綜合活動可從綠能社區、安心家園或地球夥伴切入。結束後每個學生儲存一張永續行動卡，並補上一句「我這週可以在教室做到的行動」。這樣遊戲裡的選擇才會從螢幕延續到生活。
+
+## 技術與教學特色
+
+- **純前端、免登入**：直接以瀏覽器遊玩，個人進度與行動紀錄留在本機，不蒐集學生身分資料。
+- **中高年級雙模式**：中年級輔助降低理解門檻，高年級標準模式保留更多比較與判斷空間。
+- **完整的九關學習路徑**：關卡依序解鎖，讓「永續」不只是零散主題，而能看見資源、環境、健康、安全與合作彼此相連。
+- **PWA 與無障礙考量**：具更新機制與可在學生載具使用的介面，適合課堂投影、分站或自主探索。
+
+## 適用對象與配對工具
+
+- 國小中高年級學生：以具體任務理解 SDGs，練習說出環境選擇的理由。
+- 班級導師：班會、晨光時間、環境教育週或跨領域主題日。
+- 自然、社會、綜合活動教師：用關卡當探究活動的情境入口，再延伸實驗、調查或行動倡議。
+
+- [#29 太陽系探索者](/tool/29)：同樣適合把抽象的科學概念變成可探索的視覺任務。
+- [#11 剛好學 Akailao](/tool/11)：可在關卡後用即時投票蒐集各組的永續方案與理由。
+- [#119 地球守護隊：能量大作戰](/tool/119)：本篇主角，讓九大 SDGs 世界成為學生的行動練習場。
+
+## 想試試？
+
+→ [前往 #119 SDGs永續行動遊戲－地球守護隊：能量大作戰](https://cagoooo.github.io/Shoot/)
+
+下一次要談永續時，先別急著問學生「你知道 SDG 幾嗎？」試著讓他們在任務裡做一次選擇、說出一次理由，再寫下一件今天就做得到的小行動。守護地球不是口號，是一連串願意開始的選擇。`,
+};
+
 const POST_118: BlogPost = {
   slug: 'it-quiz-battle-118-cockpit-knowledge-battle',
   title: '#118 資訊課複習不用再發一張題目紙：讓孩子在答題快打裡用正確觀念守護校園網路',
@@ -14371,7 +14428,7 @@ const POST_117: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+export const POSTS: BlogPost[] = [POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。
