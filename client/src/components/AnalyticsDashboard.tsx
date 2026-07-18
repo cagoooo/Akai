@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { lazy, Suspense, useState, useEffect, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BarChart, LineChart, PieChart } from "@/components/ui/charts";
@@ -15,6 +15,11 @@ import { WishingWellAdmin } from "@/components/admin/WishingWellAdmin";
 import { ToolFlowAnalysisPanel } from "@/components/admin/ToolFlowAnalysisPanel";
 import { HealthCheckPanel } from "@/components/admin/HealthCheckPanel";
 import { RecommendationStatsPanel } from "@/components/admin/RecommendationStatsPanel";
+import { StickyStatCard } from "@/components/admin/StickyStatCard";
+import {
+  BackfillLocalAnalyticsBar,
+  SnapshotManagementPanel,
+} from "@/components/admin/AnalyticsInfrastructurePanels";
 import {
   DateRangePicker,
   presetToRange,
@@ -22,6 +27,12 @@ import {
   toDateStr,
   type DateRange,
 } from "@/components/admin/DateRangePicker";
+
+const AnalyticsBehaviorTabs = lazy(() =>
+  import("@/components/admin/AnalyticsBehaviorTabs").then((module) => ({
+    default: module.AnalyticsBehaviorTabs,
+  }))
+);
 
 // 檢測是否為靜態部署環境
 const isStaticDeployment = () => {
@@ -36,7 +47,6 @@ export function AnalyticsDashboard() {
   // 日期範圍篩選（預設「最近 30 天」）
   const [dateRange, setDateRange] = useState<DateRange>(() => presetToRange('last30'));
 
-  const heatmapRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
 
   // 即時連線狀態
@@ -226,34 +236,6 @@ export function AnalyticsDashboard() {
       console.log('🔴 Firebase 即時監聽已停止');
     };
   }, []);
-
-  // 渲染熱力圖
-  useEffect(() => {
-    if (heatmapRef.current && visitorStats && activeTab === "heatmap") {
-      import('heatmap.js').then((heatmapjs) => {
-        const heatmapInstance = heatmapjs.default.create({
-          container: heatmapRef.current!,
-          radius: 50,
-          maxOpacity: 0.6,
-        });
-
-        // 模擬數據
-        const points = [];
-        for (let i = 0; i < 200; i++) {
-          points.push({
-            x: Math.floor(Math.random() * heatmapRef.current!.offsetWidth),
-            y: Math.floor(Math.random() * heatmapRef.current!.offsetHeight),
-            value: Math.random()
-          });
-        }
-
-        heatmapInstance.setData({
-          max: 1,
-          data: points
-        });
-      }).catch(console.error);
-    }
-  }, [heatmapRef, activeTab, visitorStats]);
 
   // 準備圖表數據（依日期範圍篩選）— 範圍內每日填滿（沒資料補 0），便於趨勢線連續
   const prepareVisitorChartData = () => {
@@ -471,7 +453,7 @@ export function AnalyticsDashboard() {
                     // CSV 匯出
                     import('@/lib/data').then(({ tools }) => {
                       const now = new Date();
-                      const dateStr = now.toISOString().split('T')[0];
+                      const dateStr = toDateStr(now);
                       const timeStr = now.toTimeString().split(' ')[0];
 
                       const categoryLabels: Record<string, string> = {
@@ -538,7 +520,7 @@ export function AnalyticsDashboard() {
                     // Excel (TSV) 匯出 - 可用 Excel 直接開啟
                     import('@/lib/data').then(({ tools }) => {
                       const now = new Date();
-                      const dateStr = now.toISOString().split('T')[0];
+                      const dateStr = toDateStr(now);
 
                       const categoryLabels: Record<string, string> = {
                         communication: '溝通互動', teaching: '教學輔助', language: '語言學習',
@@ -580,7 +562,7 @@ export function AnalyticsDashboard() {
                   onClick={() => {
                     // JSON 匯出 - 完整數據
                     const now = new Date();
-                    const dateStr = now.toISOString().split('T')[0];
+                    const dateStr = toDateStr(now);
 
                     const exportData = {
                       generatedAt: now.toISOString(),
@@ -867,7 +849,7 @@ export function AnalyticsDashboard() {
                   <div>
                     <h3 className="text-lg font-medium mb-3">🗺️ 訪問者地理分布</h3>
                     {(() => {
-                      // 優先用 Firestore 全站累計，本地 fallback，再退回示意數據
+                      // 優先用 Firestore 全站累計，本地只做舊資料 fallback；無資料就明確顯示空狀態
                       const getGeoData = () => {
                         const sv = serverContext.geoStats || {};
                         const hasServer = Object.keys(sv).length > 0;
@@ -876,17 +858,7 @@ export function AnalyticsDashboard() {
                           const data = localStorage.getItem('visitorGeoStats');
                           if (data) return JSON.parse(data);
                         } catch (e) { }
-                        // 預設數據 (初次載入時模擬台灣主要城市)
-                        return {
-                          '台北市': 45,
-                          '新北市': 32,
-                          '台中市': 28,
-                          '高雄市': 22,
-                          '桃園市': 18,
-                          '台南市': 15,
-                          '新竹市': 12,
-                          '其他': 20
-                        };
+                        return {};
                       };
 
                       const geoData = getGeoData();
@@ -894,7 +866,7 @@ export function AnalyticsDashboard() {
                       const sortedData = Object.entries(geoData)
                         .sort((a: any, b: any) => b[1] - a[1])
                         .slice(0, 8);
-                      const maxValue = Math.max(...sortedData.map((d: any) => d[1]));
+                      const maxValue = Math.max(...sortedData.map((d: any) => d[1]), 1);
 
                       const colors = [
                         'bg-blue-500', 'bg-indigo-500', 'bg-purple-500', 'bg-pink-500',
@@ -903,6 +875,12 @@ export function AnalyticsDashboard() {
 
                       return (
                         <div className="space-y-3">
+                          {total === 0 && (
+                            <div className="text-center py-8 text-muted-foreground">
+                              <p>尚無可用的地理分布資料</p>
+                              <p className="text-sm mt-1">收到真實訪客地理資料後才會顯示，不使用示意數字。</p>
+                            </div>
+                          )}
                           {sortedData.map(([city, count]: [string, any], index) => {
                             const percent = total > 0 ? ((count / total) * 100).toFixed(1) : 0;
                             const barWidth = maxValue > 0 ? (count / maxValue) * 100 : 0;
@@ -1128,817 +1106,13 @@ export function AnalyticsDashboard() {
             <ToolFlowAnalysisPanel toolTitles={toolTitles} />
           </TabsContent>
 
-          <TabsContent value="heatmap">
-            <Card>
-              <CardHeader>
-                <CardTitle>🔥 用戶行為熱力圖</CardTitle>
-                <CardDescription>顯示用戶在頁面上的點擊與互動熱點（基於真實點擊數據）</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {(() => {
-                  // 動態獲取點擊數據
-                  const getClickData = () => {
-                    try {
-                      const data = localStorage.getItem('clickHeatmapData');
-                      if (data) return JSON.parse(data);
-                    } catch (e) { }
-                    return [];
-                  };
-
-                  const clickData = getClickData();
-                  const totalClicks = clickData.length;
-
-                  // 聚合點擊到 10x10 網格
-                  const gridSize = 10;
-                  const grid: Record<string, number> = {};
-                  clickData.forEach((click: { x: number; y: number }) => {
-                    const gridX = Math.floor(click.x / gridSize);
-                    const gridY = Math.floor(click.y / gridSize);
-                    const key = `${gridX}-${gridY}`;
-                    grid[key] = (grid[key] || 0) + 1;
-                  });
-
-                  const maxValue = Math.max(...Object.values(grid), 1);
-
-                  // 計算點擊時段分布
-                  const hourlyClicks: Record<number, number> = {};
-                  clickData.forEach((click: { timestamp: number }) => {
-                    const hour = new Date(click.timestamp).getHours();
-                    hourlyClicks[hour] = (hourlyClicks[hour] || 0) + 1;
-                  });
-
-                  return (
-                    <div className="space-y-6">
-                      {/* 統計摘要 */}
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div className="bg-gradient-to-br from-orange-50 to-red-50 p-4 rounded-lg text-center">
-                          <p className="text-sm text-muted-foreground">總點擊次數</p>
-                          <p className="text-2xl font-bold text-orange-600">{totalClicks}</p>
-                        </div>
-                        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-lg text-center">
-                          <p className="text-sm text-muted-foreground">熱點區域</p>
-                          <p className="text-2xl font-bold text-blue-600">{Object.keys(grid).length}</p>
-                        </div>
-                        <div className="bg-gradient-to-br from-green-50 to-teal-50 p-4 rounded-lg text-center">
-                          <p className="text-sm text-muted-foreground">最熱區域點擊</p>
-                          <p className="text-2xl font-bold text-green-600">{maxValue}</p>
-                        </div>
-                        <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-4 rounded-lg text-center">
-                          <p className="text-sm text-muted-foreground">平均每區域</p>
-                          <p className="text-2xl font-bold text-purple-600">
-                            {Object.keys(grid).length > 0 ? (totalClicks / Object.keys(grid).length).toFixed(1) : 0}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* 熱力圖網格 */}
-                      <div>
-                        <h4 className="text-sm font-medium mb-2">頁面熱力分布</h4>
-                        <div
-                          className="relative bg-slate-100 rounded-lg overflow-hidden"
-                          style={{ aspectRatio: '16/9' }}
-                        >
-                          {/* 網格背景 */}
-                          <div className="absolute inset-0 grid grid-cols-10 grid-rows-10">
-                            {Array.from({ length: 100 }).map((_, i) => {
-                              const gridX = i % 10;
-                              const gridY = Math.floor(i / 10);
-                              const key = `${gridX}-${gridY}`;
-                              const value = grid[key] || 0;
-                              const intensity = maxValue > 0 ? value / maxValue : 0;
-
-                              // 顏色從藍色到紅色
-                              const hue = (1 - intensity) * 240; // 240 = 藍, 0 = 紅
-
-                              return (
-                                <div
-                                  key={i}
-                                  className="border border-white/20 transition-all hover:scale-105"
-                                  style={{
-                                    backgroundColor: value > 0 ? `hsla(${hue}, 80%, 50%, ${0.3 + intensity * 0.7})` : 'transparent'
-                                  }}
-                                  title={`區域 (${gridX}, ${gridY}): ${value} 次點擊`}
-                                />
-                              );
-                            })}
-                          </div>
-
-                          {/* 中心提示 */}
-                          {totalClicks === 0 && (
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <div className="bg-white/90 p-4 rounded-lg text-center shadow-lg">
-                                <p className="font-medium mb-2">尚無點擊數據</p>
-                                <p className="text-sm text-muted-foreground">在網站上點擊互動後，這裡會顯示熱力圖</p>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* 圖例 */}
-                        <div className="flex items-center justify-center gap-2 mt-3">
-                          <span className="text-xs text-muted-foreground">冷</span>
-                          <div className="flex h-3 w-32 rounded overflow-hidden">
-                            <div className="flex-1 bg-blue-500"></div>
-                            <div className="flex-1 bg-cyan-500"></div>
-                            <div className="flex-1 bg-green-500"></div>
-                            <div className="flex-1 bg-yellow-500"></div>
-                            <div className="flex-1 bg-orange-500"></div>
-                            <div className="flex-1 bg-red-500"></div>
-                          </div>
-                          <span className="text-xs text-muted-foreground">熱</span>
-                        </div>
-                      </div>
-
-                      {/* 點擊時段分布 */}
-                      {totalClicks > 0 && (
-                        <div>
-                          <h4 className="text-sm font-medium mb-2">點擊時段分布（24小時）</h4>
-                          <div className="flex items-end gap-1 h-24">
-                            {Array.from({ length: 24 }).map((_, hour) => {
-                              const count = hourlyClicks[hour] || 0;
-                              const maxHourly = Math.max(...Object.values(hourlyClicks), 1);
-                              const height = (count / maxHourly) * 100;
-
-                              return (
-                                <div
-                                  key={hour}
-                                  className="flex-1 bg-gradient-to-t from-indigo-500 to-purple-500 rounded-t transition-all hover:from-indigo-600 hover:to-purple-600"
-                                  style={{ height: `${height}%`, minHeight: count > 0 ? '4px' : '0' }}
-                                  title={`${hour}:00 - ${hour + 1}:00: ${count} 次點擊`}
-                                />
-                              );
-                            })}
-                          </div>
-                          <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                            <span>0時</span>
-                            <span>6時</span>
-                            <span>12時</span>
-                            <span>18時</span>
-                            <span>24時</span>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* 清除按鈕 */}
-                      <div className="flex justify-end">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            localStorage.removeItem('clickHeatmapData');
-                            window.location.reload();
-                          }}
-                        >
-                          清除點擊數據
-                        </Button>
-                      </div>
-                    </div>
-                  );
-                })()}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="calendar">
-            <Card>
-              <CardHeader className="pb-2">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <div>
-                    <CardTitle className="text-lg sm:text-xl">📅 日曆視圖</CardTitle>
-                    <CardDescription className="text-xs sm:text-sm">按日期查看訪問數據</CardDescription>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-2">
-                {(() => {
-                  // 獲取訪問數據
-                  const dailyVisits = visitorStats?.dailyVisits as Record<string, number> || {};
-                  const today = new Date();
-
-                  // 週視圖：顯示最近7天
-                  const weekDays: { date: string; dayName: string; day: number; month: string; visits: number; isToday: boolean }[] = [];
-                  for (let i = 6; i >= 0; i--) {
-                    const date = new Date(today);
-                    date.setDate(date.getDate() - i);
-                    const dateStr = date.toISOString().split('T')[0];
-                    const dayNames = ['週日', '週一', '週二', '週三', '週四', '週五', '週六'];
-                    weekDays.push({
-                      date: dateStr,
-                      dayName: dayNames[date.getDay()],
-                      day: date.getDate(),
-                      month: `${date.getMonth() + 1}月`,
-                      visits: dailyVisits[dateStr] || 0,
-                      isToday: i === 0
-                    });
-                  }
-
-                  // 月視圖：顯示最近30天
-                  const monthDays: { date: string; day: number; visits: number; isToday: boolean }[] = [];
-                  for (let i = 29; i >= 0; i--) {
-                    const date = new Date(today);
-                    date.setDate(date.getDate() - i);
-                    const dateStr = date.toISOString().split('T')[0];
-                    monthDays.push({
-                      date: dateStr,
-                      day: date.getDate(),
-                      visits: dailyVisits[dateStr] || 0,
-                      isToday: i === 0
-                    });
-                  }
-
-                  const maxWeekVisits = Math.max(...weekDays.map(d => d.visits), 1);
-                  const maxMonthVisits = Math.max(...monthDays.map(d => d.visits), 1);
-                  const totalVisits = Object.values(dailyVisits).reduce((a, b) => a + b, 0);
-                  const weekTotal = weekDays.reduce((a, b) => a + b.visits, 0);
-                  const weekAvg = (weekTotal / 7).toFixed(1);
-
-                  return (
-                    <div className="space-y-6">
-                      {/* 週視圖 - 大卡片顯示，適合手機 */}
-                      <div>
-                        <div className="flex items-center justify-between mb-3">
-                          <h4 className="text-sm font-semibold flex items-center gap-2">
-                            <span className="text-indigo-600">📊</span> 本週詳細數據
-                          </h4>
-                          <div className="text-xs text-muted-foreground">
-                            平均: <span className="font-medium text-indigo-600">{weekAvg}</span>/天
-                          </div>
-                        </div>
-
-                        {/* 週視圖卡片 - RWD 響應式 */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-2 sm:gap-3">
-                          {weekDays.map((item, i) => {
-                            const heightPercent = maxWeekVisits > 0 ? (item.visits / maxWeekVisits) * 100 : 0;
-                            return (
-                              <div
-                                key={i}
-                                className={`relative overflow-hidden rounded-xl border transition-all hover:shadow-md ${item.isToday
-                                  ? 'bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-300 ring-2 ring-indigo-200'
-                                  : 'bg-white hover:bg-gray-50'
-                                  }`}
-                              >
-                                {/* 手機版：水平佈局 */}
-                                <div className="sm:hidden flex items-center justify-between p-3">
-                                  <div className="flex items-center gap-3">
-                                    <div className={`w-12 h-12 rounded-lg flex flex-col items-center justify-center ${item.isToday ? 'bg-indigo-600 text-white' : 'bg-gray-100'
-                                      }`}>
-                                      <span className="text-[10px] opacity-80">{item.month}</span>
-                                      <span className="text-lg font-bold leading-none">{item.day}</span>
-                                    </div>
-                                    <div>
-                                      <div className={`text-sm font-medium ${item.isToday ? 'text-indigo-600' : ''}`}>
-                                        {item.dayName} {item.isToday && <span className="text-xs bg-indigo-100 text-indigo-600 px-1.5 py-0.5 rounded-full ml-1">今天</span>}
-                                      </div>
-                                      <div className="text-xs text-muted-foreground">{item.date}</div>
-                                    </div>
-                                  </div>
-                                  <div className="text-right">
-                                    <div className={`text-2xl font-bold ${item.visits > 0 ? 'text-indigo-600' : 'text-gray-300'}`}>
-                                      {item.visits}
-                                    </div>
-                                    <div className="text-xs text-muted-foreground">次訪問</div>
-                                  </div>
-                                </div>
-
-                                {/* 桌面版：垂直佈局 */}
-                                <div className="hidden sm:block p-3 text-center">
-                                  <div className={`text-xs mb-1 ${item.isToday ? 'text-indigo-600 font-semibold' : 'text-muted-foreground'}`}>
-                                    {item.dayName}
-                                  </div>
-                                  <div className={`text-lg font-bold ${item.isToday ? 'text-indigo-600' : ''}`}>
-                                    {item.day}
-                                  </div>
-                                  <div className="text-[10px] text-muted-foreground mb-2">{item.month}</div>
-
-                                  {/* 訪問量柱狀圖 */}
-                                  <div className="h-16 flex items-end justify-center">
-                                    <div
-                                      className={`w-8 rounded-t transition-all ${item.visits > 0
-                                        ? 'bg-gradient-to-t from-indigo-500 to-purple-400'
-                                        : 'bg-gray-200'
-                                        }`}
-                                      style={{ height: `${Math.max(heightPercent, 8)}%` }}
-                                    />
-                                  </div>
-
-                                  <div className={`text-sm font-bold mt-2 ${item.visits > 0 ? 'text-indigo-600' : 'text-gray-300'}`}>
-                                    {item.visits}
-                                  </div>
-
-                                  {item.isToday && (
-                                    <span className="inline-block text-[10px] bg-indigo-100 text-indigo-600 px-1.5 py-0.5 rounded-full mt-1">
-                                      今天
-                                    </span>
-                                  )}
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-
-                      {/* 月視圖 - 緊湊網格 */}
-                      <div>
-                        <div className="flex items-center justify-between mb-3">
-                          <h4 className="text-sm font-semibold flex items-center gap-2">
-                            <span className="text-purple-600">🗓️</span> 月度熱力圖
-                          </h4>
-                          <div className="text-xs text-muted-foreground">
-                            總計: <span className="font-medium text-purple-600">{totalVisits}</span> 次
-                          </div>
-                        </div>
-
-                        {/* 星期標題 */}
-                        <div className="grid grid-cols-7 gap-1 mb-1">
-                          {['日', '一', '二', '三', '四', '五', '六'].map(day => (
-                            <div key={day} className="text-center text-[10px] sm:text-xs text-muted-foreground font-medium py-1">
-                              {day}
-                            </div>
-                          ))}
-                        </div>
-
-                        {/* 月視圖格子 - 響應式大小 */}
-                        <div className="grid grid-cols-7 gap-1">
-                          {monthDays.map((item, i) => {
-                            const intensity = maxMonthVisits > 0 ? item.visits / maxMonthVisits : 0;
-                            const bgColor = item.visits > 0
-                              ? `rgba(99, 102, 241, ${0.2 + intensity * 0.6})`
-                              : 'transparent';
-
-                            return (
-                              <div
-                                key={i}
-                                className={`aspect-square border rounded flex flex-col items-center justify-center cursor-pointer transition-all hover:scale-105 ${item.isToday ? 'ring-2 ring-purple-400 border-purple-300' : 'hover:border-indigo-300'
-                                  }`}
-                                style={{ backgroundColor: bgColor }}
-                                title={`${item.date}: ${item.visits} 次訪問`}
-                              >
-                                <span className={`text-[10px] sm:text-xs font-medium ${item.isToday ? 'text-purple-600' : ''}`}>
-                                  {item.day}
-                                </span>
-                                {item.visits > 0 && (
-                                  <span className="text-[8px] sm:text-[10px] text-indigo-600 font-medium">
-                                    {item.visits}
-                                  </span>
-                                )}
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-
-                      {/* 圖例 */}
-                      <div className="flex flex-wrap justify-between items-center gap-2 pt-2 border-t">
-                        <div className="flex items-center gap-3 sm:gap-4">
-                          <div className="flex items-center gap-1.5">
-                            <div className="w-3 h-3 rounded bg-indigo-500/20"></div>
-                            <span className="text-[10px] sm:text-xs text-muted-foreground">低</span>
-                          </div>
-                          <div className="flex items-center gap-1.5">
-                            <div className="w-3 h-3 rounded bg-indigo-500/50"></div>
-                            <span className="text-[10px] sm:text-xs text-muted-foreground">中</span>
-                          </div>
-                          <div className="flex items-center gap-1.5">
-                            <div className="w-3 h-3 rounded bg-indigo-500"></div>
-                            <span className="text-[10px] sm:text-xs text-muted-foreground">高</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-purple-400 ring-2 ring-purple-200"></span>
-                          <span className="text-[10px] sm:text-xs text-muted-foreground">今天</span>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })()}
-              </CardContent>
-            </Card>
-          </TabsContent>
+          {(activeTab === 'heatmap' || activeTab === 'calendar') && (
+            <Suspense fallback={<div className="py-16 text-center text-muted-foreground">載入行為分析中…</div>}>
+              <AnalyticsBehaviorTabs visitorStats={visitorStats} />
+            </Suspense>
+          )}
         </Tabs>
       </main>
     </div >
-  );
-}
-
-// ── cork 風格統計便利貼（後台儀表板 4 張卡用） ───────────────
-interface StickyStatCardProps {
-  color: string;        // 便利貼底色
-  tilt: number;         // 傾斜角度
-  pinColor: string;     // 圖釘顏色
-  label: string;        // 標題（如「總訪問量」）
-  value: string;        // 主數字
-  icon: React.ReactNode;
-  delta: string;        // 比較文字
-  deltaColor: string;   // 比較文字顏色
-}
-
-function StickyStatCard({ color, tilt, pinColor, label, value, icon, delta, deltaColor }: StickyStatCardProps) {
-  return (
-    <div
-      className="sticker-card"
-      style={{
-        position: 'relative',
-        background: color,
-        padding: '16px 18px 14px',
-        borderRadius: 6,
-        border: '2px solid #1a1a1a',
-        boxShadow: '3px 3px 0 rgba(0,0,0,.22), 0 10px 20px -6px rgba(0,0,0,.22)',
-        transform: `rotate(${tilt}deg)`,
-        fontFamily: "'Noto Sans TC', sans-serif",
-      }}
-    >
-      {/* 頂部立體圖釘 */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          top: -8,
-          left: '50%',
-          marginLeft: -8,
-          width: 16,
-          height: 16,
-          borderRadius: '50%',
-          background: `radial-gradient(circle at 30% 30%, #ffffff, ${pinColor} 55%, #000000)`,
-          boxShadow: '0 2px 4px rgba(0,0,0,.35), inset -1px -1px 2px rgba(0,0,0,.3)',
-          zIndex: 2,
-        }}
-      >
-        <div
-          style={{
-            position: 'absolute',
-            top: '30%',
-            left: '30%',
-            width: '22%',
-            height: '22%',
-            borderRadius: '50%',
-            background: 'rgba(255,255,255,.8)',
-          }}
-        />
-      </div>
-
-      <div className="flex items-center justify-between gap-3">
-        <div className="min-w-0 flex-1">
-          <p className="text-xs sm:text-sm font-bold mb-1" style={{ color: '#4a3a20', letterSpacing: '0.03em' }}>
-            {label}
-          </p>
-          <h3 className="text-2xl sm:text-3xl font-black truncate" style={{ color: '#1a1a1a', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-            {value}
-          </h3>
-          <p className="text-xs sm:text-sm mt-1 font-bold" style={{ color: deltaColor }}>
-            {delta}
-          </p>
-        </div>
-        {/* icon 框 */}
-        <div
-          className="shrink-0 grid place-items-center"
-          style={{
-            width: 48,
-            height: 48,
-            background: 'rgba(255,255,255,.7)',
-            border: '2px solid #1a1a1a',
-            borderRadius: '50%',
-            color: '#1a1a1a',
-            boxShadow: '2px 2px 0 rgba(0,0,0,.2)',
-          }}
-        >
-          {icon}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ────────────────────────────────────────────────────────────
-// 一次性回填本地歷史 → Firestore
-// 為了補救 v3.6.4 之前 context 只寫 localStorage 的歷史資料
-// ────────────────────────────────────────────────────────────
-function BackfillLocalAnalyticsBar() {
-  const [done, setDone] = useState<boolean>(() => localStorage.getItem('analyticsBackfilled') === 'v1');
-  const [running, setRunning] = useState(false);
-  const [result, setResult] = useState<string | null>(null);
-
-  // 統計本地有多少筆可上傳
-  const localPreview = useMemo(() => {
-    const sumMap = (key: string) => {
-      try {
-        const data = JSON.parse(localStorage.getItem(key) || '{}') as Record<string, number>;
-        return Object.values(data).reduce((s, v) => s + (typeof v === 'number' ? v : 0), 0);
-      } catch { return 0; }
-    };
-    return {
-      device: sumMap('visitorDeviceStats'),
-      referrer: sumMap('visitorReferrerStats'),
-      geo: sumMap('visitorGeoStats'),
-    };
-  }, []);
-
-  const totalLocal = localPreview.device + localPreview.referrer + localPreview.geo;
-
-  const handleBackfill = async (force = false) => {
-    if (running) return;
-    setRunning(true);
-    setResult(null);
-    try {
-      const { backfillLocalAnalytics } = await import('@/lib/visitorTracker');
-      const r = await backfillLocalAnalytics({ force });
-      if (!r.ok) {
-        setResult(`⚠️ ${r.reason}`);
-      } else {
-        setResult(
-          `✅ 已上傳 ${r.totalAdded} 筆（geo ${r.geoEntries} / device ${r.deviceEntries} / referrer ${r.referrerEntries}）— 重整後台即可看到`
-        );
-        setDone(true);
-      }
-    } catch (err) {
-      setResult(`❌ 失敗：${(err as Error).message || String(err)}`);
-    } finally {
-      setRunning(false);
-    }
-  };
-
-  // 沒有任何本地資料時不顯示
-  if (totalLocal === 0 && !result) return null;
-
-  return (
-    <div
-      style={{
-        background: done ? 'rgba(212,244,199,0.7)' : 'rgba(255,242,122,0.55)',
-        border: '2px dashed #1a1a1a',
-        borderRadius: 10,
-        padding: '10px 14px',
-        boxShadow: '2px 2px 0 rgba(0,0,0,.15)',
-        display: 'flex',
-        flexWrap: 'wrap',
-        alignItems: 'center',
-        gap: 12,
-        fontFamily: "'Noto Sans TC', sans-serif",
-      }}
-    >
-      <span style={{ fontSize: 13, fontWeight: 800, color: '#1a1a1a' }}>
-        {done ? '✅ 本地歷史已回填' : '🗃️ 偵測到本地歷史尚未上傳'}
-      </span>
-      {!done && (
-        <span style={{ fontSize: 11, color: '#4a3a20' }}>
-          這台瀏覽器 localStorage 還有 <b>{totalLocal}</b> 筆 context（geo {localPreview.geo} / device {localPreview.device} / referrer {localPreview.referrer}）。
-          按下方按鈕一次性合併到 Firestore，後台就能反映回來。
-          <br />
-          <span style={{ color: '#7a8c3a', fontSize: 10 }}>
-            ⚠️ 註：v3.6.4 之前其他訪客的 context 沒寫過 server，這次只能救「你這台瀏覽器」累積的部分。
-          </span>
-        </span>
-      )}
-      <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
-        {!done && (
-          <button
-            onClick={() => handleBackfill(false)}
-            disabled={running}
-            style={{
-              background: '#ea8a3e',
-              color: '#fff',
-              border: '2px solid #1a1a1a',
-              borderRadius: 8,
-              padding: '6px 14px',
-              fontSize: 12,
-              fontWeight: 800,
-              cursor: running ? 'wait' : 'pointer',
-              boxShadow: '2px 2px 0 rgba(0,0,0,.25)',
-            }}
-          >
-            {running ? '上傳中…' : '📥 上傳本地歷史到 Firestore'}
-          </button>
-        )}
-        {done && (
-          <button
-            onClick={() => {
-              if (confirm('確定要強制再跑一次回填嗎？這會把本地數字「再加一次」到 Firestore，可能造成重複計算。')) {
-                handleBackfill(true);
-              }
-            }}
-            disabled={running}
-            style={{
-              background: '#fff',
-              color: '#1a1a1a',
-              border: '1.5px dashed #1a1a1a',
-              borderRadius: 8,
-              padding: '4px 10px',
-              fontSize: 11,
-              fontWeight: 700,
-              cursor: running ? 'wait' : 'pointer',
-            }}
-          >
-            🔁 強制重跑
-          </button>
-        )}
-      </div>
-      {result && (
-        <div style={{ width: '100%', fontSize: 11, color: '#4a3a20', marginTop: 4 }}>
-          {result}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ────────────────────────────────────────────────────────────
-// 📦 每日快照備份管理面板（admin 才看得到）
-// 由 dailySnapshot Cloud Function 每天 03:00 自動建立
-// ────────────────────────────────────────────────────────────
-function SnapshotManagementPanel() {
-  const [snapshots, setSnapshots] = useState<Array<{
-    id: string;
-    sizes: Record<string, number>;
-    capturedAt: string | null;
-  }>>([]);
-  const [loading, setLoading] = useState(true);
-  const [restoring, setRestoring] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
-
-  // 訂閱 analyticsSnapshots 集合（admin 才有讀取權限）
-  useEffect(() => {
-    let unsub: (() => void) | undefined;
-    let cancelled = false;
-    (async () => {
-      try {
-        const { db, isFirebaseAvailable } = await import('@/lib/firebase');
-        if (!isFirebaseAvailable() || !db) {
-          setLoading(false);
-          return;
-        }
-        const { collection, onSnapshot, query, orderBy, limit } = await import('firebase/firestore');
-        unsub = onSnapshot(
-          query(collection(db, 'analyticsSnapshots'), orderBy('__name__', 'desc'), limit(30)),
-          (snap) => {
-            if (cancelled) return;
-            const arr: typeof snapshots = [];
-            snap.forEach((doc) => {
-              const d = doc.data() as any;
-              arr.push({
-                id: doc.id,
-                sizes: d.sizes || {},
-                capturedAt: d.capturedAt?.toDate?.()?.toLocaleString('zh-TW') || null,
-              });
-            });
-            setSnapshots(arr);
-            setLoading(false);
-          },
-          (err) => {
-            console.warn('[SnapshotPanel] 讀取失敗（可能你不是 admin）:', err);
-            setLoading(false);
-          }
-        );
-      } catch (err) {
-        console.warn('[SnapshotPanel] 初始化失敗:', err);
-        setLoading(false);
-      }
-    })();
-    return () => {
-      cancelled = true;
-      if (unsub) unsub();
-    };
-  }, []);
-
-  const handleRestore = async (date: string, dryRun: boolean) => {
-    if (restoring) return;
-    if (!dryRun && !confirm(
-      `⚠️ 確定要從 ${date} 快照還原嗎？\n\n` +
-      `這會「覆寫」目前的 visitorStats / analytics / toolUsageStats / toolRatings。\n` +
-      `目前資料會被取代成 ${date} 那天的版本。\n\n` +
-      `若只是要預演，請按取消，改按「🧪 預演」。`
-    )) {
-      return;
-    }
-    setRestoring(true);
-    setMessage(null);
-    try {
-      const { httpsCallable, getFunctions } = await import('firebase/functions');
-      const firebaseApp = (await import('@/lib/firebase')).default;
-      if (!firebaseApp) throw new Error('Firebase app 未初始化');
-      const functions = getFunctions(firebaseApp);
-      const fn = httpsCallable(functions, 'restoreFromSnapshot');
-      const res: any = await fn({ date, dryRun });
-      setMessage(`${dryRun ? '🧪 預演' : '✅ 還原'}成功：${res.data?.message || ''}`);
-    } catch (err: any) {
-      setMessage(`❌ 失敗：${err.message || String(err)}`);
-    } finally {
-      setRestoring(false);
-    }
-  };
-
-  // 不是 admin 時不顯示（snapshots 永遠空陣列、且 loading 完）
-  if (!loading && snapshots.length === 0 && !message) return null;
-
-  return (
-    <div
-      style={{
-        background: 'rgba(255,255,255,.85)',
-        border: '2px solid #1a1a1a',
-        borderRadius: 10,
-        padding: '14px 16px',
-        boxShadow: '3px 3px 0 rgba(0,0,0,.18)',
-        fontFamily: "'Noto Sans TC', sans-serif",
-      }}
-    >
-      <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-        <div className="flex items-center gap-2">
-          <span style={{ fontSize: 14, fontWeight: 800 }}>📦 每日快照備份</span>
-          <span style={{
-            fontSize: 11,
-            color: '#7a8c3a',
-            background: '#f5f0d4',
-            padding: '2px 8px',
-            borderRadius: 10,
-            border: '1.5px solid #7a8c3a',
-            fontWeight: 700,
-          }}>
-            {snapshots.length} 份（最多保留 90 天）
-          </span>
-        </div>
-        <span style={{ fontSize: 11, color: '#666' }}>
-          每天 03:00 自動備份｜誤刪可一鍵還原
-        </span>
-      </div>
-
-      {loading ? (
-        <div style={{ fontSize: 12, color: '#666' }}>載入中…</div>
-      ) : snapshots.length === 0 ? (
-        <div style={{ fontSize: 12, color: '#666' }}>
-          暫無快照（部署後第一份會在隔天 03:00 建立）
-        </div>
-      ) : (
-        <div style={{ maxHeight: 200, overflowY: 'auto' }}>
-          <table style={{ width: '100%', fontSize: 12, borderCollapse: 'collapse' }}>
-            <thead>
-              <tr style={{ borderBottom: '1.5px dashed #1a1a1a' }}>
-                <th style={{ textAlign: 'left', padding: '4px 6px' }}>日期</th>
-                <th style={{ textAlign: 'right', padding: '4px 6px' }}>visitor</th>
-                <th style={{ textAlign: 'right', padding: '4px 6px' }}>analytics</th>
-                <th style={{ textAlign: 'right', padding: '4px 6px' }}>tools</th>
-                <th style={{ textAlign: 'right', padding: '4px 6px' }}>ratings</th>
-                <th style={{ textAlign: 'center', padding: '4px 6px' }}>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              {snapshots.map((s) => (
-                <tr key={s.id} style={{ borderBottom: '1px dotted #ccc' }}>
-                  <td style={{ padding: '4px 6px', fontWeight: 700 }}>{s.id}</td>
-                  <td style={{ padding: '4px 6px', textAlign: 'right' }}>{s.sizes.visitorStats ?? '-'}</td>
-                  <td style={{ padding: '4px 6px', textAlign: 'right' }}>{s.sizes.analytics ?? '-'}</td>
-                  <td style={{ padding: '4px 6px', textAlign: 'right' }}>{s.sizes.toolUsageStats ?? '-'}</td>
-                  <td style={{ padding: '4px 6px', textAlign: 'right' }}>{s.sizes.toolRatings ?? '-'}</td>
-                  <td style={{ padding: '4px 6px', textAlign: 'center' }}>
-                    <button
-                      onClick={() => handleRestore(s.id, true)}
-                      disabled={restoring}
-                      style={{
-                        padding: '2px 6px',
-                        fontSize: 10,
-                        marginRight: 4,
-                        border: '1px solid #1a1a1a',
-                        borderRadius: 4,
-                        background: '#fff',
-                        cursor: restoring ? 'wait' : 'pointer',
-                      }}
-                    >
-                      🧪 預演
-                    </button>
-                    <button
-                      onClick={() => handleRestore(s.id, false)}
-                      disabled={restoring}
-                      style={{
-                        padding: '2px 6px',
-                        fontSize: 10,
-                        border: '1px solid #c7302a',
-                        borderRadius: 4,
-                        background: '#fff',
-                        color: '#c7302a',
-                        fontWeight: 700,
-                        cursor: restoring ? 'wait' : 'pointer',
-                      }}
-                    >
-                      ↩ 還原
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {message && (
-        <div
-          style={{
-            marginTop: 8,
-            fontSize: 12,
-            padding: '6px 10px',
-            background: message.startsWith('❌') ? '#ffe4e4' : '#d4f4c7',
-            border: '1px solid #1a1a1a',
-            borderRadius: 6,
-          }}
-        >
-          {message}
-        </div>
-      )}
-    </div>
   );
 }

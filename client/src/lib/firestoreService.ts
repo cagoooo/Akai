@@ -4,13 +4,11 @@ import {
     doc,
     getDoc,
     setDoc,
-    updateDoc,
     collection,
     getDocs,
     query,
     orderBy,
     limit,
-    increment,
     serverTimestamp,
     Timestamp,
     Firestore
@@ -65,7 +63,6 @@ export async function getVisitorStats(): Promise<VisitorStats> {
             lastVisitAt: null
         };
 
-        await setDoc(docRef, initialStats);
         return initialStats;
     } catch (error) {
         console.error('取得訪客統計失敗:', error);
@@ -94,19 +91,8 @@ export async function incrementVisitorCount(): Promise<VisitorStats> {
     }
 
     try {
-        const today = new Date().toISOString().split('T')[0];
-        const docRef = doc(db as Firestore, VISITOR_STATS_COLLECTION, VISITOR_STATS_DOC);
-
-        // 單次原子 merge 寫入：不先讀、不整份覆蓋。
-        // 2026-07-04 事故：舊寫法「getDoc → 不存在就 setDoc 重建」在 getDoc
-        // 誤判不存在時會把 4592 累計整份覆蓋成 1；dailyVisits 全 map
-        // read-modify-write 也會在高併發下互吃。increment + 巢狀 merge
-        // 兩個問題一次解決，文件不存在時 merge 也會自動建立。
-        await setDoc(docRef, {
-            totalVisits: increment(1),
-            dailyVisits: { [today]: increment(1) },
-            lastVisitAt: serverTimestamp()
-        }, { merge: true });
+        const { invokePublicAnalytics } = await import('@/lib/publicAnalyticsService');
+        await invokePublicAnalytics({ kind: 'visitorCount' });
 
         // 回傳樂觀值（呼叫端顯示一律走 onSnapshot，此值僅供 fallback）
         return {
@@ -201,35 +187,7 @@ export async function trackToolUsage(toolId: number): Promise<ToolStats> {
                 categoryClicks: {},
             };
         } catch (err) {
-            console.warn('[trackToolUsage] callable 失敗，fallback direct write:', err);
-            // fallthrough 到 direct write fallback
-        }
-
-        // Fallback：callable 失敗時 client direct write totalClicks（沒 event log）
-        // ⚠️ docId 必須跟 Cloud Function 用同樣的 String(toolId) 命名 — 否則會產生
-        //    "tool_81" vs "81" 雙 doc 漂移，前端 onSnapshot 讀錯邊（歷史踩雷）
-        try {
-            const docRef = doc(db as Firestore, TOOL_STATS_COLLECTION, String(toolId));
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                await updateDoc(docRef, {
-                    totalClicks: increment(1),
-                    lastUsedAt: serverTimestamp(),
-                });
-                const data = docSnap.data() as ToolStats;
-                return { ...data, totalClicks: data.totalClicks + 1, lastUsedAt: Timestamp.now() };
-            } else {
-                const newStats: ToolStats = {
-                    toolId,
-                    totalClicks: 1,
-                    lastUsedAt: Timestamp.now(),
-                    categoryClicks: {},
-                };
-                await setDoc(docRef, { ...newStats, lastUsedAt: serverTimestamp() });
-                return newStats;
-            }
-        } catch (error) {
-            console.error('追蹤工具使用失敗 (direct write fallback):', error);
+            console.warn('[trackToolUsage] callable 失敗，改用本地計數:', err);
         }
     }
 
@@ -376,6 +334,8 @@ export async function logError(
     }
 
     try {
+        const { ensureSignedIn } = await import('@/lib/authService');
+        if (!await ensureSignedIn()) return;
         const colRef = collection(db as Firestore, ERROR_LOGS_COLLECTION);
         const logEntry: ErrorLogEntry = {
             level,

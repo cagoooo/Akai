@@ -8,11 +8,13 @@ const mockUser = {
     uid: 'test-uid',
     email: 'test@example.com',
     displayName: 'Test User',
+    isAnonymous: false,
     getIdTokenResult: vi.fn(),
 };
 
 const mockSignIn = vi.fn();
 const mockSignOut = vi.fn();
+const mockMarkSignedOut = vi.fn();
 let authStateCallback: ((user: any) => void) | null = null;
 
 // Correct path to match project structure
@@ -24,6 +26,7 @@ vi.mock('@/lib/authService', () => ({
         return () => { };
     },
     getCurrentUser: () => null,
+    markSignedOutThisSession: () => mockMarkSignedOut(),
 }));
 
 vi.mock('@/lib/firebase', () => ({
@@ -35,6 +38,8 @@ describe('useAuth', () => {
         vi.clearAllMocks();
         authStateCallback = null;
         mockUser.getIdTokenResult.mockReset();
+        mockUser.getIdTokenResult.mockResolvedValue({ claims: {} });
+        mockSignIn.mockResolvedValue(mockUser);
     });
 
     it('should initialize with loading state', () => {
@@ -132,6 +137,7 @@ describe('useAuth', () => {
         });
 
         expect(mockSignOut).toHaveBeenCalled();
+        expect(mockMarkSignedOut).toHaveBeenCalled();
         expect(result.current.isAdmin).toBe(false);
     });
 

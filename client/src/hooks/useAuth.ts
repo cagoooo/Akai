@@ -63,7 +63,8 @@ export function useAuth(): UseAuthReturn {
     const signIn = useCallback(async () => {
         setLoading(true);
         try {
-            await signInWithGoogle();
+            const signedInUser = await signInWithGoogle();
+            if (!signedInUser) throw new Error('Google 登入未完成');
         } finally {
             setLoading(false);
         }

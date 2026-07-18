@@ -17,7 +17,8 @@
 
 import type { Metric } from 'web-vitals';
 import { db } from '@/lib/firebase';
-import { addDoc, collection, doc, setDoc, serverTimestamp, increment } from 'firebase/firestore';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { invokePublicAnalytics } from '@/lib/publicAnalyticsService';
 
 // ── gtag wrapper ─────────────────────────────────────────────
 type GtagFn = (command: 'event' | 'config' | 'js' | 'set', ...args: unknown[]) => void;
@@ -174,33 +175,21 @@ export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
 // 為什麼用「單一聚合 doc + nested increment」而非寫 raw event：
 //   - 精靈完成頻率低，單 doc 綽綽有餘（segments ~22、tools ~116、都在 1MB 內）
 //   - dashboard 只要 getDoc 一次就能算 CTR，不必掃幾千筆 raw event 再前端 aggregate
-//   - analytics/{docId} 規則已是「所有人可讀、認證者可寫」→ 無需改 rules
+//   - client 不直接寫 Firestore；recordPublicAnalytics 驗證事件後由 Admin SDK 原子遞增
 // 結構：analytics/recoStats
 //   { totalImpressions, totalClicks, updatedAt,
 //     tools: { [toolId]: { imp, clk } },
 //     segments: { [segment]: { imp, clk } },
 //     slotClicks: { [slot]: n }, painClicks,
 //     daily: { [YYYY-MM-DD]: { imp, clk, painClk } } }  ← P0-D 時間維度（事件層級每日總量）
-const RECO_STATS_DOC = ['analytics', 'recoStats'] as const;
 export type RecommendationSurface = 'wizard' | 'strip';
 export type RecommendationBatch = 'initial' | 'reshuffled';
 export type AudienceSelectionDimension = 'audience' | 'schoolLevels' | 'teacherRoles' | 'departments';
 export type AudienceFunnelEvent = 'opened' | 'audienceSelected' | 'schoolLevelSelected' | 'teacherRoleSelected' | 'departmentSelected' | 'painPointsConfirmed' | 'resultsShown' | 'dismissed' | 'reshuffled';
 
-/** 本地日期字串 YYYY-MM-DD（與 useToolClickStats 的每日快照對齊，用本地時區） */
-function recoTodayStr(d = new Date()): string {
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, '0');
-  const dd = String(d.getDate()).padStart(2, '0');
-  return `${yyyy}-${mm}-${dd}`;
-}
-
-async function writeRecoStats(payload: Record<string, unknown>) {
-  if (!db) return;
+async function writeRecoEvent(payload: Record<string, unknown>) {
   try {
-    const { ensureSignedIn } = await import('@/lib/authService');
-    await ensureSignedIn();
-    await setDoc(doc(db, ...RECO_STATS_DOC), { ...payload, updatedAt: serverTimestamp() }, { merge: true });
+    await invokePublicAnalytics({ kind: 'recommendation', ...payload });
   } catch (err) {
     if (import.meta.env.DEV) console.warn('[reco stats] 寫入失敗:', err);
   }
@@ -208,52 +197,23 @@ async function writeRecoStats(payload: Record<string, unknown>) {
 
 /** 僅寫入匿名加總，以找出精靈流程的流失點；不保存個人設定或帳號資料。 */
 export function recordAudienceFunnelEvent(event: AudienceFunnelEvent, step?: string) {
-  const today = recoTodayStr();
-  return writeRecoStats({
-    funnel: { [event]: increment(1) },
-    funnelDaily: { [today]: { [event]: increment(1) } },
-    ...(step ? { dismissedAtStep: { [step]: increment(1) } } : {}),
-  });
+  return writeRecoEvent({ action: 'funnel', event, ...(step ? { step } : {}) });
 }
 
 export function recordAudienceSelection(dimension: AudienceSelectionDimension, value: string) {
   if (!value) return Promise.resolve();
-  const event = ({ audience: 'audienceSelected', schoolLevels: 'schoolLevelSelected', teacherRoles: 'teacherRoleSelected', departments: 'departmentSelected' } as const)[dimension];
-  return writeRecoStats({
-    selections: { [dimension]: { [value]: increment(1) } },
-    funnel: { [event]: increment(1) },
-    funnelDaily: { [recoTodayStr()]: { [event]: increment(1) } },
-  });
+  return writeRecoEvent({ action: 'selection', dimension, value });
 }
 
 export function recordAudiencePainPointSelection(painPoints: string[]) {
-  const counts: Record<string, ReturnType<typeof increment>> = {};
-  for (const painPoint of painPoints) counts[painPoint] = increment(1);
-  return writeRecoStats({
-    funnel: { painPointsConfirmed: increment(1) },
-    funnelDaily: { [recoTodayStr()]: { painPointsConfirmed: increment(1) } },
-    ...(Object.keys(counts).length > 0 ? { selections: { painPoints: counts } } : {}),
-  });
+  return writeRecoEvent({ action: 'painSelection', painPoints });
 }
 
 /** 推薦結果曝光：每個被展示的工具 +1 imp，該 segment +1 imp，總曝光 +1，今日 bucket +1 imp */
 export async function recordRecoImpression(params: { segment: string; toolIds: number[]; surface?: RecommendationSurface; batch?: RecommendationBatch }) {
-  if (!db || !params.segment || params.toolIds.length === 0) return;
+  if (!params.segment || params.toolIds.length === 0) return;
   try {
-    const { ensureSignedIn } = await import('@/lib/authService');
-    await ensureSignedIn();
-    const tools: Record<string, { imp: ReturnType<typeof increment> }> = {};
-    for (const id of params.toolIds) tools[String(id)] = { imp: increment(1) };
-    await setDoc(doc(db, ...RECO_STATS_DOC), {
-      totalImpressions: increment(1),
-      updatedAt: serverTimestamp(),
-      tools,
-      segments: { [params.segment]: { imp: increment(1) } },
-      segmentDaily: { [recoTodayStr()]: { [params.segment]: { imp: increment(1) } } },
-      surfaces: { [params.surface ?? 'wizard']: { imp: increment(1) } },
-      ...(params.batch ? { batchStats: { [params.batch]: { imp: increment(1) } } } : {}),
-      daily: { [recoTodayStr()]: { imp: increment(1) } },
-    }, { merge: true });
+    await invokePublicAnalytics({ kind: 'recommendation', action: 'impression', ...params });
   } catch (err) {
     if (import.meta.env.DEV) console.warn('[reco stats] impression 寫入失敗:', err);
   }
@@ -261,35 +221,12 @@ export async function recordRecoImpression(params: { segment: string; toolIds: n
 
 /** 推薦點擊：該工具 +1 clk，該 segment +1 clk，該 slot +1，總點擊 +1，今日 bucket +1 clk */
 export async function recordRecoClick(params: { segment: string; toolId: number; slot: string; matchedPains: number; painPoints?: string[]; surface?: RecommendationSurface; batch?: RecommendationBatch }) {
-  if (!db || !params.segment) return;
+  if (!params.segment) return;
   try {
-    const { ensureSignedIn } = await import('@/lib/authService');
-    await ensureSignedIn();
-    const isPain = params.matchedPains > 0;
-    const painPointClicks: Record<string, ReturnType<typeof increment>> = {};
-    for (const painPoint of params.painPoints ?? []) painPointClicks[painPoint] = increment(1);
-    await setDoc(doc(db, ...RECO_STATS_DOC), {
-      totalClicks: increment(1),
-      updatedAt: serverTimestamp(),
-      tools: { [String(params.toolId)]: { clk: increment(1) } },
-      segments: { [params.segment]: { clk: increment(1) } },
-      segmentDaily: { [recoTodayStr()]: { [params.segment]: { clk: increment(1) } } },
-      surfaces: { [params.surface ?? 'wizard']: { clk: increment(1) } },
-      ...(params.batch ? { batchStats: { [params.batch]: { clk: increment(1) } } } : {}),
-      slotClicks: { [params.slot]: increment(1) },
-      ...(isPain ? { painClicks: increment(1) } : {}),
-      ...(Object.keys(painPointClicks).length > 0 ? { painPointClicks } : {}),
-      daily: { [recoTodayStr()]: { clk: increment(1), ...(isPain ? { painClk: increment(1) } : {}) } },
-    }, { merge: true });
+    await invokePublicAnalytics({ kind: 'recommendation', action: 'click', ...params });
   } catch (err) {
     if (import.meta.env.DEV) console.warn('[reco stats] click 寫入失敗:', err);
   }
-}
-
-function simpleHash(s: string): string {
-  let h = 0;
-  for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
-  return Math.abs(h).toString(36);
 }
 
 /**
@@ -301,24 +238,7 @@ export async function logToolIndexQuery(query: string, resultCount: number) {
   const q = query.trim().slice(0, 80);
   if (q.length < 2) return; // 太短不記
   try {
-    const { doc: docRef, getDoc, setDoc: writeDoc, increment } = await import('firebase/firestore');
-    const ref = docRef(db, 'analytics', 'toolIndexQueries', 'queries', simpleHash(q));
-    const snap = await getDoc(ref);
-    if (snap.exists()) {
-      await writeDoc(ref, {
-        count: increment(1),
-        lastUsedAt: new Date().toISOString(),
-        lastResultCount: resultCount,
-      }, { merge: true });
-    } else {
-      await writeDoc(ref, {
-        query: q,
-        count: 1,
-        firstSeenAt: new Date().toISOString(),
-        lastUsedAt: new Date().toISOString(),
-        lastResultCount: resultCount,
-      });
-    }
+    await invokePublicAnalytics({ kind: 'toolIndexQuery', query: q, resultCount });
   } catch {
     /* 失敗不打擾使用者 */
   }
@@ -338,18 +258,17 @@ async function sendMetricToFirestore(metric: Metric) {
   sentMetrics.add(metric.id);
 
   try {
-    const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
-    const colRef = collection(db, 'analytics', 'webVitals', today);
-    const docRef = doc(colRef, metric.id);
-    await setDoc(docRef, {
+    const keepsDecimal = metric.name === 'CLS';
+    await invokePublicAnalytics({
+      kind: 'webVital',
+      metricId: metric.id,
       name: metric.name,
-      value: Math.round(metric.value),
+      value: keepsDecimal ? metric.value : Math.round(metric.value),
       rating: metric.rating, // 'good' | 'needs-improvement' | 'poor'
-      delta: Math.round(metric.delta),
+      delta: keepsDecimal ? metric.delta : Math.round(metric.delta),
       navigationType: metric.navigationType,
       path: window.location.pathname,
       ua: navigator.userAgent.slice(0, 200), // 截斷避免 doc 過大
-      ts: serverTimestamp(),
     });
   } catch {
     /* 寫入失敗就放棄，不打擾使用者 */

@@ -9,6 +9,7 @@ import { getWishes, updateWishStatus, deleteWish, type Wish } from "@/lib/wishin
 export function WishingWellAdmin() {
     const [wishes, setWishes] = useState<Wish[]>([]);
     const [loading, setLoading] = useState(true);
+    const [actionId, setActionId] = useState<string | null>(null);
     const { toast } = useToast();
 
     const fetchWishes = async () => {
@@ -33,9 +34,10 @@ export function WishingWellAdmin() {
 
     const handleStatusChange = async (id: string, currentStatus: string) => {
         if (currentStatus === "processed") return;
+        setActionId(id);
         try {
             await updateWishStatus(id, "processed");
-            setWishes(wishes.map(w => w.id === id ? { ...w, status: "processed" } : w));
+            setWishes((current) => current.map(w => w.id === id ? { ...w, status: "processed" } : w));
             toast({
                 title: "狀態已更新",
                 description: "許願已標記為處理完成",
@@ -46,15 +48,18 @@ export function WishingWellAdmin() {
                 description: "無法更新許願狀態",
                 variant: "destructive"
             });
+        } finally {
+            setActionId(null);
         }
     };
 
     const handleDelete = async (id: string) => {
         if (!window.confirm("確定要刪除這筆許願記錄嗎？此動作無法復原。")) return;
 
+        setActionId(id);
         try {
             await deleteWish(id);
-            setWishes(wishes.filter(w => w.id !== id));
+            setWishes((current) => current.filter(w => w.id !== id));
             toast({
                 title: "刪除成功",
                 description: "已移除該筆許願紀錄",
@@ -65,6 +70,8 @@ export function WishingWellAdmin() {
                 description: "無法刪除許願記錄",
                 variant: "destructive"
             });
+        } finally {
+            setActionId(null);
         }
     };
 
@@ -149,6 +156,7 @@ export function WishingWellAdmin() {
                                         size="sm"
                                         className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 border-emerald-200"
                                         onClick={() => handleStatusChange(wish.id, wish.status)}
+                                        disabled={actionId !== null}
                                     >
                                         <CheckCircle2 className="w-4 h-4 mr-1" />
                                         標記處理
@@ -159,6 +167,7 @@ export function WishingWellAdmin() {
                                     size="sm"
                                     className="text-red-500 hover:text-red-600 hover:bg-red-50"
                                     onClick={() => handleDelete(wish.id)}
+                                    disabled={actionId !== null}
                                 >
                                     <Trash2 className="w-4 h-4 mr-1" />
                                     刪除

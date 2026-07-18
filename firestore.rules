@@ -2,17 +2,60 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // 訪客統計 - 所有人可讀，僅認證用戶可寫
-    // 🛡️ 2026-07-04 事故防線：totalVisits 只准變大不准變小。
-    //   外面還在跑的舊版 PWA bundle 若再走「誤判不存在 → setDoc 重建」
-    //   把累計覆蓋成 1，會直接被這條擋下（4592 → 92 歸零事故不再重演）。
+    function isAdmin() {
+      return request.auth != null && request.auth.token.admin == true;
+    }
+
+    function optionalString(data, field, maxLength) {
+      return !(field in data) || (data[field] is string && data[field].size() <= maxLength);
+    }
+
+    function validWishCreate() {
+      return request.resource.data.keys().hasOnly([
+          'userId', 'userName', 'userPhoto', 'type', 'content', 'rating', 'status', 'createdAt'
+        ])
+        && request.resource.data.keys().hasAll([
+          'userId', 'userName', 'type', 'content', 'status', 'createdAt'
+        ])
+        && request.resource.data.userId is string
+        && request.resource.data.userId.size() <= 128
+        && request.resource.data.userName is string
+        && request.resource.data.userName.size() <= 80
+        && optionalString(request.resource.data, 'userPhoto', 500)
+        && request.resource.data.type in ['suggestion', 'feedback']
+        && request.resource.data.content is string
+        && request.resource.data.content.size() >= 1
+        && request.resource.data.content.size() <= 2000
+        && (!( 'rating' in request.resource.data)
+          || (request.resource.data.rating is int
+            && request.resource.data.rating >= 1
+            && request.resource.data.rating <= 5))
+        && request.resource.data.status == 'pending'
+        && request.resource.data.createdAt == request.time;
+    }
+
+    function validErrorLogCreate() {
+      return request.auth != null
+        && request.resource.data.keys().hasOnly([
+          'level', 'message', 'stack', 'componentStack', 'url', 'userAgent',
+          'timestamp', 'createdAt', 'metadata'
+        ])
+        && request.resource.data.keys().hasAll(['level', 'message'])
+        && request.resource.data.level in ['error', 'warn', 'info', 'unhandledrejection']
+        && request.resource.data.message is string
+        && request.resource.data.message.size() >= 1
+        && request.resource.data.message.size() <= 2000
+        && optionalString(request.resource.data, 'stack', 2500)
+        && optionalString(request.resource.data, 'componentStack', 2500)
+        && optionalString(request.resource.data, 'url', 1000)
+        && optionalString(request.resource.data, 'userAgent', 500)
+        && optionalString(request.resource.data, 'timestamp', 40);
+    }
+
+    // 訪客統計：公開顯示，寫入只走 recordPublicAnalytics Admin SDK。
     match /visitorStats/{docId} {
       allow read: if true;
-      allow create: if request.auth != null;
-      allow update: if request.auth != null
-        && request.resource.data.totalVisits is int
-        && request.resource.data.totalVisits >= resource.data.totalVisits;
-      allow delete: if false;
+      allow write: if false;
     }
 
     // 🆕 v3.6.67: 2026 AIFED 演講「現場提問」收件箱
@@ -26,19 +69,18 @@ service cloud.firestore {
       allow update, delete: if request.auth != null && request.auth.token.admin == true;
     }
 
-    // 訪客 context 全站累計（地理 / 裝置 / 來源 三類，與 totalVisits 對齊的全域統計）
-    // 所有人可讀（後台需要），認證用戶可寫（與 visitorStats 一致的存取模型）
+    // 分析資料只供 Admin 讀取；公開事件由 recordPublicAnalytics 驗證後以 Admin SDK 寫入。
     match /analytics/{docId} {
-      allow read: if true;
-      allow write: if request.auth != null;
+      allow read: if isAdmin();
+      allow write: if false;
     }
     // 🆕 v3.6.35: Web Vitals RUM + ToolIndex 熱門搜尋詞 sub-collection
     //   分別寫入 analytics/webVitals/{YYYY-MM-DD}/{metricId}
     //          analytics/toolIndexQueries/queries/{queryHash}
     //   必須明確開放，上述單層規則涵蓋不到 → 沒這條會被全部擋光。
     match /analytics/{docId}/{subCol}/{subDocId} {
-      allow read: if true;
-      allow write: if request.auth != null;
+      allow read: if isAdmin();
+      allow write: if false;
     }
 
     // 每日快照備份 — 只有 admin custom claim 可讀／可寫（一般使用者完全看不到）
@@ -60,18 +102,10 @@ service cloud.firestore {
       allow write: if false;
     }
 
-    // 工具使用統計 - 所有人可讀，僅認證用戶可寫
-    // 🛡️ v3.6.69 防呆：docId 必須是純數字字串（"81" 不是 "tool_81"），totalClicks 必須是 int
-    //   過去踩過雙寫 doc 漂移（client direct write 寫 "tool_81" / callable 寫 "81" 分裂累計，
-    //   前端讀錯邊看不到學生點擊）— 加 rules 從寫入源頭擋掉異常命名
-    //   注意：callable incrementToolClick 走 admin SDK 不受 rules 限制
-    //         內部已有 1-200 範圍 + Number.isInteger 雙重檢查，這層 rules 只擋 client 寫入
+    // 工具使用統計公開顯示；寫入只走 incrementToolClick / beaconToolClick Admin SDK。
     match /toolUsageStats/{toolId} {
       allow read: if true;
-      allow write: if request.auth != null
-        && toolId.matches('^[1-9][0-9]{0,2}$')
-        && request.resource.data.totalClicks is int
-        && request.resource.data.totalClicks >= 0;
+      allow write: if false;
     }
 
     // 🆕 v3.6.49: 工具點擊事件記錄（細粒度，給 /admin 流量解析用）
@@ -83,7 +117,7 @@ service cloud.firestore {
       allow write: if false; // 僅 admin SDK 寫入
     }
 
-    // 錯誤日誌 - 認證用戶可建立（內容欄位限制 5000 字元），認證用戶可讀/更新/刪除
+    // 錯誤日誌：匿名／Google 身分可依 schema 建立；只有 Admin 能查看與管理。
     match /engagementEvents/{eventId} {
       allow create: if request.auth != null
         && request.resource.data.type in ['tool_click', 'blog_read'];
@@ -91,10 +125,8 @@ service cloud.firestore {
     }
 
     match /errorLogs/{logId} {
-      allow create: if request.auth != null
-        && request.resource.data.content is string
-        && request.resource.data.content.size() < 5000;
-      allow read, update, delete: if request.auth != null;
+      allow create: if validErrorLogCreate();
+      allow read, update, delete: if isAdmin();
     }
 
     // 成就系統 - 所有人可讀，僅認證用戶可寫
@@ -133,10 +165,9 @@ service cloud.firestore {
     // ==================== 許願池 ====================
 
     match /wishingWell/{wishId} {
-      // 所有人都可以提交新許願（匿名提交）
-      allow create: if true;
-      // 只有登入者（管理員）可以讀取、更新、刪除
-      allow read, update, delete: if request.auth != null;
+      // 公開提交需通過 schema 白名單；讀取與管理必須有 Admin custom claim。
+      allow create: if validWishCreate();
+      allow read, update, delete: if isAdmin();
     }
 
     // ==================== 用戶收藏 ====================

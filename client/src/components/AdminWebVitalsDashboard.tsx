@@ -15,6 +15,7 @@ import { collection, query, getDocs, limit } from 'firebase/firestore';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts';
 import { db } from '@/lib/firebase';
 import { tokens } from '@/design/tokens';
+import { toDateStr } from '@/components/admin/DateRangePicker';
 
 type Rating = 'good' | 'needs-improvement' | 'poor';
 
@@ -52,7 +53,7 @@ function lastNDates(n: number): string[] {
   for (let i = n - 1; i >= 0; i--) {
     const d = new Date();
     d.setDate(d.getDate() - i);
-    dates.push(d.toISOString().slice(0, 10));
+    dates.push(toDateStr(d));
   }
   return dates;
 }
@@ -67,25 +68,30 @@ function median(arr: number[]): number {
 function p75(arr: number[]): number {
   if (arr.length === 0) return 0;
   const sorted = [...arr].sort((a, b) => a - b);
-  return sorted[Math.floor(sorted.length * 0.75)] || sorted[sorted.length - 1];
+  return sorted[Math.ceil(sorted.length * 0.75) - 1];
 }
 
 export function AdminWebVitalsDashboard() {
   const [daily, setDaily] = useState<DailyAgg[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      if (!db) return;
+      if (!db) {
+        setLoadError('Firebase 尚未初始化，無法讀取 Web Vitals。');
+        setLoading(false);
+        return;
+      }
+      const firestore = db;
       const dates = lastNDates(7);
-      const result: DailyAgg[] = [];
-      for (const date of dates) {
+      const result = await Promise.all(dates.map(async (date): Promise<DailyAgg> => {
         const agg: DailyAgg = { date, count: 0, byMetric: {} };
         for (const m of METRICS) agg.byMetric[m] = { values: [], good: 0, ni: 0, poor: 0 };
         try {
           // 注意：webVitals/{date} 是 collection 不是 doc，要用 collection() 取
-          const colRef = collection(db, 'analytics', 'webVitals', date);
+          const colRef = collection(firestore, 'analytics', 'webVitals', date);
           const snap = await getDocs(query(colRef, limit(500)));
           snap.forEach((doc) => {
             const v = doc.data() as VitalRow;
@@ -97,16 +103,20 @@ export function AdminWebVitalsDashboard() {
             else slot.poor++;
             agg.count++;
           });
-        } catch {
-          /* 該日無資料 / Firestore 沒讀權限就跳過 */
+        } catch (error) {
+          console.warn(`[AdminWebVitals] ${date} 讀取失敗:`, error);
+          throw error;
         }
-        result.push(agg);
-      }
+        return agg;
+      }));
+      if (!cancelled) setDaily(result);
+    })().catch((error) => {
       if (!cancelled) {
-        setDaily(result);
-        setLoading(false);
+        setLoadError(error instanceof Error ? error.message : '讀取 Web Vitals 失敗');
       }
-    })();
+    }).finally(() => {
+      if (!cancelled) setLoading(false);
+    });
     return () => { cancelled = true; };
   }, []);
 
@@ -176,6 +186,12 @@ export function AdminWebVitalsDashboard() {
       {loading && (
         <div style={{ padding: 30, textAlign: 'center', color: tokens.muted2, fontStyle: 'italic' }}>
           載入中…
+        </div>
+      )}
+
+      {!loading && loadError && (
+        <div role="alert" style={{ padding: 18, color: '#b42318', background: '#fff1f0', borderRadius: 8 }}>
+          Web Vitals 載入失敗：{loadError}
         </div>
       )}
 

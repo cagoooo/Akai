@@ -107,6 +107,8 @@ window.addEventListener('unhandledrejection', async (event) => {
     try {
         const { db, isFirebaseAvailable } = await import('./lib/firebase');
         if (!isFirebaseAvailable() || !db) return;
+        const { ensureSignedIn } = await import('./lib/authService');
+        if (!await ensureSignedIn()) return;
         const { collection, addDoc } = await import('firebase/firestore');
         await addDoc(collection(db, 'errorLogs'), {
             message: event.reason?.message || String(event.reason),

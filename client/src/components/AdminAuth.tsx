@@ -14,13 +14,22 @@ import { useLocation, Link } from "wouter";
 import { tokens } from "@/design/tokens";
 import { Pin } from "@/components/primitives/Pin";
 import { Tape } from "@/components/primitives/Tape";
+import { useState } from "react";
 
 export function AdminAuth() {
     const { user, isAdmin, loading, signIn, logout } = useAuth();
     const [, setLocation] = useLocation();
+    const [loginError, setLoginError] = useState<string | null>(null);
+    const interactiveUser = user && !user.isAnonymous ? user : null;
 
     const handleLogin = async () => {
-        try { await signIn(); } catch (error) { console.error("登入失敗", error); }
+        setLoginError(null);
+        try {
+            await signIn();
+        } catch (error) {
+            console.error("登入失敗", error);
+            setLoginError(error instanceof Error ? error.message : 'Google 登入失敗，請再試一次');
+        }
     };
 
     const handleLogout = async () => {
@@ -34,7 +43,7 @@ export function AdminAuth() {
     }
 
     // ── 情境 1：已登入且是管理員 → 儀表板 ────────
-    if (user && isAdmin) {
+    if (interactiveUser && isAdmin) {
         return (
             <div style={{ position: 'relative' }}>
                 {/* 頂部右側 cork 風管理員資訊 + 登出 */}
@@ -64,7 +73,7 @@ export function AdminAuth() {
                             transform: 'rotate(-1deg)',
                         }}
                     >
-                        👤 {user.displayName || user.email}
+                        👤 {interactiveUser.displayName || interactiveUser.email}
                     </div>
                     <button
                         type="button"
@@ -106,7 +115,7 @@ export function AdminAuth() {
     }
 
     // ── 情境 2：已登入但非管理員 → 無權限便利貼 ───
-    if (user && !isAdmin) {
+    if (interactiveUser && !isAdmin) {
         return (
             <CorkShell centered>
                 <div
@@ -144,7 +153,7 @@ export function AdminAuth() {
                             lineHeight: 1.65,
                         }}
                     >
-                        抱歉，您的帳號 <strong>{user.email}</strong> 沒有管理員權限。
+                        抱歉，您的帳號 <strong>{interactiveUser.email}</strong> 沒有管理員權限。
                         如需取得存取權，請聯絡阿凱老師。
                     </div>
 
@@ -300,6 +309,11 @@ export function AdminAuth() {
                         />
                         使用 Google 登入
                     </button>
+                    {loginError && (
+                        <div role="alert" style={{ color: tokens.red, fontSize: 12, fontWeight: 700, lineHeight: 1.5 }}>
+                            {loginError}
+                        </div>
+                    )}
                 </div>
 
                 <div style={{ marginTop: 22, textAlign: 'center', paddingTop: 16, borderTop: '1px dashed rgba(74,58,32,.35)' }}>

@@ -86,20 +86,8 @@ export async function trackPageVisit(): Promise<void> {
 async function incrementServerStat(category: 'device' | 'referrer' | 'geo', key: string) {
   if (!key) return;
   try {
-    const { db, isFirebaseAvailable } = await import('@/lib/firebase');
-    if (!isFirebaseAvailable() || !db) return;
-    const { doc, setDoc, increment, serverTimestamp } = await import('firebase/firestore');
-    const fieldName =
-      category === 'device' ? 'deviceStats' : category === 'referrer' ? 'referrerStats' : 'geoStats';
-    const ref = doc(db, 'analytics', 'visitorContext');
-    await setDoc(
-      ref,
-      {
-        [fieldName]: { [key]: increment(1) },
-        lastUpdatedAt: serverTimestamp(),
-      },
-      { merge: true }
-    );
+    const { invokePublicAnalytics } = await import('@/lib/publicAnalyticsService');
+    await invokePublicAnalytics({ kind: 'visitorContext', category, key, count: 1 });
   } catch (err) {
     console.warn(`[trackPageVisit] Firestore ${category}/${key} 寫入失敗:`, err);
   }
@@ -149,24 +137,15 @@ export async function backfillLocalAnalytics(opts?: { force?: boolean }): Promis
 
   const writeBatch = async (
     category: 'device' | 'referrer' | 'geo',
-    fieldName: 'deviceStats' | 'referrerStats' | 'geoStats',
     data: Record<string, number>
   ) => {
     const validEntries = Object.entries(data).filter(([k, v]) => k && typeof v === 'number' && v > 0);
     if (validEntries.length === 0) return 0;
     try {
-      const { db, isFirebaseAvailable } = await import('@/lib/firebase');
-      if (!isFirebaseAvailable() || !db) return 0;
-      const { doc, setDoc, increment, serverTimestamp } = await import('firebase/firestore');
-      const ref = doc(db, 'analytics', 'visitorContext');
-      // 一次把這個 category 所有 key 寫進 nested map（每個 key 用 increment(N)）
-      const nested: Record<string, any> = {};
-      for (const [k, v] of validEntries) nested[k] = increment(v);
-      await setDoc(
-        ref,
-        { [fieldName]: nested, lastUpdatedAt: serverTimestamp() },
-        { merge: true }
-      );
+      const { invokePublicAnalytics } = await import('@/lib/publicAnalyticsService');
+      for (const [key, count] of validEntries) {
+        await invokePublicAnalytics({ kind: 'visitorContext', category, key, count });
+      }
       const sum = validEntries.reduce((s, [, v]) => s + v, 0);
       console.log(`[backfillLocalAnalytics] ${category}: ${validEntries.length} 個 key, 共 ${sum} 筆`);
       return sum;
@@ -181,7 +160,7 @@ export async function backfillLocalAnalytics(opts?: { force?: boolean }): Promis
     const data: Record<string, number> = JSON.parse(
       localStorage.getItem('visitorDeviceStats') || '{}'
     );
-    const sum = await writeBatch('device', 'deviceStats', data);
+    const sum = await writeBatch('device', data);
     result.deviceEntries = sum;
     result.totalAdded += sum;
   } catch (err) { console.warn('device 解析失敗:', err); }
@@ -191,7 +170,7 @@ export async function backfillLocalAnalytics(opts?: { force?: boolean }): Promis
     const data: Record<string, number> = JSON.parse(
       localStorage.getItem('visitorReferrerStats') || '{}'
     );
-    const sum = await writeBatch('referrer', 'referrerStats', data);
+    const sum = await writeBatch('referrer', data);
     result.referrerEntries = sum;
     result.totalAdded += sum;
   } catch (err) { console.warn('referrer 解析失敗:', err); }
@@ -201,7 +180,7 @@ export async function backfillLocalAnalytics(opts?: { force?: boolean }): Promis
     const data: Record<string, number> = JSON.parse(
       localStorage.getItem('visitorGeoStats') || '{}'
     );
-    const sum = await writeBatch('geo', 'geoStats', data);
+    const sum = await writeBatch('geo', data);
     result.geoEntries = sum;
     result.totalAdded += sum;
   } catch (err) { console.warn('geo 解析失敗:', err); }

@@ -88,7 +88,7 @@ export async function submitWish(
  */
 export async function getWishes(statusFilter?: WishStatus): Promise<Wish[]> {
     if (!isFirebaseAvailable() || !db) {
-        return [];
+        throw new Error('Firebase 未連線');
     }
 
     try {
@@ -118,7 +118,7 @@ export async function getWishes(statusFilter?: WishStatus): Promise<Wish[]> {
         return wishes;
     } catch (error) {
         console.error('取得許願清單失敗:', error);
-        return [];
+        throw error;
     }
 }
 
@@ -128,9 +128,9 @@ export async function getWishes(statusFilter?: WishStatus): Promise<Wish[]> {
 export async function updateWishStatus(
     wishId: string,
     status: WishStatus
-): Promise<boolean> {
+): Promise<void> {
     if (!isFirebaseAvailable() || !db) {
-        return false;
+        throw new Error('Firebase 未連線');
     }
 
     try {
@@ -139,27 +139,25 @@ export async function updateWishStatus(
             status,
             updatedAt: serverTimestamp()
         });
-        return true;
     } catch (error) {
         console.error('更新許願狀態失敗:', error);
-        return false;
+        throw error;
     }
 }
 
 /**
  * 刪除許願
  */
-export async function deleteWish(wishId: string): Promise<boolean> {
+export async function deleteWish(wishId: string): Promise<void> {
     if (!isFirebaseAvailable() || !db) {
-        return false;
+        throw new Error('Firebase 未連線');
     }
 
     try {
         const wishRef = doc(db as Firestore, WISHES_COLLECTION, wishId);
         await deleteDoc(wishRef);
-        return true;
     } catch (error) {
         console.error('刪除許願失敗:', error);
-        return false;
+        throw error;
     }
 }

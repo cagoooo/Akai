@@ -42,6 +42,9 @@ export { runHealthCheckDaily } from "./runHealthCheckDaily";
 // 🆕 v3.6.82: 許願池回饋 (onWishCreated) 與 工具評論 (onReviewCreated) 也從 LINE 遷移到 Google Chat
 export { onUserCreated, onErrorLogCreated, onWishCreated, onReviewCreated, onEngagementEventCreated } from "./googleChatTriggers";
 
+// 公開分析事件經白名單驗證後由 Admin SDK 原子遞增；client 不再直寫統計集合。
+export { recordPublicAnalytics } from "./recordPublicAnalytics";
+
 
 /** 取得 Asia/Taipei 當日 YYYY-MM-DD（與 dailySnapshot 一致） */
 function todayInTaipei(): string {

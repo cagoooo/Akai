@@ -10,10 +10,11 @@
  * - 寫入：analyticsSnapshots/{YYYY-MM-DD}（單一文件含全部資料的 JSON）
  * - 保留：90 天，超過自動裁切
  *
- * 還原：
+ * 合併還原：
  * - onCall function `restoreFromSnapshot({ date: 'YYYY-MM-DD', dryRun?: boolean })`
  * - 只允許 admin custom claim 呼叫
  * - dryRun=true 時只 console.log 不寫
+ * - 只覆寫快照內同名頂層文件；快照外文件與所有 subcollection 均保留
  */
 
 import { onSchedule } from "firebase-functions/v2/scheduler";
@@ -207,7 +208,8 @@ export const dailySnapshot = onSchedule(
 );
 
 /**
- * 從快照還原資料
+ * 從快照合併還原核心頂層資料。
+ * 注意：這不是完整時間點回滾；快照沒有的文件不刪除，subcollection 也不在快照範圍。
  * 用法（前端）：
  *   const fn = httpsCallable(functions, 'restoreFromSnapshot');
  *   await fn({ date: '2026-04-25', dryRun: true });
@@ -231,15 +233,26 @@ export const restoreFromSnapshot = onCall(async (request) => {
     }
 
     const snap = snapDoc.data() as SnapshotPayload;
-    const restored: Record<string, number> = {};
+    const restored: Record<string, {
+        snapshotDocs: number;
+        existingDocs: number;
+        extraDocsKept: number;
+    }> = {};
 
     for (const collection of ["visitorStats", "analytics", "toolUsageStats", "toolRatings"] as const) {
         const docs = (snap.data as any)[collection] || {};
         const docIds = Object.keys(docs);
-        restored[collection] = docIds.length;
+        const current = await admin.firestore().collection(collection).get();
+        const snapshotIdSet = new Set(docIds);
+        const extraDocsKept = current.docs.filter((doc) => !snapshotIdSet.has(doc.id)).length;
+        restored[collection] = {
+            snapshotDocs: docIds.length,
+            existingDocs: current.size,
+            extraDocsKept,
+        };
 
         if (dryRun) {
-            console.log(`[restoreFromSnapshot] [DRY-RUN] ${collection} 將還原 ${docIds.length} 個文件`);
+            console.log(`[restoreFromSnapshot] [DRY-RUN] ${collection} 將覆寫／建立 ${docIds.length} 個頂層文件，保留 ${extraDocsKept} 個快照外文件`);
             continue;
         }
 
@@ -262,7 +275,7 @@ export const restoreFromSnapshot = onCall(async (request) => {
         dryRun,
         restored,
         message: dryRun
-            ? "已預演還原（未實際寫入）。請呼叫時加 dryRun: false 才會真的覆寫"
-            : `已從 ${date} 快照還原 ${Object.values(restored).reduce((a, b) => a + b, 0)} 個文件`,
+            ? "已預演合併還原（未寫入）：只處理快照內頂層文件，快照外文件與子集合會保留"
+            : `已從 ${date} 快照合併還原 ${Object.values(restored).reduce((sum, item) => sum + item.snapshotDocs, 0)} 個頂層文件；快照外文件與子集合未刪除`,
     };
 });

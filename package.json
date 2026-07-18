@@ -26,6 +26,7 @@
     "check": "tsc",
     "db:push": "drizzle-kit push",
     "test": "vitest",
+    "test:rules": "firebase emulators:exec --only firestore \"vitest --config vitest.rules.config.ts --run\"",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
     "optimize:images": "node scripts/compress-images.mjs",
@@ -119,6 +120,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@firebase/rules-unit-testing": "^5.0.1",
     "@napi-rs/canvas": "^0.1.100",
     "@opentelemetry/api": "^1.9.1",
     "@playwright/test": "^1.57.0",
