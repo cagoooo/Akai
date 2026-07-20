@@ -3,12 +3,74 @@
 ## 🎯 當前版本狀態
 - **當前版本**: `v3.6.93` (本機/CI) · 公開工具總數 **119 個** 🎮🚀
 - **里程碑**: **2026-07-19 Admin 權限與資料可信度整頓** — 公開分析改走受控 callable、Firestore 統計集合封鎖 client 直寫、匿名認證與 Admin 登入狀態分流、許願池操作改以真實寫入結果判定，並拆分 AnalyticsDashboard。
-- **最後更新狀態**: 見下方 `2026-07-19` 段落
+- **最後更新狀態**: 見下方 `2026-07-21` Admin 後台 Roadmap 與 `2026-07-19` 完成紀錄
 - **前一版**: v3.6.90 — 客群推薦精靈全面情境化 + 成效閉環
 - **前一版**: v3.6.71 — 新增 #102 外星人入侵·保衛石門 + 雙 tools.json 對齊
 - **📎 文件補追記**：本檔案從 v3.6.71 停更到 2026-07-04 才補寫。中間 v3.6.72 → v3.6.87 共 16 個版本（主要是新增工具 #103-#114 + 幾個獨立 bug fix，例如 v3.6.80 使用次數本機計數 bug、v3.6.81/b3032b2 許願池通知從 LINE 遷移到 Google Chat）沒有寫進本檔案，細節可查 `git log`（commit 訊息大多含版本號）。工具總數從 102 → 115 就是這段期間累積的，之後有空再補完整段落。
 
 ## 📌 完成功能總覽
+
+### `2026-07-21`（📋 Admin 進度核對 + 未來 P0／P1 優化 Roadmap）
+
+> 本段是針對 `/admin`、Firestore、Cloud Functions、匿名 Auth、測試與分析資料可信度的**最新決策清單**，和本檔後方既有的「客群推薦 Roadmap」「100 工具 Roadmap」分開管理。以下 P0／P1 尚未開發，等使用者挑選後再執行。
+
+**✅ 目前已完成並上線（基準 commit：`c4a1354`）**
+
+| 完成面向 | 已上線內容 | 驗證狀態 |
+|---|---|---|
+| 權限與資料可信度 | `analytics`、`visitorStats`、`toolUsageStats` 禁止 client 直寫；公開分析改走 `recordPublicAnalytics` callable 白名單驗證與 Admin SDK 原子累計 | Function 與 Rules 已部署；正式環境確認偽造許願、非法批次、直接竄改統計均遭拒 |
+| 匿名 Auth／Admin 登入 | 公開分析自動建立匿名身分；匿名 session 不會被 Admin UI 當成 Google 登入；登入取消／失敗有明確錯誤；主動登出後不會立刻匿名登入 | 匿名登入、Admin 狀態、登出行為測試通過 |
+| 許願池正確性 | Firestore 成功後才更新 UI／顯示成功，失敗保留原狀；讀取錯誤不再假裝「0 筆」 | 更新失敗、刪除失敗、刪除成功三種測試通過 |
+| 備份還原語意 | 統一稱為「核心頂層資料快照／合併還原」；明示不刪除快照外文件與子集合；預演會回報現有／快照／保留文件數 | Functions build 與前端型別檢查通過 |
+| Admin 架構與效能 | `AnalyticsDashboard.tsx` 約 1,795 → 1,045 行；拆出行為分頁、基礎設施面板、統計卡；熱力／日曆改延遲載入 | production build 成功；Pages 與 Lighthouse workflow 完成 |
+| Web Vitals | 修正 CLS 小數、p75 索引、台灣日期與七天串行讀取；改為平行查詢並顯示讀取失敗 | 型別檢查與 production build 通過 |
+| 測試骨架 | 新增 Rules Emulator、匿名登入、Admin 權限與許願池操作測試 | 20 項針對性測試通過；Rules Emulator 本機仍受缺 Java 限制 |
+
+#### 優先級與工時定義
+
+- **P0**：直接影響安全、資料正確性、災難復原或後續開發可信度；建議下一輪優先挑選。
+- **P1**：能顯著提升日常管理效率、分析深度或產品化程度；P0 穩定後逐項加入。
+- **S**：約 0.5–1 工作日；**M**：約 2–4 工作日；**L**：約 5–10 工作日。這是單人開發的相對估算，不含外部審核等待時間。
+
+### 🟥 Admin P0（近期，安全／正確性／可維護性優先）
+
+| ID | 建議項目 | 目前缺口／為什麼要做 | 建議實作內容 | Effort | 完成驗收標準 |
+|---|---|---|---|---|---|
+| **ADM-P0-1** | **CI 機密與部署流程整頓** | `deploy-pages.yml` 目前會直接 `cat .env`，雖 Firebase Web config 多數可公開，仍不應把完整環境設定寫進 Actions log；CI 也使用 `npm install`，依賴結果不夠可重現 | 移除 `.env` 全文輸出，只顯示「是否存在／長度」；改用 `npm ci`；為 build、deploy 加最小權限與環境保護；Actions 升級到支援 Node 24 的版本 | S | Actions log 不再出現任何設定值；乾淨 runner 可重現安裝與 build；Pages deploy 維持成功 |
+| **ADM-P0-2** | **公開 callable 防濫用：App Check + 持久化限流 + 冪等鍵** | `recordPublicAnalytics` 已有 Auth 與 schema 白名單，但匿名帳號仍可大量建立並重複呼叫；目前沒有 App Check、跨 instance 限流或事件去重 | callable 開啟 App Check（先 monitor、後 enforce）；以 UID＋IP hash＋事件類型做 Firestore/Redis 型滑動視窗限流；訪次、推薦曝光與 Web Vital 加 event id 去重；超限只拒絕、不污染正式統計 | M–L | 合法 GitHub Pages 流量正常；未帶 App Check／超限／重複 event 測試全部被拒；Dashboard 數字不因 retry 重複累加 |
+| **ADM-P0-3** | **Rules Emulator 正式納入 CI 閘門** | `test:rules` 與測試檔已存在，但本機缺 Java，且 GitHub Actions 尚未執行；規則部署仍可能靠人工發現錯誤 | CI 加 `setup-java`、Firestore Emulator 與 `npm run test:rules`；覆蓋 unauth／anon／Google user／Admin 四種身分；對每個敏感集合測 create/read/update/delete；Rules 失敗禁止部署 | M | PR／push 自動跑 Rules tests；刻意放寬一條規則時 CI 必須紅燈；正式部署前有可追溯測試結果 |
+| **ADM-P0-4** | **修復測試與 Lint 基準線** | 全專案仍有 12 項既有測試失敗（工具數寫死、TooltipProvider、舊排序預期、空測試檔）；ESLint 9 缺 `eslint.config.*`，目前 lint 根本無法啟動 | 修正過時 fixture 與 provider；移除空測試或補實際案例；建立 ESLint flat config；CI 固定跑 `check + test + lint`，只允許明確列管的非阻擋檢查 | M | `npm test -- --run`、`npm run lint`、`npm run check` 全綠；未來新失敗會阻擋 merge |
+| **ADM-P0-5** | **危險 Admin 操作雙重防護與稽核** | 合併還原、許願刪除、狀態修改目前只靠 Admin claim 與前端 confirm；沒有近期重新驗證、理由、操作記錄或 request id | 還原／大量刪除要求近期重新登入；Cloud Function 再驗 Admin claim；寫入不可竄改 `adminAuditLogs`（操作者、動作、目標、前後摘要、時間、結果、request id）；重複 request 不得執行兩次 | M | 每次成功／失敗操作都有 audit record；過期登入會被拒；重送同 request id 不會重複還原或刪除 |
+| **ADM-P0-6** | **備份從「資料快照」升級為可驗證災難復原** | 現有 snapshot 只涵蓋指定頂層文件，不含子集合，也不等同完整 Firestore point-in-time backup；若 snapshot doc 變大還有 1 MiB 文件限制風險 | 保留目前快速合併還原，同時新增定期 Firestore managed export 到 Cloud Storage；manifest 記錄集合、文件數、checksum、版本與保留期限；每月至少做一次沙箱 restore drill；後台顯示「最近成功備份／最近驗證還原」 | L | 能從獨立備份還原含子集合資料；checksum 驗證通過；至少一份 restore drill 紀錄；失敗會送 Google Chat 告警 |
+| **ADM-P0-7** | **Admin 分頁真正按需掛載與資料查詢治理** | 主檔雖降至 1,045 行，但除熱力／日曆外，多數 panel 仍是靜態 import；隱藏分頁可能同時啟動 listener／query，造成首次載入、Firestore reads 與維護成本偏高 | 每個 tab 拆成 lazy chunk，只掛載 active tab；TanStack Query 統一 cache key、stale time、retry、abort；即時 listener 僅在分頁可見時存在；保留 skeleton、錯誤與重新整理 | M | 初次進 Admin 不下載非目前分頁 chunk；未開啟分頁不產生對應 reads/listeners；切頁與返回可用 cache 秒開；無 listener 洩漏 |
+| **ADM-P0-8** | **指標來源、更新時間與錯誤狀態標準化** | 已移除示意數字，但部分 panel 仍可能把「無資料」「權限不足」「查詢錯誤」「尚未累積」呈現成相似空畫面，容易誤判 | 每張 KPI 卡附 source、最後更新、取樣率、日期範圍、分母；統一 `loading / empty / stale / permission-denied / error` 元件；超過 SLA 顯示資料過期；匯出檔一併帶 metadata | S–M | 斷網、權限不足、真正 0 筆、資料過期四種狀態可被明確區分；任何數字都可追到來源與更新時間 |
+
+### 🟧 Admin P1（中期，營運效率／分析深度／產品化）
+
+| ID | 建議項目 | 可開發功能與價值 | Effort | 完成驗收標準 |
+|---|---|---|---|---|
+| **ADM-P1-1** | **Admin「今日待辦／異常中心」首頁** | 把既有健康檢查、許願待處理、錯誤日誌、備份狀態、匿名 Auth 自癒、CTR 異常整合成一個紅黃綠摘要；點卡片直達對應分頁，避免每天逐頁巡查 | M | 進後台 10 秒內看懂「今天是否要處理事情」；每張異常有嚴重度、時間、負責動作與深連結 |
+| **ADM-P1-2** | **錯誤日誌工作台** | 目前 errorLogs 會通知 Google Chat，但後台缺少分群處理流程；可依 fingerprint 合併相同錯誤，顯示首次／最後發生、受影響 URL、次數、版本，並支援確認、忽略、已修復與連到 Sentry | M | 同類錯誤不再洗版；可追蹤狀態與處理者；修復後若重現會自動重新開啟 |
+| **ADM-P1-3** | **許願池正式工作流** | 將 pending／reviewing／planned／building／released／rejected 做成看板；加入管理備註、標籤、優先級、相關工具／commit／Issue；上線後留下「願望已實現」紀錄 | M | 每個願望有完整狀態歷史；可搜尋／篩選／批次操作；released 能連到工具與版本紀錄 |
+| **ADM-P1-4** | **角色分級 RBAC** | 目前只有單一 Admin claim；未來可拆 Owner（還原／權限）、Analyst（只讀分析／匯出）、Moderator（許願／評論）以降低誤操作與帳號外洩衝擊 | L | 三種角色的 Rules／Functions／UI 權限測試完整；Analyst 無法刪除或還原；Moderator 看不到敏感分析原始資料 |
+| **ADM-P1-5** | **異常偵測與成本／配額看板** | 監控訪次或點擊突然暴增、callable 拒絕率、Functions p95 latency、Firestore reads/writes、錯誤率與估算成本；用 7／28 天基線判斷，不用固定死門檻 | M–L | 異常可在 15 分鐘內被標記；告警帶基線、目前值、可能來源；能看到每日用量與預估月成本 |
+| **ADM-P1-6** | **資料保留與隱私治理** | 為 Web Vitals UA、errorLogs、toolClickEvents、audit logs 設定不同 TTL；縮短／hash 可能識別資訊；後台顯示 retention policy，並能驗證到期刪除是否運作 | M | 每個集合都有 owner、用途與保留天數；TTL 自動刪除有監控；匯出不包含不必要的完整 UA／URL 參數 |
+| **ADM-P1-7** | **推薦權重管理與安全發布** | 將推薦權重從程式碼抽成版本化 config；Admin 可預覽「調整前後哪些客群／工具升降」，再以草稿→核准→發布；保留一鍵 rollback | L | 每次權重改動有版本、理由與指標快照；未發布草稿不影響正式站；rollback 可在 1 分鐘內完成 |
+| **ADM-P1-8** | **分析洞察深化：留存、路徑與內容成效** | 在匿名聚合與隱私限制下，補新／舊訪客、推薦→工具使用、搜尋→點擊、文章閱讀→工具啟用漏斗；加 7／28 日比較與最低樣本提示，避免小樣本誤判 | L | 每個漏斗有清楚分母與最小樣本；可比較日期區間／裝置／來源；不保存可回推個人的原始路徑 |
+| **ADM-P1-9** | **排程營運摘要與可訂閱報表** | 透過既有 Google Chat 管道，每日／每週推送訪客、熱門工具、許願、錯誤、備份、推薦 CTR 與異常；Admin 可選頻率與開關，不再需要每天登入查看 | S–M | 排程成功／失敗可追蹤；摘要數字能點回 Admin；沒有異常時採精簡訊息，避免通知疲勞 |
+| **ADM-P1-10** | **Admin 手機版與無障礙完整驗收** | 針對表格、圖表、對話框、Tabs、鍵盤操作與螢幕閱讀器補齊；手機改成摘要卡＋展開詳情，危險操作避免誤觸 | M | Pixel 5／iPad／桌機 E2E 通過；鍵盤可完成登入、切頁、篩選與安全取消操作；axe 無重大違規 |
+| **ADM-P1-11** | **大資料匯出工作佇列** | 目前 CSV／Excel／JSON 在瀏覽器同步組裝；資料量成長後改為 callable 建立匯出工作、背景產檔、短效簽名 URL 下載，並記錄匯出人與條件 | M–L | 大日期範圍不凍結瀏覽器；檔案有 metadata／checksum／過期時間；未授權者不能下載 |
+| **ADM-P1-12** | **Feature Flag／維護模式控制台** | 對推薦精靈、許願池、Web Vitals、實驗功能提供遠端開關與 rollout 百分比；出問題可停用單一功能，不必整站重新部署 | M | 開關有角色限制與 audit log；變更數分鐘內生效；預設值與斷線 fallback 明確；可一鍵回復上一版 |
+
+#### 建議挑選組合（可直接回覆代號）
+
+1. **安全地基包**：`ADM-P0-1 + P0-2 + P0-3 + P0-4` — 先把 CI、濫用防護、Rules 與測試基準線做穩。
+2. **日常管理包**：`ADM-P0-5 + P0-8 + P1-1 + P1-2 + P1-3` — 每天更快看懂問題，也能追蹤誰做了什麼。
+3. **效能維護包**：`ADM-P0-7 + P1-10` — 繼續拆 Admin、降低初始 reads／bundle，順便完成手機與無障礙驗收。
+4. **災難復原包**：`ADM-P0-5 + P0-6` — 把「合併還原」提升成有稽核、可演練的完整備援。
+5. **數據決策包**：`ADM-P0-8 + P1-5 + P1-8 + P1-9` — 讓後台從顯示數字升級成會主動指出異常與趨勢。
+
+**建議實際順序**：先 `P0-1 → P0-3 → P0-4 → P0-2` 建立可信安全地基，再依需求選 `P0-5／P0-6`（復原安全）或 `P0-7／P0-8`（後台體驗）。P1 則優先推薦 `P1-1`，因為它能直接整合目前已存在的健康檢查、備份、許願與錯誤資料，投入效益最高。
 
 ### `2026-07-19`（🔐 Admin 權限、匿名認證與 AnalyticsDashboard 重構）
 
