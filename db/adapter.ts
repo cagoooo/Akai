@@ -20,9 +20,7 @@ export function getCurrentTimeSql(): string {
  * 返回一個可以直接在 Drizzle SQL 表達式中使用的對象
  */
 export function nowSql() {
-  return dbType === 'postgres' 
-    ? sqlTemplate`NOW()` 
-    : sqlTemplate`datetime('now')`;
+  return dbType === 'postgres' ? sqlTemplate`NOW()` : sqlTemplate`datetime('now')`;
 }
 
 /**
@@ -30,9 +28,7 @@ export function nowSql() {
  * 解決 SQLite 的 now() 函數不存在的問題
  */
 export function getTimestamp() {
-  return dbType === 'postgres' 
-    ? nowSql() 
-    : new Date();
+  return dbType === 'postgres' ? nowSql() : new Date();
 }
 
 /**
@@ -50,17 +46,21 @@ export function dateToDbFormat(date: Date): any {
 /**
  * 獲取日期差的 SQL 表達式
  */
-export function getDateDiffSql(startDate: string, endDate: string = 'NOW()', unit: 'day' | 'hour' | 'minute' | 'second' = 'day'): string {
+export function getDateDiffSql(
+  startDate: string,
+  endDate: string = 'NOW()',
+  unit: 'day' | 'hour' | 'minute' | 'second' = 'day',
+): string {
   if (dbType === 'postgres') {
     // PostgreSQL 日期差異語法
     return `EXTRACT(${unit} FROM (${endDate} - ${startDate}))`;
   } else {
     // SQLite 日期差異語法
     const divisors: Record<string, number> = {
-      'second': 1,
-      'minute': 60,
-      'hour': 3600,
-      'day': 86400
+      second: 1,
+      minute: 60,
+      hour: 3600,
+      day: 86400,
     };
     const divisor = divisors[unit];
     const nowFunction = endDate === 'NOW()' ? "datetime('now')" : endDate;
@@ -94,7 +94,8 @@ export function jsonFieldSql(field: string, path: string): string {
 export function formatDateSql(dateField: string, format: string = '%Y-%m-%d'): string {
   if (dbType === 'postgres') {
     // PostgreSQL 日期格式化
-    let pgFormat = format.replace('%Y', 'YYYY')
+    const pgFormat = format
+      .replace('%Y', 'YYYY')
       .replace('%m', 'MM')
       .replace('%d', 'DD')
       .replace('%H', 'HH24')

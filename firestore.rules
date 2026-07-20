@@ -83,6 +83,16 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // 公開分析 callable 的持久化限流與冪等紀錄；client 永遠不可直接寫入。
+    match /_analyticsRateLimits/{bucketId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+    match /_analyticsEventClaims/{eventId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
     // 每日快照備份 — 只有 admin custom claim 可讀／可寫（一般使用者完全看不到）
     // dailySnapshot Cloud Function 走 admin SDK 不受 rules 限制
     match /analyticsSnapshots/{date} {

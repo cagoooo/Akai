@@ -40,7 +40,7 @@ function getGtag(): GtagFn | null {
  */
 export function trackEvent(
   name: string,
-  params: Record<string, string | number | boolean | undefined> = {}
+  params: Record<string, string | number | boolean | undefined> = {},
 ) {
   try {
     const gtag = getGtag();
@@ -122,7 +122,7 @@ function markEngagementNotified(key: string) {
 
 export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
   console.log('[engagement notify] 觸發事件:', event);
-  
+
   if (!db) {
     console.warn('[engagement notify] db 不存在');
     return;
@@ -184,8 +184,21 @@ export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
 //     daily: { [YYYY-MM-DD]: { imp, clk, painClk } } }  ← P0-D 時間維度（事件層級每日總量）
 export type RecommendationSurface = 'wizard' | 'strip';
 export type RecommendationBatch = 'initial' | 'reshuffled';
-export type AudienceSelectionDimension = 'audience' | 'schoolLevels' | 'teacherRoles' | 'departments';
-export type AudienceFunnelEvent = 'opened' | 'audienceSelected' | 'schoolLevelSelected' | 'teacherRoleSelected' | 'departmentSelected' | 'painPointsConfirmed' | 'resultsShown' | 'dismissed' | 'reshuffled';
+export type AudienceSelectionDimension =
+  | 'audience'
+  | 'schoolLevels'
+  | 'teacherRoles'
+  | 'departments';
+export type AudienceFunnelEvent =
+  | 'opened'
+  | 'audienceSelected'
+  | 'schoolLevelSelected'
+  | 'teacherRoleSelected'
+  | 'departmentSelected'
+  | 'painPointsConfirmed'
+  | 'resultsShown'
+  | 'dismissed'
+  | 'reshuffled';
 
 async function writeRecoEvent(payload: Record<string, unknown>) {
   try {
@@ -210,7 +223,12 @@ export function recordAudiencePainPointSelection(painPoints: string[]) {
 }
 
 /** 推薦結果曝光：每個被展示的工具 +1 imp，該 segment +1 imp，總曝光 +1，今日 bucket +1 imp */
-export async function recordRecoImpression(params: { segment: string; toolIds: number[]; surface?: RecommendationSurface; batch?: RecommendationBatch }) {
+export async function recordRecoImpression(params: {
+  segment: string;
+  toolIds: number[];
+  surface?: RecommendationSurface;
+  batch?: RecommendationBatch;
+}) {
   if (!params.segment || params.toolIds.length === 0) return;
   try {
     await invokePublicAnalytics({ kind: 'recommendation', action: 'impression', ...params });
@@ -220,7 +238,15 @@ export async function recordRecoImpression(params: { segment: string; toolIds: n
 }
 
 /** 推薦點擊：該工具 +1 clk，該 segment +1 clk，該 slot +1，總點擊 +1，今日 bucket +1 clk */
-export async function recordRecoClick(params: { segment: string; toolId: number; slot: string; matchedPains: number; painPoints?: string[]; surface?: RecommendationSurface; batch?: RecommendationBatch }) {
+export async function recordRecoClick(params: {
+  segment: string;
+  toolId: number;
+  slot: string;
+  matchedPains: number;
+  painPoints?: string[];
+  surface?: RecommendationSurface;
+  batch?: RecommendationBatch;
+}) {
   if (!params.segment) return;
   try {
     await invokePublicAnalytics({ kind: 'recommendation', action: 'click', ...params });
@@ -249,7 +275,7 @@ export async function logToolIndexQuery(query: string, resultCount: number) {
 const SAMPLE_RATE = 0.25; // 只取樣 25%（控制 Firestore 寫入量，每月 < 50K 寫入）
 const sessionShouldSample = Math.random() < SAMPLE_RATE;
 
-let sentMetrics = new Set<string>(); // 同一頁不重複送同個 metric
+const sentMetrics = new Set<string>(); // 同一頁不重複送同個 metric
 
 async function sendMetricToFirestore(metric: Metric) {
   if (!db) return;
@@ -296,7 +322,9 @@ export async function initWebVitals() {
     const handler = (metric: Metric) => {
       sendMetricToGtag(metric);
       // Firestore 寫入用 setTimeout 推遲，不要影響使用者體驗
-      setTimeout(() => { void sendMetricToFirestore(metric); }, 0);
+      setTimeout(() => {
+        void sendMetricToFirestore(metric);
+      }, 0);
     };
     onCLS(handler);
     onINP(handler);

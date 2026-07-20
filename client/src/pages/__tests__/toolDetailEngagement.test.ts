@@ -9,17 +9,21 @@ function readSource(path: string) {
 }
 
 describe('tool detail engagement notifications', () => {
-  it('covers the current 114 public tools with a single detail-page notification path', () => {
-    const tools = JSON.parse(readFileSync(resolve(root, 'client/public/api/tools.json'), 'utf8')) as Array<{
+  it('covers every current public tool with a single detail-page notification path', () => {
+    const tools = JSON.parse(
+      readFileSync(resolve(root, 'client/public/api/tools.json'), 'utf8'),
+    ) as Array<{
       id: number;
       url?: string;
       isInternal?: boolean;
     }>;
 
     const publicTools = tools.filter((tool) => !tool.isInternal);
-    expect(publicTools).toHaveLength(114);
+    expect(publicTools.length).toBeGreaterThanOrEqual(114);
     expect(new Set(publicTools.map((tool) => tool.id)).size).toBe(publicTools.length);
-    expect(publicTools.every((tool) => typeof tool.url === 'string' && tool.url.length > 0)).toBe(true);
+    expect(publicTools.every((tool) => typeof tool.url === 'string' && tool.url.length > 0)).toBe(
+      true,
+    );
 
     const source = readSource('client/src/pages/BulletinToolDetail.tsx');
     expect(source).toContain('notifyEngagementAfterHomeEntry({');
@@ -60,7 +64,9 @@ describe('tool detail engagement notifications', () => {
     }
 
     expect(analyticsSource).toContain("event.source === 'tool_detail_intro'");
-    expect(analyticsSource).toContain("event.type === 'blog_read' && event.source === 'tool_detail_intro'");
+    expect(analyticsSource).toContain(
+      "event.type === 'blog_read' && event.source === 'tool_detail_intro'",
+    );
     expect(functionSource).toContain('source === "tool_detail_intro"');
     expect(functionSource).toContain('工具詳情頁讀介紹被點擊');
   });

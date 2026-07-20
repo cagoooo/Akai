@@ -1,49 +1,61 @@
-import { lazy, Suspense, useState, useEffect, useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BarChart, LineChart, PieChart } from "@/components/ui/charts";
-import { Button } from "@/components/ui/button";
+import { lazy, Suspense, useState, useEffect, useMemo } from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { BarChart, LineChart, PieChart } from '@/components/ui/charts';
+import { Button } from '@/components/ui/button';
 import {
-  Calendar, Download, Activity, Users, TrendingUp,
-  MousePointer, Eye, Clock, BarChart2, PieChart as PieChartIcon,
-  Home, ArrowLeft, Target
-} from "lucide-react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link } from "wouter";
-import type { VisitorStats, ToolUsageStat } from "@/types/analytics";
-import { WishingWellAdmin } from "@/components/admin/WishingWellAdmin";
-import { ToolFlowAnalysisPanel } from "@/components/admin/ToolFlowAnalysisPanel";
-import { HealthCheckPanel } from "@/components/admin/HealthCheckPanel";
-import { RecommendationStatsPanel } from "@/components/admin/RecommendationStatsPanel";
-import { StickyStatCard } from "@/components/admin/StickyStatCard";
+  Calendar,
+  Download,
+  Activity,
+  Users,
+  TrendingUp,
+  MousePointer,
+  Eye,
+  Clock,
+  BarChart2,
+  PieChart as PieChartIcon,
+  Home,
+  ArrowLeft,
+  Target,
+} from 'lucide-react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { Link } from 'wouter';
+import type { VisitorStats, ToolUsageStat } from '@/types/analytics';
+import { WishingWellAdmin } from '@/components/admin/WishingWellAdmin';
+import { ToolFlowAnalysisPanel } from '@/components/admin/ToolFlowAnalysisPanel';
+import { HealthCheckPanel } from '@/components/admin/HealthCheckPanel';
+import { RecommendationStatsPanel } from '@/components/admin/RecommendationStatsPanel';
+import { StickyStatCard } from '@/components/admin/StickyStatCard';
 import {
   BackfillLocalAnalyticsBar,
   SnapshotManagementPanel,
-} from "@/components/admin/AnalyticsInfrastructurePanels";
+} from '@/components/admin/AnalyticsInfrastructurePanels';
 import {
   DateRangePicker,
   presetToRange,
   filterDailyVisits,
   toDateStr,
   type DateRange,
-} from "@/components/admin/DateRangePicker";
+} from '@/components/admin/DateRangePicker';
 
 const AnalyticsBehaviorTabs = lazy(() =>
-  import("@/components/admin/AnalyticsBehaviorTabs").then((module) => ({
+  import('@/components/admin/AnalyticsBehaviorTabs').then((module) => ({
     default: module.AnalyticsBehaviorTabs,
-  }))
+  })),
 );
 
 // 檢測是否為靜態部署環境
 const isStaticDeployment = () => {
   if (typeof window === 'undefined') return false;
-  return window.location.hostname.includes('github.io') ||
+  return (
+    window.location.hostname.includes('github.io') ||
     window.location.hostname.includes('netlify.app') ||
-    window.location.hostname.includes('vercel.app');
+    window.location.hostname.includes('vercel.app')
+  );
 };
 
 export function AnalyticsDashboard() {
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState('overview');
   // 日期範圍篩選（預設「最近 30 天」）
   const [dateRange, setDateRange] = useState<DateRange>(() => presetToRange('last30'));
 
@@ -70,14 +82,14 @@ export function AnalyticsDashboard() {
   const [visitorStats, setVisitorStats] = useState<VisitorStats>({
     totalVisits: 0,
     dailyVisits: {},
-    lastVisitAt: null
+    lastVisitAt: null,
   });
 
   // 工具統計狀態
   const [toolStats, setToolStats] = useState<ToolUsageStat[]>([]);
   // 工具每日點擊細分（v3.6.8+ 連動日期 picker）
   const [toolDailyClicks, setToolDailyClicks] = useState<Map<number, Record<string, number>>>(
-    () => new Map()
+    () => new Map(),
   );
   // 工具標題快取（從 tools.json 載入，給圖表 label 用）
   const [toolTitles, setToolTitles] = useState<Map<number, string>>(() => new Map());
@@ -104,7 +116,9 @@ export function AnalyticsDashboard() {
         });
         setToolTitles(m);
       })
-      .catch(() => { /* 失敗就 fallback「工具 #ID」 */ });
+      .catch(() => {
+        /* 失敗就 fallback「工具 #ID」 */
+      });
   }, []);
 
   // 訂閱 analytics/visitorContext（全站累計訪客 context）
@@ -153,7 +167,7 @@ export function AnalyticsDashboard() {
           setVisitorStats({
             totalVisits: parseInt(localStorage.getItem('localVisitorCount') || '0'),
             dailyVisits: {},
-            lastVisitAt: null
+            lastVisitAt: null,
           });
           setToolStats(getLocalToolStats());
           return;
@@ -172,7 +186,7 @@ export function AnalyticsDashboard() {
           (error) => {
             console.error('儀表板監聽失敗:', error);
             setIsRealtime(false);
-          }
+          },
         );
 
         // 即時監聽工具統計（含 dailyClicks）
@@ -185,7 +199,7 @@ export function AnalyticsDashboard() {
               const data = doc.data();
               stats.push({
                 toolId: data.toolId,
-                totalClicks: data.totalClicks
+                totalClicks: data.totalClicks,
               });
               if (data.dailyClicks && typeof data.dailyClicks === 'object') {
                 const valid: Record<string, number> = {};
@@ -206,11 +220,15 @@ export function AnalyticsDashboard() {
             console.error('工具統計監聽失敗:', error);
             // 回退到本地數據
             const localStats = getLocalToolStats();
-            setToolStats(localStats.map((stat: any) => ({
-              toolId: stat.toolId,
-              totalClicks: stat.totalClicks || 0
-            })).filter((stat: any) => stat.totalClicks > 0));
-          }
+            setToolStats(
+              localStats
+                .map((stat: any) => ({
+                  toolId: stat.toolId,
+                  totalClicks: stat.totalClicks || 0,
+                }))
+                .filter((stat: any) => stat.totalClicks > 0),
+            );
+          },
         );
 
         console.log('🔴 Firebase 即時監聽已啟動');
@@ -221,7 +239,7 @@ export function AnalyticsDashboard() {
         setVisitorStats({
           totalVisits: parseInt(localStorage.getItem('localVisitorCount') || '0'),
           dailyVisits: {},
-          lastVisitAt: null
+          lastVisitAt: null,
         });
         setToolStats(getLocalToolStats());
       }
@@ -273,7 +291,7 @@ export function AnalyticsDashboard() {
     const total = entries.reduce((sum, [, n]) => sum + n, 0);
     const days = Math.max(
       1,
-      Math.round((dateRange.to.getTime() - dateRange.from.getTime()) / 86400000) + 1
+      Math.round((dateRange.to.getTime() - dateRange.from.getTime()) / 86400000) + 1,
     );
     const avg = total / days;
     const peak = entries.reduce((m, [, n]) => Math.max(m, n), 0);
@@ -288,10 +306,7 @@ export function AnalyticsDashboard() {
       to: prevTo,
       label: '前一段',
     };
-    const prevTotal = filterDailyVisits(dailyVisits, prevRange).reduce(
-      (sum, [, n]) => sum + n,
-      0
-    );
+    const prevTotal = filterDailyVisits(dailyVisits, prevRange).reduce((sum, [, n]) => sum + n, 0);
     const deltaPct =
       prevTotal === 0 ? (total > 0 ? 100 : 0) : ((total - prevTotal) / prevTotal) * 100;
     return { total, avg, peak, days, prevTotal, deltaPct };
@@ -323,9 +338,7 @@ export function AnalyticsDashboard() {
       rangeClicks: getToolClicksInRange(s.toolId, s.totalClicks),
       title: toolTitles.get(s.toolId) || `工具 #${s.toolId}`,
     }));
-    return enriched
-      .filter((s) => s.rangeClicks > 0)
-      .sort((a, b) => b.rangeClicks - a.rangeClicks);
+    return enriched.filter((s) => s.rangeClicks > 0).sort((a, b) => b.rangeClicks - a.rangeClicks);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toolStats, toolDailyClicks, toolTitles, dateRange]);
 
@@ -333,7 +346,7 @@ export function AnalyticsDashboard() {
     if (toolsInRange.length === 0) return { labels: [], datasets: [] };
     const top10 = toolsInRange.slice(0, 10);
     return {
-      labels: top10.map((s) => s.title.length > 14 ? s.title.slice(0, 14) + '…' : s.title),
+      labels: top10.map((s) => (s.title.length > 14 ? s.title.slice(0, 14) + '…' : s.title)),
       datasets: [
         {
           label: `使用次數（${dateRange.label}）`,
@@ -349,9 +362,9 @@ export function AnalyticsDashboard() {
             'rgba(83, 102, 255, 0.7)',
             'rgba(255, 99, 255, 0.7)',
             'rgba(255, 23, 68, 0.7)',
-          ]
-        }
-      ]
+          ],
+        },
+      ],
     };
   };
 
@@ -359,19 +372,34 @@ export function AnalyticsDashboard() {
   const toolChartData = prepareToolChartData();
 
   return (
-    <div className="cork-bg min-h-screen" style={{ fontFamily: "'Noto Sans TC', sans-serif", paddingTop: 18 }}>
+    <div
+      className="cork-bg min-h-screen"
+      style={{ fontFamily: "'Noto Sans TC', sans-serif", paddingTop: 18 }}
+    >
       {/* 上方木條（cork 風格） */}
       <div
         style={{
           position: 'fixed',
-          top: 0, left: 0, right: 0, height: 18, zIndex: 30, pointerEvents: 'none',
-          background: 'repeating-linear-gradient(90deg, #7c4f2a, #7c4f2a 40px, #6b4220 40px, #6b4220 42px, #8a5a32 42px, #8a5a32 90px, #6b4220 90px, #6b4220 92px)',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 18,
+          zIndex: 30,
+          pointerEvents: 'none',
+          background:
+            'repeating-linear-gradient(90deg, #7c4f2a, #7c4f2a 40px, #6b4220 40px, #6b4220 42px, #8a5a32 42px, #8a5a32 90px, #6b4220 90px, #6b4220 92px)',
           boxShadow: 'inset 0 -2px 4px rgba(0,0,0,.3), 0 2px 6px rgba(0,0,0,.2)',
         }}
       />
 
       {/* 頂部導覽列 — cork 深色紙板風 */}
-      <header style={{ background: 'rgba(26,15,5,.88)', color: '#fff', borderBottom: '3px solid #1a1a1a' }}>
+      <header
+        style={{
+          background: 'rgba(26,15,5,.88)',
+          color: '#fff',
+          borderBottom: '3px solid #1a1a1a',
+        }}
+      >
         <div className="container mx-auto px-3 sm:px-6 py-3 sm:py-6">
           {/* 手機端：緊湊佈局 */}
           <div className="flex items-center justify-between gap-2">
@@ -395,12 +423,19 @@ export function AnalyticsDashboard() {
 
             {/* 標題 — cork 膠帶風 */}
             <div className="flex-1 min-w-0 mx-2 sm:mx-4">
-              <h1 className="text-base sm:text-2xl md:text-3xl font-bold flex items-center gap-2 truncate" style={{ letterSpacing: '0.03em' }}>
+              <h1
+                className="text-base sm:text-2xl md:text-3xl font-bold flex items-center gap-2 truncate"
+                style={{ letterSpacing: '0.03em' }}
+              >
                 <span style={{ fontSize: '1.2em' }}>📊</span>
-                <span className="truncate" style={{
-                  background: 'linear-gradient(transparent 55%, #ea8a3e 55%, #ea8a3e 88%, transparent 88%)',
-                  padding: '0 4px',
-                }}>
+                <span
+                  className="truncate"
+                  style={{
+                    background:
+                      'linear-gradient(transparent 55%, #ea8a3e 55%, #ea8a3e 88%, transparent 88%)',
+                    padding: '0 4px',
+                  }}
+                >
                   分析儀表板
                 </span>
                 {isRealtime && (
@@ -457,54 +492,82 @@ export function AnalyticsDashboard() {
                       const timeStr = now.toTimeString().split(' ')[0];
 
                       const categoryLabels: Record<string, string> = {
-                        communication: '溝通互動', teaching: '教學輔助', language: '語言學習',
-                        reading: '閱讀素養', utilities: '實用工具', games: '趣味遊戲', interactive: '互動體驗',
+                        communication: '溝通互動',
+                        teaching: '教學輔助',
+                        language: '語言學習',
+                        reading: '閱讀素養',
+                        utilities: '實用工具',
+                        games: '趣味遊戲',
+                        interactive: '互動體驗',
                       };
 
                       const categoryStats: Record<string, number> = {};
-                      toolStats?.forEach(stat => {
-                        const tool = tools.find(t => t.id === stat.toolId);
-                        if (tool) categoryStats[tool.category] = (categoryStats[tool.category] || 0) + stat.totalClicks;
+                      toolStats?.forEach((stat) => {
+                        const tool = tools.find((t) => t.id === stat.toolId);
+                        if (tool)
+                          categoryStats[tool.category] =
+                            (categoryStats[tool.category] || 0) + stat.totalClicks;
                       });
 
-                      const totalClicks = toolStats?.reduce((sum, stat) => sum + stat.totalClicks, 0) || 0;
-                      const dailyVisits = visitorStats?.dailyVisits as Record<string, number> || {};
+                      const totalClicks =
+                        toolStats?.reduce((sum, stat) => sum + stat.totalClicks, 0) || 0;
+                      const dailyVisits =
+                        (visitorStats?.dailyVisits as Record<string, number>) || {};
                       const sortedDates = Object.keys(dailyVisits).sort();
 
                       // 依選擇的日期範圍篩選每日訪問
                       const rangeFromStr = toDateStr(dateRange.from);
                       const rangeToStr = toDateStr(dateRange.to);
                       const inRangeDates = sortedDates.filter(
-                        (d) => d >= rangeFromStr && d <= rangeToStr
+                        (d) => d >= rangeFromStr && d <= rangeToStr,
                       );
                       const rangeTotal = inRangeDates.reduce(
                         (sum, d) => sum + (dailyVisits[d] || 0),
-                        0
+                        0,
                       );
 
                       const reportData = [
-                        ['教育科技創新專區 - 網站分析報告'], [''],
-                        ['報告日期', dateStr], ['報告時間', timeStr],
-                        ['時間範圍', dateRange.label], ['範圍起', rangeFromStr], ['範圍迄', rangeToStr], [''],
+                        ['教育科技創新專區 - 網站分析報告'],
+                        [''],
+                        ['報告日期', dateStr],
+                        ['報告時間', timeStr],
+                        ['時間範圍', dateRange.label],
+                        ['範圍起', rangeFromStr],
+                        ['範圍迄', rangeToStr],
+                        [''],
                         ['總訪問量（全期累計）', visitorStats?.totalVisits || 0],
                         [`期間訪問量（${dateRange.label}）`, rangeTotal],
-                        ['工具使用次數（全期累計）', totalClicks], ['工具總數', tools.length], [''],
+                        ['工具使用次數（全期累計）', totalClicks],
+                        ['工具總數', tools.length],
+                        [''],
                         ['分類', '使用次數', '佔比'],
-                        ...Object.entries(categoryStats).sort((a, b) => b[1] - a[1])
-                          .map(([cat, count]) => [categoryLabels[cat] || cat, count, `${((count / totalClicks) * 100).toFixed(1)}%`]),
+                        ...Object.entries(categoryStats)
+                          .sort((a, b) => b[1] - a[1])
+                          .map(([cat, count]) => [
+                            categoryLabels[cat] || cat,
+                            count,
+                            `${((count / totalClicks) * 100).toFixed(1)}%`,
+                          ]),
                         [''],
                         ['排名', '工具名稱', '分類', '使用次數'],
                         ...(toolStats?.slice(0, 20).map((stat, i) => {
-                          const tool = tools.find(t => t.id === stat.toolId);
-                          return [i + 1, tool?.title || stat.toolId, categoryLabels[tool?.category || ''] || '', stat.totalClicks];
+                          const tool = tools.find((t) => t.id === stat.toolId);
+                          return [
+                            i + 1,
+                            tool?.title || stat.toolId,
+                            categoryLabels[tool?.category || ''] || '',
+                            stat.totalClicks,
+                          ];
                         }) || []),
                         [''],
                         [`日期（${dateRange.label}）`, '訪問次數'],
-                        ...inRangeDates.map(date => [date, dailyVisits[date] || 0]),
+                        ...inRangeDates.map((date) => [date, dailyVisits[date] || 0]),
                       ];
 
-                      const csvContent = reportData.map(row => row.join(',')).join('\n');
-                      const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+                      const csvContent = reportData.map((row) => row.join(',')).join('\n');
+                      const blob = new Blob(['\uFEFF' + csvContent], {
+                        type: 'text/csv;charset=utf-8;',
+                      });
                       const link = document.createElement('a');
                       link.href = URL.createObjectURL(blob);
                       link.download = `分析報告_${dateStr}.csv`;
@@ -523,31 +586,41 @@ export function AnalyticsDashboard() {
                       const dateStr = toDateStr(now);
 
                       const categoryLabels: Record<string, string> = {
-                        communication: '溝通互動', teaching: '教學輔助', language: '語言學習',
-                        reading: '閱讀素養', utilities: '實用工具', games: '趣味遊戲', interactive: '互動體驗',
+                        communication: '溝通互動',
+                        teaching: '教學輔助',
+                        language: '語言學習',
+                        reading: '閱讀素養',
+                        utilities: '實用工具',
+                        games: '趣味遊戲',
+                        interactive: '互動體驗',
                       };
 
-                      const totalClicks = toolStats?.reduce((sum, stat) => sum + stat.totalClicks, 0) || 0;
+                      const totalClicks =
+                        toolStats?.reduce((sum, stat) => sum + stat.totalClicks, 0) || 0;
 
                       // Excel 友好格式 (Tab 分隔)
                       const rows = [
                         ['ID', '工具名稱', '分類', '使用次數', '佔比', '標籤'],
-                        ...tools.map(tool => {
-                          const stat = toolStats?.find(s => s.toolId === tool.id);
+                        ...tools.map((tool) => {
+                          const stat = toolStats?.find((s) => s.toolId === tool.id);
                           const clicks = stat?.totalClicks || 0;
                           return [
                             tool.id,
                             tool.title,
                             categoryLabels[tool.category] || tool.category,
                             clicks,
-                            totalClicks > 0 ? `${((clicks / totalClicks) * 100).toFixed(1)}%` : '0%',
-                            tool.tags?.join(', ') || ''
+                            totalClicks > 0
+                              ? `${((clicks / totalClicks) * 100).toFixed(1)}%`
+                              : '0%',
+                            tool.tags?.join(', ') || '',
                           ];
-                        })
+                        }),
                       ];
 
-                      const tsvContent = rows.map(row => row.join('\t')).join('\n');
-                      const blob = new Blob(['\uFEFF' + tsvContent], { type: 'text/tab-separated-values;charset=utf-8;' });
+                      const tsvContent = rows.map((row) => row.join('\t')).join('\n');
+                      const blob = new Blob(['\uFEFF' + tsvContent], {
+                        type: 'text/tab-separated-values;charset=utf-8;',
+                      });
                       const link = document.createElement('a');
                       link.href = URL.createObjectURL(blob);
                       link.download = `工具統計_${dateStr}.xls`;
@@ -581,7 +654,9 @@ export function AnalyticsDashboard() {
                       clickData: JSON.parse(localStorage.getItem('clickHeatmapData') || '[]'),
                     };
 
-                    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+                    const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+                      type: 'application/json',
+                    });
                     const link = document.createElement('a');
                     link.href = URL.createObjectURL(blob);
                     link.download = `完整數據_${dateStr}.json`;
@@ -692,14 +767,38 @@ export function AnalyticsDashboard() {
             }}
           >
             {[
-              { value: 'overview', icon: <Activity className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: '總覽' },
-              { value: 'visitors', icon: <Eye className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: '訪問' },
-              { value: 'tools', icon: <BarChart2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: '工具' },
-              { value: 'heatmap', icon: <PieChartIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: '熱力' },
-              { value: 'calendar', icon: <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: '日曆' },
+              {
+                value: 'overview',
+                icon: <Activity className="h-3.5 w-3.5 sm:h-4 sm:w-4" />,
+                label: '總覽',
+              },
+              {
+                value: 'visitors',
+                icon: <Eye className="h-3.5 w-3.5 sm:h-4 sm:w-4" />,
+                label: '訪問',
+              },
+              {
+                value: 'tools',
+                icon: <BarChart2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />,
+                label: '工具',
+              },
+              {
+                value: 'heatmap',
+                icon: <PieChartIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />,
+                label: '熱力',
+              },
+              {
+                value: 'calendar',
+                icon: <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4" />,
+                label: '日曆',
+              },
               { value: 'wishes', icon: <span className="text-sm">✨</span>, label: '許願池' },
-              { value: 'reco', icon: <Target className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: '推薦' },
-            ].map(tab => (
+              {
+                value: 'reco',
+                icon: <Target className="h-3.5 w-3.5 sm:h-4 sm:w-4" />,
+                label: '推薦',
+              },
+            ].map((tab) => (
               <TabsTrigger
                 key={tab.value}
                 value={tab.value}
@@ -717,7 +816,8 @@ export function AnalyticsDashboard() {
               <CardHeader>
                 <CardTitle>訪問者趨勢</CardTitle>
                 <CardDescription>
-                  {dateRange.label} 的每日訪問量（共 {rangeStats.days} 天，總計 {rangeStats.total.toLocaleString()} 次）
+                  {dateRange.label} 的每日訪問量（共 {rangeStats.days} 天，總計{' '}
+                  {rangeStats.total.toLocaleString()} 次）
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -729,11 +829,11 @@ export function AnalyticsDashboard() {
                       responsive: true,
                       plugins: {
                         legend: { position: 'top' },
-                        tooltip: { mode: 'index' }
+                        tooltip: { mode: 'index' },
                       },
                       scales: {
-                        y: { beginAtZero: true }
-                      }
+                        y: { beginAtZero: true },
+                      },
                     }}
                   />
                 )}
@@ -754,8 +854,8 @@ export function AnalyticsDashboard() {
                       options={{
                         responsive: true,
                         plugins: {
-                          legend: { position: 'right' }
-                        }
+                          legend: { position: 'right' },
+                        },
                       }}
                     />
                   )}
@@ -773,26 +873,55 @@ export function AnalyticsDashboard() {
                     const getReferrerData = () => {
                       const sv = serverContext.referrerStats || {};
                       const hasServer = Object.values(sv).some((v) => (v as number) > 0);
-                      if (hasServer) return { direct: 0, search: 0, social: 0, email: 0, external: 0, ...sv };
+                      if (hasServer)
+                        return { direct: 0, search: 0, social: 0, email: 0, external: 0, ...sv };
                       try {
                         const data = localStorage.getItem('visitorReferrerStats');
                         if (data) return JSON.parse(data);
-                      } catch (e) { }
+                      } catch (e) {}
                       return { direct: 0, search: 0, social: 0, email: 0, external: 0 };
                     };
 
                     const stats = getReferrerData();
-                    const total = Object.values(stats).reduce((a: number, b: any) => a + (b as number), 0);
+                    const total = Object.values(stats).reduce(
+                      (a: number, b: any) => a + (b as number),
+                      0,
+                    );
 
                     const sources = [
-                      { key: 'direct', label: '直接訪問', count: stats.direct || 0, color: 'bg-blue-500' },
-                      { key: 'search', label: '搜索引擎', count: stats.search || 0, color: 'bg-red-400' },
-                      { key: 'social', label: '社交媒體', count: stats.social || 0, color: 'bg-yellow-400' },
-                      { key: 'email', label: '郵件推廣', count: stats.email || 0, color: 'bg-teal-400' },
-                      { key: 'external', label: '外部連結', count: stats.external || 0, color: 'bg-purple-400' },
+                      {
+                        key: 'direct',
+                        label: '直接訪問',
+                        count: stats.direct || 0,
+                        color: 'bg-blue-500',
+                      },
+                      {
+                        key: 'search',
+                        label: '搜索引擎',
+                        count: stats.search || 0,
+                        color: 'bg-red-400',
+                      },
+                      {
+                        key: 'social',
+                        label: '社交媒體',
+                        count: stats.social || 0,
+                        color: 'bg-yellow-400',
+                      },
+                      {
+                        key: 'email',
+                        label: '郵件推廣',
+                        count: stats.email || 0,
+                        color: 'bg-teal-400',
+                      },
+                      {
+                        key: 'external',
+                        label: '外部連結',
+                        count: stats.external || 0,
+                        color: 'bg-purple-400',
+                      },
                     ];
 
-                    const maxCount = Math.max(...sources.map(s => s.count), 1);
+                    const maxCount = Math.max(...sources.map((s) => s.count), 1);
 
                     return (
                       <div className="space-y-3">
@@ -803,23 +932,30 @@ export function AnalyticsDashboard() {
                           </div>
                         ) : (
                           <>
-                            {sources.map(source => {
-                              const percent = total > 0 ? ((source.count / total) * 100).toFixed(1) : '0';
+                            {sources.map((source) => {
+                              const percent =
+                                total > 0 ? ((source.count / total) * 100).toFixed(1) : '0';
                               const barWidth = maxCount > 0 ? (source.count / maxCount) * 100 : 0;
                               return (
                                 <div key={source.key} className="flex items-center gap-3">
-                                  <span className="w-20 text-sm font-medium truncate">{source.label}</span>
+                                  <span className="w-20 text-sm font-medium truncate">
+                                    {source.label}
+                                  </span>
                                   <div className="flex-1 h-8 bg-muted rounded-md overflow-hidden">
                                     <div
                                       className={`h-full ${source.color} transition-all duration-500 flex items-center justify-end pr-2`}
                                       style={{ width: `${barWidth}%` }}
                                     >
                                       {source.count > 0 && (
-                                        <span className="text-xs text-white font-medium">{source.count}</span>
+                                        <span className="text-xs text-white font-medium">
+                                          {source.count}
+                                        </span>
                                       )}
                                     </div>
                                   </div>
-                                  <span className="w-12 text-right text-sm text-muted-foreground">{percent}%</span>
+                                  <span className="w-12 text-right text-sm text-muted-foreground">
+                                    {percent}%
+                                  </span>
                                 </div>
                               );
                             })}
@@ -857,7 +993,7 @@ export function AnalyticsDashboard() {
                         try {
                           const data = localStorage.getItem('visitorGeoStats');
                           if (data) return JSON.parse(data);
-                        } catch (e) { }
+                        } catch (e) {}
                         return {};
                       };
 
@@ -869,8 +1005,14 @@ export function AnalyticsDashboard() {
                       const maxValue = Math.max(...sortedData.map((d: any) => d[1]), 1);
 
                       const colors = [
-                        'bg-blue-500', 'bg-indigo-500', 'bg-purple-500', 'bg-pink-500',
-                        'bg-green-500', 'bg-teal-500', 'bg-orange-500', 'bg-slate-400'
+                        'bg-blue-500',
+                        'bg-indigo-500',
+                        'bg-purple-500',
+                        'bg-pink-500',
+                        'bg-green-500',
+                        'bg-teal-500',
+                        'bg-orange-500',
+                        'bg-slate-400',
                       ];
 
                       return (
@@ -878,7 +1020,9 @@ export function AnalyticsDashboard() {
                           {total === 0 && (
                             <div className="text-center py-8 text-muted-foreground">
                               <p>尚無可用的地理分布資料</p>
-                              <p className="text-sm mt-1">收到真實訪客地理資料後才會顯示，不使用示意數字。</p>
+                              <p className="text-sm mt-1">
+                                收到真實訪客地理資料後才會顯示，不使用示意數字。
+                              </p>
                             </div>
                           )}
                           {sortedData.map(([city, count]: [string, any], index) => {
@@ -895,7 +1039,9 @@ export function AnalyticsDashboard() {
                                     <span className="text-xs text-white font-medium">{count}</span>
                                   </div>
                                 </div>
-                                <span className="w-12 text-right text-sm text-muted-foreground">{percent}%</span>
+                                <span className="w-12 text-right text-sm text-muted-foreground">
+                                  {percent}%
+                                </span>
                               </div>
                             );
                           })}
@@ -920,10 +1066,15 @@ export function AnalyticsDashboard() {
                         try {
                           const data = localStorage.getItem('visitorDeviceStats');
                           if (data) return JSON.parse(data);
-                        } catch (e) { }
+                        } catch (e) {}
                         // 偵測當前設備並更新
-                        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-                        const isTablet = /iPad|Android/i.test(navigator.userAgent) && !/Mobile/i.test(navigator.userAgent);
+                        const isMobile =
+                          /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+                            navigator.userAgent,
+                          );
+                        const isTablet =
+                          /iPad|Android/i.test(navigator.userAgent) &&
+                          !/Mobile/i.test(navigator.userAgent);
 
                         const defaultData = { desktop: 0, mobile: 0, tablet: 0 };
                         if (isTablet) defaultData.tablet = 1;
@@ -943,27 +1094,27 @@ export function AnalyticsDashboard() {
                           count: deviceData.desktop,
                           percent: ((deviceData.desktop / total) * 100).toFixed(0),
                           color: 'bg-blue-600',
-                          icon: '🖥️'
+                          icon: '🖥️',
                         },
                         {
                           name: '行動裝置',
                           count: deviceData.mobile,
                           percent: ((deviceData.mobile / total) * 100).toFixed(0),
                           color: 'bg-green-600',
-                          icon: '📱'
+                          icon: '📱',
                         },
                         {
                           name: '平板',
                           count: deviceData.tablet,
                           percent: ((deviceData.tablet / total) * 100).toFixed(0),
                           color: 'bg-purple-600',
-                          icon: '📟'
-                        }
+                          icon: '📟',
+                        },
                       ];
 
                       return (
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          {devices.map(device => (
+                          {devices.map((device) => (
                             <Card key={device.name}>
                               <CardContent className="p-4 text-center">
                                 <div className="flex items-center justify-center gap-2 mb-1">
@@ -977,7 +1128,9 @@ export function AnalyticsDashboard() {
                                     style={{ width: `${device.percent}%` }}
                                   ></div>
                                 </div>
-                                <p className="text-xs text-muted-foreground mt-2">{device.count} 次訪問</p>
+                                <p className="text-xs text-muted-foreground mt-2">
+                                  {device.count} 次訪問
+                                </p>
                               </CardContent>
                             </Card>
                           ))}
@@ -1024,15 +1177,17 @@ export function AnalyticsDashboard() {
                   <BarChart
                     data={{
                       labels: toolsInRange.map((s) =>
-                        s.title.length > 16 ? s.title.slice(0, 16) + '…' : s.title
+                        s.title.length > 16 ? s.title.slice(0, 16) + '…' : s.title,
                       ),
-                      datasets: [{
-                        label: `使用次數（${dateRange.label}）`,
-                        data: toolsInRange.map((s) => s.rangeClicks),
-                        backgroundColor: 'rgba(99, 102, 241, 0.7)',
-                        borderColor: 'rgb(99, 102, 241)',
-                        borderWidth: 1
-                      }]
+                      datasets: [
+                        {
+                          label: `使用次數（${dateRange.label}）`,
+                          data: toolsInRange.map((s) => s.rangeClicks),
+                          backgroundColor: 'rgba(99, 102, 241, 0.7)',
+                          borderColor: 'rgb(99, 102, 241)',
+                          borderWidth: 1,
+                        },
+                      ],
                     }}
                     height={400}
                     options={{
@@ -1042,20 +1197,14 @@ export function AnalyticsDashboard() {
                           const toolId = toolsInRange[index]?.toolId;
                           if (toolId) {
                             try {
-                              const trackingModule = await import('@/hooks/useToolTracking');
-                              const { useToolTracking } = trackingModule;
-                              const { trackToolUsage } = useToolTracking();
-
-                              await trackToolUsage(toolId);
-
-                              // 立即強制更新統計數據，使用正確的查詢鍵
+                              // 點擊圖表僅重新整理統計，不應把 Admin 檢視誤算成公開工具使用。
                               queryClient.invalidateQueries({
                                 queryKey: ['/api/tools/stats'],
-                                refetchType: 'all'
+                                refetchType: 'all',
                               });
                               queryClient.invalidateQueries({
                                 queryKey: ['/api/tools/rankings'],
-                                refetchType: 'all'
+                                refetchType: 'all',
                               });
 
                               // 確保所有相關查詢都會刷新
@@ -1063,7 +1212,7 @@ export function AnalyticsDashboard() {
                                 predicate: (query) =>
                                   query.queryKey[0] === '/api/tools' ||
                                   String(query.queryKey[0]).includes('tools'),
-                                type: 'all'
+                                type: 'all',
                               });
 
                               console.log('工具使用已追蹤並更新統計:', toolId);
@@ -1075,23 +1224,23 @@ export function AnalyticsDashboard() {
                       },
                       responsive: true,
                       plugins: {
-                        legend: { display: false }
+                        legend: { display: false },
                       },
                       scales: {
                         y: {
                           beginAtZero: true,
                           title: {
                             display: true,
-                            text: '點擊次數'
-                          }
+                            text: '點擊次數',
+                          },
                         },
                         x: {
                           title: {
                             display: true,
-                            text: '工具名稱'
-                          }
-                        }
-                      }
+                            text: '工具名稱',
+                          },
+                        },
+                      },
                     }}
                   />
                 ) : (
@@ -1107,12 +1256,16 @@ export function AnalyticsDashboard() {
           </TabsContent>
 
           {(activeTab === 'heatmap' || activeTab === 'calendar') && (
-            <Suspense fallback={<div className="py-16 text-center text-muted-foreground">載入行為分析中…</div>}>
+            <Suspense
+              fallback={
+                <div className="py-16 text-center text-muted-foreground">載入行為分析中…</div>
+              }
+            >
               <AnalyticsBehaviorTabs visitorStats={visitorStats} />
             </Suspense>
           )}
         </Tabs>
       </main>
-    </div >
+    </div>
   );
 }

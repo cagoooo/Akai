@@ -4,9 +4,10 @@ import {
   initializeFirestore,
   persistentLocalCache,
   persistentMultipleTabManager,
-  Firestore
+  Firestore,
 } from 'firebase/firestore';
 import { getAuth, Auth } from 'firebase/auth';
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
 
 // 從環境變數讀取 Firebase 設定
 const firebaseConfig = {
@@ -15,11 +16,12 @@ const firebaseConfig = {
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || '',
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || '',
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '',
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || ''
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || '',
 };
 
 // 檢查是否有有效的 Firebase 設定
 const hasValidConfig = firebaseConfig.apiKey && firebaseConfig.projectId;
+const appCheckSiteKey = import.meta.env.VITE_FIREBASE_APPCHECK_SITE_KEY || '';
 
 let app: FirebaseApp | null = null;
 let db: Firestore | null = null;
@@ -30,11 +32,21 @@ if (hasValidConfig) {
     // 初始化 Firebase
     app = initializeApp(firebaseConfig);
 
+    // App Check 先送出 token 供後端觀測；確認合法流量覆蓋率後才啟用強制阻擋。
+    if (appCheckSiteKey) {
+      initializeAppCheck(app, {
+        provider: new ReCaptchaEnterpriseProvider(appCheckSiteKey),
+        isTokenAutoRefreshEnabled: true,
+      });
+    } else {
+      console.warn('Firebase App Check 尚未設定 site key，目前僅能進行後端缺漏觀測。');
+    }
+
     // 使用新的 API 初始化 Firestore，包含持久化快取
     db = initializeFirestore(app, {
       localCache: persistentLocalCache({
-        tabManager: persistentMultipleTabManager()
-      })
+        tabManager: persistentMultipleTabManager(),
+      }),
     });
 
     // 初始化 Authentication

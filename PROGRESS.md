@@ -2,8 +2,8 @@
 
 ## 🎯 當前版本狀態
 - **當前版本**: `v3.6.93` (本機/CI) · 公開工具總數 **119 個** 🎮🚀
-- **里程碑**: **2026-07-19 Admin 權限與資料可信度整頓** — 公開分析改走受控 callable、Firestore 統計集合封鎖 client 直寫、匿名認證與 Admin 登入狀態分流、許願池操作改以真實寫入結果判定，並拆分 AnalyticsDashboard。
-- **最後更新狀態**: 見下方 `2026-07-21` Admin 後台 Roadmap 與 `2026-07-19` 完成紀錄
+- **里程碑**: **2026-07-21 Admin 安全地基包** — CI 機密與部署流程、Rules Emulator 閘門、測試／Lint 基線，以及公開 callable 的持久化限流與冪等保護已完成整頓；App Check 程式已接入，雲端供應商註冊待補 IAM 權限。
+- **最後更新狀態**: 見下方 `2026-07-21` 安全地基包完成紀錄與 Admin 後台 Roadmap
 - **前一版**: v3.6.90 — 客群推薦精靈全面情境化 + 成效閉環
 - **前一版**: v3.6.71 — 新增 #102 外星人入侵·保衛石門 + 雙 tools.json 對齊
 - **📎 文件補追記**：本檔案從 v3.6.71 停更到 2026-07-04 才補寫。中間 v3.6.72 → v3.6.87 共 16 個版本（主要是新增工具 #103-#114 + 幾個獨立 bug fix，例如 v3.6.80 使用次數本機計數 bug、v3.6.81/b3032b2 許願池通知從 LINE 遷移到 Google Chat）沒有寫進本檔案，細節可查 `git log`（commit 訊息大多含版本號）。工具總數從 102 → 115 就是這段期間累積的，之後有空再補完整段落。
@@ -12,7 +12,7 @@
 
 ### `2026-07-21`（📋 Admin 進度核對 + 未來 P0／P1 優化 Roadmap）
 
-> 本段是針對 `/admin`、Firestore、Cloud Functions、匿名 Auth、測試與分析資料可信度的**最新決策清單**，和本檔後方既有的「客群推薦 Roadmap」「100 工具 Roadmap」分開管理。以下 P0／P1 尚未開發，等使用者挑選後再執行。
+> 本段是針對 `/admin`、Firestore、Cloud Functions、匿名 Auth、測試與分析資料可信度的**最新決策清單**，和本檔後方既有的「客群推薦 Roadmap」「100 工具 Roadmap」分開管理。使用者已選擇「安全地基包」；`ADM-P0-1／P0-3／P0-4` 已完成，`ADM-P0-2` 的限流與冪等已完成、App Check 雲端註冊待補 IAM 權限，其餘 P0／P1 保留供後續挑選。
 
 **✅ 目前已完成並上線（基準 commit：`c4a1354`）**
 
@@ -24,7 +24,16 @@
 | 備份還原語意 | 統一稱為「核心頂層資料快照／合併還原」；明示不刪除快照外文件與子集合；預演會回報現有／快照／保留文件數 | Functions build 與前端型別檢查通過 |
 | Admin 架構與效能 | `AnalyticsDashboard.tsx` 約 1,795 → 1,045 行；拆出行為分頁、基礎設施面板、統計卡；熱力／日曆改延遲載入 | production build 成功；Pages 與 Lighthouse workflow 完成 |
 | Web Vitals | 修正 CLS 小數、p75 索引、台灣日期與七天串行讀取；改為平行查詢並顯示讀取失敗 | 型別檢查與 production build 通過 |
-| 測試骨架 | 新增 Rules Emulator、匿名登入、Admin 權限與許願池操作測試 | 20 項針對性測試通過；Rules Emulator 本機仍受缺 Java 限制 |
+| 測試骨架 | 新增 Rules Emulator、匿名登入、Admin 權限與許願池操作測試 | 20 項針對性測試通過；後續安全地基包已擴充為 35 項 Rules 權限矩陣並在 Java 21 Emulator 實跑通過 |
+
+#### 🟡 安全地基包實作紀錄（`ADM-P0-1 + P0-3 + P0-4` 完成；`P0-2` 待雲端授權）
+
+| ID | 完成內容 | 驗證結果 |
+|---|---|---|
+| **ADM-P0-1** | 移除 CI 建立／輸出 `.env` 與事後字串注入；改用 `npm ci --ignore-scripts`；建置與 Pages 部署拆成最小權限；官方 Actions 升級至 Node 24 runtime 世代，專案執行環境統一 Node 22 | 乾淨 `npm ci` 成功；CI 只輸出設定是否存在，不顯示值 |
+| **ADM-P0-3** | 新增 PR `Quality Gate`，main 部署前固定執行 Java 21 Firestore Emulator；Rules 測試擴成 unauth／anon／Google／Admin 四種身分及敏感集合 CRUD 矩陣 | 本機 Emulator **35 tests 全綠**；任一 Rules 失敗會中止 Pages 部署 |
+| **ADM-P0-4** | 修正工具數寫死、Tooltip／IntersectionObserver provider、舊排序預期與空測試檔；建立 ESLint 9 flat config；修掉 Admin 圖表內非法 Hook 呼叫與誤灌點擊 | `check`、`lint`、Functions build 全綠；前端 **183 tests**、Functions policy **3 tests** 全綠 |
+| **ADM-P0-2** | Web 端已接入 reCAPTCHA Enterprise App Check 程式；callable 先 monitor 後 enforce；以 UID＋IP hash＋事件類型建立 Firestore 跨 instance 限流；每次事件帶 event id，重試命中 claim 時不重複累加；限流／claim 集合禁止 client 寫入 | 限流／event id／App Check policy tests 全綠；Rules 已涵蓋兩個內部集合。雲端註冊被 IAM 擋下：學校帳號可部署 Firebase，但無權啟用 reCAPTCHA Enterprise API／管理 App Check；補權限與 GitHub site-key secret 後才能開始 token 覆蓋率觀測，再切 enforce |
 
 #### 優先級與工時定義
 
@@ -36,10 +45,10 @@
 
 | ID | 建議項目 | 目前缺口／為什麼要做 | 建議實作內容 | Effort | 完成驗收標準 |
 |---|---|---|---|---|---|
-| **ADM-P0-1** | **CI 機密與部署流程整頓** | `deploy-pages.yml` 目前會直接 `cat .env`，雖 Firebase Web config 多數可公開，仍不應把完整環境設定寫進 Actions log；CI 也使用 `npm install`，依賴結果不夠可重現 | 移除 `.env` 全文輸出，只顯示「是否存在／長度」；改用 `npm ci`；為 build、deploy 加最小權限與環境保護；Actions 升級到支援 Node 24 的版本 | S | Actions log 不再出現任何設定值；乾淨 runner 可重現安裝與 build；Pages deploy 維持成功 |
-| **ADM-P0-2** | **公開 callable 防濫用：App Check + 持久化限流 + 冪等鍵** | `recordPublicAnalytics` 已有 Auth 與 schema 白名單，但匿名帳號仍可大量建立並重複呼叫；目前沒有 App Check、跨 instance 限流或事件去重 | callable 開啟 App Check（先 monitor、後 enforce）；以 UID＋IP hash＋事件類型做 Firestore/Redis 型滑動視窗限流；訪次、推薦曝光與 Web Vital 加 event id 去重；超限只拒絕、不污染正式統計 | M–L | 合法 GitHub Pages 流量正常；未帶 App Check／超限／重複 event 測試全部被拒；Dashboard 數字不因 retry 重複累加 |
-| **ADM-P0-3** | **Rules Emulator 正式納入 CI 閘門** | `test:rules` 與測試檔已存在，但本機缺 Java，且 GitHub Actions 尚未執行；規則部署仍可能靠人工發現錯誤 | CI 加 `setup-java`、Firestore Emulator 與 `npm run test:rules`；覆蓋 unauth／anon／Google user／Admin 四種身分；對每個敏感集合測 create/read/update/delete；Rules 失敗禁止部署 | M | PR／push 自動跑 Rules tests；刻意放寬一條規則時 CI 必須紅燈；正式部署前有可追溯測試結果 |
-| **ADM-P0-4** | **修復測試與 Lint 基準線** | 全專案仍有 12 項既有測試失敗（工具數寫死、TooltipProvider、舊排序預期、空測試檔）；ESLint 9 缺 `eslint.config.*`，目前 lint 根本無法啟動 | 修正過時 fixture 與 provider；移除空測試或補實際案例；建立 ESLint flat config；CI 固定跑 `check + test + lint`，只允許明確列管的非阻擋檢查 | M | `npm test -- --run`、`npm run lint`、`npm run check` 全綠；未來新失敗會阻擋 merge |
+| **✅ ADM-P0-1** | **CI 機密與部署流程整頓** | 已完成：不再建立／輸出 `.env`，改用可重現安裝、最小權限與新版 Actions | 已落地 | S | 乾淨安裝已通過；待本次 push 後留存 Pages 成功紀錄 |
+| **🟡 ADM-P0-2** | **公開 callable 防濫用：App Check + 持久化限流 + 冪等鍵** | 持久化限流與 event id 去重已落地；App Check client／callable 程式已完成，但學校帳號缺 reCAPTCHA Enterprise API／App Check 管理權限，尚無法註冊供應商與設定 GitHub site-key secret | 待補雲端 IAM 後收尾 | M–L | policy tests 全綠；補權限後完成供應商註冊、觀測合法 token 覆蓋率，再切 App Check enforce |
+| **✅ ADM-P0-3** | **Rules Emulator 正式納入 CI 閘門** | 已完成：Java 21 Emulator、四身分 CRUD 矩陣及部署前阻擋 | 已落地 | M | 本機 35 tests 全綠；本次 push 後由 GitHub Actions 再驗一次 |
+| **✅ ADM-P0-4** | **修復測試與 Lint 基準線** | 已完成：12 項舊失敗歸零、ESLint 9 flat config、CI 固定執行 check＋test＋lint | 已落地 | M | 183 前端 tests、3 policy tests、check、lint、Functions build 全綠 |
 | **ADM-P0-5** | **危險 Admin 操作雙重防護與稽核** | 合併還原、許願刪除、狀態修改目前只靠 Admin claim 與前端 confirm；沒有近期重新驗證、理由、操作記錄或 request id | 還原／大量刪除要求近期重新登入；Cloud Function 再驗 Admin claim；寫入不可竄改 `adminAuditLogs`（操作者、動作、目標、前後摘要、時間、結果、request id）；重複 request 不得執行兩次 | M | 每次成功／失敗操作都有 audit record；過期登入會被拒；重送同 request id 不會重複還原或刪除 |
 | **ADM-P0-6** | **備份從「資料快照」升級為可驗證災難復原** | 現有 snapshot 只涵蓋指定頂層文件，不含子集合，也不等同完整 Firestore point-in-time backup；若 snapshot doc 變大還有 1 MiB 文件限制風險 | 保留目前快速合併還原，同時新增定期 Firestore managed export 到 Cloud Storage；manifest 記錄集合、文件數、checksum、版本與保留期限；每月至少做一次沙箱 restore drill；後台顯示「最近成功備份／最近驗證還原」 | L | 能從獨立備份還原含子集合資料；checksum 驗證通過；至少一份 restore drill 紀錄；失敗會送 Google Chat 告警 |
 | **ADM-P0-7** | **Admin 分頁真正按需掛載與資料查詢治理** | 主檔雖降至 1,045 行，但除熱力／日曆外，多數 panel 仍是靜態 import；隱藏分頁可能同時啟動 listener／query，造成首次載入、Firestore reads 與維護成本偏高 | 每個 tab 拆成 lazy chunk，只掛載 active tab；TanStack Query 統一 cache key、stale time、retry、abort；即時 listener 僅在分頁可見時存在；保留 skeleton、錯誤與重新整理 | M | 初次進 Admin 不下載非目前分頁 chunk；未開啟分頁不產生對應 reads/listeners；切頁與返回可用 cache 秒開；無 listener 洩漏 |

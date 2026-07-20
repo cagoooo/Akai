@@ -15,5 +15,8 @@ export async function invokePublicAnalytics(payload: Record<string, unknown>): P
     functions,
     'recordPublicAnalytics',
   );
-  await callable(payload);
+  const eventId =
+    globalThis.crypto?.randomUUID?.() ??
+    `${Date.now().toString(36)}_${Math.random().toString(36).slice(2)}_analytics`;
+  await callable({ ...payload, eventId });
 }

@@ -1,9 +1,9 @@
-name: "🔗 Weekly Link Health Check"
+name: '🔗 Weekly Link Health Check'
 
 on:
   schedule:
     # Every Monday at 09:00 UTC
-    - cron: "0 9 * * 1"
+    - cron: '0 9 * * 1'
   workflow_dispatch:
 
 permissions:
@@ -16,12 +16,12 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Run link checker (capture output + exit code)
         id: linkcheck
