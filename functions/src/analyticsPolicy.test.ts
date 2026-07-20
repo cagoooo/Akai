@@ -1,7 +1,22 @@
 import { describe, expect, it } from 'vitest';
-import { appCheckDecision, nextRateLimitState, validateEventId } from './analyticsPolicy';
+import {
+  analyticsRateLimitBuckets,
+  appCheckDecision,
+  nextRateLimitState,
+  validateEventId,
+} from './analyticsPolicy';
 
 describe('公開分析安全政策', () => {
+  it('同一 IP 即使輪替匿名 UID 仍會共用 IP 限流桶', () => {
+    const first = analyticsRateLimitBuckets('anon-a', '203.0.113.10', false);
+    const rotated = analyticsRateLimitBuckets('anon-b', '203.0.113.10', false);
+
+    expect(first).toHaveLength(2);
+    expect(first[0]).not.toEqual(rotated[0]);
+    expect(first[1]).toEqual(rotated[1]);
+    expect(first[1]).toMatchObject({ scope: 'ip', useExpandedLimit: true });
+  });
+
   it('App Check monitor 階段會標記缺漏，enforce 階段會拒絕', () => {
     expect(appCheckDecision(false, false)).toBe('monitor-missing');
     expect(appCheckDecision(false, true)).toBe('reject');

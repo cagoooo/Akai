@@ -18,6 +18,12 @@ export interface RateLimitState {
   windowStartedAtMs: number;
 }
 
+export interface RateLimitBucket {
+  scope: 'uid' | 'ip';
+  identityValue: string;
+  useExpandedLimit: boolean;
+}
+
 const HOUR_MS = 60 * 60 * 1000;
 
 // 匿名訪客正常使用量保留充足餘裕，但阻止腳本持續灌入聚合數字。
@@ -31,6 +37,18 @@ export const RATE_LIMITS: Record<AnalyticsKind, RateLimitPolicy> = {
 
 export function isAnalyticsKind(value: string): value is AnalyticsKind {
   return (ANALYTICS_KINDS as readonly string[]).includes(value);
+}
+
+export function analyticsRateLimitBuckets(
+  uid: string,
+  ip: string,
+  isAdmin: boolean,
+): RateLimitBucket[] {
+  return [
+    { scope: 'uid', identityValue: uid, useExpandedLimit: isAdmin },
+    // 共用出口 IP 採較寬額度，但仍獨立限制匿名 UID 輪替攻擊。
+    { scope: 'ip', identityValue: ip, useExpandedLimit: true },
+  ];
 }
 
 export function validateEventId(value: unknown): string | null {

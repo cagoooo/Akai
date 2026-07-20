@@ -9,6 +9,7 @@ import * as admin from 'firebase-admin';
 import * as logger from 'firebase-functions/logger';
 import { createHash } from 'node:crypto';
 import {
+  analyticsRateLimitBuckets,
   appCheckDecision,
   isAnalyticsKind,
   nextRateLimitState,
@@ -140,6 +141,12 @@ function secureHash(value: string): string {
   return createHash('sha256').update(value).digest('hex');
 }
 
+function shouldSampleMonitorLog(uid: string, kind: AnalyticsKind): boolean {
+  const hourBucket = Math.floor(Date.now() / (60 * 60 * 1000));
+  const sample = Number.parseInt(secureHash(`${uid}|${kind}|${hourBucket}`).slice(0, 4), 16);
+  return sample < 3277; // 約 5%，正式覆蓋率仍以 App Check metrics 為準。
+}
+
 function requestIp(request: {
   rawRequest?: { ip?: string; headers?: Record<string, unknown> };
 }): string {
@@ -156,37 +163,60 @@ async function enforcePersistentRateLimit(
   isAdmin: boolean,
 ): Promise<void> {
   const db = admin.firestore();
-  const identityHash = secureHash(`${uid}|${ip}|${kind}`);
-  const ref = db.collection('_analyticsRateLimits').doc(identityHash);
+  const buckets = analyticsRateLimitBuckets(uid, ip, isAdmin).map((bucket) => {
+    const identityHash = secureHash(`${bucket.scope}|${bucket.identityValue}|${kind}`);
+    return {
+      ...bucket,
+      identityHash,
+      ref: db.collection('_analyticsRateLimits').doc(identityHash),
+    };
+  });
   const nowMs = Date.now();
   const result = await db.runTransaction(async (transaction) => {
-    const snapshot = await transaction.get(ref);
-    const data = snapshot.data();
-    const storedTimestamp = data?.windowStartedAt;
-    const current: RateLimitState | null =
-      snapshot.exists &&
-      typeof data?.count === 'number' &&
-      storedTimestamp &&
-      typeof storedTimestamp.toMillis === 'function'
-        ? { count: data.count, windowStartedAtMs: storedTimestamp.toMillis() }
-        : null;
-    const decision = nextRateLimitState(current, nowMs, kind, isAdmin);
-    if (decision.allowed) {
-      transaction.set(
-        ref,
-        {
-          count: decision.state.count,
-          kind,
-          windowStartedAt: admin.firestore.Timestamp.fromMillis(decision.state.windowStartedAtMs),
-          updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-          expiresAt: admin.firestore.Timestamp.fromMillis(
-            decision.state.windowStartedAtMs + decision.policy.windowMs * 2,
-          ),
-        },
-        { merge: true },
-      );
+    const snapshots = await Promise.all(buckets.map((bucket) => transaction.get(bucket.ref)));
+    const decisions = buckets.map((bucket, index) => {
+      const snapshot = snapshots[index];
+      const data = snapshot.data();
+      const storedTimestamp = data?.windowStartedAt;
+      const current: RateLimitState | null =
+        snapshot.exists &&
+        typeof data?.count === 'number' &&
+        storedTimestamp &&
+        typeof storedTimestamp.toMillis === 'function'
+          ? { count: data.count, windowStartedAtMs: storedTimestamp.toMillis() }
+          : null;
+      return {
+        bucket,
+        decision: nextRateLimitState(current, nowMs, kind, bucket.useExpandedLimit),
+      };
+    });
+    const denied = decisions.find(({ decision }) => !decision.allowed);
+    if (!denied) {
+      for (const { bucket, decision } of decisions) {
+        transaction.set(
+          bucket.ref,
+          {
+            count: decision.state.count,
+            kind,
+            scope: bucket.scope,
+            windowStartedAt: admin.firestore.Timestamp.fromMillis(decision.state.windowStartedAtMs),
+            updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+            expiresAt: admin.firestore.Timestamp.fromMillis(
+              decision.state.windowStartedAtMs + decision.policy.windowMs * 2,
+            ),
+          },
+          { merge: true },
+        );
+      }
     }
-    return { allowed: decision.allowed, limit: decision.policy.limit, identityHash };
+    return denied
+      ? {
+          allowed: false,
+          limit: denied.decision.policy.limit,
+          identityHash: denied.bucket.identityHash,
+          scope: denied.bucket.scope,
+        }
+      : { allowed: true, limit: 0, identityHash: '', scope: '' };
   });
 
   if (!result.allowed) {
@@ -194,6 +224,7 @@ async function enforcePersistentRateLimit(
       kind,
       identityHash: result.identityHash.slice(0, 16),
       limit: result.limit,
+      scope: result.scope,
     });
     throw new HttpsError('resource-exhausted', 'analytics rate limit exceeded');
   }
@@ -452,7 +483,7 @@ export const recordPublicAnalytics = onCall(
     const isAdmin = request.auth?.token?.admin === true;
     const uid = request.auth?.uid ?? 'unknown';
     const appCheck = appCheckDecision(Boolean(request.app), false);
-    if (appCheck === 'monitor-missing') {
+    if (appCheck === 'monitor-missing' && shouldSampleMonitorLog(uid, kind)) {
       logger.warn('public_analytics_app_check_missing', {
         kind,
         identityHash: secureHash(uid).slice(0, 16),
@@ -465,7 +496,7 @@ export const recordPublicAnalytics = onCall(
     } catch {
       throw new HttpsError('invalid-argument', 'invalid event id');
     }
-    if (!eventId) {
+    if (!eventId && shouldSampleMonitorLog(uid, kind)) {
       logger.warn('public_analytics_legacy_event_without_id', {
         kind,
         identityHash: secureHash(uid).slice(0, 16),

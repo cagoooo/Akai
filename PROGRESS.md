@@ -32,8 +32,8 @@
 |---|---|---|
 | **ADM-P0-1** | 移除 CI 建立／輸出 `.env` 與事後字串注入；改用 `npm ci --ignore-scripts`；建置與 Pages 部署拆成最小權限；官方 Actions 升級至 Node 24 runtime 世代，專案執行環境統一 Node 22 | 乾淨 `npm ci` 成功；CI 只輸出設定是否存在，不顯示值 |
 | **ADM-P0-3** | 新增 PR `Quality Gate`，main 部署前固定執行 Java 21 Firestore Emulator；Rules 測試擴成 unauth／anon／Google／Admin 四種身分及敏感集合 CRUD 矩陣 | 本機 Emulator **35 tests 全綠**；任一 Rules 失敗會中止 Pages 部署 |
-| **ADM-P0-4** | 修正工具數寫死、Tooltip／IntersectionObserver provider、舊排序預期與空測試檔；建立 ESLint 9 flat config；修掉 Admin 圖表內非法 Hook 呼叫與誤灌點擊 | `check`、`lint`、Functions build 全綠；前端 **183 tests**、Functions policy **3 tests** 全綠 |
-| **ADM-P0-2** | Web 端已接入 reCAPTCHA Enterprise App Check 程式；callable 先 monitor 後 enforce；以 UID＋IP hash＋事件類型建立 Firestore 跨 instance 限流；每次事件帶 event id，重試命中 claim 時不重複累加；限流／claim 集合禁止 client 寫入 | 限流／event id／App Check policy tests 全綠；Rules 已涵蓋兩個內部集合。雲端註冊被 IAM 擋下：學校帳號可部署 Firebase，但無權啟用 reCAPTCHA Enterprise API／管理 App Check；補權限與 GitHub site-key secret 後才能開始 token 覆蓋率觀測，再切 enforce |
+| **ADM-P0-4** | 修正工具數寫死、Tooltip／IntersectionObserver provider、舊排序預期與空測試檔；建立 ESLint 9 flat config；修掉 Admin 圖表內非法 Hook 呼叫與誤灌點擊 | `check`、`lint`、Functions build 全綠；前端 **183 tests**、Functions policy **4 tests** 全綠 |
+| **ADM-P0-2** | Web 端已接入 reCAPTCHA Enterprise App Check 程式；callable 先 monitor 後 enforce；以 UID 與 IP 兩個獨立 hash 桶建立 Firestore 跨 instance 限流，IP 桶保留校園共用出口所需的較寬額度，同時阻止輪替匿名 UID 繞過；每次事件帶 event id，重試命中 claim 時不重複累加；限流／claim 集合禁止 client 寫入 | 限流／event id／App Check policy tests 全綠；Rules 已涵蓋兩個內部集合。雲端註冊被 IAM 擋下：學校帳號可部署 Firebase，但無權啟用 reCAPTCHA Enterprise API／管理 App Check；補權限與 GitHub site-key secret 後才能開始 token 覆蓋率觀測，再切 enforce |
 
 #### 優先級與工時定義
 
@@ -48,7 +48,7 @@
 | **✅ ADM-P0-1** | **CI 機密與部署流程整頓** | 已完成：不再建立／輸出 `.env`，改用可重現安裝、最小權限與新版 Actions | 已落地 | S | 乾淨安裝已通過；待本次 push 後留存 Pages 成功紀錄 |
 | **🟡 ADM-P0-2** | **公開 callable 防濫用：App Check + 持久化限流 + 冪等鍵** | 持久化限流與 event id 去重已落地；App Check client／callable 程式已完成，但學校帳號缺 reCAPTCHA Enterprise API／App Check 管理權限，尚無法註冊供應商與設定 GitHub site-key secret | 待補雲端 IAM 後收尾 | M–L | policy tests 全綠；補權限後完成供應商註冊、觀測合法 token 覆蓋率，再切 App Check enforce |
 | **✅ ADM-P0-3** | **Rules Emulator 正式納入 CI 閘門** | 已完成：Java 21 Emulator、四身分 CRUD 矩陣及部署前阻擋 | 已落地 | M | 本機 35 tests 全綠；本次 push 後由 GitHub Actions 再驗一次 |
-| **✅ ADM-P0-4** | **修復測試與 Lint 基準線** | 已完成：12 項舊失敗歸零、ESLint 9 flat config、CI 固定執行 check＋test＋lint | 已落地 | M | 183 前端 tests、3 policy tests、check、lint、Functions build 全綠 |
+| **✅ ADM-P0-4** | **修復測試與 Lint 基準線** | 已完成：12 項舊失敗歸零、ESLint 9 flat config、CI 固定執行 check＋test＋lint | 已落地 | M | 183 前端 tests、4 policy tests、check、lint、Functions build 全綠 |
 | **ADM-P0-5** | **危險 Admin 操作雙重防護與稽核** | 合併還原、許願刪除、狀態修改目前只靠 Admin claim 與前端 confirm；沒有近期重新驗證、理由、操作記錄或 request id | 還原／大量刪除要求近期重新登入；Cloud Function 再驗 Admin claim；寫入不可竄改 `adminAuditLogs`（操作者、動作、目標、前後摘要、時間、結果、request id）；重複 request 不得執行兩次 | M | 每次成功／失敗操作都有 audit record；過期登入會被拒；重送同 request id 不會重複還原或刪除 |
 | **ADM-P0-6** | **備份從「資料快照」升級為可驗證災難復原** | 現有 snapshot 只涵蓋指定頂層文件，不含子集合，也不等同完整 Firestore point-in-time backup；若 snapshot doc 變大還有 1 MiB 文件限制風險 | 保留目前快速合併還原，同時新增定期 Firestore managed export 到 Cloud Storage；manifest 記錄集合、文件數、checksum、版本與保留期限；每月至少做一次沙箱 restore drill；後台顯示「最近成功備份／最近驗證還原」 | L | 能從獨立備份還原含子集合資料；checksum 驗證通過；至少一份 restore drill 紀錄；失敗會送 Google Chat 告警 |
 | **ADM-P0-7** | **Admin 分頁真正按需掛載與資料查詢治理** | 主檔雖降至 1,045 行，但除熱力／日曆外，多數 panel 仍是靜態 import；隱藏分頁可能同時啟動 listener／query，造成首次載入、Firestore reads 與維護成本偏高 | 每個 tab 拆成 lazy chunk，只掛載 active tab；TanStack Query 統一 cache key、stale time、retry、abort；即時 listener 僅在分頁可見時存在；保留 skeleton、錯誤與重新整理 | M | 初次進 Admin 不下載非目前分頁 chunk；未開啟分頁不產生對應 reads/listeners；切頁與返回可用 cache 秒開；無 listener 洩漏 |
