@@ -59,9 +59,9 @@
 
 | ID | 建議項目 | 目前缺口／為什麼要做 | 建議實作內容 | Effort | 完成驗收標準 |
 |---|---|---|---|---|---|
-| **✅ ADM-P0-1** | **CI 機密與部署流程整頓** | 已完成：不再建立／輸出 `.env`，改用可重現安裝、最小權限與新版 Actions | 已落地 | S | 乾淨安裝已通過；待本次 push 後留存 Pages 成功紀錄 |
+| **✅ ADM-P0-1** | **CI 機密與部署流程整頓** | 已完成：不再建立／輸出 `.env`，改用可重現安裝、最小權限與新版 Actions | 已落地 | S | GitHub Pages CI 已完成 Linux 乾淨安裝、安全稽核、完整 Quality Gate 與部署 |
 | **🟡 ADM-P0-2** | **公開 callable 防濫用：App Check + 持久化限流 + 冪等鍵** | 持久化限流與 event id 去重已落地；App Check client／callable 程式已完成，但學校帳號缺 reCAPTCHA Enterprise API／App Check 管理權限，尚無法註冊供應商與設定 GitHub site-key secret | 待補雲端 IAM 後收尾 | M–L | policy tests 全綠；補權限後完成供應商註冊、觀測合法 token 覆蓋率，再切 App Check enforce |
-| **✅ ADM-P0-3** | **Rules Emulator 正式納入 CI 閘門** | 已完成：Java 21 Emulator、四身分 CRUD 矩陣及部署前阻擋 | 已落地 | M | 本機 35 tests 全綠；本次 push 後由 GitHub Actions 再驗一次 |
+| **✅ ADM-P0-3** | **Rules Emulator 正式納入 CI 閘門** | 已完成：Java 21 Emulator、四身分 CRUD 矩陣及部署前阻擋 | 已落地 | M | 本機與 GitHub Actions 的 35 tests 均全綠，失敗會阻擋 Pages 部署 |
 | **✅ ADM-P0-4** | **修復測試與 Lint 基準線** | 已完成：12 項舊失敗歸零、ESLint 9 flat config、CI 固定執行 check＋test＋lint | 已落地 | M | 183 前端 tests、4 policy tests、check、lint、Functions build 全綠 |
 | **ADM-P0-5** | **危險 Admin 操作雙重防護與稽核** | 合併還原、許願刪除、狀態修改目前只靠 Admin claim 與前端 confirm；沒有近期重新驗證、理由、操作記錄或 request id | 還原／大量刪除要求近期重新登入；Cloud Function 再驗 Admin claim；寫入不可竄改 `adminAuditLogs`（操作者、動作、目標、前後摘要、時間、結果、request id）；重複 request 不得執行兩次 | M | 每次成功／失敗操作都有 audit record；過期登入會被拒；重送同 request id 不會重複還原或刪除 |
 | **ADM-P0-6** | **備份從「資料快照」升級為可驗證災難復原** | 現有 snapshot 只涵蓋指定頂層文件，不含子集合，也不等同完整 Firestore point-in-time backup；若 snapshot doc 變大還有 1 MiB 文件限制風險 | 保留目前快速合併還原，同時新增定期 Firestore managed export 到 Cloud Storage；manifest 記錄集合、文件數、checksum、版本與保留期限；每月至少做一次沙箱 restore drill；後台顯示「最近成功備份／最近驗證還原」 | L | 能從獨立備份還原含子集合資料；checksum 驗證通過；至少一份 restore drill 紀錄；失敗會送 Google Chat 告警 |
