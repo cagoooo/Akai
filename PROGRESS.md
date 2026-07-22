@@ -18,8 +18,11 @@
 | Functions production 依賴 | Axios、Firebase Functions 與 Node types 更新；移除未使用且阻擋 Admin 相容性的 `firebase-functions-test`；保留 Firebase Admin 13，避免在未完整遷移 namespace API 前硬升級 | `npm audit --omit=dev`：**21 → 8 moderate**，**critical 2 → 0、high 5 → 0**；剩餘項目均為 Firebase Admin 13 上游間接依賴，Functions build 通過 |
 | 測試與建置相容性 | Vitest setup 改用絕對路徑；Functions TypeScript 開啟 `esModuleInterop`；依賴 lockfile 重建並保留 Windows／Linux 可重現安裝；Quality Gate 與 Pages CI 都會獨立安裝 Functions，並阻擋主專案或 Functions 新增 high／critical production 警示 | 前端 **183 tests**、Functions policy **4 tests**、Rules Emulator **35 tests** 全綠；`check`、`lint`、Functions build、production build 通過 |
 | App Check 雲端收尾 | 再次以教學專案擁有者帳號檢查 reCAPTCHA Enterprise API 與 GitHub secret | API 仍未啟用，學校帳號缺 `serviceusage.services.enable`／App Check 管理權限；`VITE_FIREBASE_APPCHECK_SITE_KEY` 尚無法建立。程式端、monitor 模式、限流與冪等保護均維持完成狀態 |
+| Functions 正式部署 | 重新部署 19 個 Cloud Functions，確認公開分析 callable 與其他 16 個非排程／觸發函式均完成更新 | 3 個既有排程函式仍為 ACTIVE，但 Cloud Scheduler 工作更新被 IAM 擋下：學校帳號缺 `cloudscheduler.jobs.update`；補權限後需重新部署 `dailySnapshot`、`runHealthCheckDaily`、`verifyAnonAuthDaily` |
 
 > App Check 待專案 IAM 補上 reCAPTCHA Enterprise API 啟用與 App Check 管理權限後，才能建立僅允許 `cagoooo.github.io` 的網站金鑰、寫入 GitHub secret、觀測合法 token 覆蓋率，最後再切換 enforce。未改用個人帳號繞過教學專案權限。
+
+> Functions 排程部署待專案 IAM 補上 `cloudscheduler.jobs.update`（例如 Cloud Scheduler Admin）後重跑；本次沒有刪除或重建既有排程工作，避免在權限不足時造成排程中斷。
 
 ### `2026-07-21`（📋 Admin 進度核對 + 未來 P0／P1 優化 Roadmap）
 
