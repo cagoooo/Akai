@@ -1,15 +1,15 @@
-/**
- * PWA 更新管理 Hook
- * 檢測 Service Worker 更新並提示用戶
- */
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { PWA_UPDATE_AVAILABLE_EVENT } from '@/serviceWorkerRegistration';
 
-import { useState, useEffect, useCallback } from 'react';
+interface BeforeInstallPromptEvent extends Event {
+    prompt: () => Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
 
 interface PWAUpdateState {
     isUpdateAvailable: boolean;
     isOffline: boolean;
     isInstallable: boolean;
-    installPrompt: any;
+    installPrompt: BeforeInstallPromptEvent | null;
 }
 
 export function usePWAUpdate() {
@@ -19,144 +19,154 @@ export function usePWAUpdate() {
         isInstallable: false,
         installPrompt: null,
     });
+    const registrationRef = useRef<ServiceWorkerRegistration | null>(null);
+    const reloadAfterActivationRef = useRef(false);
 
-    // 🚀 全域監聽 Service Worker 控制權變更，確保能在更新後立刻自動重載
+    // 只有使用者確認或倒數結束送出 SKIP_WAITING 後，controllerchange 才能重新整理。
     useEffect(() => {
-        if ('serviceWorker' in navigator) {
-            const handleControllerChange = () => {
-                console.log('🚀 [PWA] Controller changed, reloading page...');
-                window.location.reload();
-            };
-            navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange);
-            return () => {
-                navigator.serviceWorker.removeEventListener('controllerchange', handleControllerChange);
-            };
-        }
+        if (!('serviceWorker' in navigator)) return;
+
+        const handleControllerChange = () => {
+            if (!reloadAfterActivationRef.current) return;
+            reloadAfterActivationRef.current = false;
+            window.location.reload();
+        };
+
+        navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange);
+        return () => navigator.serviceWorker.removeEventListener('controllerchange', handleControllerChange);
     }, []);
 
-    // 監聽離線/上線狀態
     useEffect(() => {
-        const handleOnline = () => setState(prev => ({ ...prev, isOffline: false }));
-        const handleOffline = () => setState(prev => ({ ...prev, isOffline: true }));
+        const handleOnline = () => setState((previous) => ({ ...previous, isOffline: false }));
+        const handleOffline = () => setState((previous) => ({ ...previous, isOffline: true }));
 
         window.addEventListener('online', handleOnline);
         window.addEventListener('offline', handleOffline);
-
         return () => {
             window.removeEventListener('online', handleOnline);
             window.removeEventListener('offline', handleOffline);
         };
     }, []);
 
-    // 監聽 Service Worker 更新 + 定期主動檢查新版本
+    // serviceWorkerRegistration 統一發出更新事件；初始 waiting 檢查可補上 lazy component 載入前的事件。
     useEffect(() => {
-        if ('serviceWorker' in navigator) {
-            let registrationRef: ServiceWorkerRegistration | null = null;
+        if (!('serviceWorker' in navigator)) return;
 
-            navigator.serviceWorker.ready.then(registration => {
-                registrationRef = registration;
+        const markUpdateAvailable = () => {
+            setState((previous) => ({ ...previous, isUpdateAvailable: true }));
+        };
+        window.addEventListener(PWA_UPDATE_AVAILABLE_EVENT, markUpdateAvailable);
 
-                registration.addEventListener('updatefound', () => {
-                    const newWorker = registration.installing;
-                    if (newWorker) {
-                        newWorker.addEventListener('statechange', () => {
-                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                console.log('🚀 [PWA] New version installed and waiting.');
-                                setState(prev => ({ ...prev, isUpdateAvailable: true }));
-                            }
-                        });
-                    }
+        void navigator.serviceWorker.getRegistration().then((registration) => {
+            if (!registration) return;
+            registrationRef.current = registration;
+            if (registration.waiting) markUpdateAvailable();
+        });
+
+        let cancelled = false;
+        void navigator.serviceWorker.ready.then((registration) => {
+            if (!cancelled) registrationRef.current = registration;
+        });
+
+        const checkForUpdate = () => {
+            if (!document.hidden) {
+                void registrationRef.current?.update().catch((error) => {
+                    console.warn('[PWA] 更新檢查失敗：', error);
                 });
-            });
+            }
+        };
+        const checkInterval = window.setInterval(checkForUpdate, 30 * 60 * 1000);
+        const handleVisibilityChange = () => {
+            if (!document.hidden) checkForUpdate();
+        };
+        document.addEventListener('visibilitychange', handleVisibilityChange);
 
-            // 檢查是否有等待中的更新
-            navigator.serviceWorker.getRegistration().then(registration => {
-                if (registration?.waiting) {
-                    console.log('🚀 [PWA] Found waiting worker on load.');
-                    setState(prev => ({ ...prev, isUpdateAvailable: true }));
-                }
-            });
-
-            // 🔄 每 30 分鐘主動檢查一次新版本（長時間開著分頁的老師也能收到更新）
-            const checkInterval = setInterval(() => {
-                if (registrationRef && !document.hidden) {
-                    console.log('🔄 [PWA] Periodic update check...');
-                    registrationRef.update().catch(err => {
-                        console.warn('[PWA] Update check failed:', err);
-                    });
-                }
-            }, 30 * 60 * 1000); // 30 分鐘
-
-            // 📱 分頁重新取得焦點時也檢查（從背景切回前台）
-            const handleVisibilityChange = () => {
-                if (!document.hidden && registrationRef) {
-                    console.log('🔄 [PWA] Tab visible, checking for updates...');
-                    registrationRef.update().catch(() => { });
-                }
-            };
-            document.addEventListener('visibilitychange', handleVisibilityChange);
-
-            return () => {
-                clearInterval(checkInterval);
-                document.removeEventListener('visibilitychange', handleVisibilityChange);
-            };
-        }
+        return () => {
+            cancelled = true;
+            window.removeEventListener(PWA_UPDATE_AVAILABLE_EVENT, markUpdateAvailable);
+            window.clearInterval(checkInterval);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
     }, []);
 
-    // 監聽安裝提示
     useEffect(() => {
-        const handleBeforeInstall = (e: Event) => {
-            e.preventDefault();
-            setState(prev => ({
-                ...prev,
+        const handleBeforeInstall = (event: Event) => {
+            event.preventDefault();
+            setState((previous) => ({
+                ...previous,
                 isInstallable: true,
-                installPrompt: e,
+                installPrompt: event as BeforeInstallPromptEvent,
             }));
         };
 
         window.addEventListener('beforeinstallprompt', handleBeforeInstall);
-
-        return () => {
-            window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
-        };
+        return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
     }, []);
 
-    // 執行更新
-    const updateApp = useCallback(() => {
-        console.log('🚀 [PWA] User clicked update button.');
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistration().then(registration => {
-                if (registration?.waiting) {
-                    console.log('🚀 [PWA] Sending SKIP_WAITING to worker...');
-                    registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-                } else {
-                    // 🛡️ 保底機制：如果提示已出現但找不到 waiting worker，代表可能已在激活中或狀態同步延遲
-                    console.warn('⚠️ [PWA] No waiting worker found, triggering fallback reload.');
-                    window.location.reload();
-                }
-            });
-        } else {
+    const updateApp = useCallback(async () => {
+        if (!('serviceWorker' in navigator)) {
             window.location.reload();
+            return;
         }
+
+        const registration = registrationRef.current ?? await navigator.serviceWorker.getRegistration();
+        if (!registration) {
+            window.location.reload();
+            return;
+        }
+        registrationRef.current = registration;
+
+        const activateWorker = (worker: ServiceWorker) => {
+            reloadAfterActivationRef.current = true;
+            worker.postMessage({ type: 'SKIP_WAITING' });
+        };
+
+        if (registration.waiting) {
+            activateWorker(registration.waiting);
+            return;
+        }
+
+        try {
+            await registration.update();
+        } catch (error) {
+            console.warn('[PWA] 套用更新前的檢查失敗：', error);
+        }
+
+        if (registration.waiting) {
+            activateWorker(registration.waiting);
+            return;
+        }
+
+        if (registration.installing) {
+            const installingWorker = registration.installing;
+            const activateWhenInstalled = () => {
+                if (installingWorker.state !== 'installed') return;
+                installingWorker.removeEventListener('statechange', activateWhenInstalled);
+                activateWorker(installingWorker);
+            };
+            installingWorker.addEventListener('statechange', activateWhenInstalled);
+            activateWhenInstalled();
+            return;
+        }
+
+        // version.json 已更新但瀏覽器尚未產生 waiting worker 時，以一般 reload 取得最新 HTML。
+        window.location.reload();
     }, []);
 
-    // 安裝 PWA
     const installApp = useCallback(async () => {
-        if (state.installPrompt) {
-            const result = await state.installPrompt.prompt();
-            setState(prev => ({
-                ...prev,
-                isInstallable: false,
-                installPrompt: null,
-            }));
-            return result.outcome === 'accepted';
-        }
-        return false;
+        if (!state.installPrompt) return false;
+
+        const result = await state.installPrompt.prompt();
+        setState((previous) => ({
+            ...previous,
+            isInstallable: false,
+            installPrompt: null,
+        }));
+        return result.outcome === 'accepted';
     }, [state.installPrompt]);
 
-    // 關閉更新提示
     const dismissUpdate = useCallback(() => {
-        setState(prev => ({ ...prev, isUpdateAvailable: false }));
+        setState((previous) => ({ ...previous, isUpdateAvailable: false }));
     }, []);
 
     return {

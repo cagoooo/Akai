@@ -20,10 +20,30 @@ const pkgVersion = (() => {
   } catch { return 'unknown'; }
 })();
 
+// bump-sw-version 會在 Vite 啟動前更新此檔；注入 bundle 後才能拿「目前頁面版本」和線上版本比較。
+const buildInfo = (() => {
+  try {
+    return JSON.parse(
+      readFileSync(path.resolve(__dirname, 'client/public/version.json'), 'utf-8'),
+    ) as {
+      cacheVersion: string;
+      gitHash: string;
+      buildTime: string;
+      buildTimestamp: number;
+    };
+  } catch {
+    return { cacheVersion: '', gitHash: '', buildTime: '', buildTimestamp: 0 };
+  }
+})();
+
 export default defineConfig({
   base: isGitHubPages ? '/Akai/' : '/',
   define: {
     'import.meta.env.VITE_APP_VERSION': JSON.stringify(pkgVersion),
+    'import.meta.env.VITE_APP_CACHE_VERSION': JSON.stringify(buildInfo.cacheVersion),
+    'import.meta.env.VITE_APP_GIT_HASH': JSON.stringify(buildInfo.gitHash),
+    'import.meta.env.VITE_APP_BUILD_TIME': JSON.stringify(buildInfo.buildTime),
+    'import.meta.env.VITE_APP_BUILD_TIMESTAMP': JSON.stringify(buildInfo.buildTimestamp),
   },
   plugins: [
     react(),

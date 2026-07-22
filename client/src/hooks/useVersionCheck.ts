@@ -12,12 +12,26 @@
 
 import { useEffect, useState, useRef } from 'react';
 
-interface VersionInfo {
+export interface VersionInfo {
   version: string;
   cacheVersion: string;
   gitHash: string;
   buildTime: string;
   buildTimestamp: number;
+}
+
+export function getBundledVersionInfo(): VersionInfo | null {
+  const buildTimestamp = Number(import.meta.env.VITE_APP_BUILD_TIMESTAMP || 0);
+  const cacheVersion = String(import.meta.env.VITE_APP_CACHE_VERSION || '');
+  if (!Number.isFinite(buildTimestamp) || buildTimestamp <= 0 || !cacheVersion) return null;
+
+  return {
+    version: String(import.meta.env.VITE_APP_VERSION || ''),
+    cacheVersion,
+    gitHash: String(import.meta.env.VITE_APP_GIT_HASH || ''),
+    buildTime: String(import.meta.env.VITE_APP_BUILD_TIME || ''),
+    buildTimestamp,
+  };
 }
 
 interface UseVersionCheckOptions {
@@ -41,7 +55,7 @@ interface UseVersionCheckReturn {
 export function useVersionCheck(options: UseVersionCheckOptions = {}): UseVersionCheckReturn {
   const { intervalMs = 15 * 60 * 1000, onlyWhenVisible = true } = options;
 
-  const [localVersion, setLocalVersion] = useState<VersionInfo | null>(null);
+  const [localVersion, setLocalVersion] = useState<VersionInfo | null>(() => getBundledVersionInfo());
   const [latestVersion, setLatestVersion] = useState<VersionInfo | null>(null);
   const [hasNewVersion, setHasNewVersion] = useState(false);
 

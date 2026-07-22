@@ -10,13 +10,21 @@
 
 ## 📌 完成功能總覽
 
+### `2026-07-22`（🔄 Service Worker 更新通知修復）
+
+| 面向 | 完成內容 | 驗證結果 |
+|---|---|---|
+| SW 註冊 | 移除 `main.tsx` 與註冊函式的雙重 `window.load` 競態；註冊函式被呼叫後立即註冊正確的 `/Akai/` scope | 新增回歸測試，防止第二層 load listener 再次出現 |
+| 更新通知 | 新 SW 預快取後停在 waiting；統一由 React 黃色便利貼通知顯示 3 秒倒數，倒數結束或使用者點擊後才送 `SKIP_WAITING`；移除原生 Toast 與 controllerchange 立即刷新競態 | waiting worker 不會自行接管；`updateApp()` 才會啟用，相關 5 tests 全綠 |
+| 版本備援 | 建置時把 bundle 的 cache version／git hash／時間戳注入前端，再與 no-store `version.json` 比較 | 不再把首次抓到的線上最新版誤當舊頁面的本機基準；前端完整 **188 tests**、check、lint、production build 全綠 |
+
 ### `2026-07-22`（🔒 安全相依套件與可重現建置補強）
 
 | 面向 | 完成內容 | 驗證結果 |
 |---|---|---|
 | 主專案 production 依賴 | 升級 Drizzle ORM、Vite、esbuild、Sharp、Firebase Admin 等安全版本；鎖定 Vitest 共用 Vite 6.4.3，避免載入未驗證的巢狀 Vite；同步腳本改用 Firebase Admin modular API | `npm audit --omit=dev`：**16 → 0**；production build 成功；Firestore 同步腳本可正常讀取正式資料 |
 | Functions production 依賴 | Axios、Firebase Functions 與 Node types 更新；移除未使用且阻擋 Admin 相容性的 `firebase-functions-test`；保留 Firebase Admin 13，避免在未完整遷移 namespace API 前硬升級 | `npm audit --omit=dev`：**21 → 8 moderate**，**critical 2 → 0、high 5 → 0**；剩餘項目均為 Firebase Admin 13 上游間接依賴，Functions build 通過 |
-| 測試與建置相容性 | Vitest setup 改用絕對路徑；Functions TypeScript 開啟 `esModuleInterop`；依賴 lockfile 重建並保留 Windows／Linux 可重現安裝；Quality Gate 與 Pages CI 都會獨立安裝 Functions，並阻擋主專案或 Functions 新增 high／critical production 警示 | 前端 **183 tests**、Functions policy **4 tests**、Rules Emulator **35 tests** 全綠；`check`、`lint`、Functions build、production build 通過 |
+| 測試與建置相容性 | Vitest setup 改用絕對路徑；Functions TypeScript 開啟 `esModuleInterop`；依賴 lockfile 重建並保留 Windows／Linux 可重現安裝；Quality Gate 與 Pages CI 都會獨立安裝 Functions，並阻擋主專案或 Functions 新增 high／critical production 警示 | 前端 **188 tests**、Functions policy **4 tests**、Rules Emulator **35 tests** 全綠；`check`、`lint`、Functions build、production build 通過 |
 | App Check 雲端收尾 | 再次以教學專案擁有者帳號檢查 reCAPTCHA Enterprise API 與 GitHub secret | API 仍未啟用，學校帳號缺 `serviceusage.services.enable`／App Check 管理權限；`VITE_FIREBASE_APPCHECK_SITE_KEY` 尚無法建立。程式端、monitor 模式、限流與冪等保護均維持完成狀態 |
 | Functions 正式部署 | 重新部署 19 個 Cloud Functions，確認公開分析 callable 與其他 16 個非排程／觸發函式均完成更新 | 3 個既有排程函式仍為 ACTIVE，但 Cloud Scheduler 工作更新被 IAM 擋下：學校帳號缺 `cloudscheduler.jobs.update`；補權限後需重新部署 `dailySnapshot`、`runHealthCheckDaily`、`verifyAnonAuthDaily` |
 
@@ -62,7 +70,7 @@
 | **✅ ADM-P0-1** | **CI 機密與部署流程整頓** | 已完成：不再建立／輸出 `.env`，改用可重現安裝、最小權限與新版 Actions | 已落地 | S | GitHub Pages CI 已完成 Linux 乾淨安裝、安全稽核、完整 Quality Gate 與部署 |
 | **🟡 ADM-P0-2** | **公開 callable 防濫用：App Check + 持久化限流 + 冪等鍵** | 持久化限流與 event id 去重已落地；App Check client／callable 程式已完成，但學校帳號缺 reCAPTCHA Enterprise API／App Check 管理權限，尚無法註冊供應商與設定 GitHub site-key secret | 待補雲端 IAM 後收尾 | M–L | policy tests 全綠；補權限後完成供應商註冊、觀測合法 token 覆蓋率，再切 App Check enforce |
 | **✅ ADM-P0-3** | **Rules Emulator 正式納入 CI 閘門** | 已完成：Java 21 Emulator、四身分 CRUD 矩陣及部署前阻擋 | 已落地 | M | 本機與 GitHub Actions 的 35 tests 均全綠，失敗會阻擋 Pages 部署 |
-| **✅ ADM-P0-4** | **修復測試與 Lint 基準線** | 已完成：12 項舊失敗歸零、ESLint 9 flat config、CI 固定執行 check＋test＋lint | 已落地 | M | 183 前端 tests、4 policy tests、check、lint、Functions build 全綠 |
+| **✅ ADM-P0-4** | **修復測試與 Lint 基準線** | 已完成：12 項舊失敗歸零、ESLint 9 flat config、CI 固定執行 check＋test＋lint | 已落地 | M | 188 前端 tests、4 policy tests、check、lint、Functions build 全綠 |
 | **ADM-P0-5** | **危險 Admin 操作雙重防護與稽核** | 合併還原、許願刪除、狀態修改目前只靠 Admin claim 與前端 confirm；沒有近期重新驗證、理由、操作記錄或 request id | 還原／大量刪除要求近期重新登入；Cloud Function 再驗 Admin claim；寫入不可竄改 `adminAuditLogs`（操作者、動作、目標、前後摘要、時間、結果、request id）；重複 request 不得執行兩次 | M | 每次成功／失敗操作都有 audit record；過期登入會被拒；重送同 request id 不會重複還原或刪除 |
 | **ADM-P0-6** | **備份從「資料快照」升級為可驗證災難復原** | 現有 snapshot 只涵蓋指定頂層文件，不含子集合，也不等同完整 Firestore point-in-time backup；若 snapshot doc 變大還有 1 MiB 文件限制風險 | 保留目前快速合併還原，同時新增定期 Firestore managed export 到 Cloud Storage；manifest 記錄集合、文件數、checksum、版本與保留期限；每月至少做一次沙箱 restore drill；後台顯示「最近成功備份／最近驗證還原」 | L | 能從獨立備份還原含子集合資料；checksum 驗證通過；至少一份 restore drill 紀錄；失敗會送 Google Chat 告警 |
 | **ADM-P0-7** | **Admin 分頁真正按需掛載與資料查詢治理** | 主檔雖降至 1,045 行，但除熱力／日曆外，多數 panel 仍是靜態 import；隱藏分頁可能同時啟動 listener／query，造成首次載入、Firestore reads 與維護成本偏高 | 每個 tab 拆成 lazy chunk，只掛載 active tab；TanStack Query 統一 cache key、stale time、retry、abort；即時 listener 僅在分頁可見時存在；保留 skeleton、錯誤與重新整理 | M | 初次進 Admin 不下載非目前分頁 chunk；未開啟分頁不產生對應 reads/listeners；切頁與返回可用 cache 秒開；無 listener 洩漏 |

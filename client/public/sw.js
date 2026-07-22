@@ -7,7 +7,7 @@
  * - Stale While Revalidate: 圖片
  */
 
-const CACHE_VERSION = 'v3.6.93-fbf1214-202607221014';
+const CACHE_VERSION = 'v3.6.93-395586a-202607221047';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
 const ASSETS_ARCHIVE = 'assets-archive-v1';
@@ -131,11 +131,10 @@ self.addEventListener('install', (event) => {
         ),
         new Promise((resolve) => setTimeout(resolve, 5000)),
       ]),
-    ])
-      .then(() => {
-        console.log('[SW] 預快取完成（靜態 + 首屏圖）');
-        return self.skipWaiting();
-      })
+    ]).then(() => {
+      // 更新版刻意停在 waiting，讓前端先顯示通知與倒數，再由使用者端送出 SKIP_WAITING。
+      console.log('[SW] 預快取完成（靜態 + 首屏圖），等待前端套用更新');
+    })
   );
 });
 
