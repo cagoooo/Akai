@@ -21,7 +21,8 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import admin from 'firebase-admin';
+import { cert, getApps, initializeApp } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -50,7 +51,7 @@ function loadCredential() {
       const decoded = Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT, 'base64').toString('utf-8');
       const json = JSON.parse(decoded);
       console.log(`🔑 用 env FIREBASE_SERVICE_ACCOUNT（${json.project_id}）`);
-      return admin.credential.cert(json);
+      return cert(json);
     } catch (err) {
       console.error(`❌ env 解碼失敗：${err.message}`);
       return null;
@@ -59,7 +60,7 @@ function loadCredential() {
   if (existsSync(SERVICE_ACCOUNT_PATH)) {
     const json = JSON.parse(readFileSync(SERVICE_ACCOUNT_PATH, 'utf-8'));
     console.log(`🔑 用本地 service-account.json（${json.project_id}）`);
-    return admin.credential.cert(json);
+    return cert(json);
   }
   return null;
 }
@@ -96,10 +97,10 @@ async function main() {
     process.exit(0);
   }
 
-  if (!admin.apps.length) admin.initializeApp({ credential: cred });
+  if (!getApps().length) initializeApp({ credential: cred });
 
   console.log('📡 讀 Firestore analytics/toolIndexQueries/queries...');
-  const snap = await admin.firestore().collection('analytics/toolIndexQueries/queries').get();
+  const snap = await getFirestore().collection('analytics/toolIndexQueries/queries').get();
   const queries = [];
   snap.forEach((doc) => {
     const data = doc.data();

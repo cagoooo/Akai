@@ -23,7 +23,8 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import admin from 'firebase-admin';
+import { cert, getApps, initializeApp } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -41,7 +42,7 @@ function loadCredential() {
       const decoded = Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT, 'base64').toString('utf-8');
       const json = JSON.parse(decoded);
       console.log(`🔑 用 env var FIREBASE_SERVICE_ACCOUNT 認證（project: ${json.project_id}）`);
-      return admin.credential.cert(json);
+      return cert(json);
     } catch (err) {
       console.error(`❌ FIREBASE_SERVICE_ACCOUNT env 解碼失敗：${err.message}`);
       return null;
@@ -51,7 +52,7 @@ function loadCredential() {
   if (existsSync(SERVICE_ACCOUNT_PATH)) {
     const json = JSON.parse(readFileSync(SERVICE_ACCOUNT_PATH, 'utf-8'));
     console.log(`🔑 用本地 service-account.json 認證（project: ${json.project_id}）`);
-    return admin.credential.cert(json);
+    return cert(json);
   }
   return null;
 }
@@ -112,8 +113,8 @@ async function main() {
     process.exit(0); // 不 fail CI
   }
 
-  if (!admin.apps.length) {
-    admin.initializeApp({ credential: cred });
+  if (!getApps().length) {
+    initializeApp({ credential: cred });
   }
 
   // 1) 讀所有工具當查找表
@@ -122,7 +123,7 @@ async function main() {
 
   // 2) 讀 Firestore toolUsageStats
   console.log('📡 讀取 Firestore toolUsageStats...');
-  const snapshot = await admin.firestore().collection('toolUsageStats').get();
+  const snapshot = await getFirestore().collection('toolUsageStats').get();
   const stats = [];
   snapshot.forEach((doc) => {
     const data = doc.data();

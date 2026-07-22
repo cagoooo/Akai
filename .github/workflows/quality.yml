@@ -30,6 +30,14 @@ jobs:
       - name: Install dependencies reproducibly
         run: npm ci --ignore-scripts
 
+      - name: Install Functions dependencies reproducibly
+        run: npm ci --ignore-scripts --prefix functions
+
+      - name: Block high or critical production vulnerabilities
+        run: |
+          npm audit --omit=dev --audit-level=high
+          npm audit --omit=dev --audit-level=high --prefix functions
+
       - name: Type check
         run: npm run check
 
@@ -41,6 +49,9 @@ jobs:
 
       - name: Functions policy tests
         run: npm run test:functions
+
+      - name: Build Functions
+        run: npm run build --prefix functions
 
       - name: Firestore Rules tests
         run: npm run test:rules

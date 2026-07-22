@@ -2,13 +2,24 @@
 
 ## 🎯 當前版本狀態
 - **當前版本**: `v3.6.93` (本機/CI) · 公開工具總數 **119 個** 🎮🚀
-- **里程碑**: **2026-07-21 Admin 安全地基包** — CI 機密與部署流程、Rules Emulator 閘門、測試／Lint 基線，以及公開 callable 的持久化限流與冪等保護已完成整頓；App Check 程式已接入，雲端供應商註冊待補 IAM 權限。
-- **最後更新狀態**: 見下方 `2026-07-21` 安全地基包完成紀錄與 Admin 後台 Roadmap
+- **里程碑**: **2026-07-22 Admin 安全地基包補強** — 主專案 production 相依警示由 16 項降為 0；Functions production 警示由 21 項降為 8 項 moderate，critical／high 全數歸零；CI、Rules Emulator、測試／Lint、持久化限流與冪等保護均已完成整頓。App Check 程式已接入，雲端供應商註冊仍待補 IAM 權限。
+- **最後更新狀態**: 見下方 `2026-07-22` 安全相依補強，以及 `2026-07-21` 安全地基包與 Admin 後台 Roadmap
 - **前一版**: v3.6.90 — 客群推薦精靈全面情境化 + 成效閉環
 - **前一版**: v3.6.71 — 新增 #102 外星人入侵·保衛石門 + 雙 tools.json 對齊
 - **📎 文件補追記**：本檔案從 v3.6.71 停更到 2026-07-04 才補寫。中間 v3.6.72 → v3.6.87 共 16 個版本（主要是新增工具 #103-#114 + 幾個獨立 bug fix，例如 v3.6.80 使用次數本機計數 bug、v3.6.81/b3032b2 許願池通知從 LINE 遷移到 Google Chat）沒有寫進本檔案，細節可查 `git log`（commit 訊息大多含版本號）。工具總數從 102 → 115 就是這段期間累積的，之後有空再補完整段落。
 
 ## 📌 完成功能總覽
+
+### `2026-07-22`（🔒 安全相依套件與可重現建置補強）
+
+| 面向 | 完成內容 | 驗證結果 |
+|---|---|---|
+| 主專案 production 依賴 | 升級 Drizzle ORM、Vite、esbuild、Sharp、Firebase Admin 等安全版本；鎖定 Vitest 共用 Vite 6.4.3，避免載入未驗證的巢狀 Vite；同步腳本改用 Firebase Admin modular API | `npm audit --omit=dev`：**16 → 0**；production build 成功；Firestore 同步腳本可正常讀取正式資料 |
+| Functions production 依賴 | Axios、Firebase Functions 與 Node types 更新；移除未使用且阻擋 Admin 相容性的 `firebase-functions-test`；保留 Firebase Admin 13，避免在未完整遷移 namespace API 前硬升級 | `npm audit --omit=dev`：**21 → 8 moderate**，**critical 2 → 0、high 5 → 0**；剩餘項目均為 Firebase Admin 13 上游間接依賴，Functions build 通過 |
+| 測試與建置相容性 | Vitest setup 改用絕對路徑；Functions TypeScript 開啟 `esModuleInterop`；依賴 lockfile 重建並保留 Windows／Linux 可重現安裝；Quality Gate 與 Pages CI 都會獨立安裝 Functions，並阻擋主專案或 Functions 新增 high／critical production 警示 | 前端 **183 tests**、Functions policy **4 tests**、Rules Emulator **35 tests** 全綠；`check`、`lint`、Functions build、production build 通過 |
+| App Check 雲端收尾 | 再次以教學專案擁有者帳號檢查 reCAPTCHA Enterprise API 與 GitHub secret | API 仍未啟用，學校帳號缺 `serviceusage.services.enable`／App Check 管理權限；`VITE_FIREBASE_APPCHECK_SITE_KEY` 尚無法建立。程式端、monitor 模式、限流與冪等保護均維持完成狀態 |
+
+> App Check 待專案 IAM 補上 reCAPTCHA Enterprise API 啟用與 App Check 管理權限後，才能建立僅允許 `cagoooo.github.io` 的網站金鑰、寫入 GitHub secret、觀測合法 token 覆蓋率，最後再切換 enforce。未改用個人帳號繞過教學專案權限。
 
 ### `2026-07-21`（📋 Admin 進度核對 + 未來 P0／P1 優化 Roadmap）
 
