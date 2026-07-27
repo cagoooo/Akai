@@ -170,9 +170,6 @@
     "vite": "^6.4.3",
     "vitest": "^4.0.17"
   },
-  "optionalDependencies": {
-    "bufferutil": "4.1.0"
-  },
   "overrides": {
     "vite": "$vite",
     "brace-expansion": "^5.0.8"
