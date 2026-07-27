@@ -172,6 +172,8 @@
   },
   "overrides": {
     "vite": "$vite",
-    "brace-expansion": "^5.0.8"
+    "minimatch": {
+      "brace-expansion": "^2.0.1"
+    }
   }
 }
