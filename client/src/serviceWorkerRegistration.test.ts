@@ -27,22 +27,30 @@ describe('Service Worker 更新通知', () => {
     vi.restoreAllMocks();
   });
 
-  it('發現 waiting worker 時只通知 UI，不會提前 SKIP_WAITING', () => {
+  it('發現 waiting worker 時自動靜默套用 SKIP_WAITING（陷阱 #18）', () => {
+    // 測試新行為：有 waiting worker 時，自動送出 SKIP_WAITING，不等使用者手動確認。
+    // 這能解決使用者重整後看不到更新通知而卡在舊版的問題（pwa-cache-bust SKILL 陷阱 #18）。
     const worker = new FakeWorker();
     worker.state = 'installed';
     const registration = new FakeRegistration();
     registration.waiting = worker as unknown as ServiceWorker;
+
+    const mockAddEventListener = vi.fn();
     Object.defineProperty(navigator, 'serviceWorker', {
       configurable: true,
-      value: { controller: {} },
+      value: {
+        controller: {},
+        addEventListener: mockAddEventListener,
+      },
     });
-    const onUpdate = vi.fn();
-    window.addEventListener(PWA_UPDATE_AVAILABLE_EVENT, onUpdate, { once: true });
 
+    // 不需要監聽 PWA_UPDATE_AVAILABLE_EVENT，新行為是直接 SKIP_WAITING 不通知
     watchServiceWorkerRegistration(registration as unknown as ServiceWorkerRegistration);
 
-    expect(onUpdate).toHaveBeenCalledOnce();
-    expect(worker.postMessage).not.toHaveBeenCalled();
+    // 應呼叫 SKIP_WAITING 讓 SW 立即激活
+    expect(worker.postMessage).toHaveBeenCalledWith({ type: 'SKIP_WAITING' });
+    // 應監聽 controllerchange 準備 reload（防無限 reload 旗標）
+    expect(mockAddEventListener).toHaveBeenCalledWith('controllerchange', expect.any(Function));
   });
 
   it('安裝中的 worker 進入 installed 後才通知 UI', () => {

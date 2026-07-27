@@ -22,8 +22,16 @@ export function watchServiceWorkerRegistration(registration: ServiceWorkerRegist
     worker.addEventListener('statechange', announceWhenInstalled);
   };
 
+  // 陷阱 #18：頁面重整後若新 SW 已在 waiting 狀態，直接靜默自動套用，
+  // 避免使用者永遠看不到更新提示而卡在舊版（來源：2026-06-28 Akai 實戰）
   if (registration.waiting && navigator.serviceWorker.controller) {
-    announceUpdate(registration);
+    console.log('[SW] 偵測到 waiting worker，自動靜默套用新版…');
+    let _reloaded = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!_reloaded) { _reloaded = true; window.location.reload(); }
+    });
+    registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+    return; // 直接觸發自動更新，不再走 announceUpdate 路線
   }
 
   if (registration.installing) {
@@ -65,6 +73,18 @@ export function registerServiceWorker() {
       });
     });
   }
+
+  // 陷阱 #13（線 B）：監聽 SW activate 後廣播的 SW_ACTIVATED postMessage，
+  // 作為 updatefound 事件的備援通道，確保即使 updatefound 被錯過也能收到更新通知。
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    if (event.data?.type === 'SW_ACTIVATED' && navigator.serviceWorker.controller) {
+      console.log('[SW] 收到 SW_ACTIVATED 訊號，廣播更新事件');
+      // SW_ACTIVATED 表示新版 SW 已接管，直接發出 update 通知（無需 postMessage SKIP_WAITING）
+      window.dispatchEvent(new CustomEvent(PWA_UPDATE_AVAILABLE_EVENT, {
+        detail: { scope: expectedScope, fromActivation: true },
+      }));
+    }
+  });
 
   const swPath = `${import.meta.env.BASE_URL}sw.js`;
   void navigator.serviceWorker.register(swPath, { updateViaCache: 'none' })

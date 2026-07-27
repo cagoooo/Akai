@@ -7,7 +7,7 @@
  * - Stale While Revalidate: 圖片
  */
 
-const CACHE_VERSION = 'v3.6.95-38d1761-202607271127';
+const CACHE_VERSION = 'v3.6.96-6a89743-202607271136';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
 const ASSETS_ARCHIVE = 'assets-archive-v1';
@@ -197,6 +197,15 @@ self.addEventListener('activate', (event) => {
     }).then(() => {
       console.log('[SW] 激活完成');
       return self.clients.claim();
+    }).then(() => {
+      // 線 B：向所有已開啟的分頁廣播「新 SW 已激活」訊號，
+      // 作為 updatefound 事件的備援通道（SKILL pwa-cache-bust 陷阱 #13）。
+      return self.clients.matchAll({ includeUncontrolled: true, type: 'window' }).then((clients) => {
+        clients.forEach((c) => {
+          c.postMessage({ type: 'SW_ACTIVATED', version: CACHE_VERSION });
+        });
+        console.log(`[SW] SW_ACTIVATED 已廣播給 ${clients.length} 個 client`);
+      });
     })
   );
 });
