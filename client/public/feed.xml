@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 120+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 121+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Mon, 27 Jul 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Mon, 27 Jul 2026 03:36:57 GMT</lastBuildDate>
+    <pubDate>Mon, 27 Jul 2026 16:00:00 GMT</pubDate>
+    <lastBuildDate>Mon, 27 Jul 2026 08:29:51 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,18 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：仙人掌大逃亡：奔跑吧小墨龍</title>
+      <link>https://cagoooo.github.io/Akai/tool/121</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/121</guid>
+      <pubDate>Mon, 27 Jul 2026 16:00:00 GMT</pubDate>
+      <description>全新東方水墨畫風網頁無盡跑酷遊戲！靈敏操控小墨龍跳躍與俯衝，穿梭千重仙人掌陣，支援手機與電腦極速對決，挑戰最高分紀錄。</description>
+      <category>跑酷</category>
+      <category>水墨</category>
+      <category>無盡跑酷</category>
+      <category>小墨龍</category>
+      <category>教育遊戲</category>
+    </item>
     <item>
       <title>🆕 新工具：3D 星際雷霆：隕石防禦與太空探索解題大冒險</title>
       <link>https://cagoooo.github.io/Akai/tool/120</link>
@@ -36,6 +48,15 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/space-meteor-evasion-120-3d-quiz-adventure</guid>
       <pubDate>Mon, 27 Jul 2026 00:00:00 GMT</pubDate>
       <description>#120 讓學生化身星際艦長！駕駛第一人稱 3D 太空戰機，穿梭太陽系與隕石帶；在發射雷射與散彈砲衝破隕石陣的同時，捕捉發光問號智囊球解答太陽系、自然科學、AI 常識與密碼推理題庫，修復護盾登錄班級英雄榜！</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#121 仙人掌大逃亡：奔跑吧小墨龍！水墨風無盡跑酷，下課 10 分鐘的專注力極速挑戰</title>
+      <link>https://cagoooo.github.io/Akai/blog/ink-dragon-runner-121-cactus-escape</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/ink-dragon-runner-121-cactus-escape</guid>
+      <pubDate>Mon, 27 Jul 2026 00:00:00 GMT</pubDate>
+      <description>#121 仙人掌大逃亡：奔跑吧小墨龍！全新東方水墨畫風網頁無盡跑酷遊戲，靈敏操控小墨龍跳躍與俯衝，穿梭千重仙人掌陣與飛鳥障礙，支援手機與電腦對決，下課 10 分鐘最佳班級專注力與舒壓挑戰。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
@@ -309,27 +330,6 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/edu-cloud-account-updater-107-openid-roster</guid>
       <pubDate>Fri, 12 Jun 2026 00:00:00 GMT</pubDate>
       <description>每到新學年，承辦老師都要面對同一場惡夢：把全校教育雲帳號總表跟教育局新名冊重新對齊——誰轉走、誰轉進、誰升年級換了班級座號，一格一格手動圈、手動貼。#107 是阿凱老師為石門國小做的純前端工具：上傳舊帳密總表與教育局新名冊，自動比對轉入轉出、揪出末四碼撞號、跨學年保留帳密只更新座號，一鍵產出總表、異動清冊與新生通知單。全程在瀏覽器運算，個資一個 byte 都不上傳。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>🆕 新工具：石門國小 第103屆畢業典禮｜啟程・感恩・祝福</title>
-      <link>https://cagoooo.github.io/Akai/tool/106</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/106</guid>
-      <pubDate>Fri, 05 Jun 2026 06:02:49 GMT</pubDate>
-      <description>石門國小第103屆畢業典禮的數位主場：典禮資訊、YouTube 直播、校園巡禮、畢業歌〈風箏〉、家長祝福一站到齊。最大亮點是「即時祝福牆」——家長掃 QR 留言、老師 LINE 一鍵審核，祝福立刻飛上現場大螢幕的星空投影，剛寫完抬頭就看到自己。啟程・感恩・祝福，陪每個孩子勇敢啟程。</description>
-      <category>畢業典禮</category>
-      <category>石門國小</category>
-      <category>即時祝福牆</category>
-      <category>星空投影</category>
-      <category>掃碼互動</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#106 石門國小第103屆畢業典禮：當家長的祝福，能在三秒內飛上禮堂大螢幕</title>
-      <link>https://cagoooo.github.io/Akai/blog/graduation-103-shimen-wishwall-106</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/graduation-103-shimen-wishwall-106</guid>
-      <pubDate>Fri, 05 Jun 2026 00:00:00 GMT</pubDate>
-      <description>每年畢業季，家長最想說的話常常來不及說出口。#106 是石門國小阿凱老師為第103屆畢業典禮做的數位主場：掃 QR 留言、老師 LINE 一鍵審核，祝福三秒飛上禮堂大螢幕的星空投影，家長剛寫完抬頭就看到自己。一條 GAS + LINE 的零成本即時互動閉環。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>

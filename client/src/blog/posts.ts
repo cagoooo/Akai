@@ -14487,7 +14487,76 @@ const POST_117: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+const POST_121: BlogPost = {
+  slug: 'ink-dragon-runner-121-cactus-escape',
+  title: '#121 仙人掌大逃亡：奔跑吧小墨龍！水墨風無盡跑酷，下課 10 分鐘的專注力極速挑戰',
+  excerpt:
+    '#121 仙人掌大逃亡：奔跑吧小墨龍！全新東方水墨畫風網頁無盡跑酷遊戲，靈敏操控小墨龍跳躍與俯衝，穿梭千重仙人掌陣與飛鳥障礙，支援手機與電腦對決，下課 10 分鐘最佳班級專注力與舒壓挑戰。',
+  publishedAt: '2026-07-27',
+  readingMinutes: 5,
+  tags: ['跑酷遊戲', '水墨藝術', '課間活動', '專注力訓練', '網頁小遊戲'],
+  toolIds: [121, 120, 115],
+  coverEmoji: '🐉',
+  coverColor: 'orange',
+  body: `## 下課 10 分鐘，學生在電腦教室沒事做怎麼辦？
+
+在資訊課練習結束後，或者下課前的最後 5-10 分鐘，老師常常會給提前完成任務的學生一點自由探索的時間。
+
+過去許多學生會習慣打開傳統 Chrome 小恐龍跑酷遊戲，雖然玩法簡單，但單色灰階的圖像與單一的操控久了缺乏文化美感與新鮮感。
+
+**「能不能有一款融入東方藝術美學，既能鍛鍊專注力與動態視覺，又能讓學生在 Chromebook 和手機上即開即玩的小遊戲？」**
+
+阿凱老師打造的 **[#121 仙人掌大逃亡：奔跑吧小墨龍](/tool/121)** 應運而生！
+
+## #121 怎麼解？核心功能與設計亮點
+
+**功能 A：東方古典宣紙與潑墨美學**
+遊戲以經典宣紙底色（#F5F0E8）為基礎，搭配線條流暢、古靈精怪的小墨龍以及各具態勢的水墨仙人掌障礙物。每一格畫面都宛如會動的水墨長卷。
+
+**功能 B：極致靈敏的雙鍵與觸控手感**
+支援鍵盤「Space／方向鍵上」（跳躍）與「方向鍵下」（俯衝），在手機和平板上支援滑動與按鈕觸控。演算精確至毫秒，確保每一次閃避都是最痛快的視覺反饋。
+
+**功能 C：動態漸進難度與高分榜激勵**
+隨著跑酷距離增加，速度與地形組合將逐漸變化，極度考驗眼手協調與專注力。系統自動記錄最高得分，班級同儕能互相切磋挑戰極限紀錄。
+
+**功能 D：極速無載入與 100% 免安裝**
+純 HTML5 Canvas 與 Vanilla JS 打造，體積輕巧，不佔據伺服器與硬體資源，低配電腦也能流暢 60FPS 運行。
+
+## 真實技術棧
+
+- **純 HTML5 Canvas + Vanilla JavaScript**：零第三方大型庫依賴，輕量高禎率。
+- **Web Audio API 擬音效果**：流暢音效隨動作與碰撞即時播放。
+- **GitHub Pages 靜態託管**：免費部署、極速載入、穩定無上限。
+
+## 教學情境與老師回饋
+
+> 「以前資訊課學生做完練習就吵著要自由時間，現在玩這款小墨龍，學生不只安靜專注，還能在視覺上欣賞水墨風格！」
+> —— 桃園市國小資訊教師
+
+> 「下課 10 分鐘在教室電視畫面上開這款遊戲，學生輪流挑戰紀錄，氣氛超熱烈！」
+> —— 國小班級導師
+
+## 配對工具推薦
+
+- [#120 3D 星際雷霆](/tool/120) — 第一人稱 3D 飛船太空解題大冒險
+- [#115 萌獸數學道館](/tool/115) — 趣味數學心算關卡競技場
+- [#121 仙人掌大逃亡：奔跑吧小墨龍](/tool/121) — 本篇主角
+
+## 適用對象
+
+- 國小、國中與高中各學段學生（鍛鍊動態反應與專注力）。
+- 尋求課間舒壓、班級歡樂挑戰與課堂獎勵機制的班級導師與科任老師。
+- 視覺藝術與資訊科技教師（水墨視覺數位轉換案例展示）。
+
+## 想試試？
+
+→ [前往 #121 仙人掌大逃亡：奔跑吧小墨龍](https://cagoooo.github.io/ink-dragon-runner/)
+
+立刻點擊連結，感受跳躍與俯衝的極速快感，挑戰你的最高跑酷紀錄！
+`,
+};
+
+export const POSTS: BlogPost[] = [POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。

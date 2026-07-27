@@ -117,5 +117,6 @@ export const TOOL_URL_MAP: Record<string, number> = {
   "https://cagoooo.github.io/smes-substitute/": 117,
   "https://cagoooo.github.io/smes-it-quiz-battle/": 118,
   "https://cagoooo.github.io/Shoot/": 119,
-  "https://cagoooo.github.io/space-meteor-evasion-3d/": 120
+  "https://cagoooo.github.io/space-meteor-evasion-3d/": 120,
+  "https://cagoooo.github.io/ink-dragon-runner/": 121
 };
