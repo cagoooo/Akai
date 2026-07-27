@@ -14230,6 +14230,65 @@ const POST_114: BlogPost = {
 `,
 };
 
+
+const POST_120: BlogPost = {
+  slug: 'space-meteor-evasion-120-3d-quiz-adventure',
+  title: '#120 3D 星際雷霆解題大冒險：第一人稱飛船駕駛 × 太空戰術寶箱 × 跨學科知識智囊球，把課堂複習變成星際冒險！',
+  excerpt:
+    '#120 讓學生化身星際艦長！駕駛第一人稱 3D 太空戰機，穿梭太陽系與隕石帶；在發射雷射與散彈砲衝破隕石陣的同時，捕捉發光問號智囊球解答太陽系、自然科學、AI 常識與密碼推理題庫，修復護盾登錄班級英雄榜！',
+  publishedAt: '2026-07-27',
+  readingMinutes: 5,
+  tags: ['3D遊戲', '星際雷霆', '太空解題', '遊戲化學習', '石門國小'],
+  toolIds: [120, 118, 119],
+  coverEmoji: '🚀',
+  coverColor: 'purple',
+  body: `## 當課堂複習遇上第一人稱 3D 飛船駕駛
+
+許多老師在期末或單元結束時，常面臨「**學生刷題意願低落、遊戲化工具缺乏視覺震撼**」的痛點。過去傳統的選擇題刷題網站，多半只有簡單的 2D 介面或單調計時器，難以持久吸引高年級與國中生的專注力。
+
+阿凱老師推出的 [#120 3D 星際雷霆解題大冒險](https://cagoooo.github.io/space-meteor-evasion-3d/) 正是為了解決這個問題——將完整的 Three.js 第一人稱 3D 飛船駕駛體驗，與跨學科知識題庫無縫結合。學生不再只是硬生生地看題目選答案，而是駕駛戰機翱翔宇宙，透過擊碎隕石、收集戰術寶箱、射擊發光問號球來啟動解題，修復護盾並維護星際和平！
+
+## #120 怎麼解？（核心亮點拆解）
+
+- **第一人稱 3D 視角與跨平台雙端操控**：支援電腦端 \`WASD\` 鍵盤/滑鼠操控、\`J\` 鍵發射雷射砲、\`Space\` 鍵推進衝刺；手機與平板端則支援直覺全螢幕觸控滑動。無論在電腦教室、平板課堂或家庭自學，都能享有流暢不卡頓的 3D 飛行感受。
+- **星際問號解題智囊球（Quiz Orbs）**：太空中隨機出現發光的「❓問號智囊球」，飛船靠近或發射砲火即可瞬間進入解題挑戰。答對問題不僅能獲得大量積分，還能修復飛船能量護盾（Shield Level），將解題成果與冒險生存直接連結。
+- **四大跨學科知識庫**：
+  1. **☀️ 太陽系與天文科學**：探究行星特性、軌道運轉與宇宙探索知識。
+  2. **🌱 國小自然與生態環境**：檢核食物鏈、生態守護與環境保育觀念。
+  3. **💻 資訊科技與 AI 常識**：學習演算法基礎、資訊安全與生成式 AI 常識。
+  4. **🧠 星際邏輯與密碼推理**：鍛鍊邏輯思維、圖形推理與解密技巧。
+- **戰術寶箱與武器升級**：收集太空中出現的「📦 戰術寶箱」，可即時獲得散彈火砲（Spread Cannon）、時間減速（Time Slow）與護盾大補給，讓探索策略更加靈活。
+- **三階段航行關卡難度**：內建「初階 (太陽系)」、「中階 (隕石帶)」與「高階 (黑洞界)」，能依學生的能力與學習進度自訂隕石速度與航行難度。
+- **班級星際英雄排行榜 (TOP 5)**：內建本機熱血排行榜，適合課堂團體競賽與英雄榮譽應援！
+
+## 現場教學與應用情境
+
+1. **資訊科與自然科主題評量**：在資訊課或自然課單元結束時，老師可設定特定題庫與難度，讓學生進行 10 分鐘的星際冒險複習。學生在遊戲中主動思考題庫內容，為護盾補血而積極搶答。
+2. **班級晨光與期末歡樂競賽**：導師可投影班級星際英雄榜，舉辦星際解題王大比拚。透過遊戲的熱血 BGM 與散彈砲打擊感，徹底活絡班級氣氛。
+3. **跨學段與特殊學習需求陪伴**：從國小中高年級到國中生均能適用，初階模式適合剛接觸 3D 操控的學生，高階黑洞界則能滿足追求極限挑戰與高難度推理的孩子。
+
+## 配對工具推薦
+
+這幾款都是阿凱老師精心設計的課堂遊戲化與熱血競賽工具：
+
+- [#118 資訊科技駕駛艙：答題快打對戰遊戲](https://cagoooo.github.io/Akai/tool/118)：雙人同機格鬥對戰！解答題目積蓄能量發射必殺技。
+- [#119 SDGs永續行動遊戲－地球守護隊：能量大作戰](https://cagoooo.github.io/Akai/tool/119)：九大世界永續任務，組裝能量工具解決環境難題。
+- [#120 3D 星際雷霆解題大冒險](https://cagoooo.github.io/space-meteor-evasion-3d/)：本篇主角，第一人稱 3D 太空駕駛與射擊解題！
+
+## 適用對象
+
+- 尋求高互動性、視覺震撼遊戲化複習工具的**自然科、資訊科與專任教師**。
+- 想在班會、晨光或期末活動營造熱烈學習氛圍的**班級導師**。
+- 熱愛太空探索、3D 遊戲與知識解題的**國小與國中學生**。
+
+## 想試試？
+
+→ [前往 #120 3D 星際雷霆解題大冒險](https://cagoooo.github.io/space-meteor-evasion-3d/)
+
+點擊啟動飛船引擎，化身星際艦長穿梭隕石陣，用你的知識與戰術維護宇宙秩序吧！
+`,
+};
+
 const POST_119: BlogPost = {
   slug: 'sdgs-earth-guardian-119-energy-battle',
   title: '#119 SDGs 不只背目標：在地球守護隊九大世界，把永續選擇真的做一遍',
@@ -14428,7 +14487,7 @@ const POST_117: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+export const POSTS: BlogPost[] = [POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。

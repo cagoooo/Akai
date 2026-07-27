@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 119+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 120+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Mon, 13 Jul 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Wed, 22 Jul 2026 02:14:21 GMT</lastBuildDate>
+    <pubDate>Mon, 27 Jul 2026 00:00:00 GMT</pubDate>
+    <lastBuildDate>Mon, 27 Jul 2026 02:45:27 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,27 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：3D 星際雷霆：隕石防禦與太空探索解題大冒險</title>
+      <link>https://cagoooo.github.io/Akai/tool/120</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/120</guid>
+      <pubDate>Mon, 27 Jul 2026 00:00:00 GMT</pubDate>
+      <description>第一人稱 3D 太空飛船駕駛與隕石防禦遊戲！駕駛戰機發射雷射與散彈砲，捕捉問號智囊球解答太陽系、自然科學、AI 常識與密碼推理題庫，維護護盾並衝高分登錄班級英雄榜。</description>
+      <category>3D遊戲</category>
+      <category>星際雷霆</category>
+      <category>太空解題</category>
+      <category>隕石防禦</category>
+      <category>天文科學</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#120 3D 星際雷霆解題大冒險：第一人稱飛船駕駛 × 太空戰術寶箱 × 跨學科知識智囊球，把課堂複習變成星際冒險！</title>
+      <link>https://cagoooo.github.io/Akai/blog/space-meteor-evasion-120-3d-quiz-adventure</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/space-meteor-evasion-120-3d-quiz-adventure</guid>
+      <pubDate>Mon, 27 Jul 2026 00:00:00 GMT</pubDate>
+      <description>#120 讓學生化身星際艦長！駕駛第一人稱 3D 太空戰機，穿梭太陽系與隕石帶；在發射雷射與散彈砲衝破隕石陣的同時，捕捉發光問號智囊球解答太陽系、自然科學、AI 常識與密碼推理題庫，修復護盾登錄班級英雄榜！</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
     <item>
       <title>🆕 新工具：石門國小資訊科技駕駛艙：答題快打對戰遊戲</title>
       <link>https://cagoooo.github.io/Akai/tool/118</link>
@@ -311,30 +332,6 @@
       <description>每年畢業季，家長最想說的話常常來不及說出口。#106 是石門國小阿凱老師為第103屆畢業典禮做的數位主場：掃 QR 留言、老師 LINE 一鍵審核，祝福三秒飛上禮堂大螢幕的星空投影，家長剛寫完抬頭就看到自己。一條 GAS + LINE 的零成本即時互動閉環。</description>
       <category>blog</category>
       <category>教學情境</category>
-    </item>
-    <item>
-      <title>🆕 新工具：臺灣主權 AI 訓練語料庫 × 石門國小 — 把國家級本土語料變成校園教材</title>
-      <link>https://cagoooo.github.io/Akai/tool/105</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/105</guid>
-      <pubDate>Thu, 04 Jun 2026 09:44:38 GMT</pubDate>
-      <description>國家耗十年、集 265 個機關蒐集的 6 億 tokens 本土語料，從「只拿來餵 AI」變成「師生家長共用的教材庫」。九大教育主題、4,554 筆語料一鍵探索，每筆都標課綱領域與授權來源；還能用自備的免費 Gemini 金鑰，即時生成台語／客語／國語學習單與繪本腳本。數位發展部 × 桃園市龍潭區石門國民小學阿凱老師打造的「鱻本土 AI 共學站」。</description>
-      <category>臺灣主權 AI</category>
-      <category>本土語料庫</category>
-      <category>國家級開放資料</category>
-      <category>教學素材庫</category>
-      <category>數位發展部</category>
-    </item>
-    <item>
-      <title>🆕 新工具：台灣官方資料庫 Twinkle-Hub — 把台灣官方資料接進 AI 助教</title>
-      <link>https://cagoooo.github.io/Akai/tool/104</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/104</guid>
-      <pubDate>Thu, 04 Jun 2026 06:16:09 GMT</pubDate>
-      <description>讓 AI 助教「直接查台灣官方來源再回答」的資料橋 MCP 服務：國定假日補班、農曆節氣、簡繁轉換、地址郵遞區號、身分證／統編格式驗證、6.4 萬份國家考試考古題與政府開放資料，65 個現成工具一次到位。申請金鑰 → 一鍵安裝 → 重開即用，老師備課出題、學生查在地資料都更踏實。相容任何支援 MCP 的 AI 客戶端，基本查詢免費。</description>
-      <category>台灣官方資料</category>
-      <category>MCP 服務</category>
-      <category>AI 助教</category>
-      <category>國考考古題</category>
-      <category>國定假日</category>
     </item>
   </channel>
 </rss>
