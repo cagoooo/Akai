@@ -53,7 +53,7 @@ interface UseVersionCheckReturn {
 }
 
 export function useVersionCheck(options: UseVersionCheckOptions = {}): UseVersionCheckReturn {
-  const { intervalMs = 15 * 60 * 1000, onlyWhenVisible = true } = options;
+  const { intervalMs = 3 * 60 * 1000, onlyWhenVisible = true } = options;
 
   const [localVersion, setLocalVersion] = useState<VersionInfo | null>(() => getBundledVersionInfo());
   const [latestVersion, setLatestVersion] = useState<VersionInfo | null>(null);
@@ -117,6 +117,11 @@ export function useVersionCheck(options: UseVersionCheckOptions = {}): UseVersio
       }
     };
 
+    const handleFocus = () => {
+      if (!document.hidden) check();
+    };
+    window.addEventListener('focus', handleFocus);
+
     if (onlyWhenVisible) {
       // 只有分頁可見時才輪詢，節省資源
       const handleVisibilityChange = () => {
@@ -132,14 +137,17 @@ export function useVersionCheck(options: UseVersionCheckOptions = {}): UseVersio
       if (!document.hidden) startPolling();
 
       return () => {
+        window.removeEventListener('focus', handleFocus);
         document.removeEventListener('visibilitychange', handleVisibilityChange);
         stopPolling();
       };
     }
 
     startPolling();
-    return () => stopPolling();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+      stopPolling();
+    };
   }, [intervalMs, onlyWhenVisible]);
 
   return { localVersion, latestVersion, hasNewVersion, checkNow: check };

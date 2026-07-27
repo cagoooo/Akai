@@ -75,17 +75,22 @@ export function usePWAUpdate() {
                 });
             }
         };
-        const checkInterval = window.setInterval(checkForUpdate, 30 * 60 * 1000);
+        const checkInterval = window.setInterval(checkForUpdate, 3 * 60 * 1000);
         const handleVisibilityChange = () => {
             if (!document.hidden) checkForUpdate();
         };
+        const handleFocus = () => {
+            if (!document.hidden) checkForUpdate();
+        };
         document.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('focus', handleFocus);
 
         return () => {
             cancelled = true;
             window.removeEventListener(PWA_UPDATE_AVAILABLE_EVENT, markUpdateAvailable);
             window.clearInterval(checkInterval);
             document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('focus', handleFocus);
         };
     }, []);
 

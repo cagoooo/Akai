@@ -14,7 +14,7 @@ import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
 
 // 自動更新倒數秒數（使用者可在此期間點「稍後」取消）
-const AUTO_UPDATE_COUNTDOWN = 3;
+const AUTO_UPDATE_COUNTDOWN = 8;
 const PROMPT_COOLDOWN_MS = 30 * 24 * 60 * 60 * 1000; // 延長至 30 天
 
 export function PWAUpdatePrompt() {
@@ -27,8 +27,8 @@ export function PWAUpdatePrompt() {
         dismissUpdate,
     } = usePWAUpdate();
 
-    // 獨立的 version.json 輪詢（15 分鐘一次），作為 SW updatefound 的備援通道
-    const { hasNewVersion, latestVersion } = useVersionCheck({ intervalMs: 15 * 60 * 1000 });
+    // 獨立的 version.json 輪詢（3 分鐘一次），作為 SW updatefound 的備援通道
+    const { hasNewVersion, latestVersion } = useVersionCheck({ intervalMs: 3 * 60 * 1000 });
 
     // 任一通道偵測到新版本就觸發更新流程（SW 事件 OR version.json 輪詢）
     const isUpdateAvailable = swUpdateAvailable || hasNewVersion;
