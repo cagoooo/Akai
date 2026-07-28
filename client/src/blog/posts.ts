@@ -14556,7 +14556,99 @@ const POST_121: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+const POST_122: BlogPost = {
+  slug: 'word-wiz-kids-122-english-vocabulary-adventure',
+  title: '#122 兒童英語單字大冒險：拍一張課本照片，AI 幫你把整課單字變成全班對戰',
+  excerpt:
+    '#122 兒童英語單字大冒險，用 Gemini 視覺 AI 拍照辨識課本單字、真人美音朗讀、Kahoot 風格全班 PIN 碼對戰，加上等級 EXP、連續打卡與 8 款成就徽章，把「背單字」變成孩子願意每天回來的冒險。',
+  publishedAt: '2026-07-28',
+  readingMinutes: 6,
+  tags: ['英語單字', 'AI 辨識', '全班對戰', '遊戲化學習', '國小英語'],
+  toolIds: [122, 77, 43],
+  coverEmoji: '🪄',
+  coverColor: 'purple',
+  body: `## 「老師，這個字怎麼唸？」——一堂英語課被問了 20 次
+
+國小英語課最真實的畫面是這樣的：一課大概 12 到 15 個新單字，老師帶唸兩輪，下課後大部分孩子還是記不住。想讓學生回家自己練，可是「自己練」的工具通常長這樣——
+
+- 買現成的單字 App，但裡面的單字跟學校用的課本版本對不上。
+- 老師自己做單字卡，一課一課手打，打完一冊要好幾個晚上。
+- 想辦單字比賽，得先架設備、印題卡、找人計分，一次活動要準備兩小時。
+
+更麻煩的是，發音沒人聽得到。孩子在家看著紙本單字卡，唸出來的音對不對，家長也不確定。
+
+**「有沒有一個工具，能讓老師拍一張課本就生出題庫，讓孩子在家點一下就聽到純正美音，還能在課堂上直接變成全班搶答？」**
+
+這就是 **[#122 兒童英語單字大冒險](/tool/122)** 想解決的事。
+
+## #122 怎麼解？六個真的做出來的功能
+
+**功能 A：AI 拍照識字（PhotoScan）**
+把課本單字頁、自製字卡、甚至白板上寫的單字拍下來上傳，Gemini 2.5 Flash Lite 視覺 AI 會自動抽出英文單字，並補上繁體中文解釋、KK 音標與詞性分類。老師確認後一鍵存進單字庫——原本要打半小時的題庫，變成拍一張照片。
+
+**功能 B：真人美音朗讀 ＋ 慢速鍵**
+單字卡整合 Web Speech TTS，點一下就是純正美語發音。旁邊還有一個慢速朗讀（🐢）按鈕，把語速放慢，讓孩子聽清楚每個音節怎麼組起來——這對 /θ/、/ð/、字尾子音這類最常唸錯的音特別有用。
+
+**功能 C：全班即時對戰（Arena）**
+老師點「開房」，系統產生一組 4 位數 PIN 碼投影在螢幕上；學生用手機、平板或 Chromebook 輸入 PIN 就能加入，不用註冊帳號。題目一題一題出，答對加分、答題速度也算分，畫面同步顯示即時排行榜。整套流程就是 Kahoot 的節奏，但題庫是你自己這一課的單字。
+
+**功能 D：聽力測驗 ＋ 錯題本**
+ListenQuiz 只播發音、不顯示字，學生要從選項中挑出正確拼法——這是「聽得懂」和「看得懂」的分水嶺。答錯的單字會自動落進錯題本，複習時直接針對弱點打，不用整課重來。
+
+**功能 E：等級 EXP、連續打卡與 8 款成就徽章**
+學習與答題都會累積經驗值，Level N 需要 N×100 EXP，升級曲線刻意做得前期快、後期慢。連續登入天數會顯示 🔥 Streak，另有 8 款徽章可解鎖：初露鋒芒、持之以恆（連 3 天）、習慣成自然（連 7 天）、單字學徒（10 字）、單字大師（50 字）、小學霸（單場 500 分）、滿分戰神（100% 滿分）、魔法學者（Level 5）。
+
+**功能 F：教師端 CSV 批次匯入／匯出**
+提供「國小英文單字庫匯入範本.csv」，欄位就是 english / chinese / phonetic / category 四欄。老師可以一次匯入整冊單字，也能一鍵匯出備份帶到別的班級或分享給同領域的同事。匯出檔帶 UTF-8 BOM，用 Excel 打開不會變亂碼。
+
+## 真實技術棧
+
+- **前端**：React 18 + TypeScript + Wouter（Hash Router「#/」模式，根治 GitHub Pages 子目錄白屏）
+- **建置**：Vite 6 + Tailwind CSS v4 + Radix UI + Lucide Icons，pnpm workspace
+- **AI**：Google Gemini 2.5 Flash Lite Vision API（圖片轉單字結構化資料）
+- **語音**：Web Speech TTS（正常速 ＋ 慢速兩段語速）
+- **雲端**：Firebase Firestore（單字庫、學習紀錄）＋ Realtime Database（Arena 對戰房即時同步）
+- **部署**：GitHub Actions 自動編譯發布到 GitHub Pages，7 組 Firebase 連線參數全部走 Repository Secrets 打包注入，原始碼零金鑰
+- **PWA**：Service Worker 自癒 ＋ 新版滑出通知，支援離線快取與手動 skipWaiting
+
+## 教學情境
+
+**情境一：課前 5 分鐘建題庫。**
+英語老師在辦公室拍下下一課的單字頁，AI 辨識完確認一下音標，存檔。上課直接開對戰房，全班用這一課的字搶答。
+
+**情境二：課後扶助的自主練習。**
+需要加強的孩子在家開單字卡模式，聽發音、翻卡片，答錯的自動進錯題本。下次上課老師只要看錯題本，就知道整班卡在哪幾個字。
+
+**情境三：全校英語單字王比賽。**
+教務處辦活動時不用另外架系統：匯入指定的單字範圍 CSV，開房、投影 PIN 碼，學生自備載具加入，排行榜就是現成的計分板。
+
+## 跟其他工具的關係
+
+在阿凱老師的工具集裡，語文類已經有 [#20 英打練習](/tool/20) 和 [#61 英打打字超互動遊戲](/tool/61) 處理「打得出來」，[#43 課程計畫英文轉寫小精靈](/tool/43) 處理老師端的英文文件，[#77 石門國小雙語教育宣導網站](/tool/77) 處理雙語政策的對外說明。#122 補的是最中間那塊：**孩子到底記不記得住這個字、唸不唸得出來。**
+
+## 配對工具推薦
+
+- [#77 石門國小雙語教育宣導網站](/tool/77) — 雙語教育推動的說明與資源入口
+- [#43 課程計畫英文轉寫小精靈](/tool/43) — 課程計畫中英轉寫，老師端的英文助手
+- [#122 兒童英語單字大冒險](/tool/122) — 本篇主角
+
+## 適用對象
+
+- **國小英語科任／專任老師**：需要跟課本同步的單字題庫與課堂搶答活動。
+- **班級導師**：晨光時間、課後複習想帶一個全班都能參與的英語活動。
+- **國中英語老師**：基礎單字補救教學、KK 音標建立階段同樣適用。
+- **教務處**：辦英語單字競賽、課後扶助時，需要一個免安裝、免帳號的現成平台。
+- **學生與家長**：在家用手機就能聽發音、練錯題，家長不用會英文也能陪練。
+
+## 想試試？
+
+→ [前往 #122 兒童英語單字大冒險](https://cagoooo.github.io/Word-Wiz-Kids/#/)
+
+先拍一張你下一課的課本單字頁丟進去，看看 AI 幫你省下多少打字時間——然後把 PIN 碼投影出來，讓全班替你證明這套真的有效。
+`,
+};
+
+export const POSTS: BlogPost[] = [POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。

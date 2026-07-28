@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 121+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 122+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Mon, 27 Jul 2026 16:00:00 GMT</pubDate>
-    <lastBuildDate>Mon, 27 Jul 2026 08:29:51 GMT</lastBuildDate>
+    <pubDate>Tue, 28 Jul 2026 02:00:00 GMT</pubDate>
+    <lastBuildDate>Tue, 28 Jul 2026 03:39:39 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,27 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：兒童英語單字大冒險</title>
+      <link>https://cagoooo.github.io/Akai/tool/122</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/122</guid>
+      <pubDate>Tue, 28 Jul 2026 02:00:00 GMT</pubDate>
+      <description>專為國小孩子打造的魔法英語單字學習平台！AI 拍照自動辨識課本單字、真人美音朗讀、Kahoot 風格全班對戰與等級成就系統，讓背單字變成一場冒險。</description>
+      <category>英語單字</category>
+      <category>英語學習</category>
+      <category>KK音標</category>
+      <category>AI拍照辨識</category>
+      <category>單字卡</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#122 兒童英語單字大冒險：拍一張課本照片，AI 幫你把整課單字變成全班對戰</title>
+      <link>https://cagoooo.github.io/Akai/blog/word-wiz-kids-122-english-vocabulary-adventure</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/word-wiz-kids-122-english-vocabulary-adventure</guid>
+      <pubDate>Tue, 28 Jul 2026 00:00:00 GMT</pubDate>
+      <description>#122 兒童英語單字大冒險，用 Gemini 視覺 AI 拍照辨識課本單字、真人美音朗讀、Kahoot 風格全班 PIN 碼對戰，加上等級 EXP、連續打卡與 8 款成就徽章，把「背單字」變成孩子願意每天回來的冒險。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
     <item>
       <title>🆕 新工具：仙人掌大逃亡：奔跑吧小墨龍</title>
       <link>https://cagoooo.github.io/Akai/tool/121</link>
@@ -312,24 +333,6 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/digital-software-survey-109-firestore-needs-poll</guid>
       <pubDate>Fri, 12 Jun 2026 00:00:00 GMT</pubDate>
       <description>每年學校要彙整老師的教學軟體採購需求，傳統做法是一張 Excel 在處室與 LINE 群組之間傳來傳去，誰填了誰漏了、同套軟體被重複填，承辦最後還要手動去重排名。#109 是石門國小教務處的線上實名填報系統：老師勾選統購與自主需求軟體，Firebase Firestore 即時統計、自動排出全校前 5 名提報教育局，已採購的軟體自動標免填，把「對 Excel」變成「看儀表板」。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#108 把反詐騙變成一場闖關：學生扮資安特攻隊，跟 AI 教官一封封揪出釣魚信</title>
-      <link>https://cagoooo.github.io/Akai/blog/security-squad-phishing-108-it-cockpit</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/security-squad-phishing-108-it-cockpit</guid>
-      <pubDate>Fri, 12 Jun 2026 00:00:00 GMT</pubDate>
-      <description>資安宣導最怕變成「老師念一遍、學生左耳進右耳出」。#108 是阿凱老師做的資訊素養情境闖關：學生扮演「鱻盾資安特攻隊」資安新兵，跟 NotebookLM 的阿盾教官對話，一封封判斷訊息是安全還是釣魚、說出破綻、集滿 5 枚徽章晉升正式隊員。用「五看口訣」拆穿詐騙，一節課把防身術練進肌肉記憶。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#107 每學年初最磨人的雜事：上千個教育雲帳號，這次三步驟自動對齊</title>
-      <link>https://cagoooo.github.io/Akai/blog/edu-cloud-account-updater-107-openid-roster</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/edu-cloud-account-updater-107-openid-roster</guid>
-      <pubDate>Fri, 12 Jun 2026 00:00:00 GMT</pubDate>
-      <description>每到新學年，承辦老師都要面對同一場惡夢：把全校教育雲帳號總表跟教育局新名冊重新對齊——誰轉走、誰轉進、誰升年級換了班級座號，一格一格手動圈、手動貼。#107 是阿凱老師為石門國小做的純前端工具：上傳舊帳密總表與教育局新名冊，自動比對轉入轉出、揪出末四碼撞號、跨學年保留帳密只更新座號，一鍵產出總表、異動清冊與新生通知單。全程在瀏覽器運算，個資一個 byte 都不上傳。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
