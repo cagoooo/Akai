@@ -17,6 +17,8 @@ export type AudienceWizardAction =
   | { type: 'RETURNING_KEEP' }
   | { type: 'RETURNING_REPICK_PAINS' }
   | { type: 'RETURNING_RESTART' }
+  // P0-1：接續上次選到一半的草稿（來源已在 audienceWizardDraft 驗證過合法性）
+  | { type: 'RESTORE'; state: AudienceWizardState }
   | { type: 'RESET'; returningProfile?: AudienceProfile };
 
 export const initialAudienceWizardState: AudienceWizardState = { step: 'audience', profile: {} };
@@ -81,6 +83,8 @@ export function audienceWizardReducer(state: AudienceWizardState, action: Audien
     case 'RETURNING_RESTART':
       if (state.step !== 'returning') return state;
       return initialAudienceWizardState;
+    case 'RESTORE':
+      return action.state;
     case 'RESET':
       if (action.returningProfile) {
         // 只沿用身分，不沿用上次的痛點（那是上次的煩惱，不是這次的）

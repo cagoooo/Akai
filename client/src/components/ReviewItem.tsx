@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
+import { usePWAUpdateHold } from '@/hooks/usePWAUpdateHold';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -74,6 +75,9 @@ export function ReviewItem({ review, toolId, onReviewUpdated }: ReviewItemProps)
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [deleting, setDeleting] = useState(false);
     const [showReplies, setShowReplies] = useState(false);
+
+    // P0-2：正在編輯評論或存檔中就先別自動更新，改到一半被重整等於白改
+    usePWAUpdateHold(isEditing || saving);
 
     const hasLiked = user && review.likedBy?.includes(user.uid);
     const isOwner = user && review.userId === user.uid;

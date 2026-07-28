@@ -13,9 +13,13 @@ import { useState, useEffect } from 'react';
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
 import { isPWAUpdateHeld, PWA_UPDATE_HOLD_CHANGE_EVENT } from '@/lib/pwaUpdateHold';
+import { useUserIdle } from '@/hooks/useUserIdle';
 
 // 自動更新倒數秒數（使用者可在此期間點「稍後」取消）
 const AUTO_UPDATE_COUNTDOWN = 8;
+// P0-3：使用者停手多久才視為「可以安心套用更新」。讀長文、點選單、打字到一半被重整，
+// 比晚幾秒更新糟糕得多；分頁切到背景也算閒置（那是最無感的更新時機）。
+const IDLE_BEFORE_AUTO_UPDATE_MS = 20 * 1000;
 const PROMPT_COOLDOWN_MS = 30 * 24 * 60 * 60 * 1000; // 延長至 30 天
 
 export function PWAUpdatePrompt() {
@@ -56,9 +60,12 @@ export function PWAUpdatePrompt() {
         return () => clearTimeout(timer);
     }, []);
 
-    // 🚀 自動更新倒數：偵測到新版本時，3 秒後自動套用
+    // P0-3：使用者停手 20 秒（或分頁切到背景）才算可以動手更新
+    const isIdle = useUserIdle(IDLE_BEFORE_AUTO_UPDATE_MS);
+
+    // 🚀 自動更新倒數：偵測到新版本、且使用者已經停手，才開始倒數套用
     useEffect(() => {
-        if (!isUpdateAvailable || isAutoUpdateCancelled) {
+        if (!isUpdateAvailable || isAutoUpdateCancelled || !isIdle) {
             setAutoUpdateCountdown(null);
             return;
         }
@@ -78,7 +85,7 @@ export function PWAUpdatePrompt() {
         }, 1000);
 
         return () => clearInterval(intervalId);
-    }, [isUpdateAvailable, isAutoUpdateCancelled, updateApp]);
+    }, [isUpdateAvailable, isAutoUpdateCancelled, isIdle, updateApp]);
 
     // 使用者選擇稍後更新（取消自動倒數）
     const handlePostponeUpdate = () => {
@@ -279,6 +286,11 @@ export function PWAUpdatePrompt() {
                                     <>
                                         <span style={{ fontWeight: 900, color: tokens.accent, fontSize: 15 }}>{autoUpdateCountdown}</span> 秒後自動套用最新功能與修復
                                     </>
+                                ) : isAutoUpdateCancelled ? (
+                                    '已延後更新，隨時可以按「立即更新」'
+                                ) : !isIdle ? (
+                                    // P0-3：使用者還在操作 → 不倒數、不打斷，等停手再說
+                                    '等你忙完會自動更新，不會打斷正在做的事'
                                 ) : (
                                     '正在套用更新...'
                                 )}

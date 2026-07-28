@@ -17,6 +17,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { usePWAUpdateHold } from '@/hooks/usePWAUpdateHold';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -203,6 +204,9 @@ function ReplyForm({
     const queryClient = useQueryClient();
     const [content, setContent] = useState('');
     const [submitting, setSubmitting] = useState(false);
+
+    // P0-2：打到一半的回覆不能被自動更新重整掉
+    usePWAUpdateHold(content.trim().length > 0 || submitting);
 
     const handleSubmit = async () => {
         if (!user || !content.trim() || submitting) return;

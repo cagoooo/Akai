@@ -15,6 +15,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Loader2, RefreshCw, Target, MousePointer, Eye, Percent } from 'lucide-react';
+import { AudienceFunnelChart } from './AudienceFunnelChart';
+import { sumFunnelDaily } from '@/lib/audienceFunnel';
 
 type Counter = { imp?: number; clk?: number };
 type DailyCounter = { imp?: number; clk?: number; painClk?: number };
@@ -179,6 +181,17 @@ export function RecommendationStatsPanel() {
   const rangedCtr = ctr(ranged.clk, ranged.imp);
   const hasDaily = !!stats?.daily && Object.keys(stats.daily).length > 0;
 
+  // P0-5：漏斗跟著區間走；該區間沒有每日資料時退回累積值，並在標題註明看的是哪一段
+  const rangedFunnel = useMemo(() => {
+    const opt = RANGE_OPTIONS.find((o) => o.key === range) ?? RANGE_OPTIONS[0];
+    return sumFunnelDaily(stats?.funnelDaily, opt.days) ?? stats?.funnel;
+  }, [range, stats]);
+  const funnelRangeLabel = useMemo(() => {
+    const opt = RANGE_OPTIONS.find((o) => o.key === range) ?? RANGE_OPTIONS[0];
+    if (opt.days === null) return '全部';
+    return sumFunnelDaily(stats?.funnelDaily, opt.days) ? opt.label : `${opt.label}無資料，改看全部`;
+  }, [range, stats]);
+
   const segmentRows = useMemo(() => {
     const entries = Object.entries(stats?.segments ?? {});
     return entries
@@ -311,6 +324,8 @@ export function RecommendationStatsPanel() {
             {kpiCard(<Percent className="h-3.5 w-3.5" />, 'CTR', fmtPct(rangedCtr), '點擊 ÷ 曝光')}
             {kpiCard(<Target className="h-3.5 w-3.5" />, '痛點點擊佔比', ranged.clk > 0 ? fmtPct((ranged.painClk / ranged.clk) * 100) : '—', '命中痛點的點擊比例')}
           </div>
+
+          <AudienceFunnelChart funnel={rangedFunnel} minSample={MIN_ALERT_SAMPLE} rangeLabel={funnelRangeLabel} />
 
           <Card>
             <CardHeader><CardTitle className="text-base">漏斗轉換與異常提醒</CardTitle><CardDescription>樣本少於 {MIN_ALERT_SAMPLE} 次時只顯示數字，不做品質判定。</CardDescription></CardHeader>

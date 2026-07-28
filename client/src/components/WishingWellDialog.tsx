@@ -8,6 +8,7 @@ import { m as motion, AnimatePresence } from "framer-motion";
 import { tokens } from "@/design/tokens";
 import { Pin } from "@/components/primitives/Pin";
 import { Tape } from "@/components/primitives/Tape";
+import { usePWAUpdateHold } from "@/hooks/usePWAUpdateHold";
 
 interface WishingWellDialogProps {
     open: boolean;
@@ -28,6 +29,9 @@ export function WishingWellDialog({ open, onOpenChange }: WishingWellDialogProps
     const [content, setContent] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [linkCopied, setLinkCopied] = useState(false);
+
+    // P0-2：已經打了字或送出中就先別自動更新，寫到一半的許願不能被重整吃掉
+    usePWAUpdateHold(open && (content.trim().length > 0 || isSubmitting));
 
     const handleCopyLink = () => {
         // 使用 /wish/ 靜態頁面當分享連結，讓 FB / LINE / Twitter 爬蟲抓到許願池專屬的 OG 預覽圖

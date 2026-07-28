@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { LogIn, Send, AlertCircle } from 'lucide-react';
+import { usePWAUpdateHold } from '@/hooks/usePWAUpdateHold';
 
 interface ReviewFormProps {
     toolId: number;
@@ -29,6 +30,9 @@ export function ReviewForm({ toolId, toolTitle, onReviewSubmitted }: ReviewFormP
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('');
     const [submitting, setSubmitting] = useState(false);
+
+    // P0-2：寫到一半的評論不能被自動更新重整掉（給了星等也算已投入）
+    usePWAUpdateHold(comment.trim().length > 0 || rating > 0 || submitting);
 
     // 檢查是否已評論
     const { data: hasReviewed, isLoading: checkingReview } = useQuery({

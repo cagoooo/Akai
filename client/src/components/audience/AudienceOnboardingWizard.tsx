@@ -10,6 +10,7 @@ import { audienceWizardReducer, initialAudienceWizardState, toAudienceProfile, P
 import { readRecommendationHistory, rememberRecommendedTools } from '@/lib/recommendationHistory';
 import { acquirePWAUpdateHold } from '@/lib/pwaUpdateHold';
 import { noteToneSequence } from '@/lib/noteTone';
+import { clearWizardDraft, readWizardDraft, writeWizardDraft } from '@/lib/audienceWizardDraft';
 
 type Props = { open: boolean; tools: EducationalTool[]; onComplete: (profile: AudienceProfile) => void; onDismiss: () => void; onLocateTool: (toolId: number) => void; recentToolIds?: number[]; /** 隔幾天回訪的重問：帶上次的身分 → 走「一鍵沿用」畫面；undefined 表示首次引導或手動重選 */ returningProfile?: AudienceProfile };
 const levels: [SchoolLevel, string][] = [['elementary', '國小老師'], ['junior', '國中老師'], ['senior', '高中老師']];
@@ -55,6 +56,17 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
     if (!open) return;
     return acquirePWAUpdateHold();
   }, [open]);
+  // P0-1：作答中的每一步都留草稿；走到結果就代表這一輪完成，草稿功成身退。
+  // 暫緩更新是「不要被打斷」，草稿是「就算真的被打斷也救得回來」，兩層防護缺一不可。
+  //
+  // 陷阱：開啟當下這個 effect 拿到的還是「上一輪的 state」（RESTORE 要下一次 render 才生效），
+  // 直接寫入會用空白初始狀態把剛讀到的草稿蓋掉 —— 所以開啟後的第一次一律跳過。
+  useEffect(() => {
+    if (!open) { draftHydratedRef.current = false; return; }
+    if (!draftHydratedRef.current) { draftHydratedRef.current = true; return; }
+    if (state.step === 'results' || state.step === 'thinking') { clearWizardDraft(); return; }
+    writeWizardDraft(state);
+  }, [open, state]);
   const closeRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const firstRecommendationRef = useRef<HTMLButtonElement | null>(null);
@@ -64,6 +76,8 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const completedRef = useRef<string | null>(null);
   const wasOpenRef = useRef(false);
+  /** P0-1：草稿寫入是否已經對齊到「這一輪」的 state（開啟後第一次 effect 拿到的還是舊 state） */
+  const draftHydratedRef = useRef(false);
   // 只在「開啟當下」讀一次，避免把 returningProfile 塞進 open effect 的相依陣列
   const returningRef = useRef(returningProfile);
   returningRef.current = returningProfile;
@@ -74,6 +88,8 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
    * 因為結果一顯示就會把這批寫進歷史，晚讀就分不出新舊了。
    */
   const [history, setHistory] = useState<ReadonlySet<number>>(() => new Set());
+  /** P0-1：這次是「接續上次選到一半」開的 —— 要在畫面上明講，並給重新開始的出口 */
+  const [resumedFromDraft, setResumedFromDraft] = useState(false);
   // P1-1「換一批」：累積已看過的工具 id，讓下一波推薦排除它們（同家族一併排除）
   const [seenIds, setSeenIds] = useState<number[]>([]);
   const seenKeyRef = useRef('');
@@ -108,7 +124,17 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
       previouslyFocusedRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
       modeRef.current = returningRef.current ? 're_prompt' : 'first_time';
       setHistory(readRecommendationHistory());
-      dispatch({ type: 'RESET', returningProfile: returningRef.current });
+      // P0-1：先看有沒有選到一半的草稿 —— 有就接續，讓「我剛剛選的都不見了」不再發生。
+      // 回訪重問（returningProfile）優先，那條線本來就會帶出上次的完整身分。
+      const draft = returningRef.current ? null : readWizardDraft();
+      if (draft) {
+        dispatch({ type: 'RESTORE', state: draft });
+        setResumedFromDraft(true);
+        trackEvent('audience_wizard_resumed', { step: draft.step });
+      } else {
+        dispatch({ type: 'RESET', returningProfile: returningRef.current });
+        setResumedFromDraft(false);
+      }
       completedRef.current = null;
       reshufflePendingRef.current = false;
       dismissedRef.current = false;
@@ -119,6 +145,7 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
       requestAnimationFrame(() => closeRef.current?.focus());
     }
     if (!open && wasOpenRef.current) {
+      setResumedFromDraft(false);
       dispatch({ type: 'RESET' });
       completedRef.current = null;
       reshufflePendingRef.current = false;
@@ -182,6 +209,13 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
     }
     onDismiss();
   }, [onDismiss, state.step]);
+  // P0-1：接續的人想從頭來過 —— 丟掉草稿並回到第一題
+  const handleRestartFromScratch = useCallback(() => {
+    clearWizardDraft();
+    setResumedFromDraft(false);
+    dispatch({ type: 'RESET' });
+    trackEvent('audience_wizard_draft_discarded', {});
+  }, []);
   // P1-1：換一批 — 把目前這批加進「已看過」，下一波排除它們；看完一輪就重新洗牌
   const handleReshuffle = useCallback(() => {
     if (!profile || recommendations.length === 0) return;
@@ -239,6 +273,12 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
       <button ref={closeRef} type="button" className="audience-wizard__close" onClick={handleDismiss} aria-label="稍後再說"><X size={20} /></button>
       <div className="audience-wizard__progress" aria-label="引導進度"><span style={{ width: `${({ returning: 12, audience: 14, 'school-level': 30, 'teacher-role': 46, department: 60, 'pain-points': 76, thinking: 90, results: 100 } as Record<string, number>)[state.step]}%` }} /></div>
       {state.step !== 'audience' && state.step !== 'thinking' && state.step !== 'returning' && <button type="button" className="audience-wizard__back" onClick={() => dispatch({ type: 'BACK' })}><ArrowLeft size={17} /> 上一步</button>}
+      {resumedFromDraft && state.step !== 'thinking' && state.step !== 'results' && (
+        <p className="audience-wizard__resume" role="status">
+          <span aria-hidden="true">📌</span> 已幫你接續上次選到一半的進度
+          <button type="button" onClick={handleRestartFromScratch}>重新開始</button>
+        </p>
+      )}
       {state.step !== 'thinking' && <header><span className="audience-wizard__eyebrow">阿凱老師的工具小幫手</span><h1>{heading}</h1><p>{subheading}</p></header>}
       {state.step === 'returning' && <ReturningChoices
         segmentLabel={userSegmentLabel(state.profile)}

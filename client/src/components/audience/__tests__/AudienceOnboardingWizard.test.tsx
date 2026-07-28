@@ -7,6 +7,8 @@ const noop = () => {};
 
 // 讓「為你思考中」過場在測試裡走 reduced-motion（立即完成），不必等 ~3s 動畫
 beforeEach(() => {
+  // P0-1 草稿存在 sessionStorage，測試之間必須互相隔離
+  sessionStorage.clear();
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
     matches: true, media: query, onchange: null,
     addEventListener: vi.fn(), removeEventListener: vi.fn(),
@@ -41,7 +43,8 @@ describe('AudienceOnboardingWizard', () => {
     expect(onComplete).toHaveBeenCalledTimes(1);
   });
 
-  it('resets and restores focus when reopened', async () => {
+  // P0-1：關掉再開不再是「從頭來過」，而是接續上次選到一半的進度
+  it('restores focus on close and resumes the saved draft when reopened', async () => {
     const user = userEvent.setup();
     const trigger = document.createElement('button');
     document.body.appendChild(trigger);
@@ -52,8 +55,22 @@ describe('AudienceOnboardingWizard', () => {
     view.rerender(<AudienceOnboardingWizard open={false} tools={[]} onComplete={vi.fn()} onDismiss={onDismiss} onLocateTool={noop} />);
     expect(trigger).toHaveFocus();
     view.rerender(<AudienceOnboardingWizard open tools={[]} onComplete={vi.fn()} onDismiss={onDismiss} onLocateTool={noop} />);
-    expect(screen.getByRole('button', { name: /我是老師/ })).toBeInTheDocument();
+    // 接回學段步驟，並明講是接續來的
+    await waitFor(() => expect(screen.getByText(/已幫你接續上次選到一半的進度/)).toBeInTheDocument());
+    expect(screen.queryByRole('button', { name: /我是老師/ })).not.toBeInTheDocument();
     trigger.remove();
+  });
+
+  it('lets a resumed visitor start over from the first question', async () => {
+    const user = userEvent.setup();
+    const onDismiss = vi.fn();
+    const view = renderWizard(true, vi.fn(), onDismiss);
+    await user.click(screen.getByRole('button', { name: /我是學生/ }));
+    view.rerender(<AudienceOnboardingWizard open={false} tools={[]} onComplete={vi.fn()} onDismiss={onDismiss} onLocateTool={noop} />);
+    view.rerender(<AudienceOnboardingWizard open tools={[]} onComplete={vi.fn()} onDismiss={onDismiss} onLocateTool={noop} />);
+    await user.click(await screen.findByRole('button', { name: '重新開始' }));
+    expect(screen.getByRole('button', { name: /我是老師/ })).toBeInTheDocument();
+    expect(sessionStorage.getItem('akai_audience_wizard_draft_v1')).toBeNull();
   });
 
   it('traps tab navigation and supports Escape dismissal', async () => {

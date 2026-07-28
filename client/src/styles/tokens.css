@@ -34,6 +34,9 @@
   --accent-soft: #fef3e7;
   --olive: #7a8c3a;           /* 橄欖綠（Hero 主題色） */
   --olive-deep: #5a6a28;
+  /* 便利貼卡片上的行動提示專用：--olive-deep 在粉(4.44)／紫(4.34)底色上差一點點不到 AA，
+     壓深一階讓六色輪盤每一色都過 4.5:1（見 scripts/check-color-contrast.mjs） */
+  --olive-on-note: #46521c;
   --olive-soft: #e8edd0;
 
   /* ── Sticky-note colors (post-it) ─────── */
@@ -125,9 +128,14 @@
 
 .audience-wizard__choice strong { display: block; margin: 12px 0 3px; font-size: 20px; }
 .audience-wizard__choice small, .audience-wizard__recommendation small { display: block; color: var(--ink-soft); font-size: 13px; line-height: 1.5; }
-.audience-wizard__choice > span:last-child, .audience-wizard__go { display: block; margin-top: 17px; color: var(--olive-deep); font-size: 13px; font-weight: 900; }
+.audience-wizard__choice > span:last-child, .audience-wizard__go { display: block; margin-top: 17px; color: var(--olive-on-note); font-size: 13px; font-weight: 900; }
 .audience-wizard__later { display: block; margin: 28px auto 0; padding: 8px 14px; color: var(--muted2); background: transparent; border: 0; text-decoration: underline; cursor: pointer; font-family: inherit; }
-.audience-wizard__results { text-align: center; }.audience-wizard__results h2 { margin: 12px 0 7px; font-size: clamp(24px, 3.5vw, 34px); }.audience-wizard__recommendations { margin-top: 24px; text-align: left; }.audience-wizard__recommendation { min-height: 150px; padding-top: 18px; }.audience-wizard__recommendation .audience-wizard__pin { position: absolute; left: 12px; top: 11px; background: var(--note-tone-pin, var(--pin-green)); width: 10px; height: 10px; }.audience-wizard__number { display: block; color: var(--olive-deep); font-family: var(--font-mono); font-size: 11px; font-weight: 900; }.audience-wizard__recommendation strong { display: block; margin: 6px 0 4px; font-size: 17px; }
+.audience-wizard__results { text-align: center; }.audience-wizard__results h2 { margin: 12px 0 7px; font-size: clamp(24px, 3.5vw, 34px); }.audience-wizard__recommendations { margin-top: 24px; text-align: left; }.audience-wizard__recommendation { min-height: 150px; padding-top: 18px; }.audience-wizard__recommendation .audience-wizard__pin { position: absolute; left: 12px; top: 11px; background: var(--note-tone-pin, var(--pin-green)); width: 10px; height: 10px; }.audience-wizard__number { display: block; color: var(--olive-on-note); font-family: var(--font-mono); font-size: 11px; font-weight: 900; }.audience-wizard__recommendation strong { display: block; margin: 6px 0 4px; font-size: 17px; }
+/* 接續草稿提示（P0-1）：明講「幫你接回來了」，並附一鍵重來的出口 */
+.audience-wizard__resume { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px; width: fit-content; max-width: 590px; margin: 4px auto 14px; padding: 8px 14px; background: var(--note-yellow); border: 2px solid var(--ink); border-radius: 999px; box-shadow: 2px 3px 0 rgba(0,0,0,.18); font-size: 13px; font-weight: 800; color: var(--ink); transform: rotate(-.6deg); }
+.audience-wizard__resume button { min-height: 32px; padding: 4px 12px; background: var(--paper-warm); border: 1.5px solid var(--ink); border-radius: 999px; cursor: pointer; font: inherit; font-size: 12.5px; font-weight: 800; color: var(--olive-deep); }
+.audience-wizard__resume button:hover { background: #fff; transform: translateY(-1px); }
+
 /* 痛點勾選（P0-2）：便利貼風 chip 多選 */
 .audience-wizard__pains { max-width: 640px; margin: 4px auto 0; }
 .audience-wizard__pain-chips { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
@@ -223,7 +231,7 @@
 .audience-strip__card:hover { transform: translateY(-4px) rotate(0); box-shadow: 6px 8px 0 rgba(0,0,0,.22); }
 .audience-strip__card strong { display: block; margin: 4px 0 4px; font-size: 16px; line-height: 1.35; }
 .audience-strip__card small { display: block; color: var(--ink-soft); font-size: 12.5px; line-height: 1.5; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
-.audience-strip__go { display: block; margin-top: 12px; color: var(--olive-deep); font-size: 12px; font-weight: 900; }
+.audience-strip__go { display: block; margin-top: 12px; color: var(--olive-on-note); font-size: 12px; font-weight: 900; }
 @media (max-width: 1024px) { .audience-strip { padding: 4px 32px 18px; } .audience-strip__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 480px) { .audience-strip { padding: 4px 14px 16px; } .audience-strip__cards { grid-template-columns: 1fr; gap: 12px; } .audience-strip__card { min-height: 0; } }
 
