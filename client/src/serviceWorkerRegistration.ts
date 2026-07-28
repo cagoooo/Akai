@@ -1,3 +1,5 @@
+import { runWhenUpdateAllowed } from '@/lib/pwaUpdateHold';
+
 export const PWA_UPDATE_AVAILABLE_EVENT = 'akai:pwa-update-available';
 
 function announceUpdate(registration: ServiceWorkerRegistration) {
@@ -24,13 +26,18 @@ export function watchServiceWorkerRegistration(registration: ServiceWorkerRegist
 
   // 陷阱 #18：頁面重整後若新 SW 已在 waiting 狀態，直接靜默自動套用，
   // 避免使用者永遠看不到更新提示而卡在舊版（來源：2026-06-28 Akai 實戰）
+  // 但若此刻有「不能被打斷」的流程（如族群對象引導精靈）持有更新暫緩票，
+  // 就等它結束後再套用，避免訪客選到一半被重整（2026-07-28）
   if (registration.waiting && navigator.serviceWorker.controller) {
-    console.log('[SW] 偵測到 waiting worker，自動靜默套用新版…');
-    let _reloaded = false;
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-      if (!_reloaded) { _reloaded = true; window.location.reload(); }
+    const waitingWorker = registration.waiting;
+    runWhenUpdateAllowed(() => {
+      console.log('[SW] 偵測到 waiting worker，自動靜默套用新版…');
+      let _reloaded = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!_reloaded) { _reloaded = true; window.location.reload(); }
+      });
+      waitingWorker.postMessage({ type: 'SKIP_WAITING' });
     });
-    registration.waiting.postMessage({ type: 'SKIP_WAITING' });
     return; // 直接觸發自動更新，不再走 announceUpdate 路線
   }
 

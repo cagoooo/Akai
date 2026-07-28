@@ -8,6 +8,7 @@ import { trackEvent, recordAudienceFunnelEvent, recordAudiencePainPointSelection
 import { AudienceRecommendationResults } from './AudienceRecommendationResults';
 import { audienceWizardReducer, initialAudienceWizardState, toAudienceProfile, PAIN_POINT_SELECTION_LIMIT } from './audienceWizardReducer';
 import { readRecommendationHistory, rememberRecommendedTools } from '@/lib/recommendationHistory';
+import { acquirePWAUpdateHold } from '@/lib/pwaUpdateHold';
 
 type Props = { open: boolean; tools: EducationalTool[]; onComplete: (profile: AudienceProfile) => void; onDismiss: () => void; onLocateTool: (toolId: number) => void; recentToolIds?: number[]; /** 隔幾天回訪的重問：帶上次的身分 → 走「一鍵沿用」畫面；undefined 表示首次引導或手動重選 */ returningProfile?: AudienceProfile };
 const levels: [SchoolLevel, string][] = [['elementary', '國小老師'], ['junior', '國中老師'], ['senior', '高中老師']];
@@ -48,6 +49,11 @@ function markImpressionFired(signature: string): void {
 
 export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, onLocateTool, recentToolIds, returningProfile }: Props) {
   const [state, dispatch] = useReducer(audienceWizardReducer, initialAudienceWizardState);
+  // 精靈開著就暫緩 PWA 自動更新：訪客答到一半被自動重整，等於什麼都沒選到。
+  useEffect(() => {
+    if (!open) return;
+    return acquirePWAUpdateHold();
+  }, [open]);
   const closeRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const firstRecommendationRef = useRef<HTMLButtonElement | null>(null);

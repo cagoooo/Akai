@@ -12,6 +12,7 @@ import { m as motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
+import { isPWAUpdateHeld, PWA_UPDATE_HOLD_CHANGE_EVENT } from '@/lib/pwaUpdateHold';
 
 // 自動更新倒數秒數（使用者可在此期間點「稍後」取消）
 const AUTO_UPDATE_COUNTDOWN = 8;
@@ -30,8 +31,18 @@ export function PWAUpdatePrompt() {
     // 獨立的 version.json 輪詢（3 分鐘一次），作為 SW updatefound 的備援通道
     const { hasNewVersion, latestVersion } = useVersionCheck({ intervalMs: 3 * 60 * 1000 });
 
+    // 族群對象引導精靈等「不能被打斷」的流程進行中時暫緩更新，
+    // 否則訪客選到一半被自動重整，等於什麼都沒選到。
+    const [isUpdateHeld, setIsUpdateHeld] = useState(() => isPWAUpdateHeld());
+    useEffect(() => {
+        const syncHold = () => setIsUpdateHeld(isPWAUpdateHeld());
+        window.addEventListener(PWA_UPDATE_HOLD_CHANGE_EVENT, syncHold);
+        syncHold();
+        return () => window.removeEventListener(PWA_UPDATE_HOLD_CHANGE_EVENT, syncHold);
+    }, []);
+
     // 任一通道偵測到新版本就觸發更新流程（SW 事件 OR version.json 輪詢）
-    const isUpdateAvailable = swUpdateAvailable || hasNewVersion;
+    const isUpdateAvailable = (swUpdateAvailable || hasNewVersion) && !isUpdateHeld;
 
     const [shouldShowAfterDelay, setShouldShowAfterDelay] = useState(false);
     const [autoUpdateCountdown, setAutoUpdateCountdown] = useState<number | null>(null);
