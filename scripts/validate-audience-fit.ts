@@ -21,9 +21,7 @@ const RECOMMENDATION_LIMIT = 6;
  * 已存在、尚待分批回填 audienceFit 的外部工具。每批回填完成時，必須同步移除對應 ID，
  * 以避免 progressive 模式意外放行新工具。
  */
-export const LEGACY_MISSING_AUDIENCE_IDS: ReadonlySet<number> = new Set([
-  80,
-]);
+export const LEGACY_MISSING_AUDIENCE_IDS: ReadonlySet<number> = new Set<number>();
 
 export const REQUIRED_PROFILES: readonly AudienceProfile[] = [
   { audience: 'student' },
