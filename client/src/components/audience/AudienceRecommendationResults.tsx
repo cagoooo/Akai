@@ -1,6 +1,7 @@
-import type { Ref } from 'react';
+import { useMemo, type Ref } from 'react';
 import type { AudienceRecommendation, RecommendationSlot } from '@/lib/audienceRecommendation';
 import { noveltyBadgeFor } from '@/lib/recommendationHistory';
+import { noteToneSequence } from '@/lib/noteTone';
 
 // P0-1：把已算好的 slot / 痛點命中轉成「為什麼推」徽章，讓使用者秒懂推薦邏輯。
 const SLOT_BADGES: Record<RecommendationSlot, { label: string; kind: string }> = {
@@ -19,6 +20,11 @@ export function badgeFor(rec: AudienceRecommendation): { label: string; kind: st
 
 export function AudienceRecommendationResults({ recommendations, onLocateTool, onReshuffle, firstRecommendationRef, recommendationHistory }: { recommendations: AudienceRecommendation[]; onLocateTool: (toolId: number) => void; onReshuffle?: () => void; firstRecommendationRef?: Ref<HTMLButtonElement>; /** 上一次推薦過的工具 id，用來標「👀 上次沒看到」 */ recommendationHistory?: ReadonlySet<number> }) {
   const history = recommendationHistory ?? new Set<number>();
+  // 便利貼色調：以這批工具 id 當種子 → 同一批顏色穩定不閃爍，「換一批」則換一套配色
+  const tones = useMemo(
+    () => noteToneSequence(recommendations.length, recommendations.map((rec) => rec.tool.id).join('-')),
+    [recommendations],
+  );
   return <section className="audience-wizard__results" aria-labelledby="audience-results-title">
     <div className="audience-wizard__tape">為你精選</div>
     <h2 id="audience-results-title">這些工具，現在就很好用</h2>
@@ -29,7 +35,7 @@ export function AudienceRecommendationResults({ recommendations, onLocateTool, o
         const badge = badgeFor(rec);
         // P1-2：新鮮度徽章與「為什麼推」徽章並存 —— 前者回答「為什麼這次才給你看」
         const novelty = noveltyBadgeFor(tool, history);
-        return <button ref={index === 0 ? firstRecommendationRef : undefined} key={tool.id} type="button" className="audience-wizard__recommendation is-revealing" style={{ animationDelay: `${index * 75}ms` }} data-tool-id={tool.id} onClick={() => onLocateTool(tool.id)}>
+        return <button ref={index === 0 ? firstRecommendationRef : undefined} key={tool.id} type="button" className="audience-wizard__recommendation is-revealing" style={{ animationDelay: `${index * 75}ms` }} data-tool-id={tool.id} data-tone={tones[index]} onClick={() => onLocateTool(tool.id)}>
           <span className="audience-wizard__pin" aria-hidden="true" />
           <span className="audience-wizard__number">{String(index + 1).padStart(2, '0')}</span>
           <span className={`audience-wizard__badge audience-wizard__badge--${badge.kind}`}>{badge.label}</span>

@@ -110,15 +110,24 @@
 .audience-wizard h1 { margin: 12px 0 8px; font-size: clamp(26px, 4vw, 38px); line-height: 1.24; letter-spacing: -.05em; }
 .audience-wizard header p, .audience-wizard__results > p { margin: 0; color: var(--muted2); line-height: 1.65; }
 .audience-wizard__choices, .audience-wizard__recommendations { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
-.audience-wizard__choice, .audience-wizard__recommendation { position: relative; min-height: 164px; padding: 22px; text-align: left; color: var(--ink); background: var(--note-green); border: 2px solid var(--ink); box-shadow: var(--shadow-note); cursor: pointer; font-family: inherit; transition: transform .2s ease, box-shadow .2s ease; }
-.audience-wizard__choice:nth-child(even), .audience-wizard__recommendation:nth-child(even) { background: var(--note-blue); transform: rotate(1deg); }
+.audience-wizard__choice, .audience-wizard__recommendation { position: relative; min-height: 164px; padding: 22px; text-align: left; color: var(--ink); background: var(--note-tone, var(--note-green)); border: 2px solid var(--ink); box-shadow: var(--shadow-note); cursor: pointer; font-family: inherit; transform: rotate(var(--note-tilt, 0deg)); transition: transform .2s ease, box-shadow .2s ease; }
 .audience-wizard__choice:hover, .audience-wizard__recommendation:hover { transform: translateY(-4px) rotate(0); box-shadow: 6px 8px 0 rgba(0,0,0,.22); }
-.audience-wizard__choice .audience-wizard__pin { position: absolute; top: 10px; right: 12px; width: 10px; height: 10px; background: var(--pin-blue); }
+.audience-wizard__choice .audience-wizard__pin { position: absolute; top: 10px; right: 12px; width: 10px; height: 10px; background: var(--note-tone-pin, var(--pin-blue)); }
+/* 便利貼色調輪盤（6 色）：由 JS 洗牌後用 data-tone 指派（見 lib/noteTone.ts），
+   取代原本「奇數綠、偶數藍」的兩色棋盤格。傾斜角跟著色調一起換，
+   卡片才像一張張隨手貼上公佈欄的便利貼，而不是對齊的格線。 */
+:is(.audience-wizard__choice, .audience-wizard__recommendation, .audience-strip__card)[data-tone="0"] { --note-tone: var(--note-green); --note-tone-pin: var(--pin-green); --note-tilt: -1.1deg; }
+:is(.audience-wizard__choice, .audience-wizard__recommendation, .audience-strip__card)[data-tone="1"] { --note-tone: var(--note-blue); --note-tone-pin: var(--pin-blue); --note-tilt: 1deg; }
+:is(.audience-wizard__choice, .audience-wizard__recommendation, .audience-strip__card)[data-tone="2"] { --note-tone: var(--note-yellow); --note-tone-pin: var(--pin-red); --note-tilt: -.6deg; }
+:is(.audience-wizard__choice, .audience-wizard__recommendation, .audience-strip__card)[data-tone="3"] { --note-tone: var(--note-pink); --note-tone-pin: var(--pin-magenta); --note-tilt: 1.3deg; }
+:is(.audience-wizard__choice, .audience-wizard__recommendation, .audience-strip__card)[data-tone="4"] { --note-tone: var(--note-orange); --note-tone-pin: var(--pin-orange); --note-tilt: -1.4deg; }
+:is(.audience-wizard__choice, .audience-wizard__recommendation, .audience-strip__card)[data-tone="5"] { --note-tone: var(--note-purple); --note-tone-pin: var(--pin-yellow); --note-tilt: .7deg; }
+
 .audience-wizard__choice strong { display: block; margin: 12px 0 3px; font-size: 20px; }
 .audience-wizard__choice small, .audience-wizard__recommendation small { display: block; color: var(--ink-soft); font-size: 13px; line-height: 1.5; }
 .audience-wizard__choice > span:last-child, .audience-wizard__go { display: block; margin-top: 17px; color: var(--olive-deep); font-size: 13px; font-weight: 900; }
 .audience-wizard__later { display: block; margin: 28px auto 0; padding: 8px 14px; color: var(--muted2); background: transparent; border: 0; text-decoration: underline; cursor: pointer; font-family: inherit; }
-.audience-wizard__results { text-align: center; }.audience-wizard__results h2 { margin: 12px 0 7px; font-size: clamp(24px, 3.5vw, 34px); }.audience-wizard__recommendations { margin-top: 24px; text-align: left; }.audience-wizard__recommendation { min-height: 150px; padding-top: 18px; }.audience-wizard__recommendation .audience-wizard__pin { position: absolute; left: 12px; top: 11px; background: var(--pin-green); width: 10px; height: 10px; }.audience-wizard__number { display: block; color: var(--olive-deep); font-family: var(--font-mono); font-size: 11px; font-weight: 900; }.audience-wizard__recommendation strong { display: block; margin: 6px 0 4px; font-size: 17px; }
+.audience-wizard__results { text-align: center; }.audience-wizard__results h2 { margin: 12px 0 7px; font-size: clamp(24px, 3.5vw, 34px); }.audience-wizard__recommendations { margin-top: 24px; text-align: left; }.audience-wizard__recommendation { min-height: 150px; padding-top: 18px; }.audience-wizard__recommendation .audience-wizard__pin { position: absolute; left: 12px; top: 11px; background: var(--note-tone-pin, var(--pin-green)); width: 10px; height: 10px; }.audience-wizard__number { display: block; color: var(--olive-deep); font-family: var(--font-mono); font-size: 11px; font-weight: 900; }.audience-wizard__recommendation strong { display: block; margin: 6px 0 4px; font-size: 17px; }
 /* 痛點勾選（P0-2）：便利貼風 chip 多選 */
 .audience-wizard__pains { max-width: 640px; margin: 4px auto 0; }
 .audience-wizard__pain-chips { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
@@ -144,17 +153,18 @@
 .audience-wizard__badge { position: absolute; top: 10px; right: 10px; display: inline-block; padding: 3px 8px; border: 1.5px solid var(--ink); border-radius: 999px; font-size: 10.5px; font-weight: 900; letter-spacing: .01em; line-height: 1.5; transform: rotate(1.5deg); box-shadow: 1px 2px 0 rgba(0,0,0,.2); white-space: nowrap; }
 .audience-wizard__badge--painpoint { background: #ffd34a; }
 .audience-wizard__badge--popular { background: #ff9d6b; }
-.audience-wizard__badge--role { background: var(--note-green); }
-.audience-wizard__badge--stage { background: #a7d3ff; }
-.audience-wizard__badge--discovery { background: #e6c7ff; }
-.audience-wizard__badge--universal { background: var(--paper-warm); }
+/* 卡片底色現在是六色輪盤，徽章要比卡片更飽和才不會「綠徽章貼在綠卡片上」糊成一片 */
+.audience-wizard__badge--role { background: #a3e88a; }
+.audience-wizard__badge--stage { background: #8ec6ff; }
+.audience-wizard__badge--discovery { background: #d9aeff; }
+.audience-wizard__badge--universal { background: #fffdf5; }
 
 /* 新鮮度徽章（P1-2）：回答「為什麼這次才給你看這個」，與上面的「為什麼推」徽章並存。
    疊在「為什麼推」徽章正下方（左上角是圖釘的位置，不能放），往反方向微旋轉，
    讓兩張貼紙看起來像手貼上去的，而不是對齊的 UI 元件。 */
 .audience-wizard__novelty { position: absolute; top: 52px; right: 10px; display: inline-block; padding: 3px 8px; border: 1.5px solid var(--ink); border-radius: 999px; font-size: 10px; font-weight: 900; letter-spacing: .01em; line-height: 1.5; transform: rotate(-2deg); box-shadow: 1px 2px 0 rgba(0,0,0,.2); white-space: nowrap; }
-.audience-wizard__novelty--fresh { background: #ffe9a8; }
-.audience-wizard__novelty--unseen { background: #c9e8ff; }
+.audience-wizard__novelty--fresh { background: #ffd67a; }
+.audience-wizard__novelty--unseen { background: #9fd4ff; }
 
 .audience-wizard__recommendation { padding-top: 34px; }
 /* 兩張徽章疊在一起時，內容再往下讓一段，避免標題被壓到 */
@@ -189,10 +199,11 @@
 @keyframes audience-icon-pop { 0% { transform: scale(.4); } 70% { transform: scale(1.18); } 100% { transform: scale(1); } }
 
 /* 推薦卡片交錯浮現（配合思考過場的揭曉感） */
+/* 收尾角度用 --note-tilt，否則 forwards 會把色調帶的傾斜角覆蓋掉，卡片又變回一致角度 */
 .audience-wizard__recommendation.is-revealing { opacity: 0; animation: audience-card-reveal .5s cubic-bezier(.2,.7,.3,1) forwards; }
-@keyframes audience-card-reveal { 0% { opacity: 0; transform: translateY(16px) rotate(-1.5deg) scale(.97); } 100% { opacity: 1; transform: translateY(0) rotate(0) scale(1); } }
+@keyframes audience-card-reveal { 0% { opacity: 0; transform: translateY(16px) rotate(-1.5deg) scale(.97); } 100% { opacity: 1; transform: translateY(0) rotate(var(--note-tilt, 0deg)) scale(1); } }
 .audience-wizard__recommendation:nth-child(even).is-revealing { animation-name: audience-card-reveal-even; }
-@keyframes audience-card-reveal-even { 0% { opacity: 0; transform: translateY(16px) rotate(1.5deg) scale(.97); } 100% { opacity: 1; transform: translateY(0) rotate(1deg) scale(1); } }
+@keyframes audience-card-reveal-even { 0% { opacity: 0; transform: translateY(16px) rotate(1.5deg) scale(.97); } 100% { opacity: 1; transform: translateY(0) rotate(var(--note-tilt, 0deg)) scale(1); } }
 
 @media (prefers-reduced-motion: reduce) {
   .audience-wizard__thinking-orb, .audience-wizard__thinking-orb::before, .audience-wizard__thinking-orb::after, .audience-wizard__thinking-emoji { animation: none; }
@@ -208,8 +219,7 @@
 .audience-strip__reselect { margin-left: auto; padding: 6px 12px; color: var(--olive-deep); background: var(--paper-warm); border: 1.5px solid var(--ink); border-radius: 999px; cursor: pointer; font: inherit; font-size: 12px; font-weight: 800; }
 .audience-strip__reselect:hover { background: var(--note-yellow); }
 .audience-strip__cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
-.audience-strip__card { position: relative; text-align: left; min-height: 128px; padding: 30px 16px 16px; color: var(--ink); background: var(--note-green); border: 2px solid var(--ink); box-shadow: var(--shadow-note); cursor: pointer; font-family: inherit; transition: transform .18s ease, box-shadow .18s ease; }
-.audience-strip__card:nth-child(even) { background: var(--note-blue); transform: rotate(.8deg); }
+.audience-strip__card { position: relative; text-align: left; min-height: 128px; padding: 30px 16px 16px; color: var(--ink); background: var(--note-tone, var(--note-green)); border: 2px solid var(--ink); box-shadow: var(--shadow-note); cursor: pointer; font-family: inherit; transform: rotate(var(--note-tilt, 0deg)); transition: transform .18s ease, box-shadow .18s ease; }
 .audience-strip__card:hover { transform: translateY(-4px) rotate(0); box-shadow: 6px 8px 0 rgba(0,0,0,.22); }
 .audience-strip__card strong { display: block; margin: 4px 0 4px; font-size: 16px; line-height: 1.35; }
 .audience-strip__card small { display: block; color: var(--ink-soft); font-size: 12.5px; line-height: 1.5; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }

@@ -9,6 +9,7 @@ import { AudienceRecommendationResults } from './AudienceRecommendationResults';
 import { audienceWizardReducer, initialAudienceWizardState, toAudienceProfile, PAIN_POINT_SELECTION_LIMIT } from './audienceWizardReducer';
 import { readRecommendationHistory, rememberRecommendedTools } from '@/lib/recommendationHistory';
 import { acquirePWAUpdateHold } from '@/lib/pwaUpdateHold';
+import { noteToneSequence } from '@/lib/noteTone';
 
 type Props = { open: boolean; tools: EducationalTool[]; onComplete: (profile: AudienceProfile) => void; onDismiss: () => void; onLocateTool: (toolId: number) => void; recentToolIds?: number[]; /** 隔幾天回訪的重問：帶上次的身分 → 走「一鍵沿用」畫面；undefined 表示首次引導或手動重選 */ returningProfile?: AudienceProfile };
 const levels: [SchoolLevel, string][] = [['elementary', '國小老師'], ['junior', '國中老師'], ['senior', '高中老師']];
@@ -323,7 +324,9 @@ function PainPointPicker({ options, selected, onToggle, onConfirm }: {
 }
 
 function Choices({ choices, onChoose }: { choices: [string, string, string, typeof GraduationCap][]; onChoose: (value: string) => void }) {
-  return <div className="audience-wizard__choices">{choices.map(([value, title, note, Icon], index) => <button key={value} type="button" className="audience-wizard__choice" onClick={() => onChoose(value)}>
+  // 每一題用自己的選項組合當種子 → 不同題目換一套便利貼配色，同題重繪不變色
+  const tones = noteToneSequence(choices.length, choices.map(([value]) => value).join('-'));
+  return <div className="audience-wizard__choices">{choices.map(([value, title, note, Icon], index) => <button key={value} type="button" className="audience-wizard__choice" data-tone={tones[index]} onClick={() => onChoose(value)}>
     <span className="audience-wizard__pin" aria-hidden="true" /><Icon size={28} /><strong>{title}</strong><small>{note}</small><span>{index % 2 ? '選這個 →' : '開始選擇 →'}</span>
   </button>)}</div>;
 }

@@ -5,6 +5,7 @@ import { recommendTools } from '@/lib/audienceRecommendation';
 import { recordRecoClick, recordRecoImpression, trackEvent } from '@/lib/analytics';
 import { buildAudienceSegmentKey } from '@/lib/audienceProfile';
 import { badgeFor } from './AudienceRecommendationResults';
+import { noteToneSequence } from '@/lib/noteTone';
 
 /**
  * P1-7：首頁常駐「為你推薦」條。
@@ -43,6 +44,9 @@ export function AudienceRecommendationStrip({
     }
     void recordRecoImpression({ segment, toolIds: recommendations.map((rec) => rec.tool.id), surface: 'strip' });
   }, [profile, recommendations]);
+
+  // 便利貼色調：與精靈結果頁同一套輪盤，首頁推薦條才不會又退回綠藍雙色
+  const tones = noteToneSequence(recommendations.length, recommendations.map((rec) => rec.tool.id).join('-'));
 
   if (recommendations.length === 0) return null;
 
@@ -83,6 +87,7 @@ export function AudienceRecommendationStrip({
               type="button"
               className="audience-strip__card"
               data-tool-id={rec.tool.id}
+              data-tone={tones[index]}
               onClick={() => handleClick(rec.tool.id, rec.slot, index + 1, rec.matchedPainPoints)}
             >
               <span className={`audience-wizard__badge audience-wizard__badge--${badge.kind}`}>{badge.label}</span>
