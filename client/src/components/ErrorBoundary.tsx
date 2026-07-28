@@ -1,4 +1,5 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { shouldReportErrorToFirestore } from '@/lib/errorReporting';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
@@ -106,6 +107,8 @@ export class ErrorBoundary extends Component<Props, State> {
     }
 
     private async logErrorToFirestore(error: Error, errorInfo: ErrorInfo) {
+        // 本機開發不寫進正式 errorLogs（避免污染 Google Chat 告警）
+        if (!shouldReportErrorToFirestore()) return;
         try {
             const { db, isFirebaseAvailable } = await import('@/lib/firebase');
             if (!isFirebaseAvailable() || !db) return;

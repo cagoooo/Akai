@@ -7,6 +7,7 @@ import "./styles/keyframes.css";
 import "./styles/blog-article.css";
 import { registerServiceWorker } from "./serviceWorkerRegistration"; // Added import
 import { initSentry, captureException } from "./lib/sentry";
+import { shouldReportErrorToFirestore } from './lib/errorReporting';
 
 // ── 🛟 PWA chunk 404 自動 self-heal ─────────────────────────────────
 // 場景：deploy 換新 chunk hash 後，使用者的舊 SW 給出舊 index.html 引用舊 chunk
@@ -104,6 +105,9 @@ createRoot(document.getElementById("root")!).render(
 window.addEventListener('unhandledrejection', async (event) => {
     console.error('Unhandled promise rejection:', event.reason);
     captureException(event.reason, { source: 'unhandledrejection' });
+    // 本機開發（含 vite HMR 的 WebSocket 斷線）不寫進正式 errorLogs，
+    // 否則會誤觸 Google Chat 告警。console.error 上面已經印過了。
+    if (!shouldReportErrorToFirestore()) return;
     try {
         const { db, isFirebaseAvailable } = await import('./lib/firebase');
         if (!isFirebaseAvailable() || !db) return;

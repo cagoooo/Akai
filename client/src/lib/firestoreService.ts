@@ -1,5 +1,6 @@
 // Firestore 資料庫服務層
 import { db, isFirebaseAvailable } from './firebase';
+import { shouldReportErrorToFirestore } from './errorReporting';
 import {
     doc,
     getDoc,
@@ -330,6 +331,12 @@ export async function logError(
 ): Promise<void> {
     if (!isFirebaseAvailable() || !db) {
         console.warn('Firebase 不可用，錯誤僅記錄在控制台:', level, message);
+        return;
+    }
+
+    // 本機開發不寫進正式 errorLogs（避免污染 Google Chat 告警）
+    if (!shouldReportErrorToFirestore()) {
+        console.warn('[本機開發] 錯誤僅記錄在控制台:', level, message);
         return;
     }
 
