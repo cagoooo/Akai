@@ -3,14 +3,9 @@
 
 <head>
   <meta charset="UTF-8" />
-  <!-- Google tag (gtag.js)
-       ID 由 Vite 的 HTML env replacement 在 build 時注入（%VITE_GA_MEASUREMENT_ID%），
-       CI 從 GitHub secret VITE_GA_MEASUREMENT_ID 餵進來。
-
-       ⚠️ 2026-07-28 修正：原本寫的是自訂佔位符 __GA_MEASUREMENT_ID__，
-       但 repo 裡從來沒有任何程式碼負責替換它（analytics.ts 的註解說「由 inject.py 注入」，
-       而 inject.py 並不存在），導致線上一直載入 id=__GA_MEASUREMENT_ID__，
-       所有 GA event 靜默丟失。改用 Vite 原生的 %VAR% 語法才會真的被替換。 -->
+  <!-- Google tag (gtag.js) — ID 由 Vite HTML env replacement 於 build 時注入，
+       CI 從 GitHub secret VITE_GA_MEASUREMENT_ID 餵值。
+       （2026-07-28 修正一個長期靜默失效的舊自訂佔位符，來龍去脈見 PROGRESS.md v3.6.103） -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
