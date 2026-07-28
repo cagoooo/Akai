@@ -235,6 +235,21 @@
 @media (max-width: 1024px) { .audience-strip { padding: 4px 32px 18px; } .audience-strip__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 480px) { .audience-strip { padding: 4px 14px 16px; } .audience-strip__cards { grid-template-columns: 1fr; gap: 12px; } .audience-strip__card { min-height: 0; } }
 
+/* 常駐入口：還沒選過身分時，首頁必須有一個「1 次點擊就能叫回精靈」的地方。
+   在這之前精靈只有自動彈出一條路，按過「稍後再說」就再也找不到入口。 */
+.audience-entry-wrap { display: flex; justify-content: center; padding: 0 20px 16px; }
+.audience-entry { display: flex; align-items: center; gap: 14px; width: min(760px, 100%); min-height: 48px; padding: 14px 18px; text-align: left; color: var(--ink); background: linear-gradient(160deg, var(--note-yellow-bright), var(--note-yellow)); border: 2.5px solid var(--ink); border-radius: 10px; box-shadow: 4px 5px 0 rgba(0,0,0,.22); cursor: pointer; font-family: var(--font-tc); transform: rotate(-.5deg); transition: transform .18s ease, box-shadow .18s ease; }
+.audience-entry:hover, .audience-entry:focus-visible { transform: translateY(-3px) rotate(0); box-shadow: 6px 8px 0 rgba(0,0,0,.26); }
+.audience-entry__icon { display: grid; place-items: center; width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%; background: var(--paper-warm); border: 2px solid var(--ink); box-shadow: 2px 2px 0 rgba(0,0,0,.2); }
+.audience-entry__text { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.audience-entry__text strong { font-size: 16px; font-weight: 900; }
+.audience-entry__text small { font-size: 12.5px; color: var(--muted2); font-weight: 700; line-height: 1.45; }
+.audience-entry__go { flex-shrink: 0; padding: 8px 14px; background: var(--olive); color: #fff; border: 2px solid var(--ink); border-radius: 999px; box-shadow: 2px 3px 0 rgba(0,0,0,.24); font-size: 13px; font-weight: 900; }
+@media (max-width: 640px) {
+  .audience-entry { flex-wrap: wrap; gap: 10px; }
+  .audience-entry__go { width: 100%; text-align: center; }
+}
+
 .audience-profile-badge-wrap { display: flex; justify-content: center; padding: 0 20px 14px; }
 .audience-profile-badge { display: inline-flex; align-items: center; flex-wrap: wrap; justify-content: center; gap: 7px; padding: 8px 12px; color: var(--ink); background: var(--note-green); border: 2px solid var(--ink); border-radius: 6px; box-shadow: 3px 3px 0 rgba(0,0,0,.22); font-family: var(--font-tc); font-size: 13px; font-weight: 800; transform: rotate(-.6deg); }
 .audience-profile-badge button { min-height: 32px; padding: 4px 9px; color: var(--olive-deep); background: var(--paper-warm); border: 1px solid var(--ink); border-radius: 999px; cursor: pointer; font: inherit; font-size: 12px; }

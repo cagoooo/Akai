@@ -32,7 +32,11 @@ function scrollToId(id: string) {
   window.scrollTo({ top, behavior: 'smooth' });
 }
 
-export function BulletinQuickNav() {
+/**
+ * @param onFindTools 有傳入時，最前面多一顆「找適合我的工具」動作 chip（開推薦精靈）。
+ *   只在訪客還沒選過身分時傳 —— 這條列多半落在第一屏附近，是最容易被看見的入口。
+ */
+export function BulletinQuickNav({ onFindTools }: { onFindTools?: () => void } = {}) {
   const isMobile = useIsMobile();
 
   return (
@@ -71,6 +75,37 @@ export function BulletinQuickNav() {
           >
             👉 快速跳到
           </span>
+        )}
+
+        {onFindTools && (
+          <button
+            type="button"
+            onClick={() => {
+              trackEvent('audience_wizard_entry_click', { surface: 'quick_nav' });
+              onFindTools();
+            }}
+            aria-label="開啟推薦精靈，找出適合我的工具"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 5,
+              padding: isMobile ? '6px 10px' : '5px 12px',
+              background: tokens.accent,
+              color: '#fff',
+              border: `2px solid ${tokens.ink}`,
+              borderRadius: 8,
+              fontSize: isMobile ? 12 : 13,
+              fontWeight: 900,
+              fontFamily: tokens.font.tc,
+              cursor: 'pointer',
+              boxShadow: '2px 3px 0 rgba(0,0,0,.24)',
+              transform: 'rotate(-1.5deg)',
+              minHeight: isMobile ? 32 : 'auto',
+            }}
+          >
+            <span aria-hidden="true">🎯</span>
+            <span>找適合我的工具</span>
+          </button>
         )}
 
         {NAV_ITEMS.map((item, i) => (

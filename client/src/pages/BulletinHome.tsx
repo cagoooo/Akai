@@ -38,6 +38,7 @@ import { BulletinFooter } from '@/components/bulletin/BulletinFooter';
 import { AudienceOnboardingWizard } from '@/components/audience/AudienceOnboardingWizard';
 import { AudienceProfileBadge } from '@/components/audience/AudienceProfileBadge';
 import { AudienceRecommendationStrip } from '@/components/audience/AudienceRecommendationStrip';
+import { AudienceEntryCard } from '@/components/audience/AudienceEntryCard';
 import { tokens } from '@/design/tokens';
 import { markHomeEntryForEngagementNotifications } from '@/lib/analytics';
 import type { AudienceProfile } from '@/lib/audienceProfile';
@@ -322,7 +323,13 @@ export function BulletinHome() {
       <BulletinMilestone100 onWishClick={() => setShowWishingWellFromShortcut(true)} />
       <BulletinSpeechBanner />
       <BulletinHero toolCount={toolsWithStats.length} />
-      <BulletinQuickNav />
+
+      {/* 還沒選過身分 → 給常駐入口（精靈原本只有自動彈出一條路，關掉就找不回來了）。
+          擺在 Hero 正下方、快速跳到列之前，進站不必捲動就看得到。
+          已經選過 → 下方徽章本身就帶「重新設定」，不必再多一張卡 */}
+      {!audienceProfile && <AudienceEntryCard onStart={reselectAudience} />}
+
+      <BulletinQuickNav onFindTools={audienceProfile ? undefined : reselectAudience} />
 
       {audienceProfile && (
         <div className="audience-profile-badge-wrap">
