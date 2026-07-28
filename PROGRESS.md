@@ -1,14 +1,31 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.93` (本機/CI) · 公開工具總數 **119 個** 🎮🚀
-- **里程碑**: **2026-07-22 Admin 安全地基包補強** — 主專案 production 相依警示由 16 項降為 0；Functions production 警示由 21 項降為 8 項 moderate，critical／high 全數歸零；CI、Rules Emulator、測試／Lint、持久化限流與冪等保護均已完成整頓。App Check 程式已接入，雲端供應商註冊仍待補 IAM 權限。
-- **最後更新狀態**: 見下方 `2026-07-22` 安全相依補強，以及 `2026-07-21` 安全地基包與 Admin 後台 Roadmap
+- **當前版本**: `v3.6.100` (本機/CI) · 公開工具總數 **122 個** 🎮🚀
+- **里程碑**: **2026-07-28 推薦與計數器體感修正** — 新增 #122 兒童英語單字大冒險；修正訪客里程碑進度條「5,448 人卻顯示 8%」的比例語意；已選過族群的訪客滿 7 天回訪會再被邀請重選一次拿新推薦；本機開發錯誤不再誤觸正式 Google Chat 告警。
+- **最後更新狀態**: 見下方 `2026-07-28`；未來待辦見 `FUTURE_OPTIMIZATION_V3.6.100.md`
+- **前一版**: v3.6.93 — Admin 安全地基包補強（見 `2026-07-22`）
 - **前一版**: v3.6.90 — 客群推薦精靈全面情境化 + 成效閉環
 - **前一版**: v3.6.71 — 新增 #102 外星人入侵·保衛石門 + 雙 tools.json 對齊
 - **📎 文件補追記**：本檔案從 v3.6.71 停更到 2026-07-04 才補寫。中間 v3.6.72 → v3.6.87 共 16 個版本（主要是新增工具 #103-#114 + 幾個獨立 bug fix，例如 v3.6.80 使用次數本機計數 bug、v3.6.81/b3032b2 許願池通知從 LINE 遷移到 Google Chat）沒有寫進本檔案，細節可查 `git log`（commit 訊息大多含版本號）。工具總數從 102 → 115 就是這段期間累積的，之後有空再補完整段落。
 
 ## 📌 完成功能總覽
+
+### `2026-07-28`（✨ #122 上架 + 🎯 進度條比例修正 + 🔁 回訪重問 + 🔇 告警降噪）
+
+三個版本一次收：`v3.6.98` 新工具、`v3.6.99` 兩項 UX 改良、`v3.6.100` 告警品質。
+
+| 版本 | 面向 | 完成內容 | 驗證結果 |
+|---|---|---|---|
+| **v3.6.98** | 新工具 #122 | 「兒童英語單字大冒險」（Word-Wiz-Kids）完整上架：卡片資料（`language` 分類／`Wand2` 圖示／12 標籤）、`tool_122.webp` 卡片主圖、`og/tool_122.webp` 社群圖、`POST_122` 手寫長文、`audienceFit` 客群推薦資料 | build log「手寫長文 123 篇 / 涵蓋 122 個工具」「迷你 blog OG landing: 0 篇」；線上 `api/tools.json` 已含 #122，長文頁回 200 |
+| **v3.6.98** | 🐛 客群推薦資料陷阱 | 初版填了 `audienceFit.departments: ['academic']`，實測發現國小導師／科任**完全撈不到**。根因：`audienceRecommendation.isEligible()` 只要看到 `departments` 有值，就把資格收斂成「行政人員 ＋ 該處室」，其餘老師整組排除 → 拿掉後恢復正常 | 6 種 profile 全部命中：國小科任 rank 4、國小導師 rank 4、國中科任 rank 4、教務行政 rank 12、國小學生 rank 2、勾「語文學習」痛點 rank 3 |
+| **v3.6.99** | 訪客里程碑進度條 | 舊版算「上一個里程碑 → 下一個里程碑」的區間比例（5,448 人顯示 8%），與條子兩端標示的 5,000／10,000 對不起來。改成對下個里程碑的**絕對比例**（55%），已達成的里程碑改為軌道刻度線；底部標示改為「0 ／ 55%・還差 4,552 人 ／ 10,000」；補 `role="progressbar"` 與 `aria-valuetext` | 瀏覽器實測（5,451 人）：軌道 350px、fill 190px = 54.2%、刻度落在 50%；舊版 `VisitorCounter` 同步改為相同語意 |
+| **v3.6.99** | 回訪重問族群 | 選過族群的訪客過去永遠不再被問。改為距上次選擇滿 **7 天**（`AUDIENCE_REFRESH_DAYS`）回訪即自動再開精靈，換成「好久不見！再選一次，換一批新推薦」文案；被關掉則延後 **3 天**（`AUDIENCE_SNOOZE_DAYS`）才再問；重選完成重置計時；深連結照舊不打擾 | 新增 6 個單元測試；瀏覽器實測重問會開、按「這次先跳過」後重整不再出現；埋點 `audience_wizard_opened` 帶 `mode=first_time／re_prompt` |
+| **v3.6.100** | 🔇 告警降噪 | 本機跑 vite 預覽時 HMR 的 `WebSocket closed without opened` 被全域 `unhandledrejection` 攔到後寫進正式 `errorLogs`，再推 Google Chat 告警。Sentry 早有擋本機，Firestore 這條備援通道漏了同一道守門 → 新增 `lib/errorReporting.ts` 的 `shouldReportErrorToFirestore()`，套用到 `main.tsx`／`ErrorBoundary`／`firestoreService.logError` 三個寫入點 | 新增 8 個單元測試；在 localhost 手動丟出同一顆 rejection，網路請求已無任何 `firestore.googleapis.com` 寫入；`console.error` 照印不影響除錯 |
+
+**本次沿用的既有慣例**：卡片插入依 ID 升序、server SSOT 不含 #100、blog 連結寫工具原始對外 URL 交由 `toolUrlMap` 自動改寫、bump `package.json` 版本後跑完整 `npm run build` 再 commit + push 觸發 Actions。
+
+**已知未解（不屬本次範圍）**：本機 `npm run dev` 無法啟動（`better-sqlite3` 缺原生 binding ＋ 未設 `DATABASE_URL`），本次改用純前端 vite 預覽完成驗證。
 
 ### `2026-07-22`（🔄 Service Worker 更新通知修復）
 
