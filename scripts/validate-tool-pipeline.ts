@@ -6,8 +6,9 @@
  *
  * 這支腳本把「新增工具時必須做到的事」變成 build 會擋下來的硬條件：
  *   1. 卡片主圖 previewUrl 與社群圖 ogPreviewUrl 都有填，而且檔案真的存在
- *   2. 每個工具都有對應的手寫長文 POST_N（toolIds[0] === 工具 id），或列入豁免清單
- *   3. 全 repo 不得把學校名寫成「新明」（正確是石門國小／桃園市龍潭區石門國民小學）
+ *   2. 每個工具都有合法的 addedAt
+ *   3. 每個工具都有對應的手寫長文 POST_N（toolIds[0] === 工具 id），或列入豁免清單
+ *   4. 全 repo 不得把學校名寫成「新明」（正確是石門國小／桃園市龍潭區石門國民小學）
  *
  * 「能不能被推薦引擎撈到」由 validate-audience-fit.ts 負責，兩支都掛在 prebuild。
  */
@@ -65,6 +66,24 @@ function checkPreviewAssets(tools: readonly EducationalTool[]): void {
       if (!existsSync(assetPath)) {
         errors.push(`#${tool.id} ${tool.title}: ${field} 指向的檔案不存在 → ${value}`);
       }
+    }
+  }
+}
+
+/**
+ * addedAt 是好幾個功能的共同輸入：推薦引擎的 freshness 加分（45 天窗）、
+ * 卡片的「🆕 上架 N 天」徽章、推薦理由體檢的「距上次複查幾天」。
+ * 缺這個欄位不會報錯，只會讓那些功能對該工具靜默失效 —— 2026-07-28 回填了 97 個，
+ * 這道守門是為了不讓洞再被打開。
+ */
+function checkAddedAt(tools: readonly EducationalTool[]): void {
+  for (const tool of tools) {
+    if (tool.isInternal) continue;
+    const addedAt = tool.addedAt;
+    if (typeof addedAt !== 'string' || Number.isNaN(Date.parse(addedAt))) {
+      errors.push(
+        `#${tool.id} ${tool.title}: 缺少合法的 addedAt（freshness 加分、🆕 徽章、理由複查天數都靠它）`,
+      );
     }
   }
 }
@@ -132,6 +151,7 @@ function checkSchoolName(): void {
 function run(): void {
   const tools = loadTools();
   checkPreviewAssets(tools);
+  checkAddedAt(tools);
   checkHandwrittenBlog(tools);
   checkSchoolName();
 
@@ -144,7 +164,7 @@ function run(): void {
 
   const external = tools.filter((tool) => !tool.isInternal);
   console.log(
-    `工具上架守門通過：${external.length} 個外部工具的預覽圖／社群圖／手寫長文齊全，學校名稱無誤植。`,
+    `工具上架守門通過：${external.length} 個外部工具的預覽圖／社群圖／addedAt／手寫長文齊全，學校名稱無誤植。`,
   );
 }
 

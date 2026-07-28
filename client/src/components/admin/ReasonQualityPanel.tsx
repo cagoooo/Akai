@@ -4,22 +4,27 @@
  * `audienceFit.reasons` 是人工寫死的字串，122 個工具 × 最多 9 種理由鍵。
  * 過去沒有任何機制會抓到「理由寫得很漂亮但其實不太適合」的漂移 —— 只有訪客默默不點。
  *
- * 這個面板把四種訊號攤開來：太久沒複查 / 太空泛 / 沒對到題 / 點擊率偏低，
+ * 這個面板把三種訊號攤開來：太空泛 / 沒對到題 / 點擊率偏低，
  * 直接回答「這 N 條推薦理由該重寫了」。
- * 前三種離線就算得出來（`npm run validate:audience` 也會印），
- * 第四種需要 Firestore 的 analytics/recoStats。
+ * 前兩種離線就算得出來（`npm run validate:audience` 也會印），
+ * 第三種需要 Firestore 的 analytics/recoStats。
+ *
+ * 「太久沒複查」刻意不是問題訊號（會把真正該改的洗掉，見 lib/reasonQuality.ts 的說明），
+ * 改成兩種呈現：每條問題附「距上次複查 N 天」當排序情境，
+ * 另開一個「最久沒複查 Top 20」分頁給主動複查用。
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   REASON_ISSUE_LABEL,
   analyzeReasonQuality,
+  listLeastRecentlyReviewed,
   type ReasonIssue,
   type ReasonIssueKind,
   type ToolReasonInput,
   type ToolRecoStat,
 } from '@/lib/reasonQuality';
 
-const KIND_ORDER: ReasonIssueKind[] = ['low-ctr', 'off-topic', 'vague', 'stale'];
+const KIND_ORDER: ReasonIssueKind[] = ['low-ctr', 'off-topic', 'vague'];
 
 /** reasons 的鍵 → 中文標籤，跟推薦精靈的用語一致 */
 const REASON_KEY_LABEL: Record<string, string> = {
@@ -41,6 +46,7 @@ export function ReasonQualityPanel() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [kindFilter, setKindFilter] = useState<ReasonIssueKind | 'all'>('all');
+  const [view, setView] = useState<'issues' | 'review-age'>('issues');
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -78,7 +84,7 @@ export function ReasonQualityPanel() {
   );
 
   const counts = useMemo(() => {
-    const acc: Record<ReasonIssueKind, number> = { stale: 0, vague: 0, 'off-topic': 0, 'low-ctr': 0 };
+    const acc: Record<ReasonIssueKind, number> = { vague: 0, 'off-topic': 0, 'low-ctr': 0 };
     for (const issue of issues) for (const kind of issue.kinds) acc[kind] += 1;
     return acc;
   }, [issues]);
@@ -87,6 +93,8 @@ export function ReasonQualityPanel() {
     () => (kindFilter === 'all' ? issues : issues.filter((i) => i.kinds.includes(kindFilter))),
     [issues, kindFilter],
   );
+
+  const reviewAge = useMemo(() => (tools ? listLeastRecentlyReviewed(tools, 20) : []), [tools]);
 
   const totalReasons = useMemo(() => {
     if (!tools) return 0;
@@ -124,27 +132,65 @@ export function ReasonQualityPanel() {
         </button>
       </header>
 
-      <div className="flex flex-wrap gap-2">
-        <FilterChip active={kindFilter === 'all'} onClick={() => setKindFilter('all')}>
-          全部 {issues.length}
+      <div className="flex flex-wrap gap-2 border-b border-border pb-3">
+        <FilterChip active={view === 'issues'} onClick={() => setView('issues')}>
+          🩺 該重寫的 {issues.length}
         </FilterChip>
-        {KIND_ORDER.map((kind) => (
-          <FilterChip key={kind} active={kindFilter === kind} onClick={() => setKindFilter(kind)}>
-            {REASON_ISSUE_LABEL[kind]} {counts[kind]}
-          </FilterChip>
-        ))}
+        <FilterChip active={view === 'review-age'} onClick={() => setView('review-age')}>
+          ⏳ 最久沒複查 Top {reviewAge.length}
+        </FilterChip>
       </div>
 
-      {visible.length === 0 ? (
-        <p className="rounded-lg border border-emerald-500/40 bg-emerald-500/5 p-4 text-sm">
-          ✅ 這個分類目前沒有需要重寫的理由。
-        </p>
+      {view === 'issues' ? (
+        <>
+          <div className="flex flex-wrap gap-2">
+            <FilterChip active={kindFilter === 'all'} onClick={() => setKindFilter('all')}>
+              全部 {issues.length}
+            </FilterChip>
+            {KIND_ORDER.map((kind) => (
+              <FilterChip key={kind} active={kindFilter === kind} onClick={() => setKindFilter(kind)}>
+                {REASON_ISSUE_LABEL[kind]} {counts[kind]}
+              </FilterChip>
+            ))}
+          </div>
+
+          {visible.length === 0 ? (
+            <p className="rounded-lg border border-emerald-500/40 bg-emerald-500/5 p-4 text-sm">
+              ✅ 這個分類目前沒有需要重寫的理由。
+            </p>
+          ) : (
+            <ul className="space-y-2">
+              {visible.map((issue) => (
+                <IssueRow key={`${issue.toolId}-${issue.reasonKey}`} issue={issue} />
+              ))}
+            </ul>
+          )}
+        </>
       ) : (
-        <ul className="space-y-2">
-          {visible.map((issue) => (
-            <IssueRow key={`${issue.toolId}-${issue.reasonKey}`} issue={issue} />
-          ))}
-        </ul>
+        <>
+          <p className="text-sm text-muted-foreground">
+            這裡的工具<b>不代表有問題</b>，只是最久沒人回頭看過。複查完用
+            <code className="mx-1 rounded bg-muted px-1.5 py-0.5">npm run reasons:reviewed -- {reviewAge[0]?.toolId ?? 9}</code>
+            蓋章，天數就會從今天重算。
+          </p>
+          <ul className="space-y-1.5">
+            {reviewAge.map((entry) => (
+              <li key={entry.toolId} className="flex flex-wrap items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm">
+                <a
+                  href={`${import.meta.env.BASE_URL || '/'}tool/${entry.toolId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-bold underline underline-offset-2"
+                >
+                  #{entry.toolId} {entry.toolTitle}
+                </a>
+                <span className="ml-auto text-xs text-muted-foreground">
+                  {entry.neverReviewed ? '從未複查' : '上次複查'}・{entry.daysSinceReview} 天前
+                </span>
+              </li>
+            ))}
+          </ul>
+        </>
       )}
     </section>
   );
@@ -187,7 +233,14 @@ function IssueRow({ issue }: { issue: ReasonIssue }) {
         ))}
       </div>
       <p className="mt-2 text-sm">「{issue.reason}」</p>
-      <p className="mt-1 text-xs text-muted-foreground">{issue.detail}</p>
+      <p className="mt-1 text-xs text-muted-foreground">
+        {issue.detail}
+        {issue.daysSinceReview !== null && (
+          <span className="ml-1">
+            ・{issue.neverReviewed ? '從未複查' : '上次複查'} {issue.daysSinceReview} 天前
+          </span>
+        )}
+      </p>
     </li>
   );
 }

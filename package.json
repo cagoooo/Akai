@@ -1,6 +1,6 @@
 {
   "name": "rest-express",
-  "version": "3.6.104",
+  "version": "3.6.105",
   "type": "module",
   "license": "MIT",
   "scripts": {
@@ -37,7 +37,9 @@
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
-    "validate:pipeline": "tsx scripts/validate-tool-pipeline.ts"
+    "validate:pipeline": "tsx scripts/validate-tool-pipeline.ts",
+    "reasons:reviewed": "node scripts/mark-reasons-reviewed.mjs",
+    "backfill:added-at": "node scripts/backfill-added-at.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
