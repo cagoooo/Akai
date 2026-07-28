@@ -311,6 +311,8 @@ export function BulletinHome() {
 
   const reselectAudience = useCallback(() => {
     setHighlightedToolId(null);
+    // 使用者主動點「重選」＝他想改東西 → 走完整精靈，不要停在「還是老樣子嗎」那一頁
+    setIsAudienceReturnVisit(false);
     setShowAudienceWizard(true);
   }, []);
 
@@ -474,7 +476,7 @@ export function BulletinHome() {
         onDismiss={dismissAudienceWizard}
         onLocateTool={locateRecommendedTool}
         recentToolIds={recentIds}
-        returningVisitor={isAudienceReturnVisit}
+        returningProfile={isAudienceReturnVisit && audienceProfile ? audienceProfile : undefined}
       />
     </BulletinBoard>
   );

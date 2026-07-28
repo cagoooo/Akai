@@ -7,8 +7,9 @@ import { recommendTools } from '@/lib/audienceRecommendation';
 import { trackEvent, recordAudienceFunnelEvent, recordAudiencePainPointSelection, recordAudienceSelection, recordRecoImpression, recordRecoClick } from '@/lib/analytics';
 import { AudienceRecommendationResults } from './AudienceRecommendationResults';
 import { audienceWizardReducer, initialAudienceWizardState, toAudienceProfile, PAIN_POINT_SELECTION_LIMIT } from './audienceWizardReducer';
+import { readRecommendationHistory, rememberRecommendedTools } from '@/lib/recommendationHistory';
 
-type Props = { open: boolean; tools: EducationalTool[]; onComplete: (profile: AudienceProfile) => void; onDismiss: () => void; onLocateTool: (toolId: number) => void; recentToolIds?: number[]; /** 隔幾天回訪的重問（非首次引導）→ 換成「好久不見」文案 */ returningVisitor?: boolean };
+type Props = { open: boolean; tools: EducationalTool[]; onComplete: (profile: AudienceProfile) => void; onDismiss: () => void; onLocateTool: (toolId: number) => void; recentToolIds?: number[]; /** 隔幾天回訪的重問：帶上次的身分 → 走「一鍵沿用」畫面；undefined 表示首次引導或手動重選 */ returningProfile?: AudienceProfile };
 const levels: [SchoolLevel, string][] = [['elementary', '國小老師'], ['junior', '國中老師'], ['senior', '高中老師']];
 // P1-2 學生學段（只列有工具資料的國小／國中；影響推薦過濾）
 const studentLevels: [SchoolLevel, string][] = [['elementary', '國小'], ['junior', '國中']];
@@ -45,7 +46,7 @@ function markImpressionFired(signature: string): void {
   try { sessionStorage.setItem(IMPRESSION_DEDUP_PREFIX + signature, '1'); } catch { /* ignore quota */ }
 }
 
-export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, onLocateTool, recentToolIds, returningVisitor = false }: Props) {
+export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, onLocateTool, recentToolIds, returningProfile }: Props) {
   const [state, dispatch] = useReducer(audienceWizardReducer, initialAudienceWizardState);
   const closeRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -56,9 +57,16 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const completedRef = useRef<string | null>(null);
   const wasOpenRef = useRef(false);
-  // 只在「開啟當下」讀一次，避免把 returningVisitor 塞進 open effect 的相依陣列
-  const returningRef = useRef(returningVisitor);
-  returningRef.current = returningVisitor;
+  // 只在「開啟當下」讀一次，避免把 returningProfile 塞進 open effect 的相依陣列
+  const returningRef = useRef(returningProfile);
+  returningRef.current = returningProfile;
+  /** P0-3：這次開啟是首次引導還是回訪重問 —— 所有埋點都帶著它，才能分開比較成效 */
+  const modeRef = useRef<'first_time' | 're_prompt'>('first_time');
+  /**
+   * P1-2：上一次推薦過哪些工具。必須在「開啟當下」快照，
+   * 因為結果一顯示就會把這批寫進歷史，晚讀就分不出新舊了。
+   */
+  const [history, setHistory] = useState<ReadonlySet<number>>(() => new Set());
   // P1-1「換一批」：累積已看過的工具 id，讓下一波推薦排除它們（同家族一併排除）
   const [seenIds, setSeenIds] = useState<number[]>([]);
   const seenKeyRef = useRef('');
@@ -91,14 +99,16 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
   useEffect(() => {
     if (open && !wasOpenRef.current) {
       previouslyFocusedRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-      dispatch({ type: 'RESET' });
+      modeRef.current = returningRef.current ? 're_prompt' : 'first_time';
+      setHistory(readRecommendationHistory());
+      dispatch({ type: 'RESET', returningProfile: returningRef.current });
       completedRef.current = null;
       reshufflePendingRef.current = false;
       dismissedRef.current = false;
       resultsRecordedRef.current = false;
       setSeenIds([]);
       void recordAudienceFunnelEvent('opened');
-      trackEvent('audience_wizard_opened', { mode: returningRef.current ? 're_prompt' : 'first_time' });
+      trackEvent('audience_wizard_opened', { mode: modeRef.current });
       requestAnimationFrame(() => closeRef.current?.focus());
     }
     if (!open && wasOpenRef.current) {
@@ -122,10 +132,19 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
     const segment = buildAudienceSegmentKey(profile);
     trackEvent('audience_reco_impression', {
       segment,
+      mode: modeRef.current,
       pain_points: (profile.painPoints ?? []).join('|') || 'none',
       tool_ids: recommendations.map((r) => r.tool.id).join(','),
       slots: recommendations.map((r) => r.slot).join(','),
     });
+    // P0-3：完成率的分子 —— 走到結果頁才算完成一次引導
+    trackEvent('audience_wizard_completed', {
+      mode: modeRef.current,
+      segment,
+      novelty: recommendations.filter((r) => !history.has(r.tool.id)).length,
+    });
+    // P1-2：記住這批，下次才標得出「👀 上次沒看到」
+    rememberRecommendedTools(recommendations.map((r) => r.tool.id));
     if (!resultsRecordedRef.current) {
       resultsRecordedRef.current = true;
       void recordAudienceFunnelEvent('resultsShown');
@@ -141,7 +160,7 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
       const segment = buildAudienceSegmentKey(profile);
       const slot = rec?.slot ?? 'unknown';
       const matchedPains = rec?.matchedPainPoints ?? 0;
-      trackEvent('audience_reco_click', { segment, tool_id: toolId, slot, rank: rank + 1, matched_pains: matchedPains });
+      trackEvent('audience_reco_click', { segment, mode: modeRef.current, tool_id: toolId, slot, rank: rank + 1, matched_pains: matchedPains });
       // 同步聚合到 Firestore（P1-6）
       void recordRecoClick({ segment, toolId, slot, matchedPains, painPoints: profile.painPoints, surface: 'wizard', batch: seenIds.length > 0 ? 'reshuffled' : 'initial' });
     }
@@ -151,6 +170,8 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
     if (!dismissedRef.current) {
       dismissedRef.current = true;
       void recordAudienceFunnelEvent('dismissed', state.step);
+      // P0-3：跳過率的分子，並記下是在哪一步跳掉的
+      trackEvent('audience_wizard_dismissed', { mode: modeRef.current, step: state.step });
     }
     onDismiss();
   }, [onDismiss, state.step]);
@@ -193,16 +214,15 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
   }, [state.step, profile, onComplete]);
   if (!open) return null;
   const isStudent = state.profile.audience === 'student';
-  const heading = state.step === 'audience'
-      ? (returningVisitor ? '好久不見！再選一次，換一批新推薦' : '先認識你，推薦會更準')
+  const heading = state.step === 'returning' ? '好久不見！換一批新推薦給你'
+    : state.step === 'audience' ? '先認識你，推薦會更準'
     : state.step === 'results' ? '為你準備的推薦工具'
     : state.step === 'pain-points' ? '你最想解決什麼？'
     : state.step === 'school-level' && isStudent ? '你現在是幾年級呢？'
     : '告訴我一點你的工作情境';
-  const subheading = state.step === 'audience'
-      ? (returningVisitor
-          ? '這幾天工具集又長大了。重選一次身分，就能拿到一批你還沒看過的工具。'
-          : '花 20 秒，找出最適合你使用的教育科技工具。')
+  const subheading = state.step === 'returning'
+      ? `這陣子工具集又長大了。${userSegmentLabel(state.profile)}，還是老樣子嗎？`
+    : state.step === 'audience' ? '花 20 秒，找出最適合你使用的教育科技工具。'
     : state.step === 'pain-points' ? `勾選最想解決的情境（可複選，最多 ${PAIN_POINT_SELECTION_LIMIT} 個），推薦會更對症下藥。也可以直接略過。`
     : state.step === 'school-level' && isStudent ? '選你的學段，推薦會更符合你的程度。'
     : '每個選擇都能讓推薦更貼近日常需要。';
@@ -210,9 +230,15 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
     <div className="audience-wizard__paper" tabIndex={-1}>
       <span className="audience-wizard__pin audience-wizard__pin--top" aria-hidden="true" />
       <button ref={closeRef} type="button" className="audience-wizard__close" onClick={handleDismiss} aria-label="稍後再說"><X size={20} /></button>
-      <div className="audience-wizard__progress" aria-label="引導進度"><span style={{ width: `${({ audience: 14, 'school-level': 30, 'teacher-role': 46, department: 60, 'pain-points': 76, thinking: 90, results: 100 } as Record<string, number>)[state.step]}%` }} /></div>
-      {state.step !== 'audience' && state.step !== 'thinking' && <button type="button" className="audience-wizard__back" onClick={() => dispatch({ type: 'BACK' })}><ArrowLeft size={17} /> 上一步</button>}
+      <div className="audience-wizard__progress" aria-label="引導進度"><span style={{ width: `${({ returning: 12, audience: 14, 'school-level': 30, 'teacher-role': 46, department: 60, 'pain-points': 76, thinking: 90, results: 100 } as Record<string, number>)[state.step]}%` }} /></div>
+      {state.step !== 'audience' && state.step !== 'thinking' && state.step !== 'returning' && <button type="button" className="audience-wizard__back" onClick={() => dispatch({ type: 'BACK' })}><ArrowLeft size={17} /> 上一步</button>}
       {state.step !== 'thinking' && <header><span className="audience-wizard__eyebrow">阿凱老師的工具小幫手</span><h1>{heading}</h1><p>{subheading}</p></header>}
+      {state.step === 'returning' && <ReturningChoices
+        segmentLabel={userSegmentLabel(state.profile)}
+        onKeep={() => { trackEvent('audience_wizard_returning_choice', { choice: 'keep' }); dispatch({ type: 'RETURNING_KEEP' }); }}
+        onRepickPains={() => { trackEvent('audience_wizard_returning_choice', { choice: 'repick_pains' }); dispatch({ type: 'RETURNING_REPICK_PAINS' }); }}
+        onRestart={() => { trackEvent('audience_wizard_returning_choice', { choice: 'restart' }); dispatch({ type: 'RETURNING_RESTART' }); }}
+      />}
       {state.step === 'audience' && <Choices choices={[['teacher', '我是老師', '依學段與職務推薦', GraduationCap], ['student', '我是學生／小朋友', '探索好用小工具與遊戲', BookOpen]]} onChoose={(value) => { void recordAudienceSelection('audience', value); dispatch({ type: 'SELECT_AUDIENCE', value: value as 'teacher' | 'student' }); }} />}
       {state.step === 'school-level' && (isStudent
         ? <Choices choices={studentLevels.map(([value, label]) => [value, label, '選你的學段', BookOpen])} onChoose={(value) => { void recordAudienceSelection('schoolLevels', value); dispatch({ type: 'SELECT_SCHOOL_LEVEL', value: value as SchoolLevel }); }} />
@@ -230,8 +256,35 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
         toolCount={tools.length}
         onDone={() => dispatch({ type: 'THINKING_DONE' })}
       />}
-      {state.step === 'results' && <AudienceRecommendationResults recommendations={recommendations} onLocateTool={handleLocate} onReshuffle={handleReshuffle} firstRecommendationRef={firstRecommendationRef} />}
-      {state.step !== 'thinking' && <button type="button" className="audience-wizard__later" onClick={handleDismiss}>{returningVisitor ? '這次先跳過，繼續逛' : '稍後再說，先逛逛'}</button>}
+      {state.step === 'results' && <AudienceRecommendationResults recommendations={recommendations} onLocateTool={handleLocate} onReshuffle={handleReshuffle} firstRecommendationRef={firstRecommendationRef} recommendationHistory={history} />}
+      {state.step !== 'thinking' && <button type="button" className="audience-wizard__later" onClick={handleDismiss}>{returningProfile ? '這次先跳過，繼續逛' : '稍後再說，先逛逛'}</button>}
+    </div>
+  </div>;
+}
+
+/**
+ * 回訪重問的第一畫面（P1-1）：帶出上次的身分，一鍵沿用或只改一項。
+ * 三個選項刻意不等權 —— 「還是這樣」是主動作，另兩個是次動作。
+ */
+function ReturningChoices({ segmentLabel, onKeep, onRepickPains, onRestart }: {
+  segmentLabel: string;
+  onKeep: () => void;
+  onRepickPains: () => void;
+  onRestart: () => void;
+}) {
+  return <div className="audience-wizard__returning">
+    <button type="button" className="audience-wizard__returning-primary" onClick={onKeep}>
+      <span aria-hidden="true">✅</span>
+      <strong>還是「{segmentLabel}」</strong>
+      <small>直接看這一批新推薦 →</small>
+    </button>
+    <div className="audience-wizard__returning-secondary">
+      <button type="button" onClick={onRepickPains}>
+        <span aria-hidden="true">🎯</span> 這次想解決別的事
+      </button>
+      <button type="button" onClick={onRestart}>
+        <span aria-hidden="true">✏️</span> 我的身分變了
+      </button>
     </div>
   </div>;
 }

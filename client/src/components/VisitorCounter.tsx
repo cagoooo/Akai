@@ -5,6 +5,7 @@ import { UserCheck, Award, Star, Trophy, Crown, Diamond, Rocket, Sparkles } from
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { Progress } from "@/components/ui/progress";
+import { getMilestoneProgress } from "@/lib/visitorMilestones";
 import type { VisitorStats } from "@/lib/firestoreService";
 
 // Define milestones for the counter
@@ -15,6 +16,8 @@ const MILESTONES = [
   { value: 1000, title: "1,000 訪問", description: "恭喜！網站已達到 1,000 次訪問！", icon: Crown },
   { value: 5000, title: "5,000 訪問", description: "了不起！5,000 次訪問達成！", icon: Diamond },
   { value: 10000, title: "10,000 訪問", description: "驚人的成就！10,000 次訪問！", icon: Rocket },
+  { value: 20000, title: "20,000 訪問", description: "持續攀升！20,000 次訪問達成！", icon: Rocket },
+  { value: 30000, title: "30,000 訪問", description: "穩定成長！30,000 次訪問達成！", icon: Sparkles },
   { value: 50000, title: "50,000 訪問", description: "網站超級明星！50,000 次訪問！", icon: Sparkles }
 ];
 
@@ -47,15 +50,10 @@ function AnimatedCounter({ value }: { value: number }) {
 }
 
 function MilestoneProgress({ currentVisits }: { currentVisits: number }) {
-  // 找到下一個里程碑
-  const sortedMilestones = [...MILESTONES].sort((a, b) => a.value - b.value);
-  const nextMilestone = sortedMilestones.find(m => m.value > currentVisits) || sortedMilestones[sortedMilestones.length - 1];
-
-  // 計算進度
-  // 與 BulletinVisitorCounter 一致：用「對下個里程碑的絕對比例」，
-  // 而不是上一個→下一個的區間比例（後者會讓 5,448/10,000 顯示成 8%，跟兩端標示對不起來）。
-  const progress = Math.min(100, Math.max(0, (currentVisits / nextMilestone.value) * 100));
-  const remaining = Math.max(0, nextMilestone.value - currentVisits);
+  // 級距與比例語意都走 lib/visitorMilestones.ts 這份 SSOT（與 BulletinVisitorCounter 共用）
+  const { nextMilestone: nextValue, progress, remaining } = getMilestoneProgress(currentVisits);
+  // MILESTONES 只剩下「圖示與文案」的用途；沒對應項目時退回最後一個
+  const nextMilestone = MILESTONES.find(m => m.value === nextValue) ?? MILESTONES[MILESTONES.length - 1];
 
   const NextIcon = nextMilestone.icon;
 
@@ -66,7 +64,7 @@ function MilestoneProgress({ currentVisits }: { currentVisits: number }) {
         <div className="flex items-center gap-1 text-primary-foreground/90">
           <NextIcon className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-400 flex-shrink-0" />
           <span>下一個里程碑：</span>
-          <span className="font-black text-yellow-300">{nextMilestone.value.toLocaleString()}</span>
+          <span className="font-black text-yellow-300">{nextValue.toLocaleString()}</span>
           {remaining > 0 && (
             <span className="text-primary-foreground/70">（還差 {remaining.toLocaleString()}）</span>
           )}

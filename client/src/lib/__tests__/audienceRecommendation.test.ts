@@ -507,4 +507,55 @@ describe('recommendTools', () => {
     expect(recommendTools([first, second], { audience: 'teacher' }, 2)
       .map(({ tool }) => tool.id)).toEqual([4, 87]);
   });
+  // ── departments 語意（P0-1，2026-07-28）────────────────────────────────
+  // 舊版只要 departments 有值就把資格收斂成「行政人員 ＋ 該處室」，
+  // teacherRoles 裡明寫的 homeroom／subject 會被整組忽略（9 個工具中招）。
+  describe('departments 只約束行政人員這一支', () => {
+    const mixed = makeTool(46, makeFit({
+      teacherRoles: ['homeroom', 'subject', 'admin'],
+      departments: ['academic', 'general-affairs'],
+      reasons: {
+        teacher: '通用教師理由。',
+        homeroom: '導師理由。',
+        subject: '科任理由。',
+        academic: '教務處理由。',
+      },
+    }));
+
+    it.each([
+      ['homeroom' as const, '導師理由。'],
+      ['subject' as const, '科任理由。'],
+    ])('明寫在 teacherRoles 的 %s 不受 departments 影響', (teacherRole, reason) => {
+      const result = recommendTools([mixed], {
+        audience: 'teacher', schoolLevel: 'elementary', teacherRole,
+      }, 1);
+      expect(result.map(({ tool }) => tool.id)).toEqual([46]);
+      expect(result[0].reason).toBe(reason);
+    });
+
+    it('行政人員仍要比對處室：命中放行', () => {
+      expect(recommendTools([mixed], {
+        audience: 'teacher', schoolLevel: 'elementary', teacherRole: 'admin', department: 'academic',
+      }, 1).map(({ tool }) => tool.id)).toEqual([46]);
+    });
+
+    it('行政人員仍要比對處室：未命中排除', () => {
+      expect(recommendTools([mixed], {
+        audience: 'teacher', schoolLevel: 'elementary', teacherRole: 'admin', department: 'counseling',
+      }, 1)).toEqual([]);
+    });
+
+    it('沒明寫 teacherRoles 的純行政工具維持舊語意（只給對應處室行政人員）', () => {
+      const adminOnly = makeTool(49, makeFit({
+        departments: ['academic'],
+        reasons: { academic: '教務處寶藏庫。' },
+      }));
+      const base = { audience: 'teacher' as const, schoolLevel: 'elementary' as const };
+      expect(recommendTools([adminOnly], { ...base, teacherRole: 'homeroom' }, 1)).toEqual([]);
+      expect(recommendTools([adminOnly], { ...base, teacherRole: 'subject' }, 1)).toEqual([]);
+      expect(recommendTools([adminOnly], { ...base, teacherRole: 'admin', department: 'counseling' }, 1)).toEqual([]);
+      expect(recommendTools([adminOnly], { ...base, teacherRole: 'admin', department: 'academic' }, 1)
+        .map(({ tool }) => tool.id)).toEqual([49]);
+    });
+  });
 });

@@ -12,10 +12,11 @@
  *           這個元件只剩 onSnapshot 訂閱顯示。
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { animate, m as motion, useMotionValue, useTransform } from 'framer-motion';
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
+import { estimateTimeToMilestone, getMilestoneProgress } from '@/lib/visitorMilestones';
 
 interface VisitorStats {
   totalVisits: number;
@@ -23,8 +24,21 @@ interface VisitorStats {
   lastVisitAt?: string | null;
 }
 
-// 里程碑
-const MILESTONES = [100, 500, 1000, 2000, 5000, 10000, 50000, 100000];
+/** 估算成長速度時取最近幾天的 dailyVisits 平均 */
+const VELOCITY_WINDOW_DAYS = 14;
+
+/** 從 dailyVisits 算最近的每日平均訪客數；資料不足回傳 0（→ 不顯示預估） */
+function averageDailyVisits(dailyVisits: Record<string, number> | undefined): number {
+  if (!dailyVisits) return 0;
+  const recent = Object.entries(dailyVisits)
+    .sort(([a], [b]) => (a < b ? 1 : -1))
+    .slice(0, VELOCITY_WINDOW_DAYS)
+    .map(([, count]) => count)
+    .filter((count) => typeof count === 'number' && Number.isFinite(count) && count >= 0);
+  // 少於 3 天資料就別亂估
+  if (recent.length < 3) return 0;
+  return recent.reduce((sum, count) => sum + count, 0) / recent.length;
+}
 
 function AnimatedNumber({ value }: { value: number }) {
   const motionValue = useMotionValue(0);
@@ -40,6 +54,7 @@ function AnimatedNumber({ value }: { value: number }) {
 
 export function BulletinVisitorCounter() {
   const [totalVisits, setTotalVisits] = useState(0);
+  const [dailyVisits, setDailyVisits] = useState<Record<string, number> | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const [justUpdated, setJustUpdated] = useState(false);
 
@@ -63,6 +78,7 @@ export function BulletinVisitorCounter() {
               if (cancelled) return;
               if (snapshot.exists()) {
                 const data = snapshot.data() as VisitorStats;
+                setDailyVisits(data.dailyVisits);
                 setTotalVisits((prev) => {
                   if (prev !== 0 && prev !== data.totalVisits) {
                     setJustUpdated(true);
@@ -101,28 +117,22 @@ export function BulletinVisitorCounter() {
     };
   }, []);
 
-  // 計算下一個里程碑 + 進度百分比
-  //
-  // ⚠️ v3.6.99 修正：舊版用「上一個里程碑 → 下一個里程碑」的區間比例，
-  // 導致 5,448 人朝 10,000 邁進時只顯示 8%（因為算的是 448/5000）。
-  // 但條子兩端標的是 5,000 與 10,000，訪客眼睛讀到的是「5,448 快到一半了」，
-  // 兩者對不起來 → 看起來就是「比例怪怪的」。
-  // 改成對「下個里程碑」的絕對比例（5,448 / 10,000 = 54%），
-  // 已達成的上一個里程碑改用軌道上的刻度標示，資訊不遺失。
-  const lastMilestone = MILESTONES[MILESTONES.length - 1];
-  const achievedAll = totalVisits >= lastMilestone;
-  const nextMilestone = MILESTONES.find((m) => m > totalVisits) ?? lastMilestone;
-  const prevMilestone = [...MILESTONES].reverse().find((m) => m <= totalVisits) ?? 0;
+  // 里程碑進度改由 lib/visitorMilestones.ts 統一計算（與舊版 VisitorCounter 共用同一份級距與語意）
+  const {
+    nextMilestone,
+    prevMilestone,
+    progress,
+    progressLabel,
+    remaining,
+    achievedAll,
+    prevMarkerPercent,
+  } = useMemo(() => getMilestoneProgress(totalVisits), [totalVisits]);
 
-  const progress = achievedAll
-    ? 100
-    : Math.min(100, Math.max(0, (totalVisits / nextMilestone) * 100));
-  // 已達成的里程碑在軌道上的位置（0 或超出範圍時不畫刻度）
-  const prevMarkerPercent =
-    !achievedAll && prevMilestone > 0 ? (prevMilestone / nextMilestone) * 100 : null;
-  // 顯示用整數：還沒真的達標就不讓它寫 100%
-  const progressLabel = achievedAll ? 100 : Math.min(99, Math.round(progress));
-  const remaining = Math.max(0, nextMilestone - totalVisits);
+  // 以最近 14 天的平均成長速度估算還要多久達標，把靜態數字變成有盼頭的敘事
+  const eta = useMemo(
+    () => estimateTimeToMilestone(remaining, averageDailyVisits(dailyVisits)),
+    [remaining, dailyVisits],
+  );
 
   return (
     <div
@@ -213,7 +223,7 @@ export function BulletinVisitorCounter() {
             fontWeight: 700,
           }}
         >
-          <span>下個里程碑</span>
+          <span>{eta ? `下個里程碑・${eta}` : '下個里程碑'}</span>
           <span style={{ fontFamily: tokens.font.en, fontWeight: 900, color: tokens.accent }}>
             🏆 {nextMilestone.toLocaleString()}
           </span>

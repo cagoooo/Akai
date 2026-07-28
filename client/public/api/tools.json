@@ -22,6 +22,7 @@
     "icon": "MessageCircle",
     "category": "communication",
     "previewUrl": "/previews/tool_1.webp",
+    "ogPreviewUrl": "/previews/og/tool_1.webp",
     "tags": [
       "客服",
       "即時通訊",
@@ -64,6 +65,7 @@
     "icon": "ClipboardList",
     "category": "utilities",
     "previewUrl": "/previews/tool_2.webp",
+    "ogPreviewUrl": "/previews/og/tool_2.webp",
     "tags": [
       "行政",
       "協調",
@@ -80,6 +82,7 @@
     "icon": "Vote",
     "category": "interactive",
     "previewUrl": "/previews/tool_3.webp",
+    "ogPreviewUrl": "/previews/og/tool_3.webp",
     "tags": [
       "投票",
       "互動",
@@ -144,6 +147,7 @@
     "icon": "Book",
     "category": "reading",
     "previewUrl": "/previews/tool_4.webp",
+    "ogPreviewUrl": "/previews/og/tool_4.webp",
     "tags": [
       "PIRLS",
       "閱讀理解",
@@ -188,6 +192,7 @@
     "icon": "Utensils",
     "category": "utilities",
     "previewUrl": "/previews/tool_5.webp",
+    "ogPreviewUrl": "/previews/og/tool_5.webp",
     "tags": [
       "點餐",
       "午餐",
@@ -230,6 +235,7 @@
     "icon": "Gamepad2",
     "category": "games",
     "previewUrl": "/previews/tool_6.webp",
+    "ogPreviewUrl": "/previews/og/tool_6.webp",
     "tags": [
       "遊戲",
       "蜜蜂",
@@ -267,6 +273,7 @@
     "icon": "MessageSquare",
     "category": "teaching",
     "previewUrl": "/previews/tool_7.webp",
+    "ogPreviewUrl": "/previews/og/tool_7.webp",
     "tags": [
       "評語",
       "AI",
@@ -297,6 +304,7 @@
     "icon": "Files",
     "category": "teaching",
     "previewUrl": "/previews/tool_8.webp",
+    "ogPreviewUrl": "/previews/og/tool_8.webp",
     "tags": [
       "教案",
       "十二年國教",
@@ -340,6 +348,7 @@
     "icon": "Gamepad2",
     "category": "games",
     "previewUrl": "/previews/tool_9.webp",
+    "ogPreviewUrl": "/previews/og/tool_9.webp",
     "tags": [
       "遊戲",
       "瑪莉歐",
@@ -377,6 +386,7 @@
     "icon": "Users",
     "category": "utilities",
     "previewUrl": "/previews/tool_10.webp",
+    "ogPreviewUrl": "/previews/og/tool_10.webp",
     "tags": [
       "班級",
       "管理",
@@ -410,6 +420,7 @@
     "icon": "GraduationCap",
     "category": "teaching",
     "previewUrl": "/previews/tool_11.webp",
+    "ogPreviewUrl": "/previews/og/tool_11.webp",
     "tags": [
       "互動",
       "課堂",
@@ -446,6 +457,7 @@
     "icon": "BookOpen",
     "category": "reading",
     "previewUrl": "/previews/tool_12.webp",
+    "ogPreviewUrl": "/previews/og/tool_12.webp",
     "tags": [
       "PIRLS",
       "閱讀",
@@ -489,6 +501,7 @@
     "icon": "Rocket",
     "category": "teaching",
     "previewUrl": "/previews/tool_13.webp",
+    "ogPreviewUrl": "/previews/og/tool_13.webp",
     "tags": [
       "5W1H",
       "創意",
@@ -525,6 +538,7 @@
     "icon": "Image",
     "category": "utilities",
     "previewUrl": "/previews/tool_14.webp",
+    "ogPreviewUrl": "/previews/og/tool_14.webp",
     "upgradeToId": 91,
     "tags": [
       "長輩圖",
@@ -564,6 +578,7 @@
     "icon": "FileText",
     "category": "utilities",
     "previewUrl": "/previews/tool_15.webp",
+    "ogPreviewUrl": "/previews/og/tool_15.webp",
     "tags": [
       "會議",
       "報告",
@@ -602,6 +617,7 @@
     "icon": "MessageSquare",
     "category": "communication",
     "previewUrl": "/previews/tool_16.webp",
+    "ogPreviewUrl": "/previews/og/tool_16.webp",
     "tags": [
       "親師",
       "溝通",
@@ -638,6 +654,7 @@
     "icon": "Ticket",
     "category": "utilities",
     "previewUrl": "/previews/tool_17.webp",
+    "ogPreviewUrl": "/previews/og/tool_17.webp",
     "tags": [
       "抽籤",
       "隨機",
@@ -681,6 +698,7 @@
     "icon": "Shuffle",
     "category": "utilities",
     "previewUrl": "/previews/tool_18.webp",
+    "ogPreviewUrl": "/previews/og/tool_18.webp",
     "tags": [
       "抽籤",
       "隨機",
@@ -719,6 +737,7 @@
     "icon": "Bot",
     "category": "utilities",
     "previewUrl": "/previews/tool_19.webp",
+    "ogPreviewUrl": "/previews/og/tool_19.webp",
     "tags": [
       "客服",
       "AI",
@@ -757,6 +776,7 @@
     "icon": "Keyboard",
     "category": "language",
     "previewUrl": "/previews/tool_20.webp",
+    "ogPreviewUrl": "/previews/og/tool_20.webp",
     "tags": [
       "打字",
       "英文",
@@ -796,6 +816,7 @@
     "icon": "Keyboard",
     "category": "language",
     "previewUrl": "/previews/tool_21.webp",
+    "ogPreviewUrl": "/previews/og/tool_21.webp",
     "tags": [
       "打字",
       "中文",
@@ -838,6 +859,7 @@
     "icon": "Languages",
     "category": "language",
     "previewUrl": "/previews/preview_typing_v2.webp",
+    "ogPreviewUrl": "/previews/og/tool_22.webp",
     "tags": [
       "打字",
       "成語",
@@ -878,6 +900,7 @@
     "icon": "Sparkles",
     "category": "teaching",
     "previewUrl": "/previews/preview_feedback_v2.webp",
+    "ogPreviewUrl": "/previews/og/tool_23.webp",
     "tags": [
       "評語",
       "AI",
@@ -914,6 +937,7 @@
     "icon": "ClipboardCheck",
     "category": "utilities",
     "previewUrl": "/previews/preview_admin_v2.webp",
+    "ogPreviewUrl": "/previews/og/tool_24.webp",
     "tags": [
       "午會",
       "記錄",
@@ -956,6 +980,7 @@
     "icon": "Mic",
     "category": "language",
     "previewUrl": "/previews/preview_language_v2.webp",
+    "ogPreviewUrl": "/previews/og/tool_25.webp",
     "tags": [
       "演說",
       "國語",
@@ -997,6 +1022,7 @@
     "icon": "Calculator",
     "category": "teaching",
     "previewUrl": "/previews/preview_teaching_v2.webp",
+    "ogPreviewUrl": "/previews/og/tool_26.webp",
     "tags": [
       "數學",
       "乘法",
@@ -1034,6 +1060,7 @@
     "icon": "Wrench",
     "category": "utilities",
     "previewUrl": "/previews/preview_utility_v2.webp",
+    "ogPreviewUrl": "/previews/og/tool_27.webp",
     "tags": [
       "工具",
       "集合",
@@ -1076,6 +1103,7 @@
     "icon": "Gamepad2",
     "category": "games",
     "previewUrl": "/previews/preview_platformer_v2.webp",
+    "ogPreviewUrl": "/previews/og/tool_28.webp",
     "tags": [
       "遊戲",
       "瑪莉歐",
@@ -1115,6 +1143,7 @@
     "icon": "Globe",
     "category": "teaching",
     "previewUrl": "/previews/preview_space_v2.webp",
+    "ogPreviewUrl": "/previews/og/tool_29.webp",
     "tags": [
       "太陽系",
       "3D",
@@ -1157,6 +1186,7 @@
     "icon": "Dice5",
     "category": "games",
     "previewUrl": "/previews/preview_game_v2.webp",
+    "ogPreviewUrl": "/previews/og/tool_30.webp",
     "tags": [
       "遊戲",
       "合集",
@@ -1199,6 +1229,7 @@
     "icon": "Gift",
     "category": "games",
     "previewUrl": "/previews/preview_claw_machine.webp",
+    "ogPreviewUrl": "/previews/og/tool_31.webp",
     "tags": [
       "遊戲",
       "夾娃娃",
@@ -1235,6 +1266,7 @@
     "icon": "Hand",
     "category": "games",
     "previewUrl": "/previews/preview_touch_collision.webp",
+    "ogPreviewUrl": "/previews/og/tool_32.webp",
     "tags": [
       "遊戲",
       "觸屏",
@@ -1276,6 +1308,7 @@
     "icon": "AudioWaveform",
     "category": "games",
     "previewUrl": "/previews/preview_music_v2.webp",
+    "ogPreviewUrl": "/previews/og/tool_33.webp",
     "tags": [
       "聲音",
       "視覺化",
@@ -1313,6 +1346,7 @@
     "icon": "Play",
     "category": "games",
     "previewUrl": "/previews/preview_interactive_av.webp",
+    "ogPreviewUrl": "/previews/og/tool_34.webp",
     "tags": [
       "遊戲",
       "影像",
@@ -1350,6 +1384,7 @@
     "icon": "Palette",
     "category": "games",
     "previewUrl": "/previews/preview_touch_doodle.webp",
+    "ogPreviewUrl": "/previews/og/tool_35.webp",
     "tags": [
       "塗鴉",
       "觸屏",
@@ -1390,6 +1425,7 @@
     "icon": "Gamepad2",
     "category": "games",
     "previewUrl": "/previews/preview_snake_game.webp",
+    "ogPreviewUrl": "/previews/og/tool_36.webp",
     "tags": [
       "遊戲",
       "貪食蛇",
@@ -1431,6 +1467,7 @@
     "icon": "Waves",
     "category": "games",
     "previewUrl": "/previews/preview_sound_wave.webp",
+    "ogPreviewUrl": "/previews/og/tool_37.webp",
     "tags": [
       "遊戲",
       "聲波",
@@ -1470,6 +1507,7 @@
     "icon": "Volume2",
     "category": "games",
     "previewUrl": "/previews/preview_sound_control.webp",
+    "ogPreviewUrl": "/previews/og/tool_38.webp",
     "tags": [
       "遊戲",
       "聲音",
@@ -1512,6 +1550,7 @@
     "icon": "Wand2",
     "category": "games",
     "previewUrl": "/previews/preview_magic_v2.webp",
+    "ogPreviewUrl": "/previews/og/tool_39.webp",
     "tags": [
       "魔術",
       "預言",
@@ -1552,6 +1591,7 @@
     "icon": "LayoutDashboard",
     "category": "utilities",
     "previewUrl": "/previews/preview_padlet_wall.webp",
+    "ogPreviewUrl": "/previews/og/tool_40.webp",
     "tags": [
       "Padlet",
       "公告",
@@ -1570,6 +1610,7 @@
     "icon": "Music",
     "category": "interactive",
     "previewUrl": "/previews/preview_guitar_song.webp",
+    "ogPreviewUrl": "/previews/og/tool_41.webp",
     "tags": [
       "音樂",
       "吉他",
@@ -1632,6 +1673,7 @@
     "icon": "ShieldCheck",
     "category": "utilities",
     "previewUrl": "/previews/preview_privacy_v2.webp",
+    "ogPreviewUrl": "/previews/og/tool_42.webp",
     "tags": [
       "隱私",
       "兒童",
@@ -1666,6 +1708,7 @@
     "icon": "Languages",
     "category": "language",
     "previewUrl": "/previews/preview_bilingual_translator.webp",
+    "ogPreviewUrl": "/previews/og/tool_43.webp",
     "tags": [
       "翻譯",
       "雙語",
@@ -1707,6 +1750,7 @@
     "icon": "Calculator",
     "category": "teaching",
     "previewUrl": "/previews/tool_44.webp",
+    "ogPreviewUrl": "/previews/og/tool_44.webp",
     "tags": [
       "數學",
       "加法",
@@ -1725,6 +1769,7 @@
     "icon": "Cloud",
     "category": "interactive",
     "previewUrl": "/previews/tool_45.webp",
+    "ogPreviewUrl": "/previews/og/tool_45.webp",
     "tags": [
       "文字雲",
       "即時互動",
@@ -1792,6 +1837,7 @@
     "icon": "CalendarCheck",
     "category": "utilities",
     "previewUrl": "/previews/tool_46.webp",
+    "ogPreviewUrl": "/previews/og/tool_46.webp",
     "tags": [
       "預約",
       "禮堂",
@@ -1834,6 +1880,7 @@
     "icon": "FileSignature",
     "category": "utilities",
     "previewUrl": "/previews/tool_47.webp",
+    "ogPreviewUrl": "/previews/og/tool_47.webp",
     "tags": [
       "線上簽名",
       "肖像授權",
@@ -1880,6 +1927,7 @@
     "icon": "FileInput",
     "category": "utilities",
     "previewUrl": "/previews/tool_48.webp",
+    "ogPreviewUrl": "/previews/og/tool_48.webp",
     "tags": [
       "表單",
       "自動回報",
@@ -1922,6 +1970,7 @@
     "icon": "FolderOpen",
     "category": "teaching",
     "previewUrl": "/previews/tool_49.webp",
+    "ogPreviewUrl": "/previews/og/tool_49.webp",
     "tags": [
       "教務",
       "資源庫",
@@ -1966,6 +2015,7 @@
     "icon": "Baby",
     "category": "games",
     "previewUrl": "/previews/kids-zone-preview.webp",
+    "ogPreviewUrl": "/previews/og/tool_50.webp",
     "tags": [
       "兒童",
       "遊戲",
@@ -2003,6 +2053,7 @@
     "icon": "Calendar",
     "category": "utilities",
     "previewUrl": "/previews/auto-schedule-preview.webp",
+    "ogPreviewUrl": "/previews/og/tool_51.webp",
     "detailedDescription": "「SMES AI 智慧排課系統 v2.12.0」是阿凱老師為**石門國小（Shih Men Elementary School）客製**的智慧排課工具，用 **遺傳演算法 GA v3.1** 取代傳統手工 Excel，把教務組長 7 月暑假 5-7 天連續加班的痛苦壓縮到 2 小時。\n\n## 🎯 核心特色\n\n- 🧬 **遺傳演算法 GA v3.1（不是 CSP 不是模擬退火）** — 染色體每班 35 個基因（5 天 × 7 節）、族群 100、菁英保留 Top 3、自適應突變率，一次處理全校六年級各 N 班\n- 🔧 **混合修復突變五選一策略** — 教師衝突修復 30% / 數學修復 17.5% / 國語修復 17.5% / 定向優化 21% / 隨機交換 14%\n- 🌱 **Smart Seed（v3.1 加速收斂）** — 用「上學期最佳染色體」當新學期初始族群，50% Smart + 50% Random 保多樣性\n- 🔗 **AI 鏈式衝突解決** — `ConflictResolver.jsx` 採深度 BFS 搜尋多步交換路徑（A→B、B→C），一鍵解排課僵局\n- ⚖️ **三層計分** — 硬限制 −50,000/次（教師衝突、數學下午禁排）/ 軟限制 −500 ~ −5,000（體育避第 3-4 節、國語分散五天）/ 教師疲勞警告（連續 3 節以上）\n- 🇹🇼 **台灣國小規則寫死** — 全校週三下午停課、一二年級只有週二全天、三四年級週五下午停課、五六年級全週滿課\n- 📊 **Excel 雙向 IO** — 匯入舊配課表（全形 / 半形正規化 + 模糊比對）+ 匯出「Editorial Luxury」三欄漸層卡片（ExcelJS + html2canvas + jsPDF）\n- 🔄 **智慧代課推薦** — 三級推薦（最佳 / 可考慮 / 備選）+ 過勞防護（單日 ≤ 5 節）+ 科目相符判斷\n\n## 💡 設計理念\n\n取代傳統桌機版 STC.EXE 581KB（repo 根目錄保留作對照組）。技術棧 React 19 + Vite 7 + Firebase Auth + Firestore + Zustand + vite-plugin-pwa 離線、IndexedDB（idb）+ Firestore 雲端快照可一鍵還原任一歷史版本。**127 個單元測試 + 23 個 Firestore Rules 測試 + CI 三 jobs（lint / test / rules / build）**，工程紀律企業級。Footer：「Developed with ❤️ for SMES by Antigravity AI」。\n\n## 🎒 適合情境\n\n國中小教務組長 / 教務主任 6-7 月必用 — 6 月就開始輸入師資資料，暑假還沒到課表就已排好。**石門國小 115 學年度實測：排課時間從 5-7 天 → 2 小時、衝堂錯誤 5-10 個 → 0、教務組長加班從 50+ 小時 → 3 小時、家裡老婆冷戰風險：零**。配對 [#49 教務處寶藏庫](/tool/49) 整理教師資料 + [#83 本土語分班配對系統](/tool/83) 處理跨校巡迴本土語老師時段 + [#2 行政業務協調系統](/tool/2)。",
     "tags": [
       "排課",
@@ -2020,6 +2071,7 @@
     "icon": "Library",
     "category": "interactive",
     "previewUrl": "/previews/expo-soka-preview.webp",
+    "ogPreviewUrl": "/previews/og/tool_52.webp",
     "detailedDescription": "「2026 創價・教育 EXPO 線上選課」是阿凱老師為**創價教育 EXPO 跨機構教育博覽會**打造的 **整合式線上報名系統**（React + Vite），是阿凱「對外輸出」的代表作 — 證明工具集不只服務石門國小。\n\n## 🎯 核心特色\n\n- 📚 **直觀介面瀏覽** — 各領域課程一目了然，**從科學技術到人文藝術一應俱全**\n- ⚡ **即時選課** — 點擊報名立即加入個人清單，不用等表單送出\n- 📌 **報名狀態追蹤** — 「已選 / 未選」清楚顯示，不會重複選\n- 📝 **個人化課程清單管理** — 「我的課程」單獨頁可隨時調整 / 取消\n- 📱 **博覽會數位導覽小幫手** — 行動裝置優先設計\n\n## 💡 設計理念\n\n用 React + Vite 寫成單檔靜態頁部署（1133 bytes 入口 HTML 引外部 bundle），EZPage 一鍵發布。**創價學會**（Soka Gakkai）是日本創立的國際性教育組織，在台灣有 50+ 年歷史，每年辦教育博覽會推廣**人本教育**理念。阿凱為這個千人級博覽會做數位報名系統 — **跨機構合作的代表作**。\n\n## 🎒 適合情境\n\n比 Google 表單專業 100 倍 — 主辦方可即時看哪場最熱門，參與者「個人清單」減少撞場。屬於阿凱「活動專屬網」6 件套之一：[#62 親職教育日](/tool/62)、[#74 親職日場地配置](/tool/74)、[#56 元宵猜燈謎](/tool/56)、[#80 教師會議](/tool/80)、[#95 龍潭區語文競賽](/tool/95) 都是同一系列。下次教育博覽會 / 多場次研習 / 跨機構活動可直接 fork 模板。",
     "tags": [
       "創價",
@@ -2078,6 +2130,7 @@
     "icon": "Tool",
     "category": "utilities",
     "previewUrl": "/previews/repair-preview.webp",
+    "ogPreviewUrl": "/previews/og/tool_53.webp",
     "detailedDescription": "「智慧校園報修系統」v0.9.2 是阿凱老師為校園師生與總務處打造的 **即時報修平台** — **沒有 QR Code 掃描入口**！真正的核心是「**點互動式校園平面圖 + Google Vision OCR 自動標教室 + LINE Flex Message 雙軌通知**」三條全鏈路設計。\n\n## 🎯 核心特色\n\n- 🗺️ **互動式校園平面圖（免登入）** — Google Vision API 預先 OCR 抓出 C101 / C310 編號 + 自製「**連鎖磁吸**」演算法把「一年 1 班」破碎文字聚合 → 自動生成可點擊熱區\n- 📸 **報修表單支援 iPhone HEIC/HEIF** — 瀏覽器自動壓縮到 300 KB，**不用先轉格式**\n- 📲 **LINE Flex Message 雙軌通知（核心殺手鐧）** — **兩個獨立 LINE Token**：10 項資訊類別走資訊組長 / 10 項事務類別走事務組長，緊急 header 自動變紅，附 deep link「查看詳情」按鈕\n- 👤 **AdminRoleSelector 角色切換後台** — 🖥️ 資訊組長 / 🔧 事務組長 / 📊 全部檢視，**各組長只看自己的單互不干擾**\n- 📊 **資料分析儀表板** — MTTR 平均維修時間 + Top 10 熱點教室 + Top 5 報修王 + 類別圓餅圖 + Excel 匯出\n- 💾 **離線報修（神細節）** — 訊號死角報修不會丟，照片存 **IndexedDB** 暫存，連線後**自動補發 LINE 通知**\n\n## 💡 設計理念\n\nReact 19 + Vite 7 + 自製 CSS（Aurora 漸層 + Glassmorphism）+ Firebase 全家桶（Auth + Firestore + Storage + Cloud Functions + Hosting）+ Google Cloud Vision API + LINE Messaging API（**LINE Notify 2025/3 停止後**已遷移）+ recharts + xlsx。雙軌分流不是 UI 設計而是**核心業務邏輯**，系統用 `category` 欄位自動分流。`firestore.rules` 7.7 KB 雙重權限驗證。**石門國小三個月實戰**：報修平均處理時長從 5.2 天 → **1.4 天（-73%）**、老師月跑總務從 3-5 次 → 0 次、分流錯誤率 0%、學期統計從半天 → **30 秒自動匯出**。Footer 寫 `Made with ❤️ for SMES` 確認是石門國小自己人。\n\n## 🎒 適合情境\n\n- 國小 / 國中 / 高中 / 大專總務處 + 資訊組\n- 補習班 / 安親班 / 教會教室 / 社區中心\n- 任何「多空間多設備 + 多角色協作維修」場域\n\n部署 `cagoooo.github.io/repair/` + Firebase Hosting。配對 [#46 禮堂&專科教室&IPAD平板車預約系統](/tool/46) 總務數位轉型系列、[#82 教室資訊設備盤點](/tool/82) 盤點發現故障直接報修。新學校導入建議第一週只貼 5-10 間教室在平面圖上試水溫。MIT 授權，cagoooo/repair 開源。",
     "tags": [
       "報修",
@@ -2114,6 +2167,7 @@
     "icon": "ScanFace",
     "category": "teaching",
     "previewUrl": "/previews/recognize_preview.webp",
+    "ogPreviewUrl": "/previews/og/tool_54.webp",
     "detailedDescription": "「識生學坊 - 臉盲教師救星」是阿凱老師為「**開學第一週記不住學生名字**」這個真痛點打造的 **遊戲化臉部辨識訓練工具**，部署在 `cagoooo.github.io/recognize/`，當前 **v3.14.0** 活躍開發中。資訊科任老師教 6 個班 = 180 個名字，特教巡迴老師跨 4 間學校 28 個學生 — 這款工具就是為這群人而生。\n\n## 🎯 核心特色\n\n- 📁 **班級雙通道匯入** — Excel 批次匯入名單 + 相簿批次匯入照片，一張照片一個學生\n- 🤖 **MediaPipe 端離線臉部偵測** — `@mediapipe/tasks-vision` WebAssembly 本地跑，1:1 智慧裁切「頭頂 +50% / 肩膀 +140% / 左右 +35%」不上傳第三方\n- 🧠 **Gemini Vision 記憶口訣**（殺手鐧）— `gemini-2.5-flash-lite` 看照片產出「黑框眼鏡、燦爛笑容、馬尾」3 個特徵描述 + 3-5 個關鍵字標籤幫老師建記憶錨點\n- 🎮 **4 模式遊戲化特訓** — 看照片猜名字 / 看名字猜照片 / 極限混淆（相似標籤干擾）/ 標籤特訓（如「眼鏡」組專練），含 Combo 連擊 + S+/S/A/B 評級\n- 📖 **班級攻略本兩階段比對演算法** — 階段 1 前端 64×64 灰階 fingerprint 餘弦相似度粗篩（30 人班 435 對毫秒完成），階段 2 對 top 50 對呼叫 Gemini 雙圖比對，**30 人班一次跑全套約 NT$0.25-0.5**\n- 📊 **成長戰績儀表板** — 折線圖 / 難易度指數 / 班級爭霸榜，html2canvas 戰績卡含 QR Code 分享家長群\n- 🤝 **shareToken 班級攻略本分享** — 科任老師只能讀不能寫，firestore.rules 嚴綁 `teacherUid == request.auth.uid`\n- 📱 **PWA + 觸感震動 50ms + SpeechSynthesis 語音教練** — 答題自動唸正確答案與特徵描述\n\n## 💡 設計理念\n\n技術棧 React 19 + Vite 7 + Tailwind v4 + framer-motion + lucide-react + recharts + Firebase（Auth + Firestore + Storage + Hosting）+ IndexedDB v3 雙存（裁切版 blob 顯示 + 原圖保留供重新裁切）+ Vitest + Playwright 視覺回歸測試。**腦科學告訴我們**：記名字需要「多次接觸 + 主動回想 + 情境連結」三件事。#54 把這三件事用遊戲化機制全包，並把成本控制做到極致 — 兩階段比對演算法讓「找出最容易認錯的相似學生 pair」這件事的單次成本壓在 NT$0.5 以下。\n\n## 🎒 適合情境\n\n石門國小 5 位科任老師實測：全班記熟時間從 4-6 週縮到 **1.5-2 週**，上課叫錯名字次數從 8-12 次/節降到 1-2 次/節，親師會家長辨識率從 50% 拉到 90%。\n\n- **開學新接班的導師**（記 30 個學生 + 30 個家長）— 開學前一週就上傳照片開始練\n- **國中 / 高中科任老師**（180+ 學生）— 兩週後能在走廊叫出每個學生的名字\n- **音樂 / 體育 / 美術 / 英語 / 資訊老師** — 多班輪流上課不再喊「那個誰」\n- **特教巡迴 / 兼任輔導老師** — 跨校把學生跟學校連起來，不會走錯教室\n- **補習班 / 安親班新進老師** — 第一週快速建立信任\n\n搭配 [#49 教務處寶藏庫](/tool/49)（班級照、座位表）+ [#89 教師回覆小幫手 Pro](/tool/89)（記名字 + 寫回覆一條龍）形成完整師生互動鏈。",
     "tags": [
       "臉盲",
@@ -2155,6 +2209,7 @@
     "icon": "Languages",
     "category": "language",
     "previewUrl": "/previews/zhuyin_preview.webp",
+    "ogPreviewUrl": "/previews/og/tool_55.webp",
     "detailedDescription": "「ㄅㄆㄇ 注音大挑戰 🎲」是阿凱老師為**一年級兒童**打造的 **注音符號互動學習遊戲**，徹底告別抄注音 / 注音樂理本 / 廣告 APP 的痛點。\n\n## 🎯 核心特色\n\n- 🇹🇼 **6 個主題關卡（漸進式解鎖）** — 🍎 水果 → 🐶 動物 → 🚗 交通 → ✋ 身體 → 👨‍👩‍👧‍👦 家人 → 🏫 學校（**必須通過前一關才能挑戰下一關**）\n- ⌨️ **虛擬鍵盤拼聲母韻母聲調** — 每關隨機抽 5 題，可愛圖片 + 單字提示（如「🍎 → ㄆㄧㄥˊㄍㄨㄛˇ」），玩家用畫面下方虛擬鍵盤拼 **聲母 + 韻母 + 聲調**\n- 🎉 **答對撒彩色碎紙 / 答錯震動** — 答對綠色字體 + 碎紙機動畫；答錯畫面震動 + 顯示正確答案\n- 📊 **學習回顧模組** — 關卡結束查看該回合所有答對與答錯的題目紀錄，學生看自己弱在哪\n- 💾 **localStorage 進度儲存** — 已解鎖關卡 + 各關愛心數量評等自動儲存，可一鍵重置進度\n- 📱 **完美 RWD** — 手機 / 平板 / 桌機自動調整大小與排版\n\n## 💡 設計理念\n\n**純前端 HTML/CSS/JS**（無框架！）、無後端、無 LLM、無依賴。阿凱明確選擇純靜態的理由：**一年級工具最重要的就是「永遠不會壞」**，部署在 `cagoooo.github.io/zhuyin/` 「極端適合 GitHub Pages 部署」（README 原文）。\n\n## 🎒 適合情境\n\n一年級上學期前 10 週注音密集學習期完整覆蓋：第 1-3 週玩「水果」、第 4-6 週解鎖「動物」「交通」、第 7-10 週完成「身體 / 家人 / 學校」拿 6 顆愛心評等。屬於阿凱「注音 → 中打進化鏈」三件套：**#55 拼注音 → [#21 中文注音打字](/tool/21) 知道鍵位 → [#70 中打 Pro](/tool/70) 速度大師級**。一年級新生入學第一週貼 QR Code 在黑板，學生掃進去從「水果」關開始解鎖整個世界。",
     "tags": [
       "注音",
@@ -2198,6 +2253,7 @@
     "icon": "Lightbulb",
     "category": "games",
     "previewUrl": "/previews/preview_lantern_festival.webp",
+    "ogPreviewUrl": "/previews/og/tool_56.webp",
     "detailedDescription": "「2026 石門國小元宵猜燈謎」是阿凱老師為 **元宵節班會活動 / 走廊互動裝置** 打造的 **節慶主題闖關 PWA**，部署在 `cagoooo.github.io/lantern/`，主題色 **#E60012 中國紅**配 Noto Sans TC，meta description 直接寫明「石門國小 2026 年元宵節猜燈謎活動 - 一起來猜燈謎，歡慶元宵！」\n\n## 🎯 核心特色\n\n- 🏮 **中國紅主題 + Noto Sans TC** — 元宵氣氛滿點，視覺一秒抓住節慶感\n- 📱 **PWA 完整支援** — manifest.json + 多尺寸 icon + Service Worker，可加到主畫面像原生 App\n- ⚡ **Vite + React 現代化架構** — 小巧快速載入，老師上課 1 秒打開\n- 🎯 **即時對答 + 計分 + 排行榜** — 學生掃 QR 進入猜題立刻知道對錯，看誰拿最多分\n- 🛡️ **PointerLock 錯誤防禦** — capture phase listener 最優先吞掉 SecurityError 彈窗，工程師等級的防禦性程式設計\n- 💻 **Service Worker localhost 偵測** — dev 時不註冊 SW 避免 HMR 衝突\n- 📲 **手機掃 QR 線上猜** — 走廊不用掛紅紙、不會被風吹掉、答案不會被同學偷看\n\n## 💡 設計理念\n\n傳統元宵節老師寫燈謎在紅紙掛走廊，學生路過猜答案、老師一個個確認 — 痛點是答案被偷看、紙會被風吹掉、老師確認超累。阿凱反向用 **手機掃 QR → 線上猜 → 即時答案 + 計分** 解決。這款屬於阿凱「節慶 / 活動專用工具」系列：[#62 親職教育日](/tool/62)（3 月）、[#74 親職日場地配置](/tool/74)（特定日期）、[#80 教師會議](/tool/80)（學期週次），活動結束放著當數位海報、隔年改改日期就能再用。bundle 看出阿凱踩過 Vite + PointerLock SecurityError 的雷，最早執行的 script 就吞掉錯誤 — **這種踩雷後的防禦性寫法**是工程師等級的細節。\n\n## 🎒 適合情境\n\n- **元宵節班會活動**：全班同時掃 QR → 看誰答對最多燈謎 → 結算頒小獎品\n- **走廊互動裝置**：學校觸控螢幕掛 #56，學生課間互玩\n- **家長親子活動**：「爸媽我猜這題你也不會」變家庭遊戲\n- **國語延伸活動**：燈謎含諧音 / 拆字 / 字謎 → 國語素養延伸\n\n適合國中小元宵節活動承辦、學務 / 訓育組（節慶活動數位化）、國文老師（猜燈謎 + 字謎教學）。2026 元宵已過 — 但這份**活動數位化的設計思維**可套用任何年度節慶（中秋 / 端午 / 教師節 / 校慶），搭配 [#22 成語填空遊戲](/tool/22) 與 [#71 成語填空大挑戰](/tool/71) 是完整語文遊戲化套組。",
     "tags": [
       "元宵節",
@@ -2230,6 +2286,7 @@
     "icon": "Utensils",
     "category": "utilities",
     "previewUrl": "/previews/preview_food_wheel.webp",
+    "ogPreviewUrl": "/previews/og/tool_57.webp",
     "detailedDescription": "「選擇障礙專用 - 餐廳命運轉盤」是阿凱老師為**所有有選擇障礙的人**打造的 **極簡轉盤工具**（React + Vite），解決「今天吃什麼」這個現代生活的永恆難題 — 入口 HTML 只有 1.5 KB。\n\n## 🎯 核心特色\n\n- 🎡 **輕鬆一點命運決定** — 輸入候選餐廳清單 → 點「開始轉」→ 轉盤旋轉動畫 → **命運幫你決定**\n- 🍽️ **5 秒上手** — 阿公阿嬤都能用，零學習成本\n- 💰 **完全免費 + 免登入** — 想吃就轉，無註冊無廣告\n- 🌍 **跨情境通用** — 個人 / 家庭 / 朋友 / 課堂全適用\n- 😄 **解放選擇壓力** — 把責任外包給轉盤，吃完才發現挺好吃\n\n## 💡 設計理念\n\n用 React + Vite 寫成 1.5 KB 入口 HTML 純前端，推測純前端 localStorage 存清單，部署在 `cagoooo.github.io/food/`。**「好工具不一定要複雜」是阿凱的另一種哲學** — 對比阿凱有些工具如 [#84 領域共備 GO](/tool/84) 用 Cloudflare Turnstile + SSRF 防護，**#57 是另一端：極簡到不能再簡單**。複雜跟極簡並存，才是真實工具集。\n\n## 🎒 適合情境\n\n教師室午餐戰（沒人能說「上週吃過了」）、校外教學決策（學生分組投票公平）、家庭晚餐（小孩很興奮）、朋友聚餐（不用再投票）、班級慶生會點外送。屬於阿凱「抽選工具三件套」：**生活向 #57** + 課堂版 [#17 創意抽籤系統](/tool/17)（一個一個抽 + confetti 撒花）+ 比賽版 [#18 繽紛隨機學生抽選](/tool/18)（正取 + 備取）。下次「今天吃什麼」5 秒上手命運決定，不用再吵 20 分鐘。",
     "tags": [
       "餐廳",
@@ -2261,6 +2318,7 @@
     "icon": "Wand2",
     "category": "teaching",
     "previewUrl": "/previews/tool_58.webp",
+    "ogPreviewUrl": "/previews/og/tool_58.webp",
     "tags": [
       "AI",
       "備課",
@@ -2295,6 +2353,7 @@
     "icon": "MessageSquareText",
     "category": "communication",
     "previewUrl": "/previews/tool_59.webp",
+    "ogPreviewUrl": "/previews/og/tool_59.webp",
     "detailedDescription": "「**桃園市石門國小資訊組客服部 — 小智鈴 AI 客服系統**」是阿凱老師為**石門國小資訊組**做的智慧交談機器人，解決資訊組長一天被問 30+ 次「老師我家小孩怎麼登入 Google 帳號 / 校網密碼忘了 / Chromebook 連不上 WiFi」的重複問題痛點。\n\n## 🎯 核心特色\n\n- 🔔 **「小智鈴」命名意義** — 「鈴」= 學校鐘聲（召喚 / 呼叫）+「智」= 智慧 +「小」= 親切感，「有問題就找小智鈴，學校的鐘聲幫你」\n- 📚 **自動學習學校 QA 資料** — 行政流程 / 教學資源 / 常見問題自動整合，**取代 80% 重複諮詢**\n- ⏰ **24/7 全天候即時諮詢** — 假日深夜也能查，深夜疑問家長不用打擾老師\n- 🏫 **石門國小專屬登入頁** — login-title 寫「桃園市石門國小」+ 對話介面（傳送、✖ 取消 / ✔ 確定 modal）\n- 🔁 **可 fork 推給其他學校** — 「fork cagoooo/smes 改一下學校資料就能用」是阿凱推銷台詞\n- 💚 **減輕資訊組長負擔** — 讓真正的 IT 規劃時間回來\n\n## 💡 設計理念\n\n部署在 `cagoooo.github.io/smes/`，17 KB 入口 HTML，推測純前端 + Gemini / Cloud Functions 後端。跟 [#1 線上即時客服](/tool/1) / [#19 設計專屬客服](/tool/19) 組成「客服三件套」：#1 #19 用 Replit shared link + 製作後台雙入口（通用 AI 諮詢 + 製作者後台），#59 用 GitHub Pages 部署 **學校專屬版**。三件套完整覆蓋：通用客服 → #1、客服平台教學 → #19、學校專屬 → #59。\n\n## 🎒 適合情境\n\n新進老師入職第 1 週半夜問問題、家長深夜想問「孩子帳號怎麼設」、學生「這個工具怎麼用」自問不用煩老師、代課老師不熟系統隨時問。教導主任跟新老師說「**有問題先問小智鈴**」即可分流 90% 問題，老師可以下班，**培養學生 self-service 習慣**。配對 [#2 行政業務協調系統](/tool/2) 校內協調 + [#16 親師溝通小幫手](/tool/16)。**MIT 授權，fork cagoooo/smes 改學校資料就能上線你校 24/7 AI 客服**。",
     "tags": [
       "AI 客服",
@@ -2313,6 +2372,7 @@
     "icon": "Aperture",
     "category": "interactive",
     "previewUrl": "/previews/tool_60.webp",
+    "ogPreviewUrl": "/previews/og/tool_60.webp",
     "detailedDescription": "「專屬創意 3D 畫廊」是阿凱老師打造的 **3D 旋轉木馬照片畫廊**（純靜態零依賴），用純 CSS `transform-style: preserve-3d` 做出真實 3D 空間感 — 不是 Three.js 的複雜引擎，但效果驚豔。\n\n## 🎯 核心特色\n\n- 🌌 **純 CSS `transform-style: preserve-3d`** — 真正的 3D 空間感（不是 2D 模擬）\n- 🖱️ **滑鼠拖曳旋轉** — 以左右拖曳手勢動態旋轉畫廊\n- 📱 **觸控手勢支援** — 完整支援手機與平板的滑動操作\n- ⚡ **慣性滑動效果（神細節）** — 放開後畫廊持續以衰減速度旋轉，**仿物理摩擦感**，像真實旋轉物體\n- 📁 **本機圖片上傳** — 直接從裝置選任意數量圖片，即時更新畫廊，不需後端\n- 🌙 **`-webkit-box-reflect` 地板倒影** — 像高級藝廊展示\n- 📐 **RWD 響應式** — 自動適應手機 / 平板 / 桌機\n\n## 💡 設計理念\n\n**純靜態 HTML / CSS / JavaScript，零依賴**（無 React / Vue / 框架）。為什麼選純 CSS 而不是 Three.js？對比 [#29 太陽系探索者](/tool/29) 用 Three.js（複雜模型 + 物理），**#60 用純 CSS（零依賴 + 載入快）**：簡單 3D 場景 → 純 CSS、複雜 3D 模型 → Three.js。**用對工具是工程師的修養** — 阿凱不會為了簡單畫廊套整個 Three.js 引擎。README 74 KB 超詳細，部署 `cagoooo.github.io/3D/`。\n\n## 🎒 適合情境\n\n藝術與人文課展學生美術作品（拖曳旋轉看，比一張張投影片好看 10 倍）、校慶 / 親職日走廊大型觸控螢幕展覽（比海報生動 100 倍）、畢業班禮物（6 年級畢業典禮投影，學生看自己 3D 畫廊會哭）、學期末展覽（家長日 / 校長視察都能用）。屬於阿凱「為大型觸控螢幕設計」系列：[#32 觸屏碰碰碰](/tool/32)、[#34 影像聲音遊戲區](/tool/34)。第一次玩本機上傳幾張照片拖曳旋轉，看慣性滑動 + 倒影效果會驚豔「這是純 CSS？」。",
     "tags": [
       "3D",
@@ -2377,6 +2437,7 @@
     "icon": "Keyboard",
     "category": "language",
     "previewUrl": "/previews/tool_61.webp",
+    "ogPreviewUrl": "/previews/og/tool_61.webp",
     "tags": [
       "打字",
       "英文",
@@ -2417,6 +2478,7 @@
     "icon": "Users",
     "category": "communication",
     "previewUrl": "/previews/tool_62.webp",
+    "ogPreviewUrl": "/previews/og/tool_62.webp",
     "tags": [
       "桃園市",
       "石門國小",
@@ -2438,6 +2500,7 @@
     "icon": "Gamepad2",
     "category": "interactive",
     "previewUrl": "/previews/tool_63.webp",
+    "ogPreviewUrl": "/previews/og/tool_63.webp",
     "tags": [
       "Email",
       "帳號密碼",
@@ -2493,6 +2556,7 @@
     "icon": "Music",
     "category": "teaching",
     "previewUrl": "/previews/tool_64.webp",
+    "ogPreviewUrl": "/previews/og/tool_64.webp",
     "tags": [
       "音樂",
       "簡譜",
@@ -2527,6 +2591,7 @@
     "icon": "Clapperboard",
     "category": "teaching",
     "previewUrl": "/previews/tool_65.webp",
+    "ogPreviewUrl": "/previews/og/tool_65.webp",
     "tags": [
       "AI",
       "影片創作",
@@ -3119,10 +3184,6 @@
         "subject",
         "admin"
       ],
-      "departments": [
-        "academic",
-        "student-affairs"
-      ],
       "painPoints": [
         "meeting-productivity",
         "communication",
@@ -3187,6 +3248,7 @@
     "icon": "LayoutDashboard",
     "category": "teaching",
     "previewUrl": "/previews/tool_81.webp",
+    "ogPreviewUrl": "/previews/og/tool_81.webp",
     "tags": [
       "資訊科技",
       "教學入口",
@@ -3227,6 +3289,7 @@
     "icon": "ClipboardList",
     "category": "utilities",
     "previewUrl": "/previews/tool_82.webp",
+    "ogPreviewUrl": "/previews/og/tool_82.webp",
     "tags": [
       "設備盤點",
       "資產管理",
@@ -3270,6 +3333,7 @@
     "icon": "Languages",
     "category": "utilities",
     "previewUrl": "/previews/tool_83.webp",
+    "ogPreviewUrl": "/previews/og/tool_83.webp",
     "tags": [
       "本土語",
       "分班配對",
@@ -3863,7 +3927,7 @@
     "icon": "Brain",
     "category": "interactive",
     "previewUrl": "/previews/tool_97.webp",
-    "ogPreviewUrl": "",
+    "ogPreviewUrl": "/previews/og/tool_97.webp",
     "tags": [
       "MBTI 人格測驗",
       "16 型人格",
@@ -4231,7 +4295,7 @@
     "icon": "Heart",
     "category": "interactive",
     "previewUrl": "/previews/tool_106.webp",
-    "ogPreviewUrl": "",
+    "ogPreviewUrl": "/previews/og/tool_106.webp",
     "tags": [
       "畢業典禮",
       "石門國小",
@@ -4300,7 +4364,7 @@
     "icon": "Users",
     "category": "utilities",
     "previewUrl": "/previews/tool_107.webp",
-    "ogPreviewUrl": "",
+    "ogPreviewUrl": "/previews/og/tool_107.webp",
     "tags": [
       "教育雲帳號",
       "OpenID",
@@ -4326,7 +4390,7 @@
     "icon": "Gamepad2",
     "category": "interactive",
     "previewUrl": "/previews/tool_108.webp",
-    "ogPreviewUrl": "",
+    "ogPreviewUrl": "/previews/og/tool_108.webp",
     "tags": [
       "資安教育",
       "釣魚郵件",
@@ -4395,7 +4459,7 @@
     "icon": "ClipboardList",
     "category": "utilities",
     "previewUrl": "/previews/tool_109.webp",
-    "ogPreviewUrl": "",
+    "ogPreviewUrl": "/previews/og/tool_109.webp",
     "tags": [
       "軟體需求調查",
       "數位學習",
@@ -4437,7 +4501,7 @@
     "icon": "Video",
     "category": "utilities",
     "previewUrl": "/previews/tool_110.webp",
-    "ogPreviewUrl": "",
+    "ogPreviewUrl": "/previews/og/tool_110.webp",
     "tags": [
       "照片轉影片",
       "活動紀錄影片",

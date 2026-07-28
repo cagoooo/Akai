@@ -99,11 +99,15 @@ describe('validateAudienceFit', () => {
     expect(validateAudienceFit({ ...fit, reasons: { admin: '方便行政管理' } })).toContain(
       '老師客群至少需要一則非空白的老師、職務或處室理由',
     );
+    // P0-1：reasons.admin 在 teacherRoles 只有 subject 時永遠取用不到 → 視為死理由
     expect(
       validateAudienceFit({
         ...fit,
         reasons: { admin: '方便行政管理', subject: '協助科任老師備課' },
       }),
+    ).toContain('reasons.admin 永遠取用不到：teacherRoles 不含 admin');
+    expect(
+      validateAudienceFit({ ...fit, reasons: { subject: '協助科任老師備課' } }),
     ).toEqual([]);
   });
 
@@ -119,10 +123,67 @@ describe('validateAudienceFit', () => {
     expect(validateAudienceFit({ ...fit, reasons: { counseling: '協助輔導室業務' } })).toContain(
       '老師客群至少需要一則非空白的老師、職務或處室理由',
     );
+    // P0-1：reasons.counseling 在 departments 只有 academic 時永遠取用不到 → 視為死理由
     expect(
       validateAudienceFit({
         ...fit,
         reasons: { counseling: '協助輔導室業務', academic: '協助教務行政' },
+      }),
+    ).toContain('reasons.counseling 永遠取用不到：departments 不含 counseling');
+    expect(
+      validateAudienceFit({ ...fit, reasons: { academic: '協助教務行政' } }),
+    ).toEqual([]);
+  });
+
+  it('偵測永遠取用不到的死理由鍵（P0-1）', () => {
+    const base = { painPoints: ['administration'], priority: 60 };
+
+    // #80 的真實情境：明寫導師／科任，卻把理由掛在不在 teacherRoles 裡的職務上
+    expect(
+      validateAudienceFit({
+        ...base,
+        audiences: ['teacher'],
+        teacherRoles: ['admin'],
+        reasons: { admin: '行政理由', homeroom: '導師理由' },
+      }),
+    ).toContain('reasons.homeroom 永遠取用不到：teacherRoles 不含 homeroom');
+
+    // 沒有學生客群卻寫了學生理由
+    expect(
+      validateAudienceFit({
+        ...base,
+        audiences: ['teacher'],
+        reasons: { teacher: '老師理由', student: '學生理由' },
+      }),
+    ).toContain('reasons.student 永遠取用不到：audiences 不含 student');
+
+    // 沒有老師客群卻寫了職務理由
+    expect(
+      validateAudienceFit({
+        ...base,
+        audiences: ['student'],
+        reasons: { student: '學生理由', homeroom: '導師理由' },
+      }),
+    ).toContain('reasons.homeroom 永遠取用不到：audiences 不含 teacher');
+
+    // teacherRoles 不含 admin 時，處室理由一律取用不到
+    expect(
+      validateAudienceFit({
+        ...base,
+        audiences: ['teacher'],
+        teacherRoles: ['homeroom'],
+        reasons: { homeroom: '導師理由', academic: '教務處理由' },
+      }),
+    ).toContain('reasons.academic 永遠取用不到：teacherRoles 不含 admin');
+
+    // 合法組合不應誤報
+    expect(
+      validateAudienceFit({
+        ...base,
+        audiences: ['teacher'],
+        teacherRoles: ['homeroom', 'subject', 'admin'],
+        departments: ['academic'],
+        reasons: { homeroom: '導師理由', subject: '科任理由', academic: '教務處理由' },
       }),
     ).toEqual([]);
   });

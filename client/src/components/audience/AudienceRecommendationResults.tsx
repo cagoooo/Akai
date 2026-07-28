@@ -1,5 +1,6 @@
 import type { Ref } from 'react';
 import type { AudienceRecommendation, RecommendationSlot } from '@/lib/audienceRecommendation';
+import { noveltyBadgeFor } from '@/lib/recommendationHistory';
 
 // P0-1：把已算好的 slot / 痛點命中轉成「為什麼推」徽章，讓使用者秒懂推薦邏輯。
 const SLOT_BADGES: Record<RecommendationSlot, { label: string; kind: string }> = {
@@ -16,7 +17,8 @@ export function badgeFor(rec: AudienceRecommendation): { label: string; kind: st
   return SLOT_BADGES[rec.slot] ?? SLOT_BADGES.universal;
 }
 
-export function AudienceRecommendationResults({ recommendations, onLocateTool, onReshuffle, firstRecommendationRef }: { recommendations: AudienceRecommendation[]; onLocateTool: (toolId: number) => void; onReshuffle?: () => void; firstRecommendationRef?: Ref<HTMLButtonElement> }) {
+export function AudienceRecommendationResults({ recommendations, onLocateTool, onReshuffle, firstRecommendationRef, recommendationHistory }: { recommendations: AudienceRecommendation[]; onLocateTool: (toolId: number) => void; onReshuffle?: () => void; firstRecommendationRef?: Ref<HTMLButtonElement>; /** 上一次推薦過的工具 id，用來標「👀 上次沒看到」 */ recommendationHistory?: ReadonlySet<number> }) {
+  const history = recommendationHistory ?? new Set<number>();
   return <section className="audience-wizard__results" aria-labelledby="audience-results-title">
     <div className="audience-wizard__tape">為你精選</div>
     <h2 id="audience-results-title">這些工具，現在就很好用</h2>
@@ -25,10 +27,13 @@ export function AudienceRecommendationResults({ recommendations, onLocateTool, o
       {recommendations.map((rec, index) => {
         const { tool, reason } = rec;
         const badge = badgeFor(rec);
+        // P1-2：新鮮度徽章與「為什麼推」徽章並存 —— 前者回答「為什麼這次才給你看」
+        const novelty = noveltyBadgeFor(tool, history);
         return <button ref={index === 0 ? firstRecommendationRef : undefined} key={tool.id} type="button" className="audience-wizard__recommendation is-revealing" style={{ animationDelay: `${index * 75}ms` }} data-tool-id={tool.id} onClick={() => onLocateTool(tool.id)}>
           <span className="audience-wizard__pin" aria-hidden="true" />
           <span className="audience-wizard__number">{String(index + 1).padStart(2, '0')}</span>
           <span className={`audience-wizard__badge audience-wizard__badge--${badge.kind}`}>{badge.label}</span>
+          {novelty && <span className={`audience-wizard__novelty audience-wizard__novelty--${novelty.kind}`}>{novelty.label}</span>}
           <strong>{tool.title}</strong><small>{reason}</small><span className="audience-wizard__go">查看工具卡 →</span>
         </button>;
       })}

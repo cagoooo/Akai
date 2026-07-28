@@ -1,6 +1,8 @@
 import type { AudienceProfile, AudienceType, Department, PainPoint, SchoolLevel, TeacherRole } from '@/lib/audienceProfile';
 
-export type AudienceWizardStep = 'audience' | 'school-level' | 'teacher-role' | 'department' | 'pain-points' | 'thinking' | 'results';
+// 'returning' 是回訪重問的第一畫面（P1-1）：帶出上次的身分，讓訪客一鍵沿用或只改一項，
+// 不用從「你是老師還是學生」重頭選四步。
+export type AudienceWizardStep = 'returning' | 'audience' | 'school-level' | 'teacher-role' | 'department' | 'pain-points' | 'thinking' | 'results';
 export type AudienceWizardState = { step: AudienceWizardStep; profile: Partial<AudienceProfile> };
 export type AudienceWizardAction =
   | { type: 'SELECT_AUDIENCE'; value: AudienceType }
@@ -11,7 +13,11 @@ export type AudienceWizardAction =
   | { type: 'CONFIRM_PAIN_POINTS' }
   | { type: 'THINKING_DONE' }
   | { type: 'BACK' }
-  | { type: 'RESET' };
+  // 回訪重問（P1-1）
+  | { type: 'RETURNING_KEEP' }
+  | { type: 'RETURNING_REPICK_PAINS' }
+  | { type: 'RETURNING_RESTART' }
+  | { type: 'RESET'; returningProfile?: AudienceProfile };
 
 export const initialAudienceWizardState: AudienceWizardState = { step: 'audience', profile: {} };
 
@@ -52,6 +58,7 @@ export function audienceWizardReducer(state: AudienceWizardState, action: Audien
       if (state.step !== 'thinking') return state;
       return { step: 'results', profile: state.profile };
     case 'BACK':
+      if (state.step === 'returning') return state; // 回訪首畫面已是第一步
       // 結果 / 思考中 返回都回到痛點步驟（思考只是過場，不當作可停留的一站）
       if (state.step === 'results' || state.step === 'thinking') return { step: 'pain-points', profile: state.profile };
       if (state.step === 'pain-points') {
@@ -63,7 +70,24 @@ export function audienceWizardReducer(state: AudienceWizardState, action: Audien
       if (state.step === 'teacher-role') return { step: 'school-level', profile: omit(state.profile, 'schoolLevel', 'teacherRole', 'department', 'painPoints') };
       if (state.step === 'school-level') return initialAudienceWizardState;
       return state;
-    case 'RESET': return initialAudienceWizardState;
+    case 'RETURNING_KEEP':
+      // 身分沿用，痛點留空 → 直接看這一批新推薦
+      if (state.step !== 'returning') return state;
+      return { step: 'thinking', profile: state.profile };
+    case 'RETURNING_REPICK_PAINS':
+      // 身分沿用，只重挑「這次想解決什麼」—— 痛點才是每週會變的東西
+      if (state.step !== 'returning') return state;
+      return { step: 'pain-points', profile: state.profile };
+    case 'RETURNING_RESTART':
+      if (state.step !== 'returning') return state;
+      return initialAudienceWizardState;
+    case 'RESET':
+      if (action.returningProfile) {
+        // 只沿用身分，不沿用上次的痛點（那是上次的煩惱，不是這次的）
+        const { painPoints: _painPoints, ...identity } = action.returningProfile;
+        return { step: 'returning', profile: identity };
+      }
+      return initialAudienceWizardState;
   }
 }
 

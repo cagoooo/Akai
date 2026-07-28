@@ -166,6 +166,34 @@ export function validateAudienceFit(input: unknown): string[] {
     if (audiences?.includes('teacher') && !hasUsableReason(reasons, teacherReasonKeys)) {
       errors.push('老師客群至少需要一則非空白的老師、職務或處室理由');
     }
+
+    // 死理由偵測（P0-1）：寫了但永遠不會被任何合格 profile 取用的 reasons 鍵。
+    // #80 的 reasons.homeroom／reasons.subject 就是這樣白寫的 —— 過去沒有任何機制會抓到。
+    if (hasValidAudiences) {
+      for (const key of Object.keys(reasons)) {
+        if (key === 'student' && !audiences?.includes('student')) {
+          errors.push('reasons.student 永遠取用不到：audiences 不含 student');
+          continue;
+        }
+        const isTeacherSideKey = key === 'teacher'
+          || (TEACHER_ROLES as readonly string[]).includes(key)
+          || (DEPARTMENTS as readonly string[]).includes(key);
+        if (isTeacherSideKey && !includesTeacher) {
+          errors.push(`reasons.${key} 永遠取用不到：audiences 不含 teacher`);
+          continue;
+        }
+        if ((TEACHER_ROLES as readonly string[]).includes(key) && teacherRoles && !teacherRoles.includes(key)) {
+          errors.push(`reasons.${key} 永遠取用不到：teacherRoles 不含 ${key}`);
+        }
+        if ((DEPARTMENTS as readonly string[]).includes(key)) {
+          if (!canUseDepartmentReasons) {
+            errors.push(`reasons.${key} 永遠取用不到：teacherRoles 不含 admin`);
+          } else if (departments && !departments.includes(key)) {
+            errors.push(`reasons.${key} 永遠取用不到：departments 不含 ${key}`);
+          }
+        }
+      }
+    }
   }
 
   return errors;

@@ -151,6 +151,32 @@ function run(): void {
     return;
   }
 
+  // ── P0-1 可觸及性檢查：每個工具至少要能被 1 個實際 profile 推薦到 ──────────
+  //
+  // 這是「reasons 寫得很漂亮但訪客永遠看不到」的最後一道防線。
+  // 2026-07-28 有 9 個工具（#5 #18 #42 #46 #47 #48 #53 #72 #80）明寫了導師／科任，
+  // 卻因為同時填了 departments 而被 isEligible 整組排除，validate 與 CI 卻全綠。
+  // 用「跑真正的推薦引擎、看工具有沒有出現」來檢查，比對著欄位規則猜可靠得多。
+  // 逐一工具單獨丟進推薦引擎，測的是「這個 profile 有沒有資格看到它」，
+  // 而不是「它在 122 個工具的競爭中排不排得進前幾名」。
+  // 若整包一起跑，被 upgradeToId 取代的舊工具（#4 #13 #14 #21）會被家族去重擋掉，
+  // 造成誤判 —— 那是刻意的行為，不是資料錯誤。
+  const unreachableTools = externalTools.filter(
+    (tool) => !REQUIRED_PROFILES.some((profile) => recommendTools([tool], profile, 1).length > 0),
+  );
+  if (unreachableTools.length > 0) {
+    for (const tool of unreachableTools) {
+      console.error(
+        `${formatTool(tool)}: 沒有任何客群 profile 推薦得到這個工具，請檢查 audienceFit 的 schoolLevels／teacherRoles／departments 組合。`,
+      );
+    }
+    console.error(
+      `audienceFit 可觸及性檢查失敗：${unreachableTools.length} 個工具對所有 ${REQUIRED_PROFILES.length} 個 profile 都撈不到。`,
+    );
+    process.exitCode = 1;
+    return;
+  }
+
   const segmentCounts = REQUIRED_PROFILES.map((profile) => ({
     key: buildAudienceSegmentKey(profile),
     count: recommendTools(externalTools, profile, RECOMMENDATION_LIMIT).length,

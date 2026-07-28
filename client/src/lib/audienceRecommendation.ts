@@ -177,6 +177,37 @@ function includesProfileValue<T extends string>(
   return restrictions === undefined || (profileValue !== undefined && restrictions.includes(profileValue));
 }
 
+/**
+ * departments 的語意（v3.6.101 修正）
+ *
+ * 舊版：只要 `departments` 有值，資格就被收斂成「行政人員 ＋ 該處室」，
+ *       `teacherRoles` 裡明寫的 homeroom／subject 會被整組忽略。
+ *       實測有 9 個工具（#5 #18 #42 #46 #47 #48 #53 #72 #80）明寫了導師／科任
+ *       卻因為同時填了處室而永遠推薦不到，連 reasons 都成了死程式碼，
+ *       且 validate 與 CI 全綠、沒有任何警告。
+ *
+ * 新版：`departments` 只約束「行政人員」這一支。
+ *       - 有明寫 teacherRoles → 導師／科任照 teacherRoles 判定，不受處室影響；
+ *         行政人員則要再比對處室。
+ *       - 沒寫 teacherRoles（純行政工具的舊寫法）→ 沿用舊語意，只給對應處室的行政人員，
+ *         避免把純行政工具意外推給全體老師。
+ */
+function passesDepartmentGate(fit: AudienceFit, profile: AudienceProfile): boolean {
+  if (fit.departments === undefined) return true;
+
+  const matchesDepartment = profile.department !== undefined
+    && fit.departments.includes(profile.department);
+
+  // 沒明寫 teacherRoles → 視為純行政工具（向後相容）
+  if (fit.teacherRoles === undefined) {
+    return profile.teacherRole === 'admin' && matchesDepartment;
+  }
+
+  // 有明寫 teacherRoles → 處室只再約束行政人員這一支
+  if (profile.teacherRole === 'admin') return matchesDepartment;
+  return true;
+}
+
 function isEligible(fit: AudienceFit, profile: AudienceProfile): boolean {
   if (!fit.audiences.includes(profile.audience)) return false;
   if (profile.audience === 'student') {
@@ -188,13 +219,7 @@ function isEligible(fit: AudienceFit, profile: AudienceProfile): boolean {
   if (!includesProfileValue(fit.schoolLevels, profile.schoolLevel)) return false;
   if (!includesProfileValue(fit.teacherRoles, profile.teacherRole)) return false;
 
-  if (fit.departments !== undefined) {
-    return profile.teacherRole === 'admin'
-      && profile.department !== undefined
-      && fit.departments.includes(profile.department);
-  }
-
-  return true;
+  return passesDepartmentGate(fit, profile);
 }
 
 function readReason(fit: AudienceFit, key: keyof AudienceFit['reasons'] | undefined): string | undefined {
