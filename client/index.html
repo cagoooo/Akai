@@ -3,14 +3,32 @@
 
 <head>
   <meta charset="UTF-8" />
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=__GA_MEASUREMENT_ID__"></script>
+  <!-- Google tag (gtag.js)
+       ID 由 Vite 的 HTML env replacement 在 build 時注入（%VITE_GA_MEASUREMENT_ID%），
+       CI 從 GitHub secret VITE_GA_MEASUREMENT_ID 餵進來。
+
+       ⚠️ 2026-07-28 修正：原本寫的是自訂佔位符 __GA_MEASUREMENT_ID__，
+       但 repo 裡從來沒有任何程式碼負責替換它（analytics.ts 的註解說「由 inject.py 注入」，
+       而 inject.py 並不存在），導致線上一直載入 id=__GA_MEASUREMENT_ID__，
+       所有 GA event 靜默丟失。改用 Vite 原生的 %VAR% 語法才會真的被替換。 -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-
-    gtag('config', '__GA_MEASUREMENT_ID__');
+    (function () {
+      var id = '%VITE_GA_MEASUREMENT_ID%';
+      // 沒設環境變數時（本機 build）Vite 會原樣留下佔位字串 → 不要載入假的 GA，
+      // 免得又變成「看起來有裝、其實沒收到資料」的狀態。
+      if (id.lastIndexOf('G-', 0) !== 0) {
+        console.info('[GA] 未設定 VITE_GA_MEASUREMENT_ID，略過載入 Google Analytics');
+        return;
+      }
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + id;
+      document.head.appendChild(s);
+      gtag('js', new Date());
+      gtag('config', id);
+    })();
   </script>
   <!-- 動態設定 base URL -->
   <script>

@@ -31,7 +31,11 @@ function getGtag(): GtagFn | null {
 
 /**
  * 上報 GA event。
- * GA ID 在 index.html 由 inject.py 在 CI 注入；本地 dev 環境也安全（gtag undef 自動 noop）。
+ * GA ID 在 index.html 由 Vite 的 HTML env replacement 注入（%VITE_GA_MEASUREMENT_ID%），
+ * CI 從 GitHub secret 餵值；沒設值時 index.html 會跳過載入 GA（gtag 仍存在，事件進 dataLayer 後丟棄）。
+ *
+ * ⚠️ 2026-07-28 前這裡寫的是「由 inject.py 在 CI 注入」，但 repo 裡從來沒有 inject.py，
+ * 佔位符也就從來沒被替換過 —— 線上一直載入 id=__GA_MEASUREMENT_ID__，所有 GA event 靜默丟失。
  *
  * 用例：
  *   trackEvent('tool_click', { tool_id: 81, tool_title: '教學駕駛艙' })

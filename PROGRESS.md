@@ -1,7 +1,7 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.102` (本機/CI) · 公開工具總數 **122 個** 🎮🚀
+- **當前版本**: `v3.6.103` (本機/CI) · 公開工具總數 **122 個** 🎮🚀
 - **里程碑**: **2026-07-28 推薦與計數器體感修正** — 新增 #122 兒童英語單字大冒險；修正訪客里程碑進度條「5,448 人卻顯示 8%」的比例語意；已選過族群的訪客滿 7 天回訪會再被邀請重選一次拿新推薦；本機開發錯誤不再誤觸正式 Google Chat 告警。
 - **最後更新狀態**: 見下方 `2026-07-28`（含當日第二批：推薦可信度＋體感＋閉環三包）；未來待辦見 `FUTURE_OPTIMIZATION_V3.6.100.md`
 - **前一版**: v3.6.93 — Admin 安全地基包補強（見 `2026-07-22`）
@@ -10,6 +10,21 @@
 - **📎 文件補追記**：本檔案從 v3.6.71 停更到 2026-07-04 才補寫。中間 v3.6.72 → v3.6.87 共 16 個版本（主要是新增工具 #103-#114 + 幾個獨立 bug fix，例如 v3.6.80 使用次數本機計數 bug、v3.6.81/b3032b2 許願池通知從 LINE 遷移到 Google Chat）沒有寫進本檔案，細節可查 `git log`（commit 訊息大多含版本號）。工具總數從 102 → 115 就是這段期間累積的，之後有空再補完整段落。
 
 ## 📌 完成功能總覽
+
+### `2026-07-28` 第四批（📊 修好從來沒接上的 Google Analytics）`v3.6.103`
+
+**這是審查「剩下的技術債重不重要」時翻出來的，不在原本的清單上，但比清單上任何一項都重要。**
+
+| 面向 | 內容 |
+|---|---|
+| 症狀 | 線上 `https://cagoooo.github.io/Akai/` 的 GA script 一直是 `gtag/js?id=__GA_MEASUREMENT_ID__` —— **佔位符從來沒被替換過** |
+| 根因 | `client/index.html` 用的是自訂佔位符 `__GA_MEASUREMENT_ID__`，不是 Vite 認得的 `%VAR%` 語法；全 repo 搜過，**沒有任何程式碼負責替換它**。`analytics.ts` 的註解寫「由 inject.py 在 CI 注入」，而 `inject.py` 並不存在。GitHub secret `VITE_GA_MEASUREMENT_ID` 早在 2026-03-19 就設好、workflow 也有傳進 build step，但沒人接 |
+| 影響 | 站上每一顆 `trackEvent` 都送進虛空且不報錯：推薦精靈漏斗、`audience_reco_impression／click`、Web Vitals、以及 v3.6.101 才做的 P0-3 `mode=first_time／re_prompt` 回訪成效埋點，**全部收不到資料**。Firestore 那條線（`recordRecoImpression／recordRecoClick` → callable）不受影響，Admin 推薦成效面板的數字是真的 |
+| 修法 | 改用 Vite 原生的 `%VITE_GA_MEASUREMENT_ID%`；並加一道 `id.lastIndexOf('G-', 0) !== 0` 的守門 —— 沒設環境變數時**不載入假的 GA**，免得又變成「看起來有裝、其實沒收到」 |
+| 驗證 | 本機 build → `var id = 'G-XHT6YVN2HG'`（讀 `.env`）；`VITE_GA_MEASUREMENT_ID=G-TESTONLY123 vite build` → `var id = 'G-TESTONLY123'`，替換確實生效。原始碼仍只有佔位符，金鑰不外洩 |
+
+**教訓**：`PROGRESS.md` 第 2554 行寫著「實作佔位符與 CI/CD 自動注入機制」—— 佔位符做了，注入那半沒有。
+文件宣稱完成不等於真的完成；這種「靜默失效」只有實際打開線上產物看才抓得到。
 
 ### `2026-07-28` 第三批（🩺 推薦理由體檢 + 🔕 告警分級收斂）`v3.6.102`
 
