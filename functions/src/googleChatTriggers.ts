@@ -5,10 +5,18 @@
  * 2. onErrorLogCreated: 監聽 Firestore errorLogs 新增事件（前端 JS 崩潰日誌）。
  */
 
+import * as admin from "firebase-admin";
 import * as functions from "firebase-functions/v1";
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { defineSecret } from "firebase-functions/params";
 import { pushToGoogleChat } from "./lib/googleChatNotify";
+import {
+    SEVERITY_LABEL,
+    classifySeverity,
+    fingerprintError,
+    isKnownNoise,
+    shouldNotify,
+} from "./lib/errorAlertPolicy";
 
 const GOOGLE_CHAT_WEBHOOK_URL = defineSecret("GOOGLE_CHAT_WEBHOOK_URL");
 
@@ -97,6 +105,53 @@ export const onUserCreated = functions
         await pushToGoogleChat(webhookUrl, summaryText, [card], "AuthOnCreate");
     });
 
+/**
+ * 錯誤告警收斂狀態（P1-4）：每個錯誤指紋一份，記錄累積次數與上次推播時間。
+ * client 不可讀寫（firestore.rules 預設拒絕，這裡走 Admin SDK）。
+ */
+const ERROR_ALERT_STATE = "errorAlertState";
+
+interface AlertAggregate {
+    total: number;
+    sinceLastNotify: number;
+    firstSeenAt: number;
+    shouldPush: boolean;
+}
+
+/**
+ * 交易式累加同指紋的次數，並決定這一則要不要推播。
+ * 用 transaction 是因為同一個 bug 可能同時打進來好幾則，
+ * 沒有交易的話會各自讀到「還沒推播過」而全部推出去。
+ */
+async function recordAndDecide(
+    fingerprint: string,
+    severity: ReturnType<typeof classifySeverity>,
+    now: number,
+): Promise<AlertAggregate> {
+    const ref = admin.firestore().collection(ERROR_ALERT_STATE).doc(fingerprint);
+    return admin.firestore().runTransaction(async (tx) => {
+        const snap = await tx.get(ref);
+        const prev = snap.exists ? snap.data() ?? {} : {};
+        const total = (typeof prev.total === "number" ? prev.total : 0) + 1;
+        const sinceLastNotify = (typeof prev.sinceLastNotify === "number" ? prev.sinceLastNotify : 0) + 1;
+        const firstSeenAt = typeof prev.firstSeenAt === "number" ? prev.firstSeenAt : now;
+        const lastNotifiedAt = typeof prev.lastNotifiedAt === "number" ? prev.lastNotifiedAt : undefined;
+        const push = shouldNotify({ severity, lastNotifiedAt, now });
+
+        tx.set(ref, {
+            total,
+            // 推播後把「距離上次推播累積了幾次」歸零，下一張卡片才報得出正確的區間次數
+            sinceLastNotify: push ? 0 : sinceLastNotify,
+            firstSeenAt,
+            lastSeenAt: now,
+            severity,
+            ...(push ? { lastNotifiedAt: now } : {}),
+        }, { merge: true });
+
+        return { total, sinceLastNotify, firstSeenAt, shouldPush: push };
+    });
+}
+
 // 前端錯誤日誌建立通知 (v2 Firestore Trigger)
 export const onErrorLogCreated = onDocumentCreated(
     {
@@ -118,9 +173,29 @@ export const onErrorLogCreated = onDocumentCreated(
             ? new Date(data.timestamp).toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })
             : new Date().toLocaleString("zh-TW", { timeZone: "Asia/Taipei" });
         const level = data.level || "error";
+        const appVersion = (data.metadata && data.metadata.appVersion) || "未知版本";
 
+        // ── P1-4 告警分級與收斂 ──────────────────────────────────────
+        // 過去是一顆錯誤一則通知，同一個 bug 打到 100 個訪客就是 100 則 → 通知疲勞。
+        const logInput = { level, message, stack, componentStack, url, userAgent };
+        if (isKnownNoise(logInput)) {
+            console.log(`[ErrorAlert] 已知第三方雜訊，只留存不推播：${message}`);
+            return;
+        }
+        const severity = classifySeverity(logInput);
+        const fingerprint = fingerprintError(logInput);
+        const now = Date.now();
+        const aggregate = await recordAndDecide(fingerprint, severity, now);
+        if (!aggregate.shouldPush) {
+            console.log(
+                `[ErrorAlert] 收斂：指紋 ${fingerprint}（${severity}）累計 ${aggregate.total} 次，此則不推播`,
+            );
+            return;
+        }
+
+        const firstSeenText = new Date(aggregate.firstSeenAt).toLocaleString("zh-TW", { timeZone: "Asia/Taipei" });
         const webhookUrl = GOOGLE_CHAT_WEBHOOK_URL.value();
-        const summaryText = `🚨 系統服務錯誤告警: ${message}`;
+        const summaryText = `${severity === "critical" ? "🔴" : "🟠"} 前端錯誤告警（累計 ${aggregate.total} 次）: ${message}`;
 
         // 整理錯誤堆疊，只保留前 10 行，避免卡片太長
         const truncatedStack = stack
@@ -129,10 +204,10 @@ export const onErrorLogCreated = onDocumentCreated(
             .join("\n");
 
         const card = {
-            cardId: `error-${event.params.docId}`,
+            cardId: `error-${fingerprint}-${now}`,
             card: {
                 header: {
-                    title: `🚨 前端系統錯誤 (${level})`,
+                    title: `${SEVERITY_LABEL[severity]}`,
                     subtitle: message,
                     imageUrl: "https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/error/default/48px.svg",
                     imageType: "CIRCLE",
@@ -160,6 +235,20 @@ export const onErrorLogCreated = onDocumentCreated(
                                 decoratedText: {
                                     topLabel: "瀏覽器代理",
                                     text: userAgent,
+                                    wrapText: true,
+                                },
+                            },
+                            {
+                                decoratedText: {
+                                    topLabel: "發生頻率",
+                                    text: `距上次通知累計 <b>${aggregate.sinceLastNotify}</b> 次 · 這個錯誤總共 <b>${aggregate.total}</b> 次`,
+                                    wrapText: true,
+                                },
+                            },
+                            {
+                                decoratedText: {
+                                    topLabel: "首次發生 / 版本 / 指紋",
+                                    text: `${firstSeenText} · ${appVersion} · <code>${fingerprint}</code>`,
                                     wrapText: true,
                                 },
                             },

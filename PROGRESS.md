@@ -1,7 +1,7 @@
 # 阿凱老師教育工具集 - 開發進度與歷史紀錄
 
 ## 🎯 當前版本狀態
-- **當前版本**: `v3.6.101` (本機/CI) · 公開工具總數 **122 個** 🎮🚀
+- **當前版本**: `v3.6.102` (本機/CI) · 公開工具總數 **122 個** 🎮🚀
 - **里程碑**: **2026-07-28 推薦與計數器體感修正** — 新增 #122 兒童英語單字大冒險；修正訪客里程碑進度條「5,448 人卻顯示 8%」的比例語意；已選過族群的訪客滿 7 天回訪會再被邀請重選一次拿新推薦；本機開發錯誤不再誤觸正式 Google Chat 告警。
 - **最後更新狀態**: 見下方 `2026-07-28`（含當日第二批：推薦可信度＋體感＋閉環三包）；未來待辦見 `FUTURE_OPTIMIZATION_V3.6.100.md`
 - **前一版**: v3.6.93 — Admin 安全地基包補強（見 `2026-07-22`）
@@ -10,6 +10,22 @@
 - **📎 文件補追記**：本檔案從 v3.6.71 停更到 2026-07-04 才補寫。中間 v3.6.72 → v3.6.87 共 16 個版本（主要是新增工具 #103-#114 + 幾個獨立 bug fix，例如 v3.6.80 使用次數本機計數 bug、v3.6.81/b3032b2 許願池通知從 LINE 遷移到 Google Chat）沒有寫進本檔案，細節可查 `git log`（commit 訊息大多含版本號）。工具總數從 102 → 115 就是這段期間累積的，之後有空再補完整段落。
 
 ## 📌 完成功能總覽
+
+### `2026-07-28` 第三批（🩺 推薦理由體檢 + 🔕 告警分級收斂）`v3.6.102`
+
+| 項目 | 完成內容 | 驗證結果 |
+|---|---|---|
+| **P1-3** 推薦理由可信度分級 | 新增 `lib/reasonQuality.ts`，四種訊號：`stale`（超過 180 天沒複查，有 `reasonsReviewedAt` 就以複查日為準，沒有則退回上架日）／`vague`（少於 18 字或整句空話）／`off-topic`（理由完全沒提到工具的標籤、痛點關鍵字或標題片段）／`low-ctr`（曝光 ≥ 30 且 CTR 不到全站平均一半）。標籤與標題改用**2 字片段**比對，避免「試卷排版 / 團隊合作 / 互動遊戲」這類複合詞整串比對造成大量誤判（誤判率因此從 11.3% 降到 8.6%） | 用真實資料調校：371 條理由標記 **32 條**（8.6%），比例可用不洗版；11 個單元測試 |
+| **P1-3** 離線警告 | `validate:audience` 每次 build 印出前 10 條待重寫理由；**只警告不擋 build**（文案品質是漸進改善的事，不該擋部署） | build log 已可見「推薦理由健康檢查：32 條理由建議重寫」 |
+| **P1-3** Admin 面板 | 新增 `ReasonQualityPanel`，掛在 Admin →「推薦成效」分頁下方。可依四種訊號篩選、直接連到工具頁。CTR 訊號讀 `analytics/recoStats`，Firestore 讀不到時**降級顯示前三種**而不是整個面板壞掉 | typecheck / lint / 測試全綠 |
+| **P1-4** 告警分級與收斂 | 新增 `functions/src/lib/errorAlertPolicy.ts` 純函式層：`fingerprintError`（正規化訊息 ＋ 堆疊前 3 幀，去掉行號與 build hash → 同一個 bug 不論哪個訪客、哪一版都同指紋）／`classifySeverity`（有 React componentStack ＝ critical 白畫面、unhandledrejection ＝ warn、明確 info/warn ＝ 只留存）／`isKnownNoise`（ResizeObserver、Script error、瀏覽器擴充套件等第三方雜訊）／`shouldNotify`（critical 15 分鐘、warn 60 分鐘、info 不推） | 14 個單元測試，含「換訪客換 build hash 仍同指紋」的回歸測試 |
+| **P1-4** trigger 接線 | `onErrorLogCreated` 改用 Firestore **交易**累加 `errorAlertState/{fingerprint}`，避免同一個 bug 同時打進來時各自讀到「還沒推播過」而全部推出去。告警卡片改帶嚴重度標題、「距上次通知累計 N 次 / 總共 M 次」、首次發生時間、版本與指紋 | Functions typecheck 通過 |
+| **P1-4** 版本資訊 | client 的 `errorLogs` 寫入補 `metadata.appVersion`，讓告警卡片答得出「這是哪一版壞的」。走既有的 `metadata` 欄位，**不必動 firestore.rules** | rules 的 `validErrorLogCreate()` 本來就允許 `metadata` 鍵 |
+
+**驗證**：`tsc --noEmit`、Functions `tsc --noEmit`、`eslint client/src scripts functions/src --max-warnings 0`、前端 **235 個測試**、Functions **25 個測試** 全綠、`npm run build` 通過。
+
+> ⚠️ **Cloud Functions 尚未部署**：P1-4 的收斂邏輯要 `firebase deploy --only functions:onErrorLogCreated` 才會生效。
+> GitHub Actions 只部署 Pages，不含 Functions。
 
 ### `2026-07-28` 第二批（🛡️ 推薦可信度包 + 🎨 體感包 + 🔁 閉環包）`v3.6.101`
 

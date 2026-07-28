@@ -12,6 +12,7 @@ import {
 import { recommendTools } from '../client/src/lib/audienceRecommendation';
 import type { EducationalTool } from '../client/src/lib/data';
 import { validateAudienceFit } from '../client/src/lib/audienceValidation';
+import { REASON_ISSUE_LABEL, analyzeReasonQuality } from '../client/src/lib/reasonQuality';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SOURCE = resolve(ROOT, 'server', 'data', 'tools.json');
@@ -205,6 +206,25 @@ function run(): void {
   }
   if (thinPainPoints.length > 0) {
     console.warn(`推薦健康檢查：覆蓋不足 3 項的痛點：${thinPainPoints.map(({ painPoint, count }) => `${painPoint} (${count})`).join(', ')}`);
+  }
+
+  // ── P1-3 推薦理由可信度：只警告不擋 build ──────────────────────────────
+  // 文案品質是漸進改善的事，不該讓一句寫得比較弱的理由擋住整個部署；
+  // 但也不能完全沒人看，所以每次 build 都印出來。
+  // CTR 訊號需要 Firestore 資料，只有 Admin 面板才算得出來，這裡只跑離線的三種。
+  const reasonIssues = analyzeReasonQuality(externalTools);
+  if (reasonIssues.length > 0) {
+    console.warn(
+      `
+推薦理由健康檢查：${reasonIssues.length} 條理由建議重寫（不影響建置；完整清單見 Admin →「推薦理由體檢」）`,
+    );
+    for (const issue of reasonIssues.slice(0, 10)) {
+      const labels = issue.kinds.map((kind) => REASON_ISSUE_LABEL[kind]).join(' ');
+      console.warn(`  #${issue.toolId} [${issue.reasonKey}] ${labels} — ${issue.detail}`);
+    }
+    if (reasonIssues.length > 10) {
+      console.warn(`  …另有 ${reasonIssues.length - 10} 條，請到 Admin 面板查看`);
+    }
   }
 
   console.log(

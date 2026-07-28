@@ -121,6 +121,8 @@ window.addEventListener('unhandledrejection', async (event) => {
             userAgent: navigator.userAgent,
             timestamp: new Date().toISOString(),
             level: 'unhandledrejection',
+            // P1-4：告警卡片要顯示「這是哪一版壞的」；走既有的 metadata 欄位，不必動 firestore.rules
+            metadata: { appVersion: import.meta.env.VITE_APP_VERSION ?? 'unknown' },
         });
     } catch { /* silently fail */ }
 });

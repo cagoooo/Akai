@@ -25,6 +25,7 @@ import { WishingWellAdmin } from '@/components/admin/WishingWellAdmin';
 import { ToolFlowAnalysisPanel } from '@/components/admin/ToolFlowAnalysisPanel';
 import { HealthCheckPanel } from '@/components/admin/HealthCheckPanel';
 import { RecommendationStatsPanel } from '@/components/admin/RecommendationStatsPanel';
+import { ReasonQualityPanel } from '@/components/admin/ReasonQualityPanel';
 import { StickyStatCard } from '@/components/admin/StickyStatCard';
 import {
   BackfillLocalAnalyticsBar,
@@ -1156,7 +1157,11 @@ export function AnalyticsDashboard() {
           </TabsContent>
 
           <TabsContent value="reco">
-            <RecommendationStatsPanel />
+            <div className="space-y-8">
+              <RecommendationStatsPanel />
+              {/* P1-3：推薦成效看「哪些工具被點」，理由體檢看「哪些理由該重寫」，兩者互補放同一頁 */}
+              <ReasonQualityPanel />
+            </div>
           </TabsContent>
 
           <TabsContent value="tools">
