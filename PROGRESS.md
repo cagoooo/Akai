@@ -24,8 +24,10 @@
 
 **驗證**：`tsc --noEmit`、Functions `tsc --noEmit`、`eslint client/src scripts functions/src --max-warnings 0`、前端 **235 個測試**、Functions **25 個測試** 全綠、`npm run build` 通過。
 
-> ⚠️ **Cloud Functions 尚未部署**：P1-4 的收斂邏輯要 `firebase deploy --only functions:onErrorLogCreated` 才會生效。
-> GitHub Actions 只部署 Pages，不含 Functions。
+> ✅ **Cloud Functions 已部署**（2026-07-28，`--account=cagooo@gmail.com`，asia-east1、nodejs22、v2 gen）。
+> 只部署 `onErrorLogCreated` 一個函式，未動其他 18 個。
+> 部署過程會出現 `Compute Engine API has not been used` 的 403 —— 那只是查預設 compute service account 的警告，
+> CLI 會 fallback 到 `1056659479431-compute@developer.gserviceaccount.com` 繼續，不影響部署結果。
 
 ### `2026-07-28` 第二批（🛡️ 推薦可信度包 + 🎨 體感包 + 🔁 閉環包）`v3.6.101`
 
