@@ -50,11 +50,12 @@ function MilestoneProgress({ currentVisits }: { currentVisits: number }) {
   // 找到下一個里程碑
   const sortedMilestones = [...MILESTONES].sort((a, b) => a.value - b.value);
   const nextMilestone = sortedMilestones.find(m => m.value > currentVisits) || sortedMilestones[sortedMilestones.length - 1];
-  const prevMilestoneIndex = sortedMilestones.findIndex(m => m.value > currentVisits) - 1;
-  const prevMilestone = prevMilestoneIndex >= 0 ? sortedMilestones[prevMilestoneIndex] : sortedMilestones[0];
 
   // 計算進度
-  const progress = ((currentVisits - prevMilestone.value) / (nextMilestone.value - prevMilestone.value)) * 100;
+  // 與 BulletinVisitorCounter 一致：用「對下個里程碑的絕對比例」，
+  // 而不是上一個→下一個的區間比例（後者會讓 5,448/10,000 顯示成 8%，跟兩端標示對不起來）。
+  const progress = Math.min(100, Math.max(0, (currentVisits / nextMilestone.value) * 100));
+  const remaining = Math.max(0, nextMilestone.value - currentVisits);
 
   const NextIcon = nextMilestone.icon;
 
@@ -66,6 +67,9 @@ function MilestoneProgress({ currentVisits }: { currentVisits: number }) {
           <NextIcon className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-400 flex-shrink-0" />
           <span>下一個里程碑：</span>
           <span className="font-black text-yellow-300">{nextMilestone.value.toLocaleString()}</span>
+          {remaining > 0 && (
+            <span className="text-primary-foreground/70">（還差 {remaining.toLocaleString()}）</span>
+          )}
         </div>
       </div>
       <Progress

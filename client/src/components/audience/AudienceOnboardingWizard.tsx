@@ -8,7 +8,7 @@ import { trackEvent, recordAudienceFunnelEvent, recordAudiencePainPointSelection
 import { AudienceRecommendationResults } from './AudienceRecommendationResults';
 import { audienceWizardReducer, initialAudienceWizardState, toAudienceProfile, PAIN_POINT_SELECTION_LIMIT } from './audienceWizardReducer';
 
-type Props = { open: boolean; tools: EducationalTool[]; onComplete: (profile: AudienceProfile) => void; onDismiss: () => void; onLocateTool: (toolId: number) => void; recentToolIds?: number[] };
+type Props = { open: boolean; tools: EducationalTool[]; onComplete: (profile: AudienceProfile) => void; onDismiss: () => void; onLocateTool: (toolId: number) => void; recentToolIds?: number[]; /** 隔幾天回訪的重問（非首次引導）→ 換成「好久不見」文案 */ returningVisitor?: boolean };
 const levels: [SchoolLevel, string][] = [['elementary', '國小老師'], ['junior', '國中老師'], ['senior', '高中老師']];
 // P1-2 學生學段（只列有工具資料的國小／國中；影響推薦過濾）
 const studentLevels: [SchoolLevel, string][] = [['elementary', '國小'], ['junior', '國中']];
@@ -45,7 +45,7 @@ function markImpressionFired(signature: string): void {
   try { sessionStorage.setItem(IMPRESSION_DEDUP_PREFIX + signature, '1'); } catch { /* ignore quota */ }
 }
 
-export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, onLocateTool, recentToolIds }: Props) {
+export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, onLocateTool, recentToolIds, returningVisitor = false }: Props) {
   const [state, dispatch] = useReducer(audienceWizardReducer, initialAudienceWizardState);
   const closeRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -56,6 +56,9 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const completedRef = useRef<string | null>(null);
   const wasOpenRef = useRef(false);
+  // 只在「開啟當下」讀一次，避免把 returningVisitor 塞進 open effect 的相依陣列
+  const returningRef = useRef(returningVisitor);
+  returningRef.current = returningVisitor;
   // P1-1「換一批」：累積已看過的工具 id，讓下一波推薦排除它們（同家族一併排除）
   const [seenIds, setSeenIds] = useState<number[]>([]);
   const seenKeyRef = useRef('');
@@ -95,6 +98,7 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
       resultsRecordedRef.current = false;
       setSeenIds([]);
       void recordAudienceFunnelEvent('opened');
+      trackEvent('audience_wizard_opened', { mode: returningRef.current ? 're_prompt' : 'first_time' });
       requestAnimationFrame(() => closeRef.current?.focus());
     }
     if (!open && wasOpenRef.current) {
@@ -189,12 +193,16 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
   }, [state.step, profile, onComplete]);
   if (!open) return null;
   const isStudent = state.profile.audience === 'student';
-  const heading = state.step === 'audience' ? '先認識你，推薦會更準'
+  const heading = state.step === 'audience'
+      ? (returningVisitor ? '好久不見！再選一次，換一批新推薦' : '先認識你，推薦會更準')
     : state.step === 'results' ? '為你準備的推薦工具'
     : state.step === 'pain-points' ? '你最想解決什麼？'
     : state.step === 'school-level' && isStudent ? '你現在是幾年級呢？'
     : '告訴我一點你的工作情境';
-  const subheading = state.step === 'audience' ? '花 20 秒，找出最適合你使用的教育科技工具。'
+  const subheading = state.step === 'audience'
+      ? (returningVisitor
+          ? '這幾天工具集又長大了。重選一次身分，就能拿到一批你還沒看過的工具。'
+          : '花 20 秒，找出最適合你使用的教育科技工具。')
     : state.step === 'pain-points' ? `勾選最想解決的情境（可複選，最多 ${PAIN_POINT_SELECTION_LIMIT} 個），推薦會更對症下藥。也可以直接略過。`
     : state.step === 'school-level' && isStudent ? '選你的學段，推薦會更符合你的程度。'
     : '每個選擇都能讓推薦更貼近日常需要。';
@@ -223,7 +231,7 @@ export function AudienceOnboardingWizard({ open, tools, onComplete, onDismiss, o
         onDone={() => dispatch({ type: 'THINKING_DONE' })}
       />}
       {state.step === 'results' && <AudienceRecommendationResults recommendations={recommendations} onLocateTool={handleLocate} onReshuffle={handleReshuffle} firstRecommendationRef={firstRecommendationRef} />}
-      {state.step !== 'thinking' && <button type="button" className="audience-wizard__later" onClick={handleDismiss}>稍後再說，先逛逛</button>}
+      {state.step !== 'thinking' && <button type="button" className="audience-wizard__later" onClick={handleDismiss}>{returningVisitor ? '這次先跳過，繼續逛' : '稍後再說，先逛逛'}</button>}
     </div>
   </div>;
 }

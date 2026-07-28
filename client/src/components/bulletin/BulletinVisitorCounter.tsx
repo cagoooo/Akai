@@ -102,16 +102,27 @@ export function BulletinVisitorCounter() {
   }, []);
 
   // 計算下一個里程碑 + 進度百分比
-  const nextMilestone = MILESTONES.find((m) => m > totalVisits) ?? MILESTONES[MILESTONES.length - 1];
-  const prevMilestone =
-    [...MILESTONES].reverse().find((m) => m <= totalVisits) ?? 0;
-  const progress =
-    nextMilestone > prevMilestone
-      ? Math.min(
-          100,
-          Math.max(0, ((totalVisits - prevMilestone) / (nextMilestone - prevMilestone)) * 100)
-        )
-      : 0;
+  //
+  // ⚠️ v3.6.99 修正：舊版用「上一個里程碑 → 下一個里程碑」的區間比例，
+  // 導致 5,448 人朝 10,000 邁進時只顯示 8%（因為算的是 448/5000）。
+  // 但條子兩端標的是 5,000 與 10,000，訪客眼睛讀到的是「5,448 快到一半了」，
+  // 兩者對不起來 → 看起來就是「比例怪怪的」。
+  // 改成對「下個里程碑」的絕對比例（5,448 / 10,000 = 54%），
+  // 已達成的上一個里程碑改用軌道上的刻度標示，資訊不遺失。
+  const lastMilestone = MILESTONES[MILESTONES.length - 1];
+  const achievedAll = totalVisits >= lastMilestone;
+  const nextMilestone = MILESTONES.find((m) => m > totalVisits) ?? lastMilestone;
+  const prevMilestone = [...MILESTONES].reverse().find((m) => m <= totalVisits) ?? 0;
+
+  const progress = achievedAll
+    ? 100
+    : Math.min(100, Math.max(0, (totalVisits / nextMilestone) * 100));
+  // 已達成的里程碑在軌道上的位置（0 或超出範圍時不畫刻度）
+  const prevMarkerPercent =
+    !achievedAll && prevMilestone > 0 ? (prevMilestone / nextMilestone) * 100 : null;
+  // 顯示用整數：還沒真的達標就不讓它寫 100%
+  const progressLabel = achievedAll ? 100 : Math.min(99, Math.round(progress));
+  const remaining = Math.max(0, nextMilestone - totalVisits);
 
   return (
     <div
@@ -216,23 +227,54 @@ export function BulletinVisitorCounter() {
             overflow: 'hidden',
             border: '1px solid rgba(0,0,0,.18)',
           }}
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={nextMilestone}
+          aria-valuenow={Math.min(totalVisits, nextMilestone)}
+          aria-valuetext={
+            achievedAll
+              ? `已達成 ${nextMilestone.toLocaleString()} 人次`
+              : `${totalVisits.toLocaleString()} / ${nextMilestone.toLocaleString()} 人次，還差 ${remaining.toLocaleString()} 人`
+          }
         >
           <div
             style={{
               position: 'absolute',
-              inset: 0,
+              left: 0,
+              top: 0,
+              bottom: 0,
               width: `${progress}%`,
+              // 進度極小時仍留一小截，避免看起來完全空白
+              minWidth: progress > 0 ? 6 : 0,
               background: `linear-gradient(90deg, ${tokens.accent}, ${tokens.red})`,
               borderRadius: 999,
               transition: 'width .8s cubic-bezier(.34,1.56,.64,1)',
               boxShadow: '1px 0 0 rgba(0,0,0,.15)',
             }}
           />
+          {/* 已達成的上一個里程碑刻度（例如 5,000）— 讓「走了多遠」與「已解鎖什麼」同時看得到 */}
+          {prevMarkerPercent !== null && (
+            <div
+              aria-hidden="true"
+              title={`已達成 ${prevMilestone.toLocaleString()}`}
+              style={{
+                position: 'absolute',
+                top: -1,
+                bottom: -1,
+                left: `${prevMarkerPercent}%`,
+                width: 2,
+                background: 'rgba(0,0,0,.38)',
+                transition: 'left .8s cubic-bezier(.34,1.56,.64,1)',
+              }}
+            />
+          )}
         </div>
         <div
           style={{
             display: 'flex',
             justifyContent: 'space-between',
+            alignItems: 'baseline',
+            gap: 6,
             fontSize: 9.5,
             color: tokens.muted,
             marginTop: 3,
@@ -240,8 +282,17 @@ export function BulletinVisitorCounter() {
             fontWeight: 600,
           }}
         >
-          <span>{prevMilestone.toLocaleString()}</span>
-          <span>{Math.floor(progress)}%</span>
+          <span>0</span>
+          <span
+            style={{
+              color: tokens.muted2,
+              fontWeight: 800,
+              whiteSpace: 'nowrap',
+              fontFamily: tokens.font.tc,
+            }}
+          >
+            {achievedAll ? '已達成 🎉' : `${progressLabel}%・還差 ${remaining.toLocaleString()} 人`}
+          </span>
           <span>{nextMilestone.toLocaleString()}</span>
         </div>
       </div>

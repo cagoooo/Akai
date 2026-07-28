@@ -43,9 +43,11 @@ import { markHomeEntryForEngagementNotifications } from '@/lib/analytics';
 import type { AudienceProfile } from '@/lib/audienceProfile';
 import {
   dismissAudienceWizardForSession,
+  isAudienceRePrompt,
   readAudienceProfile,
   saveAudienceProfile,
   shouldAutoOpenAudienceWizard,
+  snoozeAudienceRePrompt,
 } from '@/lib/audienceProfileStorage';
 
 const KeyboardShortcutsDialog = lazy(() =>
@@ -98,6 +100,9 @@ export function BulletinHome() {
   const [showAudienceWizard, setShowAudienceWizard] = useState(() =>
     shouldAutoOpenAudienceWizard(new URLSearchParams(window.location.search))
   );
+  // 這次開啟是「隔幾天回訪的重問」而不是「首次引導」：換文案，
+  // 而且被關掉時要延後幾天（不是每次進站都攔）。
+  const [isAudienceReturnVisit, setIsAudienceReturnVisit] = useState(() => isAudienceRePrompt());
   const [highlightedToolId, setHighlightedToolId] = useState<number | null>(null);
   const [toolLocationStatus, setToolLocationStatus] = useState<'locating' | 'not-found' | null>(null);
   const highlightTimeoutRef = useRef<number | null>(null);
@@ -259,13 +264,15 @@ export function BulletinHome() {
   }, [scrollToGrid]);
 
   const dismissAudienceWizard = useCallback(() => {
-    dismissAudienceWizardForSession();
+    if (isAudienceReturnVisit) snoozeAudienceRePrompt();
+    else dismissAudienceWizardForSession();
     setShowAudienceWizard(false);
-  }, []);
+  }, [isAudienceReturnVisit]);
 
   const completeAudienceProfile = useCallback((profile: AudienceProfile) => {
     const storedProfile = saveAudienceProfile(profile);
     setAudienceProfile(storedProfile);
+    setIsAudienceReturnVisit(false);
   }, []);
 
   const locateRecommendedTool = useCallback((toolId: number) => {
@@ -467,6 +474,7 @@ export function BulletinHome() {
         onDismiss={dismissAudienceWizard}
         onLocateTool={locateRecommendedTool}
         recentToolIds={recentIds}
+        returningVisitor={isAudienceReturnVisit}
       />
     </BulletinBoard>
   );
