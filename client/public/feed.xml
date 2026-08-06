@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 122+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 123+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Tue, 28 Jul 2026 02:00:00 GMT</pubDate>
-    <lastBuildDate>Tue, 28 Jul 2026 11:41:26 GMT</lastBuildDate>
+    <pubDate>Thu, 06 Aug 2026 02:00:00 GMT</pubDate>
+    <lastBuildDate>Thu, 06 Aug 2026 03:03:45 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,27 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：校網無障礙 AA 遷移操作平台</title>
+      <link>https://cagoooo.github.io/Akai/tool/123</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/123</guid>
+      <pubDate>Thu, 06 Aug 2026 02:00:00 GMT</pubDate>
+      <description>把「舊校網搬到教育局 XOOPS 共構平台、拿到無障礙 AA 標章」拆成 12 個能打勾的步驟：逐項操作指引、要貼的內容一鍵複製、進度自動記住，還內建對比度檢查小工具與送審四大雷區清單。</description>
+      <category>校網遷移</category>
+      <category>無障礙AA</category>
+      <category>網站標章</category>
+      <category>XOOPS共構</category>
+      <category>對比度檢查</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#123 校網無障礙 AA 遷移操作平台：把一本研習講義，變成 12 個能打勾的步驟</title>
+      <link>https://cagoooo.github.io/Akai/blog/web-migration-123-accessibility-aa-console</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/web-migration-123-accessibility-aa-console</guid>
+      <pubDate>Thu, 06 Aug 2026 00:00:00 GMT</pubDate>
+      <description>#123 校網無障礙 AA 遷移操作平台，把「舊校網搬到教育局共構平台、拿到無障礙 AA 標章」這件沒人說得清楚的事，拆成 12 個由上往下、做完打勾就好的步驟：要貼的內容一鍵複製、進度自動記住，還內建對比度小工具與會讓你秒退件的四大雷區清單。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
     <item>
       <title>🆕 新工具：兒童英語單字大冒險</title>
       <link>https://cagoooo.github.io/Akai/tool/122</link>
@@ -314,27 +335,6 @@
       <category>反詐騙</category>
       <category>數位素養</category>
       <category>資訊安全</category>
-    </item>
-    <item>
-      <title>🆕 新工具：學生教育雲帳號更新工具</title>
-      <link>https://cagoooo.github.io/Akai/tool/107</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/107</guid>
-      <pubDate>Fri, 12 Jun 2026 00:02:01 GMT</pubDate>
-      <description>每學年初校務行政最磨人的雜事之一：教育雲帳號總表要跟教育局新名冊對齊——誰轉走了、誰轉進來、誰升年級換了班級座號。#107 讓你上傳舊帳密總表與教育局新名冊，自動比對轉入轉出、偵測末四碼撞號、跨學年保留帳密只更新座號，一鍵產出更新後總表、異動清冊與新生通知單。全程純前端、個資絕不上傳，所有運算只在你這台電腦的瀏覽器裡完成。</description>
-      <category>教育雲帳號</category>
-      <category>OpenID</category>
-      <category>學生帳號管理</category>
-      <category>帳密總表</category>
-      <category>轉入轉出比對</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#109 別再用 Excel 收軟體需求了：老師三分鐘勾選，全校前 5 名即時排好提報教育局</title>
-      <link>https://cagoooo.github.io/Akai/blog/digital-software-survey-109-firestore-needs-poll</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/digital-software-survey-109-firestore-needs-poll</guid>
-      <pubDate>Fri, 12 Jun 2026 00:00:00 GMT</pubDate>
-      <description>每年學校要彙整老師的教學軟體採購需求，傳統做法是一張 Excel 在處室與 LINE 群組之間傳來傳去，誰填了誰漏了、同套軟體被重複填，承辦最後還要手動去重排名。#109 是石門國小教務處的線上實名填報系統：老師勾選統購與自主需求軟體，Firebase Firestore 即時統計、自動排出全校前 5 名提報教育局，已採購的軟體自動標免填，把「對 Excel」變成「看儀表板」。</description>
-      <category>blog</category>
-      <category>教學情境</category>
     </item>
   </channel>
 </rss>
