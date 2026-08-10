@@ -31,7 +31,7 @@ function extractToolsFromJson() {
  * 生成工具頁面 HTML
  */
 function generateToolPageHtml(tool) {
-  const pageUrl = `${SITE_URL}/tool/${tool.id}`;
+  const pageUrl = `${SITE_URL}/tool/${tool.id}/`;
 
   // 優先用 ogPreviewUrl（1200×630 設計過的社群分享圖）
   // 沒有才 fallback 到 previewUrl（1024×1024 卡片預覽截圖）
@@ -195,7 +195,7 @@ function generateToolPageHtml(tool) {
     <div class="spinner"></div>
     <p style="margin-top: 1rem; font-size: 0.875rem;">
       正在載入中... 
-      <a href="${SITE_URL}/tool/${tool.id}">點此直接前往</a>
+      <a href="${SITE_URL}/tool/${tool.id}/">點此直接前往</a>
     </p>
   </div>
 </body>
@@ -877,7 +877,7 @@ function generateCelebration100DialogPageHtml() {
  * 爬蟲訪問時直接命中、拿到正確 meta。
  */
 function generateBlogIndexHtml(posts) {
-  const pageUrl = `${SITE_URL}/blog`;
+  const pageUrl = `${SITE_URL}/blog/`;
   const title = '📖 教學情境部落格 · 阿凱老師教育工具集';
   const description = `阿凱老師親手撰寫的工具使用情境長文 — ${posts.length} 篇文章，每篇講一個熱門工具如何解決真實教學現場的問題，含實測數字、學生回饋、配對推薦。`;
 
@@ -927,14 +927,14 @@ function generateBlogIndexHtml(posts) {
   <div class="card">
     <h1>📖 教學情境部落格</h1>
     <p>${description}</p>
-    <a href="/Akai/blog">📚 前往看所有文章</a>
+    <a href="/Akai/blog/">📚 前往看所有文章</a>
   </div>
 </body>
 </html>`;
 }
 
 function generateBlogPostHtml(post) {
-  const pageUrl = `${SITE_URL}/blog/${post.slug}`;
+  const pageUrl = `${SITE_URL}/blog/${post.slug}/`;
   const title = `${post.title} · 阿凱老師教學情境長文`;
   const description = post.excerpt;
   // OG 圖 — 用第一個相關工具的 ogPreviewUrl
@@ -979,7 +979,7 @@ function generateBlogPostHtml(post) {
     about: (post.toolIds || []).map(id => ({
       '@type': 'SoftwareApplication',
       name: `阿凱老師工具 #${id}`,
-      url: `${SITE_URL}/tool/${id}`,
+      url: `${SITE_URL}/tool/${id}/`,
     })),
   };
 
@@ -1034,7 +1034,7 @@ function generateBlogPostHtml(post) {
   <div class="card">
     <h1>${post.coverEmoji} ${post.title}</h1>
     <p>${description}</p>
-    <a href="/Akai/blog/${post.slug}">📖 閱讀全文</a>
+    <a href="/Akai/blog/${post.slug}/">📖 閱讀全文</a>
   </div>
 </body>
 </html>`;

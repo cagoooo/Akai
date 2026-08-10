@@ -37,7 +37,7 @@ urls.push({
 let toolDetailCount = 0;
 for (const tool of tools) {
     urls.push({
-        loc: `${SITE_URL}/tool/${tool.id}`,
+        loc: `${SITE_URL}/tool/${tool.id}/`,
         lastmod: tool.addedAt ? tool.addedAt.slice(0, 10) : TODAY,
         changefreq: tool.addedAt ? 'monthly' : 'yearly',
         priority: tool.isInternal ? '0.72' : '0.78',
@@ -85,7 +85,7 @@ if (existsSync(postsPath)) {
     }
     // Blog 列表頁
     urls.push({
-        loc: `${SITE_URL}/blog`,
+        loc: `${SITE_URL}/blog/`,
         lastmod: longformSlugs[0]?.publishedAt || TODAY,
         changefreq: 'weekly',
         priority: '0.85',
@@ -93,7 +93,7 @@ if (existsSync(postsPath)) {
     // 手寫長文
     for (const { slug, publishedAt } of longformSlugs) {
         urls.push({
-            loc: `${SITE_URL}/blog/${slug}`,
+            loc: `${SITE_URL}/blog/${slug}/`,
             lastmod: publishedAt,
             changefreq: 'monthly',
             priority: '0.8',
@@ -111,7 +111,7 @@ let miniCount = 0;
 for (const tool of tools) {
     if (tool.isInternal || SKIP_IDS.has(tool.id)) continue;
     urls.push({
-        loc: `${SITE_URL}/blog/${makeMiniSlug(tool)}`,
+        loc: `${SITE_URL}/blog/${makeMiniSlug(tool)}/`,
         lastmod: tool.addedAt ? tool.addedAt.slice(0, 10) : TODAY,
         changefreq: 'monthly',
         priority: '0.65',

@@ -287,7 +287,7 @@ export function BlogList() {
         mode="custom"
         title="📖 教學情境部落格 · 阿凱老師教育工具集"
         description="阿凱老師親手撰寫的 98 篇工具使用情境長文 — 涵蓋 5 大部署平台（GitHub Pages / Google Sites / XOOPS 校網 / Firebase / 第三方），每篇含實測數字與配對推薦。"
-        path="/blog"
+        path="/blog/"
       />
       <BulletinHeader />
 

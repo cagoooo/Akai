@@ -29,6 +29,7 @@ const DEFAULT_KEYWORDS = [
     '石門國小',
 ];
 const SITE_URL = 'https://cagoooo.github.io/Akai';
+const DEFAULT_CANONICAL_URL = `${SITE_URL}/`;
 const DEFAULT_IMAGE = `${SITE_URL}/og-preview-45ea14c2.png`;
 
 /**
@@ -40,7 +41,7 @@ export function SEOHead({
     description = DEFAULT_DESCRIPTION,
     keywords = DEFAULT_KEYWORDS,
     image = DEFAULT_IMAGE,
-    url = SITE_URL,
+    url = DEFAULT_CANONICAL_URL,
     type = 'website',
     author = '阿凱老師',
     publishedTime,

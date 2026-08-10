@@ -206,7 +206,7 @@ interface ToolDetailSchemaProps {
 }
 
 export function ToolDetailSchema({ tool }: ToolDetailSchemaProps) {
-  const detailUrl = tool.id ? `${SITE_URL}/tool/${tool.id}` : tool.url;
+  const detailUrl = tool.id ? `${SITE_URL}/tool/${tool.id}/` : tool.url;
   const softwareSchema = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
@@ -276,10 +276,10 @@ export function AllToolsSchema() {
         position: index + 1,
         item: {
           '@type': 'SoftwareApplication',
-          '@id': `${SITE_URL}/tool/${tool.id}#software`,
+          '@id': `${SITE_URL}/tool/${tool.id}/#software`,
           name: tool.title,
           description: tool.description,
-          url: `${SITE_URL}/tool/${tool.id}`,
+          url: `${SITE_URL}/tool/${tool.id}/`,
           sameAs: tool.url,
           applicationCategory: 'EducationalApplication',
           operatingSystem: 'Web Browser',

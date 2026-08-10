@@ -85,7 +85,7 @@ export function PageHead(props: Props) {
     const { tool, isArticle = true } = props;
     const title = `${tool.title} · 阿凱老師教育工具`;
     const description = tool.description;
-    const url = `${SITE_URL}/tool/${tool.id}`;
+    const url = `${SITE_URL}/tool/${tool.id}/`;
     const image = resolveToolImage(tool, version);
     const keywords = ['教育工具', tool.title, '阿凱老師', '石門國小', ...(tool.tags || [])].join(',');
 

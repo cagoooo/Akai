@@ -243,7 +243,7 @@ export function BlogPost() {
         mode="custom"
         title={`${post.title} · 阿凱老師教學情境長文`}
         description={post.excerpt}
-        path={`/blog/${post.slug}`}
+        path={`/blog/${post.slug}/`}
       />
 
       <BlogPostingSchema

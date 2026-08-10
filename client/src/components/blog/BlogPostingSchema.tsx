@@ -38,7 +38,7 @@ export function BlogPostingSchema({
   tags = [],
   relatedTools = [],
 }: BlogPostingSchemaProps) {
-  const url = `${SITE_URL}/blog/${slug}`;
+  const url = `${SITE_URL}/blog/${slug}/`;
   const wordCount = body.length; // 中文以字元數估算（en wordCount 不適用 CJK）
   const keywords = Array.from(
     new Set([
@@ -90,10 +90,10 @@ export function BlogPostingSchema({
     },
     about: relatedTools.map((tool) => ({
       '@type': 'SoftwareApplication',
-      '@id': `${SITE_URL}/tool/${tool.id}#software`,
+      '@id': `${SITE_URL}/tool/${tool.id}/#software`,
       name: tool.title,
       description: tool.description,
-      url: `${SITE_URL}/tool/${tool.id}`,
+      url: `${SITE_URL}/tool/${tool.id}/`,
       sameAs: tool.url,
       applicationCategory: 'EducationalApplication',
       operatingSystem: 'Web Browser',

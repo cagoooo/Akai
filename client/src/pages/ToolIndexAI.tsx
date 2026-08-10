@@ -237,7 +237,7 @@ export function ToolIndexAI() {
         title="🧭 工具索引神器 · 從 100 款教育工具中找到最適合你的"
         description="輸入課程主題、教學情境或學生需求，從阿凱老師親手打造的 100 款國小教育工具中模糊比對推薦最匹配的 5 個組合。fuse.js 即時搜尋，免註冊免費使用。"
         image="/previews/og/tool_100.webp"
-        path="/tool/100"
+        path="/tool/100/"
       />
 
       <BulletinHeader />
