@@ -163,7 +163,7 @@
     "globals": "16.5.0",
     "jsdom": "^27.4.0",
     "png-to-ico": "^3.0.1",
-    "postcss": "^8.4.47",
+    "postcss": "^8.5.26",
     "prettier": "^3.8.0",
     "rollup-plugin-visualizer": "^6.0.5",
     "sharp": "^0.35.3",
