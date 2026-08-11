@@ -81,14 +81,19 @@ export async function signInWithGoogle(): Promise<User | null> {
         const result = await signInWithPopup(auth, googleProvider);
         return result.user;
     } catch (error: any) {
-        if (error.code === 'auth/cancelled-popup-request') {
-            // 登入視窗已關閉
-        } else if (error.code === 'auth/popup-closed-by-user') {
-            // 使用者關閉登入視窗
-        } else {
-            console.error('Google 登入失敗:', error);
+        // 使用者主動取消／彈窗被瀏覽器擋掉：屬於正常操作，靜默回傳 null，不當作錯誤
+        const cancelledCodes = [
+            'auth/cancelled-popup-request',
+            'auth/popup-closed-by-user',
+            'auth/popup-blocked',
+            'auth/user-cancelled',
+        ];
+        if (cancelledCodes.includes(error?.code)) {
+            return null;
         }
-        return null;
+        // 其餘才是真正的登入失敗，往上拋讓遙測系統回報
+        console.error('Google 登入失敗:', error);
+        throw error;
     }
 }
 

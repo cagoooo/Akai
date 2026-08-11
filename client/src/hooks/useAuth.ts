@@ -63,8 +63,9 @@ export function useAuth(): UseAuthReturn {
     const signIn = useCallback(async () => {
         setLoading(true);
         try {
-            const signedInUser = await signInWithGoogle();
-            if (!signedInUser) throw new Error('Google 登入未完成');
+            // signInWithGoogle 回傳 null = 使用者主動取消或彈窗被擋（正常操作，不視為錯誤）；
+            // 真正的登入失敗會由 signInWithGoogle 直接往上拋，交給遙測回報。
+            await signInWithGoogle();
         } finally {
             setLoading(false);
         }
