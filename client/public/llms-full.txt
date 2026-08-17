@@ -562,7 +562,7 @@ Next.js + Tailwind CSS 純前端架構部署 Firebase Hosting。阿凱「漸進�
 
 - **分類**：實用工具
 - **科技教育專區工具頁**：https://cagoooo.github.io/Akai/tool/17
-- **實際工具網址**：https://www.smes.tyc.edu.tw/smes_html/gogogo.html
+- **實際工具網址**：https://web.smes.tyc.edu.tw/smes_html/gogogo.html
 - **教學情境文章**：https://cagoooo.github.io/Akai/blog/draw-17-creative-lottery
 - **標籤**：抽籤, 隨機, 點名, 簡單, 快速
 
@@ -594,7 +594,7 @@ Next.js + Tailwind CSS 純前端架構部署 Firebase Hosting。阿凱「漸進�
 
 - **分類**：實用工具
 - **科技教育專區工具頁**：https://cagoooo.github.io/Akai/tool/18
-- **實際工具網址**：https://www.smes.tyc.edu.tw/smes_html/random.html
+- **實際工具網址**：https://web.smes.tyc.edu.tw/smes_html/random.html
 - **教學情境文章**：https://cagoooo.github.io/Akai/blog/student-pick-18-main-alternate
 - **標籤**：抽籤, 隨機, 大量, 分組, 進階
 
@@ -659,7 +659,7 @@ Replit Autoscale + Vite + 推測 React/Vue + AI 後端（推測 OpenAI / Gemini�
 
 - **分類**：語言學習
 - **科技教育專區工具頁**：https://cagoooo.github.io/Akai/tool/20
-- **實際工具網址**：https://www.smes.tyc.edu.tw/smes_html/typeEN.html
+- **實際工具網址**：https://web.smes.tyc.edu.tw/smes_html/typeEN.html
 - **教學情境文章**：https://cagoooo.github.io/Akai/blog/typing-20-english-letters-falling
 - **標籤**：打字, 英文, 練習, 鍵盤, 速度
 
@@ -691,7 +691,7 @@ Replit Autoscale + Vite + 推測 React/Vue + AI 後端（推測 OpenAI / Gemini�
 
 - **分類**：語言學習
 - **科技教育專區工具頁**：https://cagoooo.github.io/Akai/tool/21
-- **實際工具網址**：https://www.smes.tyc.edu.tw/smes_html/typeCC.html
+- **實際工具網址**：https://web.smes.tyc.edu.tw/smes_html/typeCC.html
 - **教學情境文章**：https://cagoooo.github.io/Akai/blog/typing-21-zhuyin-keymap
 - **標籤**：打字, 中文, 練習, 注音, 輸入法
 
@@ -724,7 +724,7 @@ Replit Autoscale + Vite + 推測 React/Vue + AI 後端（推測 OpenAI / Gemini�
 
 - **分類**：語言學習
 - **科技教育專區工具頁**：https://cagoooo.github.io/Akai/tool/22
-- **實際工具網址**：https://www.smes.tyc.edu.tw/smes_html/typeTC.html
+- **實際工具網址**：https://web.smes.tyc.edu.tw/smes_html/typeTC.html
 - **教學情境文章**：https://cagoooo.github.io/Akai/blog/idiom-22-fill-blank-game
 - **標籤**：打字, 成語, 中文, 學習, 國語
 
@@ -925,7 +925,7 @@ Replit Autoscale + Vite + 推測 React/Vue + AI 後端（推測 OpenAI / Gemini�
 
 - **分類**：趣味遊戲
 - **科技教育專區工具頁**：https://cagoooo.github.io/Akai/tool/28
-- **實際工具網址**：https://www.smes.tyc.edu.tw/smes_html/mariojump.html
+- **實際工具網址**：https://web.smes.tyc.edu.tw/smes_html/mariojump.html
 - **教學情境文章**：https://cagoooo.github.io/Akai/blog/mario-28-jump-platform
 - **標籤**：遊戲, 瑪莉歐, 跳躍, 平台, 經典
 
@@ -957,7 +957,7 @@ Replit Autoscale + Vite + 推測 React/Vue + AI 後端（推測 OpenAI / Gemini�
 
 - **分類**：教學設計
 - **科技教育專區工具頁**：https://cagoooo.github.io/Akai/tool/29
-- **實際工具網址**：https://www.smes.tyc.edu.tw/smes_html/3d-space.html
+- **實際工具網址**：https://web.smes.tyc.edu.tw/smes_html/3d-space.html
 - **教學情境文章**：https://cagoooo.github.io/Akai/blog/solar-29-system-explorer
 - **標籤**：太陽系, 3D, 太空, 行星, 自然
 
@@ -991,7 +991,7 @@ Replit Autoscale + Vite + 推測 React/Vue + AI 後端（推測 OpenAI / Gemini�
 
 - **分類**：趣味遊戲
 - **科技教育專區工具頁**：https://cagoooo.github.io/Akai/tool/30
-- **實際工具網址**：https://www.smes.tyc.edu.tw/smes_html/little_games/
+- **實際工具網址**：https://web.smes.tyc.edu.tw/smes_html/little_games/
 - **教學情境文章**：https://cagoooo.github.io/Akai/blog/games-30-collection-12-in-1
 - **標籤**：遊戲, 合集, 趣味, 休閒, 多款
 
@@ -1024,7 +1024,7 @@ Replit Autoscale + Vite + 推測 React/Vue + AI 後端（推測 OpenAI / Gemini�
 
 - **分類**：趣味遊戲
 - **科技教育專區工具頁**：https://cagoooo.github.io/Akai/tool/31
-- **實際工具網址**：https://www.smes.tyc.edu.tw/claw-machine-game.html
+- **實際工具網址**：https://web.smes.tyc.edu.tw/claw-machine-game.html
 - **教學情境文章**：https://cagoooo.github.io/Akai/blog/claw-31-machine-game
 - **標籤**：遊戲, 夾娃娃, 互動, 趣味, 獎品
 
@@ -1057,7 +1057,7 @@ Replit Autoscale + Vite + 推測 React/Vue + AI 後端（推測 OpenAI / Gemini�
 
 - **分類**：趣味遊戲
 - **科技教育專區工具頁**：https://cagoooo.github.io/Akai/tool/32
-- **實際工具網址**：https://www.smes.tyc.edu.tw/smes_html/touch.html
+- **實際工具網址**：https://web.smes.tyc.edu.tw/smes_html/touch.html
 - **教學情境文章**：https://cagoooo.github.io/Akai/blog/touch-32-bombbombbomb
 - **標籤**：遊戲, 觸屏, 碰撞, 互動, 觸控
 
@@ -1090,7 +1090,7 @@ Replit Autoscale + Vite + 推測 React/Vue + AI 後端（推測 OpenAI / Gemini�
 
 - **分類**：趣味遊戲
 - **科技教育專區工具頁**：https://cagoooo.github.io/Akai/tool/33
-- **實際工具網址**：https://www.smes.tyc.edu.tw/smes_html/sound.html
+- **實際工具網址**：https://web.smes.tyc.edu.tw/smes_html/sound.html
 - **教學情境文章**：https://cagoooo.github.io/Akai/blog/sound-33-visualizer
 - **標籤**：聲音, 視覺化, 互動, 音樂, 波形
 
@@ -1122,7 +1122,7 @@ Replit Autoscale + Vite + 推測 React/Vue + AI 後端（推測 OpenAI / Gemini�
 
 - **分類**：趣味遊戲
 - **科技教育專區工具頁**：https://cagoooo.github.io/Akai/tool/34
-- **實際工具網址**：https://www.smes.tyc.edu.tw/smes_html/go.html
+- **實際工具網址**：https://web.smes.tyc.edu.tw/smes_html/go.html
 - **教學情境文章**：https://cagoooo.github.io/Akai/blog/interactive-34-image-sound
 - **標籤**：遊戲, 影像, 聲音, 互動, 多媒體
 
@@ -1155,7 +1155,7 @@ Replit Autoscale + Vite + 推測 React/Vue + AI 後端（推測 OpenAI / Gemini�
 
 - **分類**：趣味遊戲
 - **科技教育專區工具頁**：https://cagoooo.github.io/Akai/tool/35
-- **實際工具網址**：https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2856
+- **實際工具網址**：https://web.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2856
 - **教學情境文章**：https://cagoooo.github.io/Akai/blog/doodle-35-touch-canvas
 - **標籤**：塗鴉, 觸屏, 繪畫, 創作, 藝術
 
@@ -1188,7 +1188,7 @@ Replit Autoscale + Vite + 推測 React/Vue + AI 後端（推測 OpenAI / Gemini�
 
 - **分類**：趣味遊戲
 - **科技教育專區工具頁**：https://cagoooo.github.io/Akai/tool/36
-- **實際工具網址**：https://www.smes.tyc.edu.tw/smes_html/snake_game.html
+- **實際工具網址**：https://web.smes.tyc.edu.tw/smes_html/snake_game.html
 - **教學情境文章**：https://cagoooo.github.io/Akai/blog/snake-36-game
 - **標籤**：遊戲, 貪食蛇, 經典, 休閒, 懷舊
 
@@ -1221,7 +1221,7 @@ Replit Autoscale + Vite + 推測 React/Vue + AI 後端（推測 OpenAI / Gemini�
 
 - **分類**：趣味遊戲
 - **科技教育專區工具頁**：https://cagoooo.github.io/Akai/tool/37
-- **實際工具網址**：https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2863
+- **實際工具網址**：https://web.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2863
 - **教學情境文章**：https://cagoooo.github.io/Akai/blog/soundwave-37-360-game
 - **標籤**：遊戲, 聲波, 視覺化, 360, 互動
 
@@ -1253,7 +1253,7 @@ Replit Autoscale + Vite + 推測 React/Vue + AI 後端（推測 OpenAI / Gemini�
 
 - **分類**：趣味遊戲
 - **科技教育專區工具頁**：https://cagoooo.github.io/Akai/tool/38
-- **實際工具網址**：https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2859
+- **實際工具網址**：https://web.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2859
 - **教學情境文章**：https://cagoooo.github.io/Akai/blog/sound-38-interactive-game
 - **標籤**：遊戲, 聲音, 控制, 互動, 麥克風
 
@@ -5019,7 +5019,7 @@ React 19 + Vite 7 + 自製 CSS（Aurora 漸層 + Glassmorphism）+ Firebase 全�
 
 **內文**：
 
-## 阿凱另一個部署平台：XOOPS 校網 VM 繼 Google Sites Embedded 之後，阿凱第三個部署平台是 **石門國小 XOOPS 校網 VM**（\`www.smes.tyc.edu.tw/smes_html/\`）— 用 Gemini Canvas 寫好單檔 HTML，直接上傳到學校 VM 雲端就上線。 **為什麼用這個方式？** - 比 Google Sites 更彈性（不受 Embedded HTML 限制） - 比 GitHub Pages 更省事（不用 commit / push） - **掛在學校網域** → 學生看到 \`smes.tyc.edu.tw\` 自然信任 ## #17 真實怎麼做？ **真實標題**：「**✨ 創意抽籤系統 ✨**」 **核心功能**： - 📝 **輸入抽籤名單**：每行一個名稱或項目 - 🎲 **開始抽籤**：一個一個抽出（不是一次全抽） - 🏆 **抽籤結果**：顯示已抽出的清單 - **剩餘項目即時顯示**：知道還有幾個沒抽 - 📋 **複製結果** / **重新開始** **遊戲化設計**：每抽中觸發 **canvas-confetti** 撒花。 ## 真實技術棧 - **純前端單檔 HTML**（19,892 字元） - **Tailwind CSS**（\`cdn.tailwindcss.com\`） - **canvas-confetti** - **無後端、無 LLM** - 部署：\`smes.tyc.edu.tw/smes_html/gogogo.html\`（檔名 gogogo 很可愛） - Footer：「© 2025 桃園市石門國小 資訊組 阿凱老師 設計」 ## 跟 #18 大量抽選的差別 | 維度 | **#17 創意抽籤** | **#18 大量隨機抽選** | |---|---|---| | 抽法 | **一個一個抽**（保留懸念）| 一次出**正取 + 備取**名單 | | 場景 | 課堂點人 / 隨機分組 | 比賽選手 / 校隊選拔 | | 結果 | 累積式（看誰先被抽中）| 一次性（含備取）| | confetti | ✅ 撒花 | ❌ 純表格 | ## 老師使用情境 **課堂點人發言**： - 開學第一週收集學生名單貼上 - 上課時點「開始抽籤」抽下一個發言 - 抽過的不會再抽（自動排除） - **比小棒子公平 + 比 random.org 視覺好玩** **分組活動**： - 30 人分 6 組 → 每次抽 5 個 → 自動成一組 - 剩餘人數即時顯示，知道還有多少要分 ## 配對工具推薦 - [#18 繽紛隨機學生抽選工具](/tool/18) — 正取 + 備取榜單模式 - [#57 餐廳命運轉盤](/tool/57) — 選擇障礙剋星 - [#10 班級小管家](/tool/10) — 內建抽籤模式（v3.1.6） ## 適用對象 - 國中小所有任課老師（每天都會用到點人） - 補習班 / 安親班老師 - 想做課堂遊戲化的老師 - 想看「**Gemini Canvas + XOOPS VM 工作流**」案例的開發者 ## 想試試？ → [前往 #17 創意抽籤系統](/tool/17) 把全班名單貼進去 → 一次點「開始抽籤」抽 1 個 → 學生看 confetti 撒花會超開心。
+## 阿凱另一個部署平台：XOOPS 校網 VM 繼 Google Sites Embedded 之後，阿凱第三個部署平台是 **石門國小 XOOPS 校網 VM**（\`web.smes.tyc.edu.tw/smes_html/\`）— 用 Gemini Canvas 寫好單檔 HTML，直接上傳到學校 VM 雲端就上線。 **為什麼用這個方式？** - 比 Google Sites 更彈性（不受 Embedded HTML 限制） - 比 GitHub Pages 更省事（不用 commit / push） - **掛在學校網域** → 學生看到 \`smes.tyc.edu.tw\` 自然信任 ## #17 真實怎麼做？ **真實標題**：「**✨ 創意抽籤系統 ✨**」 **核心功能**： - 📝 **輸入抽籤名單**：每行一個名稱或項目 - 🎲 **開始抽籤**：一個一個抽出（不是一次全抽） - 🏆 **抽籤結果**：顯示已抽出的清單 - **剩餘項目即時顯示**：知道還有幾個沒抽 - 📋 **複製結果** / **重新開始** **遊戲化設計**：每抽中觸發 **canvas-confetti** 撒花。 ## 真實技術棧 - **純前端單檔 HTML**（19,892 字元） - **Tailwind CSS**（\`cdn.tailwindcss.com\`） - **canvas-confetti** - **無後端、無 LLM** - 部署：\`smes.tyc.edu.tw/smes_html/gogogo.html\`（檔名 gogogo 很可愛） - Footer：「© 2025 桃園市石門國小 資訊組 阿凱老師 設計」 ## 跟 #18 大量抽選的差別 | 維度 | **#17 創意抽籤** | **#18 大量隨機抽選** | |---|---|---| | 抽法 | **一個一個抽**（保留懸念）| 一次出**正取 + 備取**名單 | | 場景 | 課堂點人 / 隨機分組 | 比賽選手 / 校隊選拔 | | 結果 | 累積式（看誰先被抽中）| 一次性（含備取）| | confetti | ✅ 撒花 | ❌ 純表格 | ## 老師使用情境 **課堂點人發言**： - 開學第一週收集學生名單貼上 - 上課時點「開始抽籤」抽下一個發言 - 抽過的不會再抽（自動排除） - **比小棒子公平 + 比 random.org 視覺好玩** **分組活動**： - 30 人分 6 組 → 每次抽 5 個 → 自動成一組 - 剩餘人數即時顯示，知道還有多少要分 ## 配對工具推薦 - [#18 繽紛隨機學生抽選工具](/tool/18) — 正取 + 備取榜單模式 - [#57 餐廳命運轉盤](/tool/57) — 選擇障礙剋星 - [#10 班級小管家](/tool/10) — 內建抽籤模式（v3.1.6） ## 適用對象 - 國中小所有任課老師（每天都會用到點人） - 補習班 / 安親班老師 - 想做課堂遊戲化的老師 - 想看「**Gemini Canvas + XOOPS VM 工作流**」案例的開發者 ## 想試試？ → [前往 #17 創意抽籤系統](/tool/17) 把全班名單貼進去 → 一次點「開始抽籤」抽 1 個 → 學生看 confetti 撒花會超開心。
 
 ---
 
@@ -5171,7 +5171,7 @@ React 19 + Vite 7 + 自製 CSS（Aurora 漸層 + Glassmorphism）+ Firebase 全�
 
 **內文**：
 
-## XOOPS tadnews 頁面 — 另一種部署方式 #35 用了**第六種部署方式** — 嵌在 XOOPS tadnews 文章內： URL：\`www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2856\` **XOOPS tadnews** 是 XOOPS 系統的文章模組，阿凱**寫工具直接貼進文章內**，跟其他 \`smes_html/*.html\` 純單檔不同。 ## 為什麼用 XOOPS tadnews 而不是純單檔？ XOOPS tadnews 的好處： - ✅ **直接由學校網站發布** — 自動進「最新消息」列表 - ✅ **學生家長從首頁文章列表能看到** — 不用記住 URL - ✅ **內建留言 + 分類** - ❌ 但 HTML 會被 XOOPS 主題包一層（含校網行事曆 / 處室導覽）— 工具實際內容在中間 iframe-like 嵌入區 ## #35 真實核心 **真實標題**：「**點擊下方畫布，浮現創意塗鴉！**」 **核心互動**： - 螢幕中央有一個畫布 - 學生**點擊任意位置** - 該位置浮現**隨機創意塗鴉** - 多人同時點 → 多塗鴉並存 跟 [#32 觸屏碰碰碰](/blog/touch-32-bombbombbomb) 概念類似但呈現形式不同 — **#32 是浮動圖案 / #35 是塗鴉繪畫風格**。 ## 真實技術棧 - **嵌入 XOOPS tadnews 文章**（68 KB 含 XOOPS 系統頁面） - 實際工具邏輯內嵌在文章區 - **requestAnimationFrame** 流暢繪製 - 部署：\`smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2856\` ## 教學情境 **走廊觸控螢幕**： - 學生路過點兩下 → 浮現塗鴉 → **5 秒小確幸** **藝術與人文課**： - 講「**集體塗鴉藝術**」 - 全班同時點 → 大家共創一幅圖 **校慶 / 親職日**： - 家長路過點一下 → 留下「**今天我在這**」的視覺印記 ## 配對工具推薦 - [#32 觸屏碰碰碰](/tool/32) — 浮動圖案版 - [#34 互動式影像聲音遊戲區](/tool/34) — 多功能互動裝置 - [#37 聲波擴散 360 小遊戲](/tool/37) — 聲音版互動 ## 適用對象 - 有大型觸控螢幕的學校 - 藝術與人文老師（互動藝術單元） - 圖書館 / 學習角規劃者 - 想做「**集體塗鴉藝術**」的老師 ## 想試試？ → [前往 #35 觸屏點點塗鴉區](/tool/35) 把螢幕擺在走廊 — **學生每個路過點一下，集體塗鴉慢慢成形**。
+## XOOPS tadnews 頁面 — 另一種部署方式 #35 用了**第六種部署方式** — 嵌在 XOOPS tadnews 文章內： URL：\`web.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2856\` **XOOPS tadnews** 是 XOOPS 系統的文章模組，阿凱**寫工具直接貼進文章內**，跟其他 \`smes_html/*.html\` 純單檔不同。 ## 為什麼用 XOOPS tadnews 而不是純單檔？ XOOPS tadnews 的好處： - ✅ **直接由學校網站發布** — 自動進「最新消息」列表 - ✅ **學生家長從首頁文章列表能看到** — 不用記住 URL - ✅ **內建留言 + 分類** - ❌ 但 HTML 會被 XOOPS 主題包一層（含校網行事曆 / 處室導覽）— 工具實際內容在中間 iframe-like 嵌入區 ## #35 真實核心 **真實標題**：「**點擊下方畫布，浮現創意塗鴉！**」 **核心互動**： - 螢幕中央有一個畫布 - 學生**點擊任意位置** - 該位置浮現**隨機創意塗鴉** - 多人同時點 → 多塗鴉並存 跟 [#32 觸屏碰碰碰](/blog/touch-32-bombbombbomb) 概念類似但呈現形式不同 — **#32 是浮動圖案 / #35 是塗鴉繪畫風格**。 ## 真實技術棧 - **嵌入 XOOPS tadnews 文章**（68 KB 含 XOOPS 系統頁面） - 實際工具邏輯內嵌在文章區 - **requestAnimationFrame** 流暢繪製 - 部署：\`smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2856\` ## 教學情境 **走廊觸控螢幕**： - 學生路過點兩下 → 浮現塗鴉 → **5 秒小確幸** **藝術與人文課**： - 講「**集體塗鴉藝術**」 - 全班同時點 → 大家共創一幅圖 **校慶 / 親職日**： - 家長路過點一下 → 留下「**今天我在這**」的視覺印記 ## 配對工具推薦 - [#32 觸屏碰碰碰](/tool/32) — 浮動圖案版 - [#34 互動式影像聲音遊戲區](/tool/34) — 多功能互動裝置 - [#37 聲波擴散 360 小遊戲](/tool/37) — 聲音版互動 ## 適用對象 - 有大型觸控螢幕的學校 - 藝術與人文老師（互動藝術單元） - 圖書館 / 學習角規劃者 - 想做「**集體塗鴉藝術**」的老師 ## 想試試？ → [前往 #35 觸屏點點塗鴉區](/tool/35) 把螢幕擺在走廊 — **學生每個路過點一下，集體塗鴉慢慢成形**。
 
 ---
 

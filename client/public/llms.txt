@@ -36,8 +36,8 @@
 - [#10 班級小管家](https://cagoooo.github.io/Akai/tool/10): 阿凱老師打造的班級小管家全方位課堂工具箱，整合學生名單、加扣分、抽籤分組、計時器、聯絡簿、作業檢查、考試監考共八大功能，多班級資料自動隔離。 標籤：班級、管理、導師、學生、事務。 實際工具：https://cagoooo.github.io/class/。教學情境文章：https://cagoooo.github.io/Akai/blog/class-helper-10-daily-routine
 - [#14 點亮詩意~『早安長輩圖產生器』](https://cagoooo.github.io/Akai/tool/14): 輕鬆製作溫馨的早安問候圖片 標籤：長輩圖、早安、圖片、問候、詩詞。 實際工具：https://cagoooo.github.io/PhotoPoet/。教學情境文章：https://cagoooo.github.io/Akai/blog/poet-14-elder-greeting-image
 - [#15 社群領域會議報告產出平台](https://cagoooo.github.io/Akai/tool/15): 快速產生會議報告的協作工具 標籤：會議、報告、社群、記錄、產出。 實際工具：https://report.smes.tyc.edu.tw/。教學情境文章：https://cagoooo.github.io/Akai/blog/report-15-domain-meeting-go
-- [#17 單一抽籤系統](https://cagoooo.github.io/Akai/tool/17): 簡單快速的單一抽籤工具 標籤：抽籤、隨機、點名、簡單、快速。 實際工具：https://www.smes.tyc.edu.tw/smes_html/gogogo.html。教學情境文章：https://cagoooo.github.io/Akai/blog/draw-17-creative-lottery
-- [#18 大量抽籤系統](https://cagoooo.github.io/Akai/tool/18): 支援大量抽籤的進階工具 標籤：抽籤、隨機、大量、分組、進階。 實際工具：https://www.smes.tyc.edu.tw/smes_html/random.html。教學情境文章：https://cagoooo.github.io/Akai/blog/student-pick-18-main-alternate
+- [#17 單一抽籤系統](https://cagoooo.github.io/Akai/tool/17): 簡單快速的單一抽籤工具 標籤：抽籤、隨機、點名、簡單、快速。 實際工具：https://web.smes.tyc.edu.tw/smes_html/gogogo.html。教學情境文章：https://cagoooo.github.io/Akai/blog/draw-17-creative-lottery
+- [#18 大量抽籤系統](https://cagoooo.github.io/Akai/tool/18): 支援大量抽籤的進階工具 標籤：抽籤、隨機、大量、分組、進階。 實際工具：https://web.smes.tyc.edu.tw/smes_html/random.html。教學情境文章：https://cagoooo.github.io/Akai/blog/student-pick-18-main-alternate
 - [#19 設計自己的專屬客服](https://cagoooo.github.io/Akai/tool/19): 自訂專屬的智能客服系統 標籤：客服、AI、機器人、自訂、智能。 實際工具：https://document-ai-companion-ipad4.replit.app/。教學情境文章：https://cagoooo.github.io/Akai/blog/replit-19-design-your-own
 - [#24 教師午會記錄報告站](https://cagoooo.github.io/Akai/tool/24): 教師午會紀錄與報告分享平台 標籤：午會、記錄、教師、報告、行政。 實際工具：https://sites.google.com/mail2.smes.tyc.edu.tw/114teacher/。教學情境文章：https://cagoooo.github.io/Akai/blog/meeting-24-end-semester-record
 - [#27 ⬅️好用小工具(許願池)](https://cagoooo.github.io/Akai/tool/27): 各種好用的教學小工具集合與許願池 標籤：工具、集合、許願、小工具、瑞士刀。 實際工具：https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/。教學情境文章：https://cagoooo.github.io/Akai/blog/swissknife-27-tool-vault
@@ -81,7 +81,7 @@
 - [#13 5W1H 靈感發射器 🚀](https://cagoooo.github.io/Akai/tool/13): 創意思維激發工具，協助發想教學內容 標籤：5W1H、創意、靈感、思維、發想。 實際工具：https://5w1h.smes.tyc.edu.tw/。教學情境文章：https://cagoooo.github.io/Akai/blog/aura-13-firebase-mirror
 - [#23 點石成金蜂🐝 評語優化網頁版](https://cagoooo.github.io/Akai/tool/23): 阿凱老師打造的「點石成金蜂」教師評語生成應用，協助老師快速產出個人化、貼近學生特質的成績單評語，告別罐頭句子。 標籤：評語、AI、正向、學生、網頁版。 實際工具：https://cagoooo.github.io/comments/。教學情境文章：https://cagoooo.github.io/Akai/blog/comments-23-web-version
 - [#26 九九乘法表練習器](https://cagoooo.github.io/Akai/tool/26): 互動式九九乘法表練習工具 標籤：數學、乘法、九九、練習、計算。 實際工具：https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E4%B9%9D%E4%B9%9D%E4%B9%98%E6%B3%95%E8%A1%A8%E7%B7%B4%E7%BF%92%E5%99%A8?authuser=0。教學情境文章：https://cagoooo.github.io/Akai/blog/multiplication-26-adventure
-- [#29 太陽系探索者](https://cagoooo.github.io/Akai/tool/29): 3D 太陽系探索互動學習工具 標籤：太陽系、3D、太空、行星、自然。 實際工具：https://www.smes.tyc.edu.tw/smes_html/3d-space.html。教學情境文章：https://cagoooo.github.io/Akai/blog/solar-29-system-explorer
+- [#29 太陽系探索者](https://cagoooo.github.io/Akai/tool/29): 3D 太陽系探索互動學習工具 標籤：太陽系、3D、太空、行星、自然。 實際工具：https://web.smes.tyc.edu.tw/smes_html/3d-space.html。教學情境文章：https://cagoooo.github.io/Akai/blog/solar-29-system-explorer
 - [#44 數學加減法練習器](https://cagoooo.github.io/Akai/tool/44): 互動式數學加減法練習工具，幫助學生熟練基礎運算能力 標籤：數學、加法、減法、練習、基礎運算。 實際工具：https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E6%95%B8%E5%AD%B8%E5%8A%A0%E6%B8%9B%E6%B3%95%E7%B7%B4%E7%BF%92%E5%99%A8。教學情境文章：https://cagoooo.github.io/Akai/blog/math-adventure-44-grade-one
 - [#49 教務處寶藏庫](https://cagoooo.github.io/Akai/tool/49): 教務處精心彙整的豐富資源平台，集結課程計畫、評量工具、教學表單及行政公告等寶貴資料，是教師備課與行政作業的最佳後盾 標籤：教務、資源庫、課程計畫、評量、行政、表單。 實際工具：https://sites.google.com/mail2.smes.tyc.edu.tw/academic/。教學情境文章：https://cagoooo.github.io/Akai/blog/academic-49-treasure-trove
 - [#54 臉盲教師救星 - 識生學坊](https://cagoooo.github.io/Akai/tool/54): 專為教師設計的學生辨識訓練工坊透過遊戲化測驗強化對學生面孔的記憶。 標籤：臉盲、學生辨識、記憶訓練、師生互動、教學輔助。 實際工具：https://cagoooo.github.io/recognize/。教學情境文章：https://cagoooo.github.io/Akai/blog/face-recognition-54-teacher-savior
@@ -101,16 +101,16 @@
 
 - [#6 蜂類配對消消樂](https://cagoooo.github.io/Akai/tool/6): 阿凱老師打造的記憶配對消消樂遊戲，三種難度搭配注音、唐詩、英單、水果等六大主題包，老師改 JSON 就能新增主題，純靜態 PWA 離線可玩。 標籤：遊戲、蜜蜂、配對、消消樂、自然。 實際工具：https://cagoooo.github.io/bee/。教學情境文章：https://cagoooo.github.io/Akai/blog/bee-6-pair-game
 - [#9 超級瑪莉歐冒險](https://cagoooo.github.io/Akai/tool/9): 阿凱老師打造的瀏覽器版超級瑪莉歐冒險遊戲，支援鍵盤＋觸控雙模式操作，內建關卡選擇、計分、金幣與成就系統，純前端開瀏覽器就能玩。 標籤：遊戲、瑪莉歐、冒險、跳躍、經典。 實際工具：https://cagoooo.github.io/mario-game/。教學情境文章：https://cagoooo.github.io/Akai/blog/mario-9-platformer-adventure
-- [#28 瑪莉歐風格平台跳躍遊戲](https://cagoooo.github.io/Akai/tool/28): 經典瑪莉歐風格的平台跳躍遊戲 標籤：遊戲、瑪莉歐、跳躍、平台、經典。 實際工具：https://www.smes.tyc.edu.tw/smes_html/mariojump.html。教學情境文章：https://cagoooo.github.io/Akai/blog/mario-28-jump-platform
-- [#30 小遊戲大集合](https://cagoooo.github.io/Akai/tool/30): 多款趣味小遊戲合集 標籤：遊戲、合集、趣味、休閒、多款。 實際工具：https://www.smes.tyc.edu.tw/smes_html/little_games/。教學情境文章：https://cagoooo.github.io/Akai/blog/games-30-collection-12-in-1
-- [#31 互動遊戲抓抓樂](https://cagoooo.github.io/Akai/tool/31): 趣味夾娃娃機互動遊戲 標籤：遊戲、夾娃娃、互動、趣味、獎品。 實際工具：https://www.smes.tyc.edu.tw/claw-machine-game.html。教學情境文章：https://cagoooo.github.io/Akai/blog/claw-31-machine-game
-- [#32 遊戲觸屏碰碰碰](https://cagoooo.github.io/Akai/tool/32): 觸屏互動碰撞遊戲 標籤：遊戲、觸屏、碰撞、互動、觸控。 實際工具：https://www.smes.tyc.edu.tw/smes_html/touch.html。教學情境文章：https://cagoooo.github.io/Akai/blog/touch-32-bombbombbomb
-- [#33 讓聲音具現化吧！](https://cagoooo.github.io/Akai/tool/33): 聲音視覺化互動體驗 標籤：聲音、視覺化、互動、音樂、波形。 實際工具：https://www.smes.tyc.edu.tw/smes_html/sound.html。教學情境文章：https://cagoooo.github.io/Akai/blog/sound-33-visualizer
-- [#34 互動式影像聲音遊戲區](https://cagoooo.github.io/Akai/tool/34): 結合影像與聲音的互動遊戲 標籤：遊戲、影像、聲音、互動、多媒體。 實際工具：https://www.smes.tyc.edu.tw/smes_html/go.html。教學情境文章：https://cagoooo.github.io/Akai/blog/interactive-34-image-sound
-- [#35 觸屏點點塗鴉區](https://cagoooo.github.io/Akai/tool/35): 觸屏塗鴉創作工具 標籤：塗鴉、觸屏、繪畫、創作、藝術。 實際工具：https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2856。教學情境文章：https://cagoooo.github.io/Akai/blog/doodle-35-touch-canvas
-- [#36 貪食蛇互動遊戲](https://cagoooo.github.io/Akai/tool/36): 經典貪食蛇遊戲 標籤：遊戲、貪食蛇、經典、休閒、懷舊。 實際工具：https://www.smes.tyc.edu.tw/smes_html/snake_game.html。教學情境文章：https://cagoooo.github.io/Akai/blog/snake-36-game
-- [#37 聲波擴散360小遊戲](https://cagoooo.github.io/Akai/tool/37): 聲波視覺化互動遊戲 標籤：遊戲、聲波、視覺化、360、互動。 實際工具：https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2863。教學情境文章：https://cagoooo.github.io/Akai/blog/soundwave-37-360-game
-- [#38 聲音互動小遊戲](https://cagoooo.github.io/Akai/tool/38): 透過聲音控制的互動遊戲 標籤：遊戲、聲音、控制、互動、麥克風。 實際工具：https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2859。教學情境文章：https://cagoooo.github.io/Akai/blog/sound-38-interactive-game
+- [#28 瑪莉歐風格平台跳躍遊戲](https://cagoooo.github.io/Akai/tool/28): 經典瑪莉歐風格的平台跳躍遊戲 標籤：遊戲、瑪莉歐、跳躍、平台、經典。 實際工具：https://web.smes.tyc.edu.tw/smes_html/mariojump.html。教學情境文章：https://cagoooo.github.io/Akai/blog/mario-28-jump-platform
+- [#30 小遊戲大集合](https://cagoooo.github.io/Akai/tool/30): 多款趣味小遊戲合集 標籤：遊戲、合集、趣味、休閒、多款。 實際工具：https://web.smes.tyc.edu.tw/smes_html/little_games/。教學情境文章：https://cagoooo.github.io/Akai/blog/games-30-collection-12-in-1
+- [#31 互動遊戲抓抓樂](https://cagoooo.github.io/Akai/tool/31): 趣味夾娃娃機互動遊戲 標籤：遊戲、夾娃娃、互動、趣味、獎品。 實際工具：https://web.smes.tyc.edu.tw/claw-machine-game.html。教學情境文章：https://cagoooo.github.io/Akai/blog/claw-31-machine-game
+- [#32 遊戲觸屏碰碰碰](https://cagoooo.github.io/Akai/tool/32): 觸屏互動碰撞遊戲 標籤：遊戲、觸屏、碰撞、互動、觸控。 實際工具：https://web.smes.tyc.edu.tw/smes_html/touch.html。教學情境文章：https://cagoooo.github.io/Akai/blog/touch-32-bombbombbomb
+- [#33 讓聲音具現化吧！](https://cagoooo.github.io/Akai/tool/33): 聲音視覺化互動體驗 標籤：聲音、視覺化、互動、音樂、波形。 實際工具：https://web.smes.tyc.edu.tw/smes_html/sound.html。教學情境文章：https://cagoooo.github.io/Akai/blog/sound-33-visualizer
+- [#34 互動式影像聲音遊戲區](https://cagoooo.github.io/Akai/tool/34): 結合影像與聲音的互動遊戲 標籤：遊戲、影像、聲音、互動、多媒體。 實際工具：https://web.smes.tyc.edu.tw/smes_html/go.html。教學情境文章：https://cagoooo.github.io/Akai/blog/interactive-34-image-sound
+- [#35 觸屏點點塗鴉區](https://cagoooo.github.io/Akai/tool/35): 觸屏塗鴉創作工具 標籤：塗鴉、觸屏、繪畫、創作、藝術。 實際工具：https://web.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2856。教學情境文章：https://cagoooo.github.io/Akai/blog/doodle-35-touch-canvas
+- [#36 貪食蛇互動遊戲](https://cagoooo.github.io/Akai/tool/36): 經典貪食蛇遊戲 標籤：遊戲、貪食蛇、經典、休閒、懷舊。 實際工具：https://web.smes.tyc.edu.tw/smes_html/snake_game.html。教學情境文章：https://cagoooo.github.io/Akai/blog/snake-36-game
+- [#37 聲波擴散360小遊戲](https://cagoooo.github.io/Akai/tool/37): 聲波視覺化互動遊戲 標籤：遊戲、聲波、視覺化、360、互動。 實際工具：https://web.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2863。教學情境文章：https://cagoooo.github.io/Akai/blog/soundwave-37-360-game
+- [#38 聲音互動小遊戲](https://cagoooo.github.io/Akai/tool/38): 透過聲音控制的互動遊戲 標籤：遊戲、聲音、控制、互動、麥克風。 實際工具：https://web.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2859。教學情境文章：https://cagoooo.github.io/Akai/blog/sound-38-interactive-game
 - [#39 孔明神算：心靈感應預言魔術](https://cagoooo.github.io/Akai/tool/39): 神奇的心靈感應預言魔術遊戲 標籤：魔術、預言、心靈感應、神奇、表演。 實際工具：https://claude.ai/public/artifacts/982f7b1c-8302-4112-a05f-342ad24bd421。教學情境文章：https://cagoooo.github.io/Akai/blog/magic-39-mind-reading
 - [#50 童趣學園](https://cagoooo.github.io/Akai/tool/50): 阿凱老師打造的童趣樂園 KidsZone 兒童學習平台，13 款繁中互動遊戲涵蓋顏色、數學、英單、注音、時鐘、程式設計，搭配星星幣經濟與頭像系統。 標籤：兒童、遊戲、學習、探索、樂園、互動。 實際工具：https://cagoooo.github.io/kids/。教學情境文章：https://cagoooo.github.io/Akai/blog/kids-50-zone-learning
 - [#56 元宵猜燈謎闖關遊戲](https://cagoooo.github.io/Akai/tool/56): 充滿節慶氣氛的元宵猜燈謎互動遊戲，讓學生在趣味闖關中學習傳統文化。 標籤：元宵節、猜燈謎、傳統文化、遊戲、節慶、教育。 實際工具：https://cagoooo.github.io/lantern/。教學情境文章：https://cagoooo.github.io/Akai/blog/lantern-56-festival-riddles
@@ -127,9 +127,9 @@
 
 ### 語言學習（14 款）
 
-- [#20 英打練習](https://cagoooo.github.io/Akai/tool/20): 英文打字練習工具，提升打字速度與準確度 標籤：打字、英文、練習、鍵盤、速度。 實際工具：https://www.smes.tyc.edu.tw/smes_html/typeEN.html。教學情境文章：https://cagoooo.github.io/Akai/blog/typing-20-english-letters-falling
-- [#21 中打練習](https://cagoooo.github.io/Akai/tool/21): 中文打字練習工具，提升中文輸入能力 標籤：打字、中文、練習、注音、輸入法。 實際工具：https://www.smes.tyc.edu.tw/smes_html/typeCC.html。教學情境文章：https://cagoooo.github.io/Akai/blog/typing-21-zhuyin-keymap
-- [#22 成語中打練習](https://cagoooo.github.io/Akai/tool/22): 透過成語練習中文打字，邊打邊學成語 標籤：打字、成語、中文、學習、國語。 實際工具：https://www.smes.tyc.edu.tw/smes_html/typeTC.html。教學情境文章：https://cagoooo.github.io/Akai/blog/idiom-22-fill-blank-game
+- [#20 英打練習](https://cagoooo.github.io/Akai/tool/20): 英文打字練習工具，提升打字速度與準確度 標籤：打字、英文、練習、鍵盤、速度。 實際工具：https://web.smes.tyc.edu.tw/smes_html/typeEN.html。教學情境文章：https://cagoooo.github.io/Akai/blog/typing-20-english-letters-falling
+- [#21 中打練習](https://cagoooo.github.io/Akai/tool/21): 中文打字練習工具，提升中文輸入能力 標籤：打字、中文、練習、注音、輸入法。 實際工具：https://web.smes.tyc.edu.tw/smes_html/typeCC.html。教學情境文章：https://cagoooo.github.io/Akai/blog/typing-21-zhuyin-keymap
+- [#22 成語中打練習](https://cagoooo.github.io/Akai/tool/22): 透過成語練習中文打字，邊打邊學成語 標籤：打字、成語、中文、學習、國語。 實際工具：https://web.smes.tyc.edu.tw/smes_html/typeTC.html。教學情境文章：https://cagoooo.github.io/Akai/blog/idiom-22-fill-blank-game
 - [#25 國語演說培訓班](https://cagoooo.github.io/Akai/tool/25): 國語演說練習與培訓工具 標籤：演說、國語、口說、培訓、比賽。 實際工具：https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E5%9C%8B%E8%AA%9E%E6%BC%94%E8%AA%AA%E7%B7%B4%E7%BF%92%E5%B0%8F%E5%B7%A5%E5%85%B7?authuser=0。教學情境文章：https://cagoooo.github.io/Akai/blog/speech-25-training-class-entry
 - [#43 課程計畫英文轉寫小精靈](https://cagoooo.github.io/Akai/tool/43): 上傳中文課程計畫 (PDF, DOCX)，轉寫小精靈將自動翻譯並整理成 Markdown 表格 標籤：翻譯、雙語、課程計畫、Markdown、PDF。 實際工具：https://bilingual.smes.tyc.edu.tw/。教學情境文章：https://cagoooo.github.io/Akai/blog/bilingual-43-lingua-lesson
 - [#55 ㄅㄆㄇ注音大挑戰](https://cagoooo.github.io/Akai/tool/55): 專為兒童設計的注音學習挑戰透過趣味互動讓孩子輕鬆掌握ㄅㄆㄇ。 標籤：注音、ㄅㄆㄇ、國語、幼童、拼音。 實際工具：https://cagoooo.github.io/zhuyin/。教學情境文章：https://cagoooo.github.io/Akai/blog/zhuyin-55-bopomofo-challenge

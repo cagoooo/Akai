@@ -4527,7 +4527,7 @@ const POST_17: BlogPost = {
   coverColor: 'orange',
   body: `## 阿凱另一個部署平台：XOOPS 校網 VM
 
-繼 Google Sites Embedded 之後，阿凱第三個部署平台是 **石門國小 XOOPS 校網 VM**（\`www.smes.tyc.edu.tw/smes_html/\`）— 用 Gemini Canvas 寫好單檔 HTML，直接上傳到學校 VM 雲端就上線。
+繼 Google Sites Embedded 之後，阿凱第三個部署平台是 **石門國小 XOOPS 校網 VM**（\`web.smes.tyc.edu.tw/smes_html/\`）— 用 Gemini Canvas 寫好單檔 HTML，直接上傳到學校 VM 雲端就上線。
 
 **為什麼用這個方式？**
 - 比 Google Sites 更彈性（不受 Embedded HTML 限制）
@@ -5684,7 +5684,7 @@ const POST_35: BlogPost = {
 
 #35 用了**第六種部署方式** — 嵌在 XOOPS tadnews 文章內：
 
-URL：\`www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2856\`
+URL：\`web.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2856\`
 
 **XOOPS tadnews** 是 XOOPS 系統的文章模組，阿凱**寫工具直接貼進文章內**，跟其他 \`smes_html/*.html\` 純單檔不同。
 

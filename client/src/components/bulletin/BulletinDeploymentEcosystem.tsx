@@ -48,7 +48,7 @@ const PLATFORMS: Platform[] = [
   {
     emoji: '🏫',
     name: 'XOOPS 校網 VM',
-    count: 16,
+    count: 0,
     desc: '學校 smes_html/ 雲端部署',
     color: tokens.note.orange,
     pinColor: '#f97316',
@@ -58,7 +58,7 @@ const PLATFORMS: Platform[] = [
   {
     emoji: '🔥',
     name: 'Firebase Hosting',
-    count: 7,
+    count: 23,
     desc: '學校自訂 subdomain',
     color: tokens.note.green,
     pinColor: '#16a34a',

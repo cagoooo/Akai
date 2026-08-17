@@ -175,7 +175,7 @@
 | 13 | **5W1H 靈感發射器 🚀** | 創意思維激發工具，協助發想教學內容 | [開啟工具](https://5w1h.smes.tyc.edu.tw/) |
 | 23 | **點石成金蜂🐝 評語優化網頁版** | 網頁版學生評語優化工具，輕鬆產出正向評語 | [開啟工具](https://cagoooo.github.io/comments/) |
 | 26 | **九九乘法表練習器** | 互動式九九乘法表練習工具 | [開啟工具](https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E4%B9%9D%E4%B9%9D%E4%B9%98%E6%B3%95%E8%A1%A8%E7%B7%B4%E7%BF%92%E5%99%A8?authuser=0) |
-| 29 | **太陽系探索者** | 3D 太陽系探索互動學習工具 | [開啟工具](https://www.smes.tyc.edu.tw/smes_html/3d-space.html) |
+| 29 | **太陽系探索者** | 3D 太陽系探索互動學習工具 | [開啟工具](https://web.smes.tyc.edu.tw/smes_html/3d-space.html) |
 | 44 | **數學加減法練習器** | 互動式數學加減法練習工具，幫助學生熟練基礎運算能力 | [開啟工具](https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E6%95%B8%E5%AD%B8%E5%8A%A0%E6%B8%9B%E6%B3%95%E7%B7%B4%E7%BF%92%E5%99%A8) |
 | 58 | **教師數位備課教案小幫手** | 專為老師設計的 AI 數位備課工具，快速生成優質教案與活動設計 | [開啟工具](https://cagoooo.github.io/prepare/) |
 | 66 | **Sora AI 旅遊全記錄教學網** | 探索 Sora AI 與旅遊記錄的完美結合，掌握如何利用 AI 技術捕捉、編輯並分享您的旅遊點滴 | [開啟工具](https://cagoooo.github.io/Sora/) |
@@ -187,9 +187,9 @@
 
 | # | 工具名稱 | 說明 | 連結 |
 |---|----------|------|------|
-| 20 | **英打練習** | 英文打字練習工具，提升打字速度與準確度 | [開啟工具](https://www.smes.tyc.edu.tw/smes_html/typeEN.html) |
-| 21 | **中打練習** | 中文打字練習工具，提升中文輸入能力 | [開啟工具](https://www.smes.tyc.edu.tw/smes_html/typeCC.html) |
-| 22 | **成語中打練習** | 透過成語練習中文打字，邊打邊學成語 | [開啟工具](https://www.smes.tyc.edu.tw/smes_html/typeTC.html) |
+| 20 | **英打練習** | 英文打字練習工具，提升打字速度與準確度 | [開啟工具](https://web.smes.tyc.edu.tw/smes_html/typeEN.html) |
+| 21 | **中打練習** | 中文打字練習工具，提升中文輸入能力 | [開啟工具](https://web.smes.tyc.edu.tw/smes_html/typeCC.html) |
+| 22 | **成語中打練習** | 透過成語練習中文打字，邊打邊學成語 | [開啟工具](https://web.smes.tyc.edu.tw/smes_html/typeTC.html) |
 | 25 | **國語演說培訓班** | 國語演說練習與培訓工具 | [開啟工具](https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/%E5%9C%8B%E8%AA%9E%E6%BC%94%E8%AA%AA%E7%B7%B4%E7%BF%92%E5%B0%8F%E5%B7%A5%E5%85%B7?authuser=0) |
 | 43 | **課程計畫英文轉寫小精靈** | 上傳中文課程計畫 (PDF, DOCX)，轉寫小精靈將自動翻譯並整理成 Markdown 表格 | [開啟工具](https://bilingual.smes.tyc.edu.tw/) |
 | 70 | **中文注音打字遊戲 (pro版)** | 進階版中文注音打字練習遊戲，提供更豐富有趣的打字挑戰，全面提升中文輸入速度與準確度 | [開啟工具](https://cagoooo.github.io/typeCC/) |
@@ -216,8 +216,8 @@
 | 10 | **班級小管家** | 便捷的班級管理工具，協助教師輕鬆管理班級事務 | [開啟工具](https://cagoooo.github.io/class/) |
 | 14 | **點亮詩意~『早安長輩圖產生器』** | 輕鬆製作溫馨的早安問候圖片 | [開啟工具](https://poet.smes.tyc.edu.tw/) |
 | 15 | **社群領域會議報告產出平台** | 快速產生會議報告的協作工具 | [開啟工具](https://report.smes.tyc.edu.tw/) |
-| 17 | **單一抽籤系統** | 簡單快速的單一抽籤工具 | [開啟工具](https://www.smes.tyc.edu.tw/smes_html/gogogo.html) |
-| 18 | **大量抽籤系統** | 支援大量抽籤的進階工具 | [開啟工具](https://www.smes.tyc.edu.tw/smes_html/random.html) |
+| 17 | **單一抽籤系統** | 簡單快速的單一抽籤工具 | [開啟工具](https://web.smes.tyc.edu.tw/smes_html/gogogo.html) |
+| 18 | **大量抽籤系統** | 支援大量抽籤的進階工具 | [開啟工具](https://web.smes.tyc.edu.tw/smes_html/random.html) |
 | 19 | **設計自己的專屬客服** | 自訂專屬的智能客服系統 | [開啟工具](https://document-ai-companion-ipad4.replit.app/) |
 | 24 | **教師午會記錄報告站** | 教師午會紀錄與報告分享平台 | [開啟工具](https://sites.google.com/mail2.smes.tyc.edu.tw/114teacher/) |
 | 27 | **⬅️好用小工具(許願池)** | 各種好用的教學小工具集合與許願池 | [開啟工具](https://sites.google.com/mail2.smes.tyc.edu.tw/swissknife/) |
@@ -237,16 +237,16 @@
 |---|----------|------|------|
 | 6 | **蜂類配對消消樂** | 寓教於樂的教育遊戲，通過趣味性的方式學習蜂類知識 | [開啟工具](https://cagoooo.github.io/bee/) |
 | 9 | **超級瑪莉歐冒險** | 經典遊戲風格的教育遊戲，結合趣味與學習的互動體驗 | [開啟工具](https://cagoooo.github.io/mario-game/) |
-| 28 | **瑪莉歐風格平台跳躍遊戲** | 經典瑪莉歐風格的平台跳躍遊戲 | [開啟工具](https://www.smes.tyc.edu.tw/smes_html/mariojump.html) |
-| 30 | **小遊戲大集合** | 多款趣味小遊戲合集 | [開啟工具](https://www.smes.tyc.edu.tw/smes_html/little_games/) |
-| 31 | **互動遊戲抓抓樂** | 趣味夾娃娃機互動遊戲 | [開啟工具](https://www.smes.tyc.edu.tw/claw-machine-game.html) |
-| 32 | **遊戲觸屏碰碰碰** | 觸屏互動碰撞遊戲 | [開啟工具](https://www.smes.tyc.edu.tw/smes_html/touch.html) |
-| 33 | **讓聲音具現化吧！** | 聲音視覺化互動體驗 | [開啟工具](https://www.smes.tyc.edu.tw/smes_html/sound.html) |
-| 34 | **互動式影像聲音遊戲區** | 結合影像與聲音的互動遊戲 | [開啟工具](https://www.smes.tyc.edu.tw/smes_html/go.html) |
-| 35 | **觸屏點點塗鴉區** | 觸屏塗鴉創作工具 | [開啟工具](https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2856) |
-| 36 | **貪食蛇互動遊戲** | 經典貪食蛇遊戲 | [開啟工具](https://www.smes.tyc.edu.tw/smes_html/snake_game.html) |
-| 37 | **聲波擴散360小遊戲** | 聲波視覺化互動遊戲 | [開啟工具](https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2863) |
-| 38 | **聲音互動小遊戲** | 透過聲音控制的互動遊戲 | [開啟工具](https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2859) |
+| 28 | **瑪莉歐風格平台跳躍遊戲** | 經典瑪莉歐風格的平台跳躍遊戲 | [開啟工具](https://web.smes.tyc.edu.tw/smes_html/mariojump.html) |
+| 30 | **小遊戲大集合** | 多款趣味小遊戲合集 | [開啟工具](https://web.smes.tyc.edu.tw/smes_html/little_games/) |
+| 31 | **互動遊戲抓抓樂** | 趣味夾娃娃機互動遊戲 | [開啟工具](https://web.smes.tyc.edu.tw/claw-machine-game.html) |
+| 32 | **遊戲觸屏碰碰碰** | 觸屏互動碰撞遊戲 | [開啟工具](https://web.smes.tyc.edu.tw/smes_html/touch.html) |
+| 33 | **讓聲音具現化吧！** | 聲音視覺化互動體驗 | [開啟工具](https://web.smes.tyc.edu.tw/smes_html/sound.html) |
+| 34 | **互動式影像聲音遊戲區** | 結合影像與聲音的互動遊戲 | [開啟工具](https://web.smes.tyc.edu.tw/smes_html/go.html) |
+| 35 | **觸屏點點塗鴉區** | 觸屏塗鴉創作工具 | [開啟工具](https://web.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2856) |
+| 36 | **貪食蛇互動遊戲** | 經典貪食蛇遊戲 | [開啟工具](https://web.smes.tyc.edu.tw/smes_html/snake_game.html) |
+| 37 | **聲波擴散360小遊戲** | 聲波視覺化互動遊戲 | [開啟工具](https://web.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2863) |
+| 38 | **聲音互動小遊戲** | 透過聲音控制的互動遊戲 | [開啟工具](https://web.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=14&nsn=2859) |
 | 39 | **孔明神算：心靈感應預言魔術** | 神奇的心靈感應預言魔術遊戲 | [開啟工具](https://claude.ai/public/artifacts/982f7b1c-8302-4112-a05f-342ad24bd421) |
 | 50 | **童趣學園** | 專為兒童設計的快樂學習探索樂園，結合趣味與學習 | [開啟工具](https://cagoooo.github.io/kids/) |
 | 69 | **猴子丟香蕉-投擲大戰爭** | 是一款充滿趣味與挑戰的互動投擲遊戲！玩家將化身為靈活的小猴子，在熱帶叢林中展開一場香蕉大戰。 | [開啟工具](https://cagoooo.github.io/monkey/) |
