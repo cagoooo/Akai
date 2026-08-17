@@ -19,8 +19,6 @@ interface BulletinHeroProps {
 }
 
 export function BulletinHero({ toolCount }: BulletinHeroProps = {}) {
-  const [avatarError, setAvatarError] = useState(false);
-
   // 動態讀取當前版本（顯示在雙膠帶的 NEW 膠帶上）
   const { localVersion } = useVersionCheck({ intervalMs: 60 * 60 * 1000 });
   const displayVersion = localVersion?.version ? `v${localVersion.version}` : 'v3.6.1';
@@ -189,6 +187,8 @@ export function BulletinHero({ toolCount }: BulletinHeroProps = {}) {
 }
 
 function AkaiPolaroid() {
+  const [avatarError, setAvatarError] = useState(false);
+
   return (
     <div className="bulletin-akai-polaroid" style={{ position: 'relative', justifySelf: 'center', maxWidth: 300 }}>
       {/* 對話泡泡 */}

@@ -520,12 +520,22 @@ export function BulletinToolDetail() {
                 <div
                   style={{
                     position: 'absolute',
-                    bottom: 8,
-                    right: 8,
-                    transform: 'rotate(-12deg)',
+                    bottom: 14,
+                    right: 14,
+                    border: `3px solid ${tokens.red}`,
+                    color: tokens.red,
+                    padding: '4px 12px',
+                    fontSize: 11,
+                    fontWeight: 900,
+                    letterSpacing: '0.15em',
+                    borderRadius: 4,
+                    fontFamily: tokens.font.en,
+                    transform: 'rotate(-8deg)',
+                    opacity: 0.85,
+                    background: 'rgba(255,255,255,.7)',
                   }}
                 >
-                  <Stamp color={C.fg} text="AKAI" subtext="2026" size={54} />
+                  APPROVED
                 </div>
 
                 <Stamp trigger={stampTrigger}>OPENED</Stamp>
