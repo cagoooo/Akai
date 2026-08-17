@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { tools } from '@/lib/data';
 
 const SITE_URL = 'https://cagoooo.github.io/Akai';
-const AUTHOR_URL = 'https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5';
+const AUTHOR_URL = 'https://www.smes.tyc.edu.tw/modules/school/index.php?department_id=2&zone_id=0&page_id=2&content_id=11&type=news&from_op=all_news#a5';
 const SCHOOL_NAME = '桃園市龍潭區石門國民小學';
 const SITE_NAME = '科技教育創新專區';
 

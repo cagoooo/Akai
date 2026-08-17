@@ -627,7 +627,7 @@ function generateCelebration100PageHtml() {
 
   <footer class="footer">
     Made with ❤ by <a href="../">阿凱老師</a> ·
-    <a href="https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5" target="_blank" rel="noopener noreferrer">桃園市龍潭區石門國民小學</a>
+    <a href="https://www.smes.tyc.edu.tw/modules/school/index.php?department_id=2&zone_id=0&page_id=2&content_id=11&type=news&from_op=all_news#a5" target="_blank" rel="noopener noreferrer">桃園市龍潭區石門國民小學</a>
     · MIT License · 影片音樂 CC BY
   </footer>
 
@@ -857,7 +857,7 @@ function generateCelebration100DialogPageHtml() {
 
   <footer class="footer">
     Made with ❤ by <a href="../">阿凱老師</a> ·
-    <a href="https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5" target="_blank" rel="noopener noreferrer">桃園市龍潭區石門國民小學</a>
+    <a href="https://www.smes.tyc.edu.tw/modules/school/index.php?department_id=2&zone_id=0&page_id=2&content_id=11&type=news&from_op=all_news#a5" target="_blank" rel="noopener noreferrer">桃園市龍潭區石門國民小學</a>
     · MIT License · Kiki &amp; Gordon by NotebookLM AI
   </footer>
 
