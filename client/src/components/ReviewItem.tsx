@@ -206,14 +206,14 @@ export function ReviewItem({ review, toolId, onReviewUpdated }: ReviewItemProps)
                                 <DropdownMenuContent align="end">
                                     <DropdownMenuItem onClick={handleEdit}>
                                         <Pencil className="w-4 h-4 mr-2" />
-                                        編輯
+                                        <span>編輯</span>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem
                                         onClick={() => setShowDeleteDialog(true)}
                                         className="text-red-600"
                                     >
                                         <Trash2 className="w-4 h-4 mr-2" />
-                                        刪除
+                                        <span>刪除</span>
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
@@ -236,7 +236,7 @@ export function ReviewItem({ review, toolId, onReviewUpdated }: ReviewItemProps)
                                     disabled={saving}
                                 >
                                     <X className="w-4 h-4 mr-1" />
-                                    取消
+                                    <span>取消</span>
                                 </Button>
                                 <Button
                                     size="sm"
@@ -244,7 +244,7 @@ export function ReviewItem({ review, toolId, onReviewUpdated }: ReviewItemProps)
                                     disabled={saving || !editContent.trim()}
                                 >
                                     <Check className="w-4 h-4 mr-1" />
-                                    儲存
+                                    <span>儲存</span>
                                 </Button>
                             </div>
                         </div>

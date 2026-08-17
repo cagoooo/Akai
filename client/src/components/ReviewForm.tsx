@@ -115,7 +115,7 @@ export function ReviewForm({ toolId, toolTitle, onReviewSubmitted }: ReviewFormP
                     </p>
                     <Button onClick={signIn} disabled={authLoading} className="gap-2">
                         <LogIn className="w-4 h-4" />
-                        使用 Google 登入
+                        <span>使用 Google 登入</span>
                     </Button>
                 </CardContent>
             </Card>
@@ -177,11 +177,11 @@ export function ReviewForm({ toolId, toolTitle, onReviewSubmitted }: ReviewFormP
                         className="gap-2"
                     >
                         {submitting ? (
-                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin inline-block" />
                         ) : (
                             <Send className="w-4 h-4" />
                         )}
-                        送出評論
+                        <span>送出評論</span>
                     </Button>
                 </form>
             </CardContent>

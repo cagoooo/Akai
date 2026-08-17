@@ -44,6 +44,19 @@ export class ErrorBoundary extends Component<Props, State> {
     }
 
     /**
+     * 判斷錯誤是不是「Google 翻譯 / 外掛造成的 DOM 脫節錯誤」
+     * （例如 Failed to execute 'insertBefore' / 'removeChild' on 'Node'）
+     */
+    private static isDomDesyncError(error: Error): boolean {
+        const msg = String(error?.message || '');
+        const name = String(error?.name || '');
+        return (
+            name === 'NotFoundError' ||
+            /insertBefore|removeChild|not a child of this node/i.test(msg)
+        );
+    }
+
+    /**
      * 接住 chunk error → 強制清 SW + reload 一次。
      * 用 sessionStorage 旗標防無限循環（reload 過一次後若還噴 chunk error，就改顯示一般錯誤畫面）
      */
@@ -76,6 +89,8 @@ export class ErrorBoundary extends Component<Props, State> {
         window.location.reload();
     }
 
+    private domDesyncRetryCount = 0;
+
     public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
         this.setState({ errorInfo });
 
@@ -85,6 +100,17 @@ export class ErrorBoundary extends Component<Props, State> {
             console.warn('[ErrorBoundary] 偵測到 chunk error，啟動自癒流程', error.message);
             void this.handleChunkError();
             return; // 不繼續跑 Sentry / Firestore 紀錄（不算 bug）
+        }
+
+        // 🛡️ DOM 脫節（如 Google Translate / 插件插入節點）自癒：
+        // 自動嘗試重置 React 虛擬 DOM 狀態一次，避免白畫面
+        if (ErrorBoundary.isDomDesyncError(error) && this.domDesyncRetryCount < 2) {
+            this.domDesyncRetryCount++;
+            console.warn('[ErrorBoundary] 偵測到 DOM 脫節錯誤，自動重試恢復渲染...', error.message);
+            setTimeout(() => {
+                this.setState({ hasError: false, error: null, errorInfo: null });
+            }, 50);
+            return;
         }
 
         // 呼叫外部錯誤處理函式

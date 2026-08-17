@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useState } from 'react';
 import { tokens } from '@/design/tokens';
 import { Tape } from '@/components/primitives/Tape';
 import { Pin } from '@/components/primitives/Pin';
@@ -19,6 +19,8 @@ interface BulletinHeroProps {
 }
 
 export function BulletinHero({ toolCount }: BulletinHeroProps = {}) {
+  const [avatarError, setAvatarError] = useState(false);
+
   // 動態讀取當前版本（顯示在雙膠帶的 NEW 膠帶上）
   const { localVersion } = useVersionCheck({ intervalMs: 60 * 60 * 1000 });
   const displayVersion = localVersion?.version ? `v${localVersion.version}` : 'v3.6.1';
@@ -264,21 +266,22 @@ function AkaiPolaroid() {
             background: tokens.accentSoft,
             overflow: 'hidden',
             position: 'relative',
+            display: avatarError ? 'grid' : 'block',
+            placeItems: avatarError ? 'center' : undefined,
           }}
         >
-          <img
-            src={`${import.meta.env.BASE_URL}assets/Akai.png`}
-            alt="阿凱老師"
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            onError={(e) => {
-              const el = e.currentTarget as HTMLImageElement;
-              el.style.display = 'none';
-              (el.parentElement as HTMLElement).textContent = '👨‍🏫';
-              (el.parentElement as HTMLElement).style.display = 'grid';
-              (el.parentElement as HTMLElement).style.placeItems = 'center';
-              (el.parentElement as HTMLElement).style.fontSize = '96px';
-            }}
-          />
+          {!avatarError ? (
+            <img
+              src={`${import.meta.env.BASE_URL}assets/Akai.png`}
+              alt="阿凱老師"
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              onError={() => {
+                setAvatarError(true);
+              }}
+            />
+          ) : (
+            <div style={{ fontSize: '96px', userSelect: 'none' }}>👨‍🏫</div>
+          )}
           {/* 裝飾貼紙 */}
           <div
             style={{

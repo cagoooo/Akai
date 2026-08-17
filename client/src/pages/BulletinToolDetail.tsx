@@ -214,6 +214,7 @@ export function BulletinToolDetail() {
 
   const [heartTrigger, setHeartTrigger] = useState(0);
   const [stampTrigger, setStampTrigger] = useState(0);
+  const [detailImgError, setDetailImgError] = useState(false);
 
   // 取得工具資料
   const { data: allTools, isLoading: toolsLoading } = useQuery({
@@ -486,14 +487,13 @@ export function BulletinToolDetail() {
                   placeItems: 'center',
                 }}
               >
-                {previewSrc ? (
+                {previewSrc && !detailImgError ? (
                   <img
                     src={previewSrc}
                     alt={tool.title}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    onError={(e) => {
-                      const img = e.currentTarget;
-                      img.style.display = 'none';
+                    onError={() => {
+                      setDetailImgError(true);
                     }}
                   />
                 ) : (
@@ -520,33 +520,24 @@ export function BulletinToolDetail() {
                 <div
                   style={{
                     position: 'absolute',
-                    bottom: 14,
-                    right: 14,
-                    border: `3px solid ${tokens.red}`,
-                    color: tokens.red,
-                    padding: '4px 12px',
-                    fontSize: 11,
-                    fontWeight: 900,
-                    letterSpacing: '0.15em',
-                    borderRadius: 4,
-                    fontFamily: tokens.font.en,
-                    transform: 'rotate(-8deg)',
-                    opacity: 0.85,
-                    background: 'rgba(255,255,255,.7)',
+                    bottom: 8,
+                    right: 8,
+                    transform: 'rotate(-12deg)',
                   }}
                 >
-                  APPROVED
+                  <Stamp color={C.fg} text="AKAI" subtext="2026" size={54} />
                 </div>
 
                 <Stamp trigger={stampTrigger}>OPENED</Stamp>
               </div>
 
-              {/* 拍立得底部 caption */}
-              <div style={{ marginTop: 14, textAlign: 'center', fontFamily: tokens.font.tc }}>
+              {/* 拍立得下緣：工具標題 */}
+              <div style={{ padding: '16px 6px 4px 6px' }}>
                 <div
                   style={{
-                    fontSize: 20,
-                    fontWeight: 800,
+                    fontSize: 22,
+                    fontWeight: 900,
+                    fontFamily: tokens.font.tc,
                     fontStyle: 'italic',
                     color: tokens.ink,
                     lineHeight: 1.3,
@@ -590,7 +581,7 @@ export function BulletinToolDetail() {
                   gap: 8,
                 }}
               >
-                ⚡ 立即使用
+                <span>⚡ 立即使用</span>
               </button>
               <button
                 type="button"
@@ -611,7 +602,7 @@ export function BulletinToolDetail() {
                   gap: 6,
                 }}
               >
-                📋 複製連結
+                <span>📋 複製連結</span>
               </button>
               <button
                 type="button"

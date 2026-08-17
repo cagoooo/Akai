@@ -31,6 +31,7 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0, highlighte
 
   const [heartTrigger, setHeartTrigger] = useState(0);
   const [stampTrigger, setStampTrigger] = useState(0);
+  const [imgError, setImgError] = useState(false);
 
   const catKey = getCategoryKey(tool.category);
   const C = tokens.cat[catKey];
@@ -140,7 +141,7 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0, highlighte
             cursor: 'pointer',
           }}
         >
-          {previewSrc ? (
+          {previewSrc && !imgError ? (
             <img
               src={previewSrc}
               alt={tool.title}
@@ -155,16 +156,8 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0, highlighte
                 objectFit: 'cover',
                 display: 'block',
               }}
-              onError={(e) => {
-                // 預覽圖載入失敗 → 退回顯示 emoji
-                const img = e.currentTarget;
-                const parent = img.parentElement;
-                if (!parent) return;
-                img.style.display = 'none';
-                const fallback = document.createElement('div');
-                fallback.style.fontSize = '64px';
-                fallback.textContent = emoji;
-                parent.insertBefore(fallback, img);
+              onError={() => {
+                setImgError(true);
               }}
             />
           ) : (

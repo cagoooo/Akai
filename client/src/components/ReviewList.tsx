@@ -54,13 +54,13 @@ export function ReviewList({ toolId, toolTitle }: ReviewListProps) {
                     <CardTitle className="text-lg flex items-center justify-between flex-wrap gap-3">
                         <span className="flex items-center gap-2">
                             <MessageSquare className="w-5 h-5" />
-                            評論與評分
+                            <span>評論與評分</span>
                         </span>
                         {rating && (
                             <div className="flex items-center gap-2 text-base font-normal">
                                 <StarRating rating={rating.averageRating} readonly size="sm" showValue />
                                 <span className="text-muted-foreground">
-                                    ({rating.totalReviews} 則評論)
+                                    <span>({rating.totalReviews} 則評論)</span>
                                 </span>
                             </div>
                         )}
@@ -94,7 +94,7 @@ export function ReviewList({ toolId, toolTitle }: ReviewListProps) {
                                 )}
                             >
                                 <span className="mr-1">{opt.icon}</span>
-                                {opt.label}
+                                <span>{opt.label}</span>
                             </button>
                         ))}
                     </div>
