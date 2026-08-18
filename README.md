@@ -31,14 +31,12 @@
 「教育科技創新專區」是一個整合多種教育工具的平台，由阿凱老師開發維護。平台提供多種實用的教育資源，包括：
 
 | 工具 | 說明 |
-|---------|------|
-| [🗨️ 線上即時客服](https://chat.smes.tyc.edu.tw) | 提供即時的線上教育支援和諮詢服務 |
-| [💡 激發教案靈感](https://lesson.smes.tyc.edu.tw) | 為教師提供創新的教學設計靈感 |
+|------|------|
+| [🗨️ 線上即時客服](https://document-ai-companion-ipad4.replit.app/shared/A4uyH5OdHI) | 提供即時的線上教育支援和諮詢服務 |
 | [🗳️ 學生即時投票系統](https://cagoooo.github.io/vote/) | 即時收集學生意見的投票平台 |
-| [📖 PIRLS閱讀理解生成](https://pirls.smes.tyc.edu.tw) | 專業的閱讀理解評估工具 |
-| [📱 QRCode批次產生器](https://qrcode.smes.tyc.edu.tw) | 便捷的QR碼批量生成工具 |
-| [🎮 蜂類配對消消樂](https://bee.smes.tyc.edu.tw) | 寓教於樂的教育遊戲 |
-| ✍️ 點「石」成金 (評語優化) | 學生評語優化工具 |
+| [📖 PIRLS閱讀理解生成](https://pirlss.smes.tyc.edu.tw/) | 專業的閱讀理解評估工具 |
+| [🎮 蜂類配對消消樂](https://cagoooo.github.io/bee/) | 寓教於樂的教育遊戲 |
+| [✍️ 點「石」成金🐝(評語優化)](https://line.me/R/ti/p/@733oiboa?oat_content=url&ts=05120012) | 學生評語優化工具 |
 | [📊 國小期中考成績篩選工具](https://cagoooo.github.io/filter/) | 協助教師快速分析與篩選期中考成績 |
 | [🗺️ 2026 親職日場地配置圖](https://sites.google.com/mail2.smes.tyc.edu.tw/academic/2026%E8%A6%AA%E8%81%B7%E6%97%A5%E5%A0%B4%E5%9C%B0%E9%85%8D%E7%BD%AE) | 提供親職日完整場地配置與動線規劃 |
 
