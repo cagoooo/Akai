@@ -10,9 +10,14 @@ beforeEach(() => {
   // P0-1 草稿存在 sessionStorage，測試之間必須互相隔離
   sessionStorage.clear();
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
-    matches: true, media: query, onchange: null,
-    addEventListener: vi.fn(), removeEventListener: vi.fn(),
-    addListener: vi.fn(), removeListener: vi.fn(), dispatchEvent: vi.fn(),
+    matches: true,
+    media: query,
+    onchange: null,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    dispatchEvent: vi.fn(),
   })) as unknown as typeof window.matchMedia;
 });
 
@@ -20,7 +25,15 @@ function renderWizard(open = true, onComplete = vi.fn(), onDismiss = vi.fn()) {
   return {
     onComplete,
     onDismiss,
-    ...render(<AudienceOnboardingWizard open={open} tools={[]} onComplete={onComplete} onDismiss={onDismiss} onLocateTool={noop} />),
+    ...render(
+      <AudienceOnboardingWizard
+        open={open}
+        tools={[]}
+        onComplete={onComplete}
+        onDismiss={onDismiss}
+        onLocateTool={noop}
+      />,
+    ),
   };
 }
 
@@ -50,7 +63,9 @@ describe('AudienceOnboardingWizard', () => {
     await user.click(screen.getByRole('button', { name: /大學老師/ }));
     await user.click(screen.getByRole('button', { name: /科任老師/ }));
     await user.click(screen.getByRole('button', { name: /直接看推薦/ }));
-    await waitFor(() => expect(onComplete).toHaveBeenCalledWith(expect.objectContaining({ schoolLevel: 'college' })));
+    await waitFor(() =>
+      expect(onComplete).toHaveBeenCalledWith(expect.objectContaining({ schoolLevel: 'college' })),
+    );
   });
 
   it('提供大學學生學段並保留 college profile', async () => {
@@ -59,7 +74,11 @@ describe('AudienceOnboardingWizard', () => {
     await user.click(screen.getByRole('button', { name: /我是學生/ }));
     await user.click(screen.getByRole('button', { name: /大學.*選你的學段/ }));
     await user.click(screen.getByRole('button', { name: /直接看推薦/ }));
-    await waitFor(() => expect(onComplete).toHaveBeenCalledWith(expect.objectContaining({ audience: 'student', schoolLevel: 'college' })));
+    await waitFor(() =>
+      expect(onComplete).toHaveBeenCalledWith(
+        expect.objectContaining({ audience: 'student', schoolLevel: 'college' }),
+      ),
+    );
   });
 
   // P0-1：關掉再開不再是「從頭來過」，而是接續上次選到一半的進度
@@ -71,11 +90,29 @@ describe('AudienceOnboardingWizard', () => {
     const onDismiss = vi.fn();
     const view = renderWizard(true, vi.fn(), onDismiss);
     await user.click(screen.getByRole('button', { name: /我是學生/ }));
-    view.rerender(<AudienceOnboardingWizard open={false} tools={[]} onComplete={vi.fn()} onDismiss={onDismiss} onLocateTool={noop} />);
+    view.rerender(
+      <AudienceOnboardingWizard
+        open={false}
+        tools={[]}
+        onComplete={vi.fn()}
+        onDismiss={onDismiss}
+        onLocateTool={noop}
+      />,
+    );
     expect(trigger).toHaveFocus();
-    view.rerender(<AudienceOnboardingWizard open tools={[]} onComplete={vi.fn()} onDismiss={onDismiss} onLocateTool={noop} />);
+    view.rerender(
+      <AudienceOnboardingWizard
+        open
+        tools={[]}
+        onComplete={vi.fn()}
+        onDismiss={onDismiss}
+        onLocateTool={noop}
+      />,
+    );
     // 接回學段步驟，並明講是接續來的
-    await waitFor(() => expect(screen.getByText(/已幫你接續上次選到一半的進度/)).toBeInTheDocument());
+    await waitFor(() =>
+      expect(screen.getByText(/已幫你接續上次選到一半的進度/)).toBeInTheDocument(),
+    );
     expect(screen.queryByRole('button', { name: /我是老師/ })).not.toBeInTheDocument();
     trigger.remove();
   });
@@ -85,11 +122,38 @@ describe('AudienceOnboardingWizard', () => {
     const onDismiss = vi.fn();
     const view = renderWizard(true, vi.fn(), onDismiss);
     await user.click(screen.getByRole('button', { name: /我是學生/ }));
-    view.rerender(<AudienceOnboardingWizard open={false} tools={[]} onComplete={vi.fn()} onDismiss={onDismiss} onLocateTool={noop} />);
-    view.rerender(<AudienceOnboardingWizard open tools={[]} onComplete={vi.fn()} onDismiss={onDismiss} onLocateTool={noop} />);
+    view.rerender(
+      <AudienceOnboardingWizard
+        open={false}
+        tools={[]}
+        onComplete={vi.fn()}
+        onDismiss={onDismiss}
+        onLocateTool={noop}
+      />,
+    );
+    view.rerender(
+      <AudienceOnboardingWizard
+        open
+        tools={[]}
+        onComplete={vi.fn()}
+        onDismiss={onDismiss}
+        onLocateTool={noop}
+      />,
+    );
     await user.click(await screen.findByRole('button', { name: '重新開始' }));
     expect(screen.getByRole('button', { name: /我是老師/ })).toBeInTheDocument();
     expect(sessionStorage.getItem('akai_audience_wizard_draft_v1')).toBeNull();
+  });
+
+  it('允許訪客免填身分先看熱門工具，且不儲存成個人化 profile', async () => {
+    const user = userEvent.setup();
+    const { onComplete } = renderWizard();
+    await user.click(screen.getByRole('button', { name: /先看熱門工具/ }));
+    expect(screen.getByText('大家都在用')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /告訴我身分，取得更精準推薦/ })).toBeInTheDocument();
+    expect(onComplete).not.toHaveBeenCalled();
+    await user.click(screen.getByRole('button', { name: /告訴我身分，取得更精準推薦/ }));
+    expect(screen.getByRole('button', { name: /我是老師/ })).toBeInTheDocument();
   });
 
   it('traps tab navigation and supports Escape dismissal', async () => {

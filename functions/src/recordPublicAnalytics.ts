@@ -28,6 +28,8 @@ const FUNNEL_EVENTS = new Set([
   'departmentSelected',
   'painPointsConfirmed',
   'resultsShown',
+  'quickPreviewStarted',
+  'quickPreviewResultsShown',
   'dismissed',
   'reshuffled',
 ]);
@@ -39,6 +41,7 @@ const WIZARD_STEPS = new Set([
   'pain-points',
   'thinking',
   'results',
+  'general-results',
 ]);
 const SELECTIONS: Record<string, Set<string>> = {
   audience: new Set(['teacher', 'student']),

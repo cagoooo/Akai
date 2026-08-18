@@ -18,7 +18,9 @@ type ReasonResolution = {
   isPrecise: boolean;
 };
 
-const BASE_SLOT_TARGETS: ReadonlyArray<readonly [Exclude<RecommendationSlot, 'popular' | 'discovery'>, number]> = [
+const BASE_SLOT_TARGETS: ReadonlyArray<
+  readonly [Exclude<RecommendationSlot, 'popular' | 'discovery'>, number]
+> = [
   ['universal', 2],
   ['role', 2],
   ['stage', 1],
@@ -110,7 +112,10 @@ function getMatchedPainPoints(fit: AudienceFit, profile: AudienceProfile): PainP
  * 讓「🎯 命中你的需求」徽章名實相符。最多點名 2 個痛點，後接原本的理由。
  */
 function painPointReason(matched: PainPoint[], baseReason: string): string {
-  const labels = matched.slice(0, 2).map((p) => PAIN_POINT_LABELS[p]).filter(Boolean);
+  const labels = matched
+    .slice(0, 2)
+    .map((p) => PAIN_POINT_LABELS[p])
+    .filter(Boolean);
   if (labels.length === 0) return baseReason;
   return `對應你想解決的「${labels.join('、')}」：${baseReason}`;
 }
@@ -174,7 +179,10 @@ function includesProfileValue<T extends string>(
   restrictions: readonly T[] | undefined,
   profileValue: T | undefined,
 ): boolean {
-  return restrictions === undefined || (profileValue !== undefined && restrictions.includes(profileValue));
+  return (
+    restrictions === undefined ||
+    (profileValue !== undefined && restrictions.includes(profileValue))
+  );
 }
 
 /**
@@ -195,8 +203,8 @@ function includesProfileValue<T extends string>(
 function passesDepartmentGate(fit: AudienceFit, profile: AudienceProfile): boolean {
   if (fit.departments === undefined) return true;
 
-  const matchesDepartment = profile.department !== undefined
-    && fit.departments.includes(profile.department);
+  const matchesDepartment =
+    profile.department !== undefined && fit.departments.includes(profile.department);
 
   // 沒明寫 teacherRoles → 視為純行政工具（向後相容）
   if (fit.teacherRoles === undefined) {
@@ -222,7 +230,10 @@ function isEligible(fit: AudienceFit, profile: AudienceProfile): boolean {
   return passesDepartmentGate(fit, profile);
 }
 
-function readReason(fit: AudienceFit, key: keyof AudienceFit['reasons'] | undefined): string | undefined {
+function readReason(
+  fit: AudienceFit,
+  key: keyof AudienceFit['reasons'] | undefined,
+): string | undefined {
   if (key === undefined) return undefined;
   const reason = fit.reasons[key]?.trim();
   return reason || undefined;
@@ -238,15 +249,16 @@ function resolveReason(fit: AudienceFit, profile: AudienceProfile): ReasonResolu
 
   const departmentReason = readReason(fit, profile.department);
   if (departmentReason) {
-    const isDepartmentScoped = fit.departments?.includes(profile.department!)
-      && (fit.teacherRoles === undefined || fit.teacherRoles.includes('admin'));
+    const isDepartmentScoped =
+      fit.departments?.includes(profile.department!) &&
+      (fit.teacherRoles === undefined || fit.teacherRoles.includes('admin'));
     return { reason: departmentReason, isPrecise: Boolean(isDepartmentScoped) };
   }
 
   const roleReason = readReason(fit, profile.teacherRole);
   if (roleReason) {
-    const isRoleScoped = profile.teacherRole !== undefined
-      && fit.teacherRoles?.includes(profile.teacherRole);
+    const isRoleScoped =
+      profile.teacherRole !== undefined && fit.teacherRoles?.includes(profile.teacherRole);
     return { reason: roleReason, isPrecise: Boolean(isRoleScoped) };
   }
 
@@ -259,17 +271,20 @@ function resolveReason(fit: AudienceFit, profile: AudienceProfile): ReasonResolu
 function classifySlot(fit: AudienceFit, profile: AudienceProfile): RecommendationSlot {
   if (profile.audience === 'student') return 'universal';
 
-  const hasDepartmentMatch = fit.departments !== undefined
-    && profile.department !== undefined
-    && fit.departments.includes(profile.department);
-  const hasRoleMatch = fit.teacherRoles !== undefined
-    && profile.teacherRole !== undefined
-    && fit.teacherRoles.includes(profile.teacherRole);
+  const hasDepartmentMatch =
+    fit.departments !== undefined &&
+    profile.department !== undefined &&
+    fit.departments.includes(profile.department);
+  const hasRoleMatch =
+    fit.teacherRoles !== undefined &&
+    profile.teacherRole !== undefined &&
+    fit.teacherRoles.includes(profile.teacherRole);
   if (hasDepartmentMatch || hasRoleMatch) return 'role';
 
-  const hasStageMatch = fit.schoolLevels !== undefined
-    && profile.schoolLevel !== undefined
-    && fit.schoolLevels.includes(profile.schoolLevel);
+  const hasStageMatch =
+    fit.schoolLevels !== undefined &&
+    profile.schoolLevel !== undefined &&
+    fit.schoolLevels.includes(profile.schoolLevel);
   if (hasStageMatch) return 'stage';
 
   return 'universal';
@@ -285,39 +300,45 @@ function rankTool(
   recentlyUsedIds: ReadonlySet<number> | undefined,
 ): AudienceRecommendation {
   const isTeacherProfile = profile.audience === 'teacher';
-  const roleMatch = isTeacherProfile
-    && fit.teacherRoles !== undefined
-    && profile.teacherRole !== undefined
-    && fit.teacherRoles.includes(profile.teacherRole);
-  const departmentMatch = isTeacherProfile
-    && fit.departments !== undefined
-    && profile.department !== undefined
-    && fit.departments.includes(profile.department);
-  const stageMatch = isTeacherProfile
-    && fit.schoolLevels !== undefined
-    && profile.schoolLevel !== undefined
-    && fit.schoolLevels.includes(profile.schoolLevel);
+  const roleMatch =
+    isTeacherProfile &&
+    fit.teacherRoles !== undefined &&
+    profile.teacherRole !== undefined &&
+    fit.teacherRoles.includes(profile.teacherRole);
+  const departmentMatch =
+    isTeacherProfile &&
+    fit.departments !== undefined &&
+    profile.department !== undefined &&
+    fit.departments.includes(profile.department);
+  const stageMatch =
+    isTeacherProfile &&
+    fit.schoolLevels !== undefined &&
+    profile.schoolLevel !== undefined &&
+    fit.schoolLevels.includes(profile.schoolLevel);
   const reason = resolveReason(fit, profile);
   const matched = getMatchedPainPoints(fit, profile);
   const matchedPainPoints = matched.length;
-  const painPointScore = Math.min(matchedPainPoints, WEIGHTS.painPointMaxMatches) * WEIGHTS.painPointPerMatch;
+  const painPointScore =
+    Math.min(matchedPainPoints, WEIGHTS.painPointMaxMatches) * WEIGHTS.painPointPerMatch;
   // P0-B：命中痛點時，理由改為點名使用者所選痛點；否則沿用原本的職務/處室理由
-  const finalReason = matchedPainPoints > 0 ? painPointReason(matched, reason.reason) : reason.reason;
+  const finalReason =
+    matchedPainPoints > 0 ? painPointReason(matched, reason.reason) : reason.reason;
   const recentlyUsedPenalty = recentlyUsedIds?.has(tool.id) ? WEIGHTS.recentlyUsedPenalty : 0;
 
   return {
     tool,
     reason: finalReason,
-    score: fit.priority
-      + (roleMatch ? WEIGHTS.roleMatch : 0)
-      + (departmentMatch ? WEIGHTS.departmentMatch : 0)
-      + (stageMatch ? WEIGHTS.stageMatch : 0)
-      + (reason.isPrecise ? WEIGHTS.preciseReason : 0)
-      + painPointScore
-      + popularityBonus(tool, maxClicks)
-      + trendingBonus(tool, maxRecentClicks)
-      + freshnessBonus(tool, now)
-      - recentlyUsedPenalty,
+    score:
+      fit.priority +
+      (roleMatch ? WEIGHTS.roleMatch : 0) +
+      (departmentMatch ? WEIGHTS.departmentMatch : 0) +
+      (stageMatch ? WEIGHTS.stageMatch : 0) +
+      (reason.isPrecise ? WEIGHTS.preciseReason : 0) +
+      painPointScore +
+      popularityBonus(tool, maxClicks) +
+      trendingBonus(tool, maxRecentClicks) +
+      freshnessBonus(tool, now) -
+      recentlyUsedPenalty,
     slot: classifySlot(fit, profile),
     matchedPainPoints,
   };
@@ -332,10 +353,9 @@ function composeRecommendationSlots(
   const selectedIds = new Set<number>();
   const selectedFamilyIds = new Set<number>();
 
-  const isSelected = (recommendation: AudienceRecommendation): boolean => (
-    selectedIds.has(recommendation.tool.id)
-    || selectedFamilyIds.has(getToolFamilyId(recommendation.tool, familyIds))
-  );
+  const isSelected = (recommendation: AudienceRecommendation): boolean =>
+    selectedIds.has(recommendation.tool.id) ||
+    selectedFamilyIds.has(getToolFamilyId(recommendation.tool, familyIds));
 
   const select = (recommendation: AudienceRecommendation): void => {
     selected.push(recommendation);
@@ -348,7 +368,11 @@ function composeRecommendationSlots(
     for (const recommendation of ranked) {
       if (recommendation.slot !== slot || isSelected(recommendation)) continue;
       select(recommendation);
-      if (selected.length >= limit || selected.filter((item) => item.slot === slot).length >= target) break;
+      if (
+        selected.length >= limit ||
+        selected.filter((item) => item.slot === slot).length >= target
+      )
+        break;
     }
   }
 
@@ -405,19 +429,86 @@ export function recommendTools(
   const familyIds = buildToolFamilyIds(tools);
 
   // 把「已看過的工具」換算成「已看過的家族」，避免下一波冒出同家族兄弟
-  const excludedFamilies = excludeIds && excludeIds.size > 0
-    ? new Set(Array.from(excludeIds, (id) => familyIds.get(id) ?? id))
-    : null;
+  const excludedFamilies =
+    excludeIds && excludeIds.size > 0
+      ? new Set(Array.from(excludeIds, (id) => familyIds.get(id) ?? id))
+      : null;
 
   const eligible = tools.filter(
-    (tool) => !tool.isInternal && tool.audienceFit && isEligible(tool.audienceFit, profile)
-      && !(excludedFamilies && excludedFamilies.has(familyIds.get(tool.id) ?? tool.id)),
+    (tool) =>
+      !tool.isInternal &&
+      tool.audienceFit &&
+      isEligible(tool.audienceFit, profile) &&
+      !(excludedFamilies && excludedFamilies.has(familyIds.get(tool.id) ?? tool.id)),
   );
   const maxClicks = eligible.reduce((max, tool) => Math.max(max, getToolClicks(tool)), 0);
-  const maxRecentClicks = eligible.reduce((max, tool) => Math.max(max, getToolRecentClicks(tool)), 0);
+  const maxRecentClicks = eligible.reduce(
+    (max, tool) => Math.max(max, getToolRecentClicks(tool)),
+    0,
+  );
 
   const ranked = eligible
-    .map((tool) => rankTool(tool, tool.audienceFit!, profile, maxClicks, maxRecentClicks, now, recentlyUsedIds))
+    .map((tool) =>
+      rankTool(tool, tool.audienceFit!, profile, maxClicks, maxRecentClicks, now, recentlyUsedIds),
+    )
+    .sort((left, right) => right.score - left.score || left.tool.id - right.tool.id);
+
+  return composeRecommendationSlots(dedupeRankedFamilies(ranked, familyIds), limit, familyIds);
+}
+
+/**
+ * 未填身分時的快速預覽：只從同時適合教師與學生、且沒有學段／職務限制的工具中挑選。
+ * 這條路徑的目的在於先讓訪客看見價值，不能把「通用瀏覽」假裝成某一種身分的個人化推薦。
+ */
+export function recommendPopularTools(
+  tools: EducationalTool[],
+  limit = 6,
+  excludeIds?: ReadonlySet<number>,
+  recentlyUsedIds?: ReadonlySet<number>,
+): AudienceRecommendation[] {
+  if (!Number.isInteger(limit) || limit <= 0) return [];
+  const now = Date.now();
+  const familyIds = buildToolFamilyIds(tools);
+  const excludedFamilies =
+    excludeIds && excludeIds.size > 0
+      ? new Set(Array.from(excludeIds, (id) => familyIds.get(id) ?? id))
+      : null;
+  const isEligible = (tool: EducationalTool) => {
+    const fit = tool.audienceFit;
+    return (
+      !tool.isInternal &&
+      fit !== undefined &&
+      fit.audiences.includes('teacher') &&
+      fit.audiences.includes('student') &&
+      fit.schoolLevels === undefined &&
+      fit.teacherRoles === undefined &&
+      fit.departments === undefined &&
+      !(excludedFamilies && excludedFamilies.has(familyIds.get(tool.id) ?? tool.id))
+    );
+  };
+  const eligible = tools.filter(isEligible);
+  const maxClicks = eligible.reduce((max, tool) => Math.max(max, getToolClicks(tool)), 0);
+  const maxRecentClicks = eligible.reduce(
+    (max, tool) => Math.max(max, getToolRecentClicks(tool)),
+    0,
+  );
+  const ranked = eligible
+    .map((tool): AudienceRecommendation => {
+      const fit = tool.audienceFit!;
+      const recentlyUsedPenalty = recentlyUsedIds?.has(tool.id) ? WEIGHTS.recentlyUsedPenalty : 0;
+      return {
+        tool,
+        reason: '不必先填資料也能直接使用，先從這個廣受歡迎的工具開始。',
+        score:
+          fit.priority +
+          popularityBonus(tool, maxClicks) +
+          trendingBonus(tool, maxRecentClicks) +
+          freshnessBonus(tool, now) -
+          recentlyUsedPenalty,
+        slot: getToolHotness(tool) > 0 ? 'popular' : 'discovery',
+        matchedPainPoints: 0,
+      };
+    })
     .sort((left, right) => right.score - left.score || left.tool.id - right.tool.id);
 
   return composeRecommendationSlots(dedupeRankedFamilies(ranked, familyIds), limit, familyIds);

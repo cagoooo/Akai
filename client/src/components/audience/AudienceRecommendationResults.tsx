@@ -18,36 +18,89 @@ export function badgeFor(rec: AudienceRecommendation): { label: string; kind: st
   return SLOT_BADGES[rec.slot] ?? SLOT_BADGES.universal;
 }
 
-export function AudienceRecommendationResults({ recommendations, onLocateTool, onReshuffle, firstRecommendationRef, recommendationHistory }: { recommendations: AudienceRecommendation[]; onLocateTool: (toolId: number) => void; onReshuffle?: () => void; firstRecommendationRef?: Ref<HTMLButtonElement>; /** 上一次推薦過的工具 id，用來標「👀 上次沒看到」 */ recommendationHistory?: ReadonlySet<number> }) {
+export function AudienceRecommendationResults({
+  recommendations,
+  onLocateTool,
+  onReshuffle,
+  firstRecommendationRef,
+  recommendationHistory,
+  isGeneralPreview = false,
+  onStartPersonalization,
+}: {
+  recommendations: AudienceRecommendation[];
+  onLocateTool: (toolId: number) => void;
+  onReshuffle?: () => void;
+  firstRecommendationRef?: Ref<HTMLButtonElement>;
+  /** 上一次推薦過的工具 id，用來標「👀 上次沒看到」 */ recommendationHistory?: ReadonlySet<number>;
+  /** 未填身分時先讓訪客看見價值的熱門工具預覽 */ isGeneralPreview?: boolean;
+  onStartPersonalization?: () => void;
+}) {
   const history = recommendationHistory ?? new Set<number>();
   // 便利貼色調：以這批工具 id 當種子 → 同一批顏色穩定不閃爍，「換一批」則換一套配色
   const tones = useMemo(
-    () => noteToneSequence(recommendations.length, recommendations.map((rec) => rec.tool.id).join('-')),
+    () =>
+      noteToneSequence(recommendations.length, recommendations.map((rec) => rec.tool.id).join('-')),
     [recommendations],
   );
-  return <section className="audience-wizard__results" aria-labelledby="audience-results-title">
-    <div className="audience-wizard__tape">為你精選</div>
-    <h2 id="audience-results-title">這些工具，現在就很好用</h2>
-    <p>依照你的身分，先從最能幫上忙的工具開始。</p>
-    <div className="audience-wizard__recommendations">
-      {recommendations.map((rec, index) => {
-        const { tool, reason } = rec;
-        const badge = badgeFor(rec);
-        // P1-2：新鮮度徽章與「為什麼推」徽章並存 —— 前者回答「為什麼這次才給你看」
-        const novelty = noveltyBadgeFor(tool, history);
-        return <button ref={index === 0 ? firstRecommendationRef : undefined} key={tool.id} type="button" className="audience-wizard__recommendation is-revealing" style={{ animationDelay: `${index * 75}ms` }} data-tool-id={tool.id} data-tone={tones[index]} onClick={() => onLocateTool(tool.id)}>
-          <span className="audience-wizard__pin" aria-hidden="true" />
-          <span className="audience-wizard__number">{String(index + 1).padStart(2, '0')}</span>
-          <span className={`audience-wizard__badge audience-wizard__badge--${badge.kind}`}>{badge.label}</span>
-          {novelty && <span className={`audience-wizard__novelty audience-wizard__novelty--${novelty.kind}`}>{novelty.label}</span>}
-          <strong>{tool.title}</strong><small>{reason}</small><span className="audience-wizard__go">查看工具卡 →</span>
-        </button>;
-      })}
-    </div>
-    {onReshuffle && (
-      <button type="button" className="audience-wizard__reshuffle" onClick={onReshuffle}>
-        🔄 換一批推薦
-      </button>
-    )}
-  </section>;
+  return (
+    <section className="audience-wizard__results" aria-labelledby="audience-results-title">
+      <div className="audience-wizard__tape">{isGeneralPreview ? '大家都在用' : '為你精選'}</div>
+      <h2 id="audience-results-title">這些工具，現在就很好用</h2>
+      <p>
+        {isGeneralPreview
+          ? '先不用填資料；想讓推薦更貼近你，再告訴我身分即可。'
+          : '依照你的身分，先從最能幫上忙的工具開始。'}
+      </p>
+      <div className="audience-wizard__recommendations">
+        {recommendations.map((rec, index) => {
+          const { tool, reason } = rec;
+          const badge = badgeFor(rec);
+          // P1-2：新鮮度徽章與「為什麼推」徽章並存 —— 前者回答「為什麼這次才給你看」
+          const novelty = noveltyBadgeFor(tool, history);
+          return (
+            <button
+              ref={index === 0 ? firstRecommendationRef : undefined}
+              key={tool.id}
+              type="button"
+              className="audience-wizard__recommendation is-revealing"
+              style={{ animationDelay: `${index * 75}ms` }}
+              data-tool-id={tool.id}
+              data-tone={tones[index]}
+              onClick={() => onLocateTool(tool.id)}
+            >
+              <span className="audience-wizard__pin" aria-hidden="true" />
+              <span className="audience-wizard__number">{String(index + 1).padStart(2, '0')}</span>
+              <span className={`audience-wizard__badge audience-wizard__badge--${badge.kind}`}>
+                {badge.label}
+              </span>
+              {novelty && (
+                <span
+                  className={`audience-wizard__novelty audience-wizard__novelty--${novelty.kind}`}
+                >
+                  {novelty.label}
+                </span>
+              )}
+              <strong>{tool.title}</strong>
+              <small>{reason}</small>
+              <span className="audience-wizard__go">查看工具卡 →</span>
+            </button>
+          );
+        })}
+      </div>
+      {onReshuffle && (
+        <button type="button" className="audience-wizard__reshuffle" onClick={onReshuffle}>
+          🔄 換一批推薦
+        </button>
+      )}
+      {isGeneralPreview && onStartPersonalization && (
+        <button
+          type="button"
+          className="audience-wizard__personalize"
+          onClick={onStartPersonalization}
+        >
+          🎯 告訴我身分，取得更精準推薦
+        </button>
+      )}
+    </section>
+  );
 }

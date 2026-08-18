@@ -201,6 +201,8 @@ export type AudienceFunnelEvent =
   | 'departmentSelected'
   | 'painPointsConfirmed'
   | 'resultsShown'
+  | 'quickPreviewStarted'
+  | 'quickPreviewResultsShown'
   | 'dismissed'
   | 'reshuffled';
 

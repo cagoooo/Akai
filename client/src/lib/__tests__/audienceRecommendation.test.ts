@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { AudienceFit, AudienceProfile } from '../audienceProfile';
 import type { EducationalTool } from '../data';
-import { recommendTools } from '../audienceRecommendation';
+import { recommendPopularTools, recommendTools } from '../audienceRecommendation';
 
 const makeFit = (overrides: Partial<AudienceFit> = {}): AudienceFit => ({
   audiences: ['teacher'],
@@ -27,22 +27,27 @@ const makeTool = (
   ...overrides,
 });
 
-const meetingTool = makeTool(84, makeFit({
-  priority: 90,
-  reasons: {
-    teacher: '快速整理會議內容。',
-    admin: '行政會議可直接摘要匯出。',
-  },
-}));
-
-const universalFillers = Array.from({ length: 8 }, (_, index) => makeTool(
-  index + 120,
+const meetingTool = makeTool(
+  84,
   makeFit({
-    painPoints: ['resource-discovery'],
-    priority: 50 - index,
-    reasons: { teacher: `老師推薦理由 ${index}` },
+    priority: 90,
+    reasons: {
+      teacher: '快速整理會議內容。',
+      admin: '行政會議可直接摘要匯出。',
+    },
   }),
-));
+);
+
+const universalFillers = Array.from({ length: 8 }, (_, index) =>
+  makeTool(
+    index + 120,
+    makeFit({
+      painPoints: ['resource-discovery'],
+      priority: 50 - index,
+      reasons: { teacher: `老師推薦理由 ${index}` },
+    }),
+  ),
+);
 
 describe('recommendTools', () => {
   it.each(['homeroom', 'subject', 'admin'] as const)('#84 會議工具可推薦給 %s', (teacherRole) => {
@@ -52,30 +57,40 @@ describe('recommendTools', () => {
       teacherRole,
     };
 
-    expect(recommendTools([meetingTool, ...universalFillers], profile).map(({ tool }) => tool.id))
-      .toContain(84);
+    expect(
+      recommendTools([meetingTool, ...universalFillers], profile).map(({ tool }) => tool.id),
+    ).toContain(84);
   });
 
   it('將 junior admin academic 的 #78 精準工具排在 discovery 前', () => {
-    const academicTool = makeTool(78, makeFit({
-      teacherRoles: ['admin'],
-      departments: ['academic'],
-      priority: 88,
-      reasons: { academic: '加速課程計畫審查。' },
-    }));
-    const discoveryTool = makeTool(79, makeFit({
-      schoolLevels: ['junior'],
-      priority: 20,
-      reasons: { teacher: '提供另一種教學選擇。' },
-    }));
-    const result = recommendTools(
-      [meetingTool, academicTool, discoveryTool, ...universalFillers],
-      { audience: 'teacher', schoolLevel: 'junior', teacherRole: 'admin', department: 'academic' },
+    const academicTool = makeTool(
+      78,
+      makeFit({
+        teacherRoles: ['admin'],
+        departments: ['academic'],
+        priority: 88,
+        reasons: { academic: '加速課程計畫審查。' },
+      }),
     );
+    const discoveryTool = makeTool(
+      79,
+      makeFit({
+        schoolLevels: ['junior'],
+        priority: 20,
+        reasons: { teacher: '提供另一種教學選擇。' },
+      }),
+    );
+    const result = recommendTools([meetingTool, academicTool, discoveryTool, ...universalFillers], {
+      audience: 'teacher',
+      schoolLevel: 'junior',
+      teacherRole: 'admin',
+      department: 'academic',
+    });
 
     expect(result).toHaveLength(6);
-    expect(result.findIndex(({ tool }) => tool.id === 78))
-      .toBeLessThan(result.findIndex(({ slot }) => slot === 'discovery'));
+    expect(result.findIndex(({ tool }) => tool.id === 78)).toBeLessThan(
+      result.findIndex(({ slot }) => slot === 'discovery'),
+    );
     expect(result.find(({ tool }) => tool.id === 78)).toMatchObject({
       reason: '加速課程計畫審查。',
       score: 153,
@@ -100,33 +115,47 @@ describe('recommendTools', () => {
     const valid = makeTool(1);
     const internal = makeTool(2, makeFit(), { isInternal: true });
     const missingFit: EducationalTool = { ...makeTool(3), audienceFit: undefined };
-    const studentOnly = makeTool(4, makeFit({
-      audiences: ['student'],
-      reasons: { student: '適合學生。' },
-    }));
+    const studentOnly = makeTool(
+      4,
+      makeFit({
+        audiences: ['student'],
+        reasons: { student: '適合學生。' },
+      }),
+    );
 
-    expect(recommendTools([valid, internal, missingFit, studentOnly], {
-      audience: 'teacher',
-      schoolLevel: 'elementary',
-      teacherRole: 'subject',
-    }, 10).map(({ tool }) => tool.id)).toEqual([1]);
+    expect(
+      recommendTools(
+        [valid, internal, missingFit, studentOnly],
+        {
+          audience: 'teacher',
+          schoolLevel: 'elementary',
+          teacherRole: 'subject',
+        },
+        10,
+      ).map(({ tool }) => tool.id),
+    ).toEqual([1]);
   });
 
   it('學生 profile 忽略 mixed tool 的老師學段、職務與處室限制', () => {
-    const mixed = makeTool(5, makeFit({
-      audiences: ['teacher', 'student'],
-      schoolLevels: ['senior'],
-      teacherRoles: ['admin'],
-      departments: ['academic'],
-      reasons: { teacher: '適合教師。', student: '適合學生自主練習。' },
-    }));
+    const mixed = makeTool(
+      5,
+      makeFit({
+        audiences: ['teacher', 'student'],
+        schoolLevels: ['senior'],
+        teacherRoles: ['admin'],
+        departments: ['academic'],
+        reasons: { teacher: '適合教師。', student: '適合學生自主練習。' },
+      }),
+    );
 
-    expect(recommendTools([mixed], {
-      audience: 'student',
-      schoolLevel: 'senior',
-      teacherRole: 'admin',
-      department: 'academic',
-    })).toEqual([
+    expect(
+      recommendTools([mixed], {
+        audience: 'student',
+        schoolLevel: 'senior',
+        teacherRole: 'admin',
+        department: 'academic',
+      }),
+    ).toEqual([
       expect.objectContaining({
         tool: mixed,
         reason: '適合學生自主練習。',
@@ -137,15 +166,18 @@ describe('recommendTools', () => {
   });
 
   it('學生理由缺失時使用中性 fallback，不退回教師理由', () => {
-    const mixed = makeTool(6, makeFit({
-      audiences: ['teacher', 'student'],
-      reasons: {
-        teacher: '這是僅供教師的推薦理由。',
-        student: '   ',
-        admin: '這是行政人員理由。',
-        academic: '這是教務處理由。',
-      },
-    }));
+    const mixed = makeTool(
+      6,
+      makeFit({
+        audiences: ['teacher', 'student'],
+        reasons: {
+          teacher: '這是僅供教師的推薦理由。',
+          student: '   ',
+          admin: '這是行政人員理由。',
+          academic: '這是教務處理由。',
+        },
+      }),
+    );
 
     const [result] = recommendTools([mixed], {
       audience: 'student',
@@ -163,73 +195,122 @@ describe('recommendTools', () => {
   it('正確套用教師學段、職務與行政處室限制', () => {
     const stage = makeTool(10, makeFit({ schoolLevels: ['junior'] }));
     const role = makeTool(11, makeFit({ teacherRoles: ['subject'] }));
-    const department = makeTool(12, makeFit({
-      teacherRoles: ['admin'],
-      departments: ['academic'],
-      reasons: { teacher: '適合教師。' },
-    }));
+    const department = makeTool(
+      12,
+      makeFit({
+        teacherRoles: ['admin'],
+        departments: ['academic'],
+        reasons: { teacher: '適合教師。' },
+      }),
+    );
 
-    expect(recommendTools([stage, role, department], {
-      audience: 'teacher', schoolLevel: 'elementary', teacherRole: 'subject',
-    }, 10).map(({ tool }) => tool.id)).toEqual([11]);
-    expect(recommendTools([department], {
-      audience: 'teacher', schoolLevel: 'junior', teacherRole: 'subject', department: 'academic',
-    })).toEqual([]);
-    expect(recommendTools([department], {
-      audience: 'teacher', schoolLevel: 'junior', teacherRole: 'admin', department: 'counseling',
-    })).toEqual([]);
-    expect(recommendTools([department], {
-      audience: 'teacher', schoolLevel: 'junior', teacherRole: 'admin', department: 'academic',
-    })[0]).toMatchObject({ score: 105, slot: 'role', reason: '適合教師。' });
+    expect(
+      recommendTools(
+        [stage, role, department],
+        {
+          audience: 'teacher',
+          schoolLevel: 'elementary',
+          teacherRole: 'subject',
+        },
+        10,
+      ).map(({ tool }) => tool.id),
+    ).toEqual([11]);
+    expect(
+      recommendTools([department], {
+        audience: 'teacher',
+        schoolLevel: 'junior',
+        teacherRole: 'subject',
+        department: 'academic',
+      }),
+    ).toEqual([]);
+    expect(
+      recommendTools([department], {
+        audience: 'teacher',
+        schoolLevel: 'junior',
+        teacherRole: 'admin',
+        department: 'counseling',
+      }),
+    ).toEqual([]);
+    expect(
+      recommendTools([department], {
+        audience: 'teacher',
+        schoolLevel: 'junior',
+        teacherRole: 'admin',
+        department: 'academic',
+      })[0],
+    ).toMatchObject({ score: 105, slot: 'role', reason: '適合教師。' });
   });
 
   it('理由依處室、職務、audience 優先序解析，並可退回 teacher', () => {
-    const exact = makeTool(20, makeFit({
-      teacherRoles: ['admin'],
-      departments: ['academic'],
-      reasons: {
-        teacher: '通用教師理由。',
-        admin: '行政職務理由。',
-        academic: '教務處精準理由。',
-      },
-    }));
-    const fallback = makeTool(21, makeFit({
-      teacherRoles: ['admin'],
-      departments: ['academic'],
-      reasons: { teacher: '  通用教師理由。  ', academic: '   ' },
-    }));
+    const exact = makeTool(
+      20,
+      makeFit({
+        teacherRoles: ['admin'],
+        departments: ['academic'],
+        reasons: {
+          teacher: '通用教師理由。',
+          admin: '行政職務理由。',
+          academic: '教務處精準理由。',
+        },
+      }),
+    );
+    const fallback = makeTool(
+      21,
+      makeFit({
+        teacherRoles: ['admin'],
+        departments: ['academic'],
+        reasons: { teacher: '  通用教師理由。  ', academic: '   ' },
+      }),
+    );
     const profile: AudienceProfile = {
-      audience: 'teacher', schoolLevel: 'junior', teacherRole: 'admin', department: 'academic',
+      audience: 'teacher',
+      schoolLevel: 'junior',
+      teacherRole: 'admin',
+      department: 'academic',
     };
 
     const result = recommendTools([exact, fallback], profile, 2);
     expect(result.find(({ tool }) => tool.id === 20)).toMatchObject({
-      reason: '教務處精準理由。', score: 115,
+      reason: '教務處精準理由。',
+      score: 115,
     });
     expect(result.find(({ tool }) => tool.id === 21)).toMatchObject({
-      reason: '通用教師理由。', score: 105,
+      reason: '通用教師理由。',
+      score: 105,
     });
   });
 
   it('only awards the precise reason bonus when the role is explicitly scoped', () => {
-    const universal = makeTool(22, makeFit({
-      priority: 70,
-      reasons: { teacher: '通用教師理由', homeroom: '導師專用文案' },
-    }));
-    const scoped = makeTool(23, makeFit({
-      priority: 70,
-      teacherRoles: ['homeroom'],
-      reasons: { teacher: '通用教師理由', homeroom: '導師專用文案' },
-    }));
+    const universal = makeTool(
+      22,
+      makeFit({
+        priority: 70,
+        reasons: { teacher: '通用教師理由', homeroom: '導師專用文案' },
+      }),
+    );
+    const scoped = makeTool(
+      23,
+      makeFit({
+        priority: 70,
+        teacherRoles: ['homeroom'],
+        reasons: { teacher: '通用教師理由', homeroom: '導師專用文案' },
+      }),
+    );
     const profile: AudienceProfile = {
-      audience: 'teacher', schoolLevel: 'elementary', teacherRole: 'homeroom',
+      audience: 'teacher',
+      schoolLevel: 'elementary',
+      teacherRole: 'homeroom',
     };
 
     expect(recommendTools([universal], profile)[0]).toMatchObject({
-      reason: '導師專用文案', score: 70, slot: 'universal',
+      reason: '導師專用文案',
+      score: 70,
+      slot: 'universal',
     });
     expect(recommendTools([scoped], profile)[0]).toMatchObject({
-      reason: '導師專用文案', score: 110, slot: 'role',
+      reason: '導師專用文案',
+      score: 110,
+      slot: 'role',
     });
   });
 
@@ -243,30 +324,41 @@ describe('recommendTools', () => {
       makeTool(6, makeFit({ schoolLevels: ['junior'], priority: 40 })),
     ];
     const result = recommendTools(tools, {
-      audience: 'teacher', schoolLevel: 'junior', teacherRole: 'subject',
+      audience: 'teacher',
+      schoolLevel: 'junior',
+      teacherRole: 'subject',
     });
 
     expect(result.map(({ tool }) => tool.id)).toEqual([1, 2, 4, 5, 6, 3]);
     expect(result.map(({ slot }) => slot)).toEqual([
-      'universal', 'universal', 'role', 'role', 'stage', 'discovery',
+      'universal',
+      'universal',
+      'role',
+      'role',
+      'stage',
+      'discovery',
     ]);
   });
 
   it('熱門保底席：即使 priority 偏低，排行榜最熱門的合格工具仍會露出', () => {
     // 模擬「馬力歐遊戲」情境：priority 低但點擊數全站最高
-    const popularGame = makeTool(9, makeFit({
-      audiences: ['teacher', 'student'],
-      priority: 42,
-      reasons: { teacher: '課間獎勵遊戲。', student: '挑戰關卡累積分數。' },
-    }), { totalClicks: 5000 });
-    const higherPriority = Array.from({ length: 6 }, (_, index) => makeTool(
-      200 + index,
-      makeFit({ priority: 95 - index }),
-      { totalClicks: 10 },
-    ));
+    const popularGame = makeTool(
+      9,
+      makeFit({
+        audiences: ['teacher', 'student'],
+        priority: 42,
+        reasons: { teacher: '課間獎勵遊戲。', student: '挑戰關卡累積分數。' },
+      }),
+      { totalClicks: 5000 },
+    );
+    const higherPriority = Array.from({ length: 6 }, (_, index) =>
+      makeTool(200 + index, makeFit({ priority: 95 - index }), { totalClicks: 10 }),
+    );
 
     const result = recommendTools([popularGame, ...higherPriority], {
-      audience: 'teacher', schoolLevel: 'elementary', teacherRole: 'homeroom',
+      audience: 'teacher',
+      schoolLevel: 'elementary',
+      teacherRole: 'homeroom',
     });
 
     expect(result.map(({ tool }) => tool.id)).toContain(9);
@@ -274,10 +366,12 @@ describe('recommendTools', () => {
   });
 
   it('人氣加分讓同 priority 的熱門工具分數更高，但個人化職務配對仍勝過純人氣', () => {
-    const studentFit = (priority: number) => makeFit({
-      audiences: ['teacher', 'student'], priority,
-      reasons: { teacher: '老師理由。', student: '學生理由。' },
-    });
+    const studentFit = (priority: number) =>
+      makeFit({
+        audiences: ['teacher', 'student'],
+        priority,
+        reasons: { teacher: '老師理由。', student: '學生理由。' },
+      });
     const hot = makeTool(1, studentFit(60), { totalClicks: 4000 });
     const cold = makeTool(2, studentFit(60), { totalClicks: 0 });
 
@@ -288,31 +382,60 @@ describe('recommendTools', () => {
 
     // 職務配對（+30）仍應勝過純人氣加分（≤28）：同 priority 下，
     // 有職務配對但零點擊的工具分數，應高於零配對但全站最熱門的工具。
-    const scopedCold = makeTool(3, makeFit({
-      teacherRoles: ['subject'], priority: 60,
-    }), { totalClicks: 0 });
-    const scopedResult = recommendTools([hot, scopedCold], {
-      audience: 'teacher', schoolLevel: 'elementary', teacherRole: 'subject',
-    }, 2);
+    const scopedCold = makeTool(
+      3,
+      makeFit({
+        teacherRoles: ['subject'],
+        priority: 60,
+      }),
+      { totalClicks: 0 },
+    );
+    const scopedResult = recommendTools(
+      [hot, scopedCold],
+      {
+        audience: 'teacher',
+        schoolLevel: 'elementary',
+        teacherRole: 'subject',
+      },
+      2,
+    );
     const hotTeacherScore = scopedResult.find(({ tool }) => tool.id === 1)!.score;
     const scopedScore = scopedResult.find(({ tool }) => tool.id === 3)!.score;
     expect(scopedScore).toBeGreaterThan(hotTeacherScore);
   });
 
   it('痛點命中：勾選的痛點命中越多分數越高，並標記 matchedPainPoints', () => {
-    const twoMatch = makeTool(1, makeFit({
-      priority: 50, painPoints: ['classroom-management', 'assessment'],
-    }));
-    const oneMatch = makeTool(2, makeFit({
-      priority: 50, painPoints: ['assessment', 'administration'],
-    }));
-    const noMatch = makeTool(3, makeFit({
-      priority: 50, painPoints: ['media-production'],
-    }));
-    const result = recommendTools([twoMatch, oneMatch, noMatch], {
-      audience: 'teacher', schoolLevel: 'elementary', teacherRole: 'subject',
-      painPoints: ['classroom-management', 'assessment'],
-    }, 3);
+    const twoMatch = makeTool(
+      1,
+      makeFit({
+        priority: 50,
+        painPoints: ['classroom-management', 'assessment'],
+      }),
+    );
+    const oneMatch = makeTool(
+      2,
+      makeFit({
+        priority: 50,
+        painPoints: ['assessment', 'administration'],
+      }),
+    );
+    const noMatch = makeTool(
+      3,
+      makeFit({
+        priority: 50,
+        painPoints: ['media-production'],
+      }),
+    );
+    const result = recommendTools(
+      [twoMatch, oneMatch, noMatch],
+      {
+        audience: 'teacher',
+        schoolLevel: 'elementary',
+        teacherRole: 'subject',
+        painPoints: ['classroom-management', 'assessment'],
+      },
+      3,
+    );
 
     const byId = new Map(result.map((r) => [r.tool.id, r]));
     expect(byId.get(1)!.matchedPainPoints).toBe(2);
@@ -335,7 +458,11 @@ describe('recommendTools', () => {
   });
 
   it('trending 加分：同 priority、同累計點擊下，近 7 日竄升的工具分數更高', () => {
-    const studentFit = makeFit({ audiences: ['teacher', 'student'], priority: 50, reasons: { student: 'x' } });
+    const studentFit = makeFit({
+      audiences: ['teacher', 'student'],
+      priority: 50,
+      reasons: { student: 'x' },
+    });
     const surging = makeTool(1, studentFit, { totalClicks: 100, recentClicks: 100 });
     const flat = makeTool(2, studentFit, { totalClicks: 100, recentClicks: 0 });
     const result = recommendTools([surging, flat], { audience: 'student' }, 2);
@@ -344,23 +471,30 @@ describe('recommendTools', () => {
   });
 
   it('熱門保底席混合熱度：累計點擊相同時，近 7 日竄升者搶下 popular 席', () => {
-    const studentFit = makeFit({ audiences: ['teacher', 'student'], priority: 30, reasons: { student: 'x' } });
+    const studentFit = makeFit({
+      audiences: ['teacher', 'student'],
+      priority: 30,
+      reasons: { student: 'x' },
+    });
     const surging = makeTool(9, studentFit, { totalClicks: 100, recentClicks: 100 });
     const flat = makeTool(10, studentFit, { totalClicks: 100, recentClicks: 0 });
     // 高 priority fillers 佔滿前面的 universal 名額，把保底席留給熱度競爭
-    const fillers = Array.from({ length: 6 }, (_, i) => makeTool(
-      200 + i, makeFit({ audiences: ['teacher', 'student'], priority: 95 - i, reasons: { student: 'x' } }),
-      { totalClicks: 0, recentClicks: 0 },
-    ));
+    const fillers = Array.from({ length: 6 }, (_, i) =>
+      makeTool(
+        200 + i,
+        makeFit({ audiences: ['teacher', 'student'], priority: 95 - i, reasons: { student: 'x' } }),
+        { totalClicks: 0, recentClicks: 0 },
+      ),
+    );
     const result = recommendTools([surging, flat, ...fillers], { audience: 'student' }, 6);
     const popular = result.find((r) => r.slot === 'popular');
     expect(popular?.tool.id).toBe(9);
   });
 
   it('換一批：excludeIds 讓下一波推薦排除已看過的工具（且不重覆家族）', () => {
-    const pool = Array.from({ length: 10 }, (_, i) => makeTool(
-      100 + i, makeFit({ priority: 90 - i }),
-    ));
+    const pool = Array.from({ length: 10 }, (_, i) =>
+      makeTool(100 + i, makeFit({ priority: 90 - i })),
+    );
     const first = recommendTools(pool, { audience: 'teacher' }, 6);
     const firstIds = first.map(({ tool }) => tool.id);
     expect(firstIds).toHaveLength(6);
@@ -376,7 +510,9 @@ describe('recommendTools', () => {
   it('換一批：排除已看過工具時，其同家族兄弟也不再出現', () => {
     const base = makeTool(4, makeFit({ priority: 70 }), { upgradeToId: 87 });
     const pro = makeTool(87, makeFit({ priority: 90 }), { upgradeFromId: 4 });
-    const others = Array.from({ length: 4 }, (_, i) => makeTool(200 + i, makeFit({ priority: 60 - i })));
+    const others = Array.from({ length: 4 }, (_, i) =>
+      makeTool(200 + i, makeFit({ priority: 60 - i })),
+    );
 
     // 第一波會用 Pro(87) 代表該家族；把 87 放進 exclude 後，base(4) 也不該出現
     const next = recommendTools([base, pro, ...others], { audience: 'teacher' }, 6, new Set([87]));
@@ -404,66 +540,125 @@ describe('recommendTools', () => {
     // 沒去重時 used(60) > fresh(50)；標記 used 為最近使用後應反轉
     const plain = recommendTools([used, fresh], { audience: 'teacher' }, 2);
     expect(plain[0].tool.id).toBe(1);
-    const withRecent = recommendTools([used, fresh], { audience: 'teacher' }, 2, undefined, new Set([1]));
+    const withRecent = recommendTools(
+      [used, fresh],
+      { audience: 'teacher' },
+      2,
+      undefined,
+      new Set([1]),
+    );
     const usedScore = withRecent.find((r) => r.tool.id === 1)!.score;
     const freshScore = withRecent.find((r) => r.tool.id === 2)!.score;
     expect(usedScore).toBeLessThan(freshScore);
   });
 
   it('學生選了學段（P1-2）：只保留符合學段或跨學段的工具', () => {
-    const elemOnly = makeTool(1, makeFit({ audiences: ['student'], schoolLevels: ['elementary'], reasons: { student: '國小適用。' } }));
-    const juniorOnly = makeTool(2, makeFit({ audiences: ['student'], schoolLevels: ['junior'], reasons: { student: '國中適用。' } }));
-    const crossStage = makeTool(3, makeFit({ audiences: ['student'], reasons: { student: '跨學段。' } }));
-    const ids = recommendTools([elemOnly, juniorOnly, crossStage], { audience: 'student', schoolLevel: 'elementary' }, 10)
-      .map(({ tool }) => tool.id);
+    const elemOnly = makeTool(
+      1,
+      makeFit({
+        audiences: ['student'],
+        schoolLevels: ['elementary'],
+        reasons: { student: '國小適用。' },
+      }),
+    );
+    const juniorOnly = makeTool(
+      2,
+      makeFit({
+        audiences: ['student'],
+        schoolLevels: ['junior'],
+        reasons: { student: '國中適用。' },
+      }),
+    );
+    const crossStage = makeTool(
+      3,
+      makeFit({ audiences: ['student'], reasons: { student: '跨學段。' } }),
+    );
+    const ids = recommendTools(
+      [elemOnly, juniorOnly, crossStage],
+      { audience: 'student', schoolLevel: 'elementary' },
+      10,
+    ).map(({ tool }) => tool.id);
     expect(ids).toContain(1); // 國小
     expect(ids).toContain(3); // 跨學段
     expect(ids).not.toContain(2); // 國中專屬被過濾
   });
 
   it('大學生 profile 只保留大學適用或跨學段的工具', () => {
-    const collegeOnly = makeTool(4, makeFit({ audiences: ['student'], schoolLevels: ['college'], reasons: { student: '大學適用。' } }));
-    const juniorOnly = makeTool(5, makeFit({ audiences: ['student'], schoolLevels: ['junior'], reasons: { student: '國中適用。' } }));
-    const crossStage = makeTool(6, makeFit({ audiences: ['student'], reasons: { student: '跨學段。' } }));
-    const ids = recommendTools([collegeOnly, juniorOnly, crossStage], { audience: 'student', schoolLevel: 'college' }, 10)
-      .map(({ tool }) => tool.id);
+    const collegeOnly = makeTool(
+      4,
+      makeFit({
+        audiences: ['student'],
+        schoolLevels: ['college'],
+        reasons: { student: '大學適用。' },
+      }),
+    );
+    const juniorOnly = makeTool(
+      5,
+      makeFit({
+        audiences: ['student'],
+        schoolLevels: ['junior'],
+        reasons: { student: '國中適用。' },
+      }),
+    );
+    const crossStage = makeTool(
+      6,
+      makeFit({ audiences: ['student'], reasons: { student: '跨學段。' } }),
+    );
+    const ids = recommendTools(
+      [collegeOnly, juniorOnly, crossStage],
+      { audience: 'student', schoolLevel: 'college' },
+      10,
+    ).map(({ tool }) => tool.id);
     expect(ids).toContain(4);
     expect(ids).toContain(6);
     expect(ids).not.toContain(5);
   });
 
   it('學生未選學段時不過濾（回溯相容）', () => {
-    const juniorOnly = makeTool(2, makeFit({ audiences: ['student'], schoolLevels: ['junior'], reasons: { student: '國中適用。' } }));
-    const ids = recommendTools([juniorOnly], { audience: 'student' }, 10).map(({ tool }) => tool.id);
+    const juniorOnly = makeTool(
+      2,
+      makeFit({
+        audiences: ['student'],
+        schoolLevels: ['junior'],
+        reasons: { student: '國中適用。' },
+      }),
+    );
+    const ids = recommendTools([juniorOnly], { audience: 'student' }, 10).map(
+      ({ tool }) => tool.id,
+    );
     expect(ids).toContain(2);
   });
 
   it('沒有任何點擊資料時，第六席退回 discovery（維持既有行為）', () => {
-    const tools = Array.from({ length: 8 }, (_, index) => makeTool(
-      100 + index,
-      makeFit({ priority: 90 - index }),
-    ));
+    const tools = Array.from({ length: 8 }, (_, index) =>
+      makeTool(100 + index, makeFit({ priority: 90 - index })),
+    );
     const result = recommendTools(tools, { audience: 'teacher' });
     expect(result.some(({ slot }) => slot === 'popular')).toBe(false);
     expect(result.some(({ slot }) => slot === 'discovery')).toBe(true);
   });
 
-  it.each([0, -1, 1.5, Number.NaN, Number.POSITIVE_INFINITY])('非正整數 limit %s 回傳空陣列', (limit) => {
-    expect(recommendTools([meetingTool], { audience: 'teacher' }, limit)).toEqual([]);
-  });
+  it.each([0, -1, 1.5, Number.NaN, Number.POSITIVE_INFINITY])(
+    '非正整數 limit %s 回傳空陣列',
+    (limit) => {
+      expect(recommendTools([meetingTool], { audience: 'teacher' }, limit)).toEqual([]);
+    },
+  );
 
   it('同分時依 tool.id 升序', () => {
-    expect(recommendTools([makeTool(2), makeTool(1)], { audience: 'teacher' }, 2)
-      .map(({ tool }) => tool.id)).toEqual([1, 2]);
+    expect(
+      recommendTools([makeTool(2), makeTool(1)], { audience: 'teacher' }, 2).map(
+        ({ tool }) => tool.id,
+      ),
+    ).toEqual([1, 2]);
   });
 
   it('同一家族只保留高分 Pro，並以其他家族補滿六席', () => {
     const base = makeTool(4, makeFit({ priority: 70 }), { upgradeToId: 87 });
     const pro = makeTool(87, makeFit({ priority: 90 }), { upgradeFromId: 4 });
-    const otherFamilies = Array.from({ length: 6 }, (_, index) => makeTool(
-      200 + index,
-      makeFit({ priority: 60 - index }),
-    ));
+    const otherFamilies = Array.from({ length: 6 }, (_, index) =>
+      makeTool(200 + index, makeFit({ priority: 60 - index })),
+    );
 
     const result = recommendTools([base, pro, ...otherFamilies], { audience: 'teacher' }, 6);
     const ids = result.map(({ tool }) => tool.id);
@@ -477,29 +672,31 @@ describe('recommendTools', () => {
   });
 
   it('沒有 upgrade metadata 的不同工具不會被誤判為同一家族', () => {
-    const standaloneTools = Array.from({ length: 6 }, (_, index) => makeTool(
-      300 + index,
-      makeFit({ priority: 80 - index }),
-    ));
+    const standaloneTools = Array.from({ length: 6 }, (_, index) =>
+      makeTool(300 + index, makeFit({ priority: 80 - index })),
+    );
 
-    expect(recommendTools(standaloneTools, { audience: 'teacher' }, 6)
-      .map(({ tool }) => tool.id)).toEqual([300, 301, 302, 303, 304, 305]);
+    expect(
+      recommendTools(standaloneTools, { audience: 'teacher' }, 6).map(({ tool }) => tool.id),
+    ).toEqual([300, 301, 302, 303, 304, 305]);
   });
 
   it('treats a base-only upgradeToId as the same family as its pro tool', () => {
     const base = makeTool(4, makeFit({ priority: 70 }), { upgradeToId: 87 });
     const pro = makeTool(87, makeFit({ priority: 90 }));
 
-    expect(recommendTools([base, pro], { audience: 'teacher' }, 2)
-      .map(({ tool }) => tool.id)).toEqual([87]);
+    expect(
+      recommendTools([base, pro], { audience: 'teacher' }, 2).map(({ tool }) => tool.id),
+    ).toEqual([87]);
   });
 
   it('treats a pro-only upgradeFromId as the same family as its base tool', () => {
     const base = makeTool(4, makeFit({ priority: 70 }));
     const pro = makeTool(87, makeFit({ priority: 90 }), { upgradeFromId: 4 });
 
-    expect(recommendTools([base, pro], { audience: 'teacher' }, 2)
-      .map(({ tool }) => tool.id)).toEqual([87]);
+    expect(
+      recommendTools([base, pro], { audience: 'teacher' }, 2).map(({ tool }) => tool.id),
+    ).toEqual([87]);
   });
 
   it('deduplicates every generation in an upgrade chain', () => {
@@ -507,66 +704,135 @@ describe('recommendTools', () => {
     const pro = makeTool(87, makeFit({ priority: 80 }), { upgradeFromId: 4, upgradeToId: 120 });
     const latest = makeTool(120, makeFit({ priority: 90 }), { upgradeFromId: 87 });
 
-    expect(recommendTools([base, pro, latest], { audience: 'teacher' }, 3)
-      .map(({ tool }) => tool.id)).toEqual([120]);
+    expect(
+      recommendTools([base, pro, latest], { audience: 'teacher' }, 3).map(({ tool }) => tool.id),
+    ).toEqual([120]);
   });
 
   it('does not merge existing tools through an upgrade link to a missing tool', () => {
     const first = makeTool(4, makeFit({ priority: 90 }), { upgradeToId: 999 });
     const second = makeTool(87, makeFit({ priority: 80 }), { upgradeToId: 999 });
 
-    expect(recommendTools([first, second], { audience: 'teacher' }, 2)
-      .map(({ tool }) => tool.id)).toEqual([4, 87]);
+    expect(
+      recommendTools([first, second], { audience: 'teacher' }, 2).map(({ tool }) => tool.id),
+    ).toEqual([4, 87]);
   });
   // ── departments 語意（P0-1，2026-07-28）────────────────────────────────
   // 舊版只要 departments 有值就把資格收斂成「行政人員 ＋ 該處室」，
   // teacherRoles 裡明寫的 homeroom／subject 會被整組忽略（9 個工具中招）。
   describe('departments 只約束行政人員這一支', () => {
-    const mixed = makeTool(46, makeFit({
-      teacherRoles: ['homeroom', 'subject', 'admin'],
-      departments: ['academic', 'general-affairs'],
-      reasons: {
-        teacher: '通用教師理由。',
-        homeroom: '導師理由。',
-        subject: '科任理由。',
-        academic: '教務處理由。',
-      },
-    }));
+    const mixed = makeTool(
+      46,
+      makeFit({
+        teacherRoles: ['homeroom', 'subject', 'admin'],
+        departments: ['academic', 'general-affairs'],
+        reasons: {
+          teacher: '通用教師理由。',
+          homeroom: '導師理由。',
+          subject: '科任理由。',
+          academic: '教務處理由。',
+        },
+      }),
+    );
 
     it.each([
       ['homeroom' as const, '導師理由。'],
       ['subject' as const, '科任理由。'],
     ])('明寫在 teacherRoles 的 %s 不受 departments 影響', (teacherRole, reason) => {
-      const result = recommendTools([mixed], {
-        audience: 'teacher', schoolLevel: 'elementary', teacherRole,
-      }, 1);
+      const result = recommendTools(
+        [mixed],
+        {
+          audience: 'teacher',
+          schoolLevel: 'elementary',
+          teacherRole,
+        },
+        1,
+      );
       expect(result.map(({ tool }) => tool.id)).toEqual([46]);
       expect(result[0].reason).toBe(reason);
     });
 
     it('行政人員仍要比對處室：命中放行', () => {
-      expect(recommendTools([mixed], {
-        audience: 'teacher', schoolLevel: 'elementary', teacherRole: 'admin', department: 'academic',
-      }, 1).map(({ tool }) => tool.id)).toEqual([46]);
+      expect(
+        recommendTools(
+          [mixed],
+          {
+            audience: 'teacher',
+            schoolLevel: 'elementary',
+            teacherRole: 'admin',
+            department: 'academic',
+          },
+          1,
+        ).map(({ tool }) => tool.id),
+      ).toEqual([46]);
     });
 
     it('行政人員仍要比對處室：未命中排除', () => {
-      expect(recommendTools([mixed], {
-        audience: 'teacher', schoolLevel: 'elementary', teacherRole: 'admin', department: 'counseling',
-      }, 1)).toEqual([]);
+      expect(
+        recommendTools(
+          [mixed],
+          {
+            audience: 'teacher',
+            schoolLevel: 'elementary',
+            teacherRole: 'admin',
+            department: 'counseling',
+          },
+          1,
+        ),
+      ).toEqual([]);
     });
 
     it('沒明寫 teacherRoles 的純行政工具維持舊語意（只給對應處室行政人員）', () => {
-      const adminOnly = makeTool(49, makeFit({
-        departments: ['academic'],
-        reasons: { academic: '教務處寶藏庫。' },
-      }));
+      const adminOnly = makeTool(
+        49,
+        makeFit({
+          departments: ['academic'],
+          reasons: { academic: '教務處寶藏庫。' },
+        }),
+      );
       const base = { audience: 'teacher' as const, schoolLevel: 'elementary' as const };
       expect(recommendTools([adminOnly], { ...base, teacherRole: 'homeroom' }, 1)).toEqual([]);
       expect(recommendTools([adminOnly], { ...base, teacherRole: 'subject' }, 1)).toEqual([]);
-      expect(recommendTools([adminOnly], { ...base, teacherRole: 'admin', department: 'counseling' }, 1)).toEqual([]);
-      expect(recommendTools([adminOnly], { ...base, teacherRole: 'admin', department: 'academic' }, 1)
-        .map(({ tool }) => tool.id)).toEqual([49]);
+      expect(
+        recommendTools([adminOnly], { ...base, teacherRole: 'admin', department: 'counseling' }, 1),
+      ).toEqual([]);
+      expect(
+        recommendTools(
+          [adminOnly],
+          { ...base, teacherRole: 'admin', department: 'academic' },
+          1,
+        ).map(({ tool }) => tool.id),
+      ).toEqual([49]);
     });
+  });
+});
+
+describe('recommendPopularTools', () => {
+  it('只挑教師與學生都能直接使用、沒有身分限制的工具', () => {
+    const broad = Array.from({ length: 6 }, (_, index) =>
+      makeTool(
+        index + 1,
+        makeFit({
+          audiences: ['teacher', 'student'],
+          priority: 90 - index,
+          reasons: { teacher: '教師可用。', student: '學生可用。' },
+        }),
+      ),
+    );
+    const teacherOnly = makeTool(90, makeFit({ priority: 999 }));
+    const roleLimited = makeTool(
+      91,
+      makeFit({
+        audiences: ['teacher', 'student'],
+        teacherRoles: ['homeroom'],
+        priority: 999,
+      }),
+    );
+
+    const result = recommendPopularTools([...broad, teacherOnly, roleLimited]);
+
+    expect(result).toHaveLength(6);
+    expect(result.map(({ tool }) => tool.id)).toEqual(broad.map((tool) => tool.id));
+    expect(result.every(({ reason }) => reason.includes('不必先填資料'))).toBe(true);
   });
 });

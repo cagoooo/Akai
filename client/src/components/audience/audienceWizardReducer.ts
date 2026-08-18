@@ -1,8 +1,24 @@
-import type { AudienceProfile, AudienceType, Department, PainPoint, SchoolLevel, TeacherRole } from '@/lib/audienceProfile';
+import type {
+  AudienceProfile,
+  AudienceType,
+  Department,
+  PainPoint,
+  SchoolLevel,
+  TeacherRole,
+} from '@/lib/audienceProfile';
 
 // 'returning' 是回訪重問的第一畫面（P1-1）：帶出上次的身分，讓訪客一鍵沿用或只改一項，
 // 不用從「你是老師還是學生」重頭選四步。
-export type AudienceWizardStep = 'returning' | 'audience' | 'school-level' | 'teacher-role' | 'department' | 'pain-points' | 'thinking' | 'results';
+export type AudienceWizardStep =
+  | 'returning'
+  | 'audience'
+  | 'school-level'
+  | 'teacher-role'
+  | 'department'
+  | 'pain-points'
+  | 'thinking'
+  | 'results'
+  | 'general-results';
 export type AudienceWizardState = { step: AudienceWizardStep; profile: Partial<AudienceProfile> };
 export type AudienceWizardAction =
   | { type: 'SELECT_AUDIENCE'; value: AudienceType }
@@ -11,6 +27,8 @@ export type AudienceWizardAction =
   | { type: 'SELECT_DEPARTMENT'; value: Department }
   | { type: 'TOGGLE_PAIN_POINT'; value: PainPoint }
   | { type: 'CONFIRM_PAIN_POINTS' }
+  | { type: 'OPEN_GENERAL_PREVIEW' }
+  | { type: 'START_PERSONALIZATION' }
   | { type: 'THINKING_DONE' }
   | { type: 'BACK' }
   // 回訪重問（P1-1）
@@ -33,7 +51,10 @@ function togglePainPoint(current: PainPoint[] | undefined, value: PainPoint): Pa
   return [...list, value];
 }
 
-export function audienceWizardReducer(state: AudienceWizardState, action: AudienceWizardAction): AudienceWizardState {
+export function audienceWizardReducer(
+  state: AudienceWizardState,
+  action: AudienceWizardAction,
+): AudienceWizardState {
   switch (action.type) {
     case 'SELECT_AUDIENCE':
       if (state.step !== 'audience') return state;
@@ -45,31 +66,74 @@ export function audienceWizardReducer(state: AudienceWizardState, action: Audien
         ? { step: 'pain-points', profile: { ...state.profile, schoolLevel: action.value } }
         : { step: 'teacher-role', profile: { ...state.profile, schoolLevel: action.value } };
     case 'SELECT_TEACHER_ROLE':
-      if (state.step !== 'teacher-role' || state.profile.audience !== 'teacher' || !state.profile.schoolLevel) return state;
-      return { step: action.value === 'admin' ? 'department' : 'pain-points', profile: { ...state.profile, teacherRole: action.value } };
+      if (
+        state.step !== 'teacher-role' ||
+        state.profile.audience !== 'teacher' ||
+        !state.profile.schoolLevel
+      )
+        return state;
+      return {
+        step: action.value === 'admin' ? 'department' : 'pain-points',
+        profile: { ...state.profile, teacherRole: action.value },
+      };
     case 'SELECT_DEPARTMENT':
-      if (state.step !== 'department' || state.profile.audience !== 'teacher' || state.profile.teacherRole !== 'admin') return state;
+      if (
+        state.step !== 'department' ||
+        state.profile.audience !== 'teacher' ||
+        state.profile.teacherRole !== 'admin'
+      )
+        return state;
       return { step: 'pain-points', profile: { ...state.profile, department: action.value } };
     case 'TOGGLE_PAIN_POINT':
       if (state.step !== 'pain-points') return state;
-      return { ...state, profile: { ...state.profile, painPoints: togglePainPoint(state.profile.painPoints, action.value) } };
+      return {
+        ...state,
+        profile: {
+          ...state.profile,
+          painPoints: togglePainPoint(state.profile.painPoints, action.value),
+        },
+      };
     case 'CONFIRM_PAIN_POINTS':
       if (state.step !== 'pain-points') return state;
       return { step: 'thinking', profile: state.profile };
+    case 'OPEN_GENERAL_PREVIEW':
+      if (state.step !== 'audience') return state;
+      return { step: 'general-results', profile: {} };
+    case 'START_PERSONALIZATION':
+      if (state.step !== 'general-results') return state;
+      return initialAudienceWizardState;
     case 'THINKING_DONE':
       if (state.step !== 'thinking') return state;
       return { step: 'results', profile: state.profile };
     case 'BACK':
       if (state.step === 'returning') return state; // 回訪首畫面已是第一步
+      if (state.step === 'general-results') return initialAudienceWizardState;
       // 結果 / 思考中 返回都回到痛點步驟（思考只是過場，不當作可停留的一站）
-      if (state.step === 'results' || state.step === 'thinking') return { step: 'pain-points', profile: state.profile };
+      if (state.step === 'results' || state.step === 'thinking')
+        return { step: 'pain-points', profile: state.profile };
       if (state.step === 'pain-points') {
-        if (state.profile.audience === 'student') return { step: 'school-level', profile: omit(state.profile, 'schoolLevel', 'painPoints') };
-        if (state.profile.teacherRole === 'admin') return { step: 'department', profile: omit(state.profile, 'department', 'painPoints') };
-        return { step: 'teacher-role', profile: omit(state.profile, 'teacherRole', 'department', 'painPoints') };
+        if (state.profile.audience === 'student')
+          return {
+            step: 'school-level',
+            profile: omit(state.profile, 'schoolLevel', 'painPoints'),
+          };
+        if (state.profile.teacherRole === 'admin')
+          return { step: 'department', profile: omit(state.profile, 'department', 'painPoints') };
+        return {
+          step: 'teacher-role',
+          profile: omit(state.profile, 'teacherRole', 'department', 'painPoints'),
+        };
       }
-      if (state.step === 'department') return { step: 'teacher-role', profile: omit(state.profile, 'teacherRole', 'department', 'painPoints') };
-      if (state.step === 'teacher-role') return { step: 'school-level', profile: omit(state.profile, 'schoolLevel', 'teacherRole', 'department', 'painPoints') };
+      if (state.step === 'department')
+        return {
+          step: 'teacher-role',
+          profile: omit(state.profile, 'teacherRole', 'department', 'painPoints'),
+        };
+      if (state.step === 'teacher-role')
+        return {
+          step: 'school-level',
+          profile: omit(state.profile, 'schoolLevel', 'teacherRole', 'department', 'painPoints'),
+        };
       if (state.step === 'school-level') return initialAudienceWizardState;
       return state;
     case 'RETURNING_KEEP':
@@ -95,7 +159,10 @@ export function audienceWizardReducer(state: AudienceWizardState, action: Audien
   }
 }
 
-function omit(profile: Partial<AudienceProfile>, ...keys: (keyof AudienceProfile)[]): Partial<AudienceProfile> {
+function omit(
+  profile: Partial<AudienceProfile>,
+  ...keys: (keyof AudienceProfile)[]
+): Partial<AudienceProfile> {
   const next = { ...profile };
   keys.forEach((key) => delete next[key]);
   return next;
@@ -105,7 +172,14 @@ export function toAudienceProfile(state: AudienceWizardState): AudienceProfile |
   const { audience, schoolLevel, teacherRole, department, painPoints } = state.profile;
   const withPains = (base: AudienceProfile): AudienceProfile =>
     painPoints && painPoints.length > 0 ? { ...base, painPoints } : base;
-  if (audience === 'student') return withPains(schoolLevel ? { audience, schoolLevel } : { audience });
-  if (audience !== 'teacher' || !schoolLevel || !teacherRole || (teacherRole === 'admin' && !department)) return null;
+  if (audience === 'student')
+    return withPains(schoolLevel ? { audience, schoolLevel } : { audience });
+  if (
+    audience !== 'teacher' ||
+    !schoolLevel ||
+    !teacherRole ||
+    (teacherRole === 'admin' && !department)
+  )
+    return null;
   return withPains({ audience, schoolLevel, teacherRole, ...(department ? { department } : {}) });
 }

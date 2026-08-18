@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { audienceWizardReducer as reduce, initialAudienceWizardState, toAudienceProfile, PAIN_POINT_SELECTION_LIMIT } from '../audienceWizardReducer';
+import {
+  audienceWizardReducer as reduce,
+  initialAudienceWizardState,
+  toAudienceProfile,
+  PAIN_POINT_SELECTION_LIMIT,
+} from '../audienceWizardReducer';
 
 describe('audienceWizardReducer', () => {
   it('完成行政教師的完整選擇流程（含痛點步驟＋思考過場）', () => {
@@ -12,7 +17,12 @@ describe('audienceWizardReducer', () => {
     expect(state.step).toBe('thinking');
     state = reduce(state, { type: 'THINKING_DONE' });
     expect(state.step).toBe('results');
-    expect(toAudienceProfile(state)).toEqual({ audience: 'teacher', schoolLevel: 'elementary', teacherRole: 'admin', department: 'academic' });
+    expect(toAudienceProfile(state)).toEqual({
+      audience: 'teacher',
+      schoolLevel: 'elementary',
+      teacherRole: 'admin',
+      department: 'academic',
+    });
   });
 
   it('科任教師跳過處室，經痛點＋思考過場再到結果', () => {
@@ -24,7 +34,11 @@ describe('audienceWizardReducer', () => {
     expect(state.step).toBe('thinking');
     state = reduce(state, { type: 'THINKING_DONE' });
     expect(state.step).toBe('results');
-    expect(toAudienceProfile(state)).toEqual({ audience: 'teacher', schoolLevel: 'elementary', teacherRole: 'subject' });
+    expect(toAudienceProfile(state)).toEqual({
+      audience: 'teacher',
+      schoolLevel: 'elementary',
+      teacherRole: 'subject',
+    });
   });
 
   it('學生先選學段再進痛點步驟，勾選後經思考過場到結果，可返回起點', () => {
@@ -42,7 +56,11 @@ describe('audienceWizardReducer', () => {
     expect(backFromThinking.profile.painPoints).toEqual(['student-practice', 'creative-learning']);
     state = reduce(state, { type: 'THINKING_DONE' });
     expect(state.step).toBe('results');
-    expect(toAudienceProfile(state)).toEqual({ audience: 'student', schoolLevel: 'elementary', painPoints: ['student-practice', 'creative-learning'] });
+    expect(toAudienceProfile(state)).toEqual({
+      audience: 'student',
+      schoolLevel: 'elementary',
+      painPoints: ['student-practice', 'creative-learning'],
+    });
     // 從結果返回會回到痛點步驟並保留勾選
     const backToPains = reduce(state, { type: 'BACK' });
     expect(backToPains.step).toBe('pain-points');
@@ -60,7 +78,12 @@ describe('audienceWizardReducer', () => {
     state = reduce(state, { type: 'TOGGLE_PAIN_POINT', value: 'student-practice' }); // 再點一次移除
     expect(state.profile.painPoints).toEqual([]);
     // 連加超過上限
-    const pains = ['student-practice', 'creative-learning', 'digital-literacy', 'language-learning'] as const;
+    const pains = [
+      'student-practice',
+      'creative-learning',
+      'digital-literacy',
+      'language-learning',
+    ] as const;
     for (const p of pains) state = reduce(state, { type: 'TOGGLE_PAIN_POINT', value: p });
     expect(state.profile.painPoints).toHaveLength(PAIN_POINT_SELECTION_LIMIT);
     expect(state.profile.painPoints).toEqual(pains.slice(0, PAIN_POINT_SELECTION_LIMIT));
@@ -78,12 +101,25 @@ describe('audienceWizardReducer', () => {
   });
 
   it('rejects choices that do not belong to the current step', () => {
-    expect(reduce(initialAudienceWizardState, { type: 'SELECT_SCHOOL_LEVEL', value: 'elementary' })).toBe(initialAudienceWizardState);
-    const teacher = reduce(initialAudienceWizardState, { type: 'SELECT_AUDIENCE', value: 'teacher' });
+    expect(
+      reduce(initialAudienceWizardState, { type: 'SELECT_SCHOOL_LEVEL', value: 'elementary' }),
+    ).toBe(initialAudienceWizardState);
+    const teacher = reduce(initialAudienceWizardState, {
+      type: 'SELECT_AUDIENCE',
+      value: 'teacher',
+    });
     expect(reduce(teacher, { type: 'SELECT_DEPARTMENT', value: 'academic' })).toBe(teacher);
     const level = reduce(teacher, { type: 'SELECT_SCHOOL_LEVEL', value: 'elementary' });
     expect(reduce(level, { type: 'SELECT_DEPARTMENT', value: 'academic' })).toBe(level);
     // 不在痛點步驟時 TOGGLE_PAIN_POINT 不生效
     expect(reduce(level, { type: 'TOGGLE_PAIN_POINT', value: 'assessment' })).toBe(level);
+  });
+
+  it('可免填身分先看熱門工具，再回到個人化流程', () => {
+    const preview = reduce(initialAudienceWizardState, { type: 'OPEN_GENERAL_PREVIEW' });
+    expect(preview).toEqual({ step: 'general-results', profile: {} });
+    expect(toAudienceProfile(preview)).toBeNull();
+    expect(reduce(preview, { type: 'START_PERSONALIZATION' })).toEqual(initialAudienceWizardState);
+    expect(reduce(preview, { type: 'BACK' })).toEqual(initialAudienceWizardState);
   });
 });
