@@ -1,5 +1,5 @@
 export const AUDIENCE_TYPES = ['teacher', 'student'] as const;
-export const SCHOOL_LEVELS = ['elementary', 'junior', 'senior'] as const;
+export const SCHOOL_LEVELS = ['elementary', 'junior', 'senior', 'college'] as const;
 export const TEACHER_ROLES = ['homeroom', 'subject', 'admin'] as const;
 export const DEPARTMENTS = [
   'academic',

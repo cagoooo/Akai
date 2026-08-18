@@ -43,6 +43,25 @@ describe('AudienceOnboardingWizard', () => {
     expect(onComplete).toHaveBeenCalledTimes(1);
   });
 
+  it('提供大學老師學段並保留 college profile', async () => {
+    const user = userEvent.setup();
+    const { onComplete } = renderWizard();
+    await user.click(screen.getByRole('button', { name: /我是老師/ }));
+    await user.click(screen.getByRole('button', { name: /大學老師/ }));
+    await user.click(screen.getByRole('button', { name: /科任老師/ }));
+    await user.click(screen.getByRole('button', { name: /直接看推薦/ }));
+    await waitFor(() => expect(onComplete).toHaveBeenCalledWith(expect.objectContaining({ schoolLevel: 'college' })));
+  });
+
+  it('提供大學學生學段並保留 college profile', async () => {
+    const user = userEvent.setup();
+    const { onComplete } = renderWizard();
+    await user.click(screen.getByRole('button', { name: /我是學生/ }));
+    await user.click(screen.getByRole('button', { name: /大學.*選你的學段/ }));
+    await user.click(screen.getByRole('button', { name: /直接看推薦/ }));
+    await waitFor(() => expect(onComplete).toHaveBeenCalledWith(expect.objectContaining({ audience: 'student', schoolLevel: 'college' })));
+  });
+
   // P0-1：關掉再開不再是「從頭來過」，而是接續上次選到一半的進度
   it('restores focus on close and resumes the saved draft when reopened', async () => {
     const user = userEvent.setup();

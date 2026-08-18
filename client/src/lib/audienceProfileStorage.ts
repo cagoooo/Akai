@@ -1,4 +1,5 @@
-import type { AudienceProfile } from './audienceProfile';
+import { SCHOOL_LEVELS } from './audienceProfile';
+import type { AudienceProfile, SchoolLevel } from './audienceProfile';
 
 export const AUDIENCE_PROFILE_KEY = 'akai_audience_profile_v1';
 export const AUDIENCE_DISMISSED_KEY = 'akai_audience_wizard_dismissed_v1';
@@ -32,7 +33,7 @@ export function readAudienceProfile(): StoredAudienceProfile | null {
     const profile = value as Record<string, unknown>;
     if (typeof profile.completedAt !== 'string' || Number.isNaN(Date.parse(profile.completedAt))) return null;
     if (profile.audience === 'student') {
-      // P1-2：學生可選填 schoolLevel（國小／國中），但不得有 teacherRole / department
+      // P1-2：學生可選填 schoolLevel，但不得有 teacherRole / department
       if (profile.teacherRole !== undefined || profile.department !== undefined) return null;
       if (profile.schoolLevel !== undefined && !isSchoolLevel(profile.schoolLevel)) return null;
       return profile as unknown as StoredAudienceProfile;
@@ -45,8 +46,8 @@ export function readAudienceProfile(): StoredAudienceProfile | null {
   } catch { return null; }
 }
 
-function isSchoolLevel(value: unknown): value is AudienceProfile['schoolLevel'] {
-  return value === 'elementary' || value === 'junior' || value === 'senior';
+function isSchoolLevel(value: unknown): value is SchoolLevel {
+  return (SCHOOL_LEVELS as readonly unknown[]).includes(value);
 }
 
 function isTeacherRole(value: unknown): value is AudienceProfile['teacherRole'] {

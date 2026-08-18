@@ -25,10 +25,12 @@
 歡迎頁
   ↓
 身分：老師／學生或小朋友
-  ├─ 學生或小朋友 → 推薦結果
+  ├─ 學生或小朋友
+  │    ↓
+  │  學段：國小／國中／大學 → 推薦結果
   └─ 老師
        ↓
-     學段：國小／國中／高中
+     學段：國小／國中／高中／大學
        ↓
      職務：班級導師／科任或專任／行政人員
        ├─ 導師或科任 → 推薦結果
@@ -39,7 +41,7 @@
           推薦結果
 ```
 
-學生或小朋友不再細分年齡。
+學生或小朋友依學段細分為國小、國中與大學，讓推薦可以避開不適用的教育階段。
 
 ### 2.2 顯示規則
 
@@ -83,7 +85,7 @@
 
 ```ts
 type AudienceType = 'teacher' | 'student';
-type SchoolLevel = 'elementary' | 'junior' | 'senior';
+type SchoolLevel = 'elementary' | 'junior' | 'senior' | 'college';
 type TeacherRole = 'homeroom' | 'subject' | 'admin';
 type Department = 'academic' | 'student-affairs' | 'general-affairs' | 'counseling' | 'other';
 

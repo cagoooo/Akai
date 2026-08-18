@@ -4,6 +4,7 @@ const schoolLevelLabel = {
   elementary: '國小',
   junior: '國中',
   senior: '高中',
+  college: '大學',
 } as const;
 
 const teacherRoleLabel = {
@@ -21,7 +22,7 @@ const departmentLabel = {
 } as const;
 
 function profileLabel(profile: AudienceProfile) {
-  if (profile.audience === 'student') return '學生／小朋友';
+  if (profile.audience === 'student') return profile.schoolLevel === 'college' ? '大學生' : '學生／小朋友';
   return [
     profile.schoolLevel && schoolLevelLabel[profile.schoolLevel],
     profile.teacherRole && teacherRoleLabel[profile.teacherRole],

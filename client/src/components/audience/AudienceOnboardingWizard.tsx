@@ -13,9 +13,9 @@ import { noteToneSequence } from '@/lib/noteTone';
 import { clearWizardDraft, readWizardDraft, writeWizardDraft } from '@/lib/audienceWizardDraft';
 
 type Props = { open: boolean; tools: EducationalTool[]; onComplete: (profile: AudienceProfile) => void; onDismiss: () => void; onLocateTool: (toolId: number) => void; recentToolIds?: number[]; /** 隔幾天回訪的重問：帶上次的身分 → 走「一鍵沿用」畫面；undefined 表示首次引導或手動重選 */ returningProfile?: AudienceProfile };
-const levels: [SchoolLevel, string][] = [['elementary', '國小老師'], ['junior', '國中老師'], ['senior', '高中老師']];
-// P1-2 學生學段（只列有工具資料的國小／國中；影響推薦過濾）
-const studentLevels: [SchoolLevel, string][] = [['elementary', '國小'], ['junior', '國中']];
+const levels: [SchoolLevel, string][] = [['elementary', '國小老師'], ['junior', '國中老師'], ['senior', '高中老師'], ['college', '大學老師']];
+// P1-2 學生學段（影響推薦過濾）
+const studentLevels: [SchoolLevel, string][] = [['elementary', '國小'], ['junior', '國中'], ['college', '大學']];
 const roles: [TeacherRole, string][] = [['homeroom', '班級導師'], ['subject', '科任老師'], ['admin', '行政人員']];
 const departments: [Department, string][] = [['academic', '教務處'], ['student-affairs', '學務處'], ['general-affairs', '總務處'], ['counseling', '輔導室'], ['other', '其他處室']];
 
@@ -372,13 +372,13 @@ function Choices({ choices, onChoose }: { choices: [string, string, string, type
 }
 
 // ── 「為你量身思考中」過場（專屬族群的分析動畫） ─────────────────────────
-const LEVEL_SHORT: Record<SchoolLevel, string> = { elementary: '國小', junior: '國中', senior: '高中' };
+const LEVEL_SHORT: Record<SchoolLevel, string> = { elementary: '國小', junior: '國中', senior: '高中', college: '大學' };
 const ROLE_SHORT: Record<TeacherRole, string> = { homeroom: '導師', subject: '科任老師', admin: '行政人員' };
 const DEPT_SHORT: Record<Department, string> = { academic: '教務處', 'student-affairs': '學務處', 'general-affairs': '總務處', counseling: '輔導室', other: '其他處室' };
 
-/** 產生對使用者可讀的族群短標籤，例如「國小科任老師」「國小教務處行政人員」「學生／小朋友」 */
+/** 產生對使用者可讀的族群短標籤，例如「國小科任老師」「國小教務處行政人員」「大學生」 */
 function userSegmentLabel(profile: Partial<AudienceProfile>): string {
-  if (profile.audience === 'student') return '學生／小朋友';
+  if (profile.audience === 'student') return profile.schoolLevel === 'college' ? '大學生' : '學生／小朋友';
   const lvl = profile.schoolLevel ? LEVEL_SHORT[profile.schoolLevel] : '';
   if (profile.teacherRole === 'admin') {
     const dept = profile.department ? DEPT_SHORT[profile.department] : '';

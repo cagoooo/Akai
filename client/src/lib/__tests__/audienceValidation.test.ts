@@ -214,7 +214,7 @@ describe('validateAudienceFit', () => {
     expect(
       validateAudienceFit({
         audiences: ['teacher'],
-        schoolLevels: ['elementary', 'junior', 'senior'],
+        schoolLevels: ['elementary', 'junior', 'senior', 'college'],
         teacherRoles: ['homeroom', 'subject', 'admin'],
         departments: ['academic', 'student-affairs'],
         painPoints: ['meeting-productivity'],
@@ -319,7 +319,7 @@ describe('validateAudienceFit', () => {
   it('拒絕列舉以外的值', () => {
     const errors = validateAudienceFit({
       audiences: ['parent'],
-      schoolLevels: ['college'],
+      schoolLevels: ['graduate'],
       teacherRoles: ['principal'],
       departments: ['library'],
       painPoints: ['planning'],
@@ -330,7 +330,7 @@ describe('validateAudienceFit', () => {
     expect(errors).toEqual(
       expect.arrayContaining([
         'audiences 包含無效值：parent',
-        'schoolLevels 包含無效值：college',
+        'schoolLevels 包含無效值：graduate',
         'teacherRoles 包含無效值：principal',
         'departments 包含無效值：library',
         'reasons 包含無效鍵：parent',

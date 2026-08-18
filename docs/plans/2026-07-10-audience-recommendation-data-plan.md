@@ -73,7 +73,7 @@ Expected: FAIL，原因為 `@/lib/audienceValidation` 尚不存在。
 
 ```ts
 export const AUDIENCE_TYPES = ['teacher', 'student'] as const;
-export const SCHOOL_LEVELS = ['elementary', 'junior', 'senior'] as const;
+export const SCHOOL_LEVELS = ['elementary', 'junior', 'senior', 'college'] as const;
 export const TEACHER_ROLES = ['homeroom', 'subject', 'admin'] as const;
 export const DEPARTMENTS = ['academic', 'student-affairs', 'general-affairs', 'counseling', 'other'] as const;
 

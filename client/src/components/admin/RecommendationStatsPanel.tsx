@@ -73,7 +73,7 @@ function sumDaily(daily: Record<string, DailyCounter> | undefined, days: number 
 // segment key = [audience, schoolLevel, teacherRole, department].filter(Boolean).join('_')
 const TOKEN_LABEL: Record<string, string> = {
   teacher: '老師', student: '學生',
-  elementary: '國小', junior: '國中', senior: '高中',
+  elementary: '國小', junior: '國中', senior: '高中', college: '大學',
   homeroom: '導師', subject: '科任', admin: '行政',
   academic: '教務', 'student-affairs': '學務', 'general-affairs': '總務', counseling: '輔導', other: '其他處室',
 };

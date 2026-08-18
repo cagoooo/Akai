@@ -37,7 +37,7 @@ export function audienceWizardReducer(state: AudienceWizardState, action: Audien
   switch (action.type) {
     case 'SELECT_AUDIENCE':
       if (state.step !== 'audience') return state;
-      // 學生與老師都先選學段：學生（國小／國中）→ 痛點；老師 → 職務（P1-2）
+      // 學生與老師都先選學段：學生 → 痛點；老師 → 職務（P1-2）
       return { step: 'school-level', profile: { audience: action.value } };
     case 'SELECT_SCHOOL_LEVEL':
       if (state.step !== 'school-level' || state.profile.audience === undefined) return state;

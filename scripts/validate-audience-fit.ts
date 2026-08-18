@@ -26,6 +26,7 @@ export const LEGACY_MISSING_AUDIENCE_IDS: ReadonlySet<number> = new Set<number>(
 
 export const REQUIRED_PROFILES: readonly AudienceProfile[] = [
   { audience: 'student' },
+  ...SCHOOL_LEVELS.map((schoolLevel) => ({ audience: 'student' as const, schoolLevel })),
   ...SCHOOL_LEVELS.flatMap((schoolLevel) => [
     { audience: 'teacher' as const, schoolLevel, teacherRole: 'homeroom' as const },
     { audience: 'teacher' as const, schoolLevel, teacherRole: 'subject' as const },

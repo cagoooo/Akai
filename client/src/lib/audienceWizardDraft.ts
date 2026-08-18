@@ -12,6 +12,7 @@
  * 隔天再來身分可能就變了（代課、換職務），不該把舊答案硬塞回去。
  */
 
+import { SCHOOL_LEVELS } from '@/lib/audienceProfile';
 import type { AudienceProfile, AudienceType, Department, PainPoint, SchoolLevel, TeacherRole } from '@/lib/audienceProfile';
 import type { AudienceWizardState, AudienceWizardStep } from '@/components/audience/audienceWizardReducer';
 
@@ -23,7 +24,6 @@ const DRAFT_TTL_MS = 2 * 60 * 60 * 1000;
 const RESUMABLE_STEPS: AudienceWizardStep[] = ['audience', 'school-level', 'teacher-role', 'department', 'pain-points'];
 
 const AUDIENCE_VALUES: AudienceType[] = ['teacher', 'student'];
-const SCHOOL_LEVELS: SchoolLevel[] = ['elementary', 'junior', 'senior'];
 const TEACHER_ROLES: TeacherRole[] = ['homeroom', 'subject', 'admin'];
 const DEPARTMENTS: Department[] = ['academic', 'student-affairs', 'general-affairs', 'counseling', 'other'];
 

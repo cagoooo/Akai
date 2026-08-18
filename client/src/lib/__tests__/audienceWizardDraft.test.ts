@@ -9,6 +9,11 @@ const midway: AudienceWizardState = {
     profile: { audience: 'teacher', schoolLevel: 'elementary', teacherRole: 'subject', painPoints: ['assessment'] },
 };
 
+const collegeMidway: AudienceWizardState = {
+    step: 'pain-points',
+    profile: { audience: 'student', schoolLevel: 'college', painPoints: ['presentation'] },
+};
+
 describe('audienceWizardDraft', () => {
     beforeEach(() => {
         sessionStorage.clear();
@@ -17,6 +22,11 @@ describe('audienceWizardDraft', () => {
     it('存得起來也讀得回來（選到一半的進度不會消失）', () => {
         writeWizardDraft(midway);
         expect(readWizardDraft()).toEqual(midway);
+    });
+
+    it('可恢復大學學生的學段草稿', () => {
+        writeWizardDraft(collegeMidway);
+        expect(readWizardDraft()).toEqual(collegeMidway);
     });
 
     it('停在第一題什麼都沒選不算進度，不寫草稿', () => {

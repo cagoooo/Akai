@@ -211,7 +211,7 @@ function passesDepartmentGate(fit: AudienceFit, profile: AudienceProfile): boole
 function isEligible(fit: AudienceFit, profile: AudienceProfile): boolean {
   if (!fit.audiences.includes(profile.audience)) return false;
   if (profile.audience === 'student') {
-    // P1-2：學生若選了學段（國小／國中）則據此過濾；沒選（含舊 profile）→ 不過濾，維持相容
+    // P1-2：學生若選了學段則據此過濾；沒選（含舊 profile）→ 不過濾，維持相容
     if (profile.schoolLevel === undefined) return true;
     return includesProfileValue(fit.schoolLevels, profile.schoolLevel);
   }

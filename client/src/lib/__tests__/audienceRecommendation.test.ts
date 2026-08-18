@@ -421,6 +421,17 @@ describe('recommendTools', () => {
     expect(ids).not.toContain(2); // 國中專屬被過濾
   });
 
+  it('大學生 profile 只保留大學適用或跨學段的工具', () => {
+    const collegeOnly = makeTool(4, makeFit({ audiences: ['student'], schoolLevels: ['college'], reasons: { student: '大學適用。' } }));
+    const juniorOnly = makeTool(5, makeFit({ audiences: ['student'], schoolLevels: ['junior'], reasons: { student: '國中適用。' } }));
+    const crossStage = makeTool(6, makeFit({ audiences: ['student'], reasons: { student: '跨學段。' } }));
+    const ids = recommendTools([collegeOnly, juniorOnly, crossStage], { audience: 'student', schoolLevel: 'college' }, 10)
+      .map(({ tool }) => tool.id);
+    expect(ids).toContain(4);
+    expect(ids).toContain(6);
+    expect(ids).not.toContain(5);
+  });
+
   it('學生未選學段時不過濾（回溯相容）', () => {
     const juniorOnly = makeTool(2, makeFit({ audiences: ['student'], schoolLevels: ['junior'], reasons: { student: '國中適用。' } }));
     const ids = recommendTools([juniorOnly], { audience: 'student' }, 10).map(({ tool }) => tool.id);

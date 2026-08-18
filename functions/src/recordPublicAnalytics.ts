@@ -42,7 +42,7 @@ const WIZARD_STEPS = new Set([
 ]);
 const SELECTIONS: Record<string, Set<string>> = {
   audience: new Set(['teacher', 'student']),
-  schoolLevels: new Set(['elementary', 'junior', 'senior']),
+  schoolLevels: new Set(['elementary', 'junior', 'senior', 'college']),
   teacherRoles: new Set(['homeroom', 'subject', 'admin']),
   departments: new Set(['academic', 'student-affairs', 'general-affairs', 'counseling', 'other']),
   painPoints: new Set([
