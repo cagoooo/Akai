@@ -14648,6 +14648,71 @@ ListenQuiz 只播發音、不顯示字，學生要從選項中挑出正確拼法
 `,
 };
 
+const POST_124: BlogPost = {
+  slug: 'ai-workshop-124-teaching-research-agent',
+  title: '#124 從 AI 教學與研究助理到 AI Agent：把一日工作坊變成可重複的實作路線',
+  excerpt:
+    '#124 把上午 47 頁、下午 59 頁的 AI 工作坊整理成一條可以真的走完的路線：先建立教學與研究工作室，再練習資料治理、Agent Skills、部署與人工驗收，讓 AI 從聊天視窗變成可交付的工作夥伴。',
+  publishedAt: '2026-08-25',
+  readingMinutes: 6,
+  tags: ['AI教學', 'AI研究', 'AI Agent', '教師研習', '資料治理'],
+  toolIds: [124, 103, 87],
+  coverEmoji: '🤖',
+  coverColor: 'blue',
+  body: `## 研習最容易卡住的地方，不是沒有平台
+
+大學教師或研究生要開始用 AI，常常不是缺少工具，而是工具太多：上午有人示範 Gemini Notebook，下午又出現 Codex、Antigravity、Claude、Agent Skills；研究資料在 CSV 裡，教學成果在 HTML 裡，最後還要想辦法部署、分享、留下驗收證據。每一個名詞單獨看都不難，真正困難的是：**我現在應該先做哪一步？哪些資料可以交給 AI？哪些判斷必須自己保留？**
+
+如果只把平台名稱列成一張清單，研習結束後很容易又回到原本的工作方式。#124 **從 AI 教學與研究助理到 AI Agent**，想處理的正是這個「知道很多、卻還沒有走成流程」的落差。它不是另一個聊天機器人，而是一個把教學、研究、資料安全與交付驗收放在同一張地圖上的互動式工作坊入口。
+
+## 上午：先做出自己的 AI 教學與研究工作室
+
+上午場共有 47 頁，路線從 Vibe Coding、Vibe Working 與 AI 三個 Level 開始，接著進入 Gemini Notebook、Gem 與 Canvas。這一段的重點不是背誦功能，而是先把「我要處理的課程或研究問題」整理成有來源、有範圍、有輸出的工作空間。
+
+例如，教師可以先把指定文獻放進 Notebook，讓回答被來源約束；再用 Gem 固定常用的角色、格式與檢查規則；最後用 Canvas 把內容轉成一個可以示範、修改或交給學生操作的互動原型。這樣的順序，會比每次開新對話、重新解釋背景，更接近真正可維護的教學準備流程。
+
+簡報本身也不是只能投影觀看的 PDF。它提供章節總覽、講者備註、閱讀模式、全螢幕與 URL hash 導航，桌機可以用鍵盤換頁，手機可以左右滑動。講師現場可以用舞台模式帶領，學員課後則能回到同一頁重看操作脈絡。
+
+## 下午：把「會問 AI」推進到「能交付」
+
+下午場共有 59 頁，主題改成會做事的 AI 教學與研究夥伴。這裡的關鍵不是讓 AI 自己決定一切，而是把工作拆成可觀察、可驗證的階段。
+
+**第一步是先看清楚資料。** 內建的 PIRLS 資料分析工作台可以匯入去識別 CSV，檢查唯一鍵、缺漏值、允許值與分析風險，再產生可貼到 ChatGPT 或 Gemini 的 AI 初編提示詞。AI 回傳 JSON 後，仍要貼回工具進行人工複核；原始答案、AI 初編、證據摘錄與人工最終碼分欄保存，不把「AI 說了什麼」假裝成「研究已經完成」。
+
+**第二步是先驗證 Skill，再交給 Agent。** 跨平台 Skill 驗證器會檢查 frontmatter、相對路徑、references 與 scripts 是否找得到，也會提醒 API 金鑰、私鑰、上層路徑與要求自動公開或刪除資料的風險。綠燈只代表格式與可攜性初檢通過，研究倫理、權限與程式碼審查仍保留給人。
+
+**第三步是依需求選部署路徑。** 部署選擇精靈會用維護方式、協作需求、現有檔案、分享對象、後端需求與資料敏感度做盤點，再比較 Google Sites、GitHub Pages 與 EZPage。它不替使用者登入、不替使用者公開檔案，而是把決策理由、上線前檢查與回復策略整理成可帶走的計畫。
+
+## 我會怎麼帶一場實作
+
+如果是三小時研習，我會先請學員從資源導航選擇自己的帳號路線：有 Gemini 的人走 Notebook、Gem、Canvas；只有 ChatGPT 的人則使用來源包、任務書與 Canvas 起始站。這個分流很重要，因為工具不可用時，學員仍應完成同一個設計、分析與驗收目標。
+
+接著請每個人選一個真實但不含個資的教學或研究問題，上午完成一個小型工作室，下午把它拆成資料、提示詞、Skill、驗證、部署與證據六個節點。最後不要求大家做出一個看起來很炫的 Demo，而是請他們說清楚三件事：輸入資料從哪裡來、AI 哪些部分可以協助、交付前由誰用什麼規準確認。這樣才能把研習帶回下週的課堂或研究會議。
+
+## 真實技術特色：離線優先，也把人工界線寫在介面上
+
+工作坊入口與教材是靜態 HTML、CSS、JavaScript，部署在 GitHub Pages，不需要 Node.js 才能現場開啟；互動簡報採固定 16:9 舞台並支援手機響應式。研究工具以瀏覽器本機記憶體或 localStorage 處理流程，明確提示去識別、合成資料與人工複核，避免把研究原始資料默默送到外部 API。資源導航還提供 PDF、PowerPoint、HTML 備援、場務驗收手冊與學員任務書，讓現場斷網或帳號路線不同時，仍然有可完成的替代方案。
+
+## 適合誰？先從工作問題出發
+
+- **大學教師與研究型教師**：把課程設計、文獻整理、資料分析與互動教材串成一條可複製的工作流。
+- **研究生與教學助理**：練習去識別資料、AI 初編、證據保存與研究交付，不把工具操作誤當成研究結論。
+- **教務、研究發展、資訊與研習承辦**：用案例導航、部署決策、場務檢查與備援教材規劃一場能落地的 AI 研習。
+- **想把 AI 導入學校工作的教師**：即使不使用同一批平台，也能沿用「先定義問題、再治理資料、最後驗收交付」的順序。
+
+## 配對工具推薦
+
+- [#103 AI Agent 的 Web 技能雙引擎 — Playwright × Webwright 一頁讀懂](https://cagoooo.github.io/PlayRight/)：把 Agent 的規劃、操作、驗證與證據回報概念接到 Web 實作。
+- [#87 PIRLS 閱讀理解生成站 PRO](https://cagoooo.github.io/pirls-questioncraft/)：把閱讀題目設計與評量素材帶進上午的教學工作室，再用下午的資料流程練習分析與人工複核。
+- [#124 從 AI 教學與研究助理到 AI Agent](https://cagoooo.github.io/ncu-ai-agent-workshop-20260826/)：本篇主角，先從資源導航選一條路線開始。
+
+## 想試試？
+
+→ [前往 #124 從 AI 教學與研究助理到 AI Agent](https://cagoooo.github.io/ncu-ai-agent-workshop-20260826/)
+
+不要先從「我要學會哪一個 AI 平台」開始。先帶著一個下週真的要用的課程問題、一份已去識別的練習資料，或一個一直想部署的小作品進去；走完一條路線後，你會更清楚 AI 能幫你做什麼，也更清楚哪些地方必須由你自己負責。`,
+};
+
 const POST_123: BlogPost = {
   slug: 'web-migration-123-accessibility-aa-console',
   title: '#123 校網無障礙 AA 遷移操作平台：把一本研習講義，變成 12 個能打勾的步驟',
@@ -14757,7 +14822,7 @@ JRE 版本必須 17～21（太高太低都不行）、安裝時要把 JavaSoft r
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+export const POSTS: BlogPost[] = [POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。

@@ -120,5 +120,6 @@ export const TOOL_URL_MAP: Record<string, number> = {
   "https://cagoooo.github.io/space-meteor-evasion-3d/": 120,
   "https://cagoooo.github.io/ink-dragon-runner/": 121,
   "https://cagoooo.github.io/Word-Wiz-Kids/#/": 122,
-  "https://cagoooo.github.io/smes-web-migration/": 123
+  "https://cagoooo.github.io/smes-web-migration/": 123,
+  "https://cagoooo.github.io/ncu-ai-agent-workshop-20260826/": 124
 };
