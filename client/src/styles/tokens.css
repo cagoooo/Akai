@@ -1336,10 +1336,12 @@
    380px   : 小手機 (SE 等)
    ───────────────────────────────────────── */
 
-/* 防止卡片傾斜造成水平滾動條 */
+/* 防止卡片傾斜造成水平滾動條。
+   使用 clip 而不是 hidden，避免 body 形成額外的垂直捲動容器；
+   BlogPost 左右欄的 position: sticky 才能以視窗捲動為基準正常固定。 */
 html,
 body {
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100%;
 }
 

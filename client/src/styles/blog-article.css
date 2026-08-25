@@ -38,10 +38,21 @@
   font-family: var(--font-tc);
   color: var(--ink-soft);
 }
-.bp-page__left    { grid-area: left;    position: sticky; top: 28px; align-self: start; min-width: 0; }
+.bp-page__left,
+.bp-page__toc {
+  position: sticky;
+  top: 28px;
+  align-self: start;
+  min-width: 0;
+  max-height: calc(100vh - 56px);
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+}
+.bp-page__left    { grid-area: left; }
 .bp-page__hero    { grid-area: hero;    margin-bottom: 36px; min-width: 0; }
 .bp-page__article { grid-area: article; min-width: 0; }
-.bp-page__toc     { grid-area: toc;     position: sticky; top: 28px; align-self: start; min-width: 0; }
+.bp-page__toc     { grid-area: toc; }
 
 /* ≤1080：兩欄收起，文章單欄置中，行動版 TOC 出現 */
 @media (max-width: 1080px) {
