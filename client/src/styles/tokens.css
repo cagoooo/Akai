@@ -1158,6 +1158,16 @@
   font: inherit;
   font-size: 12px;
 }
+/* 推薦工具定位後的「電影院聚光」：只保留指定卡片的亮度，
+   不攔截其他卡片互動，讓使用者仍能隨時改看另一張工具。 */
+.bulletin-tool-grid.is-spotlighting {
+  isolation: isolate;
+}
+.bulletin-tool-grid.is-spotlighting .bulletin-tool-card:not(.audience-tool-highlight) {
+  filter: brightness(0.52) saturate(0.72);
+  opacity: 0.64;
+  transition: filter 0.45s ease, opacity 0.45s ease !important;
+}
 .audience-tool-highlight {
   z-index: 4;
   animation: audience-card-focus 1.35s ease-in-out 3;
@@ -1779,8 +1789,10 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .audience-tool-highlight,
   .audience-tool-highlight::after,
-  .audience-tool-highlight__label {
+  .audience-tool-highlight__label,
+  .bulletin-tool-grid.is-spotlighting .bulletin-tool-card:not(.audience-tool-highlight) {
     animation: none !important;
+    transition: none !important;
   }
   .sticker-card,
   .sticker-card:hover {

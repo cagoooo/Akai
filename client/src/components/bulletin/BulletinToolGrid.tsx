@@ -38,7 +38,7 @@ export function BulletinToolGrid({ tools, highlightedToolId = null }: Props) {
 
   return (
     <div
-      className="bulletin-tool-grid"
+      className={`bulletin-tool-grid${highlightedToolId !== null ? ' is-spotlighting' : ''}`}
       style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
