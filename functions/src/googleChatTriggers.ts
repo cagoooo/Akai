@@ -10,6 +10,7 @@ import * as functions from "firebase-functions/v1";
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { defineSecret } from "firebase-functions/params";
 import { pushToGoogleChat } from "./lib/googleChatNotify";
+import { createGithubErrorIssue } from "./lib/githubIssueNotify";
 import {
     SEVERITY_LABEL,
     classifySeverity,
@@ -19,6 +20,7 @@ import {
 } from "./lib/errorAlertPolicy";
 
 const GOOGLE_CHAT_WEBHOOK_URL = defineSecret("GOOGLE_CHAT_WEBHOOK_URL");
+const GITHUB_ISSUE_TOKEN = defineSecret("GITHUB_ISSUE_TOKEN");
 
 // 對外公開站點（供卡片裡的「打開查看」按鈕用）
 const SITE_BASE = "https://cagoooo.github.io/Akai";
@@ -156,7 +158,7 @@ async function recordAndDecide(
 export const onErrorLogCreated = onDocumentCreated(
     {
         document: "errorLogs/{docId}",
-        secrets: [GOOGLE_CHAT_WEBHOOK_URL],
+        secrets: [GOOGLE_CHAT_WEBHOOK_URL, GITHUB_ISSUE_TOKEN],
         region: "asia-east1",
     },
     async (event) => {
@@ -301,6 +303,23 @@ export const onErrorLogCreated = onDocumentCreated(
         };
 
         await pushToGoogleChat(webhookUrl, summaryText, [card], "FirestoreOnErrorLog");
+
+        // P1-5：同一道節流閘門之下，額外開一張 Issue 觸發雲端 agent 自動診斷根因
+        await createGithubErrorIssue(
+            GITHUB_ISSUE_TOKEN.value(),
+            {
+                message,
+                severity,
+                fingerprint,
+                stack,
+                url,
+                userAgent,
+                appVersion,
+                firstSeenText,
+                totalCount: aggregate.total,
+            },
+            "FirestoreOnErrorLog"
+        );
     }
 );
 
