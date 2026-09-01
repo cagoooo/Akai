@@ -116,6 +116,7 @@ window.addEventListener('unhandledrejection', async (event) => {
         const { collection, addDoc } = await import('firebase/firestore');
         await addDoc(collection(db, 'errorLogs'), {
             message: event.reason?.message || String(event.reason),
+            name: event.reason?.name ?? null, // event.reason 不一定是 Error 物件，Firestore 不接受 undefined
             stack: event.reason?.stack?.substring(0, 2000),
             url: window.location.href,
             userAgent: navigator.userAgent,

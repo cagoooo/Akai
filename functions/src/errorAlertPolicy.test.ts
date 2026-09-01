@@ -33,6 +33,13 @@ describe("isKnownNoise", () => {
             stack: "TypeError\n  at https://cagoooo.github.io/Akai/assets/index-a1b2c3d4.js:5:10",
         })).toBe(false);
     });
+
+    it("name 為 AbortError 時，不論 message 措辭是什麼都視為雜訊", () => {
+        expect(isKnownNoise({
+            message: "這是瀏覽器明天才會換上的全新措辭，regex 清單還沒收錄",
+            name: "AbortError",
+        })).toBe(true);
+    });
 });
 
 describe("classifySeverity", () => {

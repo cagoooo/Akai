@@ -20,6 +20,8 @@ export interface ErrorLogInput {
     componentStack?: string;
     url?: string;
     userAgent?: string;
+    /** DOMException/Error.name，如 "AbortError"。結構化欄位，不受瀏覽器措辭影響 */
+    name?: string;
 }
 
 /** 同指紋的推播間隔（毫秒）。info 不推播，只累積次數。 */
@@ -56,6 +58,10 @@ const NOISE_SOURCE_PATTERNS: readonly RegExp[] = [
 ];
 
 export function isKnownNoise(input: ErrorLogInput): boolean {
+    // 結構化判斷優先：name 是瀏覽器標準化的錯誤類型，不像 message 措辭會隨版本改變。
+    // 下面的 message regex 仍保留，作為 name 欄位缺席（舊版前端快取、非 Error 物件）時的備援。
+    if (input.name === "AbortError") return true;
+
     const message = input.message ?? "";
     if (NOISE_MESSAGE_PATTERNS.some((pattern) => pattern.test(message))) return true;
 

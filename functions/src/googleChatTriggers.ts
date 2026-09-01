@@ -173,11 +173,12 @@ export const onErrorLogCreated = onDocumentCreated(
             ? new Date(data.timestamp).toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })
             : new Date().toLocaleString("zh-TW", { timeZone: "Asia/Taipei" });
         const level = data.level || "error";
+        const name = data.name || undefined;
         const appVersion = (data.metadata && data.metadata.appVersion) || "未知版本";
 
         // ── P1-4 告警分級與收斂 ──────────────────────────────────────
         // 過去是一顆錯誤一則通知，同一個 bug 打到 100 個訪客就是 100 則 → 通知疲勞。
-        const logInput = { level, message, stack, componentStack, url, userAgent };
+        const logInput = { level, message, stack, componentStack, url, userAgent, name };
         if (isKnownNoise(logInput)) {
             console.log(`[ErrorAlert] 已知第三方雜訊，只留存不推播：${message}`);
             return;

@@ -143,6 +143,7 @@ export class ErrorBoundary extends Component<Props, State> {
             const { collection, addDoc } = await import('firebase/firestore');
             await addDoc(collection(db, 'errorLogs'), {
                 message: error.message,
+                name: error.name,
                 stack: error.stack?.substring(0, 2000),
                 componentStack: errorInfo.componentStack?.substring(0, 2000),
                 url: window.location.href,
