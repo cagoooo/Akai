@@ -7,6 +7,12 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://cagoooo.github.io/Akai/geo/</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://cagoooo.github.io/Akai/tool/1/</loc>
     <lastmod>2026-02-23</lastmod>
     <changefreq>monthly</changefreq>
@@ -1286,12 +1292,6 @@
   </url>
   <url>
     <loc>https://cagoooo.github.io/storytell/</loc>
-    <lastmod>2026-09-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.62</priority>
-  </url>
-  <url>
-    <loc>https://cagoooo.github.io/PhotoPoet/</loc>
     <lastmod>2026-09-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.62</priority>

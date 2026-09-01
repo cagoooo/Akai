@@ -24,7 +24,7 @@ export function Footer() {
         <p className="text-center sm:text-left">
           © {new Date().getFullYear()}{" "}
           <a
-            href="https://www.smes.tyc.edu.tw/modules/school/index.php?department_id=2&zone_id=0&page_id=2&content_id=11&type=news&from_op=all_news#a5"
+            href="https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5"
             target="_blank"
             rel="noopener noreferrer"
             className="text-muted-foreground hover:text-primary hover:underline transition-colors duration-300"

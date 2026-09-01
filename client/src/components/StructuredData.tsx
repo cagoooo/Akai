@@ -3,16 +3,17 @@ import { useMemo } from 'react';
 import { tools } from '@/lib/data';
 
 const SITE_URL = 'https://cagoooo.github.io/Akai';
-const AUTHOR_URL = 'https://www.smes.tyc.edu.tw/modules/school/index.php?department_id=2&zone_id=0&page_id=2&content_id=11&type=news&from_op=all_news#a5';
+const AUTHOR_URL = 'https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5';
 const SCHOOL_NAME = '桃園市龍潭區石門國民小學';
 const SITE_NAME = '科技教育創新專區';
+const AUTHOR_NAME = '黃凱揚（阿凱老師）';
 
 export function WebsiteSchema() {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     '@id': `${SITE_URL}/#website`,
-    name: `阿凱老師 · ${SITE_NAME}`,
+    name: `${AUTHOR_NAME} · ${SITE_NAME}`,
     alternateName: ['阿凱老師教育工具集', 'Akai Educational Tools'],
     url: `${SITE_URL}/`,
     description: '阿凱老師在石門國小教學現場打造的免費教育科技工具集，收錄課堂互動、AI 教案、閱讀評量、語文寫作、教育遊戲與校園行政工具。',
@@ -150,7 +151,7 @@ export function OrganizationSchema() {
     url: `${SITE_URL}/`,
     logo: `${SITE_URL}/icon-512.png`,
     image: `${SITE_URL}/og-preview.png`,
-    description: `${SCHOOL_NAME}阿凱老師建立的科技教育工具與教學情境長文專區，提供免費、免註冊、可直接用於國小教學現場的工具。`,
+    description: `${SCHOOL_NAME}${AUTHOR_NAME}建立的科技教育工具與教學情境長文專區，提供免費、免註冊、可直接用於國小教學現場的工具。`,
     sameAs: [
       AUTHOR_URL,
       'https://github.com/cagoooo',
@@ -163,8 +164,8 @@ export function OrganizationSchema() {
     '@context': 'https://schema.org',
     '@type': 'Person',
     '@id': `${SITE_URL}/#akai`,
-    name: '阿凱老師',
-    alternateName: ['Akai', 'cagoooo'],
+    name: AUTHOR_NAME,
+    alternateName: ['阿凱老師', '黃凱揚', 'Akai', 'cagoooo'],
     url: `${SITE_URL}/`,
     sameAs: [AUTHOR_URL, 'https://github.com/cagoooo'],
     jobTitle: '國小教師 / 教育科技工具開發者',
@@ -181,6 +182,10 @@ export function OrganizationSchema() {
       'PIRLS 閱讀理解',
       '課堂互動',
       '校園行政數位化',
+      '學校場地預約',
+      'QR Code 即時投票',
+      'GitHub Pages',
+      'Vite',
       'React',
       'Firebase',
     ],

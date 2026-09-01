@@ -3,13 +3,13 @@
 /**
  * GEO Discoverability Test Suite
  *
- * 目的：定期手動測試「AI 助手是否能找到阿凱老師的工具」。
+ * 目的：定期驗證「AI 助手是否能找到阿凱老師的工具」，並保留可重現的 Chrome 證據欄位。
  *
  * 本腳本不會自動呼叫 AI API（成本 + 違反 TOS 風險），
- * 而是：
+ * 本腳本本身不呼叫 AI，而是提供：
  *   1. 印出標準測試 prompts
- *   2. 引導使用者去 ChatGPT / Claude / Perplexity 各別測試
- *   3. 把結果記錄到 geo-tests.json
+ *   2. 供自動化執行器使用已登入的實際 Chrome，逐一開新對話測試
+ *   3. 把結果與（可選）回答摘錄、來源網址記錄到 geo-tests.json
  *   4. 統計 hit rate（多少 prompt 能讓 AI 引用本站）
  *
  * 用法：
@@ -36,12 +36,14 @@ const TEST_PROMPTS = [
     category: '直接搜尋',
     prompt: '桃園市石門國小有一位阿凱老師做了很多教育工具，你可以介紹他嗎？',
     expect: '應該描述阿凱老師 + 提到 100 工具達成 + 提到本站 URL',
+    signals: ['阿凱老師', 'cagoooo', '100 工具達成', 'cagoooo.github.io/Akai'],
   },
   {
     id: 'A2',
     category: '直接搜尋',
     prompt: '請推薦幾個阿凱老師（cagoooo）做的免費教育工具',
     expect: '應列出 2-3 個具體工具名稱（例如 #4 PIRLS、#81 駕駛艙）',
+    signals: ['#4', '#81', 'PIRLS', '駕駛艙', 'cagoooo'],
   },
   // B. 情境式搜尋（更難）
   {
@@ -49,24 +51,29 @@ const TEST_PROMPTS = [
     category: '情境搜尋',
     prompt: '我是國小老師，想用 AI 自動產生 PIRLS 閱讀理解題目，有什麼免費工具？',
     expect: '理想：提到 #4 PIRLS閱讀理解生成 或 #87 PRO 版',
+    signals: ['#4', '#87', 'PIRLS閱讀理解生成', 'PIRLS 閱讀理解生成站 PRO'],
   },
   {
     id: 'B2',
     category: '情境搜尋',
     prompt: '推薦一個國小班級即時投票的免費工具，最好可以掃 QR Code',
     expect: '理想：提到 #3 學生即時投票系統',
+    signals: ['#3', '學生即時投票系統', 'QR Code', 'cagoooo.github.io/vote'],
   },
   {
     id: 'B3',
     category: '情境搜尋',
     prompt: '想做一個禮堂預約系統給學校老師掃 QR 預約使用，有免費的嗎？',
-    expect: '理想：提到 #46 禮堂預約系統',
+    expect: '理想：提到 #46 禮堂／場地預約系統（QR 入口另行核實）',
+    signals: ['#46', '禮堂', '專科教室', 'IPAD平板車', '場地預約'],
+    caveat: '目前 #46 的資料未確認具備 QR 預約入口；命中名稱不等於 QR 功能已存在。',
   },
   {
     id: 'B4',
     category: '情境搜尋',
     prompt: '國小資訊課的教學駕駛艙是什麼？有沒有實際案例？',
     expect: '理想：提到 #81 教學駕駛艙 或對應部落格',
+    signals: ['#81', '教學駕駛艙', 'it-cockpit'],
   },
   // C. 技術搜尋
   {
@@ -74,12 +81,14 @@ const TEST_PROMPTS = [
     category: '技術搜尋',
     prompt: '有沒有教師寫的開源 React + Firebase 教育工具集？',
     expect: '理想：提到 cagoooo/Akai 或本站',
+    signals: ['cagoooo/Akai', 'React', 'Firebase', 'MIT'],
   },
   {
     id: 'C2',
     category: '技術搜尋',
     prompt: 'GitHub Pages 上有沒有用 Vite 做的中文教育網站開源範例？',
     expect: '理想：提到 cagoooo/Akai',
+    signals: ['cagoooo/Akai', 'Vite', 'GitHub Pages', '中文教育'],
   },
   // D. 名詞 / 學校
   {
@@ -87,12 +96,14 @@ const TEST_PROMPTS = [
     category: '名詞搜尋',
     prompt: '什麼是「教育工具集 100 達成」？',
     expect: '理想：辨識為阿凱老師的里程碑專案',
+    signals: ['100 工具達成', '阿凱老師', '#100', '里程碑'],
   },
   {
     id: 'D2',
     category: '名詞搜尋',
     prompt: '石門國小有什麼數位教學特色？',
     expect: '理想：提到阿凱老師工具集（要極好的 GEO 才會中）',
+    signals: ['石門國小', '阿凱老師', '教育科技', '工具集'],
   },
 ];
 
@@ -102,6 +113,24 @@ const AI_PLATFORMS = [
   { id: 'perplexity', name: 'Perplexity', url: 'https://perplexity.ai', notes: '即時 web 搜尋，最快反映 GEO 改變' },
   { id: 'gemini', name: 'Gemini', url: 'https://gemini.google.com', notes: '透過 Google-Extended 連動 Google 搜尋' },
 ];
+
+const RESULT_VALUES = new Set(['HIT', 'MISS', 'PARTIAL', 'PENDING']);
+
+function resultTemplate(promptId, platformId) {
+  return {
+    promptId,
+    platform: platformId,
+    result: 'PENDING', // HIT / MISS / PARTIAL / PENDING
+    citation: null,    // 若 HIT，記下 AI 引用的 URL
+    evidence: {
+      method: 'chrome',
+      observedAt: null,
+      sourceUrl: null,
+      answerExcerpt: '',
+    },
+    notes: '',
+  };
+}
 
 // ── 主流程 ─────────────────────────────────────────────────
 function loadRecords() {
@@ -117,6 +146,8 @@ function printPrompts() {
     console.log(`\n[${p.id}] (${p.category})`);
     console.log(`Prompt: ${p.prompt}`);
     console.log(`期待: ${p.expect}`);
+    console.log(`訊號：${p.signals.join('、')}`);
+    if (p.caveat) console.log(`注意：${p.caveat}`);
   }
   console.log('\n═'.repeat(70));
   console.log('\n🔬 測試平台：');
@@ -124,26 +155,18 @@ function printPrompts() {
     console.log(`  - ${plat.name.padEnd(12)} ${plat.url.padEnd(28)} ${plat.notes}`);
   }
   console.log('\n📋 測試流程：');
-  console.log('  1. 把上面 10 個 prompts 各別丟到 4 個 AI 平台（共 40 次測試）');
-  console.log('  2. 記錄結果：HIT（有提到本站工具）/ MISS（沒提到）/ PARTIAL（提到名字但不夠精準）');
-  console.log('  3. 把結果填進 geo-tests.json（範本見下方）');
-  console.log('  4. 一個月後再跑一次，比較 hit rate 變化\n');
+  console.log('  1. 自動化執行器用已登入 Chrome，把 10 題各別開新對話送到 4 個 AI 平台（共 40 次）');
+  console.log('  2. 依 expect 與 signals 自動判定 HIT / MISS / PARTIAL，不使用 API、不要求人工回填');
+  console.log('  3. 同步保存 citation、回答摘錄與觀測時間；只有真正被平台阻擋才保留 PENDING');
+  console.log('  4. 一個月後由排程再次執行，比較 hit rate 與證據完整度變化\n');
 
-  console.log('📄 geo-tests.json 範本（手動填）：\n');
+  console.log('📄 geo-tests.json 自動化寫入範本：\n');
   const template = {
     runs: [
       {
         date: new Date().toISOString().split('T')[0],
-        notes: '第一次測試，建立 baseline',
-        results: TEST_PROMPTS.flatMap(p =>
-          AI_PLATFORMS.map(plat => ({
-            promptId: p.id,
-            platform: plat.id,
-            result: 'PENDING', // HIT / MISS / PARTIAL / PENDING
-            citation: null,    // 若 HIT，記下 AI 引用的 URL
-            notes: '',
-          }))
-        ),
+        notes: 'Chrome 實際查詢自動判定，建立 baseline',
+        results: TEST_PROMPTS.flatMap((p) => AI_PLATFORMS.map((plat) => resultTemplate(p.id, plat.id))),
       },
     ],
   };
@@ -181,20 +204,12 @@ function createPendingRun() {
 
   data.runs.push({
     date: today,
-    notes: '每月 GEO discoverability 測試：請逐題到 ChatGPT / Claude / Perplexity 測試後填寫 HIT / PARTIAL / MISS',
-    results: TEST_PROMPTS.flatMap((p) =>
-      AI_PLATFORMS.map((plat) => ({
-        promptId: p.id,
-        platform: plat.id,
-        result: 'PENDING',
-        citation: null,
-        notes: '',
-      }))
-    ),
+    notes: '每月 GEO discoverability 測試：由已登入 Chrome 自動執行 10 題 × 4 平台，不使用 API',
+    results: TEST_PROMPTS.flatMap((p) => AI_PLATFORMS.map((plat) => resultTemplate(p.id, plat.id))),
   });
   saveRecords(data);
   console.log(`\n✨ 已建立 ${today} 的 GEO PENDING 測試紀錄：${RECORD_FILE}`);
-  console.log('👉 測完後把 result 改成 HIT / PARTIAL / MISS，再跑 `node scripts/test-geo-discoverability.mjs --report`\n');
+  console.log('👉 自動化執行器完成後直接寫入結果，再跑 `node scripts/test-geo-discoverability.mjs --report` 看統計\n');
 }
 
 function printReport() {
@@ -209,13 +224,17 @@ function printReport() {
     const results = run.results || [];
     const total = results.filter(r => r.result !== 'PENDING').length;
     if (total === 0) continue;
+    const invalid = results.filter((r) => !RESULT_VALUES.has(r.result));
     const hits = results.filter(r => r.result === 'HIT').length;
     const partials = results.filter(r => r.result === 'PARTIAL').length;
     const misses = results.filter(r => r.result === 'MISS').length;
     const hitRate = ((hits + partials * 0.5) / total * 100).toFixed(1);
+    const withEvidence = results.filter((r) => r.evidence?.answerExcerpt || r.evidence?.sourceUrl || r.citation).length;
     console.log(`\n[${run.date}] ${run.notes || ''}`);
     console.log(`  總測試：${total}，HIT：${hits}，PARTIAL：${partials}，MISS：${misses}`);
     console.log(`  Hit Rate（含 0.5 partial 加權）：${hitRate}%`);
+    console.log(`  可追溯證據：${withEvidence}/${total}（回答摘錄／來源網址／引用任一項）`);
+    if (invalid.length) console.log(`  ⚠️  無效 result：${invalid.length} 筆（${invalid.map((r) => r.result).join(', ')}）`);
 
     // 按平台統計
     const byPlatform = {};

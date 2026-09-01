@@ -22,6 +22,8 @@ import type { EducationalTool } from '@/lib/data';
 
 const SITE_URL = 'https://cagoooo.github.io/Akai';
 const DEFAULT_OG_FALLBACK = '/og-preview.png'; // 萬一 site-stats.json 讀不到的兜底
+const AUTHOR_NAME = '黃凱揚（阿凱老師）';
+const AUTHOR_URL = 'https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5';
 
 interface BaseProps {
   /** 強制 override 的 cache buster；不傳則自動讀 VITE_APP_VERSION */
@@ -112,7 +114,8 @@ export function PageHead(props: Props) {
       author: {
         '@type': 'Person',
         '@id': `${SITE_URL}/#akai`,
-        name: '阿凱老師',
+        name: AUTHOR_NAME,
+        url: AUTHOR_URL,
         affiliation: {
           '@type': 'EducationalOrganization',
           name: '桃園市龍潭區石門國民小學',

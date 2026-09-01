@@ -19,8 +19,8 @@ interface BlogPostingSchemaProps {
 }
 
 const SITE_URL = 'https://cagoooo.github.io/Akai';
-const AUTHOR_NAME = '阿凱老師';
-const AUTHOR_URL = 'https://www.smes.tyc.edu.tw/modules/school/index.php?department_id=2&zone_id=0&page_id=2&content_id=11&type=news&from_op=all_news#a5';
+const AUTHOR_NAME = '黃凱揚（阿凱老師）';
+const AUTHOR_URL = 'https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5';
 const PUBLISHER_NAME = '科技教育創新專區';
 const PUBLISHER_LOGO = `${SITE_URL}/icon-512.png`;
 

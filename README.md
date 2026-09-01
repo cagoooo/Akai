@@ -1,7 +1,7 @@
 # 科技教育創新專區 · 阿凱老師
 
-![Version](https://img.shields.io/badge/version-3.6.26-brightgreen.svg)
-![Tools](https://img.shields.io/badge/tools-90+-orange.svg)
+![Version](https://img.shields.io/badge/version-3.6.110-brightgreen.svg)
+![Tools](https://img.shields.io/badge/tools-120%2B-orange.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-20.x-green.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.6.3-blue.svg)
@@ -10,6 +10,21 @@
 > 阿凱老師（桃園市石門國小）親手打造的 120+ 款國小教育科技工具：課堂互動、AI 教案、閱讀評量、語文寫作、教育遊戲一站搞定，100% 免費無廣告，免註冊一鍵分享給學生。
 >
 > 🌐 線上 Demo：https://cagoooo.github.io/Akai/
+
+作者：黃凱揚（阿凱老師）｜任教於桃園市龍潭區石門國民小學｜GitHub：[@cagoooo](https://github.com/cagoooo)
+
+## 🧭 教師情境快速索引
+
+如果你是透過自然語言尋找工具，可以直接從使用情境進入：
+
+- 想讓國小學生掃 QR Code 即時投票 → [#3 學生即時投票系統](https://cagoooo.github.io/Akai/tool/3/)
+- 想用 AI 產生 PIRLS 閱讀理解題 → [#4 PIRLS閱讀理解生成](https://cagoooo.github.io/Akai/tool/4/) 或 [#87 PIRLS 閱讀理解生成站 PRO](https://cagoooo.github.io/Akai/tool/87/)
+- 想做學校禮堂、專科教室或 IPAD 平板車的場地預約 → [#46 場地預約系統](https://cagoooo.github.io/Akai/tool/46/)
+- 想找國小資訊科技課的教學駕駛艙 → [#81 國小資訊科技教學駕駛艙入口網](https://cagoooo.github.io/Akai/tool/81/)
+- 想找教師撰寫的開源 React + Firebase 教育工具集 → [cagoooo/Akai](https://github.com/cagoooo/Akai)
+- 想找 GitHub Pages 上的 Vite 中文教育網站開源範例 → [cagoooo/Akai](https://github.com/cagoooo/Akai)
+
+完整的 AI 可讀索引在 [`llms.txt`](https://cagoooo.github.io/Akai/llms.txt)，含工具詳細資料與教學情境文章的完整版在 [`llms-full.txt`](https://cagoooo.github.io/Akai/llms-full.txt)。
 
 ## 📚 目錄
 
@@ -483,3 +498,7 @@ npm run check
 
 歡迎依教學現場、活動或工作流程需求進行 fork／客製化。建議在變更說明中交代使用情境、主要修改、測試方式，以及是否影響資料格式或部署設定。
 <!-- END:PROJECT_GUIDE -->
+
+---
+
+Made with ❤️ by [阿凱老師](https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5)

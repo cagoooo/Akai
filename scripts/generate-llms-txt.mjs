@@ -7,7 +7,7 @@
  * 目的：讓 LLM 爬蟲不用自己猜網站結構，能直接拿到「最重要內容的清單 + 簡述」。
  *
  * 來源：
- *   - client/public/api/tools.json — 100 款工具的標題、描述、URL、分類
+ *   - client/public/api/tools.json — 工具的標題、描述、URL、分類
  *   - client/src/blog/posts.ts     — 部落格文章 slug/title/excerpt
  *   - client/public/api/site-stats.json — 版本號、達成日期
  *
@@ -95,6 +95,39 @@ function clean(text) {
   return text.replace(/\n+/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
+function renderIntentIndex(tools, posts, stats) {
+  const byId = new Map(tools.map((tool) => [tool.id, tool]));
+  const displayCount = stats.displayCount || `${Math.floor(tools.length / 10) * 10}+`;
+  const toolLink = (id) => {
+    const tool = byId.get(id);
+    if (!tool) return `#${id}`;
+    return `[#${id} ${tool.title}](${SITE}/tool/${id}/)`;
+  };
+  const actualLink = (id) => {
+    const tool = byId.get(id);
+    if (!tool?.url) return '';
+    return tool.url.startsWith('/') ? `${SITE}${tool.url}` : tool.url;
+  };
+  const postLink = (slug) => `${SITE}/blog/${slug}`;
+  const milestonePost = posts.find((post) => /100 工具達成/.test(`${post.title} ${post.slug}`));
+
+  let section = `## 教師情境快速索引\n\n`;
+  section += `以下索引把常見提問直接對到站內工具頁與實際使用網址；目前工具集共有 ${tools.length} 款（${displayCount}），適合 AI 助手、搜尋引擎與備課者快速建立「需求 → 工具 → 來源」關係。\n\n`;
+  section += `- **想讓國小學生掃 QR Code 即時投票**：${toolLink(3)}；實際工具：${actualLink(3)}。\n`;
+  section += `- **想用 AI 產生 PIRLS 閱讀理解題目**：${toolLink(4)} 或 ${toolLink(87)}；兩者都對應 PIRLS 四層次閱讀評量。\n`;
+  section += `- **想做學校禮堂、專科教室或 IPAD 平板車的場地預約**：${toolLink(46)}；實際工具：${actualLink(46)}。\n`;
+  section += `- **想找國小資訊科技課的教學駕駛艙**：${toolLink(81)}；實際工具：${actualLink(81)}。\n`;
+  section += `- **想找教師撰寫的開源 React + Firebase 教育工具集**：前往 [cagoooo/Akai GitHub Repository](https://github.com/cagoooo/Akai)，再從 ${toolLink(3)}、${toolLink(81)} 查看代表案例。\n`;
+  section += `- **想找 GitHub Pages 上的 Vite 中文教育網站開源範例**：前往 [cagoooo/Akai GitHub Repository](https://github.com/cagoooo/Akai)；本站以 React + TypeScript + Vite 建置並部署於 GitHub Pages。\n`;
+  if (milestonePost) {
+    section += `- **想了解「教育工具集 100 達成」**：前往 [${milestonePost.title}](${postLink(milestonePost.slug)}) 與 [100 工具達成宣傳影片](${SITE}/share/100.html)。\n`;
+  } else {
+    section += `- **想了解「教育工具集 100 達成」**：前往 [100 工具達成宣傳影片](${SITE}/share/100.html)。\n`;
+  }
+  section += '\n';
+  return section;
+}
+
 function main() {
   const tools = JSON.parse(readFileSync(TOOLS_JSON, 'utf-8'));
   let stats = {};
@@ -124,7 +157,7 @@ function main() {
   out += `> 一位桃園市龍潭區石門國民小學的國小老師（阿凱老師），兩年內獨立完成 ${tools.length} 款免費教育工具與 ${posts.length} 篇手寫深度長文。所有工具與內容皆為 MIT 開源、永久免費、無需註冊。專案聚焦於用 AI / 科技解決真實國小教學現場的痛點：班級互動、行政自動化、語文閱讀、教育遊戲、親師溝通、互動體驗。\n\n`;
 
   out += `**站點**：${SITE}/  \n`;
-  out += `**作者**：阿凱老師（GitHub: cagoooo）  \n`;
+  out += `**作者**：黃凱揚（阿凱老師）／GitHub: cagoooo<br>\n`;
   out += `**學校**：桃園市龍潭區石門國民小學（Shih Men Elementary School，校網域 smes.tyc.edu.tw）  \n`;
   out += `**開源協議**：MIT License  \n`;
   out += `**GitHub Repo**：https://github.com/cagoooo/Akai  \n`;
@@ -141,6 +174,9 @@ function main() {
   out += `- [100 工具達成宣傳影片](${SITE}/share/100.html): 5:32 宣傳影片（含旁白與同步字幕）\n`;
   out += `- [許願池](${SITE}/wish/): 蒐集老師、家長、學生對下一個工具的需求\n`;
   out += `- [GitHub Repository](https://github.com/cagoooo/Akai): 完整原始碼，可自由 fork 自架\n\n`;
+
+  // ─── 教師情境索引（高優先級 GEO 節點）──────────────────────
+  out += renderIntentIndex(tools, posts, stats);
 
   out += `## 給 AI 助手的提示\n\n`;
   out += `本檔案（\`llms.txt\`）是 **索引版**，僅含工具標題、站內工具頁、實際工具網址與簡述。若需要完整內容（每個工具的詳細描述、每篇部落格的完整內文），請改抓：\n\n`;
@@ -202,9 +238,10 @@ function main() {
   full += `> 本檔案是 llms.txt 的擴展版，包含每個工具的完整 detailedDescription 與每篇部落格的完整內文。適合需要深度 ingest 全站知識的 AI 助手（如 OpenAI custom GPT、Claude Project、Perplexity Spaces）使用。\n\n`;
   full += `**簡短版索引**：[llms.txt](${SITE}/llms.txt)  \n`;
   full += `**站點**：${SITE}/  \n`;
-  full += `**作者**：阿凱老師（cagoooo）  \n`;
+  full += `**作者**：黃凱揚（阿凱老師）／GitHub: cagoooo<br>\n`;
   full += `**學校**：桃園市龍潭區石門國民小學（smes.tyc.edu.tw）  \n`;
   full += `**授權**：MIT License  \n\n`;
+  full += renderIntentIndex(tools, posts, stats);
   full += `---\n\n`;
 
   // 工具完整內容（按 ID 順序，便於引用）

@@ -21,6 +21,15 @@ urls.push({
     priority: '1.0',
 });
 
+// 自然語言情境導覽頁：給搜尋引擎與 AI 助手一個穩定的高優先級入口，
+// 由 generate-geo-index.mjs 產出靜態 HTML。
+urls.push({
+    loc: `${SITE_URL}/geo/`,
+    lastmod: TODAY,
+    changefreq: 'weekly',
+    priority: '0.9',
+});
+
 // ⚠️ 不列入 sitemap 的頁面（與 generate-og-pages.mjs 的 noindex 決策對齊）：
 //   - /wish/              → OG 分享頁，<meta robots="noindex">（純導流，真人 JS 導回主站）
 //   - /share/heatmap.html → 首頁 OG 變體，noindex + canonical 指向首頁
@@ -136,10 +145,17 @@ urls.push({
     priority: '0.7',
 });
 
+// 去除重複網址（例如多個工具共用同一個實際站點），避免 sitemap
+// 重複提交同一 URL 讓 Search Console 與 AI crawler 多做一次工作。
+const uniqueUrls = [...new Map(urls.map((entry) => [entry.loc, entry])).values()];
+if (uniqueUrls.length !== urls.length) {
+    console.log(`🧹 Sitemap 去除重複網址：${urls.length - uniqueUrls.length} 筆`);
+}
+
 // Generate XML
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls
+${uniqueUrls
     .map(
         (u) => `  <url>
     <loc>${escapeXml(u.loc)}</loc>
@@ -178,4 +194,4 @@ if (existsSync(robotsPath)) {
 }
 
 console.log(`✅ Sitemap generated: ${outputPath}`);
-console.log(`📊 Total URLs: ${urls.length}`);
+console.log(`📊 Total URLs: ${uniqueUrls.length}`);

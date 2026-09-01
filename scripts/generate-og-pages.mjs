@@ -13,6 +13,8 @@ const __dirname = path.dirname(__filename);
 
 // 網站基礎 URL
 const SITE_URL = 'https://cagoooo.github.io/Akai';
+const AUTHOR_NAME = '黃凱揚（阿凱老師）';
+const AUTHOR_URL = 'https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5';
 
 // 從 tools.json 提取工具資料
 function extractToolsFromJson() {
@@ -56,7 +58,7 @@ function generateToolPageHtml(tool) {
   <title>${fullTitle}</title>
   <meta name="title" content="${fullTitle}">
   <meta name="description" content="${tool.description}">
-  <meta name="author" content="阿凱老師">
+  <meta name="author" content="${AUTHOR_NAME}">
   <meta name="keywords" content="教育工具,${tool.title},阿凱老師,教育科技">
   
   <!-- Open Graph / Facebook -->
@@ -111,7 +113,8 @@ function generateToolPageHtml(tool) {
     author: {
       '@type': 'Person',
       '@id': `${SITE_URL}/#akai`,
-      name: '阿凱老師',
+      name: AUTHOR_NAME,
+      url: AUTHOR_URL,
       affiliation: {
         '@type': 'EducationalOrganization',
         name: '桃園市龍潭區石門國民小學',
@@ -235,7 +238,7 @@ function generateWishPageHtml() {
   <title>${title}</title>
   <meta name="title" content="${title}">
   <meta name="description" content="${description}">
-  <meta name="author" content="阿凱老師">
+  <meta name="author" content="${AUTHOR_NAME}">
   <meta name="keywords" content="許願池,教育工具許願,使用回饋,阿凱老師,教育科技創新,石門國小">
   <meta name="theme-color" content="#ea8a3e">
 
@@ -361,7 +364,7 @@ function generateHeatmapPageHtml() {
   <title>${title}</title>
   <meta name="title" content="${title}">
   <meta name="description" content="${description}">
-  <meta name="author" content="阿凱老師">
+  <meta name="author" content="${AUTHOR_NAME}">
   <meta name="keywords" content="教育科技,熱門教育工具,精選教育工具,國小教育,阿凱老師,石門國小,${toolCount} 款教育工具">
 
   <!-- Open Graph / Facebook -->
@@ -482,7 +485,7 @@ function generateCelebration100PageHtml() {
   <title>${title}</title>
   <meta name="title" content="${title}">
   <meta name="description" content="${description}">
-  <meta name="author" content="阿凱老師">
+  <meta name="author" content="${AUTHOR_NAME}">
   <meta name="keywords" content="100 工具達成,阿凱老師,石門國小,科技教育創新專區,教育工具達成,100 milestone,教學工具集,免費教育工具">
 
   <!-- Favicon 套組（紀念頁專屬：深 navy 圓底 + 金色「100」） -->
@@ -531,7 +534,7 @@ function generateCelebration100PageHtml() {
     embedUrl: `${SITE_URL}/share/100.html`,
     inLanguage: 'zh-TW',
     isFamilyFriendly: true,
-    author: { '@type': 'Person', name: '阿凱老師', url: `${SITE_URL}/` },
+    author: { '@type': 'Person', name: AUTHOR_NAME, url: AUTHOR_URL },
     publisher: {
       '@type': 'EducationalOrganization',
       name: '科技教育創新專區',
@@ -627,7 +630,7 @@ function generateCelebration100PageHtml() {
 
   <footer class="footer">
     Made with ❤ by <a href="../">阿凱老師</a> ·
-    <a href="https://www.smes.tyc.edu.tw/modules/school/index.php?department_id=2&zone_id=0&page_id=2&content_id=11&type=news&from_op=all_news#a5" target="_blank" rel="noopener noreferrer">桃園市龍潭區石門國民小學</a>
+    <a href="${AUTHOR_URL}" target="_blank" rel="noopener noreferrer">桃園市龍潭區石門國民小學</a>
     · MIT License · 影片音樂 CC BY
   </footer>
 
@@ -663,7 +666,7 @@ function generateCelebration100DialogPageHtml() {
   <title>${title}</title>
   <meta name="title" content="${title}">
   <meta name="description" content="${description}">
-  <meta name="author" content="阿凱老師">
+  <meta name="author" content="${AUTHOR_NAME}">
   <meta name="keywords" content="100 工具達成,NotebookLM,Kiki,Gordon,雙人對談,podcast,阿凱老師,石門國小,AI 教育工具,深度解析">
 
   <link rel="icon" type="image/svg+xml" href="./celebration100/favicon.svg">
@@ -708,7 +711,7 @@ function generateCelebration100DialogPageHtml() {
       { '@type': 'Person', name: 'Kiki', description: 'AI 女主持人 · 引導發問者' },
       { '@type': 'Person', name: 'Gordon', description: 'AI 男主持人 · 內容解答者' },
     ],
-    author: { '@type': 'Person', name: '阿凱老師', url: `${SITE_URL}/` },
+    author: { '@type': 'Person', name: AUTHOR_NAME, url: AUTHOR_URL },
     publisher: {
       '@type': 'EducationalOrganization',
       name: '科技教育創新專區',
@@ -857,7 +860,7 @@ function generateCelebration100DialogPageHtml() {
 
   <footer class="footer">
     Made with ❤ by <a href="../">阿凱老師</a> ·
-    <a href="https://www.smes.tyc.edu.tw/modules/school/index.php?department_id=2&zone_id=0&page_id=2&content_id=11&type=news&from_op=all_news#a5" target="_blank" rel="noopener noreferrer">桃園市龍潭區石門國民小學</a>
+    <a href="${AUTHOR_URL}" target="_blank" rel="noopener noreferrer">桃園市龍潭區石門國民小學</a>
     · MIT License · Kiki &amp; Gordon by NotebookLM AI
   </footer>
 
@@ -961,8 +964,8 @@ function generateBlogPostHtml(post) {
     author: {
       '@type': 'Person',
       '@id': `${SITE_URL}/#akai`,
-      name: '阿凱老師',
-      url: `${SITE_URL}/`,
+      name: AUTHOR_NAME,
+      url: AUTHOR_URL,
     },
     publisher: {
       '@type': 'EducationalOrganization',
@@ -991,7 +994,7 @@ function generateBlogPostHtml(post) {
   <title>${title}</title>
   <meta name="description" content="${description}">
   <meta name="keywords" content="${keywords}">
-  <meta name="author" content="阿凱老師">
+  <meta name="author" content="${AUTHOR_NAME}">
   <meta property="og:type" content="article">
   <meta property="og:url" content="${pageUrl}">
   <meta property="og:title" content="${title}">
@@ -1003,7 +1006,7 @@ function generateBlogPostHtml(post) {
   <meta property="og:image:height" content="630">
   <meta property="og:site_name" content="科技教育創新專區">
   <meta property="og:locale" content="zh_TW">
-  <meta property="article:author" content="阿凱老師">
+  <meta property="article:author" content="${AUTHOR_NAME}">
   <meta property="article:published_time" content="${post.publishedAt}">
   <meta property="article:section" content="教學情境深度長文">
   ${(post.tags || []).map(t => `<meta property="article:tag" content="${t}">`).join('\n  ')}

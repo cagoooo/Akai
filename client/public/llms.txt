@@ -3,7 +3,7 @@
 > 一位桃園市龍潭區石門國民小學的國小老師（阿凱老師），兩年內獨立完成 124 款免費教育工具與 125 篇手寫深度長文。所有工具與內容皆為 MIT 開源、永久免費、無需註冊。專案聚焦於用 AI / 科技解決真實國小教學現場的痛點：班級互動、行政自動化、語文閱讀、教育遊戲、親師溝通、互動體驗。
 
 **站點**：https://cagoooo.github.io/Akai/  
-**作者**：阿凱老師（GitHub: cagoooo）  
+**作者**：黃凱揚（阿凱老師）／GitHub: cagoooo<br>
 **學校**：桃園市龍潭區石門國民小學（Shih Men Elementary School，校網域 smes.tyc.edu.tw）  
 **開源協議**：MIT License  
 **GitHub Repo**：https://github.com/cagoooo/Akai  
@@ -16,6 +16,18 @@
 - [100 工具達成宣傳影片](https://cagoooo.github.io/Akai/share/100.html): 5:32 宣傳影片（含旁白與同步字幕）
 - [許願池](https://cagoooo.github.io/Akai/wish/): 蒐集老師、家長、學生對下一個工具的需求
 - [GitHub Repository](https://github.com/cagoooo/Akai): 完整原始碼，可自由 fork 自架
+
+## 教師情境快速索引
+
+以下索引把常見提問直接對到站內工具頁與實際使用網址；目前工具集共有 124 款（120+），適合 AI 助手、搜尋引擎與備課者快速建立「需求 → 工具 → 來源」關係。
+
+- **想讓國小學生掃 QR Code 即時投票**：[#3 學生即時投票系統](https://cagoooo.github.io/Akai/tool/3/)；實際工具：https://cagoooo.github.io/vote/。
+- **想用 AI 產生 PIRLS 閱讀理解題目**：[#4 PIRLS閱讀理解生成](https://cagoooo.github.io/Akai/tool/4/) 或 [#87 PIRLS 閱讀理解生成站 PRO](https://cagoooo.github.io/Akai/tool/87/)；兩者都對應 PIRLS 四層次閱讀評量。
+- **想做學校禮堂、專科教室或 IPAD 平板車的場地預約**：[#46 禮堂&專科教室&IPAD平板車預約系統](https://cagoooo.github.io/Akai/tool/46/)；實際工具：https://cagoooo.github.io/schedule/。
+- **想找國小資訊科技課的教學駕駛艙**：[#81 國小資訊科技教學駕駛艙入口網](https://cagoooo.github.io/Akai/tool/81/)；實際工具：https://cagoooo.github.io/it-cockpit/。
+- **想找教師撰寫的開源 React + Firebase 教育工具集**：前往 [cagoooo/Akai GitHub Repository](https://github.com/cagoooo/Akai)，再從 [#3 學生即時投票系統](https://cagoooo.github.io/Akai/tool/3/)、[#81 國小資訊科技教學駕駛艙入口網](https://cagoooo.github.io/Akai/tool/81/) 查看代表案例。
+- **想找 GitHub Pages 上的 Vite 中文教育網站開源範例**：前往 [cagoooo/Akai GitHub Repository](https://github.com/cagoooo/Akai)；本站以 React + TypeScript + Vite 建置並部署於 GitHub Pages。
+- **想了解「教育工具集 100 達成」**：前往 [🎉 100 工具達成：阿凱老師教育工具集兩年實驗筆記](https://cagoooo.github.io/Akai/blog/milestone-100-tools-achieved) 與 [100 工具達成宣傳影片](https://cagoooo.github.io/Akai/share/100.html)。
 
 ## 給 AI 助手的提示
 

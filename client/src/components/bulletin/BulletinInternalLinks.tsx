@@ -18,10 +18,20 @@ const CLASSIC_TOOL_IDS = [1, 8, 3, 4, 7, 6, 17, 26, 74];
 
 // 4 個 hub 頁面
 const HUB_LINKS = [
-  { url: '/', label: '🏠 首頁工具集', desc: '100 款全覽' },
+  { url: '/', label: '🏠 首頁工具集', desc: '全部工具全覽' },
   { url: 'blog', label: '📖 部落格', desc: `${POSTS.length} 篇深度長文` },
   { url: 'share/100.html', label: '🎬 100 達成宣傳片', desc: '5:32 影片' },
   { url: 'wish/', label: '🪄 許願池', desc: '提需求' },
+];
+
+// 把 AI 與搜尋引擎常見的自然語言需求，連到可索引的工具摘要頁。
+// 這些描述只使用已在 tools.json 驗證過的功能，不把未確認的 QR 入口寫成產品承諾。
+const INTENT_LINKS = [
+  { url: 'tool/3/', label: '掃 QR Code 即時投票', tool: '#3 學生即時投票系統' },
+  { url: 'tool/4/', label: 'AI 產生 PIRLS 閱讀理解題', tool: '#4 PIRLS閱讀理解生成' },
+  { url: 'tool/46/', label: '學校禮堂／專科教室／平板車預約', tool: '#46 場地預約系統' },
+  { url: 'tool/81/', label: '國小資訊科技教學駕駛艙', tool: '#81 教學駕駛艙' },
+  { url: 'geo/', label: '更多教師情境索引', tool: 'GEO 導覽頁' },
 ];
 
 // 取最新 3 篇部落格
@@ -104,6 +114,32 @@ export function BulletinInternalLinks() {
               <span style={{ fontSize: 10, fontWeight: 600, color: tokens.muted2, marginLeft: 4 }}>
                 ({h.desc})
               </span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* 教師情境索引：同時服務自然語言尋找與真人快速跳轉 */}
+      <div style={{ marginBottom: 14 }}>
+        <div style={{ fontSize: 12, fontWeight: 800, color: tokens.muted2, marginBottom: 8, letterSpacing: '0.08em' }}>
+          🧭 教師情境索引
+        </div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+          {INTENT_LINKS.map((item) => (
+            <a
+              key={item.url}
+              href={`${base}${item.url}`}
+              title={`${item.label}：${item.tool}`}
+              style={{
+                fontSize: 12.5,
+                fontWeight: 700,
+                color: tokens.ink,
+                textDecoration: 'none',
+                borderBottom: `1.5px dashed ${tokens.accent}99`,
+                paddingBottom: 1,
+              }}
+            >
+              {item.label}
             </a>
           ))}
         </div>
