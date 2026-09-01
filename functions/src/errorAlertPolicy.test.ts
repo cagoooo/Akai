@@ -15,6 +15,7 @@ describe("isKnownNoise", () => {
         "Failed to fetch dynamically imported module: https://example.com/a.js",
         "Load failed",
         "The operation was aborted.",
+        "signal is aborted without reason",
     ])("把已知第三方雜訊擋下來：%s", (message) => {
         expect(isKnownNoise({ message })).toBe(true);
     });

@@ -42,6 +42,7 @@ const NOISE_MESSAGE_PATTERNS: readonly RegExp[] = [
     /NetworkError when attempting to fetch resource/i,
     /^Load failed$/i, // Safari 網路中斷
     /The operation was aborted/i,
+    /signal is aborted without reason/i, // Firestore watch stream 內部關閉時的 Chrome 新版措辭
     /AbortError/i,
     /Extension context invalidated/i,
 ];
