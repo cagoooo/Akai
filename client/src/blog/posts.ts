@@ -14816,7 +14816,7 @@ JRE 版本必須 17～21（太高太低都不行）、安裝時要把 JavaSoft r
 
 ## 想試試？
 
-→ [前往 #123 校網無障礙 AA 遷移操作平台](https://cagoooo.github.io/smes-web-migration/)
+→ [前往 #123 校網無障礙 AA 遷移操作平台](https://cagoooo.github.io/school-web-migration-playbook/)
 
 如果你手上也有一份翻不完的研習講義和一個逼近的死線，先打開它、把第一步的色碼複製起來——一分鐘修好 27 處，那種進度條動起來的感覺，會讓剩下的 11 步好走很多。
 `,

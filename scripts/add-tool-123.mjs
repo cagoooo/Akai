@@ -9,7 +9,7 @@ import sharp from 'sharp';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const ID = 123;
-const URL = 'https://cagoooo.github.io/smes-web-migration/';
+const URL = 'https://cagoooo.github.io/school-web-migration-playbook/';
 const TOOLS_SERVER = resolve(ROOT, 'server', 'data', 'tools.json');
 const TOOLS_CLIENT = resolve(ROOT, 'client', 'public', 'api', 'tools.json');
 const PREVIEW_DIR = resolve(ROOT, 'client', 'public', 'previews');

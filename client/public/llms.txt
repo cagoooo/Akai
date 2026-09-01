@@ -71,7 +71,7 @@
 - [#114 學生名單校對平台](https://cagoooo.github.io/Akai/tool/114): 專為學校行政與導師設計的學生名單校對平台。一鍵匯入名單與核對檔，智慧比對學號、姓名及班級差異，自動揪出錯漏字與重疊名單，讓繁瑣的學籍核對作業變得輕鬆又精準！ 標籤：名單校對、學生名單、行政效率、名單核對、國小教育、石門國小。 實際工具：https://cagoooo.github.io/student-list-checker/。教學情境文章：https://cagoooo.github.io/Akai/blog/student-list-checker-114-roster-verification
 - [#116 考卷格式自動校正系統](https://cagoooo.github.io/Akai/tool/116): 把考卷排版檢查交給自動化流程，快速標出題號、選項、答案區與版面格式問題，讓老師在列印前先完成一次穩穩的格式健檢。 標籤：考卷格式、自動校正、試卷排版、教師工具、列印前檢查、AI 輔助。 實際工具：https://cagoooo.github.io/exam-format-app/。教學情境文章：https://cagoooo.github.io/Akai/blog/exam-format-116-auto-proofreading
 - [#117 石門國小線上調代課系統](https://cagoooo.github.io/Akai/tool/117): 阿凱老師為石門國小打造的全校課表與線上調代課系統：老師點選節次即可智慧媒合代課或調課、一鍵同意受邀，教學組能代出單、列印 A5 三聯通知單並自動結算兼代課鐘點費，告別紙本喬課的來回奔波。 標籤：線上調代課、代課媒合、調課比對、全校課表、教師請假、教學組。 實際工具：https://cagoooo.github.io/smes-substitute/。教學情境文章：https://cagoooo.github.io/Akai/blog/substitute-117-online-class-swap
-- [#123 校網無障礙 AA 遷移操作平台](https://cagoooo.github.io/Akai/tool/123): 把「舊校網搬到教育局 XOOPS 共構平台、拿到無障礙 AA 標章」拆成 12 個能打勾的步驟：逐項操作指引、要貼的內容一鍵複製、進度自動記住，還內建對比度檢查小工具與送審四大雷區清單。 標籤：校網遷移、無障礙AA、網站標章、XOOPS共構、對比度檢查、Freego檢測。 實際工具：https://cagoooo.github.io/smes-web-migration/。教學情境文章：https://cagoooo.github.io/Akai/blog/web-migration-123-accessibility-aa-console
+- [#123 校網無障礙 AA 遷移操作平台](https://cagoooo.github.io/Akai/tool/123): 把「舊校網搬到教育局 XOOPS 共構平台、拿到無障礙 AA 標章」拆成 12 個能打勾的步驟：逐項操作指引、要貼的內容一鍵複製、進度自動記住，還內建對比度檢查小工具與送審四大雷區清單。 標籤：校網遷移、無障礙AA、網站標章、XOOPS共構、對比度檢查、Freego檢測。 實際工具：https://cagoooo.github.io/school-web-migration-playbook/。教學情境文章：https://cagoooo.github.io/Akai/blog/web-migration-123-accessibility-aa-console
 
 ### 教學設計（22 款）
 
