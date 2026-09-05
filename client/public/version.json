@@ -1,7 +1,7 @@
 {
-  "version": "3.6.110",
-  "cacheVersion": "v3.6.110-17558ea-202609011941",
-  "gitHash": "17558ea",
-  "buildTime": "2026-09-01T11:41:01.123Z",
-  "buildTimestamp": 1788262861123
+  "version": "3.6.111",
+  "cacheVersion": "v3.6.111-59db69a-202609051643",
+  "gitHash": "59db69a",
+  "buildTime": "2026-09-05T08:43:38.481Z",
+  "buildTimestamp": 1788597818481
 }

@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 124+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 125+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Tue, 25 Aug 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Tue, 01 Sep 2026 11:41:04 GMT</lastBuildDate>
+    <pubDate>Sat, 05 Sep 2026 00:00:00 GMT</pubDate>
+    <lastBuildDate>Sat, 05 Sep 2026 08:43:50 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,27 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>📖 教學情境：#125 教師工會支會宣導站：把「今年會費到底怎麼繳」一次講完，不用再翻群組</title>
+      <link>https://cagoooo.github.io/Akai/blog/teacher-union-125-membership-service-hub</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/teacher-union-125-membership-service-hub</guid>
+      <pubDate>Sat, 05 Sep 2026 00:00:00 GMT</pubDate>
+      <description>#125 桃園市教育產業工會石門國小支會的會員服務暨活動宣導站，把會費、續會禮、新進入會優惠與親子健行活動收進一頁。分「我是舊會員／我是新進老師」兩條入口，寫明本校採教師小組代收、財務長統一匯款，會員不必個別匯款，也不必自己去填官方表單。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>🆕 新工具：桃園市教育產業工會｜石門國小支會會員服務暨活動宣導</title>
+      <link>https://cagoooo.github.io/Akai/tool/125</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/125</guid>
+      <pubDate>Fri, 04 Sep 2026 16:00:00 GMT</pubDate>
+      <description>把工會會費、續會禮、新進入會優惠與親子健行活動，整理成一頁看得完的宣導站。分「我是舊會員／我是新進老師」兩條入口，寫明本校採教師小組代收、財務長統一匯款，會員不必個別匯款，也不必自己填官方表單。</description>
+      <category>教師工會</category>
+      <category>會員服務</category>
+      <category>會費續會</category>
+      <category>入會優惠</category>
+      <category>活動宣導</category>
+    </item>
     <item>
       <title>📖 教學情境：#124 從 AI 教學與研究助理到 AI Agent：把一日工作坊變成可重複的實作路線</title>
       <link>https://cagoooo.github.io/Akai/blog/ai-workshop-124-teaching-research-agent</link>
@@ -314,24 +335,6 @@
       <category>AI 自動剪輯</category>
       <category>多模態視覺辨識</category>
       <category>AI 旁白腳本</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#110 活動辦完，照片就躺在資料夾裡發霉？上傳照片，AI 幫你剪成一支有旁白有配樂的成果影片</title>
-      <link>https://cagoooo.github.io/Akai/blog/photo-to-video-110-ai-event-recap-generator</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/photo-to-video-110-ai-event-recap-generator</guid>
-      <pubDate>Wed, 17 Jun 2026 00:00:00 GMT</pubDate>
-      <description>運動會、校外教學、創意實作課辦得精彩，幾十張照片拍回來卻只能丟成無聲的相片輪播——因為剪影片要想旁白、要配音、要上字幕、要選轉場，光想就累。#110 讓你只要上傳照片，多模態 AI 自動看懂每張照片在做什麼、編寫前後連貫的繁體中文旁白與字幕、配上微軟 Neural 人聲與背景音樂，一鍵錄製匯出相容 iPhone 的 MP4。純前端、金鑰只存你的瀏覽器，照片不外傳。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#111 狼人殺冠軍賽：把班級同樂變成一場有規則、有推理、有掌聲的口語表達競賽</title>
-      <link>https://cagoooo.github.io/Akai/blog/werewolf-championship-111-classroom-deduction-game</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/werewolf-championship-111-classroom-deduction-game</guid>
-      <pubDate>Wed, 17 Jun 2026 00:00:00 GMT</pubDate>
-      <description>狼人殺最怕的不是學生太投入，而是規則講不清、節奏控不住、發言變成一團混戰。#111 把角色、流程、勝利條件與比賽提醒整理成一個可投影、可分享的冠軍賽規則頁，讓班級活動從「大家玩一下」升級成有主持、有推理、有團隊合作的互動賽事。</description>
-      <category>blog</category>
-      <category>教學情境</category>
     </item>
   </channel>
 </rss>
