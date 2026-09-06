@@ -22,9 +22,16 @@ interface Props {
   minHeight: number;
   /** 提前多少距離就開始載入，預設 400px（讓使用者捲到時通常已就緒） */
   rootMargin?: string;
+  /** 保險絲：IO 這麼久沒回報就直接顯示（見下方說明） */
+  fallbackMs?: number;
 }
 
-export function DeferUntilVisible({ children, minHeight, rootMargin = '400px' }: Props) {
+export function DeferUntilVisible({
+  children,
+  minHeight,
+  rootMargin = '400px',
+  fallbackMs = 3000,
+}: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [show, setShow] = useState(false);
 
@@ -33,11 +40,20 @@ export function DeferUntilVisible({ children, minHeight, rootMargin = '400px' }:
     const el = ref.current;
     if (!el) return;
 
-    // 不支援 IntersectionObserver（或測試環境）時直接顯示，功能不因偵測失敗而消失
+    // 不支援 IntersectionObserver 時直接顯示，功能不因偵測失敗而消失
     if (typeof IntersectionObserver === 'undefined') {
       setShow(true);
       return;
     }
+
+    /**
+     * 保險絲：IO「存在但永遠不回呼」是真的會發生的情況
+     * （2026-09-06 實測：某些內嵌瀏覽器窗格中，連固定置中的元素都收不到初次回呼）。
+     * 只靠 typeof 檢查擋不住這種情形，內容會永久消失。
+     * 所以再壓一道逾時 —— 最壞的結果是「照樣載入」（等同最佳化前的行為），
+     * 絕不會變成「這個區塊不見了」。
+     */
+    const fuse = setTimeout(() => setShow(true), fallbackMs);
 
     const io = new IntersectionObserver(
       (entries) => {
@@ -49,8 +65,11 @@ export function DeferUntilVisible({ children, minHeight, rootMargin = '400px' }:
       { rootMargin },
     );
     io.observe(el);
-    return () => io.disconnect();
-  }, [show, rootMargin]);
+    return () => {
+      clearTimeout(fuse);
+      io.disconnect();
+    };
+  }, [show, rootMargin, fallbackMs]);
 
   return (
     <div ref={ref} style={show ? undefined : { minHeight }}>
