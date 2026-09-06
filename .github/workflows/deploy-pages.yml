@@ -1,7 +1,12 @@
 name: Deploy to GitHub Pages
 
+# PR 只驗證不部署（下方 Setup Pages / Upload artifact / deploy job 都有條件擋住）。
+# 這樣「檢查清單」只有這一份，不會像先前 quality.yml 那樣放著各自腐爛
+# —— 2026-09-06 就已經發生過：這裡加了 E2E，那份重複設定沒有。
 on:
   push:
+    branches: [main]
+  pull_request:
     branches: [main]
   workflow_dispatch:
 
@@ -118,15 +123,19 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
+      # 以下只在 push 到 main 時執行；PR 跑完上面的驗證就結束
       - name: Setup Pages
+        if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v6
 
       - name: Upload artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v5
         with:
           path: ./dist/public
 
   deploy:
+    if: github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
