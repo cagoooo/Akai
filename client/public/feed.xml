@@ -8,7 +8,7 @@
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
     <pubDate>Sun, 06 Sep 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Sun, 06 Sep 2026 05:55:14 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 06 Sep 2026 06:05:13 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -19,11 +19,11 @@
       <height>144</height>
     </image>
     <item>
-      <title>📖 教學情境：#126 DEADZONE 能量防線：一款「輸了不是因為你被打死」的 3D 塔防</title>
+      <title>📖 教學情境：#126 DEADZONE 能量防線：把失敗放在策略上，孩子才會想再試一次</title>
       <link>https://cagoooo.github.io/Akai/blog/deadzone-126-3d-tower-defense-energy-weapons</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/deadzone-126-3d-tower-defense-energy-weapons</guid>
       <pubDate>Sun, 06 Sep 2026 00:00:00 GMT</pubDate>
-      <description>#126 是一款直接在瀏覽器跑的 3D 塔防射擊：三種能量武器隨時切換、三種防禦塔各有分工、十波殭屍撲向能源核心。最關鍵的設計是角色不會受傷、敵人只攻核心——孩子輸掉的是一個決策，不是一條命，所以他會想再來一局。</description>
+      <description>#126 是一款直接在瀏覽器跑的 3D 塔防射擊：三種能量武器隨時切換、三種防禦塔各有分工、十波殭屍撲向能源核心。最關鍵的設計是角色不受傷害、敵人只攻核心——失敗回饋落在「這一波該把塔蓋在哪裡」，是能被討論、被修正、被下一局驗證的判斷，孩子因此願意再想一次。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
@@ -32,7 +32,7 @@
       <link>https://cagoooo.github.io/Akai/tool/126</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/126</guid>
       <pubDate>Sat, 05 Sep 2026 16:00:00 GMT</pubDate>
-      <description>三種能量武器、三種防禦塔、十波殭屍。在彎道埋伏、用有限能源在「多蓋一座塔」與「升級舊塔」之間取捨，撐過十波守住能源核心。角色不會受傷、敵人只攻核心，動腦但不挫折；桌機鍵鼠、手機雙搖桿都能玩。</description>
+      <description>三種能量武器、三種防禦塔、十波殭屍。在彎道埋伏、用有限能源在「多蓋一座塔」與「升級舊塔」之間取捨，撐過十波守住能源核心。角色不受傷害、敵人只攻核心，失敗原因落在策略而不是手速，動腦但不挫折；桌機鍵鼠、手機雙搖桿都能玩。</description>
       <category>3D塔防</category>
       <category>能量武器</category>
       <category>殭屍防守</category>

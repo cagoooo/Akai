@@ -137,7 +137,7 @@
 - [#119 SDGs永續行動遊戲－地球守護隊：能量大作戰](https://cagoooo.github.io/Akai/tool/119): 把 SDGs 變成九大世界永續任務：組裝能量工具、解決回收、水資源、綠能、森林與海洋難題，讓國小孩子在每一次選擇中練習守護地球的行動力。 標籤：SDGs、永續教育、地球守護隊、環境教育、資源回收、水資源。 實際工具：https://cagoooo.github.io/Shoot/。教學情境文章：https://cagoooo.github.io/Akai/blog/sdgs-earth-guardian-119-energy-battle
 - [#120 3D 星際雷霆：隕石防禦與太空探索解題大冒險](https://cagoooo.github.io/Akai/tool/120): 第一人稱 3D 太空飛船駕駛與隕石防禦遊戲！駕駛戰機發射雷射與散彈砲，捕捉問號智囊球解答太陽系、自然科學、AI 常識與密碼推理題庫，維護護盾並衝高分登錄班級英雄榜。 標籤：3D遊戲、星際雷霆、太空解題、隕石防禦、天文科學、自然科學。 實際工具：https://cagoooo.github.io/space-meteor-evasion-3d/。教學情境文章：https://cagoooo.github.io/Akai/blog/space-meteor-evasion-120-3d-quiz-adventure
 - [#121 仙人掌大逃亡：奔跑吧小墨龍](https://cagoooo.github.io/Akai/tool/121): 全新東方水墨畫風網頁無盡跑酷遊戲！靈敏操控小墨龍跳躍與俯衝，穿梭千重仙人掌陣，支援手機與電腦極速對決，挑戰最高分紀錄。 標籤：跑酷、水墨、無盡跑酷、小墨龍、教育遊戲、課間遊戲。 實際工具：https://cagoooo.github.io/ink-dragon-runner/。教學情境文章：https://cagoooo.github.io/Akai/blog/ink-dragon-runner-121-cactus-escape
-- [#126 DEADZONE 能量防線：3D 塔防射擊](https://cagoooo.github.io/Akai/tool/126): 三種能量武器、三種防禦塔、十波殭屍。在彎道埋伏、用有限能源在「多蓋一座塔」與「升級舊塔」之間取捨，撐過十波守住能源核心。角色不會受傷、敵人只攻核心，動腦但不挫折；桌機鍵鼠、手機雙搖桿都能玩。 標籤：3D塔防、能量武器、殭屍防守、策略思考、資源取捨、Three.js。 實際工具：https://cagoooo.github.io/zombie/。教學情境文章：https://cagoooo.github.io/Akai/blog/deadzone-126-3d-tower-defense-energy-weapons
+- [#126 DEADZONE 能量防線：3D 塔防射擊](https://cagoooo.github.io/Akai/tool/126): 三種能量武器、三種防禦塔、十波殭屍。在彎道埋伏、用有限能源在「多蓋一座塔」與「升級舊塔」之間取捨，撐過十波守住能源核心。角色不受傷害、敵人只攻核心，失敗原因落在策略而不是手速，動腦但不挫折；桌機鍵鼠、手機雙搖桿都能玩。 標籤：3D塔防、能量武器、殭屍防守、策略思考、資源取捨、Three.js。 實際工具：https://cagoooo.github.io/zombie/。教學情境文章：https://cagoooo.github.io/Akai/blog/deadzone-126-3d-tower-defense-energy-weapons
 
 ### 語言學習（14 款）
 
@@ -192,7 +192,7 @@
 
 每篇文章 5-10 分鐘閱讀，包含真實教學現場數據、學生回饋、實作思路、與其他工具的搭配建議。
 
-- [#126 DEADZONE 能量防線：一款「輸了不是因為你被打死」的 3D 塔防](https://cagoooo.github.io/Akai/blog/deadzone-126-3d-tower-defense-energy-weapons) (2026-09-06): #126 是一款直接在瀏覽器跑的 3D 塔防射擊：三種能量武器隨時切換、三種防禦塔各有分工、十波殭屍撲向能源核心。最關鍵的設計是角色不會受傷、敵人只攻核心——孩子輸掉的是一個決策，不是一條命，所以他會想再來一局。
+- [#126 DEADZONE 能量防線：把失敗放在策略上，孩子才會想再試一次](https://cagoooo.github.io/Akai/blog/deadzone-126-3d-tower-defense-energy-weapons) (2026-09-06): #126 是一款直接在瀏覽器跑的 3D 塔防射擊：三種能量武器隨時切換、三種防禦塔各有分工、十波殭屍撲向能源核心。最關鍵的設計是角色不受傷害、敵人只攻核心——失敗回饋落在「這一波該把塔蓋在哪裡」，是能被討論、被修正、被下一局驗證的判斷，孩子因此願意再想一次。
 - [#125 教師工會支會宣導站：把「今年會費到底怎麼繳」一次講完，不用再翻群組](https://cagoooo.github.io/Akai/blog/teacher-union-125-membership-service-hub) (2026-09-05): #125 桃園市教育產業工會石門國小支會的會員服務暨活動宣導站，把會費、續會禮、新進入會優惠與親子健行活動收進一頁。分「我是舊會員／我是新進老師」兩條入口，寫明本校採教師小組代收、財務長統一匯款，會員不必個別匯款，也不必自己去填官方表單。
 - [#124 從 AI 教學與研究助理到 AI Agent：把一日工作坊變成可重複的實作路線](https://cagoooo.github.io/Akai/blog/ai-workshop-124-teaching-research-agent) (2026-08-25): #124 把上午 47 頁、下午 59 頁的 AI 工作坊整理成一條可以真的走完的路線：先建立教學與研究工作室，再練習資料治理、Agent Skills、部署與人工驗收，讓 AI 從聊天視窗變成可交付的工作夥伴。
 - [#123 校網無障礙 AA 遷移操作平台：把一本研習講義，變成 12 個能打勾的步驟](https://cagoooo.github.io/Akai/blog/web-migration-123-accessibility-aa-console) (2026-08-06): #123 校網無障礙 AA 遷移操作平台，把「舊校網搬到教育局共構平台、拿到無障礙 AA 標章」這件沒人說得清楚的事，拆成 12 個由上往下、做完打勾就好的步驟：要貼的內容一鍵複製、進度自動記住，還內建對比度小工具與會讓你秒退件的四大雷區清單。
