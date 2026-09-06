@@ -28,7 +28,7 @@ import { BulletinSpeechBanner } from '@/components/bulletin/BulletinSpeechBanner
 import { BulletinQuickNav } from '@/components/bulletin/BulletinQuickNav';
 import { BulletinLeaderboard } from '@/components/bulletin/BulletinLeaderboard';
 import { BulletinWishPool } from '@/components/bulletin/BulletinWishPool';
-import { BulletinSiteStats } from '@/components/bulletin/BulletinSiteStats';
+import { DeferUntilVisible } from '@/components/DeferUntilVisible';
 import { BulletinBlogEntry } from '@/components/bulletin/BulletinBlogEntry';
 import { BulletinDeploymentEcosystem } from '@/components/bulletin/BulletinDeploymentEcosystem';
 import { BulletinSearchBar } from '@/components/bulletin/BulletinSearchBar';
@@ -50,6 +50,12 @@ import {
   shouldAutoOpenAudienceWizard,
   snoozeAudienceRePrompt,
 } from '@/lib/audienceProfileStorage';
+
+// 站內統計卡帶 recharts（532 KB）。它在頁面很下方，改成「捲到附近才下載」，
+// 不讓圖表函式庫進首頁關鍵路徑。
+const BulletinSiteStats = lazy(() =>
+  import('@/components/bulletin/BulletinSiteStats').then((m) => ({ default: m.BulletinSiteStats }))
+);
 
 const KeyboardShortcutsDialog = lazy(() =>
   import('@/components/KeyboardShortcutsDialog').then((m) => ({ default: m.KeyboardShortcutsDialog }))
@@ -379,7 +385,11 @@ export function BulletinHome() {
           scrollMarginTop: 20,
         }}
       >
-        <BulletinSiteStats onCategoryClick={(cat) => handleCategoryChange(cat)} />
+        <DeferUntilVisible minHeight={360}>
+          <Suspense fallback={null}>
+            <BulletinSiteStats onCategoryClick={(cat) => handleCategoryChange(cat)} />
+          </Suspense>
+        </DeferUntilVisible>
         <div id="blog" style={{ scrollMarginTop: 20 }}>
           <BulletinBlogEntry />
         </div>

@@ -4,7 +4,7 @@
  */
 
 import { Link } from 'wouter';
-import { POSTS } from '@/blog/posts';
+import { POSTS_INDEX } from '@/blog/postsIndex';
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
 import { Tape } from '@/components/primitives/Tape';
@@ -19,7 +19,7 @@ const COLOR_MAP: Record<string, string> = {
 };
 
 export function BulletinBlogEntry() {
-  const latestPosts = [...POSTS]
+  const latestPosts = [...POSTS_INDEX]
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
     .slice(0, 3);
 

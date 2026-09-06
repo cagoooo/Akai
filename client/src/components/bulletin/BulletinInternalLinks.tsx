@@ -1,5 +1,5 @@
 import { tokens } from '@/design/tokens';
-import { POSTS } from '@/blog/posts';
+import { POSTS_INDEX } from '@/blog/postsIndex';
 
 /**
  * BulletinInternalLinks — 全站頁尾的「內部連結 SEO 區塊」
@@ -19,7 +19,7 @@ const CLASSIC_TOOL_IDS = [1, 8, 3, 4, 7, 6, 17, 26, 74];
 // 4 個 hub 頁面
 const HUB_LINKS = [
   { url: '/', label: '🏠 首頁工具集', desc: '全部工具全覽' },
-  { url: 'blog', label: '📖 部落格', desc: `${POSTS.length} 篇深度長文` },
+  { url: 'blog', label: '📖 部落格', desc: `${POSTS_INDEX.length} 篇深度長文` },
   { url: 'share/100.html', label: '🎬 100 達成宣傳片', desc: '5:32 影片' },
   { url: 'wish/', label: '🪄 許願池', desc: '提需求' },
 ];
@@ -35,7 +35,7 @@ const INTENT_LINKS = [
 ];
 
 // 取最新 3 篇部落格
-const LATEST_POSTS = POSTS.slice(0, 3);
+const LATEST_POSTS = POSTS_INDEX.slice(0, 3);
 
 export function BulletinInternalLinks() {
   const base = import.meta.env.BASE_URL || '/';

@@ -17,7 +17,7 @@
 
 import type { EducationalTool } from '@/lib/data';
 import type { BlogPost } from './posts';
-import { HANDWRITTEN_TOOL_IDS } from './posts';
+import { HANDWRITTEN_TOOL_IDS } from './postsIndex';
 
 const CATEGORY_LABEL: Record<string, string> = {
   communication: '溝通互動',
