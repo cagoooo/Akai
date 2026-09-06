@@ -101,6 +101,23 @@ jobs:
           VITE_GA_MEASUREMENT_ID: ${{ secrets.VITE_GA_MEASUREMENT_ID }}
           GITHUB_ACTIONS: true
 
+      # E2E 冒煙測試：擋住「build 過了但畫面壞掉」這一類單元測試看不到的回歸。
+      # 跑在 Build 之後、上傳產物之前，測的就是即將部署的那份 dist/public。
+      # （2026-09-06 加：先前 e2e/home.spec.ts 存在但沒有任何 workflow 會執行它。）
+      - name: Install Playwright (chromium)
+        run: npx playwright install --with-deps chromium
+
+      - name: E2E smoke tests
+        run: npx playwright test --config=playwright.ci.config.ts
+
+      - name: Upload E2E report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
       - name: Setup Pages
         uses: actions/configure-pages@v6
 

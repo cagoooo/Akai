@@ -22,7 +22,7 @@ interface Props {
   minHeight: number;
   /** 提前多少距離就開始載入，預設 400px（讓使用者捲到時通常已就緒） */
   rootMargin?: string;
-  /** 保險絲：IO 這麼久沒回報就直接顯示（見下方說明） */
+  /** 保險絲：這麼久還沒收到「任何」IO 回呼就視為 IO 失效並直接顯示（見下方說明） */
   fallbackMs?: number;
 }
 
@@ -30,7 +30,7 @@ export function DeferUntilVisible({
   children,
   minHeight,
   rootMargin = '400px',
-  fallbackMs = 3000,
+  fallbackMs = 1500,
 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [show, setShow] = useState(false);
@@ -49,14 +49,24 @@ export function DeferUntilVisible({
     /**
      * 保險絲：IO「存在但永遠不回呼」是真的會發生的情況
      * （2026-09-06 實測：某些內嵌瀏覽器窗格中，連固定置中的元素都收不到初次回呼）。
-     * 只靠 typeof 檢查擋不住這種情形，內容會永久消失。
-     * 所以再壓一道逾時 —— 最壞的結果是「照樣載入」（等同最佳化前的行為），
-     * 絕不會變成「這個區塊不見了」。
+     * 只靠 typeof 檢查擋不住，內容會永久消失。
+     *
+     * ⚠️ 但保險絲不能寫成「N 秒後就顯示」——那會把最佳化整個抵銷掉：
+     * 使用者只要在首頁停留超過 N 秒沒捲動，重相依照樣被下載。
+     *
+     * 正確判斷方式：IO 只要正常運作，observe() 之後一定會送出「初次回呼」
+     * （不論當下是否 isIntersecting）。所以保險絲只負責偵測「連一次回呼都沒有」，
+     * 一收到任何回呼就拆掉，之後完全交給 IO。
      */
-    const fuse = setTimeout(() => setShow(true), fallbackMs);
+    let reported = false;
+    const fuse = setTimeout(() => {
+      if (!reported) setShow(true);
+    }, fallbackMs);
 
     const io = new IntersectionObserver(
       (entries) => {
+        reported = true;
+        clearTimeout(fuse);
         if (entries.some((e) => e.isIntersecting)) {
           setShow(true);
           io.disconnect();

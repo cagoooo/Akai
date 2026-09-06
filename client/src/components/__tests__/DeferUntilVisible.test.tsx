@@ -15,7 +15,13 @@ type IOCallback = (entries: { isIntersecting: boolean }[]) => void;
 let callbacks: IOCallback[] = [];
 let disconnectCount = 0;
 
-function installIO({ fires }: { fires: boolean }) {
+/**
+ * mode:
+ *   'intersecting' —— IO 正常，且元素已在視窗內
+ *   'reported'     —— IO 正常，有送出初次回呼但元素還沒進視窗（不該被保險絲誤觸發）
+ *   'silent'       —— IO 存在卻永遠不回呼（保險絲要救場）
+ */
+function installIO({ mode }: { mode: 'intersecting' | 'reported' | 'silent' }) {
   callbacks = [];
   disconnectCount = 0;
   class FakeIO {
@@ -23,7 +29,8 @@ function installIO({ fires }: { fires: boolean }) {
       callbacks.push(cb);
     }
     observe() {
-      if (fires) this.cb([{ isIntersecting: true }]);
+      if (mode === 'intersecting') this.cb([{ isIntersecting: true }]);
+      else if (mode === 'reported') this.cb([{ isIntersecting: false }]);
     }
     disconnect() {
       disconnectCount += 1;
@@ -46,7 +53,7 @@ describe('DeferUntilVisible', () => {
   });
 
   it('IO 回報進入視窗時掛載內容', () => {
-    installIO({ fires: true });
+    installIO({ mode: 'intersecting' });
     render(
       <DeferUntilVisible minHeight={360}>
         <div>統計卡</div>
@@ -56,7 +63,7 @@ describe('DeferUntilVisible', () => {
   });
 
   it('尚未進入視窗前不掛載，並保留佔位高度避免版面跳動', () => {
-    installIO({ fires: false });
+    installIO({ mode: 'silent' });
     const { container } = render(
       <DeferUntilVisible minHeight={360}>
         <div>統計卡</div>
@@ -67,7 +74,7 @@ describe('DeferUntilVisible', () => {
   });
 
   it('IO 存在但永遠不回呼時，逾時後仍會顯示內容（不可永久消失）', () => {
-    installIO({ fires: false });
+    installIO({ mode: 'silent' });
     render(
       <DeferUntilVisible minHeight={360} fallbackMs={3000}>
         <div>統計卡</div>
@@ -78,6 +85,21 @@ describe('DeferUntilVisible', () => {
       vi.advanceTimersByTime(3000);
     });
     expect(screen.getByText('統計卡')).toBeTruthy();
+  });
+
+  it('IO 正常但元素尚未進視窗時，保險絲不可誤觸發（否則最佳化等於白做）', () => {
+    // 這是 2026-09-06 修掉的回歸：保險絲原本寫成「N 秒後就顯示」，
+    // 只要使用者在首頁停留超過 N 秒沒捲動，重相依照樣會被下載。
+    installIO({ mode: 'reported' });
+    render(
+      <DeferUntilVisible minHeight={360} fallbackMs={1500}>
+        <div>統計卡</div>
+      </DeferUntilVisible>,
+    );
+    act(() => {
+      vi.advanceTimersByTime(30_000);
+    });
+    expect(screen.queryByText('統計卡')).toBeNull();
   });
 
   it('環境完全沒有 IntersectionObserver 時直接顯示', () => {
