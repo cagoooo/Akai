@@ -502,3 +502,5 @@ npm run check
 ---
 
 Made with ❤️ by [阿凱老師](https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5)
+
+<!-- CI PR 路徑驗證用，稍後移除 -->
