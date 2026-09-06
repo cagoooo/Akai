@@ -1,6 +1,6 @@
 # 阿凱老師 · 科技教育創新專區
 
-> 一位桃園市龍潭區石門國民小學的國小老師（阿凱老師），兩年內獨立完成 125 款免費教育工具與 126 篇手寫深度長文。所有工具與內容皆為 MIT 開源、永久免費、無需註冊。專案聚焦於用 AI / 科技解決真實國小教學現場的痛點：班級互動、行政自動化、語文閱讀、教育遊戲、親師溝通、互動體驗。
+> 一位桃園市龍潭區石門國民小學的國小老師（阿凱老師），兩年內獨立完成 126 款免費教育工具與 127 篇手寫深度長文。所有工具與內容皆為 MIT 開源、永久免費、無需註冊。專案聚焦於用 AI / 科技解決真實國小教學現場的痛點：班級互動、行政自動化、語文閱讀、教育遊戲、親師溝通、互動體驗。
 
 **站點**：https://cagoooo.github.io/Akai/  
 **作者**：黃凱揚（阿凱老師）／GitHub: cagoooo<br>
@@ -11,15 +11,15 @@
 
 ## 主要頁面
 
-- [首頁工具集](https://cagoooo.github.io/Akai/): 互動公佈欄首頁，呈現全部 125 款工具的拍立得拼貼 + 分類篩選 + 許願池
-- [部落格](https://cagoooo.github.io/Akai/blog): 126 篇阿凱老師手寫的教學情境深度長文，每篇講一個熱門工具如何解決真實教學現場的問題
+- [首頁工具集](https://cagoooo.github.io/Akai/): 互動公佈欄首頁，呈現全部 126 款工具的拍立得拼貼 + 分類篩選 + 許願池
+- [部落格](https://cagoooo.github.io/Akai/blog): 127 篇阿凱老師手寫的教學情境深度長文，每篇講一個熱門工具如何解決真實教學現場的問題
 - [100 工具達成宣傳影片](https://cagoooo.github.io/Akai/share/100.html): 5:32 宣傳影片（含旁白與同步字幕）
 - [許願池](https://cagoooo.github.io/Akai/wish/): 蒐集老師、家長、學生對下一個工具的需求
 - [GitHub Repository](https://github.com/cagoooo/Akai): 完整原始碼，可自由 fork 自架
 
 ## 教師情境快速索引
 
-以下索引把常見提問直接對到站內工具頁與實際使用網址；目前工具集共有 125 款（120+），適合 AI 助手、搜尋引擎與備課者快速建立「需求 → 工具 → 來源」關係。
+以下索引把常見提問直接對到站內工具頁與實際使用網址；目前工具集共有 126 款（120+），適合 AI 助手、搜尋引擎與備課者快速建立「需求 → 工具 → 來源」關係。
 
 - **想讓國小學生掃 QR Code 即時投票**：[#3 學生即時投票系統](https://cagoooo.github.io/Akai/tool/3/)；實際工具：https://cagoooo.github.io/vote/。
 - **想用 AI 產生 PIRLS 閱讀理解題目**：[#4 PIRLS閱讀理解生成](https://cagoooo.github.io/Akai/tool/4/) 或 [#87 PIRLS 閱讀理解生成站 PRO](https://cagoooo.github.io/Akai/tool/87/)；兩者都對應 PIRLS 四層次閱讀評量。
@@ -37,7 +37,7 @@
 
 完整版約 500-800 KB，適合 OpenAI custom GPT / Claude Project / Perplexity Spaces 等需要深度 ingest 的場景。
 
-## 工具集（125 款，按分類）
+## 工具集（126 款，按分類）
 
 每款工具都是阿凱老師親手打造的單一用途網頁，可在瀏覽器直接開啟，無需安裝。
 
@@ -110,7 +110,7 @@
 - [#105 臺灣主權 AI 訓練語料庫 × 石門國小 — 把國家級本土語料變成校園教材](https://cagoooo.github.io/Akai/tool/105): 國家耗十年、集 265 個機關蒐集的 6 億 tokens 本土語料，從「只拿來餵 AI」變成「師生家長共用的教材庫」。九大教育主題、4,554 筆語料一鍵探索，每筆都標課綱領域與授權來源；還能用自備的免費 Gemini 金鑰，即時生成台語／客語／國語學習單與繪本腳本。數位發展部 × 桃園市龍潭區石門國民小學阿凱老師打造的「鱻本土 AI 共學站」。 標籤：臺灣主權 AI、本土語料庫、國家級開放資料、教學素材庫、數位發展部、石門國小。 實際工具：https://cagoooo.github.io/taic-edu/。教學情境文章：https://cagoooo.github.io/Akai/blog/taiwan-sovereign-ai-corpus-105-shimen-edu
 - [#124 從 AI 教學與研究助理到 AI Agent](https://cagoooo.github.io/Akai/tool/124): 把一日 AI 工作坊變成可直接操作的教學與研究路線：上午用 Gemini Notebook、Gem、Canvas 建工作室，下午用 Codex、Antigravity、Claude 與 Agent Skills 完成資料分析、部署與可追溯交付。 標籤：AI教學、AI研究、AI Agent、Gemini Notebook、Codex、Agent Skills。 實際工具：https://cagoooo.github.io/ncu-ai-agent-workshop-20260826/。教學情境文章：https://cagoooo.github.io/Akai/blog/ai-workshop-124-teaching-research-agent
 
-### 趣味遊戲（25 款）
+### 趣味遊戲（26 款）
 
 - [#6 蜂類配對消消樂](https://cagoooo.github.io/Akai/tool/6): 阿凱老師打造的記憶配對消消樂遊戲，三種難度搭配注音、唐詩、英單、水果等六大主題包，老師改 JSON 就能新增主題，純靜態 PWA 離線可玩。 標籤：遊戲、蜜蜂、配對、消消樂、自然。 實際工具：https://cagoooo.github.io/bee/。教學情境文章：https://cagoooo.github.io/Akai/blog/bee-6-pair-game
 - [#9 超級瑪莉歐冒險](https://cagoooo.github.io/Akai/tool/9): 阿凱老師打造的瀏覽器版超級瑪莉歐冒險遊戲，支援鍵盤＋觸控雙模式操作，內建關卡選擇、計分、金幣與成就系統，純前端開瀏覽器就能玩。 標籤：遊戲、瑪莉歐、冒險、跳躍、經典。 實際工具：https://cagoooo.github.io/mario-game/。教學情境文章：https://cagoooo.github.io/Akai/blog/mario-9-platformer-adventure
@@ -137,6 +137,7 @@
 - [#119 SDGs永續行動遊戲－地球守護隊：能量大作戰](https://cagoooo.github.io/Akai/tool/119): 把 SDGs 變成九大世界永續任務：組裝能量工具、解決回收、水資源、綠能、森林與海洋難題，讓國小孩子在每一次選擇中練習守護地球的行動力。 標籤：SDGs、永續教育、地球守護隊、環境教育、資源回收、水資源。 實際工具：https://cagoooo.github.io/Shoot/。教學情境文章：https://cagoooo.github.io/Akai/blog/sdgs-earth-guardian-119-energy-battle
 - [#120 3D 星際雷霆：隕石防禦與太空探索解題大冒險](https://cagoooo.github.io/Akai/tool/120): 第一人稱 3D 太空飛船駕駛與隕石防禦遊戲！駕駛戰機發射雷射與散彈砲，捕捉問號智囊球解答太陽系、自然科學、AI 常識與密碼推理題庫，維護護盾並衝高分登錄班級英雄榜。 標籤：3D遊戲、星際雷霆、太空解題、隕石防禦、天文科學、自然科學。 實際工具：https://cagoooo.github.io/space-meteor-evasion-3d/。教學情境文章：https://cagoooo.github.io/Akai/blog/space-meteor-evasion-120-3d-quiz-adventure
 - [#121 仙人掌大逃亡：奔跑吧小墨龍](https://cagoooo.github.io/Akai/tool/121): 全新東方水墨畫風網頁無盡跑酷遊戲！靈敏操控小墨龍跳躍與俯衝，穿梭千重仙人掌陣，支援手機與電腦極速對決，挑戰最高分紀錄。 標籤：跑酷、水墨、無盡跑酷、小墨龍、教育遊戲、課間遊戲。 實際工具：https://cagoooo.github.io/ink-dragon-runner/。教學情境文章：https://cagoooo.github.io/Akai/blog/ink-dragon-runner-121-cactus-escape
+- [#126 DEADZONE 能量防線：3D 塔防射擊](https://cagoooo.github.io/Akai/tool/126): 三種能量武器、三種防禦塔、十波殭屍。在彎道埋伏、用有限能源在「多蓋一座塔」與「升級舊塔」之間取捨，撐過十波守住能源核心。角色不會受傷、敵人只攻核心，動腦但不挫折；桌機鍵鼠、手機雙搖桿都能玩。 標籤：3D塔防、能量武器、殭屍防守、策略思考、資源取捨、Three.js。 實際工具：https://cagoooo.github.io/zombie/。教學情境文章：https://cagoooo.github.io/Akai/blog/deadzone-126-3d-tower-defense-energy-weapons
 
 ### 語言學習（14 款）
 
@@ -187,10 +188,11 @@
 - [#12 PIRLS閱讀理解網](https://cagoooo.github.io/Akai/tool/12): 完整的 PIRLS 閱讀理解資源平台 標籤：PIRLS、閱讀、理解、資源、評量。 實際工具：https://read.smes.tyc.edu.tw/smes/PIRLS/。教學情境文章：https://cagoooo.github.io/Akai/blog/reading-12-portal-page
 - [#87 PIRLS 閱讀理解生成站 PRO](https://cagoooo.github.io/Akai/tool/87): 升級版 PIRLS 閱讀理解出題平台，老師貼上課文或上傳文本，AI 依四層次（直接提取、直接推論、詮釋整合、檢驗評估）自動產生提問與答案說明，國小語文評量、補救教學、素養命題一氣呵成。 標籤：PIRLS、閱讀理解、AI 出題、四層次提問、國小語文、素養命題。 實際工具：https://cagoooo.github.io/pirls-questioncraft/。教學情境文章：https://cagoooo.github.io/Akai/blog/pirls-87-questioncraft-rewrite
 
-## 教學情境深度長文（126 篇）
+## 教學情境深度長文（127 篇）
 
 每篇文章 5-10 分鐘閱讀，包含真實教學現場數據、學生回饋、實作思路、與其他工具的搭配建議。
 
+- [#126 DEADZONE 能量防線：一款「輸了不是因為你被打死」的 3D 塔防](https://cagoooo.github.io/Akai/blog/deadzone-126-3d-tower-defense-energy-weapons) (2026-09-06): #126 是一款直接在瀏覽器跑的 3D 塔防射擊：三種能量武器隨時切換、三種防禦塔各有分工、十波殭屍撲向能源核心。最關鍵的設計是角色不會受傷、敵人只攻核心——孩子輸掉的是一個決策，不是一條命，所以他會想再來一局。
 - [#125 教師工會支會宣導站：把「今年會費到底怎麼繳」一次講完，不用再翻群組](https://cagoooo.github.io/Akai/blog/teacher-union-125-membership-service-hub) (2026-09-05): #125 桃園市教育產業工會石門國小支會的會員服務暨活動宣導站，把會費、續會禮、新進入會優惠與親子健行活動收進一頁。分「我是舊會員／我是新進老師」兩條入口，寫明本校採教師小組代收、財務長統一匯款，會員不必個別匯款，也不必自己去填官方表單。
 - [#124 從 AI 教學與研究助理到 AI Agent：把一日工作坊變成可重複的實作路線](https://cagoooo.github.io/Akai/blog/ai-workshop-124-teaching-research-agent) (2026-08-25): #124 把上午 47 頁、下午 59 頁的 AI 工作坊整理成一條可以真的走完的路線：先建立教學與研究工作室，再練習資料治理、Agent Skills、部署與人工驗收，讓 AI 從聊天視窗變成可交付的工作夥伴。
 - [#123 校網無障礙 AA 遷移操作平台：把一本研習講義，變成 12 個能打勾的步驟](https://cagoooo.github.io/Akai/blog/web-migration-123-accessibility-aa-console) (2026-08-06): #123 校網無障礙 AA 遷移操作平台，把「舊校網搬到教育局共構平台、拿到無障礙 AA 標章」這件沒人說得清楚的事，拆成 12 個由上往下、做完打勾就好的步驟：要貼的內容一鍵複製、進度自動記住，還內建對比度小工具與會讓你秒退件的四大雷區清單。
@@ -320,7 +322,7 @@
 
 ## 關於阿凱老師
 
-阿凱老師（cagoooo）是桃園市龍潭區石門國民小學的資訊組長（科任＋行政），自 2024 年起獨立開發教育工具，至今已達成 125 款。技術棧使用 React 18 + TypeScript + Vite + Tailwind CSS + Firebase，主站部署於 GitHub Pages。所有工具開源於 [cagoooo/Akai](https://github.com/cagoooo/Akai)，採 MIT License。
+阿凱老師（cagoooo）是桃園市龍潭區石門國民小學的資訊組長（科任＋行政），自 2024 年起獨立開發教育工具，至今已達成 126 款。技術棧使用 React 18 + TypeScript + Vite + Tailwind CSS + Firebase，主站部署於 GitHub Pages。所有工具開源於 [cagoooo/Akai](https://github.com/cagoooo/Akai)，採 MIT License。
 
 **石門國小（smes ≠ 新明！）**：「smes」是 Shih Men Elementary School 縮寫，學校全名為「桃園市龍潭區石門國民小學」，校網 https://www.smes.tyc.edu.tw/
 
