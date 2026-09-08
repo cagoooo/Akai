@@ -63,7 +63,7 @@ export function LineChart({ data, height = 300, width, options, className }: Cha
     <div
       ref={chartRef}
       className={cn("w-full flex items-center justify-center", className)}
-      style={{ height: height, width: width }}
+      style={{ height: height, width: width, position: "relative", minWidth: 0 }}
     >
       {loading ? (
         <div className="flex flex-col items-center justify-center text-muted-foreground">
@@ -71,7 +71,7 @@ export function LineChart({ data, height = 300, width, options, className }: Cha
           <span>載入圖表中...</span>
         </div>
       ) : chart ? (
-        <chart.LineChart data={data} options={options} height={height} width={width} />
+        <chart.LineChart data={data} options={{ responsive: true, maintainAspectRatio: false, ...options }} height={height} width={width} />
       ) : (
         <div className="text-center text-muted-foreground">
           <p>無法載入圖表</p>
@@ -127,7 +127,7 @@ export function BarChart({ data, height = 300, width, options, className }: Char
     <div
       ref={chartRef}
       className={cn("w-full flex items-center justify-center", className)}
-      style={{ height: height, width: width }}
+      style={{ height: height, width: width, position: "relative", minWidth: 0 }}
     >
       {loading ? (
         <div className="flex flex-col items-center justify-center text-muted-foreground">
@@ -135,7 +135,7 @@ export function BarChart({ data, height = 300, width, options, className }: Char
           <span>載入圖表中...</span>
         </div>
       ) : chart ? (
-        <chart.BarChart data={data} options={options} height={height} width={width} />
+        <chart.BarChart data={data} options={{ responsive: true, maintainAspectRatio: false, ...options }} height={height} width={width} />
       ) : (
         <div className="text-center text-muted-foreground">
           <p>無法載入圖表</p>
@@ -185,7 +185,7 @@ export function PieChart({ data, height = 300, width, options, className }: Char
     <div
       ref={chartRef}
       className={cn("w-full flex items-center justify-center", className)}
-      style={{ height: height, width: width }}
+      style={{ height: height, width: width, position: "relative", minWidth: 0 }}
     >
       {loading ? (
         <div className="flex flex-col items-center justify-center text-muted-foreground">
@@ -193,7 +193,7 @@ export function PieChart({ data, height = 300, width, options, className }: Char
           <span>載入圖表中...</span>
         </div>
       ) : chart ? (
-        <chart.PieChart data={data} options={options} height={height} width={width} />
+        <chart.PieChart data={data} options={{ responsive: true, maintainAspectRatio: false, ...options }} height={height} width={width} />
       ) : (
         <div className="text-center text-muted-foreground">
           <p>無法載入圖表</p>
