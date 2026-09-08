@@ -1563,6 +1563,22 @@
   min-height: 280px;
   font-family: var(--font-tc);
 }
+
+/* 保留完整文章 DOM；只延後畫面外卡片的排版與繪製。 */
+@supports (content-visibility: auto) {
+  .bp-list-grid > li {
+    content-visibility: auto;
+    contain-intrinsic-block-size: auto 320px;
+    overflow-clip-margin: 16px;
+  }
+}
+
+@media print {
+  .bp-list-grid > li {
+    content-visibility: visible;
+    contain-intrinsic-block-size: none;
+  }
+}
 .bp-list-card:hover {
   transform: translateY(-3px);
   border-color: var(--ink);

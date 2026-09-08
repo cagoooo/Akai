@@ -75,3 +75,13 @@
 驗收程式版本 8bc62ea：15 次冷啟動無 pageerror、十組響應式頁面無整頁溢出、253 個內部網址全數 HTTP 200。後台七天／三十天切換與圖表尺寸正常。
 
 完整結果及剩餘瓶頸見 [第一輪網站優化驗收](PERFORMANCE_ACCEPTANCE_2026-09-08.md)。本批只更新文件，沒有修改正式程式或資料庫；不宣稱所有效能目標均已達成。
+
+## 第六批：部落格畫面外卡片排版（2026-09-08）
+
+- Chrome trace 找到約 937ms 的 Layout，涉及約 4,800 個版面物件。初始最長任務主要是完整列表排版，而非全文搜尋。
+- 列表項目使用 content-visibility: auto，延後畫面外卡片的排版與繪製，保留全部文章 DOM；預留高度並記住實際尺寸。列印時恢復全部排版。機制參考 [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/content-visibility)。
+- 同機 production build、全新 Chrome context、1440×1000、停用快取及 Service Worker，前後交錯各三次，沒有同時執行其他測試。首張列表卡片可見：修改前 3638/3220/3592ms，修改後 1747/1855/1965ms；中位數 3592 → 1855ms，縮短約 48.4%。
+- 導覽至完成搜尋期間最長主執行緒任務：前 1110/1070/1123ms，後 463/498/525ms，中位數縮短約 55.1%。這是三筆 localhost 樣本，不是正式站改善百分比，也不是 LCP 或完整圖片完成時間。
+- 六次皆保留 124 張列表卡片、51 筆 PIRLS 搜尋、單一頁尾、一次工具資料下載；首次列表不下載文章全文。
+- 新增回歸檢查涵蓋 390/1440px 捲至最後一篇、Tab 聚焦可見、列印恢復全部排版及末篇文章開啟；既有首頁、工具介紹、搜尋與平台篩選持續驗證。
+- 原始資料：`.local/browser-audit/phase6-dom.json`；剖析：`.local/browser-audit/blog-profile.json`。大型字型樣式與工具 #81 Podcast 404 仍是後續項目。

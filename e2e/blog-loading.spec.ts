@@ -2,6 +2,33 @@ import { test, expect } from '@playwright/test';
 
 test.use({ serviceWorkers: 'block' });
 
+test('畫面外文章保留連結，捲動、鍵盤與列印皆能顯示', async ({ page }) => {
+  await page.goto('blog', { waitUntil: 'domcontentloaded' });
+  const cards = page.locator('.bp-list-card');
+  await expect(cards.first()).toBeVisible({ timeout: 30_000 });
+  const count = await cards.count();
+  expect(count).toBeGreaterThan(100);
+  for (const width of [390, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await cards.last().scrollIntoViewIfNeeded();
+    await expect(cards.last()).toBeInViewport();
+    await expect(cards.last().locator('h2, h3').first()).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await cards.first().focus();
+    await expect(cards.first()).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(cards.nth(1)).toBeFocused();
+    await expect(cards.nth(1)).toBeInViewport();
+  }
+  await page.emulateMedia({ media: 'print' });
+  expect(await cards.last().evaluate(el => getComputedStyle(el.parentElement!).contentVisibility)).toBe('visible');
+  await expect(cards).toHaveCount(count);
+  await page.emulateMedia({ media: 'screen' });
+  await cards.last().click();
+  await expect(page).toHaveURL(/blog\/.+/);
+  await expect(page.locator('.bp-article')).toBeVisible();
+});
+
 test('列表不依賴文章全文，搜尋才補載且仍可開文章', async ({ page }) => {
   let requested = false;
   let release!: () => void;
