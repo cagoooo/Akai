@@ -12,6 +12,8 @@
 import { useEffect, useState } from 'react';
 import { tokens } from '@/design/tokens';
 
+const podcastSlugs = new Set<string>(import.meta.env.VITE_BLOG_PODCAST_SLUGS ?? []);
+
 interface BlogPodcastProps {
   slug: string;
 }
@@ -19,25 +21,15 @@ interface BlogPodcastProps {
 export function BlogPodcast({ slug }: BlogPodcastProps) {
   const base = import.meta.env.BASE_URL || '/';
   const podcastUrl = `${base}blog-podcasts/${slug}.mp3`;
-  const [exists, setExists] = useState<boolean | null>(null);
+  const [failedSlug, setFailedSlug] = useState<string | null>(null);
   const [duration, setDuration] = useState<string>('');
 
   useEffect(() => {
-    let cancelled = false;
-    // HEAD 請求探測 podcast 是否存在
-    fetch(podcastUrl, { method: 'HEAD' })
-      .then((res) => {
-        if (cancelled) return;
-        setExists(res.ok);
-      })
-      .catch(() => !cancelled && setExists(false));
-    return () => {
-      cancelled = true;
-    };
-  }, [podcastUrl]);
+    setDuration('');
+  }, [slug]);
 
   // 不存在 → 不渲染（保持 layout 不變）
-  if (!exists) return null;
+  if (!podcastSlugs.has(slug) || failedSlug === slug) return null;
 
   return (
     <aside
@@ -109,9 +101,11 @@ export function BlogPodcast({ slug }: BlogPodcastProps) {
 
       {/* HTML5 audio player */}
       <audio
+        key={slug}
         controls
-        preload="metadata"
+        preload="none"
         src={podcastUrl}
+        onError={() => setFailedSlug(slug)}
         style={{
           width: '100%',
           borderRadius: 6,

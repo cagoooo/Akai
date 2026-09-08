@@ -5,7 +5,7 @@ import path, { dirname } from "path";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 import { fileURLToPath } from "url";
 import { visualizer } from "rollup-plugin-visualizer";
-import { readFileSync } from "fs";
+import { readFileSync, readdirSync } from "fs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -39,6 +39,12 @@ const buildInfo = (() => {
 export default defineConfig({
   base: isGitHubPages ? '/Akai/' : '/',
   define: {
+    // 與 public 音檔一同建置，避免每篇文章都發出不存在音檔的 HEAD。
+    'import.meta.env.VITE_BLOG_PODCAST_SLUGS': JSON.stringify(
+      readdirSync(path.resolve(__dirname, 'client/public/blog-podcasts'), { withFileTypes: true })
+        .filter(entry => entry.isFile() && entry.name.endsWith('.mp3'))
+        .map(entry => entry.name.slice(0, -4)).sort(),
+    ),
     'import.meta.env.VITE_APP_VERSION': JSON.stringify(pkgVersion),
     'import.meta.env.VITE_APP_CACHE_VERSION': JSON.stringify(buildInfo.cacheVersion),
     'import.meta.env.VITE_APP_GIT_HASH': JSON.stringify(buildInfo.gitHash),

@@ -2,6 +2,29 @@ import { test, expect } from '@playwright/test';
 
 test.use({ serviceWorkers: 'block' });
 
+test('未附音檔的文章不探測 Podcast，有音檔則按播放後才下載', async ({ page }) => {
+  const audioRequests: string[] = [];
+  page.on('request', request => {
+    if (request.url().includes('/blog-podcasts/')) audioRequests.push(request.method());
+  });
+  await page.goto('blog/cockpit-81-info-tech-class', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.bp-article')).toBeVisible();
+  await expect(page.getByTestId('blog-podcast')).toHaveCount(0);
+  await page.goto('blog/milestone-100-tools-achieved', { waitUntil: 'domcontentloaded' });
+  const player = page.getByTestId('blog-podcast');
+  await expect(player).toBeVisible();
+  const audio = player.locator('audio');
+  await expect(audio).toHaveAttribute('preload', 'none');
+  await page.waitForTimeout(500);
+  expect(audioRequests).toEqual([]);
+  await audio.scrollIntoViewIfNeeded();
+  await audio.evaluate(element => (element as HTMLAudioElement).play());
+  await expect.poll(() => audio.evaluate(element => (element as HTMLAudioElement).currentTime)).toBeGreaterThan(0);
+  await audio.evaluate(element => (element as HTMLAudioElement).pause());
+  expect(audioRequests.length).toBeGreaterThan(0);
+  expect(audioRequests).not.toContain('HEAD');
+});
+
 test('畫面外文章保留連結，捲動、鍵盤與列印皆能顯示', async ({ page }) => {
   await page.goto('blog', { waitUntil: 'domcontentloaded' });
   const cards = page.locator('.bp-list-card');

@@ -85,3 +85,22 @@
 - 六次皆保留 124 張列表卡片、51 筆 PIRLS 搜尋、單一頁尾、一次工具資料下載；首次列表不下載文章全文。
 - 新增回歸檢查涵蓋 390/1440px 捲至最後一篇、Tab 聚焦可見、列印恢復全部排版及末篇文章開啟；既有首頁、工具介紹、搜尋與平台篩選持續驗證。
 - 原始資料：`.local/browser-audit/phase6-dom.json`；剖析：`.local/browser-audit/blog-profile.json`。大型字型樣式與工具 #81 Podcast 404 仍是後續項目。
+
+## 第七批：字型樣式與 Podcast 請求（2026-09-08）
+
+- 保留 Noto Sans TC、Noto Serif TC、Plus Jakarta Sans、JetBrains Mono，改用 Google Fonts 可變字重範圍。採用方式參考 [Google Fonts CSS API](https://developers.google.com/fonts/docs/css2?hl=zh-TW)。
+- Chrome 實測字型 CSS 解壓後 1,106,840 → 248,238 bytes；@font-face 982 → 219 組。實際傳輸約 304,410 → 68,788 bytes，減少約 77.4%。這是樣式表數據，不是所有字型檔的合計。
+- 建置時掃描 public/blog-podcasts 的 mp3，自動注入可播放文章清單。新增音檔後重新建置即可，不必手動維護清單；文章不再逐篇送 HEAD 探測。
+- 更正先前簡稱：404 發生在工具 #81 對應的「部落格文章頁」，不是 /tool/81/ 介紹頁。有音檔的百項工具里程碑文章改為按播放才載入音訊，播放失敗時隱藏播放器。
+- 同機 production build、1440×1000、全新 Chrome context、停用快取及 Service Worker；四類頁面各前後交錯三次，共 24 次，零 pageerror／整頁溢出。
+
+| 主要內容可見時間（ms） | 修改前（三次） | 修改後（三次） | 中位數前 → 後 |
+| --- | --- | --- | --- |
+| 首頁工具卡片 | 2426 / 2193 / 2226 | 2037 / 2133 / 2242 | 2226 → 2133 |
+| 工具 #81 排版介紹 | 1010 / 1135 / 1073 | 827 / 794 / 1039 | 1073 → 827 |
+| 部落格列表卡片 | 1414 / 1448 / 1456 | 1295 / 1337 / 1355 | 1448 → 1337 |
+| #81 部落格文章 | 1452 / 1410 / 1421 | 1312 / 1327 / 1403 | 1421 → 1327 |
+
+- 以上為少量 localhost 樣本，不等於正式站改善百分比、LCP 或圖片全部完成時間；本機 SPA fallback 對缺少音檔會回 HTML，舊版因而多發 GET，不能拿來代表正式站 404 回應。
+- 11 個瀏覽器測試通過，包括無音檔零請求、有音檔首次零請求、實際播放進度增加及無 HEAD；型別、lint、prebuild 與 production build 通過。檢視前後畫面，主要標題高度與換行正常；字重範圍可能造成些微字寬差異，不宣稱逐像素相同。
+- 原始資料：`.local/browser-audit/phase7.json`；行動版：`phase7-mobile.json`；字型回應：`font-before.css`／`font-after.css`。
