@@ -11,10 +11,8 @@ import { useParams, Link, useLocation } from 'wouter';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { PageHead } from '@/components/PageHead';
 import { BulletinRelatedTools } from '@/components/bulletin/BulletinRelatedTools';
-import { useMemo, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import { resolveInternalLink } from '@/lib/resolveLink';
-import remarkGfm from 'remark-gfm';
+import { lazy, Suspense, useMemo, useState } from 'react';
+import { DeferUntilVisible } from '@/components/DeferUntilVisible';
 
 import { type EducationalTool } from '@/lib/data';
 import { getToolStats, trackToolUsage, type ToolStats } from '@/lib/firestoreService';
@@ -35,8 +33,10 @@ import { shade } from '@/components/primitives/shade';
 import { tokens } from '@/design/tokens';
 import { getToolEmoji, getCategoryLabel, getCategoryKey, normalizeUrl } from '@/components/bulletin/toolAdapter';
 import { OptimizedIcon } from '@/components/OptimizedIcons';
-import { ReviewList } from '@/components/ReviewList';
 import { getBlogPostPath, getPrimaryBlogPostForTool } from '@/lib/blogLinks';
+
+const BulletinToolMarkdown = lazy(() => import('@/components/bulletin/BulletinToolMarkdown'));
+const ReviewList = lazy(() => import('@/components/ReviewList').then(module => ({ default: module.ReviewList })));
 
 // ── NotFound：cork 風格 ───────────────────────────────
 function NotFound() {
@@ -166,6 +166,8 @@ function RelatedTools({ currentTool, tools }: { currentTool: EducationalTool; to
                   {previewSrc ? (
                     <img
                       src={previewSrc}
+                    fetchPriority="high"
+                    decoding="async"
                       alt={tool.title}
                       loading="lazy"
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
@@ -217,7 +219,7 @@ export function BulletinToolDetail() {
   const [detailImgError, setDetailImgError] = useState(false);
 
   // 取得工具資料
-  const { data: allTools, isLoading: toolsLoading } = useQuery({
+  const { data: allTools, isLoading: toolsLoading, isError: toolsError, isFetching: toolsFetching, refetch: retryTools } = useQuery({
     queryKey: ['/api/tools'],
     queryFn: async () => {
       const staticUrl = `${import.meta.env.BASE_URL}api/tools.json?v=${import.meta.env.VITE_APP_VERSION}`;
@@ -246,6 +248,20 @@ export function BulletinToolDetail() {
   });
 
   if (toolsLoading) return <ToolDetailSkeleton />;
+  if (toolsError && !allTools) return (
+    <BulletinBoard>
+      <section role="alert" style={{ padding: '60px 24px', textAlign: 'center', fontFamily: tokens.font.tc }}>
+        <h1>工具資料暫時無法載入</h1>
+        <p>請確認網路連線後再試一次。</p>
+        <button type="button" disabled={toolsFetching} onClick={() => void retryTools()}
+          style={{ background: tokens.navy, color: '#fff', padding: '12px 24px', borderRadius: 8 }}>
+          {toolsFetching ? '正在重新載入…' : '重新載入'}
+        </button>
+        <p><Link href="/">返回公佈欄</Link></p>
+      </section>
+      <BulletinFooter />
+    </BulletinBoard>
+  );
   if (!tool) return <NotFound />;
 
   const catKey = getCategoryKey(tool.category);
@@ -490,6 +506,8 @@ export function BulletinToolDetail() {
                 {previewSrc && !detailImgError ? (
                   <img
                     src={previewSrc}
+                    fetchPriority="high"
+                    decoding="async"
                     alt={tool.title}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     onError={() => {
@@ -821,158 +839,9 @@ export function BulletinToolDetail() {
                 boxShadow: '2px 2px 0 rgba(0,0,0,.12)',
               }}
             >
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                components={{
-                  p: ({ children }) => (
-                    <p style={{ margin: '0 0 14px 0' }}>{children}</p>
-                  ),
-                  h1: ({ children }) => (
-                    <h2
-                      style={{
-                        fontSize: 20,
-                        fontWeight: 900,
-                        color: tokens.ink,
-                        margin: '20px 0 12px 0',
-                        paddingBottom: 6,
-                        borderBottom: `2px dashed ${tokens.accent}`,
-                        fontFamily: tokens.font.tc,
-                        lineHeight: 1.35,
-                      }}
-                    >
-                      {children}
-                    </h2>
-                  ),
-                  h2: ({ children }) => (
-                    <h2
-                      style={{
-                        fontSize: 19,
-                        fontWeight: 900,
-                        color: tokens.ink,
-                        margin: '22px 0 12px 0',
-                        paddingBottom: 6,
-                        borderBottom: `2px dashed ${tokens.accent}`,
-                        fontFamily: tokens.font.tc,
-                        lineHeight: 1.35,
-                      }}
-                    >
-                      {children}
-                    </h2>
-                  ),
-                  h3: ({ children }) => (
-                    <h3
-                      style={{
-                        fontSize: 16,
-                        fontWeight: 800,
-                        color: tokens.accent,
-                        margin: '16px 0 8px 0',
-                        fontFamily: tokens.font.tc,
-                        lineHeight: 1.35,
-                      }}
-                    >
-                      {children}
-                    </h3>
-                  ),
-                  strong: ({ children }) => (
-                    <strong style={{ color: tokens.accent, fontWeight: 800 }}>
-                      {children}
-                    </strong>
-                  ),
-                  em: ({ children }) => (
-                    <em style={{ color: tokens.navy, fontStyle: 'normal', fontWeight: 700 }}>
-                      {children}
-                    </em>
-                  ),
-                  ul: ({ children }) => (
-                    <ul
-                      style={{
-                        margin: '10px 0 14px 0',
-                        paddingLeft: 4,
-                        listStyle: 'none',
-                      }}
-                    >
-                      {children}
-                    </ul>
-                  ),
-                  ol: ({ children }) => (
-                    <ol style={{ margin: '10px 0 14px 0', paddingLeft: 24 }}>
-                      {children}
-                    </ol>
-                  ),
-                  li: ({ children }) => (
-                    <li
-                      style={{
-                        marginBottom: 8,
-                        paddingLeft: 22,
-                        position: 'relative',
-                        lineHeight: 1.7,
-                      }}
-                    >
-                      <span
-                        style={{
-                          position: 'absolute',
-                          left: 0,
-                          top: 0,
-                          color: tokens.accent,
-                          fontWeight: 900,
-                          fontSize: 16,
-                        }}
-                      >
-                        ▸
-                      </span>
-                      {children}
-                    </li>
-                  ),
-                  a: ({ href, children }) => (
-                    <a
-                      href={resolveInternalLink(href)}
-                      style={{ color: tokens.accent, textDecoration: 'underline', fontWeight: 700 }}
-                    >
-                      {children}
-                    </a>
-                  ),
-                  code: ({ children }) => (
-                    <code
-                      style={{
-                        background: '#fff3d6',
-                        padding: '2px 6px',
-                        borderRadius: 4,
-                        fontSize: 14,
-                        fontFamily: 'Menlo, Consolas, monospace',
-                        color: tokens.ink,
-                        border: '1px solid #e8d49a',
-                      }}
-                    >
-                      {children}
-                    </code>
-                  ),
-                  blockquote: ({ children }) => (
-                    <blockquote
-                      style={{
-                        borderLeft: `3px solid ${tokens.accent}`,
-                        background: '#fff8ec',
-                        padding: '8px 14px',
-                        margin: '12px 0',
-                        color: tokens.muted2,
-                        fontStyle: 'italic',
-                      }}
-                    >
-                      {children}
-                    </blockquote>
-                  ),
-                  hr: () => (
-                    <hr
-                      style={{
-                        border: 'none',
-                        borderTop: `1px dashed ${tokens.muted}`,
-                        margin: '16px 0',
-                      }}
-                    />
-                  ),
-                }}
-              >
-                {(tool.detailedDescription || tool.description).replace(/\n/g, '\n\n')}
-              </ReactMarkdown>
+              <Suspense fallback={<p role="status">{tool.description}</p>}>
+                <BulletinToolMarkdown description={tool.detailedDescription || tool.description} />
+              </Suspense>
             </div>
 
             {/* 標籤 */}
@@ -1047,7 +916,11 @@ export function BulletinToolDetail() {
               <span style={{ fontSize: 13 }}>💬 使用者評論 · REVIEWS</span>
             </Tape>
           </div>
-          <ReviewList toolId={tool.id} toolTitle={tool.title} />
+          <DeferUntilVisible minHeight={320}>
+            <Suspense fallback={<p role="status">正在載入評論…</p>}>
+              <ReviewList toolId={tool.id} toolTitle={tool.title} />
+            </Suspense>
+          </DeferUntilVisible>
         </section>
 
         {/* 相關推薦 — cork 風格 + fuse.js 模糊比對找最相似的 3 個工具 */}
