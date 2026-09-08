@@ -46,6 +46,13 @@ export default defineConfig({
     'import.meta.env.VITE_APP_BUILD_TIMESTAMP': JSON.stringify(buildInfo.buildTimestamp),
   },
   plugins: [
+    {
+      name: 'akai-html-app-version',
+      transformIndexHtml(html) {
+        // 與頁面 fetch 使用同一個 package 版本，讓瀏覽器重用工具目錄預載。
+        return html.replaceAll('__AKAI_APP_VERSION__', pkgVersion);
+      },
+    },
     react(),
     runtimeErrorOverlay(),
     themePlugin(),

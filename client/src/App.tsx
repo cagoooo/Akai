@@ -11,7 +11,7 @@ const loadFramerFeatures = () => import("./framerFeatures").then(res => res.defa
 // 直接 import 首頁 (首屏必須載入)
 // 改為 E2 公佈欄版首頁（BulletinHome），舊版 Home 保留於 /classic 以便對比
 import { BulletinHome } from "@/pages/BulletinHome";
-import { Home as ClassicHome } from "@/pages/Home";
+const ClassicHome = lazy(() => import("@/pages/Home").then(module => ({ default: module.Home })));
 
 // 延遲載入次要路由元件與彈窗元件
 // BulletinToolDetail 為 cork 風格詳情頁；舊版 ToolDetail 保留於 /tool-classic/:id
