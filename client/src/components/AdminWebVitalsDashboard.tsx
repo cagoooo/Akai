@@ -179,7 +179,7 @@ export function AdminWebVitalsDashboard() {
           📊 真實使用者效能（Web Vitals RUM）
         </h2>
         <div style={{ fontSize: 12, color: tokens.muted2 }}>
-          最近 7 天，總樣本數：<strong style={{ color: tokens.ink }}>{totalSamples}</strong>
+          最近 7 天，指標樣本總數：<strong style={{ color: tokens.ink }}>{totalSamples}</strong>
         </div>
       </header>
 
@@ -310,7 +310,7 @@ export function AdminWebVitalsDashboard() {
           <p style={{ fontSize: 11, color: tokens.muted2, marginTop: 12, lineHeight: 1.5 }}>
             <strong>提示：</strong>p75 = 75% 使用者體驗到的數值（越低越好）。<br/>
             LCP &lt; 2.5s、INP &lt; 200ms、CLS &lt; 0.1 是 Google「**Core Web Vitals**」通過標準，
-            影響 SEO 排名。資料 25% 採樣，總樣本 × 4 ≈ 真實使用次數。
+            資料採樣率為 25%。同一次瀏覽可能回報多種指標，指標樣本總數不代表瀏覽次數或人數，不可直接乘四換算。
           </p>
         </>
       )}

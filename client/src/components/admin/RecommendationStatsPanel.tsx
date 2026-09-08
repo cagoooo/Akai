@@ -3,9 +3,9 @@
  *
  * 資料源：analytics/recoStats 單一聚合 doc（由 recordRecoImpression / recordRecoClick 寫入）
  * 呈現：
- * - KPI：總曝光 / 總點擊 / 整體 CTR / 痛點點擊佔比
- * - 分眾表：每個客群 segment 的曝光、點擊、CTR
- * - 工具表：每個工具被推薦的曝光、點擊、CTR，標記「常被推卻沒人點」
+ * - KPI：總曝光 / 總點擊 / 整體 點擊／曝光比 / 痛點點擊佔比
+ * - 分眾表：每個客群 segment 的曝光、點擊、點擊／曝光比
+ * - 工具表：每個工具被推薦的曝光、點擊、點擊／曝光比，標記「常被推卻沒人點」
  * - slot 點擊分布：哪種推薦理由（熱門 / 痛點 / 職務…）最能帶動點擊
  *
  * 用途：形成「量測 → 調權重 → 再量測」閉環，指導 POPULARITY_WEIGHT / PAINPOINT_WEIGHT 等調參。
@@ -259,7 +259,7 @@ export function RecommendationStatsPanel() {
     });
   }, [stats]);
 
-  // 「常被推卻沒人點」：曝光量前段（≥ 全站平均曝光）但 CTR 偏低（< 整體 CTR 的一半）
+  // 「常被推卻沒人點」：曝光量前段（≥ 全站平均曝光）但 點擊／曝光比 偏低（< 整體 點擊／曝光比 的一半）
   const overallCtr = ctr(totalClk, totalImp);
   const avgImp = toolRows.length > 0 ? toolRows.reduce((s, r) => s + r.imp, 0) / toolRows.length : 0;
   const isColdStar = (r: { imp: number; rate: number }) => r.imp >= Math.max(avgImp, 3) && r.rate < overallCtr / 2;
@@ -279,7 +279,7 @@ export function RecommendationStatsPanel() {
           <h3 style={{ fontSize: 18, fontWeight: 900, color: '#2c2412', display: 'flex', alignItems: 'center', gap: 7 }}>
             <Target className="h-5 w-5" /> 推薦精靈成效
           </h3>
-          <p style={{ fontSize: 12, color: '#6b5a35', marginTop: 2 }}>客群 onboarding 的曝光 / 點擊 / CTR，指導推薦權重調參</p>
+          <p style={{ fontSize: 12, color: '#6b5a35', marginTop: 2 }}>客群 onboarding 的曝光 / 點擊 / 點擊／曝光比，指導推薦權重調參。點擊可重複累計，因此比例可能超過 100%，不代表使用者點擊機率</p>
         </div>
         <Button variant="outline" size="sm" onClick={load} disabled={loading}>
           {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
@@ -298,7 +298,7 @@ export function RecommendationStatsPanel() {
 
       {totalImp > 0 && (
         <>
-          {/* P0-D 區間切換：KPI 依「全部 / 近 7 日 / 近 30 日」重算，用來對照調權重前後的 CTR 變化 */}
+          {/* P0-D 區間切換：KPI 依「全部 / 近 7 日 / 近 30 日」重算，用來對照調權重前後的 點擊／曝光比 變化 */}
           <div style={{ display: 'inline-flex', gap: 4, padding: 4, background: 'rgba(255,255,255,.6)', border: '2px solid #1a1a1a', borderRadius: 10, boxShadow: '2px 2px 0 rgba(0,0,0,.16)' }}>
             {RANGE_OPTIONS.map((o) => (
               <button
@@ -321,7 +321,7 @@ export function RecommendationStatsPanel() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {kpiCard(<Eye className="h-3.5 w-3.5" />, '曝光', ranged.imp.toLocaleString(), '推薦結果被看到的次數')}
             {kpiCard(<MousePointer className="h-3.5 w-3.5" />, '點擊', ranged.clk.toLocaleString(), '推薦卡片被點的次數')}
-            {kpiCard(<Percent className="h-3.5 w-3.5" />, 'CTR', fmtPct(rangedCtr), '點擊 ÷ 曝光')}
+            {kpiCard(<Percent className="h-3.5 w-3.5" />, '點擊／曝光比', fmtPct(rangedCtr), '事件次數相除，非去重人數')}
             {kpiCard(<Target className="h-3.5 w-3.5" />, '痛點點擊佔比', ranged.clk > 0 ? fmtPct((ranged.painClk / ranged.clk) * 100) : '—', '命中痛點的點擊比例')}
           </div>
 
@@ -331,8 +331,8 @@ export function RecommendationStatsPanel() {
             <CardHeader><CardTitle className="text-base">漏斗轉換與異常提醒</CardTitle><CardDescription>樣本少於 {MIN_ALERT_SAMPLE} 次時只顯示數字，不做品質判定。</CardDescription></CardHeader>
             <CardContent className="space-y-3 text-sm">
               <div className="flex justify-between border-b border-amber-100 pb-2"><span>開啟精靈 → 看到推薦結果</span><strong>{funnelCompletion.ready ? fmtPct(funnelCompletion.rate) : `累積 ${funnelCompletion.completed}/${funnelCompletion.opened}（樣本累積中）`}</strong></div>
-              {batchRows.map((row) => <div key={row.key} className="flex justify-between"><span>{row.label}</span><span>曝光 {row.imp}／點擊 {row.clk}／CTR {fmtPct(ctr(row.clk, row.imp))}</span></div>)}
-              {segmentAlerts.length > 0 && <div className="rounded-md border-2 border-red-300 bg-red-50 p-3 text-red-800"><strong>值得檢查的客群 CTR：</strong>{segmentAlerts.map((alert) => <div key={alert.segment}>{alert.label}：近 7 天 {fmtPct(alert.recentRate)}，前 7 天 {fmtPct(alert.previousRate)}</div>)}</div>}
+              {batchRows.map((row) => <div key={row.key} className="flex justify-between"><span>{row.label}</span><span>曝光 {row.imp}／點擊 {row.clk}／點擊／曝光比 {fmtPct(ctr(row.clk, row.imp))}</span></div>)}
+              {segmentAlerts.length > 0 && <div className="rounded-md border-2 border-red-300 bg-red-50 p-3 text-red-800"><strong>值得檢查的客群 點擊／曝光比：</strong>{segmentAlerts.map((alert) => <div key={alert.segment}>{alert.label}：近 7 天 {fmtPct(alert.recentRate)}，前 7 天 {fmtPct(alert.previousRate)}</div>)}</div>}
             </CardContent>
           </Card>
 
@@ -367,7 +367,7 @@ export function RecommendationStatsPanel() {
           </Card>}
 
           <Card>
-            <CardHeader><CardTitle className="text-base">分眾成效（累計）</CardTitle><CardDescription>各客群的曝光、點擊與 CTR（依曝光排序；下方三表為全期累計，不受上方區間切換影響）</CardDescription></CardHeader>
+            <CardHeader><CardTitle className="text-base">分眾成效（累計）</CardTitle><CardDescription>各客群的曝光、點擊與 點擊／曝光比（依曝光排序；下方三表為全期累計，不受上方區間切換影響）</CardDescription></CardHeader>
             <CardContent>
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', fontSize: 13, borderCollapse: 'collapse' }}>
@@ -376,7 +376,7 @@ export function RecommendationStatsPanel() {
                       <th style={{ padding: '6px 8px' }}>客群</th>
                       <th style={{ padding: '6px 8px', textAlign: 'right' }}>曝光</th>
                       <th style={{ padding: '6px 8px', textAlign: 'right' }}>點擊</th>
-                      <th style={{ padding: '6px 8px', textAlign: 'right' }}>CTR</th>
+                      <th style={{ padding: '6px 8px', textAlign: 'right' }}>點擊／曝光比</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -419,7 +419,7 @@ export function RecommendationStatsPanel() {
             <CardHeader>
               <CardTitle className="text-base">工具被推薦成效</CardTitle>
               <CardDescription>
-                依曝光排序；<span style={{ color: '#b45309', fontWeight: 800 }}>橘底</span>= 常被推卻沒人點（曝光高但 CTR 偏低，可考慮改 reason 或降權）
+                依曝光排序；<span style={{ color: '#b45309', fontWeight: 800 }}>橘底</span>= 常被推卻沒人點（曝光高但 點擊／曝光比 偏低，可考慮改 reason 或降權）
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -430,7 +430,7 @@ export function RecommendationStatsPanel() {
                       <th style={{ padding: '6px 8px' }}>工具</th>
                       <th style={{ padding: '6px 8px', textAlign: 'right' }}>曝光</th>
                       <th style={{ padding: '6px 8px', textAlign: 'right' }}>點擊</th>
-                      <th style={{ padding: '6px 8px', textAlign: 'right' }}>CTR</th>
+                      <th style={{ padding: '6px 8px', textAlign: 'right' }}>點擊／曝光比</th>
                     </tr>
                   </thead>
                   <tbody>

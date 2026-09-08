@@ -231,7 +231,7 @@ export function AnalyticsBehaviorTabs({ visitorStats }: AnalyticsBehaviorTabsPro
 
                   const maxWeekVisits = Math.max(...weekDays.map(d => d.visits), 1);
                   const maxMonthVisits = Math.max(...monthDays.map(d => d.visits), 1);
-                  const totalVisits = Object.values(dailyVisits).reduce((a, b) => a + b, 0);
+                  const totalVisits = monthDays.reduce((sum, day) => sum + day.visits, 0);
                   const weekTotal = weekDays.reduce((a, b) => a + b.visits, 0);
                   const weekAvg = (weekTotal / 7).toFixed(1);
 
@@ -327,7 +327,7 @@ export function AnalyticsBehaviorTabs({ visitorStats }: AnalyticsBehaviorTabsPro
                             <span className="text-purple-600">🗓️</span> 月度熱力圖
                           </h4>
                           <div className="text-xs text-muted-foreground">
-                            總計: <span className="font-medium text-purple-600">{totalVisits}</span> 次
+                            圖中日期總計: <span className="font-medium text-purple-600">{totalVisits}</span> 次
                           </div>
                         </div>
 

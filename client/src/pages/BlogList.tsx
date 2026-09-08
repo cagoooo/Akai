@@ -250,17 +250,10 @@ export function BlogList() {
   const featuredPosts = showMagazine ? filteredPosts.slice(1, 3) : [];
   const gridPosts = showMagazine ? filteredPosts.slice(3) : filteredPosts;
 
-  // Trending This Week mock（README §6 公式：取前 30 篇，給每篇估算 views 後倒序取前 3）
-  // 真實 view counter 上線後可換成從 Firestore / GA4 抓 last-7-days view counts
-  const trendingPosts = useMemo(() => {
-    if (!showMagazine || filteredPosts.length < 3) return [] as { post: BlogPostMeta; views: number }[];
-    return filteredPosts
-      .slice(0, 30)
-      .map((p, i) => ({ post: p, views: Math.round(3000 - i * 250 - Math.random() * 200) }))
-      .sort((a, b) => b.views - a.views)
-      .slice(0, 3);
-    // 依賴 filteredPosts 即可；showMagazine 是其衍生值
-  }, [filteredPosts, showMagazine]);
+  // 按發布日期挑選文章，不以虛構閱讀次數代表人氣。
+  const recentPosts = useMemo(() => showMagazine
+    ? [...filteredPosts].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt)).slice(0, 3)
+    : [], [filteredPosts, showMagazine]);
 
   // hero data-pf 屬性（用 PlatformKey 字串直接對應 CSS [data-pf="github"] 等）
   // 平台 chip 篩選時 hero 變那個平台的主題色；否則 fallback 到 hero 文章自己的部署平台
@@ -729,23 +722,23 @@ export function BlogList() {
           </div>
         )}
 
-        {/* ============ 🔥 本週熱門 (Trending This Week) ============ */}
-        {showMagazine && trendingPosts.length >= 3 && (
+        {/* ============ 🔥 近期文章 (Recent Articles) ============ */}
+        {showMagazine && recentPosts.length >= 3 && (
           <section className="bp-trending-section" aria-labelledby="bp-trending-title">
             <div className="bp-trending-head">
               <span className="bp-trending-flame" aria-hidden="true">🔥</span>
               <h2 id="bp-trending-title" className="bp-trending-title">
-                本週熱門 <span className="en">· Trending This Week</span>
+                近期文章 <span className="en">· Recent Articles</span>
               </h2>
-              <span className="bp-trending-sub">按閱讀次數倒序 · 過去 7 天</span>
+              <span className="bp-trending-sub">按發布日期排序</span>
             </div>
             <div className="bp-trending-grid">
-              {trendingPosts.map(({ post, views }, idx) => {
+              {recentPosts.map((post, idx) => {
                 const pp = getPostPlatform(post);
                 const ppd = pp ? PLATFORM_CHIPS.find((p) => p.key === pp) : null;
                 const rankClass = `rank-${idx + 1}`;
                 const rankNum = String(idx + 1).padStart(2, '0');
-                const badgeText = idx === 0 ? '熱搜 #1' : idx === 1 ? '老師最愛' : '行政必看';
+                const badgeText = '教學分享';
                 return (
                   <Link
                     key={post.slug}
@@ -761,7 +754,6 @@ export function BlogList() {
                       <span aria-hidden="true">{post.coverEmoji}</span> {post.title}
                     </h3>
                     <div className="bp-trend-meta">
-                      <span className="views">👁 {views.toLocaleString('en-US')}</span>
                       <span>
                         {new Date(post.publishedAt).toLocaleDateString('zh-TW', {
                           month: '2-digit',

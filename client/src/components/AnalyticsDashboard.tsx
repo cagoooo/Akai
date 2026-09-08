@@ -1,3 +1,4 @@
+import { aggregateToolStats, inclusiveCalendarDays } from '@/lib/adminStats';
 import { lazy, Suspense, useState, useEffect, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -88,6 +89,8 @@ export function AnalyticsDashboard() {
 
   // 工具統計狀態
   const [toolStats, setToolStats] = useState<ToolUsageStat[]>([]);
+  const [toolStatsError, setToolStatsError] = useState(false);
+  const [toolStatsLoading, setToolStatsLoading] = useState(true);
   // 工具每日點擊細分（v3.6.8+ 連動日期 picker）
   const [toolDailyClicks, setToolDailyClicks] = useState<Map<number, Record<string, number>>>(
     () => new Map(),
@@ -194,31 +197,19 @@ export function AnalyticsDashboard() {
         unsubscribeTool = onSnapshot(
           query(collection(db, 'toolUsageStats'), orderBy('totalClicks', 'desc')),
           (snapshot) => {
-            const stats: ToolUsageStat[] = [];
-            const daily = new Map<number, Record<string, number>>();
-            snapshot.forEach((doc) => {
-              const data = doc.data();
-              stats.push({
-                toolId: data.toolId,
-                totalClicks: data.totalClicks,
-              });
-              if (data.dailyClicks && typeof data.dailyClicks === 'object') {
-                const valid: Record<string, number> = {};
-                for (const [k, v] of Object.entries(data.dailyClicks)) {
-                  if (/^\d{4}-\d{2}-\d{2}$/.test(k) && typeof v === 'number' && v > 0) {
-                    valid[k] = v;
-                  }
-                }
-                if (Object.keys(valid).length > 0) daily.set(data.toolId, valid);
-              }
-            });
+            const { stats, daily } = aggregateToolStats(snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() })));
             setToolStats(stats);
             setToolDailyClicks(daily);
+            setToolStatsError(false);
+            setToolStatsLoading(false);
             setLastUpdated(new Date());
             console.log('🔧 工具統計已即時更新（含 dailyClicks）');
           },
           (error) => {
             console.error('工具統計監聽失敗:', error);
+            setToolStatsError(true);
+            setToolStatsLoading(false);
+            setToolDailyClicks(new Map());
             // 回退到本地數據
             const localStats = getLocalToolStats();
             setToolStats(
@@ -235,6 +226,8 @@ export function AnalyticsDashboard() {
         console.log('🔴 Firebase 即時監聽已啟動');
       } catch (error) {
         console.error('初始化即時監聽失敗:', error);
+        setToolStatsError(true);
+        setToolStatsLoading(false);
         setIsRealtime(false);
         // 使用本地數據
         setVisitorStats({
@@ -290,10 +283,7 @@ export function AnalyticsDashboard() {
     const dailyVisits = (visitorStats?.dailyVisits as Record<string, number>) || {};
     const entries = filterDailyVisits(dailyVisits, dateRange);
     const total = entries.reduce((sum, [, n]) => sum + n, 0);
-    const days = Math.max(
-      1,
-      Math.round((dateRange.to.getTime() - dateRange.from.getTime()) / 86400000) + 1,
-    );
+    const days = inclusiveCalendarDays(dateRange.from, dateRange.to);
     const avg = total / days;
     const peak = entries.reduce((m, [, n]) => Math.max(m, n), 0);
     // 與「上一段同等長度的範圍」比較
@@ -316,11 +306,11 @@ export function AnalyticsDashboard() {
   /**
    * 取得工具在當前日期範圍內的點擊數（v3.6.8+）
    * - 優先用 dailyClicks 細分（範圍篩選）
-   * - 落空就用 totalClicks 全期值（與舊行為一致）
+   * - 無每日明細的舊資料不納入期間排行
    */
-  const getToolClicksInRange = (toolId: number, totalClicks: number): number => {
+  const getToolClicksInRange = (toolId: number): number => {
     const daily = toolDailyClicks.get(toolId);
-    if (!daily) return totalClicks; // 沒 dailyClicks 就用全期累計
+    if (!daily) return 0; // 無每日明細不能當作期間點擊量
     const fromStr = toDateStr(dateRange.from);
     const toStr = toDateStr(dateRange.to);
     let sum = 0;
@@ -336,7 +326,7 @@ export function AnalyticsDashboard() {
     const enriched = toolStats.map((s) => ({
       toolId: s.toolId,
       totalClicks: s.totalClicks,
-      rangeClicks: getToolClicksInRange(s.toolId, s.totalClicks),
+      rangeClicks: getToolClicksInRange(s.toolId),
       title: toolTitles.get(s.toolId) || `工具 #${s.toolId}`,
     }));
     return enriched.filter((s) => s.rangeClicks > 0).sort((a, b) => b.rangeClicks - a.rangeClicks);
@@ -1170,15 +1160,15 @@ export function AnalyticsDashboard() {
                 <CardTitle>工具使用統計</CardTitle>
                 <CardDescription>
                   {dateRange.label} 內最受歡迎的工具
-                  {toolDailyClicks.size === 0 && (
+                  {toolStats.some((s) => !toolDailyClicks.has(s.toolId)) && (
                     <span style={{ color: '#7a8c3a', marginLeft: 8, fontSize: 11 }}>
-                      （dailyClicks 尚未累積，先以全期數據顯示。新點擊會開始累積每日細分。）
+                      （缺少每日明細的舊資料未納入期間排行。）
                     </span>
                   )}
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {toolsInRange.length > 0 ? (
+                {toolStatsLoading ? <p role="status">正在載入工具統計…</p> : toolStatsError ? <p role="alert">工具統計讀取失敗，請重新整理後再試。</p> : toolsInRange.length > 0 ? (
                   <BarChart
                     data={{
                       labels: toolsInRange.map((s) =>
@@ -1250,7 +1240,7 @@ export function AnalyticsDashboard() {
                   />
                 ) : (
                   <div className="flex items-center justify-center h-[400px] text-muted-foreground">
-                    暫無工具使用數據
+                    此期間沒有可統計的每日點擊資料
                   </div>
                 )}
               </CardContent>

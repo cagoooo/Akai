@@ -16,6 +16,9 @@ test('列表不依賴文章全文，搜尋才補載且仍可開文章', async ({
     await expect(page.locator('.bp-list-card').first()).toBeVisible({ timeout: 30_000 });
     expect(requested).toBe(false);
     await expect(page.locator('footer')).toHaveCount(1);
+    await expect(page.getByText('按發布日期排序', { exact: true })).toBeVisible();
+    await expect(page.locator('.bp-trend-meta .views')).toHaveCount(0);
+    await expect(page.getByText('熱搜 #1', { exact: true })).toHaveCount(0);
     await page.getByRole('tab', { name: /Firebase Hosting/ }).click();
     await expect(page).toHaveURL(/platform=firebase/);
     expect(requested).toBe(false);
