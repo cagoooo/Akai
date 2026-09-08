@@ -15,7 +15,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const SITE = 'https://cagoooo.github.io/Akai';
-const AUTHOR_URL = 'https://www.smes.tyc.edu.tw/modules/tadnews/page.php?ncsn=11&nsn=16#a5';
+const AUTHOR_URL = 'https://www.smes.tyc.edu.tw/modules/school/index.php?department_id=2&zone_id=0&page_id=2&content_id=11&type=news&from_op=all_news#a5';
 const tools = JSON.parse(readFileSync(resolve(ROOT, 'client/public/api/tools.json'), 'utf-8'));
 const stats = JSON.parse(readFileSync(resolve(ROOT, 'client/public/api/site-stats.json'), 'utf-8'));
 const outputDir = resolve(ROOT, 'client/public/geo');
