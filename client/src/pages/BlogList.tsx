@@ -13,7 +13,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'wouter';
 import Fuse from 'fuse.js';
 import { useQuery } from '@tanstack/react-query';
-import { POSTS, getAllPostsAsync, type BlogPost } from '@/blog/posts';
+import { POSTS_INDEX, type BlogPostMeta } from '@/blog/postsIndex';
+import { generateMiniPosts } from '@/blog/miniPosts';
 import type { EducationalTool } from '@/lib/data';
 import { tokens } from '@/design/tokens';
 import { Tape } from '@/components/primitives/Tape';
@@ -50,7 +51,7 @@ const CATEGORY_KEYWORDS: Record<string, string[]> = {
  * 1. 先看 tags 是否含分類關鍵字
  * 2. 再看 title / excerpt 是否含關鍵字
  */
-function postMatchesCategory(post: BlogPost, category: string): boolean {
+function postMatchesCategory(post: BlogPostMeta, category: string): boolean {
   const keywords = CATEGORY_KEYWORDS[category];
   if (!keywords || keywords.length === 0) return false;
   // tag 含關鍵字
@@ -124,8 +125,8 @@ function writeFiltersToUrl({ q, cat, platform }: { q: string; cat: string | null
 
 export function BlogList() {
   const initial = useMemo(() => readFiltersFromUrl(), []);
-  const [posts, setPosts] = useState<BlogPost[]>(POSTS);
   const [query, setQuery] = useState(initial.q);
+  const searchEnabled = !!query.trim();
   const [selectedCat, setSelectedCat] = useState<string | null>(initial.cat);
   const [platform, setPlatform] = useState<PlatformKey>(initial.platform);
 
@@ -142,10 +143,17 @@ export function BlogList() {
     staleTime: 5 * 60 * 1000,
   });
 
-  // async 載入完整 posts（合併手寫長文 + 迷你 blog）
-  useEffect(() => {
-    getAllPostsAsync().then((all) => setPosts(all)).catch(() => { /* fallback POSTS */ });
-  }, []);
+  // 瀏覽列表只需 metadata；開始搜尋時才補上全文，保留原本 body 搜尋能力。
+  const { data: fullPosts, isFetching: searchLoading, isError: searchError, refetch: retrySearch } = useQuery({
+    queryKey: ['blog-search-posts'],
+    queryFn: () => import('@/blog/posts').then((module) => module.POSTS),
+    enabled: searchEnabled,
+    staleTime: Infinity,
+  });
+  const posts = useMemo<BlogPostMeta[]>(() => [
+    ...(fullPosts || POSTS_INDEX),
+    ...generateMiniPosts(tools || []),
+  ], [fullPosts, tools]);
 
   // URL query sync
   useEffect(() => {
@@ -164,7 +172,7 @@ export function BlogList() {
   }, [tools]);
 
   // 取得一篇 post 的平台（用第一個 toolId 對應，找不到回 null）
-  const getPostPlatform = (post: BlogPost): PlatformKey | null => {
+  const getPostPlatform = (post: BlogPostMeta): PlatformKey | null => {
     if (post.toolIds.length === 0) return null;
     return toolPlatformMap.get(post.toolIds[0]) || null;
   };
@@ -184,7 +192,7 @@ export function BlogList() {
 
   // Fuse instance for fuzzy search
   const fuse = useMemo(() => {
-    if (posts.length === 0) return null;
+    if (!searchEnabled || posts.length === 0) return null;
     return new Fuse(posts, {
       keys: [
         { name: 'title', weight: 3 },
@@ -196,7 +204,7 @@ export function BlogList() {
       ignoreLocation: true,
       minMatchCharLength: 2,
     });
-  }, [posts]);
+  }, [posts, searchEnabled]);
 
   // 套用所有篩選條件（platform filter → category filter → search → sort）
   const filteredPosts = useMemo(() => {
@@ -245,7 +253,7 @@ export function BlogList() {
   // Trending This Week mock（README §6 公式：取前 30 篇，給每篇估算 views 後倒序取前 3）
   // 真實 view counter 上線後可換成從 Firestore / GA4 抓 last-7-days view counts
   const trendingPosts = useMemo(() => {
-    if (!showMagazine || filteredPosts.length < 3) return [] as { post: BlogPost; views: number }[];
+    if (!showMagazine || filteredPosts.length < 3) return [] as { post: BlogPostMeta; views: number }[];
     return filteredPosts
       .slice(0, 30)
       .map((p, i) => ({ post: p, views: Math.round(3000 - i * 250 - Math.random() * 200) }))
@@ -418,6 +426,10 @@ export function BlogList() {
               }}
               data-testid="blog-search-input"
             />
+            {query.trim() && searchLoading && <p role="status">正在補齊全文搜尋，先顯示標題與摘要結果…</p>}
+            {query.trim() && searchError && <p role="alert">全文暫時無法載入，目前僅搜尋標題與摘要。
+              <button type="button" onClick={() => void retrySearch()}>重試全文搜尋</button>
+            </p>}
           </div>
 
           {/* 🗺️ 部署平台 chip（按平台篩選） */}

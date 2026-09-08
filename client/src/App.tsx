@@ -68,6 +68,7 @@ function ConditionalFooter() {
   // BulletinHome ('/') 與 BulletinToolDetail ('/tool/:id') 皆已有整合版 BulletinFooter
   if (location === '/' || location === '') return null;
   if (location.startsWith('/tool/')) return null;
+  if (location === '/blog' || location.startsWith('/blog/')) return null;
   return <Footer />;
 }
 

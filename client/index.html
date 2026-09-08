@@ -88,14 +88,7 @@
 
   <!-- 動態載入關鍵資料將在下方腳本執行 -->
 
-  <!-- Preload 關鍵字體 (減少 FOUT/CLS) -->
-  <link rel="preload"
-    href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" as="font"
-    type="font/woff2" crossorigin />
-  <link rel="preload"
-    href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6fAZ9hiA.woff2" as="font"
-    type="font/woff2" crossorigin />
-
+  <!-- Inter 保留 @font-face，僅在使用該字型時載入，避免搶占首屏頻寬。 -->
   <!-- E2 公佈欄字體 (Noto Sans TC + Plus Jakarta Sans + Noto Serif TC + JetBrains Mono)
        Serif/Mono 為部落格文章內頁 blockquote / TOC 編號 / inline code 使用 -->
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800;900&family=Noto+Serif+TC:wght@500;700;900&family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
