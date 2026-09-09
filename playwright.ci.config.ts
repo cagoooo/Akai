@@ -14,7 +14,7 @@ import { defineConfig, devices } from '@playwright/test';
  *   base 是 '/Akai/' 還是 '/'，這裡沿用同一個判斷，讓本機與 CI 都指得到。
  */
 const base = process.env.GITHUB_ACTIONS === 'true' ? '/Akai/' : '/';
-const PORT = 4173;
+const PORT = Number(process.env.AKAI_E2E_PORT || 4173);
 
 export default defineConfig({
   testDir: './e2e',

@@ -39,6 +39,7 @@ import { AudienceOnboardingWizard } from '@/components/audience/AudienceOnboardi
 import { AudienceProfileBadge } from '@/components/audience/AudienceProfileBadge';
 import { AudienceRecommendationStrip } from '@/components/audience/AudienceRecommendationStrip';
 import { AudienceEntryCard } from '@/components/audience/AudienceEntryCard';
+import { LatestToolsShowcase } from '@/components/LatestToolsShowcase';
 import { tokens } from '@/design/tokens';
 import { markHomeEntryForEngagementNotifications } from '@/lib/analytics';
 import type { AudienceProfile } from '@/lib/audienceProfile';
@@ -101,6 +102,10 @@ export function BulletinHome() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(initialFilters.category);
   const [showFavorites, setShowFavorites] = useState(initialFilters.favorites);
   const [showShortcutsDialog, setShowShortcutsDialog] = useState(false);
+  const [showLatestTools, setShowLatestTools] = useState(false);
+  const [latestAutoEligible, setLatestAutoEligible] = useState(() =>
+    !['q', 'category', 'tag', 'favorites', 'wish'].some(key => new URLSearchParams(window.location.search).has(key))
+  );
   const [showWishingWellFromShortcut, setShowWishingWellFromShortcut] = useState(false);
   const [selectedToolIndex, setSelectedToolIndex] = useState(0);
   const [audienceProfile, setAudienceProfile] = useState(() => readAudienceProfile());
@@ -283,6 +288,7 @@ export function BulletinHome() {
   }, []);
 
   const locateRecommendedTool = useCallback((toolId: number) => {
+    setLatestAutoEligible(false);
     setSearchQuery('');
     setSelectedCategory(null);
     setShowFavorites(false);
@@ -326,6 +332,14 @@ export function BulletinHome() {
   return (
     <BulletinBoard>
       <BulletinHeader />
+      <LatestToolsShowcase
+        tools={toolsWithStats}
+        blocked={showAudienceWizard || showShortcutsDialog || showWishingWellFromShortcut || highlightedToolId !== null}
+        autoEligible={latestAutoEligible}
+        open={showLatestTools}
+        onOpenChange={setShowLatestTools}
+        onLocateTool={locateRecommendedTool}
+      />
       <BulletinMilestone100 onWishClick={() => setShowWishingWellFromShortcut(true)} />
       <BulletinSpeechBanner />
       <BulletinHero toolCount={toolsWithStats.length} />
@@ -343,7 +357,7 @@ export function BulletinHome() {
         </div>
       )}
 
-      {audienceProfile && (
+      {audienceProfile && !showLatestTools && (
         <AudienceRecommendationStrip
           profile={audienceProfile}
           tools={toolsWithStats}
