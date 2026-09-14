@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 126+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 127+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Sun, 06 Sep 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Sun, 06 Sep 2026 14:48:17 GMT</lastBuildDate>
+    <pubDate>Mon, 14 Sep 2026 00:00:00 GMT</pubDate>
+    <lastBuildDate>Mon, 14 Sep 2026 03:05:34 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,27 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>📖 教學情境：#127 桃園市AI素養爭霸賽：把「要會 AI」拆成學生今天就能練的六個站點</title>
+      <link>https://cagoooo.github.io/Akai/blog/ai-literacy-127-taoyuan-competition-prep</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/ai-literacy-127-taoyuan-competition-prep</guid>
+      <pubDate>Mon, 14 Sep 2026 00:00:00 GMT</pubDate>
+      <description>#127 桃園市AI素養爭霸賽備戰站，把報名、指定版本、資料蒐集、監督式學習、模型測試、規則紅線與比賽日流程放進同一條練習路線。學生知道今天做什麼，指導教師也能看見隊伍卡在哪一站。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>🆕 新工具：桃園市AI素養爭霸賽</title>
+      <link>https://cagoooo.github.io/Akai/tool/127</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/127</guid>
+      <pubDate>Sun, 13 Sep 2026 16:00:00 GMT</pubDate>
+      <description>把桃園市 115 年度 AI 素養爭霸賽的報名、版本、規則與練習拆成一條備戰路線：從 PAIA 3.3.5、魷來魷去 1.7.5 與地圖 12，到資料蒐集、監督式學習、模型測試、上傳檢查與比賽日分工，學生和指導教師打開就能開始。</description>
+      <category>AI素養</category>
+      <category>AI競賽</category>
+      <category>PAIA</category>
+      <category>魷來魷去</category>
+      <category>監督式學習</category>
+    </item>
     <item>
       <title>📖 教學情境：#126 DEADZONE 能量防線：把失敗放在策略上，孩子才會想再試一次</title>
       <link>https://cagoooo.github.io/Akai/blog/deadzone-126-3d-tower-defense-energy-weapons</link>
@@ -311,27 +332,6 @@
       <description>每學期初核對幾百名學生名單，用肉眼看字形相似又容易出錯？#114 學生名單校對平台，雙欄智慧比對一秒揪出學號姓名錯漏，資料完全在本地處理，行政效率與個資安全雙贏！</description>
       <category>blog</category>
       <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#112 皮卡丘天空大冒險：經典飛翔小鳥結合寶可夢，鍛鍊學生專注度與挫折容忍度</title>
-      <link>https://cagoooo.github.io/Akai/blog/pikachu-sky-adventure-112-flappy-bird-game</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/pikachu-sky-adventure-112-flappy-bird-game</guid>
-      <pubDate>Mon, 22 Jun 2026 00:00:00 GMT</pubDate>
-      <description>下課十分鐘，學生圍在電腦前只能玩充滿廣告的雜亂網頁遊戲？#112 提供一個純前端、無廣告、隨開即玩的「皮卡丘天空大冒險」，結合經典的 Flappy Bird 玩法，在躲避綠色水管的飛行挑戰中，無痛訓練孩子的手眼協調力與專注度。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>🆕 新工具：皮卡丘天空大冒險</title>
-      <link>https://cagoooo.github.io/Akai/tool/112</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/112</guid>
-      <pubDate>Sun, 21 Jun 2026 23:48:41 GMT</pubDate>
-      <description>精緻好玩的皮卡丘天空冒險遊戲！結合 Flappy Bird 經典玩法，在躲避障礙的過程中鍛鍊專注力與手眼協調，非常適合用於課堂破冰、班級競賽或下課休閒。</description>
-      <category>皮卡丘</category>
-      <category>Flappy Bird</category>
-      <category>飛翔的小鳥</category>
-      <category>天空冒險</category>
-      <category>網頁遊戲</category>
     </item>
   </channel>
 </rss>

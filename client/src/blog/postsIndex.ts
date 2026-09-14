@@ -15,6 +15,27 @@ export type BlogPostMeta = Omit<BlogPost, 'body'>;
 
 export const POSTS_INDEX: BlogPostMeta[] = [
   {
+    "slug": "ai-literacy-127-taoyuan-competition-prep",
+    "title": "#127 桃園市AI素養爭霸賽：把「要會 AI」拆成學生今天就能練的六個站點",
+    "excerpt": "#127 桃園市AI素養爭霸賽備戰站，把報名、指定版本、資料蒐集、監督式學習、模型測試、規則紅線與比賽日流程放進同一條練習路線。學生知道今天做什麼，指導教師也能看見隊伍卡在哪一站。",
+    "publishedAt": "2026-09-14",
+    "readingMinutes": 7,
+    "tags": [
+      "AI素養",
+      "AI競賽",
+      "PAIA",
+      "監督式學習",
+      "國小資訊"
+    ],
+    "toolIds": [
+      127,
+      81,
+      118
+    ],
+    "coverEmoji": "🏆",
+    "coverColor": "orange"
+  },
+  {
     "slug": "deadzone-126-3d-tower-defense-energy-weapons",
     "title": "#126 DEADZONE 能量防線：把失敗放在策略上，孩子才會想再試一次",
     "excerpt": "#126 是一款直接在瀏覽器跑的 3D 塔防射擊：三種能量武器隨時切換、三種防禦塔各有分工、十波殭屍撲向能源核心。最關鍵的設計是角色不受傷害、敵人只攻核心——失敗回饋落在「這一波該把塔蓋在哪裡」，是能被討論、被修正、被下一局驗證的判斷，孩子因此願意再想一次。",

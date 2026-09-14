@@ -1,5 +1,5 @@
 {
-  "toolCount": 126,
+  "toolCount": 127,
   "displayCount": "120+",
   "categoryCounts": {
     "communication": 7,
@@ -7,7 +7,7 @@
     "interactive": 13,
     "reading": 3,
     "games": 26,
-    "teaching": 22,
+    "teaching": 23,
     "language": 14
   },
   "milestones": {
@@ -15,9 +15,9 @@
   },
   "ogImage": "/og-preview-f3e4010f.png",
   "ogImageAbsolute": "https://cagoooo.github.io/Akai/og-preview-f3e4010f.png",
-  "generatedAt": "2026-09-06T14:48:16.343Z",
-  "ogImageHeatmap": "/og-preview-heatmap-81dd3d4c.png",
-  "ogImageHeatmapAbsolute": "https://cagoooo.github.io/Akai/og-preview-heatmap-81dd3d4c.png",
+  "generatedAt": "2026-09-14T03:05:32.894Z",
+  "ogImageHeatmap": "/og-preview-heatmap-06faa53c.png",
+  "ogImageHeatmapAbsolute": "https://cagoooo.github.io/Akai/og-preview-heatmap-06faa53c.png",
   "ogImageCelebration": "/og-preview-celebration-100-fe9e3183.png",
   "ogImageCelebrationAbsolute": "https://cagoooo.github.io/Akai/og-preview-celebration-100-fe9e3183.png"
 }
