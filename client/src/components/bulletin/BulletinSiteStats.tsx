@@ -12,15 +12,17 @@
  * 互動：點任一分類扇形 → 設定首頁 ?category=xxx 並 scroll 到工具網格
  */
 
-import { useMemo, useState, lazy, Suspense } from 'react';
+import { useEffect, useMemo, useState, lazy, Suspense } from 'react';
 import { useSiteStats } from '@/hooks/useSiteStats';
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-// 樹視圖較重（含 tools.json fetch + SVG），lazy load 只在切到該 tab 才下載
+// 樹視圖 lazy 載入，但不等點擊才下載（實測點下去後還要等 ~1 秒）：
+// 首頁閒置時先預載，hover / focus 切換鈕時也會提前觸發；tools.json 與首頁共用快取。
+const loadFamilyTree = () => import('./BulletinToolFamilyTree');
 const BulletinToolFamilyTree = lazy(() =>
-  import('./BulletinToolFamilyTree').then((m) => ({ default: m.BulletinToolFamilyTree }))
+  loadFamilyTree().then((m) => ({ default: m.BulletinToolFamilyTree }))
 );
 
 type Mode = 'pie' | 'tree';
@@ -54,6 +56,16 @@ export function BulletinSiteStats({ onCategoryClick }: Props) {
   const { data, isLoading } = useSiteStats();
   const [mode, setMode] = useState<Mode>('pie');
   const isMobile = useIsMobile();
+
+  useEffect(() => {
+    const w = window as Window & { requestIdleCallback?: (cb: () => void) => number };
+    if (w.requestIdleCallback) {
+      w.requestIdleCallback(() => void loadFamilyTree());
+    } else {
+      const t = setTimeout(() => void loadFamilyTree(), 2000);
+      return () => clearTimeout(t);
+    }
+  }, []);
 
   const chartData = useMemo(() => {
     if (!data?.categoryCounts) return [];
@@ -144,6 +156,9 @@ export function BulletinSiteStats({ onCategoryClick }: Props) {
               role="tab"
               aria-selected={mode === 'tree'}
               onClick={() => setMode('tree')}
+              onMouseEnter={() => void loadFamilyTree()}
+              onFocus={() => void loadFamilyTree()}
+              onTouchStart={() => void loadFamilyTree()}
               style={toggleBtn(mode === 'tree')}
             >
               🌳 家族樹
