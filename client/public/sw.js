@@ -52,7 +52,7 @@ const CACHE_STRATEGIES = {
   cacheFirst: [
     /\.js$/,
     /\.css$/,
-    /\.woff2?$/,
+    /\.woff2?(\?.*)?$/, // 自架字型帶 ?v= 版本參數，檔案變了網址就變，可放心 cache first
     /\.ttf$/,
     /\.eot$/,
     /\/assets\//,
