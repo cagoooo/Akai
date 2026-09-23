@@ -7,10 +7,10 @@
  * 設定：
  *   - DSN 從 VITE_SENTRY_DSN 讀（沒設就完全 noop，不影響本地開發）
  *   - 生產環境才啟用（dev mode 不送，避免測試誤觸）
- *   - tracesSampleRate 0.1（10% 抽樣）+ replaysSessionSampleRate 0.05（5% 錄影）
+ *   - 只做錯誤回報（2026-09-23 起不錄影回放、不做效能追蹤）
  *   - 自動捕捉 unhandledrejection、未捕獲 error、console.error/warn
  *
- * 延後載入（2026-09-23）：@sentry/react（含 replay）約佔主 bundle 一半，
+ * 延後載入（2026-09-23）：@sentry/react 若靜態 import 會佔主 bundle 一半，
  *   改成頁面 load 後閒置時才動態 import；沒設 DSN 時完全不下載。
  *   載入前發生的錯誤先暫存在 pending，Sentry 就緒後補送，不會漏掉進站頭幾秒的錯誤。
  *
@@ -20,7 +20,7 @@
  *   captureException(err);
  */
 
-type SentryModule = typeof import('@sentry/react');
+type SentryModule = typeof import('./sentryClient');
 
 let sentry: SentryModule | null = null;
 let scheduled = false;
@@ -55,7 +55,7 @@ export function initSentry() {
     return;
   }
   // CI 的 E2E（vite preview）與本機量測跑的是帶 DSN 的正式建置，
-  // 其中有刻意製造失敗的測試，不能讓它們進正式 Sentry、吃掉錄影額度
+  // 其中有刻意製造失敗的測試，不能讓它們進正式 Sentry、吃掉事件額度
   if (/^(localhost|127\.0\.0\.1|\[::1\])$/.test(window.location.hostname)) {
     console.info('[Sentry] 本機網址，跳過初始化');
     return;
@@ -66,28 +66,19 @@ export function initSentry() {
 
   const load = async () => {
     try {
-      const Sentry = await import('@sentry/react');
+      const Sentry = await import('./sentryClient');
       Sentry.init({
         dsn,
         release: `akai@${release}`,
         environment: 'production',
 
-        // 整合：browser tracing + session replay + console capture
+        // 只做錯誤回報：2026-09-23 拿掉 session replay 與 browser tracing
+        // （錄影器持續記錄 DOM 變動、效能追蹤也吃 CPU，正式站啟用後長任務約翻倍）
         integrations: [
-          Sentry.browserTracingIntegration(),
-          Sentry.replayIntegration({
-            maskAllText: false,
-            blockAllMedia: false,
-          }),
           Sentry.captureConsoleIntegration({
             levels: ['error', 'warn'], // 把 console.warn 也送過去 — 抓隱性 bug 的關鍵
           }),
         ],
-
-        // 抽樣率（控制成本）
-        tracesSampleRate: 0.1, // 10% 效能追蹤
-        replaysSessionSampleRate: 0.05, // 5% 一般 session 錄影
-        replaysOnErrorSampleRate: 1.0, // 出錯時 100% 錄影（事後可重播）；延後載入後才開始錄
 
         // 攔截一些不重要的雜訊
         ignoreErrors: [
