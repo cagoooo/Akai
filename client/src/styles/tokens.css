@@ -1158,6 +1158,22 @@
   font: inherit;
   font-size: 12px;
 }
+/* 工具網格 127 張卡：畫面外的卡先跳過排版與繪製。
+   實測手機 4G：中文字型分批到達時整頁重排 3 次、每次 2~3 秒，卡片到 15 秒才出現。
+   overflow-clip-margin 保留圖釘、傾斜、聚光 outline 不被裁切。 */
+@supports (content-visibility: auto) {
+  .bulletin-tool-grid > * {
+    content-visibility: auto;
+    contain-intrinsic-block-size: auto 460px;
+    overflow-clip-margin: 24px;
+  }
+}
+@media print {
+  .bulletin-tool-grid > * {
+    content-visibility: visible;
+    contain-intrinsic-block-size: none;
+  }
+}
 /* 推薦工具定位後的「電影院聚光」：只保留指定卡片的亮度，
    不攔截其他卡片互動，讓使用者仍能隨時改看另一張工具。 */
 .bulletin-tool-grid.is-spotlighting {

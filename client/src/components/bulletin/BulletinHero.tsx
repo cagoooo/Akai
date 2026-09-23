@@ -272,7 +272,8 @@ function AkaiPolaroid() {
         >
           {!avatarError ? (
             <img
-              src={`${import.meta.env.BASE_URL}assets/Akai.png`}
+              // 首頁只顯示 240×300；Akai.png（1200×630、265KB）保留給 JSON-LD / OG 用
+              src={`${import.meta.env.BASE_URL}assets/Akai-hero.webp`}
               alt="阿凱老師"
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               onError={() => {

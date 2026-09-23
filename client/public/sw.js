@@ -40,8 +40,8 @@ const PRECACHE_IMAGES = [
   `${BASE_PATH}previews/tool_5.webp`,
   `${BASE_PATH}previews/tool_6.webp`,
   // Hero 區的阿凱拍立得 + 校徽
-  `${BASE_PATH}assets/Akai.png`,
-  `${BASE_PATH}assets/school-logo.png`,
+  `${BASE_PATH}assets/Akai-hero.webp`,
+  `${BASE_PATH}assets/school-logo.webp`,
   // favicon（MAKER 便利貼用）
   `${BASE_PATH}favicon.png`,
 ];
