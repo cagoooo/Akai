@@ -32,6 +32,14 @@ let app: FirebaseApp | null = null;
 let db: Firestore | null = null;
 let auth: Auth | null = null;
 
+// App Check 就緒訊號：初始化完成且拿到第一個 token 才 resolve；
+// 沒有金鑰 / 本機 / 初始化失敗時直接 resolve，呼叫端不會被卡住
+let markAppCheckReady: () => void = () => {};
+const appCheckReady = new Promise<void>((resolve) => {
+  markAppCheckReady = resolve;
+});
+let appCheckScheduled = false;
+
 if (hasValidConfig) {
   try {
     // 初始化 Firebase
@@ -45,18 +53,21 @@ if (hasValidConfig) {
     } else if (appCheckSiteKey) {
       // 延後初始化（2026-09-23）：reCAPTCHA Enterprise 腳本 ~345KB（gzip）會在首屏搶頻寬與 CPU，
       // 改到頁面 load 後閒置才動態載入。Firestore / Functions 之後的請求會自動帶上 token；
-      // 在此之前送出的請求沒有 token——目前是 monitor 模式不受影響，
-      // 但將來 Functions 切 enforceAppCheck: true 前，必須先處理進站初期的 callable（會被拒）。
+      // 在此之前送出的請求沒有 token；需要 token 的統計 callable 會先 await waitForAppCheck()。
+      appCheckScheduled = true;
       const firebaseApp = app;
       const startAppCheck = () => {
         import('firebase/app-check')
-          .then(({ initializeAppCheck, ReCaptchaEnterpriseProvider }) => {
-            initializeAppCheck(firebaseApp, {
+          .then(async ({ initializeAppCheck, ReCaptchaEnterpriseProvider, getToken }) => {
+            const appCheck = initializeAppCheck(firebaseApp, {
               provider: new ReCaptchaEnterpriseProvider(appCheckSiteKey),
               isTokenAutoRefreshEnabled: true,
             });
+            // 等第一個 token 真的換到，之後的 callable 才保證帶得上
+            await getToken(appCheck).catch((err) => console.warn('Firebase App Check 取得 token 失敗:', err));
           })
-          .catch((err) => console.warn('Firebase App Check 初始化失敗:', err));
+          .catch((err) => console.warn('Firebase App Check 初始化失敗:', err))
+          .finally(() => markAppCheckReady());
       };
       const scheduleAppCheck = () => {
         const w = window as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number };
@@ -95,6 +106,16 @@ if (hasValidConfig) {
 // 導出 - 可能為 null 如果設定無效
 export { db, auth };
 export default app;
+
+if (!appCheckScheduled) markAppCheckReady();
+
+/**
+ * 等 App Check 就緒（延後初始化，約在頁面 load 後閒置時）再送需要 token 的請求。
+ * 最多等 maxWaitMs：reCAPTCHA 被廣告攔截 / 校園防火牆擋掉時，統計仍會送出（monitor 模式照收），不會永遠卡住。
+ */
+export function waitForAppCheck(maxWaitMs = 10_000): Promise<void> {
+  return Promise.race([appCheckReady, new Promise<void>((resolve) => setTimeout(resolve, maxWaitMs))]);
+}
 
 // 輔助函式：檢查 Firebase 是否可用
 export function isFirebaseAvailable(): boolean {

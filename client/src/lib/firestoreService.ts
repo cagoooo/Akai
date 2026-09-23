@@ -1,5 +1,5 @@
 // Firestore 資料庫服務層
-import { db, isFirebaseAvailable } from './firebase';
+import { db, isFirebaseAvailable, waitForAppCheck } from './firebase';
 import { shouldReportErrorToFirestore } from './errorReporting';
 import {
     doc,
@@ -171,6 +171,8 @@ export async function trackToolUsage(toolId: number): Promise<ToolStats> {
     if (isFirebaseAvailable() && db) {
         try {
             const { getFunctions, httpsCallable } = await import('firebase/functions');
+            // App Check 延後初始化；等就緒再送，callable 才帶得上 token
+            await waitForAppCheck();
             const functions = getFunctions(undefined, 'asia-east1');
             const callable = httpsCallable<typeof context, { success: boolean; toolId: number }>(
                 functions,

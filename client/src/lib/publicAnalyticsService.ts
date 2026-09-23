@@ -10,6 +10,8 @@ export async function invokePublicAnalytics(payload: Record<string, unknown>): P
   ]);
   const firebaseApp = firebaseModule.default;
   if (!firebaseApp) throw new Error('Firebase 尚未初始化');
+  // 延後初始化的 App Check 就緒後再送，callable 才帶得上 token（將來 enforceAppCheck: true 不會被拒）
+  await firebaseModule.waitForAppCheck();
   const functions = getFunctions(firebaseApp, 'asia-east1');
   const callable = httpsCallable<Record<string, unknown>, { ok: boolean }>(
     functions,
