@@ -52,6 +52,24 @@ describe('ensureSignedIn 匿名認證', () => {
     expect(mocks.signInAnonymously).not.toHaveBeenCalled();
   });
 
+  it('同時呼叫多次只建立一個匿名帳號並共用同一個 user', async () => {
+    const [a, b] = await Promise.all([ensureSignedIn(), ensureSignedIn()]);
+
+    expect(mocks.signInAnonymously).toHaveBeenCalledTimes(1);
+    expect(a).toBe(b);
+    expect(a).toMatchObject({ uid: 'anonymous-user' });
+  });
+
+  it('前一次匿名登入失敗後，下一次呼叫可重新嘗試', async () => {
+    mocks.signInAnonymously.mockRejectedValueOnce(new Error('network'));
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    await expect(ensureSignedIn()).resolves.toBeNull();
+    await expect(ensureSignedIn()).resolves.toMatchObject({ uid: 'anonymous-user' });
+    expect(mocks.signInAnonymously).toHaveBeenCalledTimes(2);
+    warn.mockRestore();
+  });
+
   it('本次 session 主動登出後尊重登出意圖', async () => {
     sessionStorage.setItem('akai_signed_out_this_session', '1');
 

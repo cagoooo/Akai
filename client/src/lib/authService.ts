@@ -36,6 +36,22 @@ export async function ensureSignedIn(): Promise<User | null> {
     if (!isAuthAvailable() || !auth) return null;
     if (auth.currentUser) return auth.currentUser;
 
+    // single-flight：首次造訪時 main.tsx、visitorTracker、analytics 等會同時呼叫，
+    // 各自看到 currentUser=null 就各自 signInAnonymously → 一位訪客建出多個匿名帳號。
+    // 同時進來的呼叫共用同一個 Promise，完成（成功或失敗）後才清掉。
+    if (!inFlightSignIn) {
+        inFlightSignIn = restoreOrSignInAnonymously().finally(() => {
+            inFlightSignIn = null;
+        });
+    }
+    return inFlightSignIn;
+}
+
+let inFlightSignIn: Promise<User | null> | null = null;
+
+async function restoreOrSignInAnonymously(): Promise<User | null> {
+    if (!auth) return null;
+
     // 等 onAuthStateChanged 第一次回呼，讓 Firebase 從 IndexedDB 還原 session
     await new Promise<void>((resolve) => {
         const unsub = onAuthStateChanged(auth as Auth, () => {
