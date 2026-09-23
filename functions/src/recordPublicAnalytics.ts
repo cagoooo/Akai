@@ -473,8 +473,9 @@ export const recordPublicAnalytics = onCall(
     region: REGION,
     memory: '256MiB',
     maxInstances: 10,
-    // 先蒐集 App Check 合法／缺漏比例；確認正式站與舊版快取皆穩定後再切成 true。
-    enforceAppCheck: false,
+    // 2026-09-23 切 enforce：前端統計已改為等 App Check 就緒（waitForAppCheck）才送出。
+    // 沒有有效 token 的請求（舊版快取、reCAPTCHA 被擋、腳本直打）會在進入 handler 前被拒。
+    enforceAppCheck: true,
   },
   async (request) => {
     requireAuth(request);
@@ -485,7 +486,7 @@ export const recordPublicAnalytics = onCall(
     const kind: AnalyticsKind = rawKind;
     const isAdmin = request.auth?.token?.admin === true;
     const uid = request.auth?.uid ?? 'unknown';
-    const appCheck = appCheckDecision(Boolean(request.app), false);
+    const appCheck = appCheckDecision(Boolean(request.app), true);
     if (appCheck === 'monitor-missing' && shouldSampleMonitorLog(uid, kind)) {
       logger.warn('public_analytics_app_check_missing', {
         kind,
