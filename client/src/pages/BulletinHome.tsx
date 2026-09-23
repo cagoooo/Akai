@@ -28,7 +28,9 @@ import { BulletinSpeechBanner } from '@/components/bulletin/BulletinSpeechBanner
 import { BulletinQuickNav } from '@/components/bulletin/BulletinQuickNav';
 import { BulletinLeaderboard } from '@/components/bulletin/BulletinLeaderboard';
 import { BulletinWishPool } from '@/components/bulletin/BulletinWishPool';
-import { DeferUntilVisible } from '@/components/DeferUntilVisible';
+// 工具地圖已改手刻 SVG（不再帶 recharts），直接載入：進站即開始抓 site-stats.json，
+// 捲到時通常已畫好，不會再「空白一陣子才彈出」。
+import { BulletinSiteStats } from '@/components/bulletin/BulletinSiteStats';
 import { BulletinBlogEntry } from '@/components/bulletin/BulletinBlogEntry';
 import { BulletinDeploymentEcosystem } from '@/components/bulletin/BulletinDeploymentEcosystem';
 import { BulletinSearchBar } from '@/components/bulletin/BulletinSearchBar';
@@ -52,11 +54,6 @@ import {
   snoozeAudienceRePrompt,
 } from '@/lib/audienceProfileStorage';
 
-// 站內統計卡帶 recharts（532 KB）。它在頁面很下方，改成「捲到附近才下載」，
-// 不讓圖表函式庫進首頁關鍵路徑。
-const BulletinSiteStats = lazy(() =>
-  import('@/components/bulletin/BulletinSiteStats').then((m) => ({ default: m.BulletinSiteStats }))
-);
 
 const KeyboardShortcutsDialog = lazy(() =>
   import('@/components/KeyboardShortcutsDialog').then((m) => ({ default: m.KeyboardShortcutsDialog }))
@@ -399,11 +396,7 @@ export function BulletinHome() {
           scrollMarginTop: 20,
         }}
       >
-        <DeferUntilVisible minHeight={360}>
-          <Suspense fallback={null}>
-            <BulletinSiteStats onCategoryClick={(cat) => handleCategoryChange(cat)} />
-          </Suspense>
-        </DeferUntilVisible>
+        <BulletinSiteStats onCategoryClick={(cat) => handleCategoryChange(cat)} />
         <div id="blog" style={{ scrollMarginTop: 20 }}>
           <BulletinBlogEntry />
         </div>

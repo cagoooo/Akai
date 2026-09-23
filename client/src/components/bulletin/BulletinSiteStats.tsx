@@ -1,8 +1,11 @@
 /**
  * BulletinSiteStats — 首頁分類分佈視覺化便利貼
  *
- * 顯示「目前 N 款工具 · X 大分類」+ 圓餅圖（recharts）
+ * 顯示「目前 N 款工具 · X 大分類」+ 甜甜圈圖（手刻 SVG）
  * 資料來源：useSiteStats hook（由 build 時的 generate-home-og.mjs 產出 site-stats.json）
+ *
+ * 效能：圓餅改手刻 SVG（原本 recharts 讓這張卡多下載 ~400KB vendor-charts），
+ * 資料未到時先畫同尺寸骨架，避免區塊空白後突然彈出。
  *
  * 設計：便利貼風格與 BulletinLeaderboard / BulletinWishPool 同
  *
@@ -10,7 +13,6 @@
  */
 
 import { useMemo, useState, lazy, Suspense } from 'react';
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import { useSiteStats } from '@/hooks/useSiteStats';
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
@@ -66,7 +68,7 @@ export function BulletinSiteStats({ onCategoryClick }: Props) {
       .sort((a, b) => b.count - a.count);
   }, [data]);
 
-  if (isLoading || !data) return null;
+  if (isLoading || !data) return <SiteStatsSkeleton />;
 
   const totalCategories = chartData.length;
   const topCat = chartData[0];
@@ -242,39 +244,7 @@ export function BulletinSiteStats({ onCategoryClick }: Props) {
         }}
       >
         <div style={{ width: 160, height: 160, margin: isMobile ? '0 auto' : undefined }}>
-          <ResponsiveContainer>
-            <PieChart>
-              <Pie
-                data={chartData}
-                dataKey="count"
-                nameKey="name"
-                innerRadius={36}
-                outerRadius={70}
-                strokeWidth={2}
-                stroke={tokens.ink}
-                onClick={(d) => onCategoryClick?.((d as { key: string }).key)}
-                cursor="pointer"
-              >
-                {chartData.map((d) => (
-                  <Cell key={d.key} fill={d.color} />
-                ))}
-              </Pie>
-              <Tooltip
-                formatter={(value: number, _name: string, props: { payload?: { emoji?: string; name?: string } }) => [
-                  `${value} 款`,
-                  `${props.payload?.emoji || ''} ${props.payload?.name || ''}`,
-                ]}
-                contentStyle={{
-                  background: '#fefdfa',
-                  border: `2px solid ${tokens.ink}`,
-                  borderRadius: 6,
-                  fontFamily: tokens.font.tc,
-                  fontSize: 12,
-                  boxShadow: '2px 2px 0 rgba(0,0,0,.2)',
-                }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
+          <DonutChart data={chartData} onSliceClick={onCategoryClick} />
         </div>
 
         {/* 圖例（可點） */}
@@ -335,6 +305,132 @@ export function BulletinSiteStats({ onCategoryClick }: Props) {
     </div>
   );
 }
+
+interface Slice {
+  key: string;
+  name: string;
+  emoji: string;
+  count: number;
+  color: string;
+}
+
+const SIZE = 160;
+const C = SIZE / 2;
+const R_OUT = 70;
+const R_IN = 36;
+
+function polar(r: number, angle: number) {
+  // angle 0 = 12 點鐘方向，順時針
+  return [C + r * Math.sin(angle), C - r * Math.cos(angle)];
+}
+
+function arcPath(start: number, end: number) {
+  // 單一分類佔滿 360° 時 SVG arc 起終點重合會畫不出來，微縮一點
+  const e = Math.min(end, start + Math.PI * 2 - 1e-4);
+  const large = e - start > Math.PI ? 1 : 0;
+  const [x1, y1] = polar(R_OUT, start);
+  const [x2, y2] = polar(R_OUT, e);
+  const [x3, y3] = polar(R_IN, e);
+  const [x4, y4] = polar(R_IN, start);
+  return `M${x1} ${y1}A${R_OUT} ${R_OUT} 0 ${large} 1 ${x2} ${y2}L${x3} ${y3}A${R_IN} ${R_IN} 0 ${large} 0 ${x4} ${y4}Z`;
+}
+
+/** 輕量甜甜圈圖：取代 recharts，hover 時中心顯示該分類數量 */
+function DonutChart({ data, onSliceClick }: { data: Slice[]; onSliceClick?: (key: string) => void }) {
+  const [hover, setHover] = useState<string | null>(null);
+  const total = data.reduce((sum, d) => sum + d.count, 0) || 1;
+  let angle = 0;
+  const slices = data.map((d) => {
+    const start = angle;
+    angle += (d.count / total) * Math.PI * 2;
+    return { ...d, path: arcPath(start, angle) };
+  });
+  const active = slices.find((s) => s.key === hover);
+
+  return (
+    <svg viewBox={`0 0 ${SIZE} ${SIZE}`} width={SIZE} height={SIZE} role="img" aria-label="工具分類分佈圓餅圖">
+      {slices.map((s) => (
+        <path
+          key={s.key}
+          d={s.path}
+          fill={s.color}
+          stroke={tokens.ink}
+          strokeWidth={2}
+          strokeLinejoin="round"
+          style={{
+            cursor: 'pointer',
+            transformOrigin: `${C}px ${C}px`,
+            transform: hover === s.key ? 'scale(1.06)' : undefined,
+            transition: 'transform 0.15s ease',
+          }}
+          onMouseEnter={() => setHover(s.key)}
+          onMouseLeave={() => setHover(null)}
+          onClick={() => onSliceClick?.(s.key)}
+        >
+          <title>{`${s.emoji} ${s.name}：${s.count} 款`}</title>
+        </path>
+      ))}
+      {active && (
+        <g pointerEvents="none" style={{ fontFamily: tokens.font.tc }}>
+          <text x={C} y={C - 2} textAnchor="middle" fontSize={18} fontWeight={900} fill={tokens.ink}>
+            {active.count}
+          </text>
+          <text x={C} y={C + 14} textAnchor="middle" fontSize={10} fontWeight={700} fill={tokens.muted2}>
+            {active.name}
+          </text>
+        </g>
+      )}
+    </svg>
+  );
+}
+
+/** 資料未到時的同尺寸骨架，保留版面避免 CLS */
+function SiteStatsSkeleton() {
+  return (
+    <div
+      aria-busy="true"
+      aria-label="工具地圖載入中"
+      style={{
+        position: 'relative',
+        background: tokens.note.green,
+        border: `2px solid ${tokens.ink}`,
+        borderRadius: 10,
+        padding: '18px 22px 14px',
+        boxShadow: '5px 6px 0 rgba(0,0,0,.2), 0 10px 22px -8px rgba(0,0,0,.18)',
+        transform: 'rotate(0.8deg)',
+        fontFamily: tokens.font.tc,
+        minHeight: 290,
+      }}
+    >
+      <Pin color="#16a34a" size={18} style={{ top: -9, left: 28, marginLeft: 0 }} />
+      <Pin color="#16a34a" size={18} style={{ top: -9, right: 28 }} />
+      <span style={{ fontSize: 18, fontWeight: 900, color: tokens.ink }}>📊 工具地圖</span>
+      <div style={{ ...skeletonBar, width: 180, height: 38, margin: '12px 0 16px' }} />
+      <div style={{ display: 'flex', gap: 18, alignItems: 'center', flexWrap: 'wrap' }}>
+        <div
+          style={{
+            width: 140,
+            height: 140,
+            margin: 10,
+            borderRadius: '50%',
+            border: `34px solid rgba(0,0,0,.08)`,
+            boxSizing: 'border-box',
+          }}
+        />
+        <div style={{ flex: 1, minWidth: 160, display: 'grid', gap: 10 }}>
+          {[0, 1, 2, 3].map((i) => (
+            <div key={i} style={{ ...skeletonBar, height: 14, width: `${90 - i * 12}%` }} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const skeletonBar: React.CSSProperties = {
+  background: 'rgba(0,0,0,.08)',
+  borderRadius: 6,
+};
 
 function toggleBtn(active: boolean): React.CSSProperties {
   return {
