@@ -17,6 +17,7 @@ import { Link } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import type { EducationalTool } from '@/lib/data';
 import { tokens } from '@/design/tokens';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const CATEGORY_LABEL: Record<string, string> = {
   communication: '溝通互動',
@@ -37,12 +38,17 @@ const CATEGORY_EMOJI: Record<string, string> = {
   interactive: '🎯',
 };
 
-const W = 720;
-const H = 540;
-const CENTER = { x: W / 2, y: H / 2 };
-const CAT_RADIUS = 140; // 分類圈半徑
+// 根節點放在原點，viewBox 依「全部展開」時的實際範圍自動裁切，不留固定畫布的空白
+const CENTER = { x: 0, y: 0 };
+// 桌機卡片是寬版 → 分類排成橫向橢圓；手機維持正圓避免被壓扁
+const LAYOUT = {
+  wide: { rx: 250, ry: 112, start: -Math.PI / 3 },
+  round: { rx: 140, ry: 140, start: -Math.PI / 2 },
+};
 const TOOL_RADIUS_BASE = 70; // 工具離分類節點的距離
 const TOOL_RADIUS_STEP = 22; // 同分類多層工具的層距
+const TOOLS_PER_LAYER = 12;
+const VIEW_PAD = 12;
 
 interface CategoryNode {
   key: string;
@@ -58,6 +64,7 @@ interface CategoryNode {
 export function BulletinToolFamilyTree() {
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [hoverTool, setHoverTool] = useState<EducationalTool | null>(null);
+  const layout = useIsMobile() ? LAYOUT.round : LAYOUT.wide;
 
   const { data: tools } = useQuery<EducationalTool[]>({
     queryKey: ['/api/tools'],
@@ -86,19 +93,40 @@ export function BulletinToolFamilyTree() {
     const entries = Array.from(groups.entries()).sort((a, b) => b[1].length - a[1].length);
     const n = entries.length;
     return entries.map(([key, ts], i) => {
-      const angle = (i / n) * Math.PI * 2 - Math.PI / 2; // 從 12 點鐘方向起算
+      const t = layout.start + (i / n) * Math.PI * 2;
+      const x = CENTER.x + Math.cos(t) * layout.rx;
+      const y = CENTER.y + Math.sin(t) * layout.ry;
       return {
         key,
         label: CATEGORY_LABEL[key] || key,
         emoji: CATEGORY_EMOJI[key] || '🔖',
         color: tokens.cat[key as keyof typeof tokens.cat]?.dot || tokens.muted,
         tools: ts.sort((a, b) => a.id - b.id),
-        angle,
-        x: CENTER.x + Math.cos(angle) * CAT_RADIUS,
-        y: CENTER.y + Math.sin(angle) * CAT_RADIUS,
+        // 橢圓上用「中心 → 節點」的實際方向，工具扇形才會朝外長
+        angle: Math.atan2(y - CENTER.y, x - CENTER.x),
+        x,
+        y,
       };
     });
-  }, [tools]);
+  }, [externalTools, layout]);
+
+  // 以全部展開時的節點、標籤範圍算 viewBox，收合時版面不跳動
+  const viewBox = useMemo(() => {
+    let x0 = -44, y0 = -44, x1 = 44, y1 = 44;
+    const add = (x: number, y: number, px: number, py: number) => {
+      x0 = Math.min(x0, x - px); x1 = Math.max(x1, x + px);
+      y0 = Math.min(y0, y - py); y1 = Math.max(y1, y + py);
+    };
+    for (const cat of categories) {
+      add(cat.x, cat.y, 28, 28);
+      add(cat.x, cat.y + labelDy(cat), 32, 10);
+      cat.tools.forEach((_, i) => {
+        const p = toolPosition(cat, i, cat.tools.length);
+        add(p.x, p.y, 9, 18); // 上方留 hover 編號的高度
+      });
+    }
+    return `${x0 - VIEW_PAD} ${y0 - VIEW_PAD} ${x1 - x0 + VIEW_PAD * 2} ${y1 - y0 + VIEW_PAD * 2}`;
+  }, [categories]);
 
   // 預設展開最大分類（讓初始畫面有東西看）
   useEffect(() => {
@@ -115,7 +143,7 @@ export function BulletinToolFamilyTree() {
     const spread = Math.min(Math.PI * 0.5, total * 0.08);
     const offset = total === 1 ? 0 : (toolIdx / (total - 1) - 0.5) * spread;
     const a = cat.angle + offset;
-    const layer = Math.floor(toolIdx / 12);
+    const layer = Math.floor(toolIdx / TOOLS_PER_LAYER);
     const r = TOOL_RADIUS_BASE + layer * TOOL_RADIUS_STEP;
     return { x: cat.x + Math.cos(a) * r, y: cat.y + Math.sin(a) * r };
   }
@@ -169,7 +197,7 @@ export function BulletinToolFamilyTree() {
       </div>
 
       <svg
-        viewBox={`0 0 ${W} ${H}`}
+        viewBox={viewBox}
         width="100%"
         height="auto"
         style={{ display: 'block' }}
@@ -294,10 +322,10 @@ export function BulletinToolFamilyTree() {
               >
                 {cat.tools.length}
               </text>
-              {/* 分類標籤（外側） */}
+              {/* 分類標籤放在靠中心那側，避開往外長的工具樹枝 */}
               <text
                 textAnchor="middle"
-                y={cat.y > CENTER.y ? 45 : -32}
+                y={labelDy(cat)}
                 fontSize="11"
                 fontWeight="800"
                 fill={tokens.ink}
@@ -333,32 +361,40 @@ export function BulletinToolFamilyTree() {
           </text>
         </g>
 
-        {/* hover tooltip — 大字浮在中下方 */}
-        {hoverTool && (
-          <g transform={`translate(${CENTER.x}, ${H - 30})`}>
-            <rect
-              x={-180}
-              y={-22}
-              width={360}
-              height={32}
-              fill={tokens.ink}
-              opacity={0.92}
-              rx={6}
-            />
-            <text
-              textAnchor="middle"
-              fontSize="13"
-              fontWeight="800"
-              fill="#fff"
-              style={{ fontFamily: tokens.font.tc }}
-            >
-              #{hoverTool.id} {hoverTool.title.length > 24 ? hoverTool.title.slice(0, 23) + '…' : hoverTool.title}
-            </text>
-          </g>
-        )}
       </svg>
+
+      {/* hover tooltip — 浮在樹的下緣，不佔 viewBox 空間 */}
+      {hoverTool && (
+        <div
+          style={{
+            position: 'absolute',
+            left: '50%',
+            bottom: 10,
+            transform: 'translateX(-50%)',
+            maxWidth: 'calc(100% - 24px)',
+            padding: '6px 14px',
+            background: tokens.ink,
+            opacity: 0.92,
+            color: '#fff',
+            borderRadius: 6,
+            fontFamily: tokens.font.tc,
+            fontSize: 13,
+            fontWeight: 800,
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            pointerEvents: 'none',
+          }}
+        >
+          #{hoverTool.id} {hoverTool.title}
+        </div>
+      )}
     </div>
   );
+}
+
+function labelDy(cat: CategoryNode) {
+  return cat.y > CENTER.y ? -32 : 45;
 }
 
 function chipBtn(active: boolean): React.CSSProperties {
