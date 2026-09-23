@@ -39,7 +39,11 @@ if (hasValidConfig) {
     app = initializeApp(firebaseConfig);
 
     // App Check 先送出 token 供後端觀測；確認合法流量覆蓋率後才啟用強制阻擋。
-    if (appCheckSiteKey) {
+    // reCAPTCHA Enterprise 金鑰只允許 cagoooo.github.io；本機 / CI E2E（localhost）取 token 必失敗並不斷重試，直接略過
+    const isLocalhost = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(window.location.hostname);
+    if (appCheckSiteKey && isLocalhost) {
+      console.info('Firebase App Check：本機網址略過（金鑰僅允許正式網域）');
+    } else if (appCheckSiteKey) {
       initializeAppCheck(app, {
         provider: new ReCaptchaEnterpriseProvider(appCheckSiteKey),
         isTokenAutoRefreshEnabled: true,
