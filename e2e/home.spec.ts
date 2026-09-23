@@ -30,10 +30,18 @@ async function revealSiteStats(page: Page) {
 }
 
 test.describe('首頁冒煙測試', () => {
-  test('工具牆有渲染出卡片', async ({ page }) => {
+  test('工具牆先畫第一批，捲到底會自動補齊全部卡片', async ({ page }) => {
     await gotoHome(page);
     const cards = page.locator('[data-testid="tool-card"]');
-    // 工具數會持續增加，所以用下限而不是固定值
+    // 分批顯示（BulletinToolGrid BATCH=24）：首屏只畫第一批
+    expect(await cards.count()).toBeGreaterThanOrEqual(24);
+    const more = page.getByTestId('tool-grid-more');
+    // 一路捲到哨兵，直到全部補完（工具數會持續增加，所以用下限而不是固定值）
+    for (let i = 0; i < 20 && (await more.count()) > 0; i++) {
+      await more.scrollIntoViewIfNeeded();
+      await page.waitForTimeout(300);
+    }
+    await expect(more).toHaveCount(0);
     expect(await cards.count()).toBeGreaterThan(100);
   });
 

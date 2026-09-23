@@ -17,12 +17,20 @@
         console.info('[GA] 未設定 VITE_GA_MEASUREMENT_ID，略過載入 Google Analytics');
         return;
       }
-      var s = document.createElement('script');
-      s.async = true;
-      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + id;
-      document.head.appendChild(s);
+      // 指令先排進 dataLayer（時間戳記照實），gtag.js 本體等頁面 load 完、主執行緒閒下來才下載，
+      // 不跟首屏搶頻寬與 CPU（實測手機 172KB、主執行緒 ~0.6 秒）。
       gtag('js', new Date());
       gtag('config', id);
+      var loadGtag = function () {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + id;
+        document.head.appendChild(s);
+      };
+      window.addEventListener('load', function () {
+        if (window.requestIdleCallback) window.requestIdleCallback(loadGtag, { timeout: 3000 });
+        else setTimeout(loadGtag, 1500);
+      }, { once: true });
     })();
   </script>
   <!-- 動態設定 base URL -->

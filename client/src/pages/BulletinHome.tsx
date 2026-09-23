@@ -28,9 +28,9 @@ import { BulletinSpeechBanner } from '@/components/bulletin/BulletinSpeechBanner
 import { BulletinQuickNav } from '@/components/bulletin/BulletinQuickNav';
 import { BulletinLeaderboard } from '@/components/bulletin/BulletinLeaderboard';
 import { BulletinWishPool } from '@/components/bulletin/BulletinWishPool';
-// 工具地圖已改手刻 SVG（不再帶 recharts），直接載入：進站即開始抓 site-stats.json，
-// 捲到時通常已畫好，不會再「空白一陣子才彈出」。
+// 工具地圖已改手刻 SVG（不再帶 recharts），直接打包進首頁；掛載時機由 DeferUntilVisible 的 mountOnIdle 控制
 import { BulletinSiteStats } from '@/components/bulletin/BulletinSiteStats';
+import { DeferUntilVisible } from '@/components/DeferUntilVisible';
 import { BulletinBlogEntry } from '@/components/bulletin/BulletinBlogEntry';
 import { BulletinDeploymentEcosystem } from '@/components/bulletin/BulletinDeploymentEcosystem';
 import { BulletinSearchBar } from '@/components/bulletin/BulletinSearchBar';
@@ -376,12 +376,17 @@ export function BulletinHome() {
           scrollMarginTop: 20,
         }}
       >
-        <BulletinLeaderboard
-          tools={toolsWithStats}
-          deltas7d={deltas7d}
-          hasDeltaHistory={hasDeltaHistory}
-        />
-        <BulletinWishPool />
+        {/* 首屏以下的區塊讓出首次繪製：捲到附近或頁面閒置時（先到先觸發）才掛載；錨點 id 留在外層 */}
+        <DeferUntilVisible minHeight={540} mountOnIdle>
+          <BulletinLeaderboard
+            tools={toolsWithStats}
+            deltas7d={deltas7d}
+            hasDeltaHistory={hasDeltaHistory}
+          />
+        </DeferUntilVisible>
+        <DeferUntilVisible minHeight={540} mountOnIdle>
+          <BulletinWishPool />
+        </DeferUntilVisible>
       </div>
 
       {/* 工具地圖 + 教學情境長文 兩欄並排 */}
@@ -396,15 +401,21 @@ export function BulletinHome() {
           scrollMarginTop: 20,
         }}
       >
-        <BulletinSiteStats onCategoryClick={(cat) => handleCategoryChange(cat)} />
+        <DeferUntilVisible minHeight={360} mountOnIdle>
+          <BulletinSiteStats onCategoryClick={(cat) => handleCategoryChange(cat)} />
+        </DeferUntilVisible>
         <div id="blog" style={{ scrollMarginTop: 20 }}>
-          <BulletinBlogEntry />
+          <DeferUntilVisible minHeight={380} mountOnIdle>
+            <BulletinBlogEntry />
+          </DeferUntilVisible>
         </div>
       </div>
 
       {/* 部署生態系全圖 — 5 大平台便利貼牆 */}
       <div className="bulletin-deployment-wrapper" style={{ padding: '0 60px 30px' }}>
-        <BulletinDeploymentEcosystem />
+        <DeferUntilVisible minHeight={700} mountOnIdle>
+          <BulletinDeploymentEcosystem />
+        </DeferUntilVisible>
       </div>
 
       {/* 搜尋 */}
@@ -462,7 +473,11 @@ export function BulletinHome() {
             📌 正在把工具釘上公佈欄…
           </div>
         ) : (
-          <BulletinToolGrid tools={sortedTools} highlightedToolId={highlightedToolId} />
+          <BulletinToolGrid
+            tools={sortedTools}
+            highlightedToolId={highlightedToolId}
+            resetKey={`${searchQuery}|${selectedCategory ?? ''}|${showFavorites}|${currentSort}`}
+          />
         )}
       </div>
 

@@ -24,6 +24,11 @@ interface Props {
   rootMargin?: string;
   /** 保險絲：這麼久還沒收到「任何」IO 回呼就視為 IO 失效並直接顯示（見下方說明） */
   fallbackMs?: number;
+  /**
+   * 頁面 load 完、主執行緒閒置時也直接掛載（與「捲到附近」先到先觸發）。
+   * 給沒有肥相依、只是想讓出首屏繪製的區塊用：錨點跳轉途中不會因區塊才長出來而停錯位置。
+   */
+  mountOnIdle?: boolean;
 }
 
 export function DeferUntilVisible({
@@ -31,9 +36,31 @@ export function DeferUntilVisible({
   minHeight,
   rootMargin = '400px',
   fallbackMs = 1500,
+  mountOnIdle = false,
 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    if (!mountOnIdle || show) return;
+    let idleId: number | undefined;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const w = window as Window & {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+    const schedule = () => {
+      if (w.requestIdleCallback) idleId = w.requestIdleCallback(() => setShow(true), { timeout: 3000 });
+      else timer = setTimeout(() => setShow(true), 1000);
+    };
+    if (document.readyState === 'complete') schedule();
+    else window.addEventListener('load', schedule, { once: true });
+    return () => {
+      window.removeEventListener('load', schedule);
+      if (idleId !== undefined) w.cancelIdleCallback?.(idleId);
+      if (timer !== undefined) clearTimeout(timer);
+    };
+  }, [mountOnIdle, show]);
 
   useEffect(() => {
     if (show) return;
