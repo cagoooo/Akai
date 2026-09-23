@@ -184,6 +184,8 @@ preview 實測「設了 dismissed 旗標 → 精靈不自動開 → 兩個入口
 
 > App Check 待專案 IAM 補上 reCAPTCHA Enterprise API 啟用與 App Check 管理權限後，才能建立僅允許 `cagoooo.github.io` 的網站金鑰、寫入 GitHub secret、觀測合法 token 覆蓋率，最後再切換 enforce。未改用個人帳號繞過教學專案權限。
 
+> **2026-09-23 更新：App Check 已上線（monitor）。** 實查 IAM 發現 `akai-e693f` 的 `roles/owner` 只有 `cagooo@gmail.com`（學校帳號本來就不是擁有者），改以擁有者帳號啟用 reCAPTCHA Enterprise / App Check API、建立僅允許 `cagoooo.github.io` 的 score 型網站金鑰並註冊到 Web App，GitHub secret `VITE_FIREBASE_APPCHECK_SITE_KEY` 已設定；正式站實測 token 交換 200、Firestore / Functions 請求開始帶 App Check token。各服務仍未開 enforcement，下一步是觀察合法 token 覆蓋率再切 `enforceAppCheck: true`。同日亦補上 `VITE_SENTRY_DSN`（先前正式站 Sentry 從未初始化）。
+
 > Functions 排程部署待專案 IAM 補上 `cloudscheduler.jobs.update`（例如 Cloud Scheduler Admin）後重跑；本次沒有刪除或重建既有排程工作，避免在權限不足時造成排程中斷。
 
 ### `2026-07-21`（📋 Admin 進度核對 + 未來 P0／P1 優化 Roadmap）
