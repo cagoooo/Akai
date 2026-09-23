@@ -13,7 +13,6 @@ import {
   browserSessionPersistence,
   Auth,
 } from 'firebase/auth';
-import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
 
 // 從環境變數讀取 Firebase 設定
 const firebaseConfig = {
@@ -44,10 +43,28 @@ if (hasValidConfig) {
     if (appCheckSiteKey && isLocalhost) {
       console.info('Firebase App Check：本機網址略過（金鑰僅允許正式網域）');
     } else if (appCheckSiteKey) {
-      initializeAppCheck(app, {
-        provider: new ReCaptchaEnterpriseProvider(appCheckSiteKey),
-        isTokenAutoRefreshEnabled: true,
-      });
+      // 延後初始化（2026-09-23）：reCAPTCHA Enterprise 腳本 ~345KB（gzip）會在首屏搶頻寬與 CPU，
+      // 改到頁面 load 後閒置才動態載入。Firestore / Functions 之後的請求會自動帶上 token；
+      // 在此之前送出的請求沒有 token——目前是 monitor 模式不受影響，
+      // 但將來 Functions 切 enforceAppCheck: true 前，必須先處理進站初期的 callable（會被拒）。
+      const firebaseApp = app;
+      const startAppCheck = () => {
+        import('firebase/app-check')
+          .then(({ initializeAppCheck, ReCaptchaEnterpriseProvider }) => {
+            initializeAppCheck(firebaseApp, {
+              provider: new ReCaptchaEnterpriseProvider(appCheckSiteKey),
+              isTokenAutoRefreshEnabled: true,
+            });
+          })
+          .catch((err) => console.warn('Firebase App Check 初始化失敗:', err));
+      };
+      const scheduleAppCheck = () => {
+        const w = window as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number };
+        if (w.requestIdleCallback) w.requestIdleCallback(startAppCheck, { timeout: 3000 });
+        else setTimeout(startAppCheck, 1500);
+      };
+      if (document.readyState === 'complete') scheduleAppCheck();
+      else window.addEventListener('load', scheduleAppCheck, { once: true });
     } else {
       console.warn('Firebase App Check 尚未設定 site key，目前僅能進行後端缺漏觀測。');
     }
