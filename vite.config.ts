@@ -101,7 +101,15 @@ export default defineConfig({
           // 圖表庫
           'vendor-charts': ['recharts'],
           // 工具函式
-          'vendor-utils': ['date-fns', 'clsx', 'tailwind-merge'],
+          // Babel helpers 是 recharts 與 react-syntax-highlighter 共用的；不指定的話會被併進
+          // vendor-charts，部落格文章頁為了兩個小函式得多下載整包圖表庫（~100KB）
+          'vendor-utils': [
+            'date-fns',
+            'clsx',
+            'tailwind-merge',
+            '@babel/runtime/helpers/esm/extends',
+            '@babel/runtime/helpers/esm/objectWithoutPropertiesLoose',
+          ],
         },
       },
     },

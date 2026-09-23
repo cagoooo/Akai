@@ -56,10 +56,20 @@ export async function loadEmbeddings(): Promise<EmbeddingsFile | null> {
   return loadingPromise;
 }
 
-/** 語意搜尋是否可用（tool-embeddings.json 存在） */
+/**
+ * 語意搜尋是否可用（tool-embeddings.json 存在）
+ * 只發 HEAD 確認檔案在不在：整份向量 ~420KB，等使用者真的切到語意搜尋才下載。
+ */
 export async function isSemanticSearchAvailable(): Promise<boolean> {
-  const data = await loadEmbeddings();
-  return data !== null;
+  if (embeddingsCache) return true;
+  try {
+    const base = import.meta.env.BASE_URL || '/';
+    const version = import.meta.env.VITE_APP_VERSION || Date.now();
+    const res = await fetch(`${base}api/tool-embeddings.json?v=${version}`, { method: 'HEAD' });
+    return res.ok;
+  } catch {
+    return false;
+  }
 }
 
 /** cosine similarity（兩向量越接近 1 越像） */
@@ -99,12 +109,12 @@ export async function semanticSearch(
   query: string,
   topN = 5
 ): Promise<Array<{ toolId: number; score: number }>> {
-  const embeddings = await loadEmbeddings();
+  // 向量檔下載與雲端 query 向量計算同時進行
+  const [embeddings, queryVec] = await Promise.all([loadEmbeddings(), embedQuery(query)]);
   if (!embeddings) {
     throw new Error('embeddings 未載入（tool-embeddings.json 不存在）');
   }
 
-  const queryVec = await embedQuery(query);
   if (queryVec.length !== embeddings.dimensions) {
     throw new Error(
       `維度不匹配：query ${queryVec.length} vs tools ${embeddings.dimensions}`
