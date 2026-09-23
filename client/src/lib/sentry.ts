@@ -54,6 +54,12 @@ export function initSentry() {
     console.info('[Sentry] 本地開發模式，跳過初始化');
     return;
   }
+  // CI 的 E2E（vite preview）與本機量測跑的是帶 DSN 的正式建置，
+  // 其中有刻意製造失敗的測試，不能讓它們進正式 Sentry、吃掉錄影額度
+  if (/^(localhost|127\.0\.0\.1|\[::1\])$/.test(window.location.hostname)) {
+    console.info('[Sentry] 本機網址，跳過初始化');
+    return;
+  }
 
   scheduled = true;
   window.addEventListener('error', onEarlyError);

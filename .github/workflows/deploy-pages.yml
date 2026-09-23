@@ -104,6 +104,8 @@ jobs:
           VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
           VITE_FIREBASE_APPCHECK_SITE_KEY: ${{ secrets.VITE_FIREBASE_APPCHECK_SITE_KEY }}
           VITE_GA_MEASUREMENT_ID: ${{ secrets.VITE_GA_MEASUREMENT_ID }}
+          # Sentry 錯誤監控（client/src/lib/sentry.ts 於頁面閒置後才動態載入）
+          VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
           GITHUB_ACTIONS: true
 
       # E2E 冒煙測試：擋住「build 過了但畫面壞掉」這一類單元測試看不到的回歸。
