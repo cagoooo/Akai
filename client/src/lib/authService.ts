@@ -6,6 +6,7 @@
 import {
     GoogleAuthProvider,
     signInWithPopup,
+    browserPopupRedirectResolver,
     signOut as firebaseSignOut,
     onAuthStateChanged,
     signInAnonymously,
@@ -78,7 +79,8 @@ export async function signInWithGoogle(): Promise<User | null> {
     }
 
     try {
-        const result = await signInWithPopup(auth, googleProvider);
+        // resolver 只在這裡帶入（firebase.ts 用 initializeAuth 省掉每頁載入的 auth iframe）
+        const result = await signInWithPopup(auth, googleProvider, browserPopupRedirectResolver);
         return result.user;
     } catch (error: any) {
         // 使用者主動取消／彈窗被瀏覽器擋掉：屬於正常操作，靜默回傳 null，不當作錯誤

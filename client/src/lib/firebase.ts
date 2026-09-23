@@ -6,7 +6,13 @@ import {
   persistentMultipleTabManager,
   Firestore,
 } from 'firebase/firestore';
-import { getAuth, Auth } from 'firebase/auth';
+import {
+  initializeAuth,
+  indexedDBLocalPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence,
+  Auth,
+} from 'firebase/auth';
 import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
 
 // 從環境變數讀取 Firebase 設定
@@ -50,7 +56,12 @@ if (hasValidConfig) {
     });
 
     // 初始化 Authentication
-    auth = getAuth(app);
+    // 不用 getAuth()：它預設掛上 browserPopupRedirectResolver，每頁都會載入 ~93KB 的
+    // __/auth/iframe.js。一般訪客只需要匿名登入，彈窗 resolver 改在 signInWithGoogle 才帶入。
+    // persistence 與 getAuth() 預設相同。
+    auth = initializeAuth(app, {
+      persistence: [indexedDBLocalPersistence, browserLocalPersistence, browserSessionPersistence],
+    });
 
     console.log('Firebase 初始化成功（含離線快取）');
   } catch (error) {

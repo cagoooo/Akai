@@ -17,6 +17,7 @@ vi.mock('firebase/auth', () => ({
   onAuthStateChanged: mocks.onAuthStateChanged,
   signInAnonymously: mocks.signInAnonymously,
   signInWithPopup: vi.fn(),
+  browserPopupRedirectResolver: {},
   signOut: vi.fn(),
 }));
 

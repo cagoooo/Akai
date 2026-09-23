@@ -67,6 +67,11 @@ vi.mock('firebase/firestore', () => ({
 
 vi.mock('firebase/auth', () => ({
   getAuth: vi.fn(),
+  initializeAuth: vi.fn(),
+  indexedDBLocalPersistence: {},
+  browserLocalPersistence: {},
+  browserSessionPersistence: {},
+  browserPopupRedirectResolver: {},
   GoogleAuthProvider: vi.fn(),
   signInWithPopup: vi.fn(),
   signOut: vi.fn(),
