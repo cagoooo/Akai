@@ -16,11 +16,16 @@
  *   都用 regex 解析它的原始碼，改檔會一起壞掉），改成額外產生 postsIndex.ts。
  *   執行期的同步使用者改讀索引，正文只在真的開啟 /blog/<slug> 時動態載入。
  *
+ * 2026-09-23 追加：每篇正文另外產生 client/src/blog/bodies/<slug>.ts。
+ *   原本開任一篇 /blog/<slug> 都要載入含全部正文的 posts chunk（gzip 後 ~267KB），
+ *   手機 4G 實測文章頁 8.8 秒才出現。改由 postLoader.ts 以 import.meta.glob
+ *   只載入該篇正文（每篇各自一個小 chunk）。
+ *
  * 用法：
- *   npx tsx scripts/gen-posts-index.ts           # 產生 / 更新索引
+ *   npx tsx scripts/gen-posts-index.ts           # 產生 / 更新索引與各篇正文
  *   npx tsx scripts/gen-posts-index.ts --check   # 只檢查是否同步（不寫檔），不同步則 exit 1
  */
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, mkdirSync, unlinkSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -28,6 +33,7 @@ import { POSTS } from '../client/src/blog/posts';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = resolve(ROOT, 'client', 'src', 'blog', 'postsIndex.ts');
+const BODIES_DIR = resolve(ROOT, 'client', 'src', 'blog', 'bodies');
 const CHECK_ONLY = process.argv.includes('--check');
 
 const entries = POSTS.map(({ body: _body, ...meta }) => meta);
@@ -63,6 +69,18 @@ export const HANDWRITTEN_TOOL_IDS: ReadonlySet<number> = new Set(
 
 const next = header + JSON.stringify(entries, null, 2) + footer;
 
+// 每篇正文一個模組，檔名即 slug
+const bodyFiles = new Map(
+  POSTS.map((p) => [
+    `${p.slug}.ts`,
+    '// 自動產生，請勿手改。來源：client/src/blog/posts.ts（npx tsx scripts/gen-posts-index.ts）\n' +
+      `export default ${JSON.stringify(p.body)};\n`,
+  ]),
+);
+const staleBodyFiles = (existsSync(BODIES_DIR) ? readdirSync(BODIES_DIR) : []).filter(
+  (f) => f.endsWith('.ts') && !bodyFiles.has(f),
+);
+
 if (CHECK_ONLY) {
   let current = '';
   try {
@@ -72,17 +90,35 @@ if (CHECK_ONLY) {
     console.error('    修法：npx tsx scripts/gen-posts-index.ts\n');
     process.exit(1);
   }
-  if (current !== next) {
-    console.error('\n✗ postsIndex.ts 與 posts.ts 不同步');
+  const outOfSyncBodies = [...bodyFiles]
+    .filter(([file, content]) => {
+      const path = resolve(BODIES_DIR, file);
+      return !existsSync(path) || readFileSync(path, 'utf8') !== content;
+    })
+    .map(([file]) => file);
+  if (current !== next || outOfSyncBodies.length > 0 || staleBodyFiles.length > 0) {
+    console.error('\n✗ postsIndex.ts / blog/bodies 與 posts.ts 不同步');
     console.error(`    posts.ts 目前有 ${POSTS.length} 篇`);
+    if (outOfSyncBodies.length) console.error(`    正文不同步：${outOfSyncBodies.slice(0, 5).join(', ')}`);
+    if (staleBodyFiles.length) console.error(`    多餘的正文檔：${staleBodyFiles.slice(0, 5).join(', ')}`);
     console.error('    修法：npx tsx scripts/gen-posts-index.ts\n');
     process.exit(1);
   }
-  console.log(`✓ postsIndex.ts 已與 posts.ts 同步（${POSTS.length} 篇）`);
+  console.log(`✓ postsIndex.ts 與 blog/bodies 已與 posts.ts 同步（${POSTS.length} 篇）`);
   process.exit(0);
 }
 
 writeFileSync(OUT, next, 'utf8');
+mkdirSync(BODIES_DIR, { recursive: true });
+for (const [file, content] of bodyFiles) {
+  const path = resolve(BODIES_DIR, file);
+  if (!existsSync(path) || readFileSync(path, 'utf8') !== content) writeFileSync(path, content, 'utf8');
+}
+for (const file of staleBodyFiles) unlinkSync(resolve(BODIES_DIR, file));
+console.log(
+  `✅ blog/bodies 已產生 ${bodyFiles.size} 篇正文` +
+    (staleBodyFiles.length ? `，移除 ${staleBodyFiles.length} 個過期檔` : ''),
+);
 const kb = (n: number) => `${(n / 1024).toFixed(0)} KB`;
 console.log(
   `✅ postsIndex.ts 已產生：${POSTS.length} 篇中繼資料 ${kb(next.length)}` +

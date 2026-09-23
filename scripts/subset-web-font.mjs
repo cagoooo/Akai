@@ -33,7 +33,8 @@ const INDEX_HTML = resolve(ROOT, 'client/index.html');
 const MARK_START = '<!-- akai-sans-tc:start（scripts/subset-web-font.mjs 產生，勿手改） -->';
 const MARK_END = '<!-- akai-sans-tc:end -->';
 const POSTS = resolve(ROOT, 'client/src/blog/posts.ts');
-const SKIP = [/[\\/]blog[\\/]posts\.ts$/, /__tests__/, /\.test\.tsx?$/];
+// 文章內文（posts.ts 與由它產生的 blog/bodies/*）歸擴充檔
+const SKIP = [/[\\/]blog[\\/]posts\.ts$/, /[\\/]blog[\\/]bodies[\\/]/, /__tests__/, /\.test\.tsx?$/];
 
 if (!existsSync(FONT_SRC)) {
   console.error(`找不到來源字型：${FONT_SRC}（可用 FONT_SRC 指定 Noto Sans TC 可變字型路徑）`);

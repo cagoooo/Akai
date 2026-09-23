@@ -13,7 +13,9 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import type { EducationalTool } from '@/lib/data';
-import { POSTS, getPostBySlug, getPostBySlugAsync, type BlogPost as BlogPostType } from '@/blog/posts';
+import type { BlogPost as BlogPostType } from '@/blog/posts';
+import { POSTS_INDEX } from '@/blog/postsIndex';
+import { loadPost } from '@/blog/postLoader';
 import { tokens } from '@/design/tokens';
 import { BulletinHeader } from '@/components/bulletin/BulletinHeader';
 import { BulletinFooter } from '@/components/bulletin/BulletinFooter';
@@ -71,17 +73,18 @@ function HeadingAnchor({ id }: { id: string }) {
 
 export function BlogPost() {
   const params = useParams<{ slug: string }>();
-  const syncPost = getPostBySlug(params.slug);
-  const [asyncPost, setAsyncPost] = useState<BlogPostType | undefined>(undefined);
-  const [loadedAsync, setLoadedAsync] = useState(false);
+  // 只載入這一篇的正文；結果綁 slug，切換上一篇 / 下一篇時不會短暫顯示舊文章
+  const [loaded, setLoaded] = useState<{ slug: string; post: BlogPostType | undefined } | null>(null);
   useEffect(() => {
-    if (syncPost) { setLoadedAsync(true); return; }
-    getPostBySlugAsync(params.slug).then((p) => {
-      setAsyncPost(p);
-      setLoadedAsync(true);
-    });
-  }, [params.slug, syncPost]);
-  const post = syncPost || asyncPost;
+    let cancelled = false;
+    loadPost(params.slug).then(
+      (p) => { if (!cancelled) setLoaded({ slug: params.slug, post: p }); },
+      () => { if (!cancelled) setLoaded({ slug: params.slug, post: undefined }); },
+    );
+    return () => { cancelled = true; };
+  }, [params.slug]);
+  const loadedAsync = loaded?.slug === params.slug;
+  const post = loadedAsync ? loaded.post : undefined;
 
   const { data: tools } = useQuery<EducationalTool[]>({
     queryKey: ['/api/tools'],
@@ -211,12 +214,12 @@ export function BlogPost() {
 
   const relatedTools = (tools || []).filter((t) => post.toolIds.includes(t.id));
 
-  // Prev / Next：只在 POSTS（手寫長文）內提供，mini blog 不顯示
-  const currentIdx = POSTS.findIndex((p) => p.slug === post.slug);
+  // Prev / Next：只在手寫長文內提供，mini blog 不顯示
+  const currentIdx = POSTS_INDEX.findIndex((p) => p.slug === post.slug);
   let prevItem: { slug: string; title: string; emoji?: string } | undefined;
   let nextItem: { slug: string; title: string; emoji?: string } | undefined;
   if (currentIdx !== -1) {
-    const sorted = [...POSTS].sort(
+    const sorted = [...POSTS_INDEX].sort(
       (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
     );
     const sIdx = sorted.findIndex((p) => p.slug === post.slug);
