@@ -142,7 +142,7 @@ export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
     !bypassDedup || (event.type === 'blog_read' && event.source === 'tool_detail_intro');
 
   if (!bypassDedup && hasNotifiedEngagement(dedupKey)) {
-    console.warn('[engagement notify] 略過：此事件在同 session 內已被去重:', dedupKey);
+    console.info('[engagement notify] 略過：此事件在同 session 內已被去重:', dedupKey);
     return;
   }
 

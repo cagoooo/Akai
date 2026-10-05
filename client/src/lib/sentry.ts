@@ -34,8 +34,8 @@ export function createFirestoreLeaseClassifier(now = () => Date.now()) {
     const timestamp = now();
     while (occurrences.length && timestamp - occurrences[0] >= 60_000) occurrences.shift();
     occurrences.push(timestamp);
-    // 同一頁 60 秒內三次以上仍視為錯誤，避免真正卡住的同步被降級。
-    event.level = occurrences.length >= 3 ? 'error' : 'warning';
+    // SDK 已處理的單次交接保留為 info；同一頁 60 秒內三次以上才升級，避免正常多分頁切換寄出告警。
+    event.level = occurrences.length >= 3 ? 'error' : 'info';
     event.message = `Firestore multi-tab primary lease changed during '${action}'.`;
     event.fingerprint = ['firestore-primary-lease', action.toLowerCase().replaceAll(' ', '-')];
     event.tags = { ...event.tags, firestoreLease: 'handoff' };
