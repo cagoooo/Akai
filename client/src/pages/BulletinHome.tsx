@@ -43,6 +43,7 @@ import { AudienceRecommendationStrip } from '@/components/audience/AudienceRecom
 import { AudienceEntryCard } from '@/components/audience/AudienceEntryCard';
 import { LatestToolsShowcase } from '@/components/LatestToolsShowcase';
 import { tokens } from '@/design/tokens';
+import { LoadingProgress } from '@/components/LoadingProgress';
 import { markHomeEntryForEngagementNotifications } from '@/lib/analytics';
 import type { AudienceProfile } from '@/lib/audienceProfile';
 import {
@@ -469,9 +470,7 @@ export function BulletinHome() {
           {toolLocationStatus === 'locating' ? '📍 正在帶你找到推薦工具…' : '找不到這張工具卡，請稍後再試一次。'}
         </div>}
         {isLoading ? (
-          <div style={{ textAlign: 'center', padding: 60, color: tokens.muted, fontStyle: 'italic' }}>
-            📌 正在把工具釘上公佈欄…
-          </div>
+          <LoadingProgress phase="content" title="正在整理你的工具公佈欄" />
         ) : (
           <BulletinToolGrid
             tools={sortedTools}

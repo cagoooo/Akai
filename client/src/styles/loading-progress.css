@@ -1,0 +1,15 @@
+.loading-progress { width: min(560px, calc(100% - 32px)); margin: 32px auto; padding: clamp(24px, 5vw, 40px); background: #fffdf7; color: #302d27; border: 1px solid #dacdb9; border-radius: 18px; box-shadow: 0 8px 28px #33251514; font-family: 'Noto Sans TC', sans-serif; }
+.loading-progress__eyebrow { font-size: 12px; color: #795534; letter-spacing: .06em; }
+.loading-progress h2 { margin: 12px 0; font-size: clamp(22px, 4vw, 28px); font-weight: 800; }
+.loading-progress p { min-height: 44px; margin: 0 0 24px; font-size: 14px; line-height: 1.7; color: #655c50; }
+.loading-progress__meta { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 10px; font-size: 12px; color: #655c50; }
+.loading-progress__track { height: 9px; overflow: hidden; border-radius: 10px; background: #eee5d7; }
+.loading-progress__fill { height: 100%; position: relative; overflow: hidden; background: #795534; border-radius: inherit; transition: width .25s ease; }
+.loading-progress__fill::after { content: ''; position: absolute; inset: 0; background: linear-gradient(100deg, transparent, #ffffff55, transparent); animation: loading-progress-glint 1.8s ease-in-out infinite; }
+.loading-progress__steps { display: flex; justify-content: space-between; padding: 0; margin: 20px 0 0; list-style: none; gap: 8px; font-size: 12px; color: #7a7166; }
+.loading-progress__steps li { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.loading-progress__steps li span { display: grid; place-items: center; width: 24px; height: 24px; background: #eee5d7; border-radius: 50%; }
+.loading-progress__steps .is-current, .loading-progress__steps .is-complete { color: #684726; font-weight: 700; }
+.loading-progress__steps .is-current span, .loading-progress__steps .is-complete span { background: #795534; color: #fff; }
+@keyframes loading-progress-glint { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+@media (prefers-reduced-motion: reduce) { .loading-progress__fill { transition: none; } .loading-progress__fill::after { animation: none; display: none; } }

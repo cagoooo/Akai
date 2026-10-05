@@ -39,7 +39,7 @@ import { PageTransition } from "@/components/PageTransition";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/queryClient";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
-import { Skeleton } from "@/components/ui/skeleton";
+import { LoadingProgress } from "@/components/LoadingProgress";
 import { useToast } from "@/hooks/use-toast";
 
 // 取得 base path - Vite 會在建置時注入 BASE_URL
@@ -71,13 +71,8 @@ function ConditionalFooter() {
   return <Footer />;
 }
 
-/**
- * ✅ 核心 LCP 優化骨架：
- * 包含真實 h1 文字（而非純骨架），讓 Lighthouse 能立即識別到大型文字元素為 LCP。
- * TooltipProvider lazy 加載期間，此骨架提供有意義的 FCP + LCP 內容。
- */
-function PageSkeleton() {
-  // cork 風格的 LCP 骨架：保留真實大 h1 讓 Lighthouse 抓到，但換成 E2 便利貼主題
+/** 保留網站識別，並顯示當前路由的載入階段。 */
+function PageLoading() {
   return (
     <div className="cork-bg min-h-screen" style={{ paddingTop: 18, fontFamily: "'Noto Sans TC', sans-serif" }}>
       <main className="container mx-auto px-4 sm:px-8 py-10">
@@ -133,27 +128,7 @@ function PageSkeleton() {
           </div>
         </section>
 
-        {/* 工具卡片骨架（cork 紙張風） */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl mx-auto">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div
-              key={i}
-              style={{
-                background: '#fefdfa',
-                border: '1px solid #d8d4c8',
-                borderRadius: 4,
-                padding: 14,
-                transform: `rotate(${(i - 1) * 1.5}deg)`,
-                boxShadow: '3px 3px 5px rgba(0,0,0,.15), 0 10px 18px -6px rgba(0,0,0,.2)',
-                opacity: 0.85,
-              }}
-            >
-              <Skeleton className="h-36 rounded-none mb-3" />
-              <Skeleton className="h-4 w-2/3 mb-2" />
-              <Skeleton className="h-3 w-1/2" />
-            </div>
-          ))}
-        </div>
+        <LoadingProgress phase="page" />
       </main>
     </div>
   );
@@ -255,19 +230,13 @@ function App() {
         <OrganizationSchema />
 
         <QueryClientProvider client={queryClient}>
-          {/*
-           * ✅ 核心策略：
-           * - TooltipProvider 保持 lazy → 主 bundle 不膨脹 → TBT 維持低水準
-           * - fallback 改為含 h1 真實文字的 PageSkeleton
-           * - h1 "✨ 教育科技創新專區 ✨" 是大文字 → 成為 LCP 元素
-           * - 骨架立即觸發有意義的 FCP，不再是空白屏幕
-           */}
+          {/* 路由等待以可存取的階段進度提示呈現。 */}
           <TooltipProvider>
             <TourProvider>
               <Router base={base}>
                 <div className="min-h-screen flex flex-col">
                   <PageTransition>
-                    <Suspense fallback={<PageSkeleton />}>
+                    <Suspense fallback={<PageLoading />}>
                       <Switch>
                         <Route path="/">
                           <BulletinHome />

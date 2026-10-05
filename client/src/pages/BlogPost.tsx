@@ -7,6 +7,7 @@
  */
 
 import { Link, useParams } from 'wouter';
+import { LoadingProgress } from '@/components/LoadingProgress';
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ReactMarkdown from 'react-markdown';
@@ -163,17 +164,7 @@ export function BlogPost() {
     return (
       <>
         <BulletinHeader />
-        <div style={{
-          maxWidth: 600,
-          margin: '40px auto',
-          padding: 60,
-          textAlign: 'center',
-          color: tokens.muted2,
-          fontFamily: tokens.font.tc,
-          fontStyle: 'italic',
-        }}>
-          📌 載入文章中…
-        </div>
+        <LoadingProgress phase="content" title="正在打開這篇文章" />
       </>
     );
   }

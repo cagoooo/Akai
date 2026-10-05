@@ -35,6 +35,7 @@ import { getToolEmoji, getCategoryLabel, getCategoryKey, normalizeUrl } from '@/
 import { OptimizedIcon } from '@/components/OptimizedIcons';
 import { getBlogPostPath, getPrimaryBlogPostForTool } from '@/lib/blogLinks';
 import { loadTool } from '@/lib/toolLoader';
+import { LoadingProgress } from '@/components/LoadingProgress';
 
 const BulletinToolMarkdown = lazy(() => import('@/components/bulletin/BulletinToolMarkdown'));
 const ReviewList = lazy(() => import('@/components/ReviewList').then(module => ({ default: module.ReviewList })));
@@ -97,9 +98,7 @@ function NotFound() {
 function ToolDetailSkeleton() {
   return (
     <BulletinBoard>
-      <div style={{ padding: '60px', textAlign: 'center', color: tokens.muted, fontStyle: 'italic' }}>
-        📌 正在把這張卡片從公佈欄取下來…
-      </div>
+      <LoadingProgress phase="content" title="正在準備這張工具卡片" />
     </BulletinBoard>
   );
 }
