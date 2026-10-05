@@ -4,6 +4,12 @@ import type { EducationalTool } from '@/lib/data';
 import { trackEvent } from '@/lib/analytics';
 import './latest-tools-showcase.css';
 
+const thumbnailPaths = JSON.parse(import.meta.env.VITE_LATEST_TOOL_PREVIEWS ?? '{}') as Record<string, string>;
+const originalPreview = (tool: EducationalTool) => tool.previewUrl
+  ? `${import.meta.env.BASE_URL}previews/${tool.previewUrl.split('/').pop()}` : undefined;
+const shelfPreview = (tool: EducationalTool) => thumbnailPaths[tool.id]
+  ? `${import.meta.env.BASE_URL}${thumbnailPaths[tool.id]}` : originalPreview(tool);
+
 export function selectLatestTools(tools: EducationalTool[]) {
   const timestamp = (tool: EducationalTool) => {
     const value = Date.parse(tool.addedAt ?? '');
@@ -25,8 +31,31 @@ export function LatestToolsShowcase({ tools, blocked, autoEligible, open, onOpen
   const signature = latest.map(tool => tool.id).join('-');
   const seen = useRef(new Set<string>());
   const trigger = useRef<HTMLButtonElement>(null);
+  const preloaded = useRef(new Map<string, HTMLLinkElement>());
+  const [failedThumbnails, setFailedThumbnails] = useState<number[]>([]);
   const [failedImages, setFailedImages] = useState<number[]>([]);
   const visible = open && !blocked;
+
+  useEffect(() => {
+    // Use the 1.2-second introduction delay to fetch only this shelf's three images.
+    if (blocked || !autoEligible) return;
+    for (const tool of latest) {
+      const src = shelfPreview(tool);
+      if (!src || preloaded.current.has(src)) continue;
+      const preload = document.createElement('link');
+      preload.rel = 'preload';
+      preload.setAttribute('as', 'image');
+      preload.fetchPriority = 'high';
+      preload.href = src;
+      preloaded.current.set(src, preload);
+      document.head.appendChild(preload);
+    }
+  }, [latest, blocked, autoEligible]);
+
+  useEffect(() => {
+    const links = preloaded.current;
+    return () => { links.forEach(link => link.remove()); links.clear(); };
+  }, []);
 
   useEffect(() => {
     if (!visible || !signature) return;
@@ -69,7 +98,13 @@ export function LatestToolsShowcase({ tools, blocked, autoEligible, open, onOpen
             }}>
             <div className="latest-tools-cover">
               {tool.previewUrl && !failedImages.includes(tool.id)
-                ? <img src={`${import.meta.env.BASE_URL}previews/${tool.previewUrl.split('/').pop()}`} alt="" onError={() => setFailedImages(ids => [...ids, tool.id])} />
+                ? <img src={failedThumbnails.includes(tool.id) ? originalPreview(tool) : shelfPreview(tool)}
+                    alt="" loading="eager" fetchPriority="high" decoding="async" width={640} height={640}
+                    onError={() => {
+                      if (thumbnailPaths[tool.id] && !failedThumbnails.includes(tool.id)) {
+                        setFailedThumbnails(ids => [...ids, tool.id]);
+                      } else setFailedImages(ids => [...ids, tool.id]);
+                    }} />
                 : <span aria-hidden="true">📖</span>}
               <span className="latest-tools-number">新上架 · {String(index + 1).padStart(2, '0')}</span>
             </div>

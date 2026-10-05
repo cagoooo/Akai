@@ -39,6 +39,10 @@ const buildInfo = (() => {
 export default defineConfig({
   base: isGitHubPages ? '/Akai/' : '/',
   define: {
+    // Generated in predev/prebuild; inline metadata avoids another cold-start request.
+    'import.meta.env.VITE_LATEST_TOOL_PREVIEWS': JSON.stringify(readFileSync(
+      path.resolve(__dirname, 'client/public/previews/latest/manifest.json'), 'utf8',
+    )),
     // 與 public 音檔一同建置，避免每篇文章都發出不存在音檔的 HEAD。
     'import.meta.env.VITE_BLOG_PODCAST_SLUGS': JSON.stringify(
       readdirSync(path.resolve(__dirname, 'client/public/blog-podcasts'), { withFileTypes: true })

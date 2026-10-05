@@ -1,13 +1,13 @@
 {
   "name": "rest-express",
-  "version": "3.6.120",
+  "version": "3.6.121",
   "type": "module",
   "license": "MIT",
   "scripts": {
     "deploy": "gh-pages -d dist/public",
-    "predev": "npm run validate:audience && npm run validate:pipeline && node scripts/sync-tools-json.mjs",
+    "predev": "npm run validate:audience && npm run validate:pipeline && node scripts/sync-tools-json.mjs && node scripts/generate-latest-tool-previews.mjs",
     "dev": "tsx server/index.ts",
-    "prebuild": "npm run validate:audience && npm run validate:pipeline && npm run check:posts-index && npm run check:contrast && node scripts/sync-tools-json.mjs",
+    "prebuild": "npm run validate:audience && npm run validate:pipeline && npm run check:posts-index && npm run check:contrast && node scripts/sync-tools-json.mjs && node scripts/generate-latest-tool-previews.mjs",
     "build": "node scripts/bump-sw-version.mjs && node scripts/sync-featured-from-firestore.mjs && node scripts/sync-popular-queries.mjs && node scripts/sync-deployment-ecosystem.mjs && node scripts/generate-favicon.mjs && node scripts/generate-home-og.mjs && node scripts/generate-home-og-heatmap.mjs && node scripts/generate-100-celebration-og.mjs && node scripts/sync-meta-from-stats.mjs && node scripts/generate-llms-txt.mjs && node scripts/generate-geo-index.mjs && node scripts/generate-sitemap.mjs && node scripts/generate-feed.mjs && node scripts/generate-wish-preview.mjs && vite build && node scripts/generate-og-pages.mjs && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
     "gen:llms-txt": "node scripts/generate-llms-txt.mjs",
     "gen:geo-index": "node scripts/generate-geo-index.mjs",

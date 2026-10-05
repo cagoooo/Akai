@@ -58,4 +58,27 @@ describe('最新工具展示架', () => {
     advance();
     expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
+  it('客群對話阻擋時不搶下載；解除後只預載最新三張', () => {
+    const preloads = () => document.head.querySelectorAll('link[rel="preload"][as="image"]');
+    const data = tools.map(tool => ({ ...tool, previewUrl: `/previews/tool_${tool.id}.webp` }));
+    const { rerender } = render(<Harness data={data} blocked />);
+    expect(preloads()).toHaveLength(0);
+    rerender(<Harness data={data} />);
+    expect(preloads()).toHaveLength(3);
+    advance();
+    expect(preloads()).toHaveLength(3);
+  });
+  it('縮圖失敗可回退原圖，原圖也失敗才顯示圖示', () => {
+    const id = Number(Object.keys(JSON.parse(import.meta.env.VITE_LATEST_TOOL_PREVIEWS))[0]);
+    const tool = { ...tools[0], id, addedAt: '2026-10-05', previewUrl: `/previews/tool_${id}.webp` };
+    render(<Harness data={[tool]} />);
+    advance();
+    const dialog = screen.getByRole('dialog');
+    const image = dialog.querySelector('img')!;
+    expect(image.getAttribute('src')).toContain('/previews/latest/');
+    fireEvent.error(image);
+    expect(image.getAttribute('src')).toBe(`/previews/tool_${id}.webp`);
+    fireEvent.error(image);
+    expect(dialog.querySelector('img')).toBeNull();
+  });
 });
