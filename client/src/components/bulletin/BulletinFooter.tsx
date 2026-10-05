@@ -39,7 +39,7 @@ export function BulletinFooter() {
       {/* 中央標題膠帶 */}
       <div style={{ textAlign: 'center', marginBottom: 24 }}>
         <Tape color={tokens.note.yellow} angle={-1.5} width={220}>
-          <span style={{ fontSize: 13 }}>🙌 Made with love · 教學現場</span>
+          <span style={{ fontSize: 13 }}>Made with ❤️ by 阿凱老師</span>
         </Tape>
       </div>
 
@@ -56,7 +56,7 @@ export function BulletinFooter() {
         }}
       >
         {/* 製作者署名（含阿凱 favicon 頭像） */}
-        <FooterNote bg={tokens.note.pink} tilt={-1.5} pinIndex={0}>
+        <FooterNote bg={tokens.note.pink} tilt={-1.5} pinIndex={0} href={SCHOOL_URL}>
           <div style={{ fontSize: 12, color: tokens.muted2, marginBottom: 8, letterSpacing: '0.1em' }}>
             ✍️ MAKER
           </div>
