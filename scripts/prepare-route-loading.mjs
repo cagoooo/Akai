@@ -42,5 +42,6 @@ const script = `<script>
 </script>`;
 const indexPath = resolve(out, 'index.html');
 const html = readFileSync(indexPath, 'utf8');
-writeFileSync(indexPath, html.replace('<head>', `<head>\n${script}`));
+// Keep the charset declaration ahead of the generated map (HTML encoding must be identified early).
+writeFileSync(indexPath, html.replace('<meta charset="UTF-8" />', `<meta charset="UTF-8" />\n${script}`));
 console.log(`Route loading prepared: ${tools.length} single-tool files, ${Object.keys(bodies).length} article bodies.`);
