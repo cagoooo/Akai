@@ -20,6 +20,8 @@
  *   captureException(err);
  */
 
+import { CHUNK_LOAD_ERROR_PATTERNS } from './chunkRecovery';
+
 type SentryModule = typeof import('./sentryClient');
 type SentryEvent = import('@sentry/react').ErrorEvent;
 
@@ -52,11 +54,7 @@ export function createFirestoreLeaseClassifier(now = () => Date.now()) {
  * 權限不足、索引錯誤等其他 Firebase 錯誤不在此列，照常回報。
  */
 const RECOVERABLE_CLIENT_NOISE: readonly RegExp[] = [
-  /Failed to fetch dynamically imported module/i,
-  /error loading dynamically imported module/i,
-  /Importing a module script failed/i,
-  /Unable to preload CSS/i,
-  /ChunkLoadError|Loading chunk \d+ failed/i,
+  ...CHUNK_LOAD_ERROR_PATTERNS,
   /\(auth\/network-request-failed\)/,
   /@firebase\/firestore:\s+Firestore \(\d+\.\d+\.\d+\): Could not reach Cloud Firestore backend\./,
   /@firebase\/firestore:\s+Firestore \(\d+\.\d+\.\d+\): WebChannelConnection RPC '\w+' stream 0x[0-9a-f]+ transport errored\./,

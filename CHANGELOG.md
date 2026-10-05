@@ -2,6 +2,15 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.134] - 2026-10-06 — 最早期 chunk 自癒改用共用額度並保留快取
+
+- `main.tsx` 的 stale chunk 監聽改走 `chunkRecovery` 共用額度，與 App 全域監聽、錯誤邊界一起遵守「每頁最多一次重載、同模組每版一次、每版最多兩次」；不再另用 `akai-self-heal-attempted-v1` 旗標。
+- 自癒時不再註銷 Service Worker、不再清空 Cache Storage（含 `assets-archive-v1` 歷史 chunk 封存），改為直接重新載入；先前它的監聽器比 App 早註冊，第一次 chunk 錯誤時常搶先清空快取，讓 v3.6.132 的保留快取設計沒有生效。
+- 不再加 `?_heal=時間戳`：重新載入時瀏覽器本來就會向伺服器重新驗證 HTML（不受 GitHub Pages `max-age=600` 影響），SW 的 Network First 也直接沿用同一請求；而一次性網址在離線時對不到 SW 已快取的 HTML，只會出現「離線中」頁，還會留在網址列被收藏、分享。舊版留下的 `_heal` 參數會在載入時自動移除。
+- `<script>`／`<link>` 資源載入失敗只處理本站 `assets/` 底下的 JS／CSS，第三方資源 404 不再觸發重載。
+- chunk 錯誤判斷集中到 `isChunkLoadError`（含 Firefox「error loading dynamically imported module」與 Vite「Unable to preload CSS」），`main.tsx`、`App.tsx`、`ErrorBoundary.tsx` 與 Sentry `beforeSend` 共用同一份規則；CSS 預載失敗的相對路徑與資源錯誤的完整網址視為同一模組。
+- 自癒紀錄維持 `console.info`，不被 Sentry 當成警告推播；新增 `main.tsx` 監聽路徑的共用額度、資源過濾與 `_heal` 清除測試。
+
 ## [3.6.133] - 2026-10-05 — 停止推播已自動復原的 chunk 與離線連線告警
 
 - Sentry `beforeSend` 丟棄部署換版後的動態模組載入失敗（已由自癒重新載入處理），以及 `auth/network-request-failed`、Firestore「Could not reach backend」與 WebChannel 中斷等裝置離線／頁面重載造成的連線訊息。

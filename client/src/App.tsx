@@ -41,7 +41,7 @@ import { queryClient } from "./lib/queryClient";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { LoadingProgress } from "@/components/LoadingProgress";
 import { useToast } from "@/hooks/use-toast";
-import { tryBeginChunkRecovery } from "@/lib/chunkRecovery";
+import { isChunkLoadError, tryBeginChunkRecovery } from "@/lib/chunkRecovery";
 import { userInteractionReady } from '@/lib/userInteraction';
 
 // 取得 base path - Vite 會在建置時注入 BASE_URL
@@ -148,8 +148,7 @@ function App() {
       const message = 'reason' in event
         ? String(event.reason?.message || event.reason || '')
         : String(event.message || '');
-      const isChunkError = /Loading chunk|Failed to fetch dynamically imported module|Importing a module script failed|ChunkLoadError/i.test(message);
-      if (!isChunkError) return;
+      if (!isChunkLoadError(message)) return;
 
       if (!tryBeginChunkRecovery(message)) return;
 
