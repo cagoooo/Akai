@@ -26,7 +26,7 @@ type SentryEvent = import('@sentry/react').ErrorEvent;
 /** SDK 已接手的多分頁交接訊息；不匹配權限、IndexedDB 或未處理例外。 */
 export function createFirestoreLeaseClassifier(now = () => Date.now()) {
   const occurrences: number[] = [];
-  const leaseMessage = /^(?:\[[^\]\r\n]+\]\s+)?@firebase\/firestore:\s+Firestore \(\d+\.\d+\.\d+\): Failed to obtain primary lease for action '(Apply remote event|Backfill Indexes)'\.$/;
+  const leaseMessage = /^(?:\[[^\]\r\n]+\]\s+)?@firebase\/firestore:\s+Firestore \(\d+\.\d+\.\d+\): Failed to obtain primary lease for action '(Apply remote event|Backfill Indexes|Collect garbage)'\.$/;
   return (event: SentryEvent): SentryEvent | null => {
     const leaseMatch = event.message?.match(leaseMessage);
     if (event.logger !== 'console' || event.exception?.values?.length || !leaseMatch) return event;

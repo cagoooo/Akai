@@ -14,13 +14,14 @@ describe('Firestore 多分頁交接告警過濾', () => {
   it('60 秒內第三次交接才回報錯誤；時間窗過後重新忽略', () => {
     let time = 0;
     const classify = createFirestoreLeaseClassifier(() => time);
+    const collectGarbage = () => ({ ...event(), message: message.replace('Apply remote event', 'Collect garbage') });
     expect(classify(event())).toBeNull();
     time = 10_000;
     expect(classify(event())).toBeNull();
     time = 20_000;
-    const third = classify(event());
+    const third = classify(collectGarbage());
     expect(third?.level).toBe('error');
-    expect(third?.fingerprint).toEqual(['firestore-primary-lease', 'apply-remote-event']);
+    expect(third?.fingerprint).toEqual(['firestore-primary-lease', 'collect-garbage']);
     expect(third?.extra?.leaseOccurrencesInLastMinute).toBe(3);
     expect(third?.message).not.toContain('2026-10-05');
     time = 30_000;
@@ -29,12 +30,16 @@ describe('Firestore 多分頁交接告警過濾', () => {
     expect(classify(event())).toBeNull();
   });
 
-  it('Apply remote event 與 Backfill Indexes 共用同一個異常頻率門檻', () => {
+  it('Apply remote event、Backfill Indexes 與 Collect garbage 共用門檻', () => {
     const classify = createFirestoreLeaseClassifier(() => 0);
     const backfill = () => ({ ...event(), message: message.replace('Apply remote event', 'Backfill Indexes') });
+    const collectGarbage = () => ({ ...event(), message: message.replace('Apply remote event', 'Collect garbage') });
+    expect(classify(collectGarbage())).toBeNull();
     expect(classify(event())).toBeNull();
-    expect(classify(backfill())).toBeNull();
-    expect(classify(backfill())?.message).toBe("Firestore multi-tab primary lease changed during 'Backfill Indexes'.");
+    const frequentHandoff = classify(backfill());
+    expect(frequentHandoff?.level).toBe('error');
+    expect(frequentHandoff?.fingerprint).toEqual(['firestore-primary-lease', 'backfill-indexes']);
+    expect(frequentHandoff?.message).toBe("Firestore multi-tab primary lease changed during 'Backfill Indexes'.");
   });
 
   it('不降級未處理例外、其他操作、其他 SDK 或真實同步錯誤', () => {
