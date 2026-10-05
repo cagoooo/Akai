@@ -104,7 +104,6 @@ async function build(set, file) {
 const core = await build(chars, 'akai-sans-tc.woff2');
 const ext = await build(extChars, 'akai-sans-tc-ext.woff2');
 const block = `${MARK_START}
-  <link rel="preload" href="%BASE_URL%fonts/akai-sans-tc.woff2?v=${version}" as="font" type="font/woff2" crossorigin />
   <style>${core}${ext}</style>
   ${MARK_END}`;
 const html = readFileSync(INDEX_HTML, 'utf-8');

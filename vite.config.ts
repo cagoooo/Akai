@@ -82,6 +82,7 @@ export default defineConfig({
   root: path.resolve(__dirname, "client"),
   envDir: path.resolve(__dirname), // 從專案根目錄讀取 .env 檔案
   build: {
+    manifest: true,
     outDir: path.resolve(__dirname, "dist/public"),
     emptyOutDir: true,
     // 程式碼分割配置

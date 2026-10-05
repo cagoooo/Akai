@@ -8,9 +8,8 @@ import { LazyMotion } from "framer-motion";
 // 動態載入 Framer Motion 特徵
 const loadFramerFeatures = () => import("./framerFeatures").then(res => res.default);
 
-// 直接 import 首頁 (首屏必須載入)
-// 改為 E2 公佈欄版首頁（BulletinHome），舊版 Home 保留於 /classic 以便對比
-import { BulletinHome } from "@/pages/BulletinHome";
+// 每個入口只載入自己的頁面；建置時預載當前路由，首頁仍在 HTML 階段開始下載。
+const BulletinHome = lazy(() => import("@/pages/BulletinHome").then(module => ({ default: module.BulletinHome })));
 const ClassicHome = lazy(() => import("@/pages/Home").then(module => ({ default: module.Home })));
 
 // 延遲載入次要路由元件與彈窗元件

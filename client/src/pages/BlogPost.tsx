@@ -7,7 +7,7 @@
  */
 
 import { Link, useParams } from 'wouter';
-import { useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -31,14 +31,18 @@ import { BlogRelatedTools } from '@/components/blog/BlogRelatedTools';
 import { BlogPrevNext } from '@/components/blog/BlogPrevNext';
 import { BlogCta } from '@/components/blog/BlogCta';
 import { BlogMobileShare } from '@/components/blog/BlogMobileShare';
-import { BlogCodeBlock } from '@/components/blog/BlogCodeBlock';
 import { BlogPostingSchema } from '@/components/blog/BlogPostingSchema';
 import { BlogPodcast } from '@/components/blog/BlogPodcast';
-import { BlogTemplateCopier } from '@/components/blog/BlogTemplateCopier';
 import { convertExternalToolLink } from '@/lib/resolveLink';
 import { useReadingProgress } from '@/hooks/useReadingProgress';
 import { useActiveSection } from '@/hooks/useActiveSection';
 import { useExtractedSections, slugifyHeading } from '@/hooks/useExtractedSections';
+
+const HighlightedCode = lazy(() => import('@/components/blog/BlogCodeBlock').then(m => ({ default: m.BlogCodeBlock })));
+const BlogTemplateCopier = lazy(() => import('@/components/blog/BlogTemplateCopier').then(m => ({ default: m.BlogTemplateCopier })));
+function BlogCodeBlock(props: { language?: string; code: string }) {
+  return <Suspense fallback={<pre><code>{props.code}</code></pre>}><HighlightedCode {...props} /></Suspense>;
+}
 
 function flattenText(children: React.ReactNode): string {
   if (children == null || children === false || children === true) return '';
@@ -416,7 +420,7 @@ export function BlogPost() {
 
       <BulletinFooter />
       <BulletinBackToTop />
-      <BlogTemplateCopier />
+      <Suspense fallback={null}><BlogTemplateCopier /></Suspense>
     </>
   );
 }

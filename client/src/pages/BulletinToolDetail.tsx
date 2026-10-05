@@ -34,6 +34,7 @@ import { tokens } from '@/design/tokens';
 import { getToolEmoji, getCategoryLabel, getCategoryKey, normalizeUrl } from '@/components/bulletin/toolAdapter';
 import { OptimizedIcon } from '@/components/OptimizedIcons';
 import { getBlogPostPath, getPrimaryBlogPostForTool } from '@/lib/blogLinks';
+import { loadTool } from '@/lib/toolLoader';
 
 const BulletinToolMarkdown = lazy(() => import('@/components/bulletin/BulletinToolMarkdown'));
 const ReviewList = lazy(() => import('@/components/ReviewList').then(module => ({ default: module.ReviewList })));
@@ -218,8 +219,14 @@ export function BulletinToolDetail() {
   const [stampTrigger, setStampTrigger] = useState(0);
   const [detailImgError, setDetailImgError] = useState(false);
 
-  // 取得工具資料
-  const { data: allTools, isLoading: toolsLoading, isError: toolsError, isFetching: toolsFetching, refetch: retryTools } = useQuery({
+  const queryClient = useQueryClient();
+  // Direct entries need only one tool; reuse the full catalogue when coming from home.
+  const { data: tool, isLoading: toolsLoading, isError: toolsError, isFetching: toolsFetching, refetch: retryTools } = useQuery({
+    queryKey: ['tool', toolId],
+    queryFn: () => loadTool(toolId, queryClient.getQueryData<EducationalTool[]>(['/api/tools'])),
+    staleTime: 300000,
+  });
+  const { data: allTools } = useQuery({
     queryKey: ['/api/tools'],
     queryFn: async () => {
       const staticUrl = `${import.meta.env.BASE_URL}api/tools.json?v=${import.meta.env.VITE_APP_VERSION}`;
@@ -230,9 +237,8 @@ export function BulletinToolDetail() {
       throw new Error('無法獲取工具數據');
     },
     staleTime: 300000,
+    enabled: !!tool,
   });
-
-  const tool = useMemo(() => allTools?.find((t) => t.id === toolId) || null, [allTools, toolId]);
 
   // 整合現有 hooks
   const { isFavorite, toggleFavorite } = useFavorites();
@@ -240,7 +246,6 @@ export function BulletinToolDetail() {
   const { trackToolUsage: trackAchievement } = useAchievements();
 
   // 統計（Firestore）
-  const queryClient = useQueryClient();
   const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ['toolStats', toolId],
     queryFn: () => getToolStats(toolId),
@@ -248,7 +253,7 @@ export function BulletinToolDetail() {
   });
 
   if (toolsLoading) return <ToolDetailSkeleton />;
-  if (toolsError && !allTools) return (
+  if (toolsError && !tool) return (
     <BulletinBoard>
       <section role="alert" style={{ padding: '60px 24px', textAlign: 'center', fontFamily: tokens.font.tc }}>
         <h1>工具資料暫時無法載入</h1>

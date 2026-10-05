@@ -16,8 +16,6 @@
  */
 
 import type { Metric } from 'web-vitals';
-import { db } from '@/lib/firebase';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { invokePublicAnalytics } from '@/lib/publicAnalyticsService';
 
 // ── gtag wrapper ─────────────────────────────────────────────
@@ -127,10 +125,6 @@ function markEngagementNotified(key: string) {
 export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
   console.log('[engagement notify] 觸發事件:', event);
 
-  if (!db) {
-    console.warn('[engagement notify] db 不存在');
-    return;
-  }
   const requiresHomeEntry = event.requireHomeEntry ?? false;
   if (requiresHomeEntry && !hasHomeEntryForEngagementNotifications()) {
     console.warn('[engagement notify] 略過：沒有 HOME_ENGAGEMENT_KEY 標記');
@@ -153,6 +147,10 @@ export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
   }
 
   try {
+    const [{ db }, { addDoc, collection, serverTimestamp }] = await Promise.all([
+      import('@/lib/firebase'), import('firebase/firestore'),
+    ]);
+    if (!db) return;
     console.log('[engagement notify] 確保登入並寫入 Firestore...');
     const { ensureSignedIn } = await import('@/lib/authService');
     await ensureSignedIn();
@@ -266,7 +264,6 @@ export async function recordRecoClick(params: {
  * 同 query 只算一次（簡單做法：用 hash 當 doc id，setDoc + merge increment）。
  */
 export async function logToolIndexQuery(query: string, resultCount: number) {
-  if (!db) return;
   const q = query.trim().slice(0, 80);
   if (q.length < 2) return; // 太短不記
   try {
@@ -284,7 +281,6 @@ const sessionShouldSample = Math.random() < SAMPLE_RATE;
 const sentMetrics = new Set<string>(); // 同一頁不重複送同個 metric
 
 async function sendMetricToFirestore(metric: Metric) {
-  if (!db) return;
   if (!sessionShouldSample) return;
   if (sentMetrics.has(metric.id)) return;
   sentMetrics.add(metric.id);
