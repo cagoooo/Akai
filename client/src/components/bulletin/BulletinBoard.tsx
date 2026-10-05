@@ -5,21 +5,22 @@ import { BulletinAdminEntry } from './BulletinAdminEntry';
 
 interface Props {
   children: ReactNode;
+  allowSticky?: boolean;
 }
 
 /**
  * 公佈欄外框容器：軟木塞背景 + 上下木條 + 回到頂部按鈕 + 隱藏後台入口
  */
-export function BulletinBoard({ children }: Props) {
+export function BulletinBoard({ children, allowSticky = false }: Props) {
   return (
     <div
-      className="cork-bg"
+      className={`cork-bg${allowSticky ? ' bulletin-sticky-search' : ''}`}
       style={{
         color: tokens.ink,
         fontFamily: tokens.font.tc,
         minHeight: '100vh',
         position: 'relative',
-        overflow: 'hidden',
+        overflow: allowSticky ? 'clip' : 'hidden',
         paddingTop: 18,
         paddingBottom: 18,
       }}

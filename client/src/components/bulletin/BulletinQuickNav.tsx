@@ -28,8 +28,8 @@ const NAV_ITEMS: NavItem[] = [
 function scrollToId(id: string) {
   const el = document.getElementById(id);
   if (!el) return;
-  const top = el.getBoundingClientRect().top + window.scrollY - 20; // 留 20px 呼吸
-  window.scrollTo({ top, behavior: 'smooth' });
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  el.scrollIntoView({ block: 'start', behavior: reduced ? 'auto' : 'smooth' });
 }
 
 /**

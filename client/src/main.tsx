@@ -5,6 +5,7 @@ import "./index.css";
 import "./styles/tokens.css";
 import "./styles/keyframes.css";
 import "./styles/loading-progress.css";
+import "./styles/sticky-search.css";
 import "./styles/blog-article.css";
 import { registerServiceWorker } from "./serviceWorkerRegistration"; // Added import
 import { initSentry, captureException } from "./lib/sentry";

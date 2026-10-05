@@ -328,7 +328,16 @@ export function BulletinHome() {
   }, []);
 
   return (
-    <BulletinBoard>
+    <BulletinBoard allowSticky>
+      {/* 搜尋 */}
+      <BulletinSearchBar
+        ref={searchInputRef}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        onSearchSubmit={scrollToGrid}
+        resultCount={filteredTools.length}
+        totalCount={toolsWithStats.length}
+      />
       <BulletinHeader />
       <LatestToolsShowcase
         tools={toolsWithStats}
@@ -419,14 +428,7 @@ export function BulletinHome() {
         </DeferUntilVisible>
       </div>
 
-      {/* 搜尋 */}
-      <BulletinSearchBar
-        ref={searchInputRef}
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        resultCount={filteredTools.length}
-        totalCount={toolsWithStats.length}
-      />
+
 
       {/* 分類篩選 + 我的收藏切換 */}
       <BulletinCategoryFilter
