@@ -1,33 +1,52 @@
 name: Lighthouse CI
 
 on:
-  push:
-    branches: [main, master]
-  pull_request:
+  workflow_run:
+    workflows: [Deploy to GitHub Pages]
+    types: [completed]
     branches: [main, master]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: lighthouse-production
+  cancel-in-progress: true
+
 jobs:
   lighthouse:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event != 'pull_request' &&
+       github.event.workflow_run.head_repository.full_name == github.repository)
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    timeout-minutes: 20
+    env:
+      EXPECTED_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+      SITE_URL: https://cagoooo.github.io/Akai/
     steps:
-      - name: Checkout
+      - name: Checkout deployed commit
         uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
-      - name: Configure Git
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
 
-      - name: Wait for deployment
-        # 等待 GitHub Pages 部署完成
-        run: sleep 30
+      - name: Test quality gate
+        run: node --test scripts/lighthouse-quality.test.mjs
+
+      - name: Verify deployed version
+        run: node scripts/wait-for-deployed-version.mjs
 
       - name: Run Lighthouse
         uses: treosh/lighthouse-ci-action@v12
         id: lighthouse
+        # budget.json 的效能預算維持原本觀察模式，分數閘門由下一步負責。
         continue-on-error: true
         with:
           urls: |
@@ -36,76 +55,12 @@ jobs:
           uploadArtifacts: false
           temporaryPublicStorage: true
 
-      - name: Format Lighthouse Score & enforce thresholds
-        id: format_lighthouse_score
+      - name: Enforce quality thresholds
         if: always()
-        uses: actions/github-script@v9
-        with:
-          script: |
-            const fs = require('fs');
-            // 分數閘門：低於門檻 → workflow 失敗（防退步）。
-            //
-            // 門檻策略：
-            //   - GH Actions runner 跑 Lighthouse 比真實桌機慢很多（performance 普遍 20-40），
-            //     所以 performance 暫時設 0（不檢查）— 防退步用真實使用者 RUM 數據更準。
-            //   - accessibility / best-practices / seo 是「程式碼正確性」指標，CI 環境影響小，
-            //     設在「實測 -5%」當基準，未來只要不退步就過。
-            //   - 想暫時禁用某項：對應 key 設 0。
-            const THRESHOLDS = {
-              performance: 0,        // CI 環境差異大，不在這檢查（用 Web Vitals RUM 觀察）
-              accessibility: 0.80,   // 實測 0.87 → 設 0.80（不能退到 80 以下）
-              'best-practices': 0.90, // 實測 1.00 → 設 0.90
-              seo: 0.75,             // 實測 0.82 → 設 0.75
-            };
+        run: node scripts/lighthouse-quality.mjs
 
-            try {
-              const results = JSON.parse(fs.readFileSync('.lighthouseci/manifest.json', 'utf8'));
-              const summary = results[0]?.summary || {};
-
-              const formatScore = (score) => {
-                if (score == null) return '❓ 無資料';
-                const value = Math.round(score * 100);
-                if (value >= 90) return `🟢 ${value}`;
-                if (value >= 50) return `🟡 ${value}`;
-                return `🔴 ${value}`;
-              };
-
-              const rows = Object.keys(THRESHOLDS).map((key) => {
-                const score = summary[key];
-                const min = THRESHOLDS[key];
-                const pass = score == null || min === 0 ? '—' : score >= min ? '✅' : '❌';
-                const minDisp = min === 0 ? '不檢查' : Math.round(min * 100);
-                return `| ${key} | ${formatScore(score)} | ≥ ${minDisp} | ${pass} |`;
-              });
-
-              const output = [
-                '## Lighthouse 效能報告',
-                '',
-                '| 指標 | 分數 | 門檻 | 狀態 |',
-                '|------|------|------|------|',
-                ...rows,
-                '',
-                '_門檻定義在 `.github/workflows/lighthouse.yml` THRESHOLDS。低於門檻 → workflow 失敗（防退步）。_',
-              ].join('\n');
-              console.log(output);
-              await core.summary.addRaw(output).write();
-
-              // 找出未達標
-              const failed = Object.keys(THRESHOLDS).filter((key) => {
-                const score = summary[key];
-                const min = THRESHOLDS[key];
-                if (min === 0) return false;
-                if (score == null) return false;
-                return score < min;
-              });
-
-              if (failed.length > 0) {
-                const msgs = failed.map((k) => `${k}: ${Math.round(summary[k] * 100)} < ${Math.round(THRESHOLDS[k] * 100)}`).join('; ');
-                core.setFailed(`Lighthouse 分數退步：${msgs}`);
-              }
-            } catch (e) {
-              core.warning(`無法讀取 Lighthouse 結果：${e.message}`);
-            }
+      - name: Verify version remained unchanged during audit
+        run: node scripts/wait-for-deployed-version.mjs --once
 
       - name: Upload Lighthouse Report
         uses: actions/upload-artifact@v7
@@ -113,5 +68,6 @@ jobs:
         with:
           name: lighthouse-report-${{ github.run_number }}
           path: .lighthouseci/
+          include-hidden-files: true
           retention-days: 30
-          if-no-files-found: ignore
+          if-no-files-found: error

@@ -93,7 +93,7 @@ export async function incrementVisitorCount(): Promise<VisitorStats> {
 
     try {
         const { invokePublicAnalytics } = await import('@/lib/publicAnalyticsService');
-        await invokePublicAnalytics({ kind: 'visitorCount' });
+        if (!await invokePublicAnalytics({ kind: 'visitorCount' })) return getVisitorStats();
 
         // 回傳樂觀值（呼叫端顯示一律走 onSnapshot，此值僅供 fallback）
         return {
@@ -172,7 +172,7 @@ export async function trackToolUsage(toolId: number): Promise<ToolStats> {
         try {
             const { getFunctions, httpsCallable } = await import('firebase/functions');
             // App Check 延後初始化；等就緒再送，callable 才帶得上 token
-            await waitForAppCheck();
+            if (!await waitForAppCheck()) throw new Error('App Check 尚未通過，使用本機工具計數');
             const functions = getFunctions(undefined, 'asia-east1');
             const callable = httpsCallable<typeof context, { success: boolean; toolId: number }>(
                 functions,

@@ -1,5 +1,7 @@
 // Firebase 初始化設定
 import { initializeApp, FirebaseApp } from 'firebase/app';
+import { createAppCheckReadiness } from './appCheckReadiness';
+import { userInteractionReady } from './userInteraction';
 import {
   initializeFirestore,
   persistentLocalCache,
@@ -32,52 +34,31 @@ let app: FirebaseApp | null = null;
 let db: Firestore | null = null;
 let auth: Auth | null = null;
 
-// App Check 就緒訊號：初始化完成且拿到第一個 token 才 resolve；
-// 沒有金鑰 / 本機 / 初始化失敗時直接 resolve，呼叫端不會被卡住
-let markAppCheckReady: () => void = () => {};
-const appCheckReady = new Promise<void>((resolve) => {
-  markAppCheckReady = resolve;
-});
-let appCheckScheduled = false;
+// 沒有合法驗證時回傳 false，不能把「初始化結束」當成「驗證通過」。
+let checkAppCheckReadiness: (maxWaitMs?: number) => Promise<boolean> = async () => false;
 
 if (hasValidConfig) {
   try {
     // 初始化 Firebase
     app = initializeApp(firebaseConfig);
 
-    // App Check 先送出 token 供後端觀測；確認合法流量覆蓋率後才啟用強制阻擋。
+    // 後端已 enforceAppCheck；不變更風險門檻或使用 debug token。
     // reCAPTCHA Enterprise 金鑰只允許 cagoooo.github.io；本機 / CI E2E（localhost）取 token 必失敗並不斷重試，直接略過
     const isLocalhost = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(window.location.hostname);
     if (appCheckSiteKey && isLocalhost) {
       console.info('Firebase App Check：本機網址略過（金鑰僅允許正式網域）');
     } else if (appCheckSiteKey) {
-      // 延後初始化（2026-09-23）：reCAPTCHA Enterprise 腳本 ~345KB（gzip）會在首屏搶頻寬與 CPU，
-      // 改到頁面 load 後閒置才動態載入。Firestore / Functions 之後的請求會自動帶上 token；
-      // 在此之前送出的請求沒有 token；需要 token 的統計 callable 會先 await waitForAppCheck()。
-      appCheckScheduled = true;
       const firebaseApp = app;
-      const startAppCheck = () => {
-        import('firebase/app-check')
-          .then(async ({ initializeAppCheck, ReCaptchaEnterpriseProvider, getToken }) => {
-            const appCheck = initializeAppCheck(firebaseApp, {
-              provider: new ReCaptchaEnterpriseProvider(appCheckSiteKey),
-              isTokenAutoRefreshEnabled: true,
-            });
-            // 等第一個 token 真的換到，之後的 callable 才保證帶得上
-            await getToken(appCheck).catch((err) => console.warn('Firebase App Check 取得 token 失敗:', err));
-          })
-          .catch((err) => console.warn('Firebase App Check 初始化失敗:', err))
-          .finally(() => markAppCheckReady());
-      };
-      const scheduleAppCheck = () => {
-        const w = window as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number };
-        if (w.requestIdleCallback) w.requestIdleCallback(startAppCheck, { timeout: 3000 });
-        else setTimeout(startAppCheck, 1500);
-      };
-      if (document.readyState === 'complete') scheduleAppCheck();
-      else window.addEventListener('load', scheduleAppCheck, { once: true });
+      checkAppCheckReadiness = createAppCheckReadiness(async () => {
+        const { initializeAppCheck, ReCaptchaEnterpriseProvider, getToken } = await import('firebase/app-check');
+        const appCheck = initializeAppCheck(firebaseApp, {
+          provider: new ReCaptchaEnterpriseProvider(appCheckSiteKey),
+          isTokenAutoRefreshEnabled: true,
+        });
+        return async () => (await getToken(appCheck)).token;
+      }, userInteractionReady);
     } else {
-      console.warn('Firebase App Check 尚未設定 site key，目前僅能進行後端缺漏觀測。');
+      console.warn('Firebase App Check 尚未設定 site key，不會傳送受保護的統計。');
     }
 
     // 使用新的 API 初始化 Firestore，包含持久化快取
@@ -107,14 +88,12 @@ if (hasValidConfig) {
 export { db, auth };
 export default app;
 
-if (!appCheckScheduled) markAppCheckReady();
-
 /**
- * 等 App Check 就緒（延後初始化，約在頁面 load 後閒置時）再送需要 token 的請求。
- * 最多等 maxWaitMs：reCAPTCHA 被廣告攔截 / 校園防火牆擋掉時，統計仍會送出（monitor 模式照收），不會永遠卡住。
+ * 首次操作後才初始化驗證；取得有效 token 才回傳 true。
+ * 驗證失敗或操作後等待逾時回傳 false，呼叫端不得送受保護請求。
  */
-export function waitForAppCheck(maxWaitMs = 10_000): Promise<void> {
-  return Promise.race([appCheckReady, new Promise<void>((resolve) => setTimeout(resolve, maxWaitMs))]);
+export function waitForAppCheck(maxWaitMs = 10_000): Promise<boolean> {
+  return checkAppCheckReadiness(maxWaitMs);
 }
 
 // 輔助函式：檢查 Firebase 是否可用

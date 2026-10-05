@@ -125,6 +125,13 @@ export async function backfillLocalAnalytics(opts?: { force?: boolean }): Promis
     };
   }
 
+  // 受保護端點沒有有效驗證時，不執行回填或寫入「已完成」旗標。
+  const { waitForAppCheck } = await import('@/lib/firebase');
+  if (!await waitForAppCheck()) {
+    return { ok: false, reason: 'App Check 尚未通過，尚未回填統計',
+      geoEntries: 0, deviceEntries: 0, referrerEntries: 0, totalAdded: 0 };
+  }
+
   // 確保有身份才能寫
   try {
     const { ensureSignedIn } = await import('@/lib/authService');
@@ -144,7 +151,9 @@ export async function backfillLocalAnalytics(opts?: { force?: boolean }): Promis
     try {
       const { invokePublicAnalytics } = await import('@/lib/publicAnalyticsService');
       for (const [key, count] of validEntries) {
-        await invokePublicAnalytics({ kind: 'visitorContext', category, key, count });
+        if (!await invokePublicAnalytics({ kind: 'visitorContext', category, key, count })) {
+          throw new Error('App Check 尚未通過，無法回填統計');
+        }
       }
       const sum = validEntries.reduce((s, [, v]) => s + v, 0);
       console.log(`[backfillLocalAnalytics] ${category}: ${validEntries.length} 個 key, 共 ${sum} 筆`);
