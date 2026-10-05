@@ -21,6 +21,15 @@ export function usePWAUpdate() {
     });
     const registrationRef = useRef<ServiceWorkerRegistration | null>(null);
     const reloadAfterActivationRef = useRef(false);
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [updateError, setUpdateError] = useState<string | null>(null);
+    const updateAttemptRef = useRef<symbol | null>(null);
+    const updateCleanupRef = useRef<(() => void) | null>(null);
+
+    useEffect(() => () => {
+        updateAttemptRef.current = null;
+        updateCleanupRef.current?.();
+    }, []);
 
     // 只有使用者確認或倒數結束送出 SKIP_WAITING 後，controllerchange 才能重新整理。
     useEffect(() => {
@@ -109,53 +118,86 @@ export function usePWAUpdate() {
     }, []);
 
     const updateApp = useCallback(async () => {
-        if (!('serviceWorker' in navigator)) {
-            window.location.reload();
-            return;
-        }
-
-        const registration = registrationRef.current ?? await navigator.serviceWorker.getRegistration();
-        if (!registration) {
-            window.location.reload();
-            return;
-        }
-        registrationRef.current = registration;
-
-        const activateWorker = (worker: ServiceWorker) => {
-            reloadAfterActivationRef.current = true;
-            worker.postMessage({ type: 'SKIP_WAITING' });
+        if (updateAttemptRef.current) return;
+        const attempt = Symbol('update');
+        updateAttemptRef.current = attempt;
+        setIsUpdating(true);
+        setUpdateError(null);
+        let removeWorkerListener = () => {};
+        const fail = () => {
+            if (updateAttemptRef.current !== attempt) return;
+            updateCleanupRef.current?.();
+            updateAttemptRef.current = null;
+            reloadAfterActivationRef.current = false;
+            setIsUpdating(false);
+            setUpdateError('更新尚未完成，請確認網路連線後重試。');
         };
-
-        if (registration.waiting) {
-            activateWorker(registration.waiting);
-            return;
+        const timeout = window.setTimeout(fail, 45000);
+        updateCleanupRef.current = () => {
+            window.clearTimeout(timeout);
+            removeWorkerListener();
+        };
+        // 先繪出更新狀態，再執行可能立刻重新載入的操作。
+        if (!document.hidden) {
+            await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
         }
-
+        if (updateAttemptRef.current !== attempt) return;
         try {
-            await registration.update();
-        } catch (error) {
-            console.warn('[PWA] 套用更新前的檢查失敗：', error);
-        }
+            if (!('serviceWorker' in navigator)) {
+                window.location.reload();
+                return;
+            }
 
-        if (registration.waiting) {
-            activateWorker(registration.waiting);
-            return;
-        }
+            const registration = registrationRef.current ?? await navigator.serviceWorker.getRegistration();
+            if (updateAttemptRef.current !== attempt) return;
+            if (!registration) {
+                window.location.reload();
+                return;
+            }
+            registrationRef.current = registration;
 
-        if (registration.installing) {
-            const installingWorker = registration.installing;
-            const activateWhenInstalled = () => {
-                if (installingWorker.state !== 'installed') return;
-                installingWorker.removeEventListener('statechange', activateWhenInstalled);
-                activateWorker(installingWorker);
+            const activateWorker = (worker: ServiceWorker) => {
+                if (updateAttemptRef.current !== attempt) return;
+                reloadAfterActivationRef.current = true;
+                worker.postMessage({ type: 'SKIP_WAITING' });
             };
-            installingWorker.addEventListener('statechange', activateWhenInstalled);
-            activateWhenInstalled();
-            return;
-        }
 
-        // version.json 已更新但瀏覽器尚未產生 waiting worker 時，以一般 reload 取得最新 HTML。
-        window.location.reload();
+            if (registration.waiting) {
+                activateWorker(registration.waiting);
+                return;
+            }
+
+            await registration.update();
+            if (updateAttemptRef.current !== attempt) return;
+
+            if (registration.waiting) {
+                activateWorker(registration.waiting);
+                return;
+            }
+
+            if (registration.installing) {
+                const installingWorker = registration.installing;
+                const activateWhenInstalled = () => {
+                    if (installingWorker.state === 'redundant') {
+                        fail();
+                        return;
+                    }
+                    if (installingWorker.state !== 'installed') return;
+                    installingWorker.removeEventListener('statechange', activateWhenInstalled);
+                    activateWorker(installingWorker);
+                };
+                installingWorker.addEventListener('statechange', activateWhenInstalled);
+                removeWorkerListener = () => installingWorker.removeEventListener('statechange', activateWhenInstalled);
+                activateWhenInstalled();
+                return;
+            }
+
+            // version.json 已更新但瀏覽器尚未產生 waiting worker 時，以一般 reload 取得最新 HTML。
+            window.location.reload();
+        } catch (error) {
+            console.warn('[PWA] 套用更新失敗：', error);
+            fail();
+        }
     }, []);
 
     const installApp = useCallback(async () => {
@@ -171,11 +213,14 @@ export function usePWAUpdate() {
     }, [state.installPrompt]);
 
     const dismissUpdate = useCallback(() => {
+        setUpdateError(null);
         setState((previous) => ({ ...previous, isUpdateAvailable: false }));
     }, []);
 
     return {
         ...state,
+        isUpdating,
+        updateError,
         updateApp,
         installApp,
         dismissUpdate,

@@ -8,7 +8,7 @@
 
 import { usePWAUpdate } from '@/hooks/usePWAUpdate';
 import { useVersionCheck } from '@/hooks/useVersionCheck';
-import { m as motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
@@ -27,10 +27,13 @@ export function PWAUpdatePrompt() {
         isUpdateAvailable: swUpdateAvailable,
         isOffline,
         isInstallable,
+        isUpdating,
+        updateError,
         updateApp,
         installApp,
         dismissUpdate,
     } = usePWAUpdate();
+    const reduceMotion = useReducedMotion();
 
     // 獨立的 version.json 輪詢（3 分鐘一次），作為 SW updatefound 的備援通道
     const { hasNewVersion, latestVersion } = useVersionCheck({ intervalMs: 3 * 60 * 1000 });
@@ -65,30 +68,30 @@ export function PWAUpdatePrompt() {
 
     // 🚀 自動更新倒數：偵測到新版本、且使用者已經停手，才開始倒數套用
     useEffect(() => {
-        if (!isUpdateAvailable || isAutoUpdateCancelled || !isIdle) {
+        if (!isUpdateAvailable || isAutoUpdateCancelled || !isIdle || isUpdating || updateError) {
             setAutoUpdateCountdown(null);
             return;
         }
 
         setAutoUpdateCountdown(AUTO_UPDATE_COUNTDOWN);
+        let remaining = AUTO_UPDATE_COUNTDOWN;
         const intervalId = setInterval(() => {
-            setAutoUpdateCountdown((prev) => {
-                if (prev === null || prev <= 1) {
-                    clearInterval(intervalId);
-                    // 倒數結束，自動套用更新
-                    console.log('🚀 [PWA] Auto-update countdown finished, applying update...');
-                    updateApp();
-                    return null;
-                }
-                return prev - 1;
-            });
+            remaining -= 1;
+            if (remaining <= 0) {
+                clearInterval(intervalId);
+                setAutoUpdateCountdown(null);
+                void updateApp();
+                return;
+            }
+            setAutoUpdateCountdown(remaining);
         }, 1000);
 
         return () => clearInterval(intervalId);
-    }, [isUpdateAvailable, isAutoUpdateCancelled, isIdle, updateApp]);
+    }, [isUpdateAvailable, isAutoUpdateCancelled, isIdle, isUpdating, updateError, updateApp]);
 
     // 使用者選擇稍後更新（取消自動倒數）
     const handlePostponeUpdate = () => {
+        if (isUpdating) return;
         setIsAutoUpdateCancelled(true);
         setAutoUpdateCountdown(null);
         dismissUpdate();
@@ -193,7 +196,7 @@ export function PWAUpdatePrompt() {
     // 更新提示 — cork 黃色便利貼（含倒數進度條）
     const UpdatePrompt = () => (
         <AnimatePresence>
-            {isUpdateAvailable && (
+            {(isUpdateAvailable || isUpdating || updateError) && (
                 <motion.div
                     initial={{ opacity: 0, y: 50, rotate: -3 }}
                     animate={{ opacity: 1, y: 0, rotate: -1.5 }}
@@ -221,6 +224,15 @@ export function PWAUpdatePrompt() {
                         <Pin color={tokens.red} size={22} style={{ position: 'static' }} />
                     </div>
 
+                    {isUpdating && (
+                        <div role="progressbar" aria-label="正在套用更新" style={{ height: 5, background: tokens.note.yellowBright, overflow: 'hidden' }}>
+                            <motion.div
+                                style={{ height: '100%', width: '40%', background: tokens.accent }}
+                                animate={reduceMotion ? { x: '75%' } : { x: ['-100%', '250%'] }}
+                                transition={{ duration: 1.3, repeat: Infinity, ease: 'easeInOut' }}
+                            />
+                        </div>
+                    )}
                     {/* 倒數進度條（橄欖綠 → 橘色漸層） */}
                     {autoUpdateCountdown !== null && autoUpdateCountdown > 0 && (
                         <motion.div
@@ -250,16 +262,16 @@ export function PWAUpdatePrompt() {
                                 flexShrink: 0,
                                 fontSize: 22,
                             }}
-                            animate={autoUpdateCountdown !== null ? { rotate: 360 } : {}}
+                            animate={!reduceMotion && (isUpdating || autoUpdateCountdown !== null) ? { rotate: 360 } : { rotate: 0 }}
                             transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
                         >
-                            ✨
+                            {isUpdating ? '🔄' : updateError ? '⚠️' : '✨'}
                         </motion.div>
 
                         <div style={{ flex: 1, minWidth: 0 }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
                                 <h4 style={{ margin: 0, fontSize: 16, fontWeight: 900, color: tokens.ink, lineHeight: 1.2 }}>
-                                    新版本已就緒！
+                                    {isUpdating ? '正在更新，請稍候…' : updateError ? '更新需要再試一次' : '新版本已就緒！'}
                                 </h4>
                                 {latestVersion && (
                                     <span
@@ -281,8 +293,8 @@ export function PWAUpdatePrompt() {
                                     </span>
                                 )}
                             </div>
-                            <p style={{ margin: '0 0 12px', fontSize: 13, color: tokens.inkSoft, lineHeight: 1.5, fontWeight: 500 }}>
-                                {autoUpdateCountdown !== null && autoUpdateCountdown > 0 ? (
+                            <p role="status" aria-live="polite" style={{ margin: '0 0 12px', fontSize: 13, color: tokens.inkSoft, lineHeight: 1.5, fontWeight: 500 }}>
+                                {isUpdating ? '正在取得並套用新版，完成後會自動重新載入。' : updateError ? updateError : autoUpdateCountdown !== null && autoUpdateCountdown > 0 ? (
                                     <>
                                         <span style={{ fontWeight: 900, color: tokens.accent, fontSize: 15 }}>{autoUpdateCountdown}</span> 秒後自動套用最新功能與修復
                                     </>
@@ -299,6 +311,8 @@ export function PWAUpdatePrompt() {
                                 <button
                                     type="button"
                                     onClick={updateApp}
+                                    disabled={isUpdating}
+                                    aria-busy={isUpdating}
                                     style={{
                                         background: tokens.accent,
                                         color: '#fff',
@@ -307,7 +321,7 @@ export function PWAUpdatePrompt() {
                                         borderRadius: 8,
                                         fontSize: 13,
                                         fontWeight: 900,
-                                        cursor: 'pointer',
+                                        cursor: isUpdating ? 'wait' : 'pointer',
                                         fontFamily: 'inherit',
                                         boxShadow: '3px 3px 0 rgba(0,0,0,.3)',
                                         display: 'inline-flex',
@@ -326,20 +340,22 @@ export function PWAUpdatePrompt() {
                                         el.style.boxShadow = '3px 3px 0 rgba(0,0,0,.3)';
                                     }}
                                 >
-                                    🔄 立即更新
+                                    {isUpdating ? '更新中…' : updateError ? '🔄 重試更新' : '🔄 立即更新'}
                                 </button>
                                 <button
                                     type="button"
                                     onClick={handlePostponeUpdate}
+                            disabled={isUpdating}
                                     style={{
                                         background: '#fefdfa',
+                                        opacity: isUpdating ? 0.6 : 1,
                                         color: tokens.ink,
                                         border: '2.5px solid #1a1a1a',
                                         padding: '7px 12px',
                                         borderRadius: 8,
                                         fontSize: 13,
                                         fontWeight: 700,
-                                        cursor: 'pointer',
+                                        cursor: isUpdating ? 'wait' : 'pointer',
                                         fontFamily: 'inherit',
                                         boxShadow: '2px 2px 0 rgba(0,0,0,.25)',
                                     }}
@@ -352,6 +368,7 @@ export function PWAUpdatePrompt() {
                         <button
                             type="button"
                             onClick={handlePostponeUpdate}
+                                    disabled={isUpdating}
                             aria-label="關閉更新提示"
                             style={{
                                 flexShrink: 0,
@@ -360,7 +377,7 @@ export function PWAUpdatePrompt() {
                                 borderRadius: '50%',
                                 background: 'transparent',
                                 border: 'none',
-                                cursor: 'pointer',
+                                cursor: isUpdating ? 'wait' : 'pointer',
                                 fontSize: 18,
                                 fontWeight: 900,
                                 color: tokens.muted,
@@ -521,8 +538,8 @@ export function PWAUpdatePrompt() {
     return (
         <>
             <OfflineIndicator />
-            <UpdatePrompt />
-            {!isUpdateAvailable && <InstallPrompt />}
+            {UpdatePrompt()}
+            {!isUpdateAvailable && !isUpdating && !updateError && <InstallPrompt />}
         </>
     );
 }
