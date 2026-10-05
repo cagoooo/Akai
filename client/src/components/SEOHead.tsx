@@ -30,7 +30,7 @@ const DEFAULT_KEYWORDS = [
 ];
 const SITE_URL = 'https://cagoooo.github.io/Akai';
 const DEFAULT_CANONICAL_URL = `${SITE_URL}/`;
-const DEFAULT_IMAGE = `${SITE_URL}/og-preview-f3e4010f.png`;
+const DEFAULT_IMAGE = `${SITE_URL}/og-preview-f7bec428.png`;
 
 /**
  * SEO Head 元件

@@ -62,7 +62,7 @@ function run() {
   }
 
   // 組裝：source 全部 + #100
-  const merged = [...source, tool100];
+  const merged = [...source, tool100].sort((a, b) => a.id - b.id);
 
   // 比對是否需要實際寫入
   const currentTarget = JSON.stringify(target, null, 2);

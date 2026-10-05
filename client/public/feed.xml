@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 127+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 128+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Mon, 14 Sep 2026 00:00:00 GMT</pubDate>
-    <lastBuildDate>Mon, 14 Sep 2026 03:05:34 GMT</lastBuildDate>
+    <pubDate>Mon, 05 Oct 2026 00:00:00 GMT</pubDate>
+    <lastBuildDate>Mon, 05 Oct 2026 01:09:13 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,27 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>📖 教學情境：#128 石門・校園漫遊：把「校園在哪裡」變成孩子走得出來的探索</title>
+      <link>https://cagoooo.github.io/Akai/blog/shimen-campus-128-3d-campus-exploration</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/shimen-campus-128-3d-campus-exploration</guid>
+      <pubDate>Mon, 05 Oct 2026 00:00:00 GMT</pubDate>
+      <description>新生聽完導覽，真的能說出自己的路線嗎？用 Godot 3D 校園探索，把景點、遊具與挑戰變成觀察起點，再接回實際校園與課堂分享。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>🆕 新工具：石門・校園漫遊</title>
+      <link>https://cagoooo.github.io/Akai/tool/128</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/128</guid>
+      <pubDate>Sun, 04 Oct 2026 16:00:00 GMT</pubDate>
+      <description>把熟悉的校園變成可以走進去的 3D 探索：沿著走廊找景點、體驗遊具、收集校園挑戰。電腦與手機都能操作，適合新生認識校園、班級觀察活動與資訊課討論，讓孩子從「玩過」走向「說得出自己的發現」。</description>
+      <category>石門國小</category>
+      <category>校園探索</category>
+      <category>3D漫遊</category>
+      <category>新生迎新</category>
+      <category>景點介紹</category>
+    </item>
     <item>
       <title>📖 教學情境：#127 桃園市AI素養爭霸賽：把「要會 AI」拆成學生今天就能練的六個站點</title>
       <link>https://cagoooo.github.io/Akai/blog/ai-literacy-127-taoyuan-competition-prep</link>
@@ -314,24 +335,6 @@
       <category>授權填報</category>
       <category>行政工具</category>
       <category>國小教育</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#113 告別 Excel 地獄！PaGamO 素養教材授權填報的行政數位轉型</title>
-      <link>https://cagoooo.github.io/Akai/blog/pagamo-license-113-school-enrollment</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/pagamo-license-113-school-enrollment</guid>
-      <pubDate>Sun, 28 Jun 2026 00:00:00 GMT</pubDate>
-      <description>專為學校導師與行政開發的 PaGamO 授權填報工具，一鍵彙整班級名單，讓繁瑣的素養教材開通流程省時 90%！</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#114 告別人工肉眼比對！學生名單校對平台的個資安全與智慧防呆防線</title>
-      <link>https://cagoooo.github.io/Akai/blog/student-list-checker-114-roster-verification</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/student-list-checker-114-roster-verification</guid>
-      <pubDate>Sun, 28 Jun 2026 00:00:00 GMT</pubDate>
-      <description>每學期初核對幾百名學生名單，用肉眼看字形相似又容易出錯？#114 學生名單校對平台，雙欄智慧比對一秒揪出學號姓名錯漏，資料完全在本地處理，行政效率與個資安全雙贏！</description>
-      <category>blog</category>
-      <category>教學情境</category>
     </item>
   </channel>
 </rss>

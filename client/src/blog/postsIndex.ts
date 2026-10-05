@@ -15,6 +15,27 @@ export type BlogPostMeta = Omit<BlogPost, 'body'>;
 
 export const POSTS_INDEX: BlogPostMeta[] = [
   {
+    "slug": "shimen-campus-128-3d-campus-exploration",
+    "title": "#128 石門・校園漫遊：把「校園在哪裡」變成孩子走得出來的探索",
+    "excerpt": "新生聽完導覽，真的能說出自己的路線嗎？用 Godot 3D 校園探索，把景點、遊具與挑戰變成觀察起點，再接回實際校園與課堂分享。",
+    "publishedAt": "2026-10-05",
+    "readingMinutes": 5,
+    "tags": [
+      "校園探索",
+      "新生迎新",
+      "Godot",
+      "空間觀察",
+      "數位素養"
+    ],
+    "toolIds": [
+      128,
+      101,
+      81
+    ],
+    "coverEmoji": "🗺️",
+    "coverColor": "green"
+  },
+  {
     "slug": "ai-literacy-127-taoyuan-competition-prep",
     "title": "#127 桃園市AI素養爭霸賽：把「要會 AI」拆成學生今天就能練的六個站點",
     "excerpt": "#127 桃園市AI素養爭霸賽備戰站，把報名、指定版本、資料蒐集、監督式學習、模型測試、規則紅線與比賽日流程放進同一條練習路線。學生知道今天做什麼，指導教師也能看見隊伍卡在哪一站。",
