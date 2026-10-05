@@ -3,6 +3,7 @@ import { shouldReportErrorToFirestore } from '@/lib/errorReporting';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
+import { tryBeginChunkRecovery } from '@/lib/chunkRecovery';
 
 interface Props {
     children: ReactNode;
@@ -56,36 +57,12 @@ export class ErrorBoundary extends Component<Props, State> {
         );
     }
 
-    /**
-     * 接住 chunk error → 強制清 SW + reload 一次。
-     * 用 sessionStorage 旗標防無限循環（reload 過一次後若還噴 chunk error，就改顯示一般錯誤畫面）
-     */
-    private async handleChunkError() {
-        const FLAG = 'akai-chunk-reload-attempted';
-        try {
-            if (sessionStorage.getItem(FLAG) === '1') {
-                console.warn('[ErrorBoundary] chunk error 已嘗試 reload 過，這次顯示一般錯誤畫面避免循環');
-                return; // 已試過就放棄自癒，讓 fallback UI 顯示
-            }
-            sessionStorage.setItem(FLAG, '1');
-        } catch { /* sessionStorage 不可用就直接 reload */ }
+    /** 接住 React.lazy chunk error；與全域監聽器共用同一個重試額度，避免重複重載。 */
+    private handleChunkError(error: Error) {
+        const reason = error.message || error.stack || 'unknown chunk error';
+        if (!tryBeginChunkRecovery(reason)) return;
 
-        console.warn('[ErrorBoundary] 偵測到 chunk error，自動清 SW + reload');
-        try {
-            // 1. unregister 所有 SW
-            if ('serviceWorker' in navigator) {
-                const regs = await navigator.serviceWorker.getRegistrations();
-                for (const reg of regs) await reg.unregister();
-            }
-            // 2. 清所有 cache（強制 fresh）
-            if ('caches' in window) {
-                const keys = await caches.keys();
-                await Promise.all(keys.map((k) => caches.delete(k)));
-            }
-        } catch (e) {
-            console.warn('[ErrorBoundary] 清 SW/cache 失敗，直接 reload', e);
-        }
-        // 3. 強制 reload（不走 SW，從 server 拿最新）
+        console.info('[ErrorBoundary] 偵測到 chunk error，保留快取並重新載入');
         window.location.reload();
     }
 
@@ -97,8 +74,8 @@ export class ErrorBoundary extends Component<Props, State> {
         // 🚀 chunk error 自癒：偵測到動態 import 失敗 → 自動清 SW + reload
         // 這不是 bug，是 vite build 後 chunk hash 變了但瀏覽器卡舊版 SPA
         if (ErrorBoundary.isChunkError(error)) {
-            console.warn('[ErrorBoundary] 偵測到 chunk error，啟動自癒流程', error.message);
-            void this.handleChunkError();
+            console.info('[ErrorBoundary] 偵測到 chunk error，啟動自癒流程');
+            this.handleChunkError(error);
             return; // 不繼續跑 Sentry / Firestore 紀錄（不算 bug）
         }
 

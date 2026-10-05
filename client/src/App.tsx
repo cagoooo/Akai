@@ -41,6 +41,7 @@ import { queryClient } from "./lib/queryClient";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { LoadingProgress } from "@/components/LoadingProgress";
 import { useToast } from "@/hooks/use-toast";
+import { tryBeginChunkRecovery } from "@/lib/chunkRecovery";
 import { userInteractionReady } from '@/lib/userInteraction';
 
 // 取得 base path - Vite 會在建置時注入 BASE_URL
@@ -142,20 +143,17 @@ function App() {
 
   useEffect(() => {
     // 🛡️ 全局 chunk error 監聽（在 ErrorBoundary 接到之前先攔截，避免畫面跳「發生錯誤」）
-    // chunk error = PWA cache 不匹配 + vite build 換 hash 的經典坑 → 自動清 SW + reload
-    const handleAssetError = async (event: ErrorEvent | PromiseRejectionEvent) => {
-      const message = 'reason' in event ? event.reason?.message : event.message;
-      const isChunkError = /Loading chunk|Failed to fetch dynamically imported module|Importing a module script failed/i.test(message || '');
+    // chunk error 常由部署後舊頁面載入新舊 hash 不一致造成；以有上限的重載修復。
+    const handleAssetError = (event: ErrorEvent | PromiseRejectionEvent) => {
+      const message = 'reason' in event
+        ? String(event.reason?.message || event.reason || '')
+        : String(event.message || '');
+      const isChunkError = /Loading chunk|Failed to fetch dynamically imported module|Importing a module script failed|ChunkLoadError/i.test(message);
       if (!isChunkError) return;
 
-      // sessionStorage 旗標防無限循環
-      const FLAG = 'akai-chunk-reload-attempted';
-      try {
-        if (sessionStorage.getItem(FLAG) === '1') return;
-        sessionStorage.setItem(FLAG, '1');
-      } catch { /* sessionStorage 不可用直接 reload */ }
+      if (!tryBeginChunkRecovery(message)) return;
 
-      console.warn('🚀 偵測到 chunk 版本斷層，自動清 SW + reload', message);
+      console.info('🚀 偵測到 chunk 版本斷層，保留快取並重新載入', message);
       // 短暫 toast 通知使用者（reload 前最後一秒）
       toast({
         title: "🚀 正在同步最新版本...",
@@ -164,19 +162,7 @@ function App() {
         duration: 2000,
       });
 
-      try {
-        if ('serviceWorker' in navigator) {
-          const regs = await navigator.serviceWorker.getRegistrations();
-          for (const reg of regs) await reg.unregister();
-        }
-        if ('caches' in window) {
-          const keys = await caches.keys();
-          await Promise.all(keys.map((k) => caches.delete(k)));
-        }
-      } catch (e) {
-        console.warn('清 SW/cache 失敗，直接 reload', e);
-      }
-      // 等 toast 顯示 1.2s 再 reload，給使用者一眼看到「正在同步」
+      // HTML 採 Network First；重新載入即可取得新版入口，避免刪除離線資料與歷史 chunk 封存。
       setTimeout(() => window.location.reload(), 1200);
     };
 
