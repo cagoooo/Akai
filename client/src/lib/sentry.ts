@@ -45,6 +45,31 @@ export function createFirestoreLeaseClassifier(now = () => Date.now()) {
   };
 }
 
+/**
+ * 前端會自行復原、或只是訪客網路中斷的事件：不是站方 bug，送進 Sentry 只會觸發告警。
+ * - 部署換 chunk hash 後舊分頁載入動態模組 404：main.tsx / App.tsx / ErrorBoundary 會自動重新載入
+ * - 裝置離線、休眠或頁面重新載入時中斷連線：Firebase SDK 會自動重連
+ * 權限不足、索引錯誤等其他 Firebase 錯誤不在此列，照常回報。
+ */
+const RECOVERABLE_CLIENT_NOISE: readonly RegExp[] = [
+  /Failed to fetch dynamically imported module/i,
+  /error loading dynamically imported module/i,
+  /Importing a module script failed/i,
+  /Unable to preload CSS/i,
+  /ChunkLoadError|Loading chunk \d+ failed/i,
+  /\(auth\/network-request-failed\)/,
+  /@firebase\/firestore:\s+Firestore \(\d+\.\d+\.\d+\): Could not reach Cloud Firestore backend\./,
+  /@firebase\/firestore:\s+Firestore \(\d+\.\d+\.\d+\): WebChannelConnection RPC '\w+' stream 0x[0-9a-f]+ transport errored\./,
+];
+
+export function isRecoverableClientNoise(event: SentryEvent): boolean {
+  const texts = [
+    event.message,
+    ...(event.exception?.values ?? []).map((value) => `${value.type ?? ''}: ${value.value ?? ''}`),
+  ];
+  return texts.some((text) => !!text && RECOVERABLE_CLIENT_NOISE.some((pattern) => pattern.test(text)));
+}
+
 let sentry: SentryModule | null = null;
 let scheduled = false;
 const pending: Array<(s: SentryModule) => void> = [];
@@ -118,6 +143,7 @@ export function initSentry() {
         beforeSend(event) {
           // 移除可能含 PII 的欄位
           if (event.request?.cookies) delete event.request.cookies;
+          if (isRecoverableClientNoise(event)) return null;
           return classifyFirestoreLease(event);
         },
       });

@@ -33,8 +33,9 @@ function looksLikeChunkError(text: string): boolean {
 async function selfHealStaleCache(reason: string) {
   // 防無限 loop：sessionStorage 每個 tab 獨立，只允許 1 次 / session
   try {
+    // 自癒是預期流程，用 info 記錄；console.warn 會被 Sentry 當成警告事件推播
     if (sessionStorage.getItem(SELF_HEAL_FLAG)) {
-      console.warn('[self-heal] already attempted this session, skipping to avoid loop. reason:', reason);
+      console.info('[self-heal] already attempted this session, skipping to avoid loop. reason:', reason);
       return;
     }
     sessionStorage.setItem(SELF_HEAL_FLAG, String(Date.now()));
@@ -42,7 +43,7 @@ async function selfHealStaleCache(reason: string) {
     // sessionStorage 不可用就直接跳過（不冒險無限 reload）
     return;
   }
-  console.warn('[self-heal] 🛟 偵測到 stale chunk，清 cache + 重新整理。reason:', reason);
+  console.info('[self-heal] 🛟 偵測到 stale chunk，清 cache + 重新整理。reason:', reason);
   try {
     // 1. unregister 所有 SW
     if ('serviceWorker' in navigator) {
@@ -105,6 +106,8 @@ createRoot(document.getElementById("root")!).render(
 
 // 全域非同步錯誤攔截（Sentry 已自動接 + Firestore 記錄保留作為備援）
 window.addEventListener('unhandledrejection', async (event) => {
+    // chunk 載入失敗已由上方 self-heal 接手（不是 bug），不再記成錯誤、寫進 errorLogs
+    if (looksLikeChunkError(event.reason?.message || String(event.reason || ''))) return;
     console.error('Unhandled promise rejection:', event.reason);
     captureException(event.reason, { source: 'unhandledrejection' });
     // 本機開發（含 vite HMR 的 WebSocket 斷線）不寫進正式 errorLogs，

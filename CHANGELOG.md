@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.133] - 2026-10-05 — 停止推播已自動復原的 chunk 與離線連線告警
+
+- Sentry `beforeSend` 丟棄部署換版後的動態模組載入失敗（已由自癒重新載入處理），以及 `auth/network-request-failed`、Firestore「Could not reach backend」與 WebChannel 中斷等裝置離線／頁面重載造成的連線訊息。
+- `main.tsx` 的 `[self-heal]` 自癒紀錄改為 info，不再被 Sentry 當作警告推播；全域 `unhandledrejection` 記錄略過已交給自癒的 chunk 錯誤，不再重複送錯誤與寫入 errorLogs。
+- 權限不足、索引缺失、SDK 內部斷言等其他 Firebase 錯誤與一般例外仍照常回報；新增以實際告警訊息為樣本的單元測試。
+
 ## [3.6.132] - 2026-10-05 — 修正動態模組失敗後的版本自癒重試
 
 - chunk 復原額度改按建置版本與失敗模組區分，同一模組每版只重試一次、每版最多兩次，並讓全域監聽與錯誤邊界共用鎖定。
