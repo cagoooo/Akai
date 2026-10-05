@@ -121,7 +121,6 @@
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
     "tailwind-merge": "^2.5.4",
-    "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.0",
     "web-vitals": "^5.2.0",
     "wouter": "^3.3.5",
@@ -176,12 +175,14 @@
     "tsx": "^4.19.1",
     "typescript": "5.6.3",
     "vite": "^6.4.3",
-    "vitest": "^4.0.17"
+    "vitest": "^4.0.17",
+    "tailwindcss-animate": "^1.0.7"
   },
   "overrides": {
     "vite": "$vite",
     "minimatch": {
       "brace-expansion": "^2.0.1"
-    }
+    },
+    "@grpc/grpc-js": "^1.14.5"
   }
 }
