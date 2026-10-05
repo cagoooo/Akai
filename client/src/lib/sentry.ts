@@ -27,15 +27,16 @@ type SentryEvent = import('@sentry/react').ErrorEvent;
 export function createFirestoreLeaseClassifier(now = () => Date.now()) {
   const occurrences: number[] = [];
   const leaseMessage = /^(?:\[[^\]\r\n]+\]\s+)?@firebase\/firestore:\s+Firestore \(\d+\.\d+\.\d+\): Failed to obtain primary lease for action '(Apply remote event|Backfill Indexes)'\.$/;
-  return (event: SentryEvent): SentryEvent => {
+  return (event: SentryEvent): SentryEvent | null => {
     const leaseMatch = event.message?.match(leaseMessage);
     if (event.logger !== 'console' || event.exception?.values?.length || !leaseMatch) return event;
     const action = leaseMatch[1];
     const timestamp = now();
     while (occurrences.length && timestamp - occurrences[0] >= 60_000) occurrences.shift();
     occurrences.push(timestamp);
-    // SDK 已處理的單次交接保留為 info；同一頁 60 秒內三次以上才升級，避免正常多分頁切換寄出告警。
-    event.level = occurrences.length >= 3 ? 'error' : 'info';
+    // SDK 已接手的正常交接不送進 Sentry；同一頁 60 秒內三次以上才回報為 error。
+    if (occurrences.length < 3) return null;
+    event.level = 'error';
     event.message = `Firestore multi-tab primary lease changed during '${action}'.`;
     event.fingerprint = ['firestore-primary-lease', action.toLowerCase().replaceAll(' ', '-')];
     event.tags = { ...event.tags, firestoreLease: 'handoff' };
