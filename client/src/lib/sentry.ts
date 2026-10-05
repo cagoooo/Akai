@@ -26,17 +26,18 @@ type SentryEvent = import('@sentry/react').ErrorEvent;
 /** SDK 已接手的多分頁交接訊息；不匹配權限、IndexedDB 或未處理例外。 */
 export function createFirestoreLeaseClassifier(now = () => Date.now()) {
   const occurrences: number[] = [];
-  const leaseMessage = /^(?:\[[^\]\r\n]+\]\s+)?@firebase\/firestore:\s+Firestore \(\d+\.\d+\.\d+\): Failed to obtain primary lease for action 'Apply remote event'\.$/;
+  const leaseMessage = /^(?:\[[^\]\r\n]+\]\s+)?@firebase\/firestore:\s+Firestore \(\d+\.\d+\.\d+\): Failed to obtain primary lease for action '(Apply remote event|Backfill Indexes)'\.$/;
   return (event: SentryEvent): SentryEvent => {
-    if (event.logger !== 'console' || event.exception?.values?.length ||
-        !leaseMessage.test(event.message ?? '')) return event;
+    const leaseMatch = event.message?.match(leaseMessage);
+    if (event.logger !== 'console' || event.exception?.values?.length || !leaseMatch) return event;
+    const action = leaseMatch[1];
     const timestamp = now();
     while (occurrences.length && timestamp - occurrences[0] >= 60_000) occurrences.shift();
     occurrences.push(timestamp);
     // 同一頁 60 秒內三次以上仍視為錯誤，避免真正卡住的同步被降級。
     event.level = occurrences.length >= 3 ? 'error' : 'warning';
-    event.message = "Firestore multi-tab primary lease changed during 'Apply remote event'.";
-    event.fingerprint = ['firestore-primary-lease', 'apply-remote-event'];
+    event.message = `Firestore multi-tab primary lease changed during '${action}'.`;
+    event.fingerprint = ['firestore-primary-lease', action.toLowerCase().replaceAll(' ', '-')];
     event.tags = { ...event.tags, firestoreLease: 'handoff' };
     event.extra = { ...event.extra, leaseOccurrencesInLastMinute: occurrences.length };
     return event;
