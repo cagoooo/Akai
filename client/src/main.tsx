@@ -10,90 +10,14 @@ import "./styles/blog-article.css";
 import { registerServiceWorker } from "./serviceWorkerRegistration"; // Added import
 import { initSentry, captureException } from "./lib/sentry";
 import { shouldReportErrorToFirestore } from './lib/errorReporting';
+import { installStaleChunkRecovery, isChunkLoadError, removeLegacyHealParam } from './lib/chunkRecovery';
 
 // ── 🛟 PWA chunk 404 自動 self-heal ─────────────────────────────────
-// 場景：deploy 換新 chunk hash 後，使用者的舊 SW 給出舊 index.html 引用舊 chunk
-//       → 舊 chunk 已被新 build 蓋掉 → 404 → React Suspense 永遠卡 spinner
-// 策略：偵測 chunk 載入失敗 → unregister SW + 清所有 cache + reload（1 shot per session）
-const SELF_HEAL_FLAG = 'akai-self-heal-attempted-v1';
-const CHUNK_404_PATTERNS = [
-  /Failed to fetch dynamically imported module/i,
-  /Loading chunk \d+ failed/i,
-  /error loading dynamically imported module/i,
-  /Importing a module script failed/i,
-  /Unable to preload CSS/i,
-  /ChunkLoadError/i,
-];
-
-function looksLikeChunkError(text: string): boolean {
-  if (!text) return false;
-  return CHUNK_404_PATTERNS.some((re) => re.test(text));
-}
-
-async function selfHealStaleCache(reason: string) {
-  // 防無限 loop：sessionStorage 每個 tab 獨立，只允許 1 次 / session
-  try {
-    // 自癒是預期流程，用 info 記錄；console.warn 會被 Sentry 當成警告事件推播
-    if (sessionStorage.getItem(SELF_HEAL_FLAG)) {
-      console.info('[self-heal] already attempted this session, skipping to avoid loop. reason:', reason);
-      return;
-    }
-    sessionStorage.setItem(SELF_HEAL_FLAG, String(Date.now()));
-  } catch {
-    // sessionStorage 不可用就直接跳過（不冒險無限 reload）
-    return;
-  }
-  console.info('[self-heal] 🛟 偵測到 stale chunk，清 cache + 重新整理。reason:', reason);
-  try {
-    // 1. unregister 所有 SW
-    if ('serviceWorker' in navigator) {
-      const regs = await navigator.serviceWorker.getRegistrations();
-      await Promise.all(regs.map((r) => r.unregister()));
-    }
-  } catch (e) {
-    console.warn('[self-heal] unregister SW 失敗', e);
-  }
-  try {
-    // 2. 清所有 cache
-    if ('caches' in self) {
-      const keys = await caches.keys();
-      await Promise.all(keys.map((k) => caches.delete(k)));
-    }
-  } catch (e) {
-    console.warn('[self-heal] 清 cache 失敗', e);
-  }
-  // 3. hard reload（query string bust 確保不從 disk cache 拿）
-  const url = new URL(window.location.href);
-  url.searchParams.set('_heal', String(Date.now()));
-  window.location.replace(url.toString());
-}
-
-// 攔截 dynamic import 的 promise reject
-window.addEventListener('unhandledrejection', (event) => {
-  const msg = event.reason?.message || String(event.reason || '');
-  if (looksLikeChunkError(msg)) {
-    event.preventDefault();
-    void selfHealStaleCache(`unhandledrejection: ${msg.slice(0, 200)}`);
-  }
-});
-
-// 攔截 <script>/<link> 標籤本身 404（capture phase 才抓得到資源錯誤）
-window.addEventListener(
-  'error',
-  (event) => {
-    const target = event.target as HTMLElement | null;
-    if (!target || target === (window as unknown as HTMLElement)) return;
-    const src =
-      (target as HTMLScriptElement).src ||
-      (target as HTMLLinkElement).href ||
-      '';
-    if (!src) return;
-    // 只處理本站的 assets/*.js / *.css
-    if (!src.includes('/assets/') || !/\.(js|css|mjs)(\?|$)/.test(src)) return;
-    void selfHealStaleCache(`resource 404: ${src.slice(-80)}`);
-  },
-  true // capture
-);
+// 場景：deploy 換新 chunk hash 後，舊分頁/舊 HTML 仍引用已被新 build 蓋掉的 chunk → 404
+// 策略：與 App / ErrorBoundary 共用 chunkRecovery 額度（每頁一次、每版兩次），
+//       保留 SW 與快取直接重新載入；HTML 走 Network First，重載即取得新版入口
+installStaleChunkRecovery();
+removeLegacyHealParam();
 
 // 最早初始化 Sentry（必須在 createRoot 前）
 initSentry();
@@ -107,7 +31,7 @@ createRoot(document.getElementById("root")!).render(
 // 全域非同步錯誤攔截（Sentry 已自動接 + Firestore 記錄保留作為備援）
 window.addEventListener('unhandledrejection', async (event) => {
     // chunk 載入失敗已由上方 self-heal 接手（不是 bug），不再記成錯誤、寫進 errorLogs
-    if (looksLikeChunkError(event.reason?.message || String(event.reason || ''))) return;
+    if (isChunkLoadError(event.reason?.message || String(event.reason || ''))) return;
     console.error('Unhandled promise rejection:', event.reason);
     captureException(event.reason, { source: 'unhandledrejection' });
     // 本機開發（含 vite HMR 的 WebSocket 斷線）不寫進正式 errorLogs，

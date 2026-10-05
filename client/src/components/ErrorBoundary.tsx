@@ -3,7 +3,7 @@ import { shouldReportErrorToFirestore } from '@/lib/errorReporting';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
-import { tryBeginChunkRecovery } from '@/lib/chunkRecovery';
+import { isChunkLoadError, tryBeginChunkRecovery } from '@/lib/chunkRecovery';
 
 interface Props {
     children: ReactNode;
@@ -39,9 +39,7 @@ export class ErrorBoundary extends Component<Props, State> {
     private static isChunkError(error: Error): boolean {
         const msg = String(error?.message || '');
         const stack = String(error?.stack || '');
-        return /Loading chunk|Failed to fetch dynamically imported module|ChunkLoadError|Importing a module script failed/i.test(
-            msg + ' ' + stack
-        );
+        return isChunkLoadError(msg + ' ' + stack);
     }
 
     /**
@@ -71,7 +69,7 @@ export class ErrorBoundary extends Component<Props, State> {
     public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
         this.setState({ errorInfo });
 
-        // 🚀 chunk error 自癒：偵測到動態 import 失敗 → 自動清 SW + reload
+        // 🚀 chunk error 自癒：偵測到動態 import 失敗 → 保留快取重新載入
         // 這不是 bug，是 vite build 後 chunk hash 變了但瀏覽器卡舊版 SPA
         if (ErrorBoundary.isChunkError(error)) {
             console.info('[ErrorBoundary] 偵測到 chunk error，啟動自癒流程');
