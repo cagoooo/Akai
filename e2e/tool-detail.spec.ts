@@ -2,6 +2,22 @@ import { test, expect } from '@playwright/test';
 
 test.use({ serviceWorkers: 'block' });
 
+test('完整目錄仍在下載時，單張工具已可閱讀與使用', async ({ page }) => {
+  let release!: () => void;
+  const held = new Promise<void>(resolve => { release = resolve; });
+  await page.route('**/api/tools.json*', async route => {
+    await held;
+    await route.continue();
+  });
+  try {
+    await page.goto('tool/81/', { waitUntil: 'domcontentloaded' });
+    await expect(page.getByRole('button', { name: '⚡ 立即使用', exact: true })).toBeVisible();
+    await expect(page.locator('.bulletin-tool-desc')).toContainText('教學駕駛艙');
+  } finally {
+    release();
+  }
+});
+
 test('排版套件未完成下載時仍顯示摘要及使用入口', async ({ page }) => {
   let release!: () => void;
   const held = new Promise<void>((resolve) => { release = resolve; });
@@ -21,6 +37,9 @@ test('排版套件未完成下載時仍顯示摘要及使用入口', async ({ pa
 
 test('下載失敗可重試，且與不存在的工具分開顯示', async ({ page }) => {
   let blocked = true;
+  await page.route('**/api/tools/81.json*', (route) => blocked
+    ? route.fulfill({ status: 503, body: 'Unavailable' })
+    : route.continue());
   await page.route('**/api/tools.json*', (route) => blocked
     ? route.fulfill({ status: 503, body: 'Unavailable' })
     : route.continue());

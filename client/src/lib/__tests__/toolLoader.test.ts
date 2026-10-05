@@ -29,6 +29,11 @@ describe('single-tool loading', () => {
     await expect(loadTool(128)).rejects.toThrow('無法獲取工具數據');
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
+  it('handles SPA HTML fallbacks for a missing tool file', async () => {
+    const fetchMock = vi.fn().mockResolvedValueOnce(new Response('<html></html>', {headers:{'content-type':'text/html'}})).mockResolvedValueOnce(new Response(JSON.stringify([tool])));
+    vi.stubGlobal('fetch', fetchMock);
+    expect(await loadTool(999)).toBeNull();
+  });
   it('returns missing records as not found', async () => {
     expect(await loadTool(999, [tool])).toBeNull();
   });

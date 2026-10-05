@@ -6,8 +6,8 @@ export async function loadTool(id: number, cached?: EducationalTool[]): Promise<
   const base = import.meta.env.BASE_URL;
   const version = import.meta.env.VITE_APP_VERSION;
   const response = await fetch(`${base}api/tools/${id}.json?v=${version}`);
-  if (response.ok) return await response.json() as EducationalTool;
-  if (response.status !== 404) throw new Error('無法獲取工具數據');
+  if (response.ok && !response.headers.get('content-type')?.includes('text/html')) return await response.json() as EducationalTool;
+  if (!response.ok && response.status !== 404) throw new Error('無法獲取工具數據');
   // Development and older deployments may only have the full catalogue.
   const catalogue = await fetch(`${base}api/tools.json?v=${version}`);
   if (!catalogue.ok) throw new Error('無法獲取工具數據');
