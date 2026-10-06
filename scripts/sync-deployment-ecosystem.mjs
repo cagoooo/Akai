@@ -16,6 +16,11 @@
  *   node scripts/sync-deployment-ecosystem.mjs --dry  # 只報告差異不寫入
  *
  * 整合：已加進 npm run build pipeline（在 vite build 之前），每次 build 自動同步。
+ *
+ * 防呆（2026-10-06）：2026-08-18 校網由 www. 改為 web. 後，16 件校網工具被誤算進
+ * Firebase、首頁顯示校網 0 件，因總數不變而 7 週沒人發現。現在：
+ *   - 任一平台算出 0 件 → 建置失敗（首頁不能出現「0 件工具」的平台卡）
+ *   - 單一平台一次少了 SHIFT_ALERT 件以上 → 印出警告（CI 上會標在 Actions 頁面）
  */
 
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -36,6 +41,8 @@ const TARGET_TSX = resolve(
 );
 
 const isDry = process.argv.includes('--dry');
+// 單一平台一次減少這麼多件，多半是網址換網域、被分到別的平台
+const SHIFT_ALERT = 5;
 
 // 與 BlogList.tsx getToolPlatform 規則保持同步。改這裡時請同步改 BlogList.tsx
 function getToolPlatform(url) {
@@ -87,6 +94,19 @@ function main() {
   let tsx = readFileSync(TARGET_TSX, 'utf-8');
   const before = tsx;
   const changes = [];
+  const shifts = [];
+
+  // ── 防呆：分類規則跟不上網址變動時提早發現 ──
+  const emptyPlatforms = Object.entries(NAME_TO_KEY)
+    .filter(([, key]) => counts[key] === 0)
+    .map(([name]) => name);
+  if (emptyPlatforms.length > 0) {
+    console.error(`\n⛔ 部署平台分類異常：${emptyPlatforms.map((n) => `「${n}」`).join('、')}算出 0 件工具。`);
+    console.error('   通常是工具網址換了網域（例如 2026-08-18 校網 www.smes → web.smes），被分到別的平台。');
+    console.error('   請更新本檔與 client/src/pages/BlogList.tsx 的 getToolPlatform 規則；');
+    console.error('   若該平台真的已沒有工具，請一併移除 BulletinDeploymentEcosystem.tsx 的平台卡片。');
+    process.exit(1);
+  }
 
   // 對每個平台：找 name: '<名稱>' 區塊內的 count: NN,，改成真實數字
   for (const [name, key] of Object.entries(NAME_TO_KEY)) {
@@ -106,6 +126,14 @@ function main() {
       changes.push(`   ${name}: ${current} → ${target}`);
       tsx = tsx.replace(pattern, `$1${target}$3`);
     }
+    if (current - target >= SHIFT_ALERT) shifts.push(`「${name}」一次少了 ${current - target} 件（${current} → ${target}）`);
+  }
+
+  for (const shift of shifts) {
+    const message = `${shift}，請確認是不是工具網址換了網域、被分到別的平台`;
+    console.warn(`\n⚠️ ${message}`);
+    // GitHub Actions 會把這行標成黃色警告，顯示在該次部署的摘要頁
+    if (process.env.GITHUB_ACTIONS) console.log(`::warning title=部署平台數字大幅變動::${message}`);
   }
 
   // 「看全部 NN 篇手寫教學心得 →」regex
