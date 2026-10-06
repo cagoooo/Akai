@@ -60,6 +60,8 @@ const RECOVERABLE_CLIENT_NOISE: readonly RegExp[] = [
   /@firebase\/firestore:\s+Firestore \(\d+\.\d+\.\d+\): WebChannelConnection RPC '\w+' stream 0x[0-9a-f]+ transport errored\./,
   // 連不上後端、本機快取又沒有該文件時 getDoc 的錯誤（code: unavailable）
   /Failed to get document because the client is offline\./,
+  // App Check 連不上網路（例如電腦剛從睡眠喚醒）；fetch-status-error、throttled、reCAPTCHA 錯誤仍回報
+  /\(appCheck\/fetch-network-error\)/,
 ];
 
 export function isRecoverableClientNoise(event: SentryEvent): boolean {
@@ -70,20 +72,48 @@ export function isRecoverableClientNoise(event: SentryEvent): boolean {
   return texts.some((text) => !!text && RECOVERABLE_CLIENT_NOISE.some((pattern) => pattern.test(text)));
 }
 
-/**
- * 頁面卸載（重新整理、套用 PWA 更新、關閉分頁）時，瀏覽器先觸發 pagehide 再中止進行中的請求。
- * 不用 beforeunload：它會讓 Firefox 停用 back/forward cache。
- */
-export function createPageUnloadTracker(target: Pick<EventTarget, 'addEventListener'>) {
-  let unloading = false;
-  target.addEventListener('pagehide', () => { unloading = true; });
-  // 從 back/forward cache 還原時頁面又恢復運作
-  target.addEventListener('pageshow', () => { unloading = false; });
-  return () => unloading;
+const NETWORK_RECOVERY_GRACE_MS = 15_000;
+const SLEEP_CHECK_INTERVAL_MS = 15_000;
+// 背景分頁的計時器最慢約每分鐘執行一次，超過兩分鐘沒執行才視為裝置曾睡眠
+const SLEEP_GAP_MS = 120_000;
+
+interface NetworkTrackerOptions {
+  now?: () => number;
+  isOnline?: () => boolean;
+  every?: (callback: () => void, ms: number) => unknown;
 }
 
 /**
- * 被瀏覽器中止的請求：Firebase callable 把失敗的 fetch 回報成 `functions/internal`、訊息為小寫 "internal"
+ * 網路暫時不可靠的時段，這段期間被中止的請求是訪客端連線問題，不是後端錯誤：
+ * - 頁面卸載（重新整理、套用 PWA 更新、關閉分頁）：瀏覽器先觸發 pagehide 再中止進行中的請求。
+ *   不用 beforeunload：它會讓 Firefox 停用 back/forward cache。
+ * - 裝置離線，或剛恢復連線、剛從睡眠喚醒的 15 秒內。睡眠時計時器會停擺，以此偵測喚醒。
+ */
+export function createUnreliableNetworkTracker(
+  target: Pick<EventTarget, 'addEventListener'>,
+  {
+    now = () => Date.now(),
+    isOnline = () => navigator.onLine,
+    every = (callback, ms) => setInterval(callback, ms),
+  }: NetworkTrackerOptions = {},
+) {
+  let unloading = false;
+  let recoveredAt = -Infinity;
+  let lastTick = now();
+  target.addEventListener('pagehide', () => { unloading = true; });
+  // 從 back/forward cache 還原時頁面又恢復運作
+  target.addEventListener('pageshow', () => { unloading = false; });
+  target.addEventListener('online', () => { recoveredAt = now(); });
+  every(() => {
+    const tick = now();
+    if (tick - lastTick > SLEEP_GAP_MS) recoveredAt = tick;
+    lastTick = tick;
+  }, SLEEP_CHECK_INTERVAL_MS);
+  return () => unloading || !isOnline() || now() - recoveredAt < NETWORK_RECOVERY_GRACE_MS;
+}
+
+/**
+ * 被瀏覽器中止或連不上網路的請求：Firebase callable 把失敗的 fetch 回報成 `functions/internal`、訊息為小寫 "internal"
  * （後端未處理例外回的是大寫 "INTERNAL"，不在此列）；原生 fetch 則是各瀏覽器的 TypeError。
  */
 export function isAbortedRequestError(error: unknown): boolean {
@@ -134,7 +164,7 @@ export function initSentry() {
 
   scheduled = true;
   window.addEventListener('error', onEarlyError);
-  const isPageUnloading = createPageUnloadTracker(window);
+  const isNetworkUnreliable = createUnreliableNetworkTracker(window);
 
   const load = async () => {
     try {
@@ -168,8 +198,8 @@ export function initSentry() {
           // 移除可能含 PII 的欄位
           if (event.request?.cookies) delete event.request.cookies;
           if (isRecoverableClientNoise(event)) return null;
-          // 例如按下「更新」後重新整理，進行中的統計請求被瀏覽器中止，並非後端錯誤
-          if (isPageUnloading() && isAbortedRequestError(hint.originalException)) return null;
+          // 例如按下「更新」後重新整理、離線或剛喚醒時，請求被瀏覽器中止或連不上，並非後端錯誤
+          if (isNetworkUnreliable() && isAbortedRequestError(hint.originalException)) return null;
           return classifyFirestoreLease(event);
         },
       });

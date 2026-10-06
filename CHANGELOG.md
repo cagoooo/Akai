@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.138] - 2026-10-06 — 裝置剛喚醒、剛恢復連線時的網路錯誤不再觸發告警
+
+- 2026-10-06 Sentry `Error while retrieving App Check token … (appCheck/fetch-network-error)`（JAVASCRIPT-REACT-K）：訪客電腦睡眠 38 分鐘後喚醒，網路還沒恢復，Firestore 舊連線回 400、App Check 換發 token 連不上；Firebase 隨後自動重連，後端正常。
+- `appCheck/fetch-network-error` 加入 `RECOVERABLE_CLIENT_NOISE`；`fetch-status-error`（例如 403 設定錯誤）、`throttled`、reCAPTCHA 錯誤仍回報。
+- 原本只在「頁面卸載」時丟棄被中止的請求（callable 小寫 `internal`、`Failed to fetch` 等），擴大為「網路不可靠」時段：頁面卸載、裝置離線，以及收到 `online` 事件或從睡眠喚醒後 15 秒內。睡眠以計時器停擺超過兩分鐘偵測（背景分頁約每分鐘一次的節流不會誤判），各瀏覽器通用。
+
 ## [3.6.137] - 2026-10-06 — Firestore 離線讀取失敗不再觸發告警
 
 - 2026-10-06 Sentry `FirebaseError: Failed to get document because the client is offline.`（JAVASCRIPT-REACT-J）：訪客的網路 10 秒內連不上 Firestore，`/tool/10/` 讀取評分統計時本機快取又沒有該文件，`reviewService` 記錄 `console.error` 後被推播為 ERROR；評分區塊只是這次沒顯示，後端正常。
