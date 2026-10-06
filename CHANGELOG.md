@@ -2,6 +2,11 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.137] - 2026-10-06 — Firestore 離線讀取失敗不再觸發告警
+
+- 2026-10-06 Sentry `FirebaseError: Failed to get document because the client is offline.`（JAVASCRIPT-REACT-J）：訪客的網路 10 秒內連不上 Firestore，`/tool/10/` 讀取評分統計時本機快取又沒有該文件，`reviewService` 記錄 `console.error` 後被推播為 ERROR；評分區塊只是這次沒顯示，後端正常。
+- 此錯誤加入 `sentry.ts` 的 `RECOVERABLE_CLIENT_NOISE`，與既有的「Could not reach Cloud Firestore backend」同屬訪客端連線問題。Firebase SDK 中「client is offline」只有這一則訊息；權限、索引、`Failed to get document from server` 等其他錯誤照常回報。
+
 ## [3.6.136] - 2026-10-06 — 重新整理時被中止的統計請求不再觸發告警
 
 - 2026-10-06 Sentry `FirebaseError: internal`（JAVASCRIPT-REACT-H）：訪客第一次點擊的是 PWA「更新」按鈕，排隊等待互動的統計請求剛送出、頁面就套用更新重新整理，5 個 `recordPublicAnalytics` 請求被瀏覽器中止；同一秒另外 2 個請求回應 200，後端正常。

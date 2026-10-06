@@ -21,6 +21,8 @@ describe('可自行復原的前端雜訊不送進 Sentry', () => {
       exceptionEvent('FirebaseError', 'Firebase: Error (auth/network-request-failed).'),
       consoleEvent("[2026-10-05T14:21:54.478Z]  @firebase/firestore: Firestore (12.8.0): Could not reach Cloud Firestore backend. Connection failed 1 times. Most recent error: FirebaseError: [code=unavailable]: The operation could not be completed\nThis typically indicates that your device does not have a healthy Internet connection at the moment."),
       { ...consoleEvent("[2026-10-05T14:21:54.472Z]  @firebase/firestore: Firestore (12.8.0): WebChannelConnection RPC 'Listen' stream 0x3e6446ae transport errored. Name: undefined Message: undefined"), level: 'warning' as const },
+      // 2026-10-06 告警：Firestore 10 秒內連不上，讀取評分統計失敗
+      exceptionEvent('FirebaseError', 'Failed to get document because the client is offline.'),
     ];
     for (const input of inputs) expect(isRecoverableClientNoise(input)).toBe(true);
   });
@@ -33,6 +35,7 @@ describe('可自行復原的前端雜訊不送進 Sentry', () => {
       consoleEvent('[2026-10-05T14:21:54.478Z]  @firebase/firestore: Firestore (12.8.0): The query requires an index.'),
       consoleEvent('[2026-10-05T14:21:54.478Z]  @firebase/firestore: Firestore (12.8.0): INTERNAL ASSERTION FAILED: Unexpected state'),
       consoleEvent('Could not reach Cloud Firestore backend.'),
+      exceptionEvent('FirebaseError', 'Failed to get document from server. (However, this document does exist in the local cache.)'),
       { level: 'error' as const },
     ];
     for (const input of inputs) expect(isRecoverableClientNoise(input)).toBe(false);
