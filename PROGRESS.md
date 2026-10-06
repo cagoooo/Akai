@@ -15,6 +15,7 @@
 
 - 排查 Sentry `FirebaseError: internal`：訪客按下 PWA「更新」後頁面重新整理，進行中的 `recordPublicAnalytics` 請求被中止；同一秒其他請求回應 200，後端正常。
 - `sentry.ts` 以 `pagehide` 標記頁面卸載，卸載期間被中止的 callable／fetch 錯誤不再送進 Sentry；後端未處理例外（大寫 `INTERNAL`）與頁面運作中的錯誤照常回報。
+- `npm audit fix` 更新 lockfile，修正 `proxy-addr`（critical）、`compression`（high）等 Express 相依套件弱點，解除 CI 部署阻擋。
 
 ### `2026-10-06` 首頁部署平台「XOOPS 校網 VM」恢復正確數量 `v3.6.135`
 
