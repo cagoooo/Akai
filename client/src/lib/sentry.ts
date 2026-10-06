@@ -58,6 +58,8 @@ const RECOVERABLE_CLIENT_NOISE: readonly RegExp[] = [
   /\(auth\/network-request-failed\)/,
   /@firebase\/firestore:\s+Firestore \(\d+\.\d+\.\d+\): Could not reach Cloud Firestore backend\./,
   /@firebase\/firestore:\s+Firestore \(\d+\.\d+\.\d+\): WebChannelConnection RPC '\w+' stream 0x[0-9a-f]+ transport errored\./,
+  // 連不上後端、本機快取又沒有該文件時 getDoc 的錯誤（code: unavailable）
+  /Failed to get document because the client is offline\./,
 ];
 
 export function isRecoverableClientNoise(event: SentryEvent): boolean {
