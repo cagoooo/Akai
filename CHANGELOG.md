@@ -2,6 +2,11 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.135] - 2026-10-06 — 首頁部署平台「XOOPS 校網 VM」恢復正確數量
+
+- 修正平台分類規則：校網 VM 自 2026-08-18 起網址改為 `web.smes.tyc.edu.tw`，但規則只認得 `www.`，導致 16 件校網工具被誤算進 Firebase Hosting，首頁顯示校網 0 件、Firebase 23 件。
+- `scripts/sync-deployment-ecosystem.mjs` 與部落格列表（`BlogList.tsx`）的平台篩選同時認得 `www.`／`web.`；首頁數字恢復為校網 VM 16 件、Firebase Hosting 7 件，總數 128 件不變。
+
 ## [3.6.134] - 2026-10-06 — 最早期 chunk 自癒改用共用額度並保留快取
 
 - `main.tsx` 的 stale chunk 監聽改走 `chunkRecovery` 共用額度，與 App 全域監聽、錯誤邊界一起遵守「每頁最多一次重載、同模組每版一次、每版最多兩次」；不再另用 `akai-self-heal-attempted-v1` 旗標。

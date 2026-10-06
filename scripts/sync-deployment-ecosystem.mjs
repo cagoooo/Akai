@@ -44,7 +44,8 @@ function getToolPlatform(url) {
   if (u.startsWith('/Akai/') || (u.startsWith('/') && !u.includes('://'))) return 'github';
   if (u.includes('github.io')) return 'github';
   if (u.includes('sites.google.com')) return 'gsites';
-  if (/^https?:\/\/www\.smes\.tyc\.edu\.tw/.test(u)) return 'xoops';
+  // 校網 VM 2026-08-18 起由 www. 改為 web.；其他 *.smes 子網域才是 Firebase
+  if (/^https?:\/\/(?:www|web)\.smes\.tyc\.edu\.tw/.test(u)) return 'xoops';
   if (/^https?:\/\/[a-z0-9-]+\.smes\.tyc\.edu\.tw/.test(u)) return 'firebase';
   return 'thirdparty';
 }
