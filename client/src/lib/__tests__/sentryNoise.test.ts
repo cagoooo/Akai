@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createPageUnloadTracker, isAbortedRequestError, isRecoverableClientNoise } from '../sentry';
+import { createUnreliableNetworkTracker, isAbortedRequestError, isRecoverableClientNoise } from '../sentry';
 
 const consoleEvent = (message: string) => ({ logger: 'console', level: 'error' as const, message });
 const exceptionEvent = (type: string, value: string) => ({ level: 'error' as const, exception: { values: [{ type, value }] } });
@@ -23,6 +23,8 @@ describe('可自行復原的前端雜訊不送進 Sentry', () => {
       { ...consoleEvent("[2026-10-05T14:21:54.472Z]  @firebase/firestore: Firestore (12.8.0): WebChannelConnection RPC 'Listen' stream 0x3e6446ae transport errored. Name: undefined Message: undefined"), level: 'warning' as const },
       // 2026-10-06 告警：Firestore 10 秒內連不上，讀取評分統計失敗
       exceptionEvent('FirebaseError', 'Failed to get document because the client is offline.'),
+      // 2026-10-06 告警：電腦睡眠 38 分鐘後喚醒，App Check 換發 token 時網路尚未恢復
+      { ...consoleEvent('[2026-10-06T05:24:17.552Z]  @firebase/auth: Auth (12.8.0): Error while retrieving App Check token: FirebaseError: AppCheck: Fetch failed to connect to a network. Check Internet connection. Original error: Failed to fetch (content-firebaseappcheck.googleapis.com). (appCheck/fetch-network-error).'), level: 'warning' as const },
     ];
     for (const input of inputs) expect(isRecoverableClientNoise(input)).toBe(true);
   });
@@ -36,6 +38,8 @@ describe('可自行復原的前端雜訊不送進 Sentry', () => {
       consoleEvent('[2026-10-05T14:21:54.478Z]  @firebase/firestore: Firestore (12.8.0): INTERNAL ASSERTION FAILED: Unexpected state'),
       consoleEvent('Could not reach Cloud Firestore backend.'),
       exceptionEvent('FirebaseError', 'Failed to get document from server. (However, this document does exist in the local cache.)'),
+      consoleEvent('@firebase/auth: Auth (12.8.0): Error while retrieving App Check token: FirebaseError: AppCheck: Requests throttled due to 403 error. Attempts allowed again after 01d:00m:00s (appCheck/throttled).'),
+      consoleEvent('@firebase/auth: Auth (12.8.0): Error while retrieving App Check token: FirebaseError: AppCheck: Fetch server returned an HTTP error status. HTTP status: 403. (appCheck/fetch-status-error).'),
       { level: 'error' as const },
     ];
     for (const input of inputs) expect(isRecoverableClientNoise(input)).toBe(false);
@@ -44,15 +48,57 @@ describe('可自行復原的前端雜訊不送進 Sentry', () => {
 
 const firebaseError = (code: string, message: string) => Object.assign(new Error(message), { name: 'FirebaseError', code });
 
-describe('頁面卸載時被中止的請求不送進 Sentry', () => {
-  it('pagehide 之後才視為卸載；從 back/forward cache 還原後恢復', () => {
-    const target = new EventTarget();
-    const isPageUnloading = createPageUnloadTracker(target);
-    expect(isPageUnloading()).toBe(false);
+function trackerHarness(online = true) {
+  const target = new EventTarget();
+  let time = 1_000_000;
+  let tick: () => void = () => {};
+  const state = { online };
+  const isNetworkUnreliable = createUnreliableNetworkTracker(target, {
+    now: () => time,
+    isOnline: () => state.online,
+    every: (callback) => { tick = callback; },
+  });
+  return {
+    target,
+    state,
+    isNetworkUnreliable,
+    advance: (ms: number) => { time += ms; },
+    tick: () => tick(),
+  };
+}
+
+describe('網路不可靠時被中止的請求不送進 Sentry', () => {
+  it('pagehide 之後視為卸載；從 back/forward cache 還原後恢復', () => {
+    const { target, isNetworkUnreliable } = trackerHarness();
+    expect(isNetworkUnreliable()).toBe(false);
     target.dispatchEvent(new Event('pagehide'));
-    expect(isPageUnloading()).toBe(true);
+    expect(isNetworkUnreliable()).toBe(true);
     target.dispatchEvent(new Event('pageshow'));
-    expect(isPageUnloading()).toBe(false);
+    expect(isNetworkUnreliable()).toBe(false);
+  });
+
+  it('離線時，以及恢復連線後 15 秒內', () => {
+    const { target, state, isNetworkUnreliable, advance } = trackerHarness(false);
+    expect(isNetworkUnreliable()).toBe(true);
+    state.online = true;
+    target.dispatchEvent(new Event('online'));
+    advance(14_000);
+    expect(isNetworkUnreliable()).toBe(true);
+    advance(2_000);
+    expect(isNetworkUnreliable()).toBe(false);
+  });
+
+  it('計時器停擺超過兩分鐘視為剛從睡眠喚醒；背景分頁約每分鐘一次的節流不算', () => {
+    const { isNetworkUnreliable, advance, tick } = trackerHarness();
+    advance(70_000);
+    tick();
+    expect(isNetworkUnreliable()).toBe(false);
+    // 2026-10-06 告警：電腦睡眠 38 分鐘後喚醒
+    advance(38 * 60_000);
+    tick();
+    expect(isNetworkUnreliable()).toBe(true);
+    advance(15_000);
+    expect(isNetworkUnreliable()).toBe(false);
   });
 
   it('辨識 callable 與 fetch 被中止的錯誤', () => {
