@@ -2,6 +2,13 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.136] - 2026-10-06 — 重新整理時被中止的統計請求不再觸發告警
+
+- 2026-10-06 Sentry `FirebaseError: internal`（JAVASCRIPT-REACT-H）：訪客第一次點擊的是 PWA「更新」按鈕，排隊等待互動的統計請求剛送出、頁面就套用更新重新整理，5 個 `recordPublicAnalytics` 請求被瀏覽器中止；同一秒另外 2 個請求回應 200，後端正常。
+- Firebase callable 會把被中止的 fetch 回報成 `functions/internal`、小寫 `internal`。`sentry.ts` 以 `pagehide` 記錄頁面正在卸載，卸載期間這類錯誤（及原生 fetch 的 `Failed to fetch`／`Load failed`／`NetworkError…`）不送進 Sentry；不使用 `beforeunload`，以免 Firefox 停用 back/forward cache。
+- 後端未處理例外（大寫 `INTERNAL`）、其他 callable 錯誤，以及頁面仍在運作時的連線失敗照常回報；已用 Chromium 與真實 Firebase SDK 驗證「重新整理中止」與「後端 500」兩種情況分別被丟棄與保留。
+- 安全性更新（CI 的 `npm audit --audit-level=high` 擋下部署）：`compression` 1.8.2、`proxy-addr` 2.0.8（critical）、`express` 4.22.3、`body-parser` 1.20.8、`qs` 6.16.0；`functions/` 的 `proxy-addr` 同步升到 2.0.8。只更新 lockfile，版本範圍不變。
+
 ## [3.6.135] - 2026-10-06 — 首頁部署平台「XOOPS 校網 VM」恢復正確數量
 
 - 修正平台分類規則：校網 VM 自 2026-08-18 起網址改為 `web.smes.tyc.edu.tw`，但規則只認得 `www.`，導致 16 件校網工具被誤算進 Firebase Hosting，首頁顯示校網 0 件、Firebase 23 件。

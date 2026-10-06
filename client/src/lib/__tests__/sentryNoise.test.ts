@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isRecoverableClientNoise } from '../sentry';
+import { createPageUnloadTracker, isAbortedRequestError, isRecoverableClientNoise } from '../sentry';
 
 const consoleEvent = (message: string) => ({ logger: 'console', level: 'error' as const, message });
 const exceptionEvent = (type: string, value: string) => ({ level: 'error' as const, exception: { values: [{ type, value }] } });
@@ -36,5 +36,40 @@ describe('可自行復原的前端雜訊不送進 Sentry', () => {
       { level: 'error' as const },
     ];
     for (const input of inputs) expect(isRecoverableClientNoise(input)).toBe(false);
+  });
+});
+
+const firebaseError = (code: string, message: string) => Object.assign(new Error(message), { name: 'FirebaseError', code });
+
+describe('頁面卸載時被中止的請求不送進 Sentry', () => {
+  it('pagehide 之後才視為卸載；從 back/forward cache 還原後恢復', () => {
+    const target = new EventTarget();
+    const isPageUnloading = createPageUnloadTracker(target);
+    expect(isPageUnloading()).toBe(false);
+    target.dispatchEvent(new Event('pagehide'));
+    expect(isPageUnloading()).toBe(true);
+    target.dispatchEvent(new Event('pageshow'));
+    expect(isPageUnloading()).toBe(false);
+  });
+
+  it('辨識 callable 與 fetch 被中止的錯誤', () => {
+    // 2026-10-06 告警：按下 PWA「更新」後重新整理，recordPublicAnalytics 請求被中止
+    expect(isAbortedRequestError(firebaseError('functions/internal', 'internal'))).toBe(true);
+    expect(isAbortedRequestError(new TypeError('Failed to fetch'))).toBe(true);
+    expect(isAbortedRequestError(new TypeError('Load failed'))).toBe(true);
+    expect(isAbortedRequestError(new TypeError('NetworkError when attempting to fetch resource.'))).toBe(true);
+  });
+
+  it('後端回應的錯誤與一般例外照常回報', () => {
+    const inputs = [
+      firebaseError('functions/internal', 'INTERNAL'),
+      firebaseError('functions/unavailable', 'unavailable'),
+      firebaseError('functions/resource-exhausted', 'analytics rate limit exceeded'),
+      firebaseError('permission-denied', 'Missing or insufficient permissions.'),
+      new TypeError("Cannot read properties of undefined (reading 'map')"),
+      'Failed to fetch',
+      undefined,
+    ];
+    for (const input of inputs) expect(isAbortedRequestError(input)).toBe(false);
   });
 });
