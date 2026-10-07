@@ -16,7 +16,7 @@
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { defineSecret } from "firebase-functions/params";
 import axios from "axios";
-import * as admin from "firebase-admin";
+import { getFirestore, FieldValue } from "firebase-admin/firestore";
 
 const GEMINI_API_KEY = defineSecret("GEMINI_API_KEY");
 
@@ -103,7 +103,7 @@ export const embedQuery = onCall(
             // ── 5. 記錄查詢到 Firestore（同 logToolIndexQuery）— 但這次走 server-side ──
             try {
                 const hash = simpleHash(query);
-                const ref = admin.firestore()
+                const ref = getFirestore()
                     .collection("analytics")
                     .doc("toolIndexQueries")
                     .collection("queries")
@@ -111,7 +111,7 @@ export const embedQuery = onCall(
                 const snap = await ref.get();
                 if (snap.exists) {
                     await ref.update({
-                        count: admin.firestore.FieldValue.increment(1),
+                        count: FieldValue.increment(1),
                         lastUsedAt: new Date().toISOString(),
                         mode: "semantic",
                     });

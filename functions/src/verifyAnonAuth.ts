@@ -25,7 +25,8 @@
 import { onSchedule } from "firebase-functions/v2/scheduler";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { defineSecret } from "firebase-functions/params";
-import * as admin from "firebase-admin";
+import { getApp } from "firebase-admin/app";
+import { getFirestore, FieldValue } from "firebase-admin/firestore";
 import axios from "axios";
 import { pushToGoogleChat } from "./lib/googleChatNotify";
 
@@ -49,8 +50,8 @@ export interface AnonAuthCheckResult {
 
 /** 從 admin SDK 取得 OAuth2 access token（給 Identity Toolkit Admin API 用）*/
 async function getAccessToken(): Promise<string> {
-    const cred = admin.app().options.credential;
-    if (!cred) throw new Error("admin.app().options.credential is missing");
+    const cred = getApp().options.credential;
+    if (!cred) throw new Error("getApp().options.credential is missing");
     const tok = await cred.getAccessToken();
     if (!tok?.access_token) throw new Error("credential.getAccessToken returned no access_token");
     return tok.access_token;
@@ -102,8 +103,7 @@ export async function checkAndHealAnonAuth(): Promise<AnonAuthCheckResult> {
 /** 寫健康日誌（每天一筆，可被覆蓋 — merge 模式累加）*/
 async function writeHealthLog(date: string, result: AnonAuthCheckResult): Promise<void> {
     try {
-        await admin
-            .firestore()
+        await getFirestore()
             .doc(`analytics/anonAuthHealth/checks/${date}`)
             .set(
                 {
@@ -112,8 +112,8 @@ async function writeHealthLog(date: string, result: AnonAuthCheckResult): Promis
                     lastEnabled: result.enabled,
                     lastWasFixed: result.wasFixed,
                     lastError: result.error || null,
-                    checkCount: admin.firestore.FieldValue.increment(1),
-                    fixCount: admin.firestore.FieldValue.increment(result.wasFixed ? 1 : 0),
+                    checkCount: FieldValue.increment(1),
+                    fixCount: FieldValue.increment(result.wasFixed ? 1 : 0),
                 },
                 { merge: true }
             );

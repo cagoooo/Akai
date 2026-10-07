@@ -19,13 +19,13 @@
 
 import { onSchedule } from "firebase-functions/v2/scheduler";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
-import * as admin from "firebase-admin";
+import { getFirestore, FieldValue, FieldPath, Timestamp } from "firebase-admin/firestore";
 
 const SNAPSHOTS_COLLECTION = "analyticsSnapshots";
 const RETENTION_DAYS = 90;
 
 interface SnapshotPayload {
-    capturedAt: admin.firestore.FieldValue;
+    capturedAt: FieldValue;
     date: string;
     schemaVersion: 1;
     sourceCollections: string[];
@@ -50,7 +50,7 @@ function todayInTaipei(): string {
 }
 
 async function readAllDocs(collection: string): Promise<Record<string, any>> {
-    const snap = await admin.firestore().collection(collection).get();
+    const snap = await getFirestore().collection(collection).get();
     const out: Record<string, any> = {};
     snap.forEach((doc) => {
         out[doc.id] = doc.data();
@@ -66,14 +66,13 @@ async function pruneOldClickEvents(): Promise<{ deleted: number }> {
     // 分批刪避免單次 batch 超過 500 限制
     const PAGE = 400;
     while (true) {
-        const snap = await admin
-            .firestore()
+        const snap = await getFirestore()
             .collection("toolClickEvents")
-            .where("timestamp", "<", admin.firestore.Timestamp.fromDate(cutoff))
+            .where("timestamp", "<", Timestamp.fromDate(cutoff))
             .limit(PAGE)
             .get();
         if (snap.empty) break;
-        const batch = admin.firestore().batch();
+        const batch = getFirestore().batch();
         snap.forEach((d) => batch.delete(d.ref));
         await batch.commit();
         deleted += snap.size;
@@ -94,10 +93,10 @@ async function pruneOldDailyClicks(): Promise<{ docsScanned: number; keysRemoved
     });
     const cutoffStr = fmt.format(cutoffDate);
 
-    const snap = await admin.firestore().collection("toolUsageStats").get();
+    const snap = await getFirestore().collection("toolUsageStats").get();
     let docsScanned = 0;
     let keysRemoved = 0;
-    const batch = admin.firestore().batch();
+    const batch = getFirestore().batch();
 
     snap.forEach((doc) => {
         docsScanned++;
@@ -107,7 +106,7 @@ async function pruneOldDailyClicks(): Promise<{ docsScanned: number; keysRemoved
         const removeFields: Record<string, any> = {};
         for (const dateKey of Object.keys(dc)) {
             if (dateKey < cutoffStr) {
-                removeFields[`dailyClicks.${dateKey}`] = admin.firestore.FieldValue.delete();
+                removeFields[`dailyClicks.${dateKey}`] = FieldValue.delete();
                 keysRemoved++;
             }
         }
@@ -148,7 +147,7 @@ export const dailySnapshot = onSchedule(
             };
 
             const payload: SnapshotPayload = {
-                capturedAt: admin.firestore.FieldValue.serverTimestamp(),
+                capturedAt: FieldValue.serverTimestamp(),
                 date,
                 schemaVersion: 1,
                 sourceCollections: ["visitorStats", "analytics", "toolUsageStats", "toolRatings"],
@@ -157,8 +156,7 @@ export const dailySnapshot = onSchedule(
             };
 
             // 2. 寫入 snapshot 文件
-            await admin
-                .firestore()
+            await getFirestore()
                 .collection(SNAPSHOTS_COLLECTION)
                 .doc(date)
                 .set(payload);
@@ -176,14 +174,13 @@ export const dailySnapshot = onSchedule(
             });
             const cutoffStr = fmt.format(cutoffDate);
 
-            const oldSnaps = await admin
-                .firestore()
+            const oldSnaps = await getFirestore()
                 .collection(SNAPSHOTS_COLLECTION)
-                .where(admin.firestore.FieldPath.documentId(), "<", cutoffStr)
+                .where(FieldPath.documentId(), "<", cutoffStr)
                 .get();
 
             if (!oldSnaps.empty) {
-                const batch = admin.firestore().batch();
+                const batch = getFirestore().batch();
                 oldSnaps.forEach((d) => batch.delete(d.ref));
                 await batch.commit();
                 console.log(`[dailySnapshot] 🧹 已裁切 ${oldSnaps.size} 份超過 ${RETENTION_DAYS} 天的舊快照`);
@@ -227,7 +224,7 @@ export const restoreFromSnapshot = onCall(async (request) => {
         throw new HttpsError("invalid-argument", "date 必須是 YYYY-MM-DD 格式");
     }
 
-    const snapDoc = await admin.firestore().collection(SNAPSHOTS_COLLECTION).doc(date).get();
+    const snapDoc = await getFirestore().collection(SNAPSHOTS_COLLECTION).doc(date).get();
     if (!snapDoc.exists) {
         throw new HttpsError("not-found", `找不到 ${date} 的快照`);
     }
@@ -242,7 +239,7 @@ export const restoreFromSnapshot = onCall(async (request) => {
     for (const collection of ["visitorStats", "analytics", "toolUsageStats", "toolRatings"] as const) {
         const docs = (snap.data as any)[collection] || {};
         const docIds = Object.keys(docs);
-        const current = await admin.firestore().collection(collection).get();
+        const current = await getFirestore().collection(collection).get();
         const snapshotIdSet = new Set(docIds);
         const extraDocsKept = current.docs.filter((doc) => !snapshotIdSet.has(doc.id)).length;
         restored[collection] = {
@@ -258,10 +255,10 @@ export const restoreFromSnapshot = onCall(async (request) => {
 
         // 真的寫入：用 batch（500 筆/批）
         for (let i = 0; i < docIds.length; i += 400) {
-            const batch = admin.firestore().batch();
+            const batch = getFirestore().batch();
             const slice = docIds.slice(i, i + 400);
             for (const id of slice) {
-                const ref = admin.firestore().collection(collection).doc(id);
+                const ref = getFirestore().collection(collection).doc(id);
                 batch.set(ref, docs[id]);
             }
             await batch.commit();

@@ -5,7 +5,7 @@
  * Firestore Rules 因此可以完全禁止 client 直接寫 analytics / visitorStats。
  */
 import { onCall, HttpsError } from 'firebase-functions/v2/https';
-import * as admin from 'firebase-admin';
+import { getFirestore, FieldValue, Timestamp, DocumentReference } from 'firebase-admin/firestore';
 import * as logger from 'firebase-functions/logger';
 import { createHash } from 'node:crypto';
 import {
@@ -128,9 +128,9 @@ function segmentValue(value: unknown): string {
   return segment;
 }
 
-function incrementMap(values: string[]): Record<string, admin.firestore.FieldValue> {
+function incrementMap(values: string[]): Record<string, FieldValue> {
   return Object.fromEntries(
-    values.map((value) => [value, admin.firestore.FieldValue.increment(1)]),
+    values.map((value) => [value, FieldValue.increment(1)]),
   );
 }
 
@@ -165,7 +165,7 @@ async function enforcePersistentRateLimit(
   kind: AnalyticsKind,
   isAdmin: boolean,
 ): Promise<void> {
-  const db = admin.firestore();
+  const db = getFirestore();
   const buckets = analyticsRateLimitBuckets(uid, ip, isAdmin).map((bucket) => {
     const identityHash = secureHash(`${bucket.scope}|${bucket.identityValue}|${kind}`);
     return {
@@ -202,9 +202,9 @@ async function enforcePersistentRateLimit(
             count: decision.state.count,
             kind,
             scope: bucket.scope,
-            windowStartedAt: admin.firestore.Timestamp.fromMillis(decision.state.windowStartedAtMs),
-            updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-            expiresAt: admin.firestore.Timestamp.fromMillis(
+            windowStartedAt: Timestamp.fromMillis(decision.state.windowStartedAtMs),
+            updatedAt: FieldValue.serverTimestamp(),
+            expiresAt: Timestamp.fromMillis(
               decision.state.windowStartedAtMs + decision.policy.windowMs * 2,
             ),
           },
@@ -237,9 +237,9 @@ async function claimEvent(
   uid: string,
   kind: AnalyticsKind,
   eventId: string | null,
-): Promise<{ duplicate: boolean; ref: admin.firestore.DocumentReference | null }> {
+): Promise<{ duplicate: boolean; ref: DocumentReference | null }> {
   if (!eventId) return { duplicate: false, ref: null };
-  const db = admin.firestore();
+  const db = getFirestore();
   const ref = db.collection('_analyticsEventClaims').doc(secureHash(`${uid}|${eventId}`));
   const duplicate = await db.runTransaction(async (transaction) => {
     const snapshot = await transaction.get(ref);
@@ -248,8 +248,8 @@ async function claimEvent(
       kind,
       identityHash: secureHash(uid).slice(0, 32),
       status: 'claimed',
-      createdAt: admin.firestore.FieldValue.serverTimestamp(),
-      expiresAt: admin.firestore.Timestamp.fromMillis(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      createdAt: FieldValue.serverTimestamp(),
+      expiresAt: Timestamp.fromMillis(Date.now() + 7 * 24 * 60 * 60 * 1000),
     });
     return false;
   });
@@ -258,15 +258,14 @@ async function claimEvent(
 
 async function recordVisitorCount(): Promise<void> {
   const today = todayInTaipei();
-  await admin
-    .firestore()
+  await getFirestore()
     .collection('visitorStats')
     .doc('global')
     .set(
       {
-        totalVisits: admin.firestore.FieldValue.increment(1),
-        dailyVisits: { [today]: admin.firestore.FieldValue.increment(1) },
-        lastVisitAt: admin.firestore.FieldValue.serverTimestamp(),
+        totalVisits: FieldValue.increment(1),
+        dailyVisits: { [today]: FieldValue.increment(1) },
+        lastVisitAt: FieldValue.serverTimestamp(),
       },
       { merge: true },
     );
@@ -287,14 +286,13 @@ async function recordVisitorContext(
   }
   const field =
     category === 'device' ? 'deviceStats' : category === 'referrer' ? 'referrerStats' : 'geoStats';
-  await admin
-    .firestore()
+  await getFirestore()
     .collection('analytics')
     .doc('visitorContext')
     .set(
       {
-        [field]: { [key]: admin.firestore.FieldValue.increment(requestedCount) },
-        lastUpdatedAt: admin.firestore.FieldValue.serverTimestamp(),
+        [field]: { [key]: FieldValue.increment(requestedCount) },
+        lastUpdatedAt: FieldValue.serverTimestamp(),
       },
       { merge: true },
     );
@@ -303,9 +301,9 @@ async function recordVisitorContext(
 async function recordReco(data: Record<string, unknown>): Promise<void> {
   const action = stringValue(data.action, 32);
   const today = todayInTaipei();
-  const inc = admin.firestore.FieldValue.increment(1);
+  const inc = FieldValue.increment(1);
   const payload: Record<string, unknown> = {
-    updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    updatedAt: FieldValue.serverTimestamp(),
   };
 
   if (action === 'funnel') {
@@ -387,7 +385,7 @@ async function recordReco(data: Record<string, unknown>): Promise<void> {
     throw new HttpsError('invalid-argument', 'invalid recommendation action');
   }
 
-  await admin.firestore().collection('analytics').doc('recoStats').set(payload, { merge: true });
+  await getFirestore().collection('analytics').doc('recoStats').set(payload, { merge: true });
 }
 
 async function recordToolIndexQuery(data: Record<string, unknown>): Promise<void> {
@@ -397,20 +395,19 @@ async function recordToolIndexQuery(data: Record<string, unknown>): Promise<void
   if (!Number.isInteger(resultCount) || resultCount < 0 || resultCount > 200) {
     throw new HttpsError('invalid-argument', 'invalid result count');
   }
-  const ref = admin
-    .firestore()
+  const ref = getFirestore()
     .collection('analytics')
     .doc('toolIndexQueries')
     .collection('queries')
     .doc(simpleHash(query));
-  await admin.firestore().runTransaction(async (transaction) => {
+  await getFirestore().runTransaction(async (transaction) => {
     const snapshot = await transaction.get(ref);
     const now = new Date().toISOString();
     if (snapshot.exists) {
       transaction.set(
         ref,
         {
-          count: admin.firestore.FieldValue.increment(1),
+          count: FieldValue.increment(1),
           lastUsedAt: now,
           lastResultCount: resultCount,
         },
@@ -450,8 +447,7 @@ async function recordWebVital(data: Record<string, unknown>): Promise<void> {
   const navigationType =
     typeof data.navigationType === 'string' ? data.navigationType.slice(0, 40) : 'unknown';
   const keepsDecimal = name === 'CLS';
-  await admin
-    .firestore()
+  await getFirestore()
     .collection('analytics')
     .doc('webVitals')
     .collection(todayInTaipei())
@@ -464,7 +460,7 @@ async function recordWebVital(data: Record<string, unknown>): Promise<void> {
       navigationType,
       path,
       ua,
-      ts: admin.firestore.FieldValue.serverTimestamp(),
+      ts: FieldValue.serverTimestamp(),
     });
 }
 
@@ -533,7 +529,7 @@ export const recordPublicAnalytics = onCall(
         await claim.ref.set(
           {
             status: 'completed',
-            completedAt: admin.firestore.FieldValue.serverTimestamp(),
+            completedAt: FieldValue.serverTimestamp(),
           },
           { merge: true },
         );

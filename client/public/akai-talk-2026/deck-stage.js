@@ -4,6 +4,8 @@
  * Handles:
  *  (a) speaker notes — reads <script type="application/json" id="speaker-notes">
  *      and posts {slideIndexChanged: N} to the parent window on nav.
+ *      （安全性：postMessage 一律用 targetOrigin '/' 只送同源視窗；
+ *       message 監聽只處理同源或本視窗自己送出的訊息。）
  *  (b) keyboard navigation — ←/→, PgUp/PgDn, Space, Home/End, number keys.
  *      On touch devices, tapping the left/right half of the stage goes
  *      prev/next — taps on links, buttons and other interactive slide
@@ -1170,7 +1172,11 @@
 
       if (broadcast) {
         // (1) Legacy: host-window postMessage for speaker-notes renderers.
-        try { window.postMessage({ slideIndexChanged: curr, deckTotal: this._slides.length, deckSkipped: this._skippedIndices() }, '*'); } catch (e) {}
+        //     安全性：targetOrigin 用 '/'（= 只送給與本頁同源的視窗），不再用 '*'
+        //     廣播給任意來源。這裡是 post 給自己這個 window，'/' 一定同源；
+        //     即使在 file:// 等 opaque origin 下也不會像 location.origin（'null'）
+        //     那樣丟出 SyntaxError，外層 try/catch 再多一層保險。
+        try { window.postMessage({ slideIndexChanged: curr, deckTotal: this._slides.length, deckSkipped: this._skippedIndices() }, '/'); } catch (e) {}
 
         // (2) In-page CustomEvent on the <deck-stage> element itself.
         //     Bubbles and composes out of shadow DOM so slide code can listen:
@@ -1426,6 +1432,10 @@
     }
 
     _onMessage(e) {
+      // 安全性：只處理「本視窗自己送出」或「同源視窗」送來的訊息，
+      // 避免外部網站透過 iframe 嵌入 / window.opener 遠端切換簡報 UI 狀態。
+      // （e.source === window 涵蓋 file:// 等 opaque origin 下自己 post 給自己的情況）
+      if (!e || (e.source !== window && e.origin !== window.location.origin)) return;
       const d = e.data;
       if (d && typeof d.__omelette_presenting === 'boolean') {
         this._presenting = d.__omelette_presenting;
@@ -2001,7 +2011,8 @@
       this._emitDeckChange({ action: on ? 'skip' : 'unskip', from: i, slide });
       // Re-broadcast so the presenter popup's prev/next thumbnails re-pick
       // the nearest non-skipped slide without waiting for a nav event.
-      try { window.postMessage({ slideIndexChanged: this._index, deckTotal: this._slides.length, deckSkipped: this._skippedIndices() }, '*'); } catch (e) {}
+      // targetOrigin '/' = 只送同源視窗（理由同 _applyIndex 的說明）。
+      try { window.postMessage({ slideIndexChanged: this._index, deckTotal: this._slides.length, deckSkipped: this._skippedIndices() }, '/'); } catch (e) {}
     }
 
     _skippedIndices() {

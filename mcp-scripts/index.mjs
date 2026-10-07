@@ -1,14 +1,15 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import admin from "firebase-admin";
+import { initializeApp } from "firebase-admin/app";
+import { getFirestore } from "firebase-admin/firestore";
 
 // Initialize Firebase using Application Default Credentials
-admin.initializeApp({
+initializeApp({
   // Project ID is optionally passed via GCLOUD_PROJECT env var or inferred automatically
 });
 
-const db = admin.firestore();
+const db = getFirestore();
 
 // Create the MCP server instance
 const server = new McpServer({

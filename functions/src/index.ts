@@ -1,8 +1,9 @@
 import { onCall, onRequest, HttpsError } from "firebase-functions/v2/https";
-import * as admin from "firebase-admin";
+import { initializeApp } from "firebase-admin/app";
+import { getFirestore, FieldValue } from "firebase-admin/firestore";
 
 // 初始化 Firebase Admin
-admin.initializeApp();
+initializeApp();
 
 // 排程備份功能（每日快照 + 還原）
 export { dailySnapshot, restoreFromSnapshot } from "./dailySnapshot";
@@ -125,19 +126,19 @@ async function recordToolClickInternal(opts: {
     // sanitize stageId：只允許 alphanumeric + dash/underscore，長度 ≤ 32
     const stageId = (rawStageId && /^[a-zA-Z0-9_-]{1,32}$/.test(rawStageId)) ? rawStageId : null;
 
-    const docRef = admin.firestore().collection("toolUsageStats").doc(String(toolId));
+    const docRef = getFirestore().collection("toolUsageStats").doc(String(toolId));
     const today = todayInTaipei();
     const now = new Date();
     const hourTW = (now.getUTCHours() + 8) % 24;
 
     // 1. 累計 doc (toolUsageStats)：含 stageBreakdown.{stageId} +1（如有）
     const accumPayload: any = {
-        totalClicks: admin.firestore.FieldValue.increment(1),
-        dailyClicks: { [today]: admin.firestore.FieldValue.increment(1) },
-        lastClickedAt: admin.firestore.FieldValue.serverTimestamp(),
+        totalClicks: FieldValue.increment(1),
+        dailyClicks: { [today]: FieldValue.increment(1) },
+        lastClickedAt: FieldValue.serverTimestamp(),
     };
     if (stageId) {
-        accumPayload.stageBreakdown = { [stageId]: admin.firestore.FieldValue.increment(1) };
+        accumPayload.stageBreakdown = { [stageId]: FieldValue.increment(1) };
     }
     const accumulatePromise = docRef.set(accumPayload, { merge: true });
 
@@ -150,14 +151,13 @@ async function recordToolClickInternal(opts: {
     const sessionId = source ? `${source}:${baseSid}`.slice(0, 64) : baseSid;
     const country = detectCountry(rawRequest);
 
-    const eventPromise = admin
-        .firestore()
+    const eventPromise = getFirestore()
         .collection("toolClickEvents")
         .add({
             toolId,
             dateKey: today,
             hour: hourTW,
-            timestamp: admin.firestore.FieldValue.serverTimestamp(),
+            timestamp: FieldValue.serverTimestamp(),
             referrer,
             referrerHost: referrerHost.slice(0, 100),
             device,
@@ -278,8 +278,7 @@ export const getToolFlowAnalysis = onCall(
 
         let snap;
         try {
-            snap = await admin
-                .firestore()
+            snap = await getFirestore()
                 .collection("toolClickEvents")
                 .where("toolId", "==", toolId)
                 .where("dateKey", ">=", fromDate)

@@ -26,7 +26,7 @@
 
 import { onRequest } from "firebase-functions/v2/https";
 import { defineSecret } from "firebase-functions/params";
-import * as admin from "firebase-admin";
+import { getFirestore, FieldValue } from "firebase-admin/firestore";
 import * as crypto from "crypto";
 import * as logger from "firebase-functions/logger";
 
@@ -99,7 +99,7 @@ export const lineTalkWebhook = onRequest(
     }
 
     // ── 4. Write to Firestore talkQuestions ─────────────────
-    const db = admin.firestore();
+    const db = getFirestore();
     const results = await Promise.allSettled(
       events.map(async (ev) => {
         const evType = (ev as any).type;
@@ -125,7 +125,7 @@ export const lineTalkWebhook = onRequest(
         await docRef.set({
           text: rawText,
           userIdHash: userId,
-          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+          createdAt: FieldValue.serverTimestamp(),
           timestamp: (ev as any).timestamp || Date.now(),
           source: source?.type || "user",
         });

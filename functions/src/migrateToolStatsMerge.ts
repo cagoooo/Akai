@@ -20,14 +20,14 @@
  *   console.log(r2.data);
  */
 import { onCall, HttpsError } from "firebase-functions/v2/https";
-import * as admin from "firebase-admin";
+import { getFirestore, FieldValue } from "firebase-admin/firestore";
 
 /**
  * 內部 helper：執行 migration（dryRun mode 不寫入；non-dryRun mode 用 batch 合併 + 刪舊）
  * 設計為 idempotent — 跑過後 tool_* 就被刪掉，再跑也是 no-op
  */
 async function runMigration(dryRun: boolean) {
-    const col = admin.firestore().collection("toolUsageStats");
+    const col = getFirestore().collection("toolUsageStats");
     const allDocs = await col.get();
 
     const oldDocs: Array<{ docId: string; toolId: number; data: any }> = [];
@@ -75,7 +75,7 @@ async function runMigration(dryRun: boolean) {
         return { mode: "execute", summary: { merged: 0, errors: 0, note: "no tool_* doc to migrate (already done?)" } };
     }
 
-    const batch = admin.firestore().batch();
+    const batch = getFirestore().batch();
     const results: Array<{ toolId: number; status: string }> = [];
 
     for (const o of oldDocs) {
@@ -84,13 +84,13 @@ async function runMigration(dryRun: boolean) {
         const dailyClicksMerge: Record<string, any> = {};
         for (const [k, v] of Object.entries(oldDailyClicks)) {
             if (/^\d{4}-\d{2}-\d{2}$/.test(k) && typeof v === "number" && v > 0) {
-                dailyClicksMerge[k] = admin.firestore.FieldValue.increment(v);
+                dailyClicksMerge[k] = FieldValue.increment(v);
             }
         }
         batch.set(
             newDocRef,
             {
-                totalClicks: admin.firestore.FieldValue.increment(Number(o.data.totalClicks) || 0),
+                totalClicks: FieldValue.increment(Number(o.data.totalClicks) || 0),
                 ...(Object.keys(dailyClicksMerge).length > 0 ? { dailyClicks: dailyClicksMerge } : {}),
             },
             { merge: true }

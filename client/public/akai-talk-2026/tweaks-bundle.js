@@ -107,12 +107,16 @@ const __TWEAKS_STYLE = `
   .twk-chip svg{position:absolute;top:6px;left:6px;width:13px;height:13px;
     filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
 `;
+const __TWK_MSG_TARGET = "/";
+function __twkIsTrustedMessage(e) {
+  return !!e && (e.source === window || e.origin === window.location.origin);
+}
 function useTweaks(defaults) {
   const [values, setValues] = React.useState(defaults);
   const setTweak = React.useCallback((keyOrEdits, val) => {
     const edits = typeof keyOrEdits === "object" && keyOrEdits !== null ? keyOrEdits : { [keyOrEdits]: val };
     setValues((prev) => ({ ...prev, ...edits }));
-    window.parent.postMessage({ type: "__edit_mode_set_keys", edits }, "*");
+    window.parent.postMessage({ type: "__edit_mode_set_keys", edits }, __TWK_MSG_TARGET);
     window.dispatchEvent(new CustomEvent("tweakchange", { detail: edits }));
   }, []);
   return [values, setTweak];
@@ -149,17 +153,18 @@ function TweaksPanel({ title = "Tweaks", children }) {
   React.useEffect(() => {
     const onMsg = (e) => {
       var _a;
+      if (!__twkIsTrustedMessage(e)) return;
       const t = (_a = e == null ? void 0 : e.data) == null ? void 0 : _a.type;
       if (t === "__activate_edit_mode") setOpen(true);
       else if (t === "__deactivate_edit_mode") setOpen(false);
     };
     window.addEventListener("message", onMsg);
-    window.parent.postMessage({ type: "__edit_mode_available" }, "*");
+    window.parent.postMessage({ type: "__edit_mode_available" }, __TWK_MSG_TARGET);
     return () => window.removeEventListener("message", onMsg);
   }, []);
   const dismiss = () => {
     setOpen(false);
-    window.parent.postMessage({ type: "__edit_mode_dismissed" }, "*");
+    window.parent.postMessage({ type: "__edit_mode_dismissed" }, __TWK_MSG_TARGET);
   };
   const onDragStart = (e) => {
     const panel = dragRef.current;

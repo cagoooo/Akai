@@ -27,13 +27,16 @@ jobs:
       EXPECTED_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
       SITE_URL: https://cagoooo.github.io/Akai/
     steps:
-      - name: Checkout deployed commit
-        uses: actions/checkout@v7
+      # 只取出預設分支（main）上受信任的檢查腳本，不取出觸發本流程那次執行的程式碼。
+      # workflow_run 事件下 github.sha 就是預設分支最新 commit；要核對的部署版本
+      # 仍由上方 EXPECTED_SHA 指定，檢查腳本只透過網址讀正式站 version.json 比對。
+      - name: Checkout trusted default-branch scripts
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
-          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          persist-credentials: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: '22'
 
@@ -44,7 +47,7 @@ jobs:
         run: node scripts/wait-for-deployed-version.mjs
 
       - name: Run Lighthouse
-        uses: treosh/lighthouse-ci-action@v12
+        uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # v12
         id: lighthouse
         # budget.json 的效能預算維持原本觀察模式，分數閘門由下一步負責。
         continue-on-error: true
@@ -63,7 +66,7 @@ jobs:
         run: node scripts/wait-for-deployed-version.mjs --once
 
       - name: Upload Lighthouse Report
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         if: always()
         with:
           name: lighthouse-report-${{ github.run_number }}
