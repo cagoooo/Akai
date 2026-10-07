@@ -14,7 +14,7 @@
  */
 import { onDocumentWritten } from "firebase-functions/v2/firestore";
 import { defineSecret } from "firebase-functions/params";
-import * as admin from "firebase-admin";
+import { getFirestore, FieldValue } from "firebase-admin/firestore";
 import { pushToGoogleChat } from "./lib/googleChatNotify";
 
 const GOOGLE_CHAT_WEBHOOK_URL = defineSecret("GOOGLE_CHAT_WEBHOOK_URL");
@@ -51,7 +51,7 @@ export const monitorToolStatsSchema = onDocumentWritten(
         if (issues.length === 0) return; // 一切正常
 
         // 去重：24 小時內同 docId 已推過則跳過（節省告警噪音）
-        const silenceRef = admin.firestore().collection(SILENCE_COLLECTION).doc(`toolstats:${docId}`);
+        const silenceRef = getFirestore().collection(SILENCE_COLLECTION).doc(`toolstats:${docId}`);
         const silenceSnap = await silenceRef.get();
         if (silenceSnap.exists) {
             const lastAlertAt = silenceSnap.data()?.lastAlertAt?.toMillis?.() ?? 0;
@@ -113,7 +113,7 @@ export const monitorToolStatsSchema = onDocumentWritten(
         try {
             await pushToGoogleChat(webhookUrl, summaryText, [gChatCard], "MonitorToolStatsSchema");
             await silenceRef.set({
-                lastAlertAt: admin.firestore.FieldValue.serverTimestamp(),
+                lastAlertAt: FieldValue.serverTimestamp(),
                 lastIssues: issues,
             });
             console.log(`[monitorToolStatsSchema] alerted ${docId}: ${issues.join(" / ")}`);

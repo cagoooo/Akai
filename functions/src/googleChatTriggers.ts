@@ -5,7 +5,7 @@
  * 2. onErrorLogCreated: 監聽 Firestore errorLogs 新增事件（前端 JS 崩潰日誌）。
  */
 
-import * as admin from "firebase-admin";
+import { getFirestore } from "firebase-admin/firestore";
 import * as functions from "firebase-functions/v1";
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { defineSecret } from "firebase-functions/params";
@@ -130,8 +130,8 @@ async function recordAndDecide(
     severity: ReturnType<typeof classifySeverity>,
     now: number,
 ): Promise<AlertAggregate> {
-    const ref = admin.firestore().collection(ERROR_ALERT_STATE).doc(fingerprint);
-    return admin.firestore().runTransaction(async (tx) => {
+    const ref = getFirestore().collection(ERROR_ALERT_STATE).doc(fingerprint);
+    return getFirestore().runTransaction(async (tx) => {
         const snap = await tx.get(ref);
         const prev = snap.exists ? snap.data() ?? {} : {};
         const total = (typeof prev.total === "number" ? prev.total : 0) + 1;

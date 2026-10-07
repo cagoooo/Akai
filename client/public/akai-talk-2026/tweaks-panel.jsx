@@ -4,7 +4,8 @@
 //
 // Owns the host protocol (listens for __activate_edit_mode / __deactivate_edit_mode,
 // posts __edit_mode_available / __edit_mode_set_keys / __edit_mode_dismissed) so
-// individual prototypes don't re-roll it. Ships a consistent set of controls so you
+// individual prototypes don't re-roll it.（安全性：收發都限同源，見下方
+// __TWK_MSG_TARGET / __twkIsTrustedMessage；跨網域的 host 收不到也指揮不動。） Ships a consistent set of controls so you
 // don't hand-draw <input type="range">, segmented radios, steppers, etc.
 //
 // Usage (in an HTML file that loads React + Babel):
@@ -156,6 +157,19 @@ const __TWEAKS_STYLE = `
     filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
 `;
 
+// ── postMessage 安全設定 ─────────────────────────────────────────────────────
+// targetOrigin 用 '/'：瀏覽器會把它換成「送出端（本頁）的 origin」，所以訊息
+// 只會送到同源的 parent／本視窗，不再用 '*' 廣播給任意網站。
+// 不用 window.location.origin 的原因：在 file:// 等 opaque origin 下它是字串
+// 'null'，postMessage 會丟 SyntaxError；'/' 不會丟錯，最多是不同源時靜默不送。
+const __TWK_MSG_TARGET = '/';
+
+// 收訊息時只處理「本視窗自己送的」或「同源視窗送來的」，外站嵌入本頁時
+// 無法遠端開關 Tweaks 面板。
+function __twkIsTrustedMessage(e) {
+  return !!e && (e.source === window || e.origin === window.location.origin);
+}
+
 // ── useTweaks ───────────────────────────────────────────────────────────────
 // Single source of truth for tweak values. setTweak persists via the host
 // (__edit_mode_set_keys → host rewrites the EDITMODE block on disk).
@@ -168,7 +182,7 @@ function useTweaks(defaults) {
     const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
       ? keyOrEdits : { [keyOrEdits]: val };
     setValues((prev) => ({ ...prev, ...edits }));
-    window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, __TWK_MSG_TARGET);
     // Same-window signal so in-page listeners (deck-stage rail thumbnails)
     // can react — the parent message only reaches the host, not peers.
     window.dispatchEvent(new CustomEvent('tweakchange', { detail: edits }));
@@ -217,18 +231,19 @@ function TweaksPanel({ title = 'Tweaks', children }) {
 
   React.useEffect(() => {
     const onMsg = (e) => {
+      if (!__twkIsTrustedMessage(e)) return;
       const t = e?.data?.type;
       if (t === '__activate_edit_mode') setOpen(true);
       else if (t === '__deactivate_edit_mode') setOpen(false);
     };
     window.addEventListener('message', onMsg);
-    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    window.parent.postMessage({ type: '__edit_mode_available' }, __TWK_MSG_TARGET);
     return () => window.removeEventListener('message', onMsg);
   }, []);
 
   const dismiss = () => {
     setOpen(false);
-    window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+    window.parent.postMessage({ type: '__edit_mode_dismissed' }, __TWK_MSG_TARGET);
   };
 
   const onDragStart = (e) => {

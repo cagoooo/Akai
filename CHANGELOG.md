@@ -2,6 +2,16 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.140] - 2026-10-07 — 公共程式平臺上架前資安修補：源碼檢測中風險以上歸零
+
+- 為申請數位發展部公共程式平臺上架，以 Semgrep 1.179.0（OWASP Top 10、JavaScript、TypeScript、React、Node.js、Express、Secrets、GitHub Actions 規則集）、npm audit、GitHub Secret Scanning、ESET 進行源碼檢測。修補前 Semgrep 有 23 項 Medium，Cloud Functions 正式環境相依套件 8 項 Moderate，`mcp-scripts/` 27 項（含 3 項 Critical）。
+- GitHub Actions：三個工作流程共 14 處 `uses:` 改以 commit SHA 鎖定（行尾註記原版本標籤，版本未升降）；Lighthouse CI 不再取出觸發來源的 commit，只執行預設分支上的受信任腳本（`persist-credentials: false`），要核對的部署版本仍由 `EXPECTED_SHA` 指定。
+- `akai-talk-2026` 簡報：8 處 `postMessage(..., '*')` 改為 `'/'`（只送同源視窗），訊息接收端加上同源檢查；`index.html` 更新 `deck-stage.js`、`tweaks-bundle.js` 快取參數。
+- Cloud Functions：`firebase-admin` 13 → 14.5，程式改用 `firebase-admin/app`、`firebase-admin/firestore` 模組化寫法（v14 移除舊命名空間 API）；以 `overrides` 讓 `gaxios` 使用 `uuid` 11.1.1（GHSA-w5hq-g745-h8pq）；`tsconfig.json` 限定 `types: ["node"]`，避免巢狀目錄讀到上層 `@types`。
+- `mcp-scripts/`（Firestore MCP 小工具）：`firebase-admin` 14.5、`@modelcontextprotocol/sdk` 1.32、`zod` 4.6，改用模組化寫法，`npm audit` 0 項。
+- 根目錄開發工具套件以相容版本更新（`npm audit fix`、vitest 4.1.11 系列），開發用弱點 30 → 12 項；剩餘項目來自 tailwindcss v3、drizzle-kit 相依鏈，需大版本遷移，不隨網站部署。正式環境相依套件維持 0 項。
+- 新增 MIT 授權 `LICENSE`（著作權人：黃凱揚）。
+
 ## [3.6.139] - 2026-10-07 — 自動化瀏覽器被 App Check 擋下不再觸發告警
 
 - 2026-10-07 Sentry `AppCheck: 403 error … (appCheck/initial-throttle)`、`Requests throttled due to previous 403 error … (appCheck/throttled)`（JAVASCRIPT-REACT-N / P / Q / R / S）：07:59–08:02 用無頭 Chrome 截取正式站畫面（公共程式上架申請用截圖），reCAPTCHA 把自動化瀏覽器判為機器人，App Check 回 403 並鎖 24 小時，每開一頁就是一位新的匿名訪客，短時間累積 6 位「使用者」、約 60 則警告。同時段一般瀏覽器沒有任何 App Check 403，真實訪客不受影響。

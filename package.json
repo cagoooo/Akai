@@ -1,6 +1,6 @@
 {
   "name": "rest-express",
-  "version": "3.6.139",
+  "version": "3.6.140",
   "type": "module",
   "license": "MIT",
   "scripts": {
@@ -150,8 +150,8 @@
     "@typescript-eslint/eslint-plugin": "^8.53.0",
     "@typescript-eslint/parser": "^8.53.0",
     "@vitejs/plugin-react": "^4.7.0",
-    "@vitest/coverage-v8": "^4.0.17",
-    "@vitest/ui": "^4.0.17",
+    "@vitest/coverage-v8": "^4.1.11",
+    "@vitest/ui": "^4.1.11",
     "autoprefixer": "^10.4.20",
     "drizzle-kit": "^0.31.10",
     "esbuild": "^0.28.1",
@@ -172,11 +172,11 @@
     "sharp": "^0.35.3",
     "subset-font": "^2.5.0",
     "tailwindcss": "^3.4.14",
+    "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.19.1",
     "typescript": "5.6.3",
     "vite": "^6.4.3",
-    "vitest": "^4.0.17",
-    "tailwindcss-animate": "^1.0.7"
+    "vitest": "^4.1.11"
   },
   "overrides": {
     "vite": "$vite",

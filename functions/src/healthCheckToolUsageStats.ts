@@ -19,7 +19,7 @@
  *   issues:  [{ docId, issue, severity: 'error' | 'warn' }, ...] (最多 50 條)
  */
 import { onCall, HttpsError } from "firebase-functions/v2/https";
-import * as admin from "firebase-admin";
+import { getFirestore, FieldValue } from "firebase-admin/firestore";
 
 export interface HealthCheckResult {
     summary: {
@@ -47,7 +47,7 @@ export async function performHealthCheck(opts: {
 } = {}): Promise<HealthCheckResult> {
     const { triggeredBy = "manual", persist = true } = opts;
 
-    const col = admin.firestore().collection("toolUsageStats");
+    const col = getFirestore().collection("toolUsageStats");
     const allDocs = await col.get();
 
     const issues: Array<{ docId: string; issue: string; severity: "error" | "warn" }> = [];
@@ -123,12 +123,12 @@ export async function performHealthCheck(opts: {
     // v3.6.71 持久化：寫一筆到 healthCheckRuns 給歷史趨勢圖用
     if (persist) {
         try {
-            await admin.firestore().collection("healthCheckRuns").add({
+            await getFirestore().collection("healthCheckRuns").add({
                 ...summary,
                 triggeredBy,
                 hasErrors: summary.errorCount > 0,
                 hasWarns: summary.warnCount > 0,
-                checkedAtTimestamp: admin.firestore.FieldValue.serverTimestamp(),
+                checkedAtTimestamp: FieldValue.serverTimestamp(),
             });
         } catch (err) {
             console.warn("[healthCheckRuns] persist failed:", err);
