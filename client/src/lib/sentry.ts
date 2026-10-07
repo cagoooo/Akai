@@ -64,12 +64,31 @@ const RECOVERABLE_CLIENT_NOISE: readonly RegExp[] = [
   /\(appCheck\/fetch-network-error\)/,
 ];
 
-export function isRecoverableClientNoise(event: SentryEvent): boolean {
+function eventTexts(event: SentryEvent): string[] {
   const texts = [
     event.message,
     ...(event.exception?.values ?? []).map((value) => `${value.type ?? ''}: ${value.value ?? ''}`),
   ];
-  return texts.some((text) => !!text && RECOVERABLE_CLIENT_NOISE.some((pattern) => pattern.test(text)));
+  return texts.filter((text): text is string => !!text);
+}
+
+export function isRecoverableClientNoise(event: SentryEvent): boolean {
+  return eventTexts(event).some((text) => RECOVERABLE_CLIENT_NOISE.some((pattern) => pattern.test(text)));
+}
+
+/**
+ * 自動化瀏覽器（Playwright 截圖、Lighthouse 量測等）會被 reCAPTCHA 判為機器人：
+ * App Check 回 403 並鎖 24 小時，接著出現 throttled 與「App Check 尚未通過」改用本機計數。
+ * 這是 App Check 正常擋下機器人，只在自動化瀏覽器上略過；真人瀏覽器的 403 代表設定出錯，照常回報。
+ */
+const APP_CHECK_REJECTION = /\(appCheck\/(?:fetch-status-error|initial-throttle|throttled)\)|App Check 尚未通過/;
+
+export function isAutomatedBrowser(nav: Pick<Navigator, 'webdriver' | 'userAgent'>): boolean {
+  return nav.webdriver === true || /\bHeadlessChrome\//.test(nav.userAgent);
+}
+
+export function isAppCheckRejection(event: SentryEvent): boolean {
+  return eventTexts(event).some((text) => APP_CHECK_REJECTION.test(text));
 }
 
 const NETWORK_RECOVERY_GRACE_MS = 15_000;
@@ -170,6 +189,7 @@ export function initSentry() {
     try {
       const Sentry = await import('./sentryClient');
       const classifyFirestoreLease = createFirestoreLeaseClassifier();
+      const automated = isAutomatedBrowser(navigator);
       Sentry.init({
         dsn,
         release: `akai@${release}`,
@@ -198,6 +218,7 @@ export function initSentry() {
           // 移除可能含 PII 的欄位
           if (event.request?.cookies) delete event.request.cookies;
           if (isRecoverableClientNoise(event)) return null;
+          if (automated && isAppCheckRejection(event)) return null;
           // 例如按下「更新」後重新整理、離線或剛喚醒時，請求被瀏覽器中止或連不上，並非後端錯誤
           if (isNetworkUnreliable() && isAbortedRequestError(hint.originalException)) return null;
           return classifyFirestoreLease(event);

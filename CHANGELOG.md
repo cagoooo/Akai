@@ -2,6 +2,11 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.139] - 2026-10-07 — 自動化瀏覽器被 App Check 擋下不再觸發告警
+
+- 2026-10-07 Sentry `AppCheck: 403 error … (appCheck/initial-throttle)`、`Requests throttled due to previous 403 error … (appCheck/throttled)`（JAVASCRIPT-REACT-N / P / Q / R / S）：07:59–08:02 用無頭 Chrome 截取正式站畫面（公共程式上架申請用截圖），reCAPTCHA 把自動化瀏覽器判為機器人，App Check 回 403 並鎖 24 小時，每開一頁就是一位新的匿名訪客，短時間累積 6 位「使用者」、約 60 則警告。同時段一般瀏覽器沒有任何 App Check 403，真實訪客不受影響。
+- 新增 `isAutomatedBrowser`（`navigator.webdriver` 或 UA 含 `HeadlessChrome/`）與 `isAppCheckRejection`（`fetch-status-error`／`initial-throttle`／`throttled`／「App Check 尚未通過」）：只有兩者同時成立才不送 Sentry。真人瀏覽器的 App Check 403 代表設定出錯，照常回報；自動化瀏覽器的其他錯誤也照常回報。
+
 ## [3.6.138] - 2026-10-06 — 裝置剛喚醒、剛恢復連線時的網路錯誤不再觸發告警
 
 - 2026-10-06 Sentry `Error while retrieving App Check token … (appCheck/fetch-network-error)`（JAVASCRIPT-REACT-K）：訪客電腦睡眠 38 分鐘後喚醒，網路還沒恢復，Firestore 舊連線回 400、App Check 換發 token 連不上；Firebase 隨後自動重連，後端正常。

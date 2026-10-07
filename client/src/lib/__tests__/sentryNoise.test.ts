@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { createUnreliableNetworkTracker, isAbortedRequestError, isRecoverableClientNoise } from '../sentry';
+import {
+  createUnreliableNetworkTracker,
+  isAbortedRequestError,
+  isAppCheckRejection,
+  isAutomatedBrowser,
+  isRecoverableClientNoise,
+} from '../sentry';
 
 const consoleEvent = (message: string) => ({ logger: 'console', level: 'error' as const, message });
 const exceptionEvent = (type: string, value: string) => ({ level: 'error' as const, exception: { values: [{ type, value }] } });
@@ -46,7 +52,39 @@ describe('可自行復原的前端雜訊不送進 Sentry', () => {
   });
 });
 
-const firebaseError = (code: string, message: string) => Object.assign(new Error(message), { name: 'FirebaseError', code });
+describe('自動化瀏覽器被 App Check 擋下不送進 Sentry', () => {
+  const chromeUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36';
+
+  it('辨識 Playwright 與無頭 Chrome；一般 Chrome 不算', () => {
+    expect(isAutomatedBrowser({ webdriver: true, userAgent: chromeUA })).toBe(true);
+    expect(isAutomatedBrowser({ webdriver: false, userAgent: chromeUA.replace('Chrome/', 'HeadlessChrome/') })).toBe(true);
+    expect(isAutomatedBrowser({ webdriver: false, userAgent: chromeUA })).toBe(false);
+  });
+
+  it('App Check 403、節流與改用本機計數', () => {
+    // 2026-10-07 告警：無頭 Chrome 截取正式站畫面，reCAPTCHA 判為機器人
+    const inputs = [
+      { ...consoleEvent('[2026-10-07T00:02:45.817Z]  @firebase/app-check: AppCheck: 403 error. Attempts allowed again after 01d:00m:00s (appCheck/initial-throttle).'), level: 'warning' as const },
+      { ...consoleEvent('[2026-10-07T00:02:47.152Z]  @firebase/app-check: AppCheck: Requests throttled due to previous 403 error. Attempts allowed again after 23h:59m:59s (appCheck/throttled).'), level: 'warning' as const },
+      { ...consoleEvent('[2026-10-07T00:02:31.436Z]  @firebase/auth: Auth (12.8.0): Error while retrieving App Check token: FirebaseError: AppCheck: 403 error. Attempts allowed again after 01d:00m:00s (appCheck/initial-throttle).'), level: 'warning' as const },
+      consoleEvent('@firebase/auth: Auth (12.8.0): Error while retrieving App Check token: FirebaseError: AppCheck: Fetch server returned an HTTP error status. HTTP status: 403. (appCheck/fetch-status-error).'),
+      exceptionEvent('Error', 'App Check 尚未通過，使用本機工具計數'),
+    ];
+    for (const input of inputs) expect(isAppCheckRejection(input)).toBe(true);
+  });
+
+  it('其他錯誤不算', () => {
+    const inputs = [
+      consoleEvent('@firebase/app-check: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).'),
+      exceptionEvent('FirebaseError', 'Missing or insufficient permissions.'),
+      exceptionEvent('TypeError', "Cannot read properties of undefined (reading 'map')"),
+      { level: 'error' as const },
+    ];
+    for (const input of inputs) expect(isAppCheckRejection(input)).toBe(false);
+  });
+});
+
+const firebaseError = (code: string, message: string) =>Object.assign(new Error(message), { name: 'FirebaseError', code });
 
 function trackerHarness(online = true) {
   const target = new EventTarget();
