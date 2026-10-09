@@ -145,6 +145,8 @@ describe('網路不可靠時被中止的請求不送進 Sentry', () => {
     expect(isAbortedRequestError(new TypeError('Failed to fetch'))).toBe(true);
     expect(isAbortedRequestError(new TypeError('Load failed'))).toBe(true);
     expect(isAbortedRequestError(new TypeError('NetworkError when attempting to fetch resource.'))).toBe(true);
+    // 2026-10-09 告警：靜態檔與備援 API 都沒成功回應（離線時 Service Worker 回合成的 503），首頁丟出此錯誤
+    expect(isAbortedRequestError(new Error('無法獲取工具數據'))).toBe(true);
   });
 
   it('後端回應的錯誤與一般例外照常回報', () => {
@@ -154,6 +156,8 @@ describe('網路不可靠時被中止的請求不送進 Sentry', () => {
       firebaseError('functions/resource-exhausted', 'analytics rate limit exceeded'),
       firebaseError('permission-denied', 'Missing or insufficient permissions.'),
       new TypeError("Cannot read properties of undefined (reading 'map')"),
+      new Error('工具資料格式錯誤'),
+      '無法獲取工具數據',
       'Failed to fetch',
       undefined,
     ];

@@ -131,6 +131,9 @@ export function createUnreliableNetworkTracker(
   return () => unloading || !isOnline() || now() - recoveredAt < NETWORK_RECOVERY_GRACE_MS;
 }
 
+/** 首頁、工具頁與 toolLoader 載入工具資料失敗時丟出的訊息 */
+const TOOL_DATA_FETCH_FAILURE = '無法獲取工具數據';
+
 /**
  * 被瀏覽器中止或連不上網路的請求：Firebase callable 把失敗的 fetch 回報成 `functions/internal`、訊息為小寫 "internal"
  * （後端未處理例外回的是大寫 "INTERNAL"，不在此列）；原生 fetch 則是各瀏覽器的 TypeError。
@@ -138,6 +141,8 @@ export function createUnreliableNetworkTracker(
 export function isAbortedRequestError(error: unknown): boolean {
   if (!(error instanceof Error)) return false;
   if ((error as { code?: unknown }).code === 'functions/internal') return error.message === 'internal';
+  // 工具資料靜態檔與備援 API 都沒成功回應：連不上網路時 Service Worker 會回合成的 503「離線中」，兩條路一起失敗
+  if (error.message === TOOL_DATA_FETCH_FAILURE) return true;
   return error.name === 'TypeError'
     && /^(?:Failed to fetch|Load failed|NetworkError when attempting to fetch resource\.)$/.test(error.message);
 }
