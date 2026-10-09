@@ -35,6 +35,7 @@ import { getToolEmoji, getCategoryLabel, getCategoryKey, normalizeUrl } from '@/
 import { OptimizedIcon } from '@/components/OptimizedIcons';
 import { getBlogPostPath, getPrimaryBlogPostForTool } from '@/lib/blogLinks';
 import { loadTool } from '@/lib/toolLoader';
+import { HOME_CATALOGUE_QUERY_KEY, fetchHomeCatalogue } from '@/lib/toolCatalogue';
 import { LoadingProgress } from '@/components/LoadingProgress';
 
 const BulletinToolMarkdown = lazy(() => import('@/components/bulletin/BulletinToolMarkdown'));
@@ -219,22 +220,17 @@ export function BulletinToolDetail() {
   const [detailImgError, setDetailImgError] = useState(false);
 
   const queryClient = useQueryClient();
-  // Direct entries need only one tool; reuse the full catalogue when coming from home.
+  // 只載入這一張工具的完整資料（含長介紹）；首頁與相關工具用的輕量清單沒有長介紹，不能拿來顯示詳細頁。
+  // 若其他頁面（例如部落格）已快取完整清單，才直接沿用。
   const { data: tool, isLoading: toolsLoading, isError: toolsError, isFetching: toolsFetching, refetch: retryTools } = useQuery({
     queryKey: ['tool', toolId],
     queryFn: () => loadTool(toolId, queryClient.getQueryData<EducationalTool[]>(['/api/tools'])),
     staleTime: 300000,
   });
+  // 「相關工具」只需要標題、分類、標籤等摘要欄位，讀輕量清單即可（從首頁過來時直接用快取）
   const { data: allTools } = useQuery({
-    queryKey: ['/api/tools'],
-    queryFn: async () => {
-      const staticUrl = `${import.meta.env.BASE_URL}api/tools.json?v=${import.meta.env.VITE_APP_VERSION}`;
-      const staticResponse = await fetch(staticUrl);
-      if (staticResponse.ok) return (await staticResponse.json()) as EducationalTool[];
-      const response = await fetch('/api/tools');
-      if (response.ok) return (await response.json()) as EducationalTool[];
-      throw new Error('無法獲取工具數據');
-    },
+    queryKey: HOME_CATALOGUE_QUERY_KEY,
+    queryFn: fetchHomeCatalogue,
     staleTime: 300000,
     enabled: !!tool,
   });

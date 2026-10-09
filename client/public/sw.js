@@ -7,7 +7,7 @@
  * - Stale While Revalidate: 圖片
  */
 
-const CACHE_VERSION = 'v3.6.142-e365788e-202610091115';
+const CACHE_VERSION = 'v3.6.143-4db9178a-202610091231';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
 const ASSETS_ARCHIVE = 'assets-archive-v1';
@@ -27,6 +27,7 @@ const BASE_PATH = self.location.pathname.replace('sw.js', '');
 const PRECACHE_ASSETS = [
   `${BASE_PATH}manifest.json`,
   `${BASE_PATH}api/tools.json`,
+  `${BASE_PATH}api/tools-lite.json`,
   `${BASE_PATH}api/teacher.json`,
 ];
 

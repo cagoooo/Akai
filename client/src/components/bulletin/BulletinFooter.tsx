@@ -8,6 +8,16 @@ import { BulletinInternalLinks } from './BulletinInternalLinks';
 const SCHOOL_URL = 'https://www.smes.tyc.edu.tw/modules/school/index.php?department_id=2&zone_id=0&page_id=2&content_id=11&type=news&from_op=all_news#a5';
 const SCHOOL_MAPS_URL = 'https://maps.app.goo.gl/D9hqL2eakDLC8ko46';
 
+/** 頭像載入失敗時依序退回 teacher-avatar.png → apple-touch-icon.png（同一張舊照片），每個只試一次 */
+const AVATAR_FALLBACKS = ['teacher-avatar.png', 'apple-touch-icon.png'];
+function avatarFallback(img: HTMLImageElement) {
+  const step = Number(img.dataset.fallback ?? '0');
+  if (step < AVATAR_FALLBACKS.length) {
+    img.dataset.fallback = String(step + 1);
+    img.src = `${import.meta.env.BASE_URL}${AVATAR_FALLBACKS[step]}`;
+  }
+}
+
 /**
  * 公佈欄頁尾（整合版）：
  * - 中央：Made with love 膠帶
@@ -77,17 +87,14 @@ export function BulletinFooter() {
               }}
             >
               <img
-                src={`${import.meta.env.BASE_URL}teacher-avatar.png`}
+                src={`${import.meta.env.BASE_URL}teacher-avatar.webp`}
                 alt="阿凱老師頭像"
+                width={36}
+                height={36}
+                loading="lazy"
+                decoding="async"
                 style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
-                onError={(e) => {
-                  // teacher-avatar.png 不存在時退回 apple-touch-icon（同檔不同名）
-                  const img = e.currentTarget;
-                  if (!img.dataset.fallback) {
-                    img.dataset.fallback = '1';
-                    img.src = `${import.meta.env.BASE_URL}apple-touch-icon.png`;
-                  }
-                }}
+                onError={(e) => avatarFallback(e.currentTarget)}
               />
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
@@ -197,17 +204,14 @@ export function BulletinFooter() {
           }}
         >
           <img
-            src={`${import.meta.env.BASE_URL}teacher-avatar.png`}
+            src={`${import.meta.env.BASE_URL}teacher-avatar.webp`}
             alt="阿凱老師教育科技創新專區"
+            width={36}
+            height={36}
+            loading="lazy"
+            decoding="async"
             style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
-            onError={(e) => {
-              // teacher-avatar.png 不存在時退回 apple-touch-icon.png
-              const img = e.currentTarget;
-              if (!img.dataset.fallback) {
-                img.dataset.fallback = '1';
-                img.src = `${import.meta.env.BASE_URL}apple-touch-icon.png`;
-              }
-            }}
+            onError={(e) => avatarFallback(e.currentTarget)}
           />
         </a>
 

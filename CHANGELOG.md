@@ -2,6 +2,16 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.143] - 2026-10-09 — 首頁瘦身：輕量工具清單與頁尾大頭照（效能體檢第一批）
+
+- 起因：2026-10-09 Lighthouse 報告（行動版、模擬慢網路）效能 41 分，首頁共搬 1,466 KiB；其中工具清單 `tools.json` 壓縮後 169 KB，而 66%（280 KB 原始大小）是首頁完全用不到的 `detailedDescription` 長介紹。
+- 新增 `client/public/api/tools-lite.json`（由 `sync-tools-json.mjs` 一併產生，拿掉 `detailedDescription`，其餘欄位含 `audienceFit` 原樣保留）：壓縮後約 44 KB，比完整清單少約 125 KB。完整的 `tools.json` 與單張 `api/tools/<id>.json` 不變，部落格、#100 搜尋、LLMS／sitemap 產生器等照舊讀完整版。
+- 首頁（`BulletinHome`）與詳細頁的「相關工具」改讀輕量清單（`client/src/lib/toolCatalogue.ts`，輕量版不存在時依序退回完整清單與伺服器 API）；使用獨立的快取鍵 `['/api/tools','lite']`，避免其他頁面從共用快取拿到少一欄的資料。詳細頁的長介紹仍由單張 JSON 載入。
+- `index.html` 的首頁預載改指向輕量清單；Service Worker 預先快取清單加入 `api/tools-lite.json`。
+- 頁尾大頭照改用 108×108 的 `teacher-avatar.webp`（8.5 KB，原 PNG 62.8 KB），並加上 `loading="lazy"`、`decoding="async"` 與寬高屬性；PNG 保留給 OG 圖產生腳本與載入失敗時的備援。
+- 驗證：單元測試 353 項全過（含新增 6 項）、型別與 ESLint 通過；以 CI 相同環境變數（`GITHUB_ACTIONS=true`）完整建置後 e2e 20 項全過；瀏覽器實測首頁只請求 `tools-lite.json`、`/tool/129` 長介紹完整。
+- 預期效果為算術估計（約少搬 170 KB，模擬慢網路約快 0.9 秒），實際分數待部署後重跑 Lighthouse 比較。
+
 ## [3.6.142] - 2026-10-09 — 工具資料載入失敗（訪客網路不穩時）不再觸發告警
 
 - 2026-10-09 Sentry `Error: 無法獲取工具數據`（JAVASCRIPT-REACT-T）：1 位訪客（Windows Chrome）、1 次。事件發生時他開著的是 v3.6.140 的舊分頁，正式站的 `api/tools.json` 當時與現在都回 200，站本身沒有問題。

@@ -80,7 +80,10 @@
       var route = window.location.pathname.slice(base.length);
       if (/^tool\/\d+\/?$/.test(route) && !/^tool\/100\/?$/.test(route)) {
         createLink('preload', 'api/tools/' + route.split('/')[1] + '.json?v=__AKAI_APP_VERSION__', null, null, 'fetch');
-      } else if (!route || route === 'tool/100' || route === 'classic') {
+      } else if (!route) {
+        // 首頁只用輕量清單（沒有長介紹），預載它才不會多搬一份用不到的資料
+        createLink('preload', 'api/tools-lite.json?v=__AKAI_APP_VERSION__', null, null, 'fetch');
+      } else if (route === 'tool/100' || route === 'classic') {
         createLink('preload', 'api/tools.json?v=__AKAI_APP_VERSION__', null, null, 'fetch');
       }
       // teacher.json 僅在舊版 TeacherIntro 組件用到，新版 BulletinHome 不再即時載入；

@@ -13,6 +13,7 @@
 import { useState, useMemo, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import type { EducationalTool } from '@/lib/data';
+import { HOME_CATALOGUE_QUERY_KEY, fetchHomeCatalogue } from '@/lib/toolCatalogue';
 import { useFavorites } from '@/hooks/useFavorites';
 import { useRecentTools } from '@/hooks/useRecentTools';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
@@ -163,16 +164,12 @@ export function BulletinHome() {
   }, [selectedCategory, searchQuery, showFavorites]);
 
   // 從 API 取得工具
+  // 首頁只讀輕量清單（沒有長介紹）；完整資料由各工具頁自己載入
   const { data: toolsData, isLoading } = useQuery({
-    queryKey: ['/api/tools'],
+    queryKey: HOME_CATALOGUE_QUERY_KEY,
     queryFn: async () => {
-      const staticUrl = `${import.meta.env.BASE_URL}api/tools.json?v=${import.meta.env.VITE_APP_VERSION}`;
       try {
-        const staticResponse = await fetch(staticUrl);
-        if (staticResponse.ok) return (await staticResponse.json()) as EducationalTool[];
-        const response = await fetch('/api/tools');
-        if (response.ok) return (await response.json()) as EducationalTool[];
-        throw new Error('無法獲取工具數據');
+        return await fetchHomeCatalogue();
       } catch (err) {
         console.error('數據獲取失敗:', err);
         throw err;

@@ -6,6 +6,8 @@
  *   - server/data/tools.json = 單一來源（Single Source of Truth），id 1-99
  *   - client/public/api/tools.json = 衍生檔，內容 = server 全部 + #100 工具索引神器
  *   - #100 是「特殊工具」（路由 /tool/100 走 ToolIndexAI 元件），只存在 client 端
+ *   - client/public/api/tools-lite.json = 首頁專用輕量清單（同上內容，但拿掉首頁用不到的
+ *     detailedDescription，約占全檔 66%）；完整清單與單筆 api/tools/<id>.json 仍保留長介紹
  *
  * 自動觸發：package.json 的 predev / prebuild
  * 手動觸發：npm run sync-tools-json
@@ -20,6 +22,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const SOURCE = resolve(ROOT, 'server', 'data', 'tools.json');
 const TARGET = resolve(ROOT, 'client', 'public', 'api', 'tools.json');
+const LITE_TARGET = resolve(ROOT, 'client', 'public', 'api', 'tools-lite.json');
 
 const HIGHLIGHT = (s) => `\x1b[36m${s}\x1b[0m`;
 const ERROR = (s) => `\x1b[31m${s}\x1b[0m`;
@@ -89,6 +92,15 @@ function run() {
     }
   } else {
     console.log(OK(`✅ tools.json 已同步，無需更新（${source.length} + #100 = ${merged.length}）`));
+  }
+
+  // 首頁專用輕量清單：只拿掉 detailedDescription，其他欄位（含 audienceFit 推薦理由）原樣保留
+  const lite = merged.map(({ detailedDescription: _detailedDescription, ...rest }) => rest);
+  const newLite = JSON.stringify(lite) + '\n';
+  const currentLite = existsSync(LITE_TARGET) ? readFileSync(LITE_TARGET, 'utf-8') : '';
+  if (currentLite !== newLite) {
+    writeFileSync(LITE_TARGET, newLite, 'utf-8');
+    console.log(OK(`✅ 已更新首頁輕量清單 tools-lite.json（${lite.length} 筆，${Math.round(Buffer.byteLength(newLite) / 1024)} KB）`));
   }
 
   // 自動生成 client/src/lib/toolUrlMap.ts
