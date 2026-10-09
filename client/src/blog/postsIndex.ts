@@ -15,6 +15,27 @@ export type BlogPostMeta = Omit<BlogPost, 'body'>;
 
 export const POSTS_INDEX: BlogPostMeta[] = [
   {
+    "slug": "shimen-meeting-hub-129-teacher-meeting-records",
+    "title": "#129 開完會還在問「哪天截止？」：石小會議集合站把每週晨會留成一個網址",
+    "excerpt": "晨會聽過的截止日，回到教室就糊了？石門國小把 115 學年度上學期的教師會議，做成一週一頁、依處室分區、能搜尋能打勾的互動紀錄入口。",
+    "publishedAt": "2026-10-09",
+    "readingMinutes": 5,
+    "tags": [
+      "會議記錄",
+      "教師晨會",
+      "導師待辦",
+      "行政報告",
+      "石門國小"
+    ],
+    "toolIds": [
+      129,
+      80,
+      84
+    ],
+    "coverEmoji": "📋",
+    "coverColor": "green"
+  },
+  {
     "slug": "shimen-campus-128-3d-campus-exploration",
     "title": "#128 石門・校園漫遊：把「校園在哪裡」變成孩子走得出來的探索",
     "excerpt": "新生聽完導覽，真的能說出自己的路線嗎？用 Godot 3D 校園探索，把景點、遊具與挑戰變成觀察起點，再接回實際校園與課堂分享。",

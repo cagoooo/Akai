@@ -2,6 +2,13 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.141] - 2026-10-09 — 新增工具 #129：115石小教師會議報告集合站 (上學期)
+
+- 新增 #129「115石小教師會議報告集合站 (上學期)」（實用工具）：石門國小 115 學年度上學期預備週、第 1～6 週與期初校務會議的互動紀錄入口，是 #80（114 下學期）的新學年續作。
+- 客群推薦：老師端，明列導師／科任／行政三種職務，不限學段與處室（各處室理由皆已撰寫）；學生端不推薦。實測所有老師輪廓都推薦得到，學生輪廓正確排除。
+- 卡片主圖截圖時把頁面上的校內共用資料夾路徑換成通用說明，避免預覽圖外露內網位址。
+- 手寫長文 POST_129（slug `shimen-meeting-hub-129-teacher-meeting-records`），配對 #80、#84。
+
 ## [3.6.140] - 2026-10-07 — 公共程式平臺上架前資安修補：源碼檢測中風險以上歸零
 
 - 為申請數位發展部公共程式平臺上架，以 Semgrep 1.179.0（OWASP Top 10、JavaScript、TypeScript、React、Node.js、Express、Secrets、GitHub Actions 規則集）、npm audit、GitHub Secret Scanning、ESET 進行源碼檢測。修補前 Semgrep 有 23 項 Medium，Cloud Functions 正式環境相依套件 8 項 Moderate，`mcp-scripts/` 27 項（含 3 項 Critical）。
