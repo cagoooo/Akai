@@ -2,6 +2,13 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.144] - 2026-10-11 — 分頁被切到背景時中斷的計數請求不再觸發告警
+
+- 2026-10-10 Sentry `FirebaseError: internal`（JAVASCRIPT-REACT-V）：1 位訪客、1 次，iPhone Safari，在 `/tool/84/` 按「立即使用」後，`[trackToolUsage] callable 失敗，改用本地計數` 這則 `console.warn` 被擷取回報（level: warning）。
+- 成因判斷：按下「立即使用」會先 `window.open` 開新分頁，原分頁立刻被切到背景，iOS 暫停背景分頁、中斷送出中的 `incrementToolClick`；Firebase SDK 把這類客戶端失敗統一包成小寫的 `functions/internal`。查 Cloud Logging：該函式 2026-10-10 起 19 筆 200、18 筆 204（CORS 預檢），事件前後 2 小時沒有任何警告或錯誤，後端無異常。這點沒有取得該訪客裝置的紀錄，屬於推論。
+- `createUnreliableNetworkTracker` 新增兩種「網路不穩」時段：分頁在背景（`document.visibilityState === 'hidden'`），以及回到前景後 15 秒內（背景期間被凍結的請求，失敗結果常在返回時才浮現）。仍只套用在被中止型的錯誤（`functions/internal` 小寫 `internal`、`TypeError: Failed to fetch／Load failed`）；後端回的錯誤與前景中發生的連線錯誤照常回報。
+- 觀察（未處理）：這個流程下，被中斷的那一次點擊只會記在本機（`localToolStats_*`），伺服器端少計 1 次。目前沒有量化資料，之後若要處理，可評估在 `window.open` 之前就先送出計數，或改用不受分頁背景化影響的送出方式。
+
 ## [3.6.143] - 2026-10-09 — 首頁瘦身：輕量工具清單與頁尾大頭照（效能體檢第一批）
 
 - 起因：2026-10-09 Lighthouse 報告（行動版、模擬慢網路）效能 41 分，首頁共搬 1,466 KiB；其中工具清單 `tools.json` 壓縮後 169 KB，而 66%（280 KB 原始大小）是首頁完全用不到的 `detailedDescription` 長介紹。

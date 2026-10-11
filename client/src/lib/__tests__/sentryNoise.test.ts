@@ -88,16 +88,21 @@ const firebaseError = (code: string, message: string) =>Object.assign(new Error(
 
 function trackerHarness(online = true) {
   const target = new EventTarget();
+  // visibilitychange 掛在 document 上，不是 window
+  const documentTarget = new EventTarget();
   let time = 1_000_000;
   let tick: () => void = () => {};
-  const state = { online };
+  const state = { online, hidden: false };
   const isNetworkUnreliable = createUnreliableNetworkTracker(target, {
     now: () => time,
     isOnline: () => state.online,
+    isHidden: () => state.hidden,
+    visibilityTarget: documentTarget,
     every: (callback) => { tick = callback; },
   });
   return {
     target,
+    documentTarget,
     state,
     isNetworkUnreliable,
     advance: (ms: number) => { time += ms; },
@@ -123,6 +128,33 @@ describe('網路不可靠時被中止的請求不送進 Sentry', () => {
     advance(14_000);
     expect(isNetworkUnreliable()).toBe(true);
     advance(2_000);
+    expect(isNetworkUnreliable()).toBe(false);
+  });
+
+  it('分頁在背景，以及回到前景後 15 秒內', () => {
+    // 2026-10-10 告警：iPhone Safari 按「立即使用」開新分頁，原分頁被切到背景，計數的 callable 被中斷
+    const { documentTarget, state, isNetworkUnreliable, advance } = trackerHarness();
+    expect(isNetworkUnreliable()).toBe(false);
+    state.hidden = true;
+    documentTarget.dispatchEvent(new Event('visibilitychange'));
+    advance(5 * 60_000);
+    expect(isNetworkUnreliable()).toBe(true);
+    // 回到前景：背景期間被凍結的請求，失敗結果常在這時才浮現
+    state.hidden = false;
+    documentTarget.dispatchEvent(new Event('visibilitychange'));
+    advance(14_000);
+    expect(isNetworkUnreliable()).toBe(true);
+    advance(2_000);
+    expect(isNetworkUnreliable()).toBe(false);
+  });
+
+  it('切到背景的瞬間不會誤把「之後才發生」的前景錯誤算進去', () => {
+    const { documentTarget, state, isNetworkUnreliable, advance } = trackerHarness();
+    state.hidden = true;
+    documentTarget.dispatchEvent(new Event('visibilitychange'));
+    state.hidden = false;
+    documentTarget.dispatchEvent(new Event('visibilitychange'));
+    advance(20_000);
     expect(isNetworkUnreliable()).toBe(false);
   });
 

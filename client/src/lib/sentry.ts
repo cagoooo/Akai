@@ -99,6 +99,10 @@ const SLEEP_GAP_MS = 120_000;
 interface NetworkTrackerOptions {
   now?: () => number;
   isOnline?: () => boolean;
+  /** 分頁目前是否在背景（預設看 document.visibilityState） */
+  isHidden?: () => boolean;
+  /** visibilitychange 事件掛在 document 上，不是 window（預設用 document） */
+  visibilityTarget?: Pick<EventTarget, 'addEventListener'>;
   every?: (callback: () => void, ms: number) => unknown;
 }
 
@@ -107,12 +111,16 @@ interface NetworkTrackerOptions {
  * - 頁面卸載（重新整理、套用 PWA 更新、關閉分頁）：瀏覽器先觸發 pagehide 再中止進行中的請求。
  *   不用 beforeunload：它會讓 Firefox 停用 back/forward cache。
  * - 裝置離線，或剛恢復連線、剛從睡眠喚醒的 15 秒內。睡眠時計時器會停擺，以此偵測喚醒。
+ * - 分頁在背景，或剛回到前景的 15 秒內：手機按「立即使用」會先開新分頁，原分頁被切到背景，
+ *   iOS 會暫停背景分頁、中斷送出中的請求；請求的失敗常在使用者回到原分頁時才被處理。
  */
 export function createUnreliableNetworkTracker(
   target: Pick<EventTarget, 'addEventListener'>,
   {
     now = () => Date.now(),
     isOnline = () => navigator.onLine,
+    isHidden = () => typeof document !== 'undefined' && document.visibilityState === 'hidden',
+    visibilityTarget = typeof document !== 'undefined' ? document : undefined,
     every = (callback, ms) => setInterval(callback, ms),
   }: NetworkTrackerOptions = {},
 ) {
@@ -123,12 +131,14 @@ export function createUnreliableNetworkTracker(
   // 從 back/forward cache 還原時頁面又恢復運作
   target.addEventListener('pageshow', () => { unloading = false; });
   target.addEventListener('online', () => { recoveredAt = now(); });
+  // 回到前景視為剛恢復：背景期間被凍結的請求，失敗結果常在這時才浮現
+  visibilityTarget?.addEventListener('visibilitychange', () => { if (!isHidden()) recoveredAt = now(); });
   every(() => {
     const tick = now();
     if (tick - lastTick > SLEEP_GAP_MS) recoveredAt = tick;
     lastTick = tick;
   }, SLEEP_CHECK_INTERVAL_MS);
-  return () => unloading || !isOnline() || now() - recoveredAt < NETWORK_RECOVERY_GRACE_MS;
+  return () => unloading || isHidden() || !isOnline() || now() - recoveredAt < NETWORK_RECOVERY_GRACE_MS;
 }
 
 /** 首頁、工具頁與 toolLoader 載入工具資料失敗時丟出的訊息 */
