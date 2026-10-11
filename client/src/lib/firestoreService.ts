@@ -1,6 +1,7 @@
 // Firestore 資料庫服務層
 import { db, isFirebaseAvailable, waitForAppCheck } from './firebase';
 import { shouldReportErrorToFirestore } from './errorReporting';
+import { reportTrackFailure, watchPageHidden } from './toolTrackFailure';
 import {
     doc,
     getDoc,
@@ -169,6 +170,8 @@ export async function trackToolUsage(toolId: number): Promise<ToolStats> {
 
     // 主管道：call Cloud Function
     if (isFirebaseAvailable() && db) {
+        // 記錄呼叫期間分頁是否曾被切到背景（手機按「立即使用」會先開新分頁），失敗時用來分辨原因
+        const visibility = watchPageHidden();
         try {
             const { getFunctions, httpsCallable } = await import('firebase/functions');
             // App Check 延後初始化；等就緒再送，callable 才帶得上 token
@@ -191,6 +194,10 @@ export async function trackToolUsage(toolId: number): Promise<ToolStats> {
             };
         } catch (err) {
             console.warn('[trackToolUsage] callable 失敗，改用本地計數:', err);
+            // 只量測、不告警：GA 事件 tool_track_failed_hidden／_visible（說明見 toolTrackFailure.ts）
+            reportTrackFailure(err, { wentHidden: visibility.wentHidden(), device: context.device });
+        } finally {
+            visibility.stop();
         }
     }
 

@@ -2,6 +2,14 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.145] - 2026-10-11 — 量測工具使用計數失敗的頻率與原因（只記錄、不告警）
+
+- 起因：v3.6.144 把「分頁被切到背景而中斷的計數請求」靜音後，日後就看不到它發生的頻率；而被中斷的那次點擊伺服器端會少計 1 次（改記在訪客本機），需要數據才能決定值不值得改流程。
+- `trackToolUsage`（`firestoreService.ts`）失敗時改送 Google Analytics 事件，不送 Sentry：`tool_track_failed_hidden`（呼叫期間分頁曾被切到背景）與 `tool_track_failed_visible`（一直在前景）；參數含 `reason`（`app_check`／`network`／`other`）、`device`、`error_code`。分兩個事件名稱，是為了不必在 GA 後台另外設定自訂維度就能直接比較數量。新增 `client/src/lib/toolTrackFailure.ts`。
+- 讀法：一週後到 GA4 →「事件」看兩個事件的次數；成功次數看 Cloud Logging 的 `incrementtoolclick`（近 7 天約 141 筆）。GA 可能被廣告攔截擋掉，所以失敗次數只會少估、不會多估。
+- 判斷依據：`hidden` 占多數且比例不小，才值得評估「開新分頁前先預熱 Firebase／App Check」或「離開分頁也能送完的直送方式」；比例很低就維持現狀。
+- 只加量測，不改計數流程；失敗時仍照舊退回本機計數。
+
 ## [3.6.144] - 2026-10-11 — 分頁被切到背景時中斷的計數請求不再觸發告警
 
 - 2026-10-10 Sentry `FirebaseError: internal`（JAVASCRIPT-REACT-V）：1 位訪客、1 次，iPhone Safari，在 `/tool/84/` 按「立即使用」後，`[trackToolUsage] callable 失敗，改用本地計數` 這則 `console.warn` 被擷取回報（level: warning）。
