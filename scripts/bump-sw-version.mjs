@@ -16,7 +16,7 @@
  */
 
 import { readFileSync, writeFileSync } from 'node:fs';
-import { execSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -32,7 +32,7 @@ const semver = pkg.version;
 
 let gitHash = 'nogit';
 try {
-  gitHash = execSync('git rev-parse --short HEAD', { cwd: ROOT, encoding: 'utf-8' }).trim();
+  gitHash = execFileSync('git', ['rev-parse', '--short', 'HEAD'], { shell: false, cwd: ROOT, encoding: 'utf-8' }).trim();
 } catch {
   // 不是 git 環境或沒安裝 git，fallback
 }

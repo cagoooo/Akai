@@ -1,3 +1,4 @@
+import { safeDiagnostic } from '@/lib/safeDiagnostic';
 // 音效管理器
 // 使用 import.meta.env.BASE_URL 支援不同部署環境
 
@@ -51,7 +52,7 @@ class SoundManager {
       // 重置音效以便重複播放
       sound.currentTime = 0;
       sound.play().catch(error => {
-        console.warn(`Failed to play sound: ${soundName}`, error);
+        safeDiagnostic('[Sound] 播放失敗', error);
       });
     }
   }

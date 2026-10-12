@@ -20,6 +20,30 @@ const MAX_IMAGE_CACHE_ENTRIES = 400; // 圖片快取最多 400 張（81 工具 �
 // 獲取 base path (支援 GitHub Pages)
 const BASE_PATH = self.location.pathname.replace('sw.js', '');
 
+// 診斷保留操作識別、公開資產檔名與清洗後的錯誤堆疊，移除網址參數及可辨識權杖。
+function reportCacheFailure(label, url, error) {
+  let asset = 'resource';
+  try {
+    const filename = new URL(url, self.location.href).pathname.split('/').pop() || '';
+    if (/^[a-zA-Z0-9_-]+\.(?:js|css|woff2?|png|jpe?g|webp|svg|ico|html)$/.test(filename)) asset = filename;
+  } catch { /* 無效網址只回報操作識別 */ }
+  const names = ['Error', 'TypeError', 'AbortError', 'NetworkError', 'QuotaExceededError'];
+  const cleanText = (value) => String(value || '').slice(0, 10000)
+    .replace(/https?:\/\/[^\s<>"']+/g, (raw) => {
+      const suffix = raw.match(/[),.;]+$/)?.[0] || '';
+      try {
+        const parsed = new URL(suffix ? raw.slice(0, -suffix.length) : raw);
+        parsed.username = ''; parsed.password = ''; parsed.search = ''; parsed.hash = '';
+        return parsed.href + suffix;
+      } catch { return '[無效網址]' + suffix; }
+    })
+    .replace(/\bBearer\s+[A-Za-z0-9._~+/-]+=*/gi, 'Bearer [已遮蔽]')
+    .replace(/\b(api[_-]?key|access[_-]?token|authorization|password)\b["']?\s*[:=]\s*["']?[^\s,;"')]+/gi, '$1=[已遮蔽]');
+  console.warn(label, { asset, type: error && names.includes(error.name) ? error.name : 'Error',
+    ...(error instanceof Error ? { message: cleanText(error.message), stack: cleanText(error.stack) } : {}),
+  });
+}
+
 // 預快取資源 - 使用相對於 base path 的路徑
 // ⚠️ 不再 PRECACHE index.html / BASE_PATH — 那會把舊版 HTML 永久 cache 起來，
 // 後續 deploy 換新 chunk hash 時舊 HTML 還引用舊 chunk → 404 → 整頁炸開。
@@ -113,7 +137,7 @@ self.addEventListener('install', (event) => {
         Promise.allSettled(
           PRECACHE_ASSETS.map((url) =>
             cache.add(url).catch((err) => {
-              console.warn(`[SW] 無法預快取靜態資源: ${url}`, err);
+              reportCacheFailure('[SW] 靜態資源預快取失敗', url, err);
             })
           )
         )
@@ -125,7 +149,7 @@ self.addEventListener('install', (event) => {
           Promise.allSettled(
             PRECACHE_IMAGES.map((url) =>
               cache.add(url).catch((err) => {
-                console.warn(`[SW] 無法預快取首屏圖: ${url}`, err);
+                reportCacheFailure('[SW] 首屏圖預快取失敗', url, err);
               })
             )
           )
@@ -178,7 +202,7 @@ self.addEventListener('activate', (event) => {
                 }
                 console.log(`[SW] 已備份 ${assetsToArchive.length} 個舊資源至 Archive`);
               } catch (e) {
-                console.warn('[SW] 備份舊快取資源失敗:', e);
+                reportCacheFailure('[SW] 備份舊快取資源失敗', '', e);
               }
             }
 
@@ -263,7 +287,7 @@ async function cacheFirst(request) {
       // 🚀 [緊急修復] 自癒機制：如果資源 (尤其是 .js) 發生 404，代表可能伺服器已更新但本地 index.html 還是舊的
       if (networkResponse.status === 404) {
         if (request.url.endsWith('.js') || request.url.includes('/assets/')) {
-          console.warn('[SW] 偵測到關鍵資產 404，正在清理 index.html 快取以強制自癒...', request.url);
+          reportCacheFailure('[SW] 關鍵資產 404，清理頁面快取', request.url);
           caches.open(STATIC_CACHE).then(cache => {
             cache.delete(`${BASE_PATH}index.html`);
             cache.delete(BASE_PATH); // 也刪除根路徑的快取
@@ -273,7 +297,7 @@ async function cacheFirst(request) {
     }
     return networkResponse;
   } catch (error) {
-    console.warn('[SW] Cache First 失敗:', request.url, error);
+    reportCacheFailure('[SW] Cache First 失敗', request.url, error);
 
     // 如果是 JS 加載失敗，嘗試清理 index 快取
     if (request.url.endsWith('.js')) {
@@ -346,7 +370,7 @@ async function staleWhileRevalidate(request) {
       return networkResponse;
     })
     .catch((error) => {
-      console.warn('[SW] 背景更新失敗:', request.url, error);
+      reportCacheFailure('[SW] 背景更新失敗', request.url, error);
       return null;
     });
 

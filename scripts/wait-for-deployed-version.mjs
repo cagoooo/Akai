@@ -1,4 +1,4 @@
-import { appendFileSync } from 'node:fs';
+import { appendRunnerSummary } from './lib/path-safety.mjs';
 import { pathToFileURL } from 'node:url';
 
 export function matchesDeployment(version, expectedSha) {
@@ -38,7 +38,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       siteUrl: process.env.SITE_URL || 'https://cagoooo.github.io/Akai/',
       maxWaitMs: process.argv.includes('--once') ? 0 : 600000,
     });
-    if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY,
+    appendRunnerSummary(
       `\n已核對正式站 **v${version.version}**，部署 SHA \`${version.gitHash}\`。\n`);
   } catch (error) {
     console.error(error.message);

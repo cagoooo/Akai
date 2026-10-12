@@ -1,4 +1,5 @@
 /** 公開分析事件統一走受控 callable，client 不直接寫統計集合。 */
+import { createSecureRandomId } from './randomId';
 import { userInteractionReady } from './userInteraction';
 
 export async function invokePublicAnalytics(payload: Record<string, unknown>): Promise<boolean> {
@@ -17,9 +18,11 @@ export async function invokePublicAnalytics(payload: Record<string, unknown>): P
     functions,
     'recordPublicAnalytics',
   );
-  const eventId =
-    globalThis.crypto?.randomUUID?.() ??
-    `${Date.now().toString(36)}_${Math.random().toString(36).slice(2)}_analytics`;
+  const eventId = createSecureRandomId();
+  if (!eventId) {
+    console.warn('無法產生安全事件識別碼，本次雲端統計未送出。');
+    return false;
+  }
   await callable({ ...payload, eventId });
   return true;
 }

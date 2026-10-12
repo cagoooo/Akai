@@ -1,10 +1,12 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import * as randomId from '../randomId';
 const mocks = vi.hoisted(() => ({ ready: vi.fn(), auth: vi.fn(), callable: vi.fn(), httpsCallable: vi.fn() }));
 vi.mock('../userInteraction', () => ({ userInteractionReady: Promise.resolve() }));
 vi.mock('@/lib/firebase', () => ({ default: {}, waitForAppCheck: mocks.ready }));
 vi.mock('@/lib/authService', () => ({ ensureSignedIn: mocks.auth }));
 vi.mock('firebase/functions', () => ({ getFunctions: vi.fn(() => ({})), httpsCallable: mocks.httpsCallable }));
 import { invokePublicAnalytics } from '../publicAnalyticsService';
+afterEach(() => vi.restoreAllMocks());
 
 describe('統計送出前的驗證', () => {
   beforeEach(() => {
@@ -28,5 +30,12 @@ describe('統計送出前的驗證', () => {
     mocks.auth.mockResolvedValue(null);
     await expect(invokePublicAnalytics({ kind: 'visitorCount' })).rejects.toThrow('認證尚未就緒');
     expect(mocks.callable).not.toHaveBeenCalled();
+  });
+  it('無系統亂數時明確停止送出，不使用可預測去重ID', async () => {
+    vi.spyOn(randomId, 'createSecureRandomId').mockReturnValue(null);
+    const warning = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    expect(await invokePublicAnalytics({ kind: 'visitorCount' })).toBe(false);
+    expect(mocks.callable).not.toHaveBeenCalled();
+    expect(warning).toHaveBeenCalledWith('無法產生安全事件識別碼，本次雲端統計未送出。');
   });
 });

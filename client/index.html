@@ -52,6 +52,8 @@
       // 動態插入 link 標籤
       var head = document.head;
       var createLink = function (rel, href, type, sizes, asType) {
+        // 僅接受相對的已知資源路徑，避免導覽文字改變預載來源。
+        if (!/^(?:[a-z0-9][a-z0-9._-]*\.(?:svg|ico|png|json)|api\/(?:tools(?:-lite)?|teacher)\.json(?:\?v=[a-zA-Z0-9._-]+)?|api\/tools\/[1-9]\d{0,5}\.json\?v=[a-zA-Z0-9._-]+)$/.test(href)) return;
         var link = document.createElement('link');
         link.rel = rel;
         link.href = base + href;
@@ -78,7 +80,7 @@
 
       // 動態預載 API
       var route = window.location.pathname.slice(base.length);
-      if (/^tool\/\d+\/?$/.test(route) && !/^tool\/100\/?$/.test(route)) {
+      if (/^tool\/[1-9]\d{0,5}\/?$/.test(route) && !/^tool\/100\/?$/.test(route)) {
         createLink('preload', 'api/tools/' + route.split('/')[1] + '.json?v=__AKAI_APP_VERSION__', null, null, 'fetch');
       } else if (!route) {
         // 首頁只用輕量清單（沒有長介紹），預載它才不會多搬一份用不到的資料

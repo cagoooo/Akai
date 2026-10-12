@@ -6,6 +6,7 @@
  */
 
 import axios from "axios";
+import { literalChatText, notificationFailureDetails } from "./googleChatCardSafety";
 
 export async function pushToGoogleChat(
     webhookUrl: string | undefined,
@@ -21,7 +22,7 @@ export async function pushToGoogleChat(
     }
 
     const payload: any = {
-        text: text.slice(0, 1000), // Google Chat 限制 text 長度
+        text: literalChatText(text).slice(0, 1000), // 使用者內容不得變成 Chat 提及指令
     };
 
     if (cardsV2 && Array.isArray(cardsV2) && cardsV2.length > 0) {
@@ -41,14 +42,14 @@ export async function pushToGoogleChat(
     } catch (error: any) {
         console.error(
             `[${contextLabel}] Failed to send Google Chat notification:`,
-            JSON.stringify(error.response?.data) || error.message
+            notificationFailureDetails(error)
         );
 
         if (!cardsV2 || !Array.isArray(cardsV2) || cardsV2.length === 0) return;
 
         try {
             const fallbackResponse = await axios.post(url, {
-                text: `${text.slice(0, 900)}\n\n(卡片格式被 Google Chat 拒收，已改送純文字備援)`,
+                text: `${literalChatText(text).slice(0, 900)}\n\n(卡片格式被 Google Chat 拒收，已改送純文字備援)`,
             }, {
                 headers: {
                     "Content-Type": "application/json",
@@ -60,7 +61,7 @@ export async function pushToGoogleChat(
         } catch (fallbackError: any) {
             console.error(
                 `[${contextLabel}] Failed to send Google Chat fallback text notification:`,
-                JSON.stringify(fallbackError.response?.data) || fallbackError.message
+                notificationFailureDetails(fallbackError)
             );
         }
     }

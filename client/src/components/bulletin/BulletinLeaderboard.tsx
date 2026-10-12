@@ -1,3 +1,4 @@
+import { safeDiagnostic } from '@/lib/safeDiagnostic';
 import { useMemo } from 'react';
 import { Tape } from '@/components/primitives/Tape';
 import { Pin } from '@/components/primitives/Pin';
@@ -75,7 +76,7 @@ export function BulletinLeaderboard({ tools, deltas7d, hasDeltaHistory }: Props)
     if (newWin) newWin.opener = null;
     // 背景追蹤
     addToRecent(tool.id);
-    trackToolUsage(tool.id).catch((err) => console.error('追蹤失敗:', err));
+    trackToolUsage(tool.id).catch((err) => safeDiagnostic('追蹤失敗:', err, 'error'));
     
     // 上報 engagement 事件以觸發 Google Chat Webhook 通知
     notifyEngagementAfterHomeEntry({

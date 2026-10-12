@@ -442,13 +442,13 @@ async function main() {
   console.log(`🎨 heatmap OG：精選 ${featuredIds.slice(0, 4).join(', ')}（共 ${tools.length} 款工具）\n`);
 
   const pngBuffer = await generateOG(tools, featuredIds);
-  const hash = createHash('md5').update(pngBuffer).digest('hex').slice(0, 8);
+  const hash = createHash('sha256').update(pngBuffer).digest('hex').slice(0, 16);
   const filename = `og-preview-heatmap-${hash}.png`;
   const outPath = resolve(PUBLIC_DIR, filename);
 
   // 清掉舊的 heatmap PNG
   for (const f of readdirSync(PUBLIC_DIR)) {
-    if (/^og-preview-heatmap-[a-f0-9]{8}\.png$/.test(f) && f !== filename) {
+    if (/^og-preview-heatmap-(?:[a-f0-9]{8}|[a-f0-9]{16})\.png$/.test(f) && f !== filename) {
       try { unlinkSync(resolve(PUBLIC_DIR, f)); } catch { /* ignore */ }
     }
   }

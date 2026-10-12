@@ -19,15 +19,16 @@
  *   npm run subset-web-font
  */
 
-import { readFileSync, writeFileSync, readdirSync, statSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, lstatSync, existsSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import subsetFont from 'subset-font';
 // subset-font 自帶的 harfbuzz，用來查來源字型實際收錄哪些字
 import harfbuzz from 'harfbuzzjs';
+import { containedRealPath, selectedFontPath } from './lib/path-safety.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const FONT_SRC = process.env.FONT_SRC || 'C:/Windows/Fonts/NotoSansTC-VF.ttf';
+const FONT_SRC = selectedFontPath(process.env.FONT_SRC || 'C:/Windows/Fonts/NotoSansTC-VF.ttf');
 const FONT_DIR = resolve(ROOT, 'client/public/fonts');
 const INDEX_HTML = resolve(ROOT, 'client/index.html');
 const MARK_START = '<!-- akai-sans-tc:start（scripts/subset-web-font.mjs 產生，勿手改） -->';
@@ -44,7 +45,9 @@ if (!existsSync(FONT_SRC)) {
 function walk(dir, out = []) {
   for (const name of readdirSync(dir)) {
     const p = join(dir, name);
-    if (statSync(p).isDirectory()) walk(p, out);
+    const stat = lstatSync(p);
+    if (stat.isSymbolicLink()) continue; // 不追蹤來源目錄外連結或循環。
+    if (stat.isDirectory()) walk(containedRealPath(ROOT, p), out);
     else if (/\.(tsx?|css|json)$/.test(name) && !SKIP.some((re) => re.test(p))) out.push(p);
   }
   return out;
@@ -58,7 +61,7 @@ const files = [
 
 const collect = (paths, set) => {
   for (const f of paths) {
-    for (const c of readFileSync(f, 'utf-8')) {
+    for (const c of readFileSync(containedRealPath(ROOT, f), 'utf-8')) {
       // 所有非 ASCII 字元都收（含 ♡⬅＋ 等符號）；來源字型沒有字形的，下面用 harfbuzz 濾掉
       if (c.codePointAt(0) > 0x7e) set.add(c);
     }

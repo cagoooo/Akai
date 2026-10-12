@@ -16,6 +16,7 @@ import { log } from './vite';
 import path from "path";
 import { getTimestamp, nowSql } from '../db/adapter';
 import fs from "node:fs/promises";
+import { publicErrorResponse, publicHealthStatus } from './public-diagnostics';
 
 // 定義類型以確保類型安全
 interface VisitorStats {
@@ -694,13 +695,10 @@ export function registerRoutes(app: Express): Server {
         _databaseType: dbType
       });
 
-      res.json(info);
+      res.json(publicHealthStatus(info, app.get('env') === 'development'));
     } catch (error) {
       console.error("Error fetching system info:", error);
-      res.status(500).json({
-        message: "獲取系統信息失敗",
-        error: error instanceof Error ? error.message : String(error)
-      });
+      res.status(500).json(publicErrorResponse('獲取系統資訊失敗', error, app.get('env') === 'development'));
     }
   });
 
@@ -718,25 +716,25 @@ export function registerRoutes(app: Express): Server {
 
       const responseTime = Date.now() - startTime;
 
-      res.json({
+      res.json(publicHealthStatus({
         status: "connected",
         databaseType: dbType,
         responseTime: `${responseTime}ms`,
         version: Array.isArray(result) ? result[0]?.version : result.version,
         timestamp: Array.isArray(result) ? result[0]?.now : result.now,
         _cached: false
-      });
+      }, app.get('env') === 'development'));
     } catch (error) {
       console.error("Database health check failed:", error);
 
-      res.json({
+      res.json(publicHealthStatus({
         status: "error",
         databaseType: dbType,
         message: "無法連接到數據庫",
         error: error instanceof Error ? error.message : String(error),
         timestamp: new Date().toISOString(),
         _cached: true
-      });
+      }, app.get('env') === 'development'));
     }
   });
 

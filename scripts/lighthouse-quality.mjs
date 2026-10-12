@@ -1,5 +1,6 @@
-import { appendFileSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
+import { appendRunnerSummary } from './lib/path-safety.mjs';
 
 export const THRESHOLDS = { performance: 0, accessibility: 0.80, 'best-practices': 0.90, seo: 0.75 };
 
@@ -26,7 +27,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   try {
     const result = evaluateManifest(JSON.parse(readFileSync('.lighthouseci/manifest.json', 'utf8')));
     console.log(result.markdown);
-    if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, `\n${result.markdown}\n`);
+    appendRunnerSummary(`\n${result.markdown}\n`);
     if (result.failed.length) throw new Error(`Lighthouse 未達標：${result.failed.join('; ')}`);
   } catch (error) {
     console.error(error.message);

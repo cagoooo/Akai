@@ -10,6 +10,7 @@ import * as functions from "firebase-functions/v1";
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { defineSecret } from "firebase-functions/params";
 import { pushToGoogleChat } from "./lib/googleChatNotify";
+import { escapeChatCardText, safeChatCardUrl } from "./lib/googleChatCardSafety";
 import { createGithubErrorIssue } from "./lib/githubIssueNotify";
 import {
     SEVERITY_LABEL,
@@ -58,7 +59,7 @@ export const onUserCreated = functions
             card: {
                 header: {
                     title: "👤 新使用者註冊成功",
-                    subtitle: `電子郵件: ${email}`,
+                    subtitle: `電子郵件: ${escapeChatCardText(email)}`,
                     imageUrl: "https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/person/default/48px.svg",
                     imageType: "CIRCLE",
                 },
@@ -69,13 +70,13 @@ export const onUserCreated = functions
                             {
                                 decoratedText: {
                                     topLabel: "使用者帳號 UID",
-                                    text: `<b>${uid}</b>`,
+                                    text: `<b>${escapeChatCardText(uid)}</b>`,
                                 },
                             },
                             {
                                 decoratedText: {
                                     topLabel: "顯示名稱",
-                                    text: displayName,
+                                    text: escapeChatCardText(displayName),
                                 },
                             },
                             {
@@ -211,7 +212,7 @@ export const onErrorLogCreated = onDocumentCreated(
             card: {
                 header: {
                     title: `${SEVERITY_LABEL[severity]}`,
-                    subtitle: message,
+                    subtitle: escapeChatCardText(message),
                     imageUrl: "https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/error/default/48px.svg",
                     imageType: "CIRCLE",
                 },
@@ -223,7 +224,7 @@ export const onErrorLogCreated = onDocumentCreated(
                             {
                                 decoratedText: {
                                     topLabel: "觸發網址",
-                                    text: `<a href="${url}">${url}</a>`,
+                                    text: `<a href="${escapeChatCardText(safeChatCardUrl(url, SITE_BASE))}">${escapeChatCardText(url)}</a>`,
                                     wrapText: true,
                                 },
                             },
@@ -237,7 +238,7 @@ export const onErrorLogCreated = onDocumentCreated(
                             {
                                 decoratedText: {
                                     topLabel: "瀏覽器代理",
-                                    text: userAgent,
+                                    text: escapeChatCardText(userAgent),
                                     wrapText: true,
                                 },
                             },
@@ -251,7 +252,7 @@ export const onErrorLogCreated = onDocumentCreated(
                             {
                                 decoratedText: {
                                     topLabel: "首次發生 / 版本 / 指紋",
-                                    text: `${firstSeenText} · ${appVersion} · <code>${fingerprint}</code>`,
+                                    text: `${firstSeenText} · ${escapeChatCardText(appVersion)} · <code>${fingerprint}</code>`,
                                     wrapText: true,
                                 },
                             },
@@ -263,17 +264,17 @@ export const onErrorLogCreated = onDocumentCreated(
                         widgets: [
                             {
                                 textParagraph: {
-                                    text: `<font color="#c2410c"><pre>${truncatedStack}</pre></font>`,
+                                    text: `<font color="#c2410c"><pre>${escapeChatCardText(truncatedStack)}</pre></font>`,
                                 },
                             },
                             ...(componentStack
                                 ? [
                                       {
                                           textParagraph: {
-                                              text: `<b>React 元件堆疊：</b><br/><font color="#7c2d12"><pre>${componentStack.slice(
+                                              text: `<b>React 元件堆疊：</b><br/><font color="#7c2d12"><pre>${escapeChatCardText(componentStack.slice(
                                                   0,
                                                   500
-                                              )}</pre></font>`,
+                                              ))}</pre></font>`,
                                           },
                                       },
                                   ]
@@ -289,7 +290,7 @@ export const onErrorLogCreated = onDocumentCreated(
                                             text: "前往 Firestore 查看日誌",
                                             onClick: {
                                                 openLink: {
-                                                    url: `https://console.firebase.google.com/project/akai-e693f/firestore/databases/(default)/data/errorLogs/${event.params.docId}`,
+                                                    url: `https://console.firebase.google.com/project/akai-e693f/firestore/databases/(default)/data/errorLogs/${encodeURIComponent(event.params.docId)}`,
                                                 },
                                             },
                                         },
@@ -348,7 +349,7 @@ export const onWishCreated = onDocumentCreated(
             {
                 decoratedText: {
                     topLabel: "使用者",
-                    text: `<b>${userName}</b>`,
+                    text: `<b>${escapeChatCardText(userName)}</b>`,
                 },
             },
             {
@@ -373,7 +374,7 @@ export const onWishCreated = onDocumentCreated(
             {
                 decoratedText: {
                     topLabel: "內容",
-                    text: content,
+                    text: escapeChatCardText(content),
                     wrapText: true,
                 },
             },
@@ -444,7 +445,7 @@ export const onReviewCreated = onDocumentCreated(
             card: {
                 header: {
                     title: "📝 工具收到新評論",
-                    subtitle: toolTitle,
+                    subtitle: escapeChatCardText(toolTitle),
                     imageUrl: "https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/rate_review/default/48px.svg",
                     imageType: "CIRCLE",
                 },
@@ -455,13 +456,13 @@ export const onReviewCreated = onDocumentCreated(
                             {
                                 decoratedText: {
                                     topLabel: "工具",
-                                    text: `<b>${toolTitle}</b>`,
+                                    text: `<b>${escapeChatCardText(toolTitle)}</b>`,
                                 },
                             },
                             {
                                 decoratedText: {
                                     topLabel: "教師",
-                                    text: userName,
+                                    text: escapeChatCardText(userName),
                                 },
                             },
                             {
@@ -473,7 +474,7 @@ export const onReviewCreated = onDocumentCreated(
                             {
                                 decoratedText: {
                                     topLabel: "評論內容",
-                                    text: comment,
+                                    text: escapeChatCardText(comment),
                                     wrapText: true,
                                 },
                             },
@@ -502,21 +503,11 @@ export const onReviewCreated = onDocumentCreated(
 );
 
 function safeText(value: unknown, fallback = ""): string {
-    return String(value ?? fallback)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .slice(0, 600);
+    return escapeChatCardText(String(value ?? fallback).slice(0, 600));
 }
 
 function safeUrl(value: unknown, fallback = SITE_BASE): string {
-    const raw = String(value || fallback);
-    try {
-        const url = new URL(raw);
-        return url.toString();
-    } catch {
-        return fallback;
-    }
+    return safeChatCardUrl(value, fallback);
 }
 
 // Homepage engagement notifications: tool cards and blog articles.
