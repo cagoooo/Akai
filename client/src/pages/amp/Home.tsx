@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { serializeJsonLd } from "@/lib/jsonLdSafety";
 
 export function AmpHome() {
   return (
@@ -74,8 +75,9 @@ export function AmpHome() {
         </div>
 
         {/* Structured Data for SEO */}
+        {/* 固定資料仍需安全序列化，避免 script 結束標籤與 SSR 實體編碼破壞 JSON。 */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: serializeJsonLd({
             "@context": "https://schema.org",
             "@type": "EducationalOrganization",
             "name": "教育科技創新專區",

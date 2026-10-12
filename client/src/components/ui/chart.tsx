@@ -66,8 +66,10 @@ const ChartContainer = React.forwardRef<
 ChartContainer.displayName = "Chart"
 
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
+  // 避免呼叫端的識別字或色彩跳出選擇器／宣告，僅接受圖表使用的色彩語法。
+  if (!/^[a-zA-Z0-9_-]+$/.test(id)) return null
   const colorConfig = Object.entries(config).filter(
-    ([_, config]) => config.theme || config.color
+    ([key, config]) => /^[a-zA-Z0-9_-]+$/.test(key) && (config.theme || config.color)
   )
 
   if (!colorConfig.length) {
@@ -75,9 +77,7 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   }
 
   return (
-    <style
-      dangerouslySetInnerHTML={{
-        __html: Object.entries(THEMES)
+    <style>{Object.entries(THEMES)
           .map(
             ([theme, prefix]) => `
 ${prefix} [data-chart=${id}] {
@@ -86,15 +86,14 @@ ${colorConfig
     const color =
       itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
       itemConfig.color
-    return color ? `  --color-${key}: ${color};` : null
+    const safeColor = color && /^(?:#[\da-fA-F]{3,8}|[a-zA-Z]+|(?:rgb|rgba|hsl|hsla|oklch|oklab)\([\d\s.,%+/-]+\)|var\(--[a-zA-Z0-9_-]+\)|(?:rgb|rgba|hsl|hsla|oklch|oklab)\(var\(--[a-zA-Z0-9_-]+\)\))$/.test(color)
+    return safeColor ? `  --color-${key}: ${color};` : null
   })
   .join("\n")}
 }
 `
           )
-          .join("\n"),
-      }}
-    />
+          .join("\n")}</style>
   )
 }
 

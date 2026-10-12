@@ -6,8 +6,8 @@
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/service-worker.js').then(function() {
         document.querySelector('#status').textContent = '服務工作器安裝成功';
-      }).catch(function(error) {
-        document.querySelector('#status').textContent = '服務工作器安裝失敗: ' + error;
+      }).catch(function() {
+        document.querySelector('#status').textContent = '服務工作器安裝失敗，請稍後重試。';
       });
     } else {
       document.querySelector('#status').textContent = '此瀏覽器不支援服務工作器';

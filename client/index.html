@@ -435,6 +435,19 @@
               var externalLink = document.getElementById('fallback-external-link');
               var currentUrl = window.location.href;
 
+              // 備援連結只接受 HTTPS；HTTP 僅供本機開發。
+              var setSafeExternalLink = function (value) {
+                try {
+                  var target = new URL(value, window.location.href);
+                  var isLocal = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(target.hostname);
+                  if (target.protocol === 'https:' || (target.protocol === 'http:' && isLocal)) {
+                    externalLink.href = target.href;
+                    return;
+                  }
+                } catch (error) { /* 無效網址使用安全備援 */ }
+                externalLink.href = 'https://cagoooo.github.io/Akai/';
+              };
+
               // 嘗試解析工具 ID 並獲取對應的外部連結
               var toolMatch = currentUrl.match(/\/tool\/(\d+)/);
               if (toolMatch) {
@@ -451,12 +464,12 @@
                 };
                 var toolId = parseInt(toolMatch[1]);
                 if (toolUrls[toolId]) {
-                  externalLink.href = toolUrls[toolId];
+                  setSafeExternalLink(toolUrls[toolId]);
                 } else {
-                  externalLink.href = currentUrl;
+                  setSafeExternalLink(currentUrl);
                 }
               } else {
-                externalLink.href = currentUrl;
+                setSafeExternalLink(currentUrl);
               }
             }
           }, 5000); // 5 秒後顯示 fallback

@@ -6,6 +6,7 @@ import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 import { fileURLToPath } from "url";
 import { visualizer } from "rollup-plugin-visualizer";
 import { readFileSync, readdirSync } from "fs";
+import { firebasePublicConfigPlugin } from "./scripts/firebase-public-config.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -56,6 +57,7 @@ export default defineConfig({
     'import.meta.env.VITE_APP_BUILD_TIMESTAMP': JSON.stringify(buildInfo.buildTimestamp),
   },
   plugins: [
+    firebasePublicConfigPlugin(),
     {
       name: 'akai-html-app-version',
       transformIndexHtml(html) {

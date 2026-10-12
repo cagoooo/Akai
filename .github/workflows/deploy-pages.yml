@@ -84,6 +84,9 @@ jobs:
       - name: Unit tests
         run: npm test -- --run
 
+      - name: Public page configuration tests
+        run: npm run test:public-config
+
       - name: Functions policy tests
         run: npm run test:functions
 

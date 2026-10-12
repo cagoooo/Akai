@@ -5,6 +5,7 @@ import { db, sql, dbType } from "../db";
 import path from "node:path";
 import fs from "node:fs";
 import compression from "compression";
+import { escapeChatCardText } from "./chat-card-escape";
 
 const app = express();
 app.use(compression());
@@ -165,7 +166,7 @@ app.use((req, res, next) => {
               card: {
                 header: {
                   title: "🚨 Express 後端伺服器 500 錯誤",
-                  subtitle: message,
+                  subtitle: escapeChatCardText(message),
                   imageUrl: "https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/dns/default/48px.svg",
                   imageType: "CIRCLE",
                 },
@@ -176,13 +177,13 @@ app.use((req, res, next) => {
                       {
                         decoratedText: {
                           topLabel: "請求路徑",
-                          text: `<b>[${reqMethod}]</b> ${reqPath}`,
+                          text: `<b>[${escapeChatCardText(reqMethod)}]</b> ${escapeChatCardText(reqPath)}`,
                         }
                       },
                       {
                         decoratedText: {
                           topLabel: "客戶端來源",
-                          text: `IP: ${clientIp}`,
+                          text: `IP: ${escapeChatCardText(clientIp)}`,
                         }
                       },
                       {
@@ -198,7 +199,7 @@ app.use((req, res, next) => {
                     widgets: [
                       {
                         textParagraph: {
-                          text: `<font color="#b91c1c"><pre>${errStack.split("\n").slice(0, 10).join("\n")}</pre></font>`,
+                          text: `<font color="#b91c1c"><pre>${escapeChatCardText(String(errStack).split("\n").slice(0, 10).join("\n"))}</pre></font>`,
                         }
                       }
                     ]

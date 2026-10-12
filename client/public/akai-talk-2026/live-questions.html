@@ -412,12 +412,12 @@
   import { getFirestore, collection, query, orderBy, limit, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js';
 
   const firebaseConfig = {
-    apiKey: "AIzaSyDWwk3dCFmEM9_5x07fvmBMZ6LApstxkw0",
-    authDomain: "akai-e693f.firebaseapp.com",
-    projectId: "akai-e693f",
-    storageBucket: "akai-e693f.firebasestorage.app",
-    messagingSenderId: "1056659479431",
-    appId: "1:1056659479431:web:d166da50e1aef3888f5122"
+    apiKey: "__FIREBASE_API_KEY__",
+    authDomain: "__FIREBASE_AUTH_DOMAIN__",
+    projectId: "__FIREBASE_PROJECT_ID__",
+    storageBucket: "__FIREBASE_STORAGE_BUCKET__",
+    messagingSenderId: "__FIREBASE_MESSAGING_SENDER_ID__",
+    appId: "__FIREBASE_APP_ID__"
   };
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);

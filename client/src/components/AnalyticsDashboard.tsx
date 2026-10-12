@@ -1,3 +1,4 @@
+import { safeCount, safePercentage, safeCountRecord, readDashboardStorage, safeToolStats, safeClickData } from '@/lib/dashboardDataSafety';
 import { aggregateToolStats, inclusiveCalendarDays } from '@/lib/adminStats';
 import { lazy, Suspense, useState, useEffect, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -68,17 +69,7 @@ export function AnalyticsDashboard() {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   // 從 LocalStorage 獲取工具統計
-  const getLocalToolStats = () => {
-    try {
-      const stats = localStorage.getItem('localToolsStats');
-      if (stats) {
-        return JSON.parse(stats);
-      }
-    } catch (e) {
-      console.error('Failed to load local tool stats:', e);
-    }
-    return [];
-  };
+  const getLocalToolStats = () => safeToolStats(readDashboardStorage('localToolsStats'));
 
   // 訪問統計狀態
   const [visitorStats, setVisitorStats] = useState<VisitorStats>({
@@ -169,7 +160,7 @@ export function AnalyticsDashboard() {
           console.log('Firebase 不可用，使用本地數據');
           // 回退到本地數據
           setVisitorStats({
-            totalVisits: parseInt(localStorage.getItem('localVisitorCount') || '0'),
+            totalVisits: safeCount(readDashboardStorage('localVisitorCount')),
             dailyVisits: {},
             lastVisitAt: null,
           });
@@ -231,7 +222,7 @@ export function AnalyticsDashboard() {
         setIsRealtime(false);
         // 使用本地數據
         setVisitorStats({
-          totalVisits: parseInt(localStorage.getItem('localVisitorCount') || '0'),
+          totalVisits: safeCount(readDashboardStorage('localVisitorCount')),
           dailyVisits: {},
           lastVisitAt: null,
         });
@@ -640,9 +631,9 @@ export function AnalyticsDashboard() {
                       rangeStats,
                       visitorStats,
                       toolStats,
-                      deviceStats: JSON.parse(localStorage.getItem('visitorDeviceStats') || '{}'),
-                      geoStats: JSON.parse(localStorage.getItem('visitorGeoStats') || '{}'),
-                      clickData: JSON.parse(localStorage.getItem('clickHeatmapData') || '[]'),
+                      deviceStats: safeCountRecord(readDashboardStorage('visitorDeviceStats')),
+                      geoStats: safeCountRecord(readDashboardStorage('visitorGeoStats')),
+                      clickData: safeClickData(readDashboardStorage('clickHeatmapData')),
                     };
 
                     const blob = new Blob([JSON.stringify(exportData, null, 2)], {
@@ -862,15 +853,12 @@ export function AnalyticsDashboard() {
                   {(() => {
                     // 優先用 Firestore 全站累計，本地 fallback
                     const getReferrerData = () => {
-                      const sv = serverContext.referrerStats || {};
+                      const sv = safeCountRecord(serverContext.referrerStats);
                       const hasServer = Object.values(sv).some((v) => (v as number) > 0);
                       if (hasServer)
                         return { direct: 0, search: 0, social: 0, email: 0, external: 0, ...sv };
-                      try {
-                        const data = localStorage.getItem('visitorReferrerStats');
-                        if (data) return JSON.parse(data);
-                      } catch (e) {}
-                      return { direct: 0, search: 0, social: 0, email: 0, external: 0 };
+                      return { direct: 0, search: 0, social: 0, email: 0, external: 0,
+                        ...safeCountRecord(readDashboardStorage('visitorReferrerStats')) };
                     };
 
                     const stats = getReferrerData();
@@ -925,8 +913,8 @@ export function AnalyticsDashboard() {
                           <>
                             {sources.map((source) => {
                               const percent =
-                                total > 0 ? ((source.count / total) * 100).toFixed(1) : '0';
-                              const barWidth = maxCount > 0 ? (source.count / maxCount) * 100 : 0;
+                                safePercentage(source.count, total).toFixed(1);
+                              const barWidth = safePercentage(source.count, maxCount);
                               return (
                                 <div key={source.key} className="flex items-center gap-3">
                                   <span className="w-20 text-sm font-medium truncate">
@@ -978,14 +966,10 @@ export function AnalyticsDashboard() {
                     {(() => {
                       // 優先用 Firestore 全站累計，本地只做舊資料 fallback；無資料就明確顯示空狀態
                       const getGeoData = () => {
-                        const sv = serverContext.geoStats || {};
+                        const sv = safeCountRecord(serverContext.geoStats);
                         const hasServer = Object.keys(sv).length > 0;
                         if (hasServer) return sv;
-                        try {
-                          const data = localStorage.getItem('visitorGeoStats');
-                          if (data) return JSON.parse(data);
-                        } catch (e) {}
-                        return {};
+                        return safeCountRecord(readDashboardStorage('visitorGeoStats'));
                       };
 
                       const geoData = getGeoData();
@@ -1017,8 +1001,8 @@ export function AnalyticsDashboard() {
                             </div>
                           )}
                           {sortedData.map(([city, count]: [string, any], index) => {
-                            const percent = total > 0 ? ((count / total) * 100).toFixed(1) : 0;
-                            const barWidth = maxValue > 0 ? (count / maxValue) * 100 : 0;
+                            const percent = safePercentage(count, total).toFixed(1);
+                            const barWidth = safePercentage(count, maxValue);
                             return (
                               <div key={city} className="flex items-center gap-3">
                                 <span className="w-16 text-sm font-medium truncate">{city}</span>
@@ -1051,13 +1035,13 @@ export function AnalyticsDashboard() {
                     {(() => {
                       // 優先用 Firestore 全站累計，本地 fallback
                       const getDeviceData = () => {
-                        const sv = serverContext.deviceStats || {};
+                        const sv = safeCountRecord(serverContext.deviceStats);
                         const hasServer = Object.values(sv).some((v) => (v as number) > 0);
                         if (hasServer) return { desktop: 0, mobile: 0, tablet: 0, ...sv };
-                        try {
-                          const data = localStorage.getItem('visitorDeviceStats');
-                          if (data) return JSON.parse(data);
-                        } catch (e) {}
+                        const data = readDashboardStorage('visitorDeviceStats');
+                        if (data && typeof data === 'object' && !Array.isArray(data)) {
+                          return { desktop: 0, mobile: 0, tablet: 0, ...safeCountRecord(data) };
+                        }
                         // 偵測當前設備並更新
                         const isMobile =
                           /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -1072,7 +1056,7 @@ export function AnalyticsDashboard() {
                         else if (isMobile) defaultData.mobile = 1;
                         else defaultData.desktop = 1;
 
-                        localStorage.setItem('visitorDeviceStats', JSON.stringify(defaultData));
+                        try { localStorage.setItem('visitorDeviceStats', JSON.stringify(defaultData)); } catch { /* 儲存空間不可用仍能顯示 */ }
                         return defaultData;
                       };
 
@@ -1083,21 +1067,21 @@ export function AnalyticsDashboard() {
                         {
                           name: '桌面',
                           count: deviceData.desktop,
-                          percent: ((deviceData.desktop / total) * 100).toFixed(0),
+                          percent: safePercentage(deviceData.desktop, total).toFixed(0),
                           color: 'bg-blue-600',
                           icon: '🖥️',
                         },
                         {
                           name: '行動裝置',
                           count: deviceData.mobile,
-                          percent: ((deviceData.mobile / total) * 100).toFixed(0),
+                          percent: safePercentage(deviceData.mobile, total).toFixed(0),
                           color: 'bg-green-600',
                           icon: '📱',
                         },
                         {
                           name: '平板',
                           count: deviceData.tablet,
-                          percent: ((deviceData.tablet / total) * 100).toFixed(0),
+                          percent: safePercentage(deviceData.tablet, total).toFixed(0),
                           color: 'bg-purple-600',
                           icon: '📟',
                         },

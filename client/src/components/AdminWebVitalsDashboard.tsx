@@ -80,7 +80,7 @@ export function AdminWebVitalsDashboard() {
     let cancelled = false;
     (async () => {
       if (!db) {
-        setLoadError('Firebase 尚未初始化，無法讀取 Web Vitals。');
+        setLoadError('目前無法讀取效能資料，請稍後重試。');
         setLoading(false);
         return;
       }
@@ -110,9 +110,9 @@ export function AdminWebVitalsDashboard() {
         return agg;
       }));
       if (!cancelled) setDaily(result);
-    })().catch((error) => {
+    })().catch(() => {
       if (!cancelled) {
-        setLoadError(error instanceof Error ? error.message : '讀取 Web Vitals 失敗');
+        setLoadError('目前無法讀取效能資料，請稍後重試。');
       }
     }).finally(() => {
       if (!cancelled) setLoading(false);
