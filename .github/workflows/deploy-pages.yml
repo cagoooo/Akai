@@ -111,6 +111,10 @@ jobs:
           VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
           GITHUB_ACTIONS: true
 
+      # 指紋留在可信 CI 紀錄，正式驗收不必下載整包圖片／影片產物。
+      - name: Record built JavaScript fingerprints
+        run: sha256sum dist/public/assets/*.js
+
       # E2E 冒煙測試：擋住「build 過了但畫面壞掉」這一類單元測試看不到的回歸。
       # 跑在 Build 之後、上傳產物之前，測的就是即將部署的那份 dist/public。
       # （2026-09-06 加：先前 e2e/home.spec.ts 存在但沒有任何 workflow 會執行它。）
