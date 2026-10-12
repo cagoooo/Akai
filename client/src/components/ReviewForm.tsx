@@ -53,7 +53,7 @@ export function ReviewForm({ toolId, toolTitle, onReviewSubmitted }: ReviewFormP
             return;
         }
 
-        if (rating === 0) {
+        if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
             toast({
                 title: '請選擇評分',
                 description: '請點擊星星給予評分',
@@ -62,10 +62,10 @@ export function ReviewForm({ toolId, toolTitle, onReviewSubmitted }: ReviewFormP
             return;
         }
 
-        if (!comment.trim()) {
+        if (!comment.trim() || comment.length > 500) {
             toast({
                 title: '請輸入評論',
-                description: '請填寫您的使用心得',
+                description: '請填寫 1 到 500 字的使用心得',
                 variant: 'destructive',
             });
             return;
@@ -78,12 +78,14 @@ export function ReviewForm({ toolId, toolTitle, onReviewSubmitted }: ReviewFormP
             if (reviewId) {
                 toast({
                     title: '評論已發表 🎉',
-                    description: '感謝您的回饋！',
+                    description: '評論已儲存，評分統計稍後同步。',
                 });
 
                 // 重設表單
                 setRating(0);
                 setComment('');
+
+                queryClient.setQueryData(['hasReviewed', toolId, user.uid], true);
 
                 // 刷新評論列表
                 queryClient.invalidateQueries({ queryKey: ['reviews', toolId] });

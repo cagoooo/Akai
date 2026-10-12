@@ -3,9 +3,9 @@
  * 顯示工具的所有評論，支援排序
  */
 
-import { useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { getReviews, getToolRating } from '@/lib/reviewService';
+import { useEffect, useMemo, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { getReviews, getToolRating, subscribeToolRating } from '@/lib/reviewService';
 import { ReviewItem } from './ReviewItem';
 import { ReviewForm } from './ReviewForm';
 import { StarRating } from './StarRating';
@@ -41,6 +41,28 @@ export function ReviewList({ toolId, toolTitle }: ReviewListProps) {
         queryFn: () => getToolRating(toolId),
     });
 
+    const queryClient = useQueryClient();
+    const [ratingSyncFailed, setRatingSyncFailed] = useState(false);
+    useEffect(() => {
+        let active = true;
+        let revision = 0;
+        setRatingSyncFailed(false);
+        const queryKey = ['toolRating', toolId];
+        const unsubscribe = subscribeToolRating(toolId, (nextRating) => {
+            const currentRevision = ++revision;
+            // 初始 getDoc 若仍在途中，不讓較早讀取的結果蓋回新的計票結果。
+            void queryClient.cancelQueries({ queryKey, exact: true }).then(() => {
+                if (!active || currentRevision !== revision) return;
+                queryClient.setQueryData(queryKey, nextRating);
+                setRatingSyncFailed(false);
+            }).catch(() => { if (active) setRatingSyncFailed(true); });
+        }, () => {
+            revision += 1;
+            if (active) setRatingSyncFailed(true);
+        });
+        return () => { active = false; unsubscribe(); };
+    }, [queryClient, toolId]);
+
     // 排序後的評論
     const sortedReviews = useMemo(() => {
         return reviews ? sortReviews(reviews) : [];
@@ -68,6 +90,11 @@ export function ReviewList({ toolId, toolTitle }: ReviewListProps) {
                             <Skeleton className="h-5 w-32" />
                         )}
                     </CardTitle>
+                    {ratingSyncFailed && (
+                        <p role="status" className="text-sm text-muted-foreground">
+                            即時評分同步暫時中斷，顯示上次取得的資料。
+                        </p>
+                    )}
                 </CardHeader>
             </Card>
 

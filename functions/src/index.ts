@@ -46,6 +46,9 @@ export { onUserCreated, onErrorLogCreated, onWishCreated, onReviewCreated, onEng
 // 公開分析事件經白名單驗證後由 Admin SDK 原子遞增；client 不再直寫統計集合。
 export { recordPublicAnalytics } from "./recordPublicAnalytics";
 
+// 評分聚合由伺服器重算，client 不再寫 toolRatings；既有評論通知維持獨立。
+export { akai_syncToolRating } from "./syncToolRating";
+
 
 /** 取得 Asia/Taipei 當日 YYYY-MM-DD（與 dailySnapshot 一致） */
 function todayInTaipei(): string {

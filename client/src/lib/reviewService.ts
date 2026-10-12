@@ -9,21 +9,18 @@ import {
     addDoc,
     getDocs,
     getDoc,
-    updateDoc,
-    deleteDoc,
+    onSnapshot,
+    runTransaction,
     query,
     where,
     orderBy,
     limit,
-    increment,
-    arrayUnion,
-    arrayRemove,
     serverTimestamp,
     Timestamp,
     Firestore
 } from 'firebase/firestore';
 import { User } from 'firebase/auth';
-import { db, isFirebaseAvailable } from './firebase';
+import { auth, db, isFirebaseAvailable } from './firebase';
 
 // ==================== 類型定義 ====================
 
@@ -32,7 +29,7 @@ export interface Review {
     toolId: number;
     userId: string;
     userName: string;
-    userPhoto?: string;
+    userPhoto?: string | null;
     rating: 1 | 2 | 3 | 4 | 5;
     comment: string;
     likes: number;
@@ -60,6 +57,22 @@ export interface ToolRating {
 const REVIEWS_COLLECTION = 'toolReviews';
 const RATINGS_COLLECTION = 'toolRatings';
 
+function validToolId(value: number): boolean {
+    return Number.isInteger(value) && value >= 1 && value <= 100000;
+}
+
+function validRating(value: number): boolean {
+    return Number.isInteger(value) && value >= 1 && value <= 5;
+}
+
+function validComment(value: string): boolean {
+    return typeof value === 'string' && value.length <= 500 && value.trim().length > 0;
+}
+
+function validReviewId(value: string): boolean {
+    return typeof value === 'string' && value.length > 0 && !value.includes('/');
+}
+
 // ==================== 評論相關 ====================
 
 /**
@@ -75,19 +88,20 @@ export async function addReview(
     comment: string,
     toolTitle?: string
 ): Promise<string | null> {
-    if (!isFirebaseAvailable() || !db) {
-        console.warn('Firebase 不可用，無法新增評論');
+    if (!isFirebaseAvailable() || !db || !user || user.uid !== auth?.currentUser?.uid
+        || !user.uid || !validToolId(toolId) || !validRating(rating) || !validComment(comment)) {
         return null;
     }
 
     try {
+        if (toolTitle !== undefined && (typeof toolTitle !== 'string' || !toolTitle.trim())) return null;
         const reviewData = {
             toolId,
-            toolTitle: toolTitle || `工具 #${toolId}`,
+            toolTitle: (toolTitle?.trim() || `工具 #${toolId}`).slice(0, 200),
             userId: user.uid,
-            userName: user.displayName || '匿名用戶',
-            userPhoto: user.photoURL || null,
-            rating: Math.min(5, Math.max(1, Math.round(rating))) as 1 | 2 | 3 | 4 | 5,
+            userName: (user.displayName?.trim() || '匿名用戶').slice(0, 80),
+            userPhoto: typeof user.photoURL === 'string' && user.photoURL.length <= 500 ? user.photoURL : null,
+            rating: rating as 1 | 2 | 3 | 4 | 5,
             comment: comment.trim(),
             likes: 0,
             likedBy: [],
@@ -99,9 +113,7 @@ export async function addReview(
             reviewData
         );
 
-        // 更新評分統計
-        await updateToolRating(toolId, reviewData.rating);
-
+        // 評分統計由後端依實際評論重算；評論寫入成功即可回報，不等待統計同步。
         console.log('評論已新增:', docRef.id);
         return docRef.id;
     } catch (error) {
@@ -134,8 +146,8 @@ export async function getReviews(
 
         querySnapshot.forEach((doc) => {
             reviews.push({
-                id: doc.id,
                 ...doc.data(),
+                id: doc.id,
             } as Review);
         });
 
@@ -173,52 +185,45 @@ export async function hasUserReviewed(
     }
 }
 
-/**
- * 點讚評論
- */
-export async function likeReview(
-    reviewId: string,
-    userId: string
-): Promise<boolean> {
-    if (!isFirebaseAvailable() || !db) {
-        return false;
-    }
-
+/** 以交易讀取目前名單，避免重複點讚、重試或其他使用者同時更新造成漂移。 */
+async function changeReviewLike(reviewId: string, userId: string, adding: boolean): Promise<boolean> {
+    if (!isFirebaseAvailable() || !db || !validReviewId(reviewId)
+        || !userId || auth?.currentUser?.uid !== userId) return false;
     try {
         const reviewRef = doc(db as Firestore, REVIEWS_COLLECTION, reviewId);
-        await updateDoc(reviewRef, {
-            likes: increment(1),
-            likedBy: arrayUnion(userId),
+        return await runTransaction(db as Firestore, async (transaction) => {
+            if (auth?.currentUser?.uid !== userId) return false;
+            const snapshot = await transaction.get(reviewRef);
+            if (!snapshot.exists() || auth?.currentUser?.uid !== userId) return false;
+            const { likes = 0, likedBy = [] } = snapshot.data();
+            // 缺欄沿用舊版 0／空名單起始；型別錯誤不修寫，既有計數偏移不重建。
+            if (!Number.isSafeInteger(likes) || likes < 0 || !Array.isArray(likedBy)
+                || likedBy.some((uid: unknown) => typeof uid !== 'string')
+                || new Set(likedBy).size !== likedBy.length) return false;
+            const alreadyLiked = likedBy.includes(userId);
+            if (adding === alreadyLiked) return true;
+            const nextLikes = likes + (adding ? 1 : -1);
+            if (!Number.isSafeInteger(nextLikes) || nextLikes < 0) return false;
+            transaction.update(reviewRef, {
+                likes: nextLikes,
+                likedBy: adding ? [...likedBy, userId] : likedBy.filter((uid: string) => uid !== userId),
+            });
+            return true;
         });
-        return true;
     } catch (error) {
-        console.error('點讚失敗:', error);
+        console.error('更新點讚失敗:', error);
         return false;
     }
 }
 
-/**
- * 取消點讚
- */
-export async function unlikeReview(
-    reviewId: string,
-    userId: string
-): Promise<boolean> {
-    if (!isFirebaseAvailable() || !db) {
-        return false;
-    }
+/** 點讚評論；重複操作視為成功且不寫入。 */
+export async function likeReview(reviewId: string, userId: string): Promise<boolean> {
+    return changeReviewLike(reviewId, userId, true);
+}
 
-    try {
-        const reviewRef = doc(db as Firestore, REVIEWS_COLLECTION, reviewId);
-        await updateDoc(reviewRef, {
-            likes: increment(-1),
-            likedBy: arrayRemove(userId),
-        });
-        return true;
-    } catch (error) {
-        console.error('取消點讚失敗:', error);
-        return false;
-    }
+/** 取消點讚；重複操作視為成功且不寫入。 */
+export async function unlikeReview(reviewId: string, userId: string): Promise<boolean> {
+    return changeReviewLike(reviewId, userId, false);
 }
 
 /**
@@ -227,14 +232,16 @@ export async function unlikeReview(
 export async function deleteReview(
     reviewId: string
 ): Promise<boolean> {
-    if (!isFirebaseAvailable() || !db) {
-        return false;
-    }
-
+    const uid = auth?.currentUser?.uid;
+    if (!isFirebaseAvailable() || !db || !uid || !validReviewId(reviewId)) return false;
     try {
         const reviewRef = doc(db as Firestore, REVIEWS_COLLECTION, reviewId);
-        await deleteDoc(reviewRef);
-        return true;
+        return await runTransaction(db as Firestore, async (transaction) => {
+            const snapshot = await transaction.get(reviewRef);
+            if (!snapshot.exists() || auth?.currentUser?.uid !== uid || snapshot.data().userId !== uid) return false;
+            transaction.delete(reviewRef);
+            return true;
+        });
     } catch (error) {
         console.error('刪除評論失敗:', error);
         return false;
@@ -248,26 +255,22 @@ export async function updateReview(
     reviewId: string,
     data: { comment?: string; rating?: number }
 ): Promise<boolean> {
-    if (!isFirebaseAvailable() || !db) {
-        return false;
-    }
-
+    const uid = auth?.currentUser?.uid;
+    if (!isFirebaseAvailable() || !db || !uid || !validReviewId(reviewId)
+        || !data || (data.comment === undefined && data.rating === undefined)
+        || (data.comment !== undefined && !validComment(data.comment))
+        || (data.rating !== undefined && !validRating(data.rating))) return false;
     try {
         const reviewRef = doc(db as Firestore, REVIEWS_COLLECTION, reviewId);
-        const updateData: any = {
-            updatedAt: serverTimestamp(),
-            edited: true,
-        };
-
-        if (data.comment !== undefined) {
-            updateData.comment = data.comment;
-        }
-        if (data.rating !== undefined) {
-            updateData.rating = Math.min(5, Math.max(1, Math.round(data.rating)));
-        }
-
-        await updateDoc(reviewRef, updateData);
-        return true;
+        return await runTransaction(db as Firestore, async (transaction) => {
+            const snapshot = await transaction.get(reviewRef);
+            if (!snapshot.exists() || auth?.currentUser?.uid !== uid || snapshot.data().userId !== uid) return false;
+            const updateData: { updatedAt: ReturnType<typeof serverTimestamp>; edited: boolean; comment?: string; rating?: number } = { updatedAt: serverTimestamp(), edited: true };
+            if (data.comment !== undefined) updateData.comment = data.comment.trim();
+            if (data.rating !== undefined) updateData.rating = data.rating;
+            transaction.update(reviewRef, updateData);
+            return true;
+        });
     } catch (error) {
         console.error('更新評論失敗:', error);
         return false;
@@ -300,58 +303,27 @@ export async function getToolRating(
     }
 }
 
-/**
- * 更新工具評分統計 (內部使用)
- */
-async function updateToolRating(
+/** 後端完成計票後直接推送此工具統計；回傳解除訂閱，錯誤不偽造零分。 */
+export function subscribeToolRating(
     toolId: number,
-    newRating: number
-): Promise<void> {
-    if (!isFirebaseAvailable() || !db) {
-        return;
+    onRating: (rating: ToolRating | null) => void,
+    onError?: () => void
+): () => void {
+    if (!isFirebaseAvailable() || !db || !validToolId(toolId)) {
+        onError?.();
+        return () => {};
     }
-
     try {
         const ratingRef = doc(db as Firestore, RATINGS_COLLECTION, `tool_${toolId}`);
-        const ratingSnap = await getDoc(ratingRef);
-
-        if (ratingSnap.exists()) {
-            const data = ratingSnap.data() as ToolRating;
-            const newTotalReviews = data.totalReviews + 1;
-            const newRatingCounts = { ...data.ratingCounts };
-            newRatingCounts[newRating as 1 | 2 | 3 | 4 | 5] += 1;
-
-            // 計算新的平均分
-            const totalScore = Object.entries(newRatingCounts).reduce(
-                (sum, [star, count]) => sum + parseInt(star) * count,
-                0
-            );
-            const newAverage = totalScore / newTotalReviews;
-
-            await updateDoc(ratingRef, {
-                totalReviews: newTotalReviews,
-                averageRating: Math.round(newAverage * 10) / 10,
-                ratingCounts: newRatingCounts,
-            });
-        } else {
-            // 建立新記錄
-            const newData: ToolRating = {
-                toolId,
-                averageRating: newRating,
-                totalReviews: 1,
-                ratingCounts: {
-                    1: newRating === 1 ? 1 : 0,
-                    2: newRating === 2 ? 1 : 0,
-                    3: newRating === 3 ? 1 : 0,
-                    4: newRating === 4 ? 1 : 0,
-                    5: newRating === 5 ? 1 : 0,
-                },
-            };
-
-            const { setDoc } = await import('firebase/firestore');
-            await setDoc(ratingRef, newData);
-        }
+        return onSnapshot(ratingRef, (snapshot) => {
+            onRating(snapshot.exists() ? snapshot.data() as ToolRating : null);
+        }, (error) => {
+            console.warn('即時評分同步失敗:', error);
+            onError?.();
+        });
     } catch (error) {
-        console.error('更新評分統計失敗:', error);
+        console.warn('無法啟動即時評分同步:', error);
+        onError?.();
+        return () => {};
     }
 }
