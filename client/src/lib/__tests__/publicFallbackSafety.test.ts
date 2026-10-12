@@ -1,8 +1,9 @@
 import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { runInNewContext } from 'node:vm';
 import { describe, expect, it } from 'vitest';
 
-const indexHtml = readFileSync(new URL('../../../index.html', import.meta.url), 'utf8');
+const indexHtml = readFileSync(resolve(process.cwd(), 'client/index.html'), 'utf8');
 const linkSetter = indexHtml.match(/var setSafeExternalLink = function \(value\) \{[\s\S]*?\n\s*\};/)?.[0];
 
 describe('正式 HTML 備援連結', () => {
@@ -26,7 +27,7 @@ describe('正式 HTML 備援連結', () => {
   });
 
   it('安裝失敗頁面不顯示底層錯誤文字', async () => {
-    const html = readFileSync(new URL('../../../public/install-service-worker.html', import.meta.url), 'utf8');
+    const html = readFileSync(resolve(process.cwd(), 'client/public/install-service-worker.html'), 'utf8');
     const script = html.match(/<script[^>]*>([\s\S]*?)<\/script>/)?.[1];
     const status = { textContent: '' };
     runInNewContext(script!, {
