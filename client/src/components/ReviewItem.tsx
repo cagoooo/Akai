@@ -79,7 +79,7 @@ export function ReviewItem({ review, toolId, onReviewUpdated }: ReviewItemProps)
     // P0-2：正在編輯評論或存檔中就先別自動更新，改到一半被重整等於白改
     usePWAUpdateHold(isEditing || saving);
 
-    const hasLiked = user && review.likedBy?.includes(user.uid);
+    const hasLiked = user && Array.isArray(review.likedBy) && review.likedBy.includes(user.uid);
     const isOwner = user && review.userId === user.uid;
 
     const handleLike = async () => {
@@ -87,12 +87,11 @@ export function ReviewItem({ review, toolId, onReviewUpdated }: ReviewItemProps)
 
         setLiking(true);
         try {
-            if (hasLiked) {
-                await unlikeReview(review.id, user.uid);
-            } else {
-                await likeReview(review.id, user.uid);
-            }
+            const saved = hasLiked ? await unlikeReview(review.id, user.uid) : await likeReview(review.id, user.uid);
+            if (!saved) throw new Error('點讚未儲存');
             queryClient.invalidateQueries({ queryKey: ['reviews', toolId] });
+        } catch {
+            toast({ title: '操作失敗', description: '目前無法更新點讚，請稍後再試。', variant: 'destructive' });
         } finally {
             setLiking(false);
         }
@@ -115,16 +114,18 @@ export function ReviewItem({ review, toolId, onReviewUpdated }: ReviewItemProps)
 
         setSaving(true);
         try {
-            await updateReview(review.id, {
+            const saved = await updateReview(review.id, {
                 comment: editContent.trim(),
                 rating: editRating,
             });
+            if (!saved) throw new Error('評論未更新');
             toast({
                 title: '更新成功',
-                description: '您的評論已更新',
+                description: '您的評論已更新，評分統計稍後同步。',
             });
             setIsEditing(false);
             queryClient.invalidateQueries({ queryKey: ['reviews', toolId] });
+            queryClient.invalidateQueries({ queryKey: ['toolRating', toolId] });
             onReviewUpdated?.();
         } catch (error) {
             toast({
@@ -142,7 +143,7 @@ export function ReviewItem({ review, toolId, onReviewUpdated }: ReviewItemProps)
 
         setDeleting(true);
         try {
-            await deleteReview(review.id);
+            if (!await deleteReview(review.id)) throw new Error('評論未刪除');
             toast({
                 title: '刪除成功',
                 description: '您的評論已刪除',
@@ -170,7 +171,7 @@ export function ReviewItem({ review, toolId, onReviewUpdated }: ReviewItemProps)
                     <div className="flex items-start justify-between gap-3 mb-3">
                         <div className="flex items-center gap-3">
                             <Avatar className="w-10 h-10">
-                                <AvatarImage src={review.userPhoto} alt={review.userName} />
+                                <AvatarImage src={review.userPhoto || undefined} alt={review.userName} />
                                 <AvatarFallback>
                                     <User className="w-5 h-5" />
                                 </AvatarFallback>
@@ -227,6 +228,7 @@ export function ReviewItem({ review, toolId, onReviewUpdated }: ReviewItemProps)
                                 value={editContent}
                                 onChange={(e) => setEditContent(e.target.value)}
                                 className="min-h-[80px]"
+                                maxLength={500}
                             />
                             <div className="flex gap-2 justify-end">
                                 <Button

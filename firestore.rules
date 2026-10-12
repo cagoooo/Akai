@@ -152,24 +152,84 @@ service cloud.firestore {
 
     // ==================== 評論功能 ====================
 
-    // 工具評論 - 所有人可讀，認證用戶可寫
+    // 工具評論：公開可讀，作者只能編輯心得／評分，點讚只能變更本人一次。
     match /toolReviews/{reviewId} {
-      // 所有人可讀
+      function validReviewContent(data) {
+        return data.comment is string
+          && data.comment.size() <= 500
+          && data.comment.trim().size() >= 1
+          && data.rating is int && data.rating >= 1 && data.rating <= 5;
+      }
+
+      function validReviewCreate() {
+        let data = request.resource.data;
+        return data.keys().hasOnly([
+            'toolId', 'toolTitle', 'userId', 'userName', 'userPhoto',
+            'rating', 'comment', 'likes', 'likedBy', 'createdAt'
+          ])
+          && data.keys().hasAll([
+            'toolId', 'userId', 'userName', 'rating', 'comment', 'likes', 'likedBy', 'createdAt'
+          ])
+          && data.userId == request.auth.uid
+          && data.toolId is int && data.toolId >= 1 && data.toolId <= 100000
+          && data.userName is string && data.userName.size() >= 1 && data.userName.size() <= 80
+          && (!('toolTitle' in data) || (data.toolTitle is string
+            && data.toolTitle.size() >= 1 && data.toolTitle.size() <= 200))
+          && (!('userPhoto' in data) || data.userPhoto == null
+            || (data.userPhoto is string && data.userPhoto.size() <= 500))
+          && validReviewContent(data)
+          && data.likes is int && data.likes == 0
+          && data.likedBy is list && data.likedBy.size() == 0
+          && data.createdAt == request.time;
+      }
+
+      function validAuthorEdit() {
+        return request.auth.uid == resource.data.userId
+          && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['comment', 'rating', 'updatedAt', 'edited'])
+          && validReviewContent(request.resource.data)
+          && request.resource.data.updatedAt == request.time
+          && request.resource.data.edited == true;
+      }
+
+      function validOwnLikeChange() {
+        // 與舊 client 的 increment／arrayUnion 一致，缺欄採 0／[]；不重算既有偏差。
+        let oldLikes = resource.data.get('likes', 0);
+        let oldLikedBy = resource.data.get('likedBy', []);
+        let newLikes = request.resource.data.likes;
+        let newLikedBy = request.resource.data.likedBy;
+        return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes', 'likedBy'])
+          && oldLikes is int && oldLikes >= 0 && oldLikes <= 9007199254740991
+          && newLikes is int && newLikes >= 0 && newLikes <= 9007199254740991
+          && oldLikedBy is list && newLikedBy is list
+          && oldLikedBy.toSet().size() == oldLikedBy.size()
+          && newLikedBy.toSet().size() == newLikedBy.size()
+          && (
+            (!(request.auth.uid in oldLikedBy)
+              && request.auth.uid in newLikedBy
+              && newLikedBy.size() == oldLikedBy.size() + 1
+              && newLikedBy.toSet().difference(oldLikedBy.toSet()) == [request.auth.uid].toSet()
+              && oldLikedBy.toSet().difference(newLikedBy.toSet()).size() == 0
+              && newLikes == oldLikes + 1)
+            || (request.auth.uid in oldLikedBy
+              && !(request.auth.uid in newLikedBy)
+              && newLikedBy.size() == oldLikedBy.size() - 1
+              && oldLikedBy.toSet().difference(newLikedBy.toSet()) == [request.auth.uid].toSet()
+              && newLikedBy.toSet().difference(oldLikedBy.toSet()).size() == 0
+              && newLikes == oldLikes - 1)
+          );
+      }
+
       allow read: if true;
-      // 認證用戶可新增
-      allow create: if request.auth != null;
-      // 只有評論作者可編輯/刪除，或任何認證用戶可更新點讚
-      allow update: if request.auth != null && (
-        request.auth.uid == resource.data.userId ||
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes', 'likedBy'])
-      );
+      allow create: if request.auth != null && validReviewCreate();
+      allow update: if request.auth != null && (validAuthorEdit() || validOwnLikeChange());
       allow delete: if request.auth != null && request.auth.uid == resource.data.userId;
     }
 
-    // 工具評分統計 - 所有人可讀，系統可寫
+    // 工具評分統計：公開可讀，只由 akai_syncToolRating 的 Admin SDK 聚合寫入。
     match /toolRatings/{toolId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if false;
     }
 
     // ==================== 許願池 ====================
