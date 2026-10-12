@@ -1,13 +1,13 @@
 # 科技教育創新專區 · 阿凱老師
 
-![Version](https://img.shields.io/badge/version-3.6.140-brightgreen.svg)
-![Tools](https://img.shields.io/badge/tools-120%2B-orange.svg)
+![Version](https://img.shields.io/badge/version-3.6.146-brightgreen.svg)
+![Tools](https://img.shields.io/badge/tools-130%2B-orange.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-20.x-green.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.6.3-blue.svg)
 ![React](https://img.shields.io/badge/React-18.3-61dafb.svg)
 
-> 阿凱老師（桃園市石門國小）親手打造的 120+ 款國小教育科技工具：課堂互動、AI 教案、閱讀評量、語文寫作、教育遊戲一站搞定，100% 免費無廣告，免註冊一鍵分享給學生。
+> 阿凱老師（桃園市石門國小）親手打造的 130+ 款國小教育科技工具：課堂互動、AI 教案、閱讀評量、語文寫作、教育遊戲一站搞定，100% 免費無廣告，免註冊一鍵分享給學生。
 >
 > 🌐 線上 Demo：https://cagoooo.github.io/Akai/
 

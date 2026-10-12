@@ -15131,6 +15131,53 @@ const POST_128: BlogPost = {
 先挑一個角落，走過去、停下來，說出你看到什麼，以及還想問什麼。等到真的走進校園，再看看數位印象和現場經驗如何互相補足。`,
 };
 
+const POST_130: BlogPost = {
+  slug: 'sportsday-130-shimen-115',
+  title: '#130 賽程、接力、停車一次查：石門國小運動會資訊站，讓全家安心出發',
+  excerpt: '運動會前，家長最常要找的是幾點到、孩子何時上場、車要停哪裡。#130 把 10 月 17 日的賽程、活動亮點、邀請單與交通提醒收在同一個公開入口。',
+  publishedAt: '2026-10-12', readingMinutes: 5,
+  tags: ['石門國小', '運動會', '活動資訊', '親師溝通', '交通停車'],
+  toolIds: [130, 129, 48], coverEmoji: '🏃', coverColor: 'green',
+  body: `## 運動會前，家長要找的資訊常散在好幾則訊息裡
+
+孩子今天提醒「下週六要運動會」，家長接著就得確認日期、集合時間、自己班上的表演或比賽、要不要帶水，還有車子可以停在哪裡。老師可能已經在班級群組傳過邀請單，行政同仁也公告了交通提醒；但到了出門前，大家翻聊天紀錄、找附件，還是會問：「節目單在哪裡？」「我幾點到比較剛好？」「校門口能停車嗎？」
+
+對學校來說，活動流程本身已經夠忙，還要反覆回答相同問題，訊息也可能因為轉傳而漏掉細節。#130「石門國小 115 學年度運動會資訊站」把這些公開資訊放在同一個網址，讓家庭、學生和教職員可以先查再出發。
+
+## 一頁看懂 10 月 17 日的重要安排
+
+本次運動會訂於 **2026 年 10 月 17 日（星期六）**在桃園市龍潭區石門國民小學舉行。網站先列出一天的幾個重要節點：08:20 開幕典禮、上午的表演與競賽、13:00 午後賽事，以及 14:00 閉幕典禮。家長不必從很長的文字裡自己拼出大致時程，可以先決定想看哪些場次，再安排交通與到校時間。
+
+完整列表共有 **30 項賽程**，可以依表演、團體競賽、徑賽或典禮篩選。導師可以快速找出班級相關項目，學生可以查自己的年級表演或班際接力，家長也能先看活動亮點，替孩子預留加油時間。若不同項目時間相近，現場仍請依學校廣播與工作人員引導為準。
+
+## 觀賽之前，先把交通和準備事項看一遍
+
+運動會當天，臨近校園的交通安排往往比「找到地址」更容易讓人緊張。資訊站整理指定路段可臨時停車的時段、機車停放提醒與禁止停車位置，也提供家長邀請單、節目單及交通指引圖片，方便直接打開查看或保存。頁面特別提醒，校園內與王朝餐廳對面不可供家長停車；請出發前查看最新指引，不要只依賴舊訊息或導航到校後才臨時找位置。
+
+家庭可以在前一晚先確認日期、想看的場次、交通方式和需要準備的物品；導師只要分享同一個入口，就能讓班級家長自行查閱。學生也可以先和家人約好集合時間，到場後一起替參賽同學加油。
+
+## 導師、科任與行政同仁，各自都能少一點臨時確認
+
+**班級導師**可以把資訊站貼到班級群組，並提醒家長查看邀請單和停車資訊。當家長問「幾點有我們班的項目」，導師能指向同一頁的分類賽程，降低重複轉述造成的時間或地點落差。
+
+**科任／專任教師**可以依活動分類核對時段，事前安排帶隊、觀賽或場邊支援。**行政人員**也能用同一個公開入口傳達活動流程與交通提醒；教務、學務、總務及跨處室支援人員，都能各自找到與工作相關的資訊。這種做法可供其他學校參考，但本頁的賽程、地點和交通資訊屬於石門國小本次運動會，其他學校不可直接照抄。
+
+## 網站實際提供什麼？哪些事仍要照學校流程
+
+我檢視了活動網站的頁面與賽程列表：它是公開的活動資訊入口，主要提供時程瀏覽、分類篩選、活動介紹、觀賽提醒、交通與停車指引，以及邀請單和相關圖片。訪客無須先建立帳號即可查閱。這個頁面沒有顯示報名、請假、回覆出席或線上繳交資料的功能；如果學校另有需要家長填寫的事項，仍須使用學校指定的表單或公告方式，不能把「看過資訊站」當成完成回覆。
+
+從維護角度看，把行程和指引集中在一個可分享的網站，方便家庭直接由連結查閱，也減少每個班各自保存不同附件。不過，頁面仍需要承辦人依最新公告更新；天候、交通或賽程若有調整，請以石門國小最新消息及當日現場廣播為準。
+
+## 可以怎麼搭配其他工具
+
+- [#129 115石小教師會議報告集合站（上學期）](https://sites.google.com/mail2.smes.tyc.edu.tw/115-teacher-1/)：給教職員查閱週次會議與行政宣達的入口，可協助校內同仁掌握平日訊息；運動會當天的最新安排仍以本活動網站和正式公告為準。
+- [#48 動態表單自動回報系統](https://cagoooo.github.io/form/)：若另有活動需要收集意願或回饋，可作為表單流程的參考工具；它不是 #130 的內建功能，也不代表本次運動會正在透過它收件。
+
+## 10 月 17 日見，出門前先看一眼
+
+請先打開 [石門國小 115 學年度運動會資訊站](https://cagoooo.github.io/sportsday-115/)，確認自己想看的項目和交通提醒，再把同一網址分享給需要的家人。到場後，跟著工作人員和現場廣播走，讓孩子在熟悉的掌聲裡完成一次值得記住的運動會。`,
+};
+
 const POST_129: BlogPost = {
   slug: 'shimen-meeting-hub-129-teacher-meeting-records',
   title: '#129 開完會還在問「哪天截止？」：石小會議集合站把每週晨會留成一個網址',
@@ -15203,7 +15250,7 @@ const POST_129: BlogPost = {
 先挑出你最近一次沒聽清楚的宣達事項，用頁籤找到那一週、用搜尋對照一次。如果你負責整理會議，不妨試著把下一週的報告，也照一週一頁、依處室分區的方式放進去。`,
 };
 
-export const POSTS: BlogPost[] = [POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+export const POSTS: BlogPost[] = [POST_130, POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。

@@ -15,6 +15,27 @@ export type BlogPostMeta = Omit<BlogPost, 'body'>;
 
 export const POSTS_INDEX: BlogPostMeta[] = [
   {
+    "slug": "sportsday-130-shimen-115",
+    "title": "#130 賽程、接力、停車一次查：石門國小運動會資訊站，讓全家安心出發",
+    "excerpt": "運動會前，家長最常要找的是幾點到、孩子何時上場、車要停哪裡。#130 把 10 月 17 日的賽程、活動亮點、邀請單與交通提醒收在同一個公開入口。",
+    "publishedAt": "2026-10-12",
+    "readingMinutes": 5,
+    "tags": [
+      "石門國小",
+      "運動會",
+      "活動資訊",
+      "親師溝通",
+      "交通停車"
+    ],
+    "toolIds": [
+      130,
+      129,
+      48
+    ],
+    "coverEmoji": "🏃",
+    "coverColor": "green"
+  },
+  {
     "slug": "shimen-meeting-hub-129-teacher-meeting-records",
     "title": "#129 開完會還在問「哪天截止？」：石小會議集合站把每週晨會留成一個網址",
     "excerpt": "晨會聽過的截止日，回到教室就糊了？石門國小把 115 學年度上學期的教師會議，做成一週一頁、依處室分區、能搜尋能打勾的互動紀錄入口。",
