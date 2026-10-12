@@ -16,6 +16,8 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import type { User } from 'firebase/auth';
 import { useAuth } from '@/hooks/useAuth';
 import { isFirebaseAvailable } from '@/lib/firebase';
+import { getCurrentUser } from '@/lib/authService';
+import { safeDiagnostic } from '@/lib/safeDiagnostic';
 
 const FAVORITES_KEY = 'akai-favorites';
 
@@ -39,35 +41,38 @@ function saveToLocalStorage(favorites: number[]): void {
 }
 
 // ── Firestore helpers ──────────────────────────────────────
-async function loadFromFirestore(uid: string): Promise<number[] | null> {
+async function loadFromFirestore(uid: string, isCurrent: () => boolean): Promise<number[] | null> {
     try {
         const { db } = await import('@/lib/firebase');
         if (!db) return null;
         const { doc, getDoc } = await import('firebase/firestore');
+        if (!isCurrent()) return null;
         const snap = await getDoc(doc(db, 'userFavorites', uid));
+        if (!isCurrent()) return null;
         if (snap.exists()) {
             const data = snap.data();
             return Array.isArray(data.toolIds) ? data.toolIds.filter((x) => typeof x === 'number') : [];
         }
         return [];
     } catch (e) {
-        console.warn('[useFavorites] Firestore load 失敗:', e);
+        if (isCurrent()) safeDiagnostic('[useFavorites] Firestore load 失敗:', e);
         return null;
     }
 }
 
-async function saveToFirestore(uid: string, toolIds: number[]): Promise<void> {
+async function saveToFirestore(uid: string, toolIds: number[], isCurrent: () => boolean): Promise<void> {
     try {
         const { db } = await import('@/lib/firebase');
         if (!db) return;
         const { doc, setDoc, serverTimestamp } = await import('firebase/firestore');
+        if (!isCurrent()) return;
         await setDoc(
             doc(db, 'userFavorites', uid),
             { toolIds, updatedAt: serverTimestamp() },
             { merge: true }
         );
     } catch (e) {
-        console.warn('[useFavorites] Firestore save 失敗:', e);
+        if (isCurrent()) safeDiagnostic('[useFavorites] Firestore save 失敗:', e);
     }
 }
 
@@ -93,6 +98,7 @@ export function useFavorites() {
         const newUid = cloudUser?.uid ?? null;
         if (newUid !== uidRef.current) {
             hasMergedRef.current = null;
+            skipNextSnapshotRef.current = false;
         }
         uidRef.current = newUid;
     }, [cloudUser?.uid]);
@@ -103,22 +109,26 @@ export function useFavorites() {
         const uid = cloudUser.uid;
         let unsub: (() => void) | undefined;
         let cancelled = false;
+        const isCurrent = () => !cancelled && uidRef.current === uid && getCurrentUser()?.uid === uid;
 
         (async () => {
             // 第一次合併：local + cloud → 雙寫
             if (hasMergedRef.current !== uid) {
                 setSyncing(true);
                 try {
-                    const cloud = await loadFromFirestore(uid);
-                    if (cancelled || uidRef.current !== uid) return;
+                    const cloud = await loadFromFirestore(uid, isCurrent);
+                    if (!isCurrent()) return;
+                    // 讀取失敗時保留本機收藏，不把失敗當成空的雲端清單再覆寫。
+                    if (cloud === null) return;
                     const local = loadFromLocalStorage();
                     const merged = mergeFavorites(local, cloud || []);
                     setFavorites(merged);
                     saveToLocalStorage(merged);
                     skipNextSnapshotRef.current = true;
                     if ((cloud?.length || 0) !== merged.length) {
-                        await saveToFirestore(uid, merged);
+                        await saveToFirestore(uid, merged, isCurrent);
                     }
+                    if (!isCurrent()) return;
                     hasMergedRef.current = uid;
                 } finally {
                     if (!cancelled) setSyncing(false);
@@ -130,10 +140,11 @@ export function useFavorites() {
                 const { db } = await import('@/lib/firebase');
                 if (!db) return;
                 const { doc, onSnapshot } = await import('firebase/firestore');
+                if (!isCurrent()) return;
                 unsub = onSnapshot(
                     doc(db, 'userFavorites', uid),
                     (snap) => {
-                        if (cancelled) return;
+                        if (!isCurrent()) return;
                         if (skipNextSnapshotRef.current) {
                             skipNextSnapshotRef.current = false;
                             return;
@@ -153,10 +164,12 @@ export function useFavorites() {
                             });
                         }
                     },
-                    (err) => console.warn('[useFavorites] onSnapshot 失敗:', err)
+                    (err) => {
+                        if (isCurrent()) safeDiagnostic('[useFavorites] onSnapshot 失敗:', err);
+                    }
                 );
             } catch (err) {
-                console.warn('[useFavorites] 訂閱失敗:', err);
+                if (isCurrent()) safeDiagnostic('[useFavorites] 訂閱失敗:', err);
             }
         })();
 
@@ -176,7 +189,8 @@ export function useFavorites() {
                 saveToLocalStorage(newFavorites);
                 if (cloudUser && isFirebaseAvailable()) {
                     skipNextSnapshotRef.current = true; // 自己剛寫的 onSnapshot 不必再 setState
-                    saveToFirestore(cloudUser.uid, newFavorites).catch(() => { /* logged */ });
+                    const uid = cloudUser.uid;
+                    saveToFirestore(uid, newFavorites, () => uidRef.current === uid && getCurrentUser()?.uid === uid).catch(() => { /* logged */ });
                 }
                 return newFavorites;
             });
