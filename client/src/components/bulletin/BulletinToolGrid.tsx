@@ -89,6 +89,7 @@ export function BulletinToolGrid({ tools, highlightedToolId = null, resetKey = '
   if (tools.length === 0) {
     return (
       <div
+        data-tour="tools-grid"
         style={{
           textAlign: 'center',
           padding: '80px 20px',

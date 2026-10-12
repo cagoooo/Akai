@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useRef } from 'react';
+import { forwardRef, useEffect, useRef, useState } from 'react';
 import { tokens } from '@/design/tokens';
 
 interface Props {
@@ -17,6 +17,33 @@ export const BulletinSearchBar = forwardRef<HTMLInputElement, Props>(function Bu
   ref
 ) {
   const sectionRef = useRef<HTMLElement>(null);
+  const [isComposing, setIsComposing] = useState(false);
+  const pendingInputScroll = useRef(false);
+  const inputScrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cancelInputScroll = () => {
+    if (inputScrollTimer.current !== null) {
+      clearTimeout(inputScrollTimer.current);
+      inputScrollTimer.current = null;
+    }
+  };
+
+  // 等使用者停下打字、中文選字完成後，再帶到已更新的工具卡區。
+  // 僅回應實際輸入，開啟帶有 q 的分享連結時不搶走原本的閱讀位置。
+  useEffect(() => {
+    if (!pendingInputScroll.current || isComposing || !searchQuery.trim()) return;
+    inputScrollTimer.current = setTimeout(() => {
+      inputScrollTimer.current = null;
+      pendingInputScroll.current = false;
+      onSearchSubmit?.();
+    }, 350);
+    return () => {
+      if (inputScrollTimer.current !== null) {
+        clearTimeout(inputScrollTimer.current);
+        inputScrollTimer.current = null;
+      }
+    };
+  }, [searchQuery, isComposing, onSearchSubmit]);
+
   useEffect(() => {
     const bar = sectionRef.current;
     const board = bar?.closest<HTMLElement>('.bulletin-sticky-search');
@@ -41,7 +68,13 @@ export const BulletinSearchBar = forwardRef<HTMLInputElement, Props>(function Bu
       <form
         role="search"
         aria-label="搜尋教育工具"
-        onSubmit={(event) => { event.preventDefault(); onSearchSubmit?.(); }}
+        onSubmit={(event) => {
+          event.preventDefault();
+          if (isComposing) return;
+          cancelInputScroll();
+          pendingInputScroll.current = false;
+          onSearchSubmit?.();
+        }}
         style={{
           position: 'relative',
           background: 'rgba(255,255,255,.95)',
@@ -62,7 +95,19 @@ export const BulletinSearchBar = forwardRef<HTMLInputElement, Props>(function Bu
           type="search"
           enterKeyHint="search"
           value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
+          onChange={(e) => {
+            pendingInputScroll.current = !!e.target.value.trim();
+            onSearchChange(e.target.value);
+          }}
+          onCompositionStart={() => {
+            cancelInputScroll();
+            setIsComposing(true);
+          }}
+          onCompositionEnd={(e) => {
+            pendingInputScroll.current = !!e.currentTarget.value.trim();
+            onSearchChange(e.currentTarget.value);
+            setIsComposing(false);
+          }}
           placeholder="搜尋教育工具名稱或描述…"
           aria-label="搜尋教育工具名稱或描述"
           style={{
@@ -81,6 +126,8 @@ export const BulletinSearchBar = forwardRef<HTMLInputElement, Props>(function Bu
           <button
             type="button"
             onClick={() => {
+              cancelInputScroll();
+              pendingInputScroll.current = false;
               onSearchChange('');
               sectionRef.current?.querySelector('input')?.focus({ preventScroll: true });
             }}
