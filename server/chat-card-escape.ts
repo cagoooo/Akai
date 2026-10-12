@@ -8,3 +8,8 @@ export function escapeChatCardText(value: unknown): string {
     "'": '&#39;',
   })[character]!);
 }
+
+/** Chat 純文字有自己的提及語法，不能讓外部資料插入 <users/all>。 */
+export function literalChatText(value: unknown): string {
+  return String(value ?? '').replace(/</g, '‹').replace(/>/g, '›');
+}

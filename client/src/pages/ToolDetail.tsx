@@ -1,3 +1,4 @@
+import { safeDiagnostic } from '@/lib/safeDiagnostic';
 /**
  * 工具詳情頁面 v2.1
  * 顯示單一教育工具的完整資訊 - 升級版 UI/UX
@@ -326,7 +327,7 @@ export function ToolDetail() {
 
                 throw new Error('無法獲取工具數據');
             } catch (err) {
-                console.error('數據獲取失敗:', err);
+                safeDiagnostic('數據獲取失敗:', err, 'error');
                 throw err;
             }
         },
@@ -389,7 +390,7 @@ export function ToolDetail() {
                 queryClient.invalidateQueries({ queryKey: ['toolStats', tool.id] });
             })
             .catch((error) => {
-                console.error('trackToolUsage failed:', error);
+                safeDiagnostic('trackToolUsage failed:', error, 'error');
                 queryClient.invalidateQueries({ queryKey: ['toolStats', tool.id] });
             });
         addToRecent(tool.id);
@@ -407,7 +408,7 @@ export function ToolDetail() {
             notifyPromise,
             new Promise((resolve) => setTimeout(resolve, 1200)),
         ]).catch((error) => {
-            console.error('工具使用通知寫入失敗:', error);
+            safeDiagnostic('工具使用通知寫入失敗:', error, 'error');
         });
 
         if (inAppBrowser) {
@@ -453,7 +454,7 @@ export function ToolDetail() {
             notifyPromise,
             new Promise((resolve) => setTimeout(resolve, 1200)),
         ]).catch((error) => {
-            console.error('tool detail intro notification failed:', error);
+            safeDiagnostic('tool detail intro notification failed:', error, 'error');
         });
 
         navigate(blogPostPath);
@@ -467,7 +468,7 @@ export function ToolDetail() {
                 description: '工具連結已複製到剪貼簿',
             });
         } catch (error) {
-            console.error('複製失敗:', error);
+            safeDiagnostic('複製失敗:', error, 'error');
         }
     };
 

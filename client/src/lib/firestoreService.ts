@@ -1,4 +1,5 @@
 // Firestore 資料庫服務層
+import { createSecureRandomId } from './randomId';
 import { db, isFirebaseAvailable, waitForAppCheck } from './firebase';
 import { shouldReportErrorToFirestore } from './errorReporting';
 import { reportTrackFailure, watchPageHidden } from './toolTrackFailure';
@@ -132,11 +133,11 @@ function getOrCreateSessionId(): string {
         if (existing && ts && Date.now() - ts < SESSION_TTL_MS) {
             return existing;
         }
-        // 新 session：用 crypto.randomUUID 若可用，fallback Math.random
-        const id =
-            typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
-                ? crypto.randomUUID()
-                : `s_${Math.random().toString(36).slice(2)}_${Date.now().toString(36)}`;
+        const id = createSecureRandomId();
+        if (!id) {
+            console.warn('無法產生安全會話識別碼，工具統計使用非唯一匿名標記。');
+            return 'anon';
+        }
         localStorage.setItem(SESSION_ID_KEY, id);
         localStorage.setItem(SESSION_TS_KEY, String(Date.now()));
         return id;

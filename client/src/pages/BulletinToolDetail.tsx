@@ -1,3 +1,4 @@
+import { safeDiagnostic } from '@/lib/safeDiagnostic';
 /**
  * BulletinToolDetail — E2 公佈欄版工具詳情頁
  *
@@ -300,7 +301,7 @@ export function BulletinToolDetail() {
     // 點擊的權威值，補救「prev 尚未回→樂觀 +1 被吞掉」的競態，並回填 lastUsedAt。
     trackToolUsage(tool.id)
       .then(() => queryClient.invalidateQueries({ queryKey: ['toolStats', tool.id] }))
-      .catch((err) => console.error('追蹤工具使用失敗:', err));
+      .catch((err) => safeDiagnostic('追蹤工具使用失敗:', err, 'error'));
 
     const notifyPromise = notifyEngagementAfterHomeEntry({
       type: 'tool_click',
@@ -315,7 +316,7 @@ export function BulletinToolDetail() {
       notifyPromise,
       new Promise((resolve) => setTimeout(resolve, 1200)),
     ]).catch((err) => {
-      console.error('工具使用通知寫入失敗:', err);
+      safeDiagnostic('工具使用通知寫入失敗:', err, 'error');
     });
 
     if (inAppBrowser) {
@@ -352,7 +353,7 @@ export function BulletinToolDetail() {
       notifyPromise,
       new Promise((resolve) => setTimeout(resolve, 1200)),
     ]).catch((err) => {
-      console.error('tool detail intro notification failed:', err);
+      safeDiagnostic('tool detail intro notification failed:', err, 'error');
     });
 
     navigate(blogPostPath);
@@ -369,7 +370,7 @@ export function BulletinToolDetail() {
       await navigator.clipboard.writeText(shareUrl);
       toast({ title: '已複製連結 🔗', description: '工具詳情頁連結已複製到剪貼簿' });
     } catch (err) {
-      console.error('複製失敗:', err);
+      safeDiagnostic('複製失敗:', err, 'error');
     }
   };
 

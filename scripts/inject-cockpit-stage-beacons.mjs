@@ -19,8 +19,9 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { containedRealPath, selectedDirectoryRoot } from './lib/path-safety.mjs';
 
-const COCKPIT_DIR = process.env.COCKPIT_DIR || 'H:/it-cockpit';
+const COCKPIT_DIR = selectedDirectoryRoot(process.env.COCKPIT_DIR || 'H:/it-cockpit');
 const TOOL_ID = 81;
 const BEACON_MARKER = 'beaconToolClick';
 const EXCLUDE_DIRS = new Set(['assets', 'node_modules', '.git', '.github', '.vscode']);
@@ -67,11 +68,18 @@ const stages = fs.readdirSync(COCKPIT_DIR, { withFileTypes: true })
 const results = { ok: [], skip: [], warn: [] };
 
 for (const stage of stages) {
-  const file = path.join(COCKPIT_DIR, stage, 'index.html');
+  // stageId 同時出現在 JavaScript 字串；只允許後端接受的安全名稱。
+  if (!/^[a-zA-Z0-9_-]{1,32}$/.test(stage)) {
+    results.warn.push({ stage, reason: 'invalid stageId' });
+    continue;
+  }
+  let file = path.join(COCKPIT_DIR, stage, 'index.html');
   if (!fs.existsSync(file)) {
     results.warn.push({ stage, reason: 'no index.html' });
     continue;
   }
+  file = containedRealPath(COCKPIT_DIR, file);
+  if (!fs.statSync(file).isFile()) throw new Error('stage index.html 必須是一般檔案');
   const content = fs.readFileSync(file, 'utf-8');
   if (content.includes(BEACON_MARKER)) {
     results.skip.push(stage);

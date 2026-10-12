@@ -1,3 +1,4 @@
+import { safeDiagnostic } from '@/lib/safeDiagnostic';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { PWA_UPDATE_AVAILABLE_EVENT } from '@/serviceWorkerRegistration';
 
@@ -80,7 +81,7 @@ export function usePWAUpdate() {
         const checkForUpdate = () => {
             if (!document.hidden) {
                 void registrationRef.current?.update().catch((error) => {
-                    console.warn('[PWA] 更新檢查失敗：', error);
+                    safeDiagnostic('[PWA] 更新檢查失敗：', error, 'warn');
                 });
             }
         };
@@ -195,7 +196,7 @@ export function usePWAUpdate() {
             // version.json 已更新但瀏覽器尚未產生 waiting worker 時，以一般 reload 取得最新 HTML。
             window.location.reload();
         } catch (error) {
-            console.warn('[PWA] 套用更新失敗：', error);
+            safeDiagnostic('[PWA] 套用更新失敗：', error, 'warn');
             fail();
         }
     }, []);

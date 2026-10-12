@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createLineShareUrl } from '@/lib/blogShare';
 
 interface BlogMobileShareProps {
   shareTitle?: string;
@@ -27,9 +28,7 @@ export function BlogMobileShare({ shareTitle }: BlogMobileShareProps) {
 
   const lineShareHref = (() => {
     if (typeof window === 'undefined') return '#';
-    const url = encodeURIComponent(window.location.href);
-    const text = encodeURIComponent(shareTitle || document.title);
-    return `https://social-plugins.line.me/lineit/share?url=${url}&text=${text}`;
+    return createLineShareUrl(window.location.href, shareTitle || document.title);
   })();
 
   return (

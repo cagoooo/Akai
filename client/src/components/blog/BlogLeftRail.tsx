@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createLineShareUrl } from '@/lib/blogShare';
 
 interface BlogLeftRailFact {
   key: string;
@@ -47,9 +48,7 @@ export function BlogLeftRail({
 
   const lineShareHref = (() => {
     if (typeof window === 'undefined') return '#';
-    const url = encodeURIComponent(window.location.href);
-    const text = encodeURIComponent(shareTitle || document.title);
-    return `https://social-plugins.line.me/lineit/share?url=${url}&text=${text}`;
+    return createLineShareUrl(window.location.href, shareTitle || document.title);
   })();
 
   return (

@@ -1,3 +1,4 @@
+import { safeDiagnostic } from '@/lib/safeDiagnostic';
 import { Suspense, lazy, useEffect } from "react";
 import { Router, Switch, Route, useLocation } from "wouter";
 import { HelmetProvider } from "react-helmet-async";
@@ -54,7 +55,7 @@ const basePath = import.meta.env.BASE_URL || '/';
 if (typeof window !== 'undefined') {
   void userInteractionReady.then(() => {
     import('@/lib/visitorTracker').then(({ trackPageVisit }) => {
-      trackPageVisit().catch((err) => console.warn('[App] trackPageVisit 失敗:', err));
+      trackPageVisit().catch((err) => safeDiagnostic('[App] trackPageVisit 失敗:', err, 'warn'));
     });
   }); // 首次操作後才啟動統計，不讓第三方驗證搶首屏資源。
 }

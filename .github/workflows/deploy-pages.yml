@@ -90,6 +90,9 @@ jobs:
       - name: Functions policy tests
         run: npm run test:functions
 
+      - name: Security boundary tests
+        run: npm run test:security
+
       - name: Build Functions
         run: npm run build --prefix functions
 

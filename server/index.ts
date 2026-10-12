@@ -5,7 +5,8 @@ import { db, sql, dbType } from "../db";
 import path from "node:path";
 import fs from "node:fs";
 import compression from "compression";
-import { escapeChatCardText } from "./chat-card-escape";
+import { escapeChatCardText, literalChatText } from "./chat-card-escape";
+import { publicErrorResponse, publicHealthStatus, validErrorStatus } from "./public-diagnostics";
 
 const app = express();
 app.use(compression());
@@ -130,7 +131,7 @@ app.use((req, res, next) => {
           };
         }
 
-        res.json(status);
+        res.json(publicHealthStatus(status, app.get('env') === 'development'));
       } catch (error) {
         console.error("Health check failed:", error);
 
@@ -139,15 +140,16 @@ app.use((req, res, next) => {
         status.errorStack = error instanceof Error ? error.stack : undefined;
 
         // 仍返回200但標示為degraded，這樣負載均衡器不會直接將服務標記為不可用
-        res.status(200).json(status);
+        res.status(200).json(publicHealthStatus(status, app.get('env') === 'development'));
       }
     });
 
     app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-      const status = err.status || err.statusCode || 500;
+      const status = validErrorStatus(err.status || err.statusCode);
       const message = err.message || "Internal Server Error";
+      const errorId = Date.now();
 
-      log(`Error: ${status} - ${message} - ${err.stack || 'No stack trace'}`);
+      log(`Error ${errorId}: ${status} - ${message} - ${err.stack || 'No stack trace'}`);
 
       // 當狀態碼為 500 且配置了 GOOGLE_CHAT_WEBHOOK_URL 時，發送告警到 Google Chat
       const webhookUrl = process.env.GOOGLE_CHAT_WEBHOOK_URL;
@@ -211,7 +213,7 @@ app.use((req, res, next) => {
             const https = await import("https");
             const urlObj = new URL(webhookUrl.trim());
             const postData = JSON.stringify({
-              text: summaryText.slice(0, 1000),
+              text: literalChatText(summaryText).slice(0, 1000),
               cardsV2: [card]
             });
 
@@ -231,6 +233,7 @@ app.use((req, res, next) => {
             req.on('error', (e) => {
               console.error("Failed to send Express error to Google Chat via HTTPS request:", e);
             });
+            req.on('timeout', () => req.destroy(new Error('通知連線逾時')));
 
             req.write(postData);
             req.end();
@@ -240,11 +243,10 @@ app.use((req, res, next) => {
         })();
       }
 
-      res.status(status).json({
-        message,
-        errorId: new Date().getTime(),
-        success: false
-      });
+      res.status(status).json(publicErrorResponse(
+        app.get('env') === 'development' ? message : '服務暫時無法完成要求，請稍後再試',
+        err, app.get('env') === 'development', errorId,
+      ));
     });
 
     if (app.get("env") === "development") {

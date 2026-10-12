@@ -382,13 +382,13 @@ async function main() {
   // 1) 產生 OG 圖
   const pngBuffer = await generateOG(tools);
   // 用 toolCount + 內容 hash 當版本，避免每次 build 都換檔名
-  const hash = createHash('md5').update(pngBuffer).digest('hex').slice(0, 8);
+  const hash = createHash('sha256').update(pngBuffer).digest('hex').slice(0, 16);
   const ogFilename = `og-preview-${hash}.png`;
   const ogPath = resolve(PUBLIC_DIR, ogFilename);
 
   // 清掉舊的 og-preview-*.png（保留最新）
   for (const f of readdirSync(PUBLIC_DIR)) {
-    if (/^og-preview-[a-f0-9]{8}\.png$/.test(f) && f !== ogFilename) {
+    if (/^og-preview-(?:[a-f0-9]{8}|[a-f0-9]{16})\.png$/.test(f) && f !== ogFilename) {
       try { unlinkSync(resolve(PUBLIC_DIR, f)); } catch { /* ignore */ }
     }
   }

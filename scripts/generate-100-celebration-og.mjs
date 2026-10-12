@@ -547,13 +547,13 @@ async function main() {
   console.log(`🎉 100 工具達成紀念 OG：主角 ${CELEBRATION_TOOL_IDS.join(', ')}${achievedDate ? `（達成 ${achievedDate}）` : ''}\n`);
 
   const pngBuffer = await generateOG(allTools, achievedDate);
-  const hash = createHash('md5').update(pngBuffer).digest('hex').slice(0, 8);
+  const hash = createHash('sha256').update(pngBuffer).digest('hex').slice(0, 16);
   const filename = `og-preview-celebration-100-${hash}.png`;
   const outPath = resolve(PUBLIC_DIR, filename);
 
   // 清掉舊的 celebration PNG
   for (const f of readdirSync(PUBLIC_DIR)) {
-    if (/^og-preview-celebration-100-[a-f0-9]{8}\.png$/.test(f) && f !== filename) {
+    if (/^og-preview-celebration-100-(?:[a-f0-9]{8}|[a-f0-9]{16})\.png$/.test(f) && f !== filename) {
       try { unlinkSync(resolve(PUBLIC_DIR, f)); } catch { /* ignore */ }
     }
   }

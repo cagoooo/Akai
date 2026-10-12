@@ -1,3 +1,4 @@
+import { safeDiagnostic } from '@/lib/safeDiagnostic';
 import { Card, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -185,7 +186,7 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
       });
     },
     onError: (error) => {
-      console.error('工具卡片點擊錯誤:', tool.id, error);
+      safeDiagnostic('[ToolCard] 卡片點擊失敗', error, 'error');
     }
   });
 
@@ -207,7 +208,7 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
           }));
         }
       })
-      .catch(error => console.error('工具使用追蹤失敗:', error));
+      .catch(error => safeDiagnostic('工具使用追蹤失敗:', error, 'error'));
 
     try {
       // LINE 等內建瀏覽器會阻擋新視窗，改用直接跳轉
@@ -224,7 +225,7 @@ export function ToolCard({ tool: initialTool, isLoading = false, isFavorite = fa
         document.body.removeChild(link);
       }
     } catch (error) {
-      console.error('開啟工具失敗:', error);
+      safeDiagnostic('開啟工具失敗:', error, 'error');
       // 極端情況下的回退
       window.location.href = tool.url;
     }
