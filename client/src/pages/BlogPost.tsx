@@ -13,7 +13,7 @@ import { useQuery } from '@tanstack/react-query';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
-import type { EducationalTool } from '@/lib/data';
+import { HOME_CATALOGUE_QUERY_KEY, fetchHomeCatalogue } from '@/lib/toolCatalogue';
 import type { BlogPost as BlogPostType } from '@/blog/posts';
 import { POSTS_INDEX } from '@/blog/postsIndex';
 import { loadPost } from '@/blog/postLoader';
@@ -91,15 +91,10 @@ export function BlogPost() {
   const loadedAsync = loaded?.slug === params.slug;
   const post = loadedAsync ? loaded.post : undefined;
 
-  const { data: tools } = useQuery<EducationalTool[]>({
-    queryKey: ['/api/tools'],
-    queryFn: async () => {
-      const base = import.meta.env.BASE_URL || '/';
-      const version = import.meta.env.VITE_APP_VERSION || Date.now();
-      const res = await fetch(`${base}api/tools.json?v=${version}`);
-      if (!res.ok) throw new Error('tools fetch failed');
-      return res.json();
-    },
+  // 「相關工具」只需要 id、標題、分類，讀輕量目錄即可（從首頁過來時直接用快取）
+  const { data: tools } = useQuery({
+    queryKey: HOME_CATALOGUE_QUERY_KEY,
+    queryFn: fetchHomeCatalogue,
     staleTime: 5 * 60 * 1000,
     enabled: !!post,
   });

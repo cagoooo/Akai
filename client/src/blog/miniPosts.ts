@@ -113,8 +113,19 @@ ${tags.length > 0 ? `\n## 🏷 工具標籤\n\n${tags.map((t) => `\`${t}\``).joi
  *
  * HANDWRITTEN_TOOL_IDS 由 posts.ts 從 POSTS 自動 derive，新增手寫長文時無需手動同步。
  */
+/** 工具是否沒有手寫長文、需要自動產生迷你文章。 */
+const needsMiniPost = (tool: EducationalTool): boolean => !tool.isInternal && !HANDWRITTEN_TOOL_IDS.has(tool.id);
+
 export function generateMiniPosts(tools: EducationalTool[]): BlogPost[] {
   return tools
-    .filter((t) => !t.isInternal && !HANDWRITTEN_TOOL_IDS.has(t.id))
+    .filter(needsMiniPost)
     .map(toolToMiniPost);
+}
+
+/**
+ * 目前是否真的有迷你文章。迷你文章的正文含工具長介紹，只有這時才需要完整工具目錄；
+ * 所有工具都有手寫長文時（常態）可省下約 469KB 的下載。
+ */
+export function hasMiniPosts(tools: EducationalTool[]): boolean {
+  return tools.some(needsMiniPost);
 }

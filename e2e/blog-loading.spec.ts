@@ -52,6 +52,27 @@ test('畫面外文章保留連結，捲動、鍵盤與列印皆能顯示', async
   await expect(page.locator('.bp-article')).toBeVisible();
 });
 
+test('列表與文章只載入輕量工具目錄（完整目錄約 469KB）', async ({ page }) => {
+  const catalogue: string[] = [];
+  page.on('request', request => {
+    const file = request.url().match(/\/api\/(tools-lite\.json|tools\.json)/)?.[1];
+    if (file) catalogue.push(file);
+  });
+  await page.goto('blog', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.bp-list-card').first()).toBeVisible({ timeout: 30_000 });
+  await expect.poll(() => catalogue.length).toBeGreaterThan(0);
+  expect(catalogue).not.toContain('tools.json');
+  // 搜尋照常運作（只有存在「無手寫長文的迷你文章」時才會補載完整目錄，所以不在此斷言）
+  await page.getByTestId('blog-search-input').fill('駕駛艙');
+  await expect(page.locator('.bp-list-card').first()).toBeVisible();
+
+  catalogue.length = 0;
+  await page.goto('blog/cockpit-81-info-tech-class', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.bp-article')).toBeVisible();
+  await expect.poll(() => catalogue.length).toBeGreaterThan(0); // 相關工具仍會載入，但只讀輕量目錄
+  expect(catalogue).not.toContain('tools.json');
+});
+
 test('列表不依賴文章全文，搜尋才補載且仍可開文章', async ({ page }) => {
   let requested = false;
   let release!: () => void;

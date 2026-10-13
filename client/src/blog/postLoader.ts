@@ -9,6 +9,7 @@
  */
 import type { BlogPost } from './posts';
 import { POSTS_INDEX } from './postsIndex';
+import { loadTool } from '@/lib/toolLoader';
 
 const bodyLoaders = import.meta.glob<string>('./bodies/*.ts', { import: 'default' });
 
@@ -32,12 +33,9 @@ async function loadMiniPost(slug: string): Promise<BlogPost | undefined> {
   if (!match) return undefined;
   const id = parseInt(match[1], 10);
   try {
-    const base = import.meta.env.BASE_URL || '/';
-    const version = import.meta.env.VITE_APP_VERSION || Date.now();
-    const res = await fetch(`${base}api/tools.json?v=${version}`);
-    if (!res.ok) return undefined;
-    const tools = await res.json();
-    const tool = tools.find((t: { id: number }) => t.id === id);
+    // 只取這一張工具（含長介紹）；找不到單筆檔時 loadTool 會自己退回完整目錄。
+    // 以前為了一篇迷你文章要下載整份完整目錄（約 469KB）。
+    const tool = await loadTool(id);
     if (!tool) return undefined;
     const { toolToMiniPost } = await import('./miniPosts');
     const mini = toolToMiniPost(tool);

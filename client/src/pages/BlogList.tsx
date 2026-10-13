@@ -14,8 +14,9 @@ import { Link } from 'wouter';
 import Fuse from 'fuse.js';
 import { useQuery } from '@tanstack/react-query';
 import { POSTS_INDEX, type BlogPostMeta } from '@/blog/postsIndex';
-import { generateMiniPosts } from '@/blog/miniPosts';
+import { generateMiniPosts, hasMiniPosts } from '@/blog/miniPosts';
 import type { EducationalTool } from '@/lib/data';
+import { HOME_CATALOGUE_QUERY_KEY, fetchHomeCatalogue } from '@/lib/toolCatalogue';
 import { tokens } from '@/design/tokens';
 import { Tape } from '@/components/primitives/Tape';
 import { BulletinHeader } from '@/components/bulletin/BulletinHeader';
@@ -131,8 +132,24 @@ export function BlogList() {
   const [selectedCat, setSelectedCat] = useState<string | null>(initial.cat);
   const [platform, setPlatform] = useState<PlatformKey>(initial.platform);
 
-  // 載入 tools.json（用於 post → platform 對應）
-  const { data: tools } = useQuery<EducationalTool[]>({
+  // 瀏覽列表只需要工具的標題、網址（post → platform 對應）與摘要，讀輕量目錄即可（從首頁過來時直接用快取）。
+  const { data: tools } = useQuery({
+    queryKey: HOME_CATALOGUE_QUERY_KEY,
+    queryFn: fetchHomeCatalogue,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  // 瀏覽列表只需 metadata；開始搜尋時才補上全文，保留原本 body 搜尋能力。
+  const { data: fullPosts, isFetching: postsLoading, isError: postsError, refetch: retryPosts } = useQuery({
+    queryKey: ['blog-search-posts'],
+    queryFn: () => import('@/blog/posts').then((module) => module.POSTS),
+    enabled: searchEnabled,
+    staleTime: Infinity,
+  });
+  // 迷你文章的正文含工具長介紹，搜尋時要補上完整目錄，才不會漏掉只出現在長介紹裡的關鍵字；
+  // 所有工具都有手寫長文（沒有迷你文章）時不需要，省下約 469KB。
+  const needsToolDetails = useMemo(() => hasMiniPosts(tools || []), [tools]);
+  const { data: fullTools, isFetching: toolsLoading, isError: toolsError, refetch: retryTools } = useQuery<EducationalTool[]>({
     queryKey: ['/api/tools'],
     queryFn: async () => {
       const base = import.meta.env.BASE_URL || '/';
@@ -141,20 +158,16 @@ export function BlogList() {
       if (!res.ok) throw new Error('tools fetch failed');
       return res.json();
     },
+    enabled: searchEnabled && needsToolDetails,
     staleTime: 5 * 60 * 1000,
   });
-
-  // 瀏覽列表只需 metadata；開始搜尋時才補上全文，保留原本 body 搜尋能力。
-  const { data: fullPosts, isFetching: searchLoading, isError: searchError, refetch: retrySearch } = useQuery({
-    queryKey: ['blog-search-posts'],
-    queryFn: () => import('@/blog/posts').then((module) => module.POSTS),
-    enabled: searchEnabled,
-    staleTime: Infinity,
-  });
+  const searchLoading = postsLoading || toolsLoading;
+  const searchError = postsError || toolsError;
+  const retrySearch = () => Promise.all([postsError ? retryPosts() : undefined, toolsError ? retryTools() : undefined]);
   const posts = useMemo<BlogPostMeta[]>(() => [
     ...(fullPosts || POSTS_INDEX),
-    ...generateMiniPosts(tools || []),
-  ], [fullPosts, tools]);
+    ...generateMiniPosts(fullTools || tools || []),
+  ], [fullPosts, fullTools, tools]);
 
   // URL query sync
   useEffect(() => {
