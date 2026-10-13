@@ -22,7 +22,7 @@ jobs:
        github.event.workflow_run.event != 'pull_request' &&
        github.event.workflow_run.head_repository.full_name == github.repository)
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     env:
       EXPECTED_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
       SITE_URL: https://cagoooo.github.io/Akai/
@@ -50,8 +50,13 @@ jobs:
         # budget.json 的效能預算維持原本觀察模式，分數閘門由下一步負責。
         continue-on-error: true
         with:
+          # 每個網址跑 3 次取中位數：單次量測同一天會在 18～62 分之間亂跳（與程式改動無關），無法判斷優化是否有效。
+          # 工具頁與文章頁先只觀察不把關，見 scripts/lighthouse-quality.mjs。
+          runs: 3
           urls: |
             https://cagoooo.github.io/Akai/
+            https://cagoooo.github.io/Akai/tool/81/
+            https://cagoooo.github.io/Akai/blog/cockpit-81-info-tech-class
           budgetPath: ./budget.json
           uploadArtifacts: false
           temporaryPublicStorage: true
