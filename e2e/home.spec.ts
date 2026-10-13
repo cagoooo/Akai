@@ -64,6 +64,37 @@ test.describe('首頁冒煙測試', () => {
     await page.keyboard.press('/');
     const searchInput = page.getByPlaceholder(/搜尋/);
     await expect(searchInput.first()).toBeFocused({ timeout: 10_000 });
+    // 按 / 是第一個動作時，自動彈窗不可以跳出來把焦點搶走（2026-10-13 實測抓到的問題）
+    await page.waitForTimeout(3000);
+    await expect(searchInput.first()).toBeFocused();
+    await expect(page.locator('.audience-wizard')).toHaveCount(0);
+  });
+
+  // 2026-10-13 實驗：推薦精靈在進站第一次渲染就蓋滿畫面，成為手機版 LCP 元素（本機 12.4→6.0 秒）。
+  // 改成訪客互動且停手約 1.5 秒後、或完全不互動 10 秒後才自動彈出，且不打斷正在輸入或操作的訪客。
+  test('進站時不彈出推薦精靈；第一次互動後才彈出', async ({ page }) => {
+    await gotoHome(page);
+    await page.waitForTimeout(1500);
+    await expect(page.locator('.audience-wizard')).toHaveCount(0);
+    await page.keyboard.press('Shift');
+    await expect(page.locator('.audience-wizard')).toBeVisible();
+  });
+
+  test('完全不互動也會在約 10 秒後彈出（不會變成永遠不彈）', async ({ page }) => {
+    test.setTimeout(45_000);
+    await gotoHome(page);
+    await expect(page.locator('.audience-wizard')).toHaveCount(0);
+    await expect(page.locator('.audience-wizard')).toBeVisible({ timeout: 20_000 });
+  });
+
+  test('在搜尋框裡操作與打字不會被彈窗打斷', async ({ page }) => {
+    await gotoHome(page);
+    const input = page.getByRole('searchbox', { name: '搜尋教育工具名稱或描述' });
+    await input.click();
+    await input.pressSequentially('駕駛艙', { delay: 80 });
+    await page.waitForTimeout(1500);
+    await expect(page.locator('.audience-wizard')).toHaveCount(0);
+    await expect(input).toHaveValue('駕駛艙');
   });
 
   // 2026-10-13 量測：破百橫幅與最新工具入口晚到，曾讓首頁 CLS 達 0.127（>0.1 即「需要改善」）。

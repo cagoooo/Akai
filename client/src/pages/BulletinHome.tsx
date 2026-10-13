@@ -16,6 +16,7 @@ import type { EducationalTool } from '@/lib/data';
 import { HOME_CATALOGUE_QUERY_KEY, fetchHomeCatalogue } from '@/lib/toolCatalogue';
 import { useFavorites } from '@/hooks/useFavorites';
 import { useRecentTools } from '@/hooks/useRecentTools';
+import { useAutoPopupReady } from '@/hooks/useAutoPopupReady';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useSortOptions } from '@/hooks/useSortOptions';
 import { useToolClickStats } from '@/hooks/useToolClickStats';
@@ -108,9 +109,19 @@ export function BulletinHome() {
   const [showWishingWellFromShortcut, setShowWishingWellFromShortcut] = useState(false);
   const [selectedToolIndex, setSelectedToolIndex] = useState(0);
   const [audienceProfile, setAudienceProfile] = useState(() => readAudienceProfile());
-  const [showAudienceWizard, setShowAudienceWizard] = useState(() =>
+  // 自動彈窗（族群推薦精靈、最新上架）不在進站時就蓋住畫面：等第一次互動或 10 秒後才開，
+  // 否則精靈會成為手機版的「最大內容」並拖慢首次繪製（本機實驗 LCP 12.4→6.0 秒）。
+  const autoPopupReady = useAutoPopupReady();
+  // 要不要自動開精靈，照舊在進站當下依網址與儲存狀態判定；只是真正開啟延到 autoPopupReady
+  const [wizardAutoPending, setWizardAutoPending] = useState(() =>
     shouldAutoOpenAudienceWizard(new URLSearchParams(window.location.search))
   );
+  const [showAudienceWizard, setShowAudienceWizard] = useState(false);
+  useEffect(() => {
+    if (!autoPopupReady || !wizardAutoPending) return;
+    setShowAudienceWizard(true);
+    setWizardAutoPending(false);
+  }, [autoPopupReady, wizardAutoPending]);
   // 這次開啟是「隔幾天回訪的重問」而不是「首次引導」：換文案，
   // 而且被關掉時要延後幾天（不是每次進站都攔）。
   const [isAudienceReturnVisit, setIsAudienceReturnVisit] = useState(() => isAudienceRePrompt());
@@ -338,8 +349,8 @@ export function BulletinHome() {
       <BulletinHeader />
       <LatestToolsShowcase
         tools={toolsWithStats}
-        blocked={showAudienceWizard || showShortcutsDialog || showWishingWellFromShortcut || highlightedToolId !== null}
-        autoEligible={latestAutoEligible}
+        blocked={showAudienceWizard || wizardAutoPending || showShortcutsDialog || showWishingWellFromShortcut || highlightedToolId !== null}
+        autoEligible={latestAutoEligible && autoPopupReady}
         open={showLatestTools}
         onOpenChange={setShowLatestTools}
         onLocateTool={locateRecommendedTool}
