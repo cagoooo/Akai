@@ -52,6 +52,23 @@ test('畫面外文章保留連結，捲動、鍵盤與列印皆能顯示', async
   await expect(page.locator('.bp-article')).toBeVisible();
 });
 
+test('引言的襯線字型改為自架，不再向 Google 下載十幾包 Noto Serif TC（約 900KB）', async ({ page }) => {
+  const googleSerif: string[] = [];
+  const selfHosted: string[] = [];
+  page.on('request', request => {
+    const url = request.url();
+    if (/fonts\.gstatic\.com\/s\/notoseriftc/.test(url)) googleSerif.push(url);
+    if (/\/fonts\/akai-serif-tc/.test(url)) selfHosted.push(url);
+  });
+  await page.goto('blog/cockpit-81-info-tech-class', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.bp-article blockquote').first()).toBeVisible();
+  await expect.poll(() => selfHosted.length).toBeGreaterThan(0);
+  await expect.poll(() => page.evaluate(
+    () => [...document.fonts].some(font => font.family === 'Noto Serif TC' && font.status === 'loaded'),
+  )).toBe(true);
+  expect(googleSerif).toEqual([]);
+});
+
 test('列表與文章只載入輕量工具目錄（完整目錄約 469KB）', async ({ page }) => {
   const catalogue: string[] = [];
   page.on('request', request => {
