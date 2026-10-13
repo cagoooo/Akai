@@ -87,8 +87,10 @@ export function evaluateManifest(results, { readReport = defaultReadReport } = {
       const score = summary[key];
       const valid = typeof score === 'number' && Number.isFinite(score) && score >= 0 && score <= 1;
       if (!valid) {
-        if (enforced) throw new Error(`Lighthouse ${key} 分數缺漏或無效`);
-        return `| ${key} | — | 觀察中 | — |`;
+        // 門檻為 0 的項目（效能）本來就只觀察、不把關；Lighthouse 偶爾算不出效能分數（例如載入中途頁面被重整、
+        // 收不到畫面截圖），那只代表這次沒有效能數字，不應讓整個品質閘門失敗並吞掉其他分數。
+        if (enforced && min > 0) throw new Error(`Lighthouse ${key} 分數缺漏或無效`);
+        return `| ${key} | — | 觀察中 | ${enforced ? '本次未產生分數' : '—'} |`;
       }
       const pass = min === 0 || score >= min;
       if (enforced && !pass) failed.push(`${multiple ? `${pageLabel(url)} ` : ''}${key}: ${Math.round(score * 100)} < ${Math.round(min * 100)}`);

@@ -52,6 +52,23 @@ export function watchServiceWorkerRegistration(registration: ServiceWorkerRegist
   });
 }
 
+/**
+ * SW_ACTIVATED 訊號是否代表「有新版可套用」。
+ *
+ * 必須是分頁載入時就已被 SW 控制（wasControlledAtLoad），才算更新；
+ * 全新訪客第一次造訪時 SW 剛安裝並接管分頁，也會收到同樣的訊號，若誤判為更新，
+ * 閒置約 20 秒再倒數 8 秒就會把頁面無故重新整理（2026-10-13 正式站實測約第 29 秒重整一次；
+ * Lighthouse 因此收不到載入期間的截圖、效能分數變成空值）。
+ */
+export function shouldAnnounceServiceWorkerActivation(
+  data: unknown,
+  wasControlledAtLoad: boolean,
+  controller: ServiceWorker | null,
+): boolean {
+  const type = (data as { type?: unknown } | null | undefined)?.type;
+  return type === 'SW_ACTIVATED' && wasControlledAtLoad && Boolean(controller);
+}
+
 // main.tsx 已在 window.load 後呼叫；此處不可再包第二層 load listener，否則不會註冊。
 export function registerServiceWorker() {
   if (!('serviceWorker' in navigator)) return;
@@ -83,8 +100,11 @@ export function registerServiceWorker() {
 
   // 陷阱 #13（線 B）：監聽 SW activate 後廣播的 SW_ACTIVATED postMessage，
   // 作為 updatefound 事件的備援通道，確保即使 updatefound 被錯過也能收到更新通知。
+  // 註冊前先記下「這個分頁載入時是否已被 SW 控制」：全新訪客第一次造訪時 SW 才剛安裝，
+  // 啟用後接管分頁也會廣播 SW_ACTIVATED，那是「第一次安裝」不是「有新版」。
+  const wasControlledAtLoad = Boolean(navigator.serviceWorker.controller);
   navigator.serviceWorker.addEventListener('message', (event) => {
-    if (event.data?.type === 'SW_ACTIVATED' && navigator.serviceWorker.controller) {
+    if (shouldAnnounceServiceWorkerActivation(event.data, wasControlledAtLoad, navigator.serviceWorker.controller)) {
       console.log('[SW] 收到 SW_ACTIVATED 訊號，廣播更新事件');
       // SW_ACTIVATED 表示新版 SW 已接管，直接發出 update 通知（無需 postMessage SKIP_WAITING）
       window.dispatchEvent(new CustomEvent(PWA_UPDATE_AVAILABLE_EVENT, {

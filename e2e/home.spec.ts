@@ -93,6 +93,23 @@ test.describe('首頁冒煙測試', () => {
     await expect(page.locator('.audience-wizard')).toBeVisible({ timeout: 10_000 });
   });
 
+  test('全新訪客第一次造訪：Service Worker 剛安裝不算「有新版」，閒置也不會被自動重新整理', async ({ page }) => {
+    // 2026-10-13：第一次安裝的 SW 啟用訊號曾被當成更新，閒置約 20 秒 + 倒數 8 秒後頁面無故重整。
+    // 原本族群精靈一進站就開（持有「暫緩更新」票）剛好擋住它；精靈改為延後彈出後這個問題就浮現：
+    // Lighthouse 載入中途被重整，收不到畫面截圖，首頁效能分數變成空值、品質閘門失敗。
+    let documentRequests = 0;
+    page.on('request', (request) => {
+      if (request.resourceType() === 'document' && request.frame() === page.mainFrame()) documentRequests += 1;
+    });
+    await page.clock.install();
+    await gotoHome(page);
+    await page.waitForFunction(() => Boolean(navigator.serviceWorker.controller), undefined, { timeout: 30_000 });
+    await page.waitForTimeout(1500); // 讓 SW_ACTIVATED 訊號送達
+    await page.clock.runFor(40_000); // 閒置 20 秒 + 倒數 8 秒（runFor 會把倒數的每一秒都跑完，fastForward 只會觸發一次）
+    await page.waitForTimeout(1500);
+    expect(documentRequests).toBe(1);
+  });
+
   test('在搜尋框裡操作與打字不會被彈窗打斷', async ({ page }) => {
     await gotoHome(page);
     const input = page.getByRole('searchbox', { name: '搜尋教育工具名稱或描述' });

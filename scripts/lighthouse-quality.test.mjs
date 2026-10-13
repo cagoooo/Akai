@@ -65,6 +65,22 @@ test('觀察中的頁面分數無效不會中斷；首頁分數無效仍然視�
   ]));
 });
 
+test('首頁效能分數算不出來（只觀察的項目）不讓閘門失敗，但其他把關項目缺漏仍然失敗', () => {
+  const noPerformance = { ...good, performance: null };
+  const result = evaluateManifest([{ url: HOME, summary: noPerformance, isRepresentativeRun: true }]);
+  assert.deepEqual(result.failed, []);
+  assert.match(result.markdown, /本次未產生分數/);
+  // 有把關門檻的項目缺漏，照舊視為失敗
+  for (const key of ['accessibility', 'best-practices', 'seo']) {
+    assert.throws(() => evaluateManifest([{ url: HOME, summary: { ...good, [key]: null }, isRepresentativeRun: true }]));
+  }
+  // 效能算不出來時，其他項目低於門檻仍然會被揪出來
+  assert.deepEqual(
+    evaluateManifest([{ url: HOME, summary: { ...noPerformance, seo: 0.5 }, isRepresentativeRun: true }]).failed,
+    ['seo: 50 < 75'],
+  );
+});
+
 test('核心指標與最大內容元素寫進報告；讀不到完整報告時只略過指標', () => {
   const lhr = { audits: {
     'first-contentful-paint': { numericValue: 2100 },
