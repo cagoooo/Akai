@@ -63,4 +63,17 @@ describe('Service Worker 更新檢查失敗的回報', () => {
     expect(fetchImpl).not.toHaveBeenCalled();
     expect(report).toHaveBeenCalledWith('[PWA] 更新檢查失敗：', error, 'warn');
   });
+
+  it('Safari 註冊裡沒有 worker（newestWorker is null）：不探測、不回報', async () => {
+    // 2026-10-13 告警：iPhone Safari 的 registration.update() 丟 InvalidStateError
+    const report = vi.fn();
+    const fetchImpl = vi.fn();
+    const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+
+    await reportServiceWorkerUpdateFailure(new DOMException('newestWorker is null', 'InvalidStateError'), { fetchImpl, report });
+
+    expect(fetchImpl).not.toHaveBeenCalled();
+    expect(report).not.toHaveBeenCalled();
+    expect(info).toHaveBeenCalledTimes(1);
+  });
 });

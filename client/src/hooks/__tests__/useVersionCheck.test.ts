@@ -30,4 +30,18 @@ describe('useVersionCheck', () => {
     );
     unmount();
   });
+
+  it('網路暫時中斷（iOS Load failed）只記 info，不送 warn 告警', async () => {
+    // 2026-10-13 告警：iPhone Chrome 單次抓 version.json 失敗
+    const fetchMock = vi.fn().mockRejectedValue(new TypeError('Load failed'));
+    vi.stubGlobal('fetch', fetchMock);
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+
+    const { unmount } = renderHook(() => useVersionCheck({ intervalMs: 60_000 }));
+
+    await waitFor(() => expect(info).toHaveBeenCalledWith('[useVersionCheck] 暫時連不上網路，稍後自動重試'));
+    expect(warn).not.toHaveBeenCalledWith('[useVersionCheck] 無法取得 version.json:', expect.anything());
+    unmount();
+  });
 });

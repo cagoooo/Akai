@@ -2,6 +2,13 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.159] - 2026-10-13 — 手機暫時斷線、Safari 沒有 Service Worker 時不再送出假告警
+
+- **現象**：Sentry 收到兩則告警，都來自 iPhone：Safari 的 `InvalidStateError: newestWorker is null`（背景更新檢查）、iPhone Chrome 的 `TypeError: Load failed`（抓 `version.json`）。各只有 1 位訪客、1～2 次，網站功能正常。
+- **原因**：前者是 Safari 在「這個註冊目前沒有任何 worker」（剛安裝失敗、網站資料被清、正在換手）時呼叫 `update()` 會丟的錯；後者是手機切 App、收訊不穩時單次請求被中止。兩者下一輪檢查都會自己恢復，卻被 `console.warn` 送進 Sentry。
+- **修正**：`reportServiceWorkerUpdateFailure` 遇到 `InvalidStateError` 改記 info；`useVersionCheck` 遇到網路中止（沿用 `isAbortedRequestError`）改記 info。其他真正的錯誤照常告警。
+- 新增測試：Safari `InvalidStateError` 不回報；`Load failed` 不送 warn。
+
 ## [3.6.158] - 2026-10-13 — 第一次造訪不再被當成「有新版」而無故重新整理；Lighthouse 閘門不再被空的效能分數卡死
 
 - **現象**：3.6.157 上線後 Lighthouse CI 失敗：「Lighthouse performance 分數缺漏或無效」，首頁與工具頁、文章頁的效能分數都是空值（原因：Chrome 沒收到畫面截圖）。

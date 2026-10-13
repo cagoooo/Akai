@@ -11,6 +11,7 @@
  */
 
 import { useEffect, useState, useRef } from 'react';
+import { isAbortedRequestError } from '@/lib/sentry';
 
 export interface VersionInfo {
   version: string;
@@ -71,6 +72,11 @@ export function useVersionCheck(options: UseVersionCheckOptions = {}): UseVersio
       const data = (await res.json()) as VersionInfo;
       return data;
     } catch (err) {
+      // 手機切 App、收訊不穩時單次請求會被中止（iOS 是 "Load failed"），下一輪檢查會自己恢復，不需要告警
+      if (isAbortedRequestError(err)) {
+        console.info('[useVersionCheck] 暫時連不上網路，稍後自動重試');
+        return null;
+      }
       console.warn('[useVersionCheck] 無法取得 version.json:', err);
       return null;
     }

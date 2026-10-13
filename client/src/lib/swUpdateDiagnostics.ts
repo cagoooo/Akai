@@ -34,6 +34,14 @@ export async function reportServiceWorkerUpdateFailure(error: unknown, options: 
     report = safeDiagnostic,
   } = options;
 
+  // Safari：這個註冊目前沒有任何 worker（剛安裝失敗、被清掉網站資料或正在換手），update() 會丟 InvalidStateError。
+  // 網站本身沒問題，下次檢查或重新整理後會重新註冊，不需要告警（2026-10-13 iPhone Safari 告警）
+  // DOMException 在部分環境不繼承 Error，只看 name
+  if ((error as { name?: unknown } | null)?.name === 'InvalidStateError') {
+    console.info('[PWA] 更新檢查略過：目前沒有可更新的 Service Worker，稍後自動重試');
+    return;
+  }
+
   if (isServiceWorkerScriptFetchFailure(error)) {
     try {
       const response = await fetchImpl(swUrl, { method: 'HEAD', cache: 'no-store' });
