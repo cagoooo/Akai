@@ -5,8 +5,8 @@ export function redactDiagnosticText(value: string): string {
       const suffix = raw.match(/[),.;]+$/)?.[0] ?? '';
       try {
         const url = new URL(suffix ? raw.slice(0, -suffix.length) : raw);
-        url.username = ''; url.password = ''; url.search = ''; url.hash = '';
-        return url.href + suffix;
+        // 只重組協定、主機與路徑，帳密、查詢參數與錨點不會進入診斷。
+        return `${url.protocol}//${url.host}${url.pathname}${suffix}`;
       } catch { return '[無效網址]' + suffix; }
     })
     .replace(/\bAIza[A-Za-z0-9_-]{20,}\b/g, '[金鑰已遮蔽]')

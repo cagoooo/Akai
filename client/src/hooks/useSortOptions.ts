@@ -5,6 +5,7 @@
 
 import { useState, useCallback } from 'react';
 import type { EducationalTool } from '@/lib/data';
+import { secureRandom } from '@/lib/secureRandom';
 
 export type SortOption = 'popular' | 'newest' | 'name' | 'random';
 
@@ -39,18 +40,8 @@ function getToolStats(): Record<number, number> {
     return {};
 }
 
-// Fisher-Yates 洗牌演算法
-function shuffleArray<T>(array: T[]): T[] {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-}
-
 // 會話級別的隨機種子，確保在頁面不重整的情況下，隨機排序結果是穩定的
-const sessionSeed = Math.random();
+const sessionSeed = secureRandom();
 
 export function useSortOptions() {
     // 預設「熱門」排序（點擊數高 → 低），讓使用者第一眼看到最多人用的工具

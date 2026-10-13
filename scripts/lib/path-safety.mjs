@@ -24,14 +24,16 @@ export function selectedDirectoryRoot(value) {
 export function appendRunnerSummary(markdown, env = process.env) {
   if (!env.GITHUB_STEP_SUMMARY) return;
   if (env.GITHUB_ACTIONS !== 'true' || !env.RUNNER_TEMP) throw new Error('摘要寫入缺少可信 Runner 設定');
-  const commandsRoot = resolve(env.RUNNER_TEMP, '_runner_file_commands');
+  // 環境變數路徑一律先正規化成絕對路徑，再交給實際路徑比對。
+  const runnerTemp = resolve(env.RUNNER_TEMP);
+  const commandsRoot = resolve(runnerTemp, '_runner_file_commands');
   const target = resolve(env.GITHUB_STEP_SUMMARY);
   if (dirname(target) !== commandsRoot || !/^step_summary_[a-zA-Z0-9-]+$/.test(basename(target))
     || !existsSync(target) || !lstatSync(target).isFile()) {
     throw new Error('摘要檔不是 Runner 建立的既有命令檔');
   }
   // 同時拒絕命令目錄本身被導向 Runner 暫存目錄外。
-  containedRealPath(env.RUNNER_TEMP, commandsRoot);
+  containedRealPath(runnerTemp, commandsRoot);
   const actualTarget = containedRealPath(commandsRoot, target);
   appendFileSync(actualTarget, markdown, 'utf8');
 }

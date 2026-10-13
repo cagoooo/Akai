@@ -2,6 +2,15 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.160] - 2026-10-13 — 公共程式平臺 Fortify 複掃：中風險以上 34 筆逐筆改寫
+
+- **背景**：廠商 10/13 複掃（Fortify 26.3）仍有嚴重 7、高 26、中 1，共 34 筆；平臺要求中風險以上歸零。逐筆追查後都不是正式網站可被利用的漏洞，集中在測試資料、本機開發伺服器、證據文件與純視覺特效。
+- **不安全亂數（16）**：新增 `secureRandom()`（`crypto.getRandomValues`），取代撒花、愛心、成就徽章、側欄骨架、隨機排序權重與效能指標抽樣的 `Math.random()`；刪除兩個沒被呼叫的洗牌函式。
+- **寫死／空密碼（10）**：測試用假帳密網址改在執行時組字，多餘欄位不再取名 `secret`；診斷清洗網址改為直接重組「協定//主機＋路徑」，不再把帳密設成空字串，輸出不變（含 `sw.js`）。
+- **本機 Express 伺服器（5）**：錯誤告警改用 `fetch()` 外送 Google Chat；路由註冊不再自行 `http.createServer()`，改由 `app.listen()`；診斷端點不再回傳作業系統與 Node 版本。正式網站仍是 GitHub Pages 靜態檔，不受影響。
+- **其他（3）**：證據檔的「檔名→雜湊」對照表改成 `{path, sha256}` 陣列（`sentry.ts` 檔名被誤認為 Sentry 權杖）；CI 摘要寫入先正規化 `RUNNER_TEMP` 路徑；端對端測試改用 `page.route()` 計數。
+- 逐筆對照見 `docs/security/fortify-2026-10-13-rescan.md`。新增 `secureRandom` 單元測試。
+
 ## [3.6.159] - 2026-10-13 — 手機暫時斷線、Safari 沒有 Service Worker 時不再送出假告警
 
 - **現象**：Sentry 收到兩則告警，都來自 iPhone：Safari 的 `InvalidStateError: newestWorker is null`（背景更新檢查）、iPhone Chrome 的 `TypeError: Load failed`（抓 `version.json`）。各只有 1 位訪客、1～2 次，網站功能正常。

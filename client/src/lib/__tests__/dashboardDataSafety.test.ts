@@ -51,7 +51,7 @@ describe('儀表板不可信統計資料', () => {
   });
 
   it('匯出熱力圖只保留合法座標與欄位，最多 500 筆', () => {
-    const good = { x: 10, y: 20, timestamp: 123, page: '/', secret: 'discard' };
+    const good = { x: 10, y: 20, timestamp: 123, page: '/', extra: 'discard' };
     expect(safeClickData([good, { ...good, x: -1 }, { ...good, y: Infinity },
       { ...good, timestamp: -1 }, { ...good, page: {} }]))
       .toEqual([{ x: 10, y: 20, timestamp: 123, page: '/' }]);

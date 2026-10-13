@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { m as motion } from 'framer-motion';
+import { secureRandom } from '@/lib/secureRandom';
 import {
   Tooltip,
   TooltipContent,
@@ -130,8 +131,8 @@ export function AchievementBadge({
                     animate={{
                       opacity: [0, 1, 0],
                       scale: [0, 1, 0.5],
-                      x: [0, (Math.random() - 0.5) * 60],
-                      y: [0, (Math.random() - 0.5) * 60],
+                      x: [0, (secureRandom() - 0.5) * 60],
+                      y: [0, (secureRandom() - 0.5) * 60],
                     }}
                     transition={{
                       duration: 1,

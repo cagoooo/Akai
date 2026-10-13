@@ -12,9 +12,14 @@ test('首屏不啟動驗證；未通過驗證時不傳送雲端統計', async ({
   });
   // 隔離測試產生的診斷不進正式監控專案。
   await page.route(/\.sentry\.io\/api\//, route => route.fulfill({ status: 200, body: '{}' }));
-  page.on('request', request => {
-    if (/recordPublicAnalytics/.test(request.url())) analyticsCalls += 1;
-    if (/recaptcha\/enterprise\.js/.test(request.url())) captchaScripts += 1;
+  // 與 App Check 計數同樣在攔截路由內累加，計完照常放行原請求。
+  await page.route(/recordPublicAnalytics/, route => {
+    analyticsCalls += 1;
+    return route.fallback();
+  });
+  await page.route(/recaptcha\/enterprise\.js/, route => {
+    captchaScripts += 1;
+    return route.fallback();
   });
   await page.addInitScript(() => {
     sessionStorage.setItem('akai_audience_wizard_dismissed_v1', '1');

@@ -11,6 +11,7 @@
  * 注意：trigger=0 不撒花（初始 mount 不觸發）；要進場撒花請在 useEffect 內 setTick(1)。
  */
 import { useEffect, useState } from 'react';
+import { secureRandom } from '@/lib/secureRandom';
 
 const CONFETTI_STYLE_ID = 'akai-confetti-keyframes';
 
@@ -54,13 +55,13 @@ export function ConfettiBurst({ trigger }: { trigger: number }) {
     ensureConfettiStyles();
     const next = Array.from({ length: CONFETTI_PIECES }, (_, i) => ({
       id: trigger * 1000 + i,
-      left: Math.random() * 100,
-      delay: Math.random() * 0.4,
-      duration: 3.2 + Math.random() * 2.0,
+      left: secureRandom() * 100,
+      delay: secureRandom() * 0.4,
+      duration: 3.2 + secureRandom() * 2.0,
       color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
-      size: 6 + Math.random() * 6,
-      drift: (Math.random() - 0.5) * 240,
-      shape: (Math.random() > 0.5 ? 'rect' : 'circle') as 'rect' | 'circle',
+      size: 6 + secureRandom() * 6,
+      drift: (secureRandom() - 0.5) * 240,
+      shape: (secureRandom() > 0.5 ? 'rect' : 'circle') as 'rect' | 'circle',
     }));
     setPieces(next);
     const cleanup = window.setTimeout(() => setPieces([]), 5800);

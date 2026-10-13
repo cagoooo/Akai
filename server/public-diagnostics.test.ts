@@ -5,7 +5,7 @@ import { literalChatText } from './chat-card-escape';
 describe('公開診斷不外送內部錯誤與系統路徑', () => {
   it('沒有健康檢查結果時標示未知，不把系統資訊查詢誤稱健康', () => {
     expect(publicHealthStatus({ timestamp: '2026-10-12', environment: 'private' })).toEqual({ status: 'unknown', timestamp: '2026-10-12' });
-    expect(publicHealthStatus({ status: { secret: 'private' } }).status).toBe('unknown');
+    expect(publicHealthStatus({ status: { nested: 'private' } }).status).toBe('unknown');
   });
   it('Express 通知純文字不能插入提及全體或偽造連結', () => {
     expect(literalChatText('錯誤 <users/all> <https://example.test|假連結>'))

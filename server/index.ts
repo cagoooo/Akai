@@ -51,7 +51,7 @@ app.use((req, res, next) => {
       log("繼續啟動應用，但數據庫相關功能可能受限");
     }
 
-    const server = registerRoutes(app);
+    registerRoutes(app);
 
     // 增強的健康檢查端點
     app.get("/health", async (_req, res) => {
@@ -210,33 +210,17 @@ app.use((req, res, next) => {
               }
             };
 
-            const https = await import("https");
-            const urlObj = new URL(webhookUrl.trim());
-            const postData = JSON.stringify({
-              text: literalChatText(summaryText).slice(0, 1000),
-              cardsV2: [card]
-            });
-
-            const req = https.request({
-              hostname: urlObj.hostname,
-              path: urlObj.pathname + urlObj.search,
+            // 通知是伺服器對 Google Chat 的外送請求，不寫回瀏覽器；請求路徑與來源已在卡片內跳脫。
+            const response = await fetch(webhookUrl.trim(), {
               method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Content-Length': Buffer.byteLength(postData)
-              },
-              timeout: 5000
-            }, (res) => {
-              res.on('data', () => {}); // 消費回應數據釋放記憶體
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                text: literalChatText(summaryText).slice(0, 1000),
+                cardsV2: [card]
+              }),
+              signal: AbortSignal.timeout(5000),
             });
-
-            req.on('error', (e) => {
-              console.error("Failed to send Express error to Google Chat via HTTPS request:", e);
-            });
-            req.on('timeout', () => req.destroy(new Error('通知連線逾時')));
-
-            req.write(postData);
-            req.end();
+            await response.body?.cancel(); // 不需要回應內容，直接釋放連線
           } catch (eChat) {
             console.error("Failed to send Express error to Google Chat:", eChat);
           }
@@ -249,16 +233,17 @@ app.use((req, res, next) => {
       ));
     });
 
+    const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;
+    // 由 Express 建立監聽，Vite 開發中介層再掛到同一個伺服器以支援熱更新。
+    const server = app.listen(port, "0.0.0.0", () => {
+      log(`Server running at http://0.0.0.0:${port}`);
+    });
+
     if (app.get("env") === "development") {
       await setupVite(app, server);
     } else {
       serveStatic(app);
     }
-
-    const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;
-    server.listen(port, "0.0.0.0", () => {
-      log(`Server running at http://0.0.0.0:${port}`);
-    });
   } catch (error) {
     console.error("Failed to start server:", error);
     process.exit(1);

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { secureRandom } from '@/lib/secureRandom';
 
 interface HeartBurstProps {
   trigger: number;
@@ -21,10 +22,10 @@ export function HeartBurst({ trigger }: HeartBurstProps) {
     const id = Date.now();
     const next: Burst[] = Array.from({ length: 6 }, (_, i) => ({
       id: id + i,
-      x: (Math.random() - 0.5) * 80,
+      x: (secureRandom() - 0.5) * 80,
       delay: i * 50,
-      rot: (Math.random() - 0.5) * 60,
-      size: 14 + Math.random() * 10,
+      rot: (secureRandom() - 0.5) * 60,
+      size: 14 + secureRandom() * 10,
     }));
     setBursts((prev) => [...prev, ...next]);
     const t = setTimeout(() => {

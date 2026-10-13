@@ -1,5 +1,4 @@
 import type { Express, Request } from "express";
-import { createServer, type Server } from "http";
 import express from "express";
 import { WebSocketServer, WebSocket } from "ws";
 import { db, dbType } from "@db";
@@ -57,7 +56,7 @@ declare global {
   }
 }
 
-export function registerRoutes(app: Express): Server {
+export function registerRoutes(app: Express): void {
   // Important: Register API routes before static file serving
   app.use((req, res, next) => {
     const start = Date.now();
@@ -681,8 +680,6 @@ export function registerRoutes(app: Express): Server {
     try {
       const info = {
         databaseType: dbType,
-        nodeVersion: process.version,
-        platform: process.platform,
         memoryUsage: process.memoryUsage(),
         uptime: process.uptime(),
         timestamp: new Date().toISOString(),
@@ -746,7 +743,4 @@ export function registerRoutes(app: Express): Server {
     index: false,
     extensions: ["html", "ico"]
   }));
-
-  const httpServer = createServer(app);
-  return httpServer;
 }

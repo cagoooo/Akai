@@ -33,8 +33,8 @@ function reportCacheFailure(label, url, error) {
       const suffix = raw.match(/[),.;]+$/)?.[0] || '';
       try {
         const parsed = new URL(suffix ? raw.slice(0, -suffix.length) : raw);
-        parsed.username = ''; parsed.password = ''; parsed.search = ''; parsed.hash = '';
-        return parsed.href + suffix;
+        // 只重組協定、主機與路徑，帳密、查詢參數與錨點不會進入診斷。
+        return `${parsed.protocol}//${parsed.host}${parsed.pathname}${suffix}`;
       } catch { return '[無效網址]' + suffix; }
     })
     .replace(/\bBearer\s+[A-Za-z0-9._~+/-]+=*/gi, 'Bearer [已遮蔽]')

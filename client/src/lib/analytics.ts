@@ -17,6 +17,7 @@
 
 import type { Metric } from 'web-vitals';
 import { invokePublicAnalytics } from '@/lib/publicAnalyticsService';
+import { secureRandom } from '@/lib/secureRandom';
 
 // ── gtag wrapper ─────────────────────────────────────────────
 type GtagFn = (command: 'event' | 'config' | 'js' | 'set', ...args: unknown[]) => void;
@@ -276,7 +277,7 @@ export async function logToolIndexQuery(query: string, resultCount: number) {
 // ── Web Vitals RUM → Firestore ────────────────────────────────
 
 const SAMPLE_RATE = 0.25; // 只取樣 25%（控制 Firestore 寫入量，每月 < 50K 寫入）
-const sessionShouldSample = Math.random() < SAMPLE_RATE;
+const sessionShouldSample = secureRandom() < SAMPLE_RATE;
 
 const sentMetrics = new Set<string>(); // 同一頁不重複送同個 metric
 
