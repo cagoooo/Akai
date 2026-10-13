@@ -66,6 +66,28 @@ test.describe('首頁冒煙測試', () => {
     await expect(searchInput.first()).toBeFocused({ timeout: 10_000 });
   });
 
+  // 2026-10-13 量測：破百橫幅與最新工具入口晚到，曾讓首頁 CLS 達 0.127（>0.1 即「需要改善」）。
+  // 修正後本機為 0；上限抓 0.06，留餘裕給 CI 機器的時序差異，仍能擋下回到 0.09 以上的退步。
+  for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
+    test(`載入過程中英雄區不被晚到的橫幅或入口往下推（版面位移 CLS，${viewport.width}px）`, async ({ page }) => {
+      await page.setViewportSize(viewport);
+      await page.addInitScript(() => {
+        const w = window as unknown as { __cls: number };
+        w.__cls = 0;
+        new PerformanceObserver((list) => {
+          for (const entry of list.getEntries() as unknown as Array<{ value: number; hadRecentInput: boolean }>) {
+            if (!entry.hadRecentInput) w.__cls += entry.value;
+          }
+        }).observe({ type: 'layout-shift', buffered: true });
+      });
+      await gotoHome(page);
+      await expect(page.getByTestId('milestone-celebration')).toBeVisible();
+      await page.waitForTimeout(2500); // 讓延後載入的區塊與字型都就位
+      const cls = await page.evaluate(() => (window as unknown as { __cls: number }).__cls);
+      expect(cls, `${viewport.width}px 的 CLS`).toBeLessThan(0.06);
+    });
+  }
+
   test('工具卡片有「閱讀文章」連結指向手寫長文', async ({ page }) => {
     // 守 blogLinks → postsIndex 這條路徑：索引若沒同步，按鈕會整批消失
     await gotoHome(page);

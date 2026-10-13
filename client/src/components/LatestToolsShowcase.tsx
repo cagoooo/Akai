@@ -71,6 +71,8 @@ export function LatestToolsShowcase({ tools, blocked, autoEligible, open, onOpen
     return () => window.clearTimeout(timer);
   }, [blocked, autoEligible, open, signature, onOpenChange]);
 
+  // 工具目錄還沒載入時先佔住入口的位置，載入後入口出現才不會把英雄區往下推
+  if (!tools.length) return <div className="latest-tools-entry latest-tools-entry--pending" aria-hidden="true" />;
   if (!latest.length) return null;
   return <>
     <div className="latest-tools-entry">

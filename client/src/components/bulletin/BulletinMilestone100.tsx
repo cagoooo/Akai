@@ -47,6 +47,14 @@ interface SiteStats {
   ogImage?: string;
 }
 
+/** 建置時內嵌的破百統計（見 vite.config.ts 的 VITE_MILESTONE_STATS）；沒有內嵌時為 null。 */
+const milestoneStatsSeed = ((): SiteStats | null => {
+  try {
+    const parsed = JSON.parse(import.meta.env.VITE_MILESTONE_STATS ?? 'null') as SiteStats | null;
+    return parsed && typeof parsed.toolCount === 'number' ? parsed : null;
+  } catch { return null; }
+})();
+
 const CELEBRATION_DAYS = 30; // 達成後幾天內顯示金色慶祝（原 7 天，2026-06-04 延長為 30 天，讓慶祝橫幅 + 兩支紀念影片入口多留一陣子）
 const PROGRESS_TARGET = 100;
 
@@ -62,9 +70,12 @@ export function BulletinMilestone100({
   /** 「許願下一個工具」按鈕點擊回呼（連到許願池） */
   onWishClick?: () => void;
 }) {
-  const [stats, setStats] = useState<SiteStats | null>(null);
+  // 建置時內嵌的統計：第一個畫面就能畫出橫幅。沒有內嵌資料（例如測試環境）才退回 fetch，
+  // 原本「抓到才畫」會讓橫幅晚出現、把下方整個英雄區往下推（CLS）。
+  const [stats, setStats] = useState<SiteStats | null>(milestoneStatsSeed);
 
   useEffect(() => {
+    if (milestoneStatsSeed) return;
     const base = import.meta.env.BASE_URL || '/';
     const version = import.meta.env.VITE_APP_VERSION || Date.now();
     fetch(`${base}api/site-stats.json?v=${version}`)

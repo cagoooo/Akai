@@ -274,6 +274,8 @@ export function BulletinToolDetail() {
   const previewSrc = tool.previewUrl
     ? `${import.meta.env.BASE_URL}previews/${tool.previewUrl.split('/').pop()}`
     : null;
+  // 用字數估排版後的高度（實測約 0.8～1.0 像素／字），在排版套件載入前預留位置
+  const descriptionLength = (tool.detailedDescription || tool.description || '').length;
 
   // ── 行為函式 ─────────────────────────────────────
   const handleUseTool = async () => {
@@ -840,7 +842,13 @@ export function BulletinToolDetail() {
                 boxShadow: '2px 2px 0 rgba(0,0,0,.12)',
               }}
             >
-              <Suspense fallback={<p role="status">{tool.description}</p>}>
+              {/* 排版套件載入前先預留接近完整介紹的高度（最多一個螢幕高）：
+                  介紹從一小段摘要變成完整內容時，才不會把畫面下方的麵包屑與評論區整個往下推（CLS） */}
+              <Suspense fallback={(
+                <div style={{ minHeight: `min(${Math.round(descriptionLength * 0.85)}px, 100vh)` }}>
+                  <p role="status">{tool.description}</p>
+                </div>
+              )}>
                 <BulletinToolMarkdown description={tool.detailedDescription || tool.description} />
               </Suspense>
             </div>

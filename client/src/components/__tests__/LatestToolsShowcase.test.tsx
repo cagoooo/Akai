@@ -50,6 +50,19 @@ describe('最新工具展示架', () => {
     advance();
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
+  it('目錄載入前先佔住入口的位置（不可操作），載入後換成真正的入口，避免把下方內容往下推', () => {
+    const { container, rerender } = render(<Harness data={[]} />);
+    const pending = container.querySelector('.latest-tools-entry--pending');
+    expect(pending).toBeInTheDocument();
+    expect(pending).toHaveAttribute('aria-hidden', 'true');
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+
+    rerender(<Harness />);
+    expect(container.querySelector('.latest-tools-entry--pending')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /看看最新/ })).toBeInTheDocument();
+    // 真正的入口與預留位置用同一個外框，位置才會一致
+    expect(container.querySelector('.latest-tools-entry')).toBeInTheDocument();
+  });
   it('資料延遲載入後仍能展示，空資料不顯示入口', () => {
     const { rerender } = render(<Harness data={[]} />);
     advance();

@@ -1,4 +1,7 @@
 .latest-tools-entry { max-width: 1200px; margin: 12px auto; padding: 0 20px; }
+/* 工具目錄載入前先佔住入口的位置（高度同真正的按鈕），入口晚出現時不會把下方內容往下推 */
+.latest-tools-entry--pending { height: 54px; box-sizing: content-box; }
+@media (max-width: 640px) { .latest-tools-entry--pending { height: 79px; } }
 .latest-tools-entry button { width: 100%; padding: 14px 20px; border: 1px solid #cbb992; border-radius: 12px; background: #fff9eb; color: #493623; text-align: left; font-weight: 700; }
 .latest-tools-entry button > span:last-child { float: right; font-size: 14px; font-weight: 400; }
 .latest-tools-showcase.latest-tools-showcase { width: calc(100% - 24px); max-width: 960px; max-height: 88dvh; overflow-y: auto; background: #fffbf2; color: #382c22; border: 1px solid #cbb992; border-radius: 16px; padding: 32px; gap: 24px; }

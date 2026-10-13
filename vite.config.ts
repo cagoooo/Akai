@@ -37,6 +37,19 @@ const buildInfo = (() => {
   }
 })();
 
+// 只取破百橫幅用到的欄位；讀不到或格式不對就給 null，元件會退回原本的 fetch。
+const milestoneStatsSeed = (() => {
+  try {
+    const stats = JSON.parse(readFileSync(path.resolve(__dirname, 'client/public/api/site-stats.json'), 'utf-8')) as {
+      toolCount?: unknown;
+      milestones?: { tool100?: unknown };
+    };
+    if (typeof stats.toolCount !== 'number') return null;
+    const tool100 = typeof stats.milestones?.tool100 === 'string' ? stats.milestones.tool100 : undefined;
+    return { toolCount: stats.toolCount, milestones: tool100 ? { tool100 } : {} };
+  } catch { return null; }
+})();
+
 export default defineConfig({
   base: isGitHubPages ? '/Akai/' : '/',
   define: {
@@ -50,6 +63,10 @@ export default defineConfig({
         .filter(entry => entry.isFile() && entry.name.endsWith('.mp3'))
         .map(entry => entry.name.slice(0, -4)).sort(),
     ),
+    // 破百橫幅需要的統計（工具數、破百日期）。build 前 sync-meta-from-stats 已更新 site-stats.json，
+    // 直接內嵌，橫幅第一個畫面就能畫出來，不必等 fetch 才把英雄區往下推（CLS）。
+    // define 的值必須是程式碼片段：外層 stringify 讓它成為「內容為 JSON 的字串」，元件再 JSON.parse。
+    'import.meta.env.VITE_MILESTONE_STATS': JSON.stringify(JSON.stringify(milestoneStatsSeed)),
     'import.meta.env.VITE_APP_VERSION': JSON.stringify(pkgVersion),
     'import.meta.env.VITE_APP_CACHE_VERSION': JSON.stringify(buildInfo.cacheVersion),
     'import.meta.env.VITE_APP_GIT_HASH': JSON.stringify(buildInfo.gitHash),
