@@ -254,10 +254,10 @@ const POST_46: BlogPost = {
 - 月視圖格內直接顯示「節次簡稱 + 借用者」
 - **衝突熱度染色**（綠 → 黃 → 橘 → 紅）
 
-**功能 D：AI 智慧衝突解析（v2.33.1）**
-- 被擋時一鍵呼叫 **Gemini 1.5 Flash**
-- 同時建議「**鄰近日期 / 換場地 / 換時段**」三種替代方案
-- 平板車還會跨年級互推
+**功能 D：衝突時的智慧替代方案（規則演算法，不是 AI 模型）**
+- 被擋時即時在瀏覽器裡算出可用的替代方案：「**鄰近日期 / 換場地 / 換時段**」三種，最多列 4 個
+- 依「當天已被借幾節」排序，自動排除週末與固定不開放的時段
+- 平板車還會跨年級互推（優先推當天最空的那一台）
 
 **功能 E：完全沒有審核流程！（最反直覺設計）**
 - **任何人打開網頁都可預約**，不需登入
@@ -281,9 +281,9 @@ const POST_46: BlogPost = {
 - **Phase 3**：使用前 30 分鐘自動提醒、**異常活動偵測**（批次取消 ≥ 10 次/h 就告警）、管理員告警訂閱
 
 **功能 H：AI 學期報告**
-- 管理員一鍵讓 **Gemini 寫 4 段白皮書**
+- 管理員一鍵讓 **Gemini 寫 4 段白皮書**（綜述 / 亮點 / 異常 / 建議；使用 gemini-2.5-flash，在 Cloud Functions 後端呼叫）
 - 上傳到 Firebase Storage
-- LINE 推連結給主任校長
+- 報告產生後，以 LINE 卡片通知已訂閱告警的管理員（附「查看報告」按鈕）
 
 **功能 I：PWA 三道更新保險絲（v2.41.6）**
 - SW activate 並行 cleanup + postMessage SW_ACTIVATED + 3 秒 timeout 強制 reload
@@ -291,10 +291,10 @@ const POST_46: BlogPost = {
 ## 真實技術棧
 
 - **純 HTML + Vanilla JS + CSS**（沒有 React/Vue 框架）
-- **app.js 高達 214 KB 單檔**（v2.50.6，從 v1.0 累積 50+ 版本）
+- **app.js 單檔約 260 KB**（從 v1.0 累積 50+ 版本，持續更新中）
 - Firebase Firestore + Cloud Functions（Node 20）+ Auth + Storage
-- @line/bot-sdk + @google/generative-ai（Gemini 1.5 Flash）
-- PWA + IndexedDB 持久化（**Firestore 月讀取量降 60-70%**）
+- @line/bot-sdk + @google/generative-ai（Gemini 2.5 Flash）
+- PWA + IndexedDB 持久化（設計目標是降低 Firestore 讀取量，預估可降 60～70%，**尚未量測**）
 - 8 篇開發文件（PROGRESS.md 68KB / FUTURE_PROPOSAL.md 60KB / OPTIMIZATION_PLAYBOOK.md 41KB）— **這不是普通工具，是當生產級教學產品在經營**
 
 ## 兩個月實測數字
