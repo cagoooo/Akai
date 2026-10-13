@@ -95,6 +95,41 @@ describe('usePWAUpdate', () => {
     expect(update).toHaveBeenCalledTimes(1);
   });
 
+  describe('背景更新檢查（回到分頁時）抓不到 sw.js', () => {
+    const notFound = () => new TypeError(
+      "Failed to update a ServiceWorker for scope ('https://cagoooo.github.io/Akai/') with script ('https://cagoooo.github.io/Akai/sw.js'): Not found",
+    );
+
+    async function focusWithUpdateFailure(headOk: boolean) {
+      const update = vi.fn().mockRejectedValue(notFound());
+      mockRegistration({ waiting: null, installing: null, update });
+      const fetchMock = vi.fn().mockResolvedValue({ ok: headOk } as Response);
+      vi.stubGlobal('fetch', fetchMock);
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+      renderHook(() => usePWAUpdate());
+      await act(async () => {}); // 等 serviceWorker.ready 把 registration 放進 ref
+      await act(async () => { window.dispatchEvent(new Event('focus')); });
+      await waitFor(() => expect(update).toHaveBeenCalled());
+      await waitFor(() => expect(fetchMock).toHaveBeenCalled());
+      return { warn, info, fetchMock };
+    }
+
+    afterEach(() => vi.unstubAllGlobals());
+
+    it('伺服器的 sw.js 正常：視為暫時失敗，不留下警告', async () => {
+      const { warn, info, fetchMock } = await focusWithUpdateFailure(true);
+      expect(fetchMock).toHaveBeenCalledWith(expect.stringMatching(/sw\.js$/), { method: 'HEAD', cache: 'no-store' });
+      await waitFor(() => expect(info).toHaveBeenCalled());
+      expect(warn).not.toHaveBeenCalledWith('[PWA] 更新檢查失敗：', expect.anything());
+    });
+
+    it('伺服器確實回 404：照常留下警告', async () => {
+      const { warn } = await focusWithUpdateFailure(false);
+      await waitFor(() => expect(warn).toHaveBeenCalledWith('[PWA] 更新檢查失敗：', expect.anything()));
+    });
+  });
+
   it('逾時後忽略遲到的更新結果，卸載時清除計時器', async () => {
     vi.useFakeTimers();
     let resolve!: () => void;

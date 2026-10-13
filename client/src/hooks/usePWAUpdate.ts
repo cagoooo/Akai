@@ -1,4 +1,5 @@
 import { safeDiagnostic } from '@/lib/safeDiagnostic';
+import { reportServiceWorkerUpdateFailure } from '@/lib/swUpdateDiagnostics';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { PWA_UPDATE_AVAILABLE_EVENT } from '@/serviceWorkerRegistration';
 
@@ -81,7 +82,7 @@ export function usePWAUpdate() {
         const checkForUpdate = () => {
             if (!document.hidden) {
                 void registrationRef.current?.update().catch((error) => {
-                    safeDiagnostic('[PWA] 更新檢查失敗：', error, 'warn');
+                    void reportServiceWorkerUpdateFailure(error);
                 });
             }
         };
