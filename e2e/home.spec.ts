@@ -105,9 +105,11 @@ test.describe('首頁冒煙測試', () => {
     await gotoHome(page);
     await page.waitForFunction(() => Boolean(navigator.serviceWorker.controller), undefined, { timeout: 30_000 });
     await page.waitForTimeout(1500); // 讓 SW_ACTIVATED 訊號送達
+    // CI 的 base 是 /Akai/，goto('/') 會先 302 轉址一次，所以不能拿「文件請求總數 = 1」當標準，改比對頁面載入完成後有沒有新增
+    const requestsAfterLoad = documentRequests;
     await page.clock.runFor(40_000); // 閒置 20 秒 + 倒數 8 秒（runFor 會把倒數的每一秒都跑完，fastForward 只會觸發一次）
     await page.waitForTimeout(1500);
-    expect(documentRequests).toBe(1);
+    expect(documentRequests).toBe(requestsAfterLoad);
   });
 
   test('在搜尋框裡操作與打字不會被彈窗打斷', async ({ page }) => {
