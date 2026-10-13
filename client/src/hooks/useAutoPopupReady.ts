@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
 
-/** 沒有任何互動時，最晚幾毫秒後允許自動彈窗。 */
-export const AUTO_POPUP_FALLBACK_MS = 10_000;
+/**
+ * 完全沒有互動時，最晚幾毫秒後允許自動彈窗（保底，確保閒置的訪客最終仍看得到引導）。
+ * 必須大於 Lighthouse 的觀察期（它會一路等到 45 秒上限，因為首頁有永不結束的即時連線）：
+ * 2026-10-13 實測保底 10 秒時，Lighthouse 在第 10 秒看到彈窗，LCP 反而從 7.7 秒變成 10.8 秒。
+ */
+export const AUTO_POPUP_FALLBACK_MS = 60_000;
 /** 訪客互動後，要停手多久才允許彈窗（連續滑動、點擊都會重新計時）。 */
 export const AUTO_POPUP_QUIET_MS = 1_500;
 /** 訪客正在輸入文字時，每隔多久再檢查一次是否可以彈窗。 */
@@ -25,7 +29,7 @@ function isTypingNow(): boolean {
  * 為什麼不一進站就開：精靈在第一次渲染就蓋滿畫面，會成為手機版的「最大內容」，
  * 還要在慢手機上做全螢幕模糊，拖慢首次繪製（2026-10-13 本機實驗：LCP 12.4→6.0 秒、首次繪製 7.4→4.9 秒；
  * 較寬鬆網路 7.3→2.9 秒）。改成訪客有互動且停手 {@link AUTO_POPUP_QUIET_MS} 後，
- * 或完全沒互動滿 {@link AUTO_POPUP_FALLBACK_MS} 才回傳 true。
+ * 或完全沒互動滿 {@link AUTO_POPUP_FALLBACK_MS}（保底）才回傳 true。
  *
  * 為什麼是「停手後」而不是「按下去的瞬間」：彈窗一開就把焦點搶到關閉按鈕，
  * 訪客按 `/` 想搜尋、剛點了篩選或正在滑動時被蓋住，動作就被打斷（e2e 實測按 `/` 的搜尋框焦點被搶走）。

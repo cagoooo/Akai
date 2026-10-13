@@ -4,7 +4,7 @@ test('族群精靈關閉後展示最新三張卡；關閉、重看、定位', as
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   const wizard = page.locator('.audience-wizard');
   const showcase = page.locator('.latest-tools-showcase');
-  // 自動彈窗不在進站時蓋住首屏：等第一次互動（或 10 秒）才彈出
+  // 自動彈窗不在進站時蓋住首屏：等第一次互動（停手後）才彈出
   await expect(page.locator('.latest-tools-entry button')).toBeVisible();
   await expect(wizard).toHaveCount(0);
   await page.keyboard.press('Shift');

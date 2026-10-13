@@ -109,8 +109,8 @@ export function BulletinHome() {
   const [showWishingWellFromShortcut, setShowWishingWellFromShortcut] = useState(false);
   const [selectedToolIndex, setSelectedToolIndex] = useState(0);
   const [audienceProfile, setAudienceProfile] = useState(() => readAudienceProfile());
-  // 自動彈窗（族群推薦精靈、最新上架）不在進站時就蓋住畫面：等第一次互動或 10 秒後才開，
-  // 否則精靈會成為手機版的「最大內容」並拖慢首次繪製（本機實驗 LCP 12.4→6.0 秒）。
+  // 自動彈窗（族群推薦精靈、最新上架）不在進站時就蓋住畫面：等第一次互動（停手後）才開，
+  // 完全沒互動則等 60 秒保底；否則精靈會成為手機版的「最大內容」並拖慢首次繪製（本機實驗 LCP 12.4→6.0 秒）。
   const autoPopupReady = useAutoPopupReady();
   // 要不要自動開精靈，照舊在進站當下依網址與儲存狀態判定；只是真正開啟延到 autoPopupReady
   const [wizardAutoPending, setWizardAutoPending] = useState(() =>

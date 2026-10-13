@@ -19,7 +19,7 @@ describe('useAutoPopupReady：自動彈窗不在進站時搶畫面，也不打�
     document.body.innerHTML = '';
   });
 
-  it('一進站不允許彈窗；完全沒有互動滿 10 秒才允許', () => {
+  it('一進站不允許彈窗；完全沒有互動要滿保底時間（60 秒，超過 Lighthouse 的 45 秒觀察期）才允許', () => {
     const { result } = renderHook(() => useAutoPopupReady());
     expect(result.current).toBe(false);
     advance(AUTO_POPUP_FALLBACK_MS - 1);
@@ -116,6 +116,10 @@ describe('useAutoPopupReady：自動彈窗不在進站時搶畫面，也不打�
     fire(window, 'scroll');
     advance(AUTO_POPUP_QUIET_MS * 2);
     expect(result.current).toBe(false);
+  });
+
+  it('保底時間必須超過 Lighthouse 的 45 秒觀察期，否則彈窗會在量測時成為最大內容', () => {
+    expect(AUTO_POPUP_FALLBACK_MS).toBeGreaterThan(45_000);
   });
 
   it('可自訂等待時間', () => {
