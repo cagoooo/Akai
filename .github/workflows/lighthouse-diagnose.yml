@@ -1,0 +1,82 @@
+name: Lighthouse Diagnose
+
+# 手動觸發的診斷流程，不影響部署與品質閘門。
+# 用途：首頁在 Lighthouse CI 偶爾拿不到「最大內容」（NO_LCP），本機重現不出來，
+# 而 Lighthouse CI 只留報告、不留原始 trace。這裡在同樣的 ubuntu 環境直接跑 Lighthouse，
+# 把原始 trace 濃縮成幾行重點（文件載入次數、最大內容候選與失效事件、截圖數）寫進摘要，
+# 並附上壓縮後的 trace 供下載。
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 要量測的網址（限 https://cagoooo.github.io/Akai/ 底下）
+        default: https://cagoooo.github.io/Akai/
+        required: true
+      runs:
+        description: 重複次數（1～5）
+        default: '4'
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lighthouse-diagnose
+  cancel-in-progress: true
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      TARGET_URL: ${{ inputs.url }}
+      RUNS: ${{ inputs.runs }}
+    steps:
+      - name: Checkout trusted default-branch scripts
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '22'
+
+      - name: Validate inputs
+        run: |
+          case "$TARGET_URL" in
+            https://cagoooo.github.io/Akai/*) ;;
+            *) echo "::error::網址必須在 https://cagoooo.github.io/Akai/ 底下"; exit 1 ;;
+          esac
+          case "$RUNS" in
+            [1-5]) ;;
+            *) echo "::error::重複次數必須是 1～5"; exit 1 ;;
+          esac
+
+      - name: Run Lighthouse and summarize traces
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium-browser || command -v chromium)"
+          echo "Chrome: $CHROME_PATH ($("$CHROME_PATH" --version))"
+          mkdir -p diagnose
+          {
+            echo "## Lighthouse 診斷：$TARGET_URL"
+            echo
+            echo "Lighthouse 12.6.1（與 Lighthouse CI 相同版本），行動版預設模擬。"
+          } >> "$GITHUB_STEP_SUMMARY"
+          for i in $(seq 1 "$RUNS"); do
+            rm -rf "diagnose/art$i"
+            npx --yes lighthouse@12.6.1 "$TARGET_URL" --only-categories=performance -G="diagnose/art$i" --chrome-flags="--headless --no-sandbox" --quiet || true
+            npx --yes lighthouse@12.6.1 "$TARGET_URL" --only-categories=performance -A="diagnose/art$i" --output=json --output-path="diagnose/run$i.json" --quiet || true
+            echo >> "$GITHUB_STEP_SUMMARY"
+            node scripts/lighthouse-trace-summary.mjs "diagnose/art$i/defaultPass.trace.json" "diagnose/run$i.json" "第 $i 次" | tee -a "$GITHUB_STEP_SUMMARY" || true
+            gzip -f "diagnose/art$i/defaultPass.trace.json" || true
+            rm -f "diagnose/art$i/artifacts.json"
+          done
+
+      - name: Upload diagnose traces
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: always()
+        with:
+          name: lighthouse-diagnose-${{ github.run_number }}
+          path: diagnose/
+          retention-days: 7
+          if-no-files-found: warn
