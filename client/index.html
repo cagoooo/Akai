@@ -3,6 +3,41 @@
 
 <head>
   <meta charset="UTF-8" />
+  <!-- 舊瀏覽器相容墊片：Android 舊手機內建的 Chrome 83 WebView 沒有下面這些內建函式，
+       web-vitals、Markdown 轉換與 Sentry 過濾器會直接丟 TypeError（2026-10-13 JAVASCRIPT-REACT-11/12）。
+       只在缺少時補上，新瀏覽器完全不受影響；必須放在所有其他腳本之前。 -->
+  <script>
+    (function () {
+      function define(obj, name, fn) {
+        if (obj && !obj[name]) {
+          Object.defineProperty(obj, name, { value: fn, writable: true, configurable: true });
+        }
+      }
+      // Object.hasOwn（Chrome 93+）
+      define(Object, 'hasOwn', function (o, k) {
+        if (o == null) throw new TypeError('Cannot convert undefined or null to object');
+        return Object.prototype.hasOwnProperty.call(Object(o), k);
+      });
+      // Array / String / TypedArray .at()（Chrome 92+）
+      function at(n) {
+        n = Math.trunc(n) || 0;
+        if (n < 0) n += this.length;
+        if (n < 0 || n >= this.length) return undefined;
+        return this[n];
+      }
+      define(Array.prototype, 'at', at);
+      define(String.prototype, 'at', function (n) { return at.call(String(this), n); });
+      if (typeof Int8Array !== 'undefined') {
+        define(Object.getPrototypeOf(Int8Array.prototype), 'at', at);
+      }
+      // String.prototype.replaceAll（Chrome 85+）：字串搜尋轉成跳脫後的全域正規表示式
+      define(String.prototype, 'replaceAll', function (search, replacement) {
+        if (search instanceof RegExp) return String(this).replace(search, replacement);
+        var re = new RegExp(String(search).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+        return String(this).replace(re, replacement);
+      });
+    })();
+  </script>
   <!-- Google tag (gtag.js) — ID 由 Vite HTML env replacement 於 build 時注入，
        CI 從 GitHub secret VITE_GA_MEASUREMENT_ID 餵值。
        （2026-07-28 修正一個長期靜默失效的舊自訂佔位符，來龍去脈見 PROGRESS.md v3.6.103） -->
@@ -271,8 +306,8 @@
   <meta property="og:site_name" content="科技教育創新專區" />
   <meta property="og:title" content="科技教育創新專區 · 阿凱老師｜130+ 款國小教育工具" />
   <meta property="og:description" content="阿凱老師（桃園市石門國小）親手打造 130+ 款教育科技工具：課堂互動、AI 教案、閱讀評量、語文寫作、教育遊戲一站搞定，100% 免費無廣告，免註冊一鍵分享給學生。" />
-  <meta property="og:image" content="https://cagoooo.github.io/Akai/og-preview-a05467f9.png" />
-  <meta property="og:image:secure_url" content="https://cagoooo.github.io/Akai/og-preview-a05467f9.png" />
+  <meta property="og:image" content="https://cagoooo.github.io/Akai/og-preview-413cd6378708dd28.png" />
+  <meta property="og:image:secure_url" content="https://cagoooo.github.io/Akai/og-preview-413cd6378708dd28.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:type" content="image/png" />
@@ -284,7 +319,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="科技教育創新專區 · 阿凱老師｜130+ 款國小教育工具" />
   <meta name="twitter:description" content="阿凱老師（桃園市石門國小）親手打造 130+ 款教育科技工具：課堂互動、AI 教案、閱讀評量、語文寫作、教育遊戲一站搞定，100% 免費無廣告。" />
-  <meta name="twitter:image" content="https://cagoooo.github.io/Akai/og-preview-a05467f9.png" />
+  <meta name="twitter:image" content="https://cagoooo.github.io/Akai/og-preview-413cd6378708dd28.png" />
   <meta name="twitter:image:alt" content="科技教育創新專區 · 阿凱老師 130+ 款國小教育工具預覽圖" />
 
   <!-- Additional Meta -->
@@ -306,7 +341,7 @@
       "description": "桃園市龍潭區石門國民小學阿凱老師打造的教育工具專區，目前收錄 130 款（130+）國小教育科技工具，涵蓋課堂互動、AI 教案、閱讀評量、語文寫作、教育遊戲、行政自動化、親師溝通。所有工具皆為 MIT 開源、永久免費、無需註冊。",
       "url": "https://cagoooo.github.io/Akai/",
       "logo": "https://cagoooo.github.io/Akai/icon-512.png",
-      "image": "https://cagoooo.github.io/Akai/og-preview-a05467f9.png",
+      "image": "https://cagoooo.github.io/Akai/og-preview-413cd6378708dd28.png",
       "sameAs": [
         "https://line.me/R/ti/p/@733oiboa",
         "https://lin.ee/pCqnVhT",

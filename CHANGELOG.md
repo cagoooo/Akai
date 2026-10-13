@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.161] - 2026-10-13 — Android 舊手機（Chrome 83 WebView）補上缺少的內建函式
+
+- **現象**：Sentry 收到 `JAVASCRIPT-REACT-11`（`this.o.at is not a function`，web-vitals）與 `JAVASCRIPT-REACT-12`（`Object.hasOwn is not a function`，部落格 Markdown 轉換），同一台 Samsung A12（Android 10，Chrome Mobile WebView 83）開部落格文章時發生。
+- **原因**：`Array.prototype.at`（Chrome 92 起）與 `Object.hasOwn`（Chrome 93 起）在 Chrome 83 不存在；打包工具只轉語法、不補函式。另外 Sentry 過濾器用的 `String.prototype.replaceAll`（Chrome 85 起）同樣會壞。
+- **修正**：`client/index.html` 最前面加入一段內嵌相容墊片，只在瀏覽器缺少時補上 `Object.hasOwn`、`Array/String/TypedArray.prototype.at`、`String.prototype.replaceAll`；新瀏覽器不受影響。
+
 ## [3.6.160] - 2026-10-13 — 公共程式平臺 Fortify 複掃：中風險以上 34 筆逐筆改寫
 
 - **背景**：廠商 10/13 複掃（Fortify 26.3）仍有嚴重 7、高 26、中 1，共 34 筆；平臺要求中風險以上歸零。逐筆追查後都不是正式網站可被利用的漏洞，集中在測試資料、本機開發伺服器、證據文件與純視覺特效。
