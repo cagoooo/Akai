@@ -48,6 +48,22 @@ export function createFirestoreLeaseClassifier(now = () => Date.now()) {
 }
 
 /**
+ * 多分頁快取會比對其他分頁寫下的主分頁租約時間；分頁之間時鐘差 1 毫秒，SDK 就記成「更新時間在未來」，
+ * 並把那份租約當作無效、自行重新協調（2026-10-14 JAVASCRIPT-REACT-13，差 1 毫秒）。
+ * 只略過 1 秒以內的分頁時鐘誤差；差距更大代表裝置時鐘異常，照常回報。
+ */
+const FIRESTORE_FUTURE_UPDATE = /^(?:\[[^\]\r\n]+\]\s+)?@firebase\/firestore:\s+Firestore \(\d+\.\d+\.\d+\): Detected an update time that is in the future: (\d{1,16}) > (\d{1,16})$/;
+const FIRESTORE_TAB_CLOCK_JITTER_MS = 1000;
+
+export function isFirestoreTabClockJitter(event: SentryEvent): boolean {
+  if (event.logger !== 'console' || event.exception?.values?.length) return false;
+  const match = event.message?.match(FIRESTORE_FUTURE_UPDATE);
+  if (!match) return false;
+  const aheadMs = Number(match[1]) - Number(match[2]);
+  return aheadMs > 0 && aheadMs <= FIRESTORE_TAB_CLOCK_JITTER_MS;
+}
+
+/**
  * 前端會自行復原、或只是訪客網路中斷的事件：不是站方 bug，送進 Sentry 只會觸發告警。
  * - 部署換 chunk hash 後舊分頁載入動態模組 404：main.tsx / App.tsx / ErrorBoundary 會自動重新載入
  * - 裝置離線、休眠或頁面重新載入時中斷連線：Firebase SDK 會自動重連
@@ -233,6 +249,7 @@ export function initSentry() {
           // 移除可能含 PII 的欄位
           if (event.request?.cookies) delete event.request.cookies;
           if (isRecoverableClientNoise(event)) return null;
+          if (isFirestoreTabClockJitter(event)) return null;
           if (automated && isAppCheckRejection(event)) return null;
           // 例如按下「更新」後重新整理、離線或剛喚醒時，請求被瀏覽器中止或連不上，並非後端錯誤
           if (isNetworkUnreliable() && isAbortedRequestError(hint.originalException)) return null;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createFirestoreLeaseClassifier } from '../sentry';
+import { createFirestoreLeaseClassifier, isFirestoreTabClockJitter } from '../sentry';
 
 const message = "[2026-10-05T07:06:46.011Z]  @firebase/firestore: Firestore (12.8.0): Failed to obtain primary lease for action 'Apply remote event'.";
 const event = () => ({ logger: 'console', level: 'error' as const, message });
@@ -59,5 +59,28 @@ describe('Firestore 多分頁交接告警過濾', () => {
       expect(input.message).not.toBe("Firestore multi-tab primary lease changed during 'Apply remote event'.");
     }
     expect(classify(event())).toBeNull();
+  });
+});
+
+describe('Firestore 多分頁時鐘誤差不送進 Sentry', () => {
+  // 2026-10-14 JAVASCRIPT-REACT-13 原文：分頁之間只差 1 毫秒
+  const future = (ahead: string, now: string) =>
+    `[2026-10-14T12:10:45.729Z]  @firebase/firestore: Firestore (12.8.0): Detected an update time that is in the future: ${ahead} > ${now}`;
+
+  it('1 秒以內的分頁時鐘誤差略過', () => {
+    expect(isFirestoreTabClockJitter({ logger: 'console', level: 'error', message: future('1791979845730', '1791979845729') })).toBe(true);
+    expect(isFirestoreTabClockJitter({ logger: 'console', level: 'error', message: future('1791979846729', '1791979845729') })).toBe(true);
+  });
+
+  it('差距超過 1 秒、未處理例外、其他記錄來源或其他訊息照常回報', () => {
+    const inputs = [
+      { logger: 'console', level: 'error' as const, message: future('1791979846730', '1791979845729') },
+      { logger: 'console', level: 'error' as const, message: future('1791979845729', '1791979845729') },
+      { logger: 'console', level: 'error' as const, message: future('1791979845730', '1791979845729'), exception: { values: [{ type: 'FirebaseError', value: 'x' }] } },
+      { logger: undefined, level: 'error' as const, message: future('1791979845730', '1791979845729') },
+      { logger: 'console', level: 'error' as const, message: `${future('1791979845730', '1791979845729')} IndexedDB failed` },
+      { logger: 'console', level: 'error' as const, message: '@firebase/firestore: Missing or insufficient permissions.' },
+    ];
+    for (const input of inputs) expect(isFirestoreTabClockJitter(input)).toBe(false);
   });
 });
