@@ -2,7 +2,15 @@
 // 用在「首頁偶爾拿不到最大內容（NO_LCP）」這類只在 CI 重現的問題：
 // 看有幾次導覽（頁面是否被重整）、最大內容候選與「失效」事件的先後、截圖有沒有收到。
 import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { containedRealPath } from './lib/path-safety.mjs';
+
+/** 只讀診斷流程放在 diagnose/ 的 Lighthouse 產物：命令列路徑先正規化，再確認實際位置沒有跑出這個資料夾。 */
+export function readDiagnoseJson(value, root = resolve('diagnose')) {
+  const target = containedRealPath(resolve(root), resolve(value));
+  return JSON.parse(readFileSync(target, 'utf8'));
+}
 
 const toMs = (event, origin) => Math.round((event.ts - origin) / 1000);
 
@@ -50,10 +58,10 @@ export function summaryMarkdown(label, summary, lcpError) {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const [tracePath, lhrPath, label = tracePath] = process.argv.slice(2);
-  const trace = JSON.parse(readFileSync(tracePath, 'utf8'));
+  const trace = readDiagnoseJson(tracePath);
   let lcpError;
   if (lhrPath) {
-    try { lcpError = JSON.parse(readFileSync(lhrPath, 'utf8')).audits?.['largest-contentful-paint']?.errorMessage; } catch { /* 沒有報告就略過 */ }
+    try { lcpError = readDiagnoseJson(lhrPath).audits?.['largest-contentful-paint']?.errorMessage; } catch { /* 沒有報告就略過 */ }
   }
   console.log(summaryMarkdown(label, summarizeTrace(trace), lcpError));
 }

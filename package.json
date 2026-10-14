@@ -1,6 +1,6 @@
 {
   "name": "rest-express",
-  "version": "3.6.161",
+  "version": "3.6.162",
   "type": "module",
   "license": "MIT",
   "scripts": {
@@ -152,6 +152,7 @@
     "@types/ws": "^8.5.13",
     "@typescript-eslint/eslint-plugin": "^8.53.0",
     "@typescript-eslint/parser": "^8.53.0",
+    "@vitejs/plugin-basic-ssl": "^1.2.0",
     "@vitejs/plugin-react": "^4.7.0",
     "@vitest/coverage-v8": "^4.1.11",
     "@vitest/ui": "^4.1.11",

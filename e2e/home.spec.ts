@@ -97,19 +97,16 @@ test.describe('首頁冒煙測試', () => {
     // 2026-10-13：第一次安裝的 SW 啟用訊號曾被當成更新，閒置約 20 秒 + 倒數 8 秒後頁面無故重整。
     // 原本族群精靈一進站就開（持有「暫緩更新」票）剛好擋住它；精靈改為延後彈出後這個問題就浮現：
     // Lighthouse 載入中途被重整，收不到畫面截圖，首頁效能分數變成空值、品質閘門失敗。
-    let documentRequests = 0;
-    page.on('request', (request) => {
-      if (request.resourceType() === 'document' && request.frame() === page.mainFrame()) documentRequests += 1;
-    });
     await page.clock.install();
     await gotoHome(page);
     await page.waitForFunction(() => Boolean(navigator.serviceWorker.controller), undefined, { timeout: 30_000 });
     await page.waitForTimeout(1500); // 讓 SW_ACTIVATED 訊號送達
-    // CI 的 base 是 /Akai/，goto('/') 會先 302 轉址一次，所以不能拿「文件請求總數 = 1」當標準，改比對頁面載入完成後有沒有新增
-    const requestsAfterLoad = documentRequests;
+    // 載入完成後在這份文件上做記號：頁面若被重新整理或轉走，新文件不會有這個記號。
+    // （CI 的 base 是 /Akai/，goto('/') 會先轉址一次，所以從「載入完成之後」開始算。）
+    await page.evaluate(() => { document.documentElement.dataset.e2eLoadedOnce = 'yes'; });
     await page.clock.runFor(40_000); // 閒置 20 秒 + 倒數 8 秒（runFor 會把倒數的每一秒都跑完，fastForward 只會觸發一次）
     await page.waitForTimeout(1500);
-    expect(documentRequests).toBe(requestsAfterLoad);
+    expect(await page.evaluate(() => document.documentElement.dataset.e2eLoadedOnce)).toBe('yes');
   });
 
   test('在搜尋框裡操作與打字不會被彈窗打斷', async ({ page }) => {

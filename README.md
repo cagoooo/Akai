@@ -1,6 +1,6 @@
 # 科技教育創新專區 · 阿凱老師
 
-![Version](https://img.shields.io/badge/version-3.6.146-brightgreen.svg)
+![Version](https://img.shields.io/badge/version-3.6.162-brightgreen.svg)
 ![Tools](https://img.shields.io/badge/tools-130%2B-orange.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-20.x-green.svg)
@@ -236,7 +236,7 @@ npm run db:push
 npm run dev
 ```
 
-伺服器將在 `http://localhost:5000` 啟動。
+伺服器將在 `https://localhost:5000` 啟動（本機自簽憑證，瀏覽器第一次開啟會提示憑證不受信任，確認是 localhost 後繼續即可）。
 
 ---
 

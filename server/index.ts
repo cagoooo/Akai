@@ -4,9 +4,11 @@ import { setupVite, serveStatic, log } from "./vite";
 import { db, sql, dbType } from "../db";
 import path from "node:path";
 import fs from "node:fs";
+import https from "node:https";
 import compression from "compression";
 import { escapeChatCardText, literalChatText } from "./chat-card-escape";
 import { publicErrorResponse, publicHealthStatus, validErrorStatus } from "./public-diagnostics";
+import { localTlsOptions } from "./local-tls";
 
 const app = express();
 app.use(compression());
@@ -234,9 +236,10 @@ app.use((req, res, next) => {
     });
 
     const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;
-    // 由 Express 建立監聽，Vite 開發中介層再掛到同一個伺服器以支援熱更新。
-    const server = app.listen(port, "0.0.0.0", () => {
-      log(`Server running at http://0.0.0.0:${port}`);
+    // 本機伺服器只提供加密連線（HTTPS，自簽憑證）；Vite 開發中介層再掛到同一個伺服器以支援熱更新。
+    const server = https.createServer(await localTlsOptions(), app);
+    server.listen(port, "0.0.0.0", () => {
+      log(`Server running at https://localhost:${port}`);
     });
 
     if (app.get("env") === "development") {

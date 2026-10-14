@@ -1,6 +1,25 @@
-import test from 'node:test';
+import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
-import { summarizeTrace, summaryMarkdown } from './lighthouse-trace-summary.mjs';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { basename, join } from 'node:path';
+import { readDiagnoseJson, summarizeTrace, summaryMarkdown } from './lighthouse-trace-summary.mjs';
+
+const fixture = mkdtempSync(join(tmpdir(), 'akai-trace-summary-'));
+after(() => {
+  assert.ok(basename(fixture).startsWith('akai-trace-summary-'));
+  rmSync(fixture, { recursive: true, force: true });
+});
+const diagnose = join(fixture, 'diagnose');
+mkdirSync(diagnose);
+writeFileSync(join(diagnose, 'run1.json'), '{"ok":true}');
+writeFileSync(join(fixture, 'outside.json'), '{"ok":false}');
+
+test('只讀 diagnose 資料夾內的檔案，跑出資料夾的路徑一律拒絕', () => {
+  assert.deepEqual(readDiagnoseJson(join(diagnose, 'run1.json'), diagnose), { ok: true });
+  assert.throws(() => readDiagnoseJson(join(fixture, 'outside.json'), diagnose));
+  assert.throws(() => readDiagnoseJson(join(diagnose, '..', 'outside.json'), diagnose));
+});
 
 const nav = (ts, url = '') => ({ name: 'navigationStart', ts, args: { data: { isLoadingMainFrame: true, documentLoaderURL: url } } });
 const lcp = (ts, kind, data = {}) => ({ name: `largestContentfulPaint::${kind}`, ts, args: { data } });

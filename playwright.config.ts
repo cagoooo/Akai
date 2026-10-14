@@ -8,7 +8,9 @@ export default defineConfig({
     workers: process.env.CI ? 1 : undefined,
     reporter: 'html',
     use: {
-        baseURL: 'http://localhost:5000',
+        baseURL: 'https://localhost:5000',
+        // 本機開發伺服器是自簽憑證的 HTTPS（見 server/local-tls.ts）
+        ignoreHTTPSErrors: true,
         trace: 'on-first-retry',
         screenshot: 'only-on-failure',
     },
@@ -37,7 +39,8 @@ export default defineConfig({
     ],
     webServer: {
         command: 'npm run dev',
-        url: 'http://localhost:5000',
+        url: 'https://localhost:5000',
+        ignoreHTTPSErrors: true,
         reuseExistingServer: !process.env.CI,
     },
 });

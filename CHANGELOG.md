@@ -2,6 +2,14 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.162] - 2026-10-14 — 公共程式平臺 Fortify 第二次複掃：中風險以上剩 6 筆，逐筆改寫
+
+- **背景**：廠商 10/14 第二次複掃（Fortify 26.3，715 檔、239,947 行）合計 196 筆，中風險以上由 34 筆降為 6 筆（嚴重 1、高 5）。上一輪 34 筆中 33 筆已不再出現。
+- **不安全傳輸（嚴重 1）**：上一輪把本機開發伺服器改成 `app.listen()` 後仍被判定，因為它本質上還是未加密的 HTTP。這次改為只提供 HTTPS：`server/local-tls.ts` 以 Vite 官方的 `@vitejs/plugin-basic-ssl`（開發用相依套件）自動產生本機自簽憑證，`https.createServer()` 監聽；`playwright.config.ts`、README 與開發指南的本機網址同步改為 `https://localhost:5000`。正式網站仍是 GitHub Pages 的 HTTPS 靜態檔，不受影響。
+- **路徑操作（高 4）**：10/13 新增的 Lighthouse 診斷腳本直接讀命令列給的檔案路徑。改為先正規化路徑，再用既有的 `containedRealPath()` 確認實際位置在 `diagnose/` 資料夾內才讀取；新增「跑出資料夾一律拒絕」的單元測試。
+- **競爭條件（高 1）**：「第一次造訪不重整」端對端測試用 `page.on('request')` 回呼累加計數。改為載入完成後在文件上做記號、閒置後確認記號還在；頁面若被重整，新文件不會有記號，測試意圖不變。
+- **處置紀錄**：`docs/security/fortify-2026-10-14-rescan.md`。
+
 ## [3.6.161] - 2026-10-13 — Android 舊手機（Chrome 83 WebView）補上缺少的內建函式
 
 - **現象**：Sentry 收到 `JAVASCRIPT-REACT-11`（`this.o.at is not a function`，web-vitals）與 `JAVASCRIPT-REACT-12`（`Object.hasOwn is not a function`，部落格 Markdown 轉換），同一台 Samsung A12（Android 10，Chrome Mobile WebView 83）開部落格文章時發生。

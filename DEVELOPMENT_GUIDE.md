@@ -376,7 +376,7 @@ describe('ToolCard', () => {
 import { test, expect } from '@playwright/test';
 
 test('search functionality', async ({ page }) => {
-  await page.goto('http://localhost:5000');
+  await page.goto('https://localhost:5000');
 
   // 搜尋工具
   await page.fill('input[type="search"]', '客服');
