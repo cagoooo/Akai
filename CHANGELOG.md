@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.164] - 2026-10-14 — App Check 幾秒內就自動重試的短暫失敗不再觸發告警
+
+- **現象**：Sentry 收到 `JAVASCRIPT-REACT-14`、`JAVASCRIPT-REACT-15`（`AppCheck: 401 error. Attempts allowed again after 00m:01s`），同一支 iPhone（Safari，仍是快取的 v3.6.158）在 0.1 秒內記下 9 筆，之後沒有再失敗。
+- **原因**：App Check 換權杖遇到 403／404 才會鎖一天；401、5xx 等其他錯誤只暫停幾秒就自動重試（指數退避：1、2、4…秒）。這次是單次短暫失敗，SDK 1 秒後重試。
+- **修正**：`client/src/lib/sentry.ts` 新增 `isAppCheckShortRetry()`，只略過 403／404 以外、1 分鐘內就會重試的退避記錄；403／404、退避超過 1 分鐘（持續失敗）、reCAPTCHA 錯誤與統計回填失敗照常回報。新增對應單元測試。
+
 ## [3.6.163] - 2026-10-14 — 多分頁時鐘差 1 毫秒的 Firestore 記錄不再觸發告警
 
 - **現象**：Sentry 收到 `JAVASCRIPT-REACT-13`（`Detected an update time that is in the future: 1791979845730 > 1791979845729`），1 位訪客、1 次，發生在 v3.6.162 部署完成前後。

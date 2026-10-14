@@ -3,6 +3,7 @@ import {
   createUnreliableNetworkTracker,
   isAbortedRequestError,
   isAppCheckRejection,
+  isAppCheckShortRetry,
   isAutomatedBrowser,
   isRecoverableClientNoise,
 } from '../sentry';
@@ -81,6 +82,31 @@ describe('自動化瀏覽器被 App Check 擋下不送進 Sentry', () => {
       { level: 'error' as const },
     ];
     for (const input of inputs) expect(isAppCheckRejection(input)).toBe(false);
+  });
+});
+
+describe('App Check 幾秒內就會自動重試的短暫失敗不送進 Sentry', () => {
+  it('401 等非 403／404 錯誤、1 分鐘內重試（2026-10-14 JAVASCRIPT-REACT-14／15 原文）', () => {
+    const inputs = [
+      consoleEvent('[2026-10-14T12:15:38.144Z]  @firebase/app-check: AppCheck: 401 error. Attempts allowed again after 00m:01s (appCheck/initial-throttle).'),
+      consoleEvent('[2026-10-14T12:15:38.170Z]  @firebase/auth: Auth (12.8.0): Error while retrieving App Check token: FirebaseError: AppCheck: 401 error. Attempts allowed again after 00m:01s (appCheck/initial-throttle).'),
+      consoleEvent('@firebase/app-check: AppCheck: Requests throttled due to previous 503 error. Attempts allowed again after 00m:32s (appCheck/throttled).'),
+      exceptionEvent('FirebaseError', 'AppCheck: 401 error. Attempts allowed again after 00m:04s (appCheck/initial-throttle).'),
+    ];
+    for (const input of inputs) expect(isAppCheckShortRetry(input)).toBe(true);
+  });
+
+  it('403／404（鎖一天）、退避超過 1 分鐘與其他 App Check 錯誤照常回報', () => {
+    const inputs = [
+      consoleEvent('[2026-10-07T00:02:31.430Z]  @firebase/app-check: AppCheck: 403 error. Attempts allowed again after 01d:00m:00s (appCheck/initial-throttle).'),
+      consoleEvent('@firebase/app-check: AppCheck: Requests throttled due to previous 403 error. Attempts allowed again after 23h:59m:59s (appCheck/throttled).'),
+      consoleEvent('@firebase/app-check: AppCheck: 403 error. Attempts allowed again after 00m:05s (appCheck/initial-throttle).'),
+      consoleEvent('@firebase/app-check: AppCheck: 401 error. Attempts allowed again after 01m:04s (appCheck/initial-throttle).'),
+      consoleEvent('@firebase/app-check: AppCheck: Requests throttled due to previous 401 error. Attempts allowed again after 02h:00m:00s (appCheck/throttled).'),
+      consoleEvent('@firebase/app-check: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).'),
+      consoleEvent('App Check 尚未通過，無法回填統計'),
+    ];
+    for (const input of inputs) expect(isAppCheckShortRetry(input)).toBe(false);
   });
 });
 

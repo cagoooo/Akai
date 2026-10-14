@@ -107,6 +107,20 @@ export function isAppCheckRejection(event: SentryEvent): boolean {
   return eventTexts(event).some((text) => APP_CHECK_REJECTION.test(text));
 }
 
+/**
+ * App Check 換權杖遇到 403／404 以外的錯誤（例如 401、5xx）時，SDK 只暫停幾秒就自動重試（指數退避）；
+ * 403／404 才會鎖一天。2026-10-14 JAVASCRIPT-REACT-14／15：一支 iPhone 在 0.1 秒內記下 9 筆 401，之後沒有再失敗。
+ * 只略過「1 分鐘內就會重試」的退避；持續失敗時退避會超過 1 分鐘，且統計回填失敗會另外記錄，照常回報。
+ */
+const APP_CHECK_SHORT_RETRY = /AppCheck: (?:Requests throttled due to previous )?(\d{3}) error\. Attempts allowed again after 00m:\d{2}s \(appCheck\/(?:initial-throttle|throttled)\)/;
+
+export function isAppCheckShortRetry(event: SentryEvent): boolean {
+  return eventTexts(event).some((text) => {
+    const status = text.match(APP_CHECK_SHORT_RETRY)?.[1];
+    return status !== undefined && status !== '403' && status !== '404';
+  });
+}
+
 const NETWORK_RECOVERY_GRACE_MS = 15_000;
 const SLEEP_CHECK_INTERVAL_MS = 15_000;
 // 背景分頁的計時器最慢約每分鐘執行一次，超過兩分鐘沒執行才視為裝置曾睡眠
@@ -250,6 +264,7 @@ export function initSentry() {
           if (event.request?.cookies) delete event.request.cookies;
           if (isRecoverableClientNoise(event)) return null;
           if (isFirestoreTabClockJitter(event)) return null;
+          if (isAppCheckShortRetry(event)) return null;
           if (automated && isAppCheckRejection(event)) return null;
           // 例如按下「更新」後重新整理、離線或剛喚醒時，請求被瀏覽器中止或連不上，並非後端錯誤
           if (isNetworkUnreliable() && isAbortedRequestError(hint.originalException)) return null;
