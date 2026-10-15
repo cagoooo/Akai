@@ -236,8 +236,10 @@ app.use((req, res, next) => {
     });
 
     const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;
-    // 本機伺服器只提供加密連線（HTTPS，自簽憑證）；Vite 開發中介層再掛到同一個伺服器以支援熱更新。
-    const server = https.createServer(await localTlsOptions(), app);
+    // 本機伺服器只提供加密連線（HTTPS，自簽憑證），並依 Fortify 建議固定使用 TLS 1.2，不接受舊版 SSL／TLS；
+    // Vite 開發中介層再掛到同一個伺服器以支援熱更新。
+    const tls = await localTlsOptions();
+    const server = https.createServer({ key: tls.key, cert: tls.cert, secureProtocol: "TLSv1_2_method" }, app);
     server.listen(port, "0.0.0.0", () => {
       log(`Server running at https://localhost:${port}`);
     });

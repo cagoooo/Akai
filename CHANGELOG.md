@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.165] - 2026-10-15 — 公共程式平臺 Fortify 第三次複掃：最後 1 筆固定 TLS 1.2
+
+- **背景**：廠商 10/15 第三次複掃 193 筆，中風險以上由 6 筆降為 1 筆（嚴重 1）。上一輪 6 筆全部不再出現；本機伺服器改為 HTTPS 後，同一行改列「不安全傳輸：弱 SSL 協定」，因為建立伺服器時沒有寫明協定版本。
+- **修正**：`server/index.ts` 依報告建議在建立 HTTPS 伺服器處直接指定 `secureProtocol: "TLSv1_2_method"`。實測 TLS 1.2 連線正常、TLS 1.1 被拒絕。正式網站（GitHub Pages）不受影響。
+- **處置紀錄**：`docs/security/fortify-2026-10-15-rescan.md`。
+
 ## [3.6.164] - 2026-10-14 — App Check 幾秒內就自動重試的短暫失敗不再觸發告警
 
 - **現象**：Sentry 收到 `JAVASCRIPT-REACT-14`、`JAVASCRIPT-REACT-15`（`AppCheck: 401 error. Attempts allowed again after 00m:01s`），同一支 iPhone（Safari，仍是快取的 v3.6.158）在 0.1 秒內記下 9 筆，之後沒有再失敗。
