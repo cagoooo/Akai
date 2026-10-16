@@ -15,6 +15,27 @@ export type BlogPostMeta = Omit<BlogPost, 'body'>;
 
 export const POSTS_INDEX: BlogPostMeta[] = [
   {
+    "slug": "iwin-survey-131-report-reading",
+    "title": "#131 先看本校，再對照全國：把兒少上網問卷結果留在同一個閱讀入口",
+    "excerpt": "兩份報告分散在訊息裡，容易記不清自己看過哪份。#131 集中石門國小與全國結果連結，用已讀標記與三步建議，陪教師從找資料走到提出問題。",
+    "publishedAt": "2026-10-16",
+    "readingMinutes": 5,
+    "tags": [
+      "iWIN",
+      "兒少上網",
+      "問卷結果",
+      "數位素養",
+      "報告閱讀"
+    ],
+    "toolIds": [
+      131,
+      3,
+      81
+    ],
+    "coverEmoji": "📖",
+    "coverColor": "green"
+  },
+  {
     "slug": "sportsday-130-shimen-115",
     "title": "#130 賽程、接力、停車一次查：石門國小運動會資訊站，讓全家安心出發",
     "excerpt": "運動會前，家長最常要找的是幾點到、孩子何時上場、車要停哪裡。#130 把 10 月 17 日的賽程、活動亮點、邀請單與交通提醒收在同一個公開入口。",

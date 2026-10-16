@@ -8,7 +8,7 @@
  *   1. 卡片主圖 previewUrl 與社群圖 ogPreviewUrl 都有填，而且檔案真的存在
  *   2. 每個工具都有合法的 addedAt
  *   3. 每個工具都有對應的手寫長文 POST_N（toolIds[0] === 工具 id），或列入豁免清單
- *   4. 全 repo 不得把學校名寫成「新明」（正確是石門國小／桃園市龍潭區石門國民小學）
+ *   4. 全 repo 不得把學校名寫成「\u65b0\u660e」（正確是石門國小／桃園市龍潭區石門國民小學）
  *
  * 「能不能被推薦引擎撈到」由 validate-audience-fit.ts 負責，兩支都掛在 prebuild。
  */
@@ -29,18 +29,18 @@ const PUBLIC_DIR = resolve(ROOT, 'client', 'public');
  */
 const BLOG_EXEMPT_IDS: ReadonlySet<number> = new Set<number>();
 
-/** 掃「新明」時要看的目錄（跳過 node_modules、dist、快取等） */
+/** 掃「\u65b0\u660e」時要看的目錄（跳過 node_modules、dist、快取等） */
 const SCHOOL_NAME_SCAN_DIRS = ['client/src', 'client/public', 'server', 'scripts', 'functions/src'];
 const SCHOOL_NAME_SCAN_EXTS = ['.ts', '.tsx', '.js', '.mjs', '.cjs', '.json', '.md', '.html', '.txt', '.xml'];
 const SCHOOL_NAME_SKIP_DIRS = new Set(['node_modules', 'dist', '.git', 'cache', 'previews', 'assets']);
-/** 這支守門腳本自己就寫滿了「新明」當作反例，掃描時要跳過自己 */
+/** 這支守門腳本自己就寫滿了「\u65b0\u660e」當作反例，掃描時要跳過自己 */
 const SCHOOL_NAME_SKIP_FILES = new Set(['validate-tool-pipeline.ts']);
 
 /**
- * 「新明」的合法出現：都是刻意寫來提醒「不要寫成新明」的對照文字。
+ * 「\u65b0\u660e」的合法出現：都是刻意寫來提醒「不要寫成\u65b0\u660e」的對照文字。
  * 只要該行含有這些字樣就放行；其餘一律視為誤植。
  */
-const SCHOOL_NAME_ALLOW_MARKERS = ['不是新明', '誤寫成', '≠ 新明', '≠新明', '已修正'];
+const SCHOOL_NAME_ALLOW_MARKERS = ['不是\u65b0\u660e', '誤寫成', '≠ \u65b0\u660e', '≠\u65b0\u660e', '已修正'];
 
 const errors: string[] = [];
 
@@ -136,12 +136,12 @@ function checkSchoolName(): void {
       } catch {
         continue;
       }
-      if (!content.includes('新明')) continue;
+      if (!content.includes('\u65b0\u660e')) continue;
       content.split('\n').forEach((line, index) => {
-        if (!line.includes('新明')) return;
+        if (!line.includes('\u65b0\u660e')) return;
         if (SCHOOL_NAME_ALLOW_MARKERS.some((marker) => line.includes(marker))) return;
         errors.push(
-          `${file.slice(ROOT.length + 1)}:${index + 1}: 出現「新明」——學校名應為「石門國小」或「桃園市龍潭區石門國民小學」`,
+          `${file.slice(ROOT.length + 1)}:${index + 1}: 出現「\u65b0\u660e」——學校名應為「石門國小」或「桃園市龍潭區石門國民小學」`,
         );
       });
     }

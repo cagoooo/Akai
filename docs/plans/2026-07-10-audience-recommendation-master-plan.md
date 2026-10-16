@@ -38,7 +38,7 @@ npm --prefix functions run build
 npm run build
 npm run test:e2e -- --project="Mobile Chrome" e2e/audience-onboarding.spec.ts
 npm run test:e2e -- --project=chromium e2e/audience-onboarding.spec.ts
-rg -n "新明" . -g '!node_modules' -g '!dist' -g '!.git'
+rg -n "\x{65b0}\x{660e}" . -g '!node_modules' -g '!dist' -g '!.git'
 ```
 
 預期：所有命令 exit 0；最後一個 `rg` 只能命中「禁止誤寫」的規範文字，不得命中對外頁面文案、footer 或工具內容。

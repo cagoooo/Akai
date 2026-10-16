@@ -409,7 +409,7 @@ Expected: PASS。
 
 ```powershell
 rg -n "email|schoolName|freeText|sessionId|ipAddress" functions/src/recordAudienceEvent.ts client/src/lib/audienceAnalytics.ts
-rg -n "新明" client server functions -g '!node_modules' -g '!dist'
+rg -n "\x{65b0}\x{660e}" client server functions -g '!node_modules' -g '!dist'
 ```
 
 Expected: 第一個命令不得顯示 payload 寫入上述個資欄位；第二個不得命中對外內容。

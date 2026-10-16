@@ -1027,7 +1027,7 @@ const POST_53: BlogPost = {
 
 ## 「人味細節」
 
-- **Footer 寫 \`Made with ❤️ for SMES\`** — 確認是石門國小自己人（不是新明）
+- **Footer 寫 \`Made with ❤️ for SMES\`** — 確認是石門國小自己人（學校名稱已核對）
 - **v0.8.2 ~ v0.8.3 連續 4 個版本**只為解決 iPhone SE 小螢幕標籤重疊（**9 px 字體微調**）
 - **firestore.rules 7.7 KB** — 雙重權限驗證（硬編 super admin + 動態 adminConfig）
 - **FUTURE_ROADMAP.md** 還規劃：耗材庫存自動扣帳、AI 智慧客服初步排障、QR Code 掃碼帶入、RBAC 細分權限
@@ -3317,7 +3317,7 @@ README 寫 **「3 分鐘換成你的學校」**。
 >
 > — 學生家長
 
-> 「**v3.13，footer 寫對「桃園市龍潭區石門國小」**（剛剛上個版本誤寫成新明，已修正） — 一個工具叫『校園奇遇記』結果學校名也是真的，超紮實」
+> 「**v3.13，footer 寫對「桃園市龍潭區石門國小」**（先前版本曾誤植校名，已修正） — 一個工具叫『校園奇遇記』結果學校名也是真的，超紮實」
 >
 > — 教導主任
 
@@ -15250,7 +15250,57 @@ const POST_129: BlogPost = {
 先挑出你最近一次沒聽清楚的宣達事項，用頁籤找到那一週、用搜尋對照一次。如果你負責整理會議，不妨試著把下一週的報告，也照一週一頁、依處室分區的方式放進去。`,
 };
 
-export const POSTS: BlogPost[] = [POST_130, POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+const POST_131: BlogPost = {
+  slug: 'iwin-survey-131-report-reading',
+  title: '#131 先看本校，再對照全國：把兒少上網問卷結果留在同一個閱讀入口',
+  excerpt: '兩份報告分散在訊息裡，容易記不清自己看過哪份。#131 集中石門國小與全國結果連結，用已讀標記與三步建議，陪教師從找資料走到提出問題。',
+  publishedAt: '2026-10-16', readingMinutes: 5,
+  tags: ['iWIN', '兒少上網', '問卷結果', '數位素養', '報告閱讀'],
+  toolIds: [131, 3, 81], coverEmoji: '📖', coverColor: 'green',
+  body: `## 先把資料找齊，才有辦法好好討論
+
+情境示例：教師準備一堂網路使用主題的課，手邊有學校問卷回饋，也有全國調查結果。訊息轉傳過幾次，報告網址留在不同地方；打開其中一份，隔天又想不起來另一份看過沒有。此時需要的，可能是把資料入口和閱讀順序放在一起。
+
+#131「iWIN 兒少上網問卷結果閱讀站」整理 115 年度「iWIN 兒少使用網際網路行為觀察」問卷的兩份結果入口：一份是石門國小的學校回饋，一份是全國整體結果。它的定位像放在講桌上的閱讀清單，讓教師先找到資料、記住讀到哪裡，再決定接下來要談什麼。
+
+## 兩張結果卡，搭配自己的閱讀標記
+
+首頁的兩張卡分別提供外部報告連結，也各有「複製連結」按鈕。需要回到原始資料時，可由同一頁開啟；與同仁討論時，也能找到對應的報告網址。本站介紹只確認了這些入口，沒有讀取兩份外部檔案的實際內容，因此不引用樣本數、百分比或調查結論。
+
+每張卡有「我已看過這份」勾選框，頁面顯示由 0/2 起算的閱讀進度。兩份都標記後，會出現「兩份都看過了，可以開始對照」的提示。開啟報告連結也會自動標記，所以這個進度只是個人提醒，不是閱讀理解測驗，更不能當成已下載或已完整看完的證明。
+
+閱讀標記保存在同一個瀏覽器的本機儲存空間，重新整理仍會保留；換裝置、換瀏覽器或清除資料，不能期待同一份進度自動跟過來。它也沒有提供行政端名單，不能拿來統計全校教師是否已完成閱讀。
+
+## 三步閱讀，先問資料在說什麼
+
+頁面建議的順序是：**看本校概況、對照全國趨勢、挑出值得關注的議題**。這是閱讀的引導，不是網站已替讀者做好的分析。實際比較前，仍要回到報告確認調查對象、題目與統計方式；條件不同時，不宜只看數字大小就下判斷。
+
+「本校」在這個入口固定指向石門國小的回饋，不會因訪客來自另一所學校而改變。其他學校的教師可以參考閱讀流程與全國資料，但要討論自己學校的狀況，必須另備自己的回饋。跨學段使用也一樣：先確認全國報告涵蓋的對象，再挑適合自己課程的材料。
+
+頁面另有可展開的「原始信件全文」，讓讀者回頭核對網站整理的脈絡。網站是這次報告的閱讀入口，不代表它由 iWIN 官方建置；也沒有問卷填答、互動圖表、統計分析或 AI 模型功能。
+
+## 情境示例：導師、科任與行政可以各做一步
+
+以下是使用建議，沒有教師回饋引言或實測成效。
+
+**導師可以先選一個班級討論題。** 讀完適合的資料後，將議題轉成孩子能理解的提問，例如「哪些情況下，你會忘記原本打算上網多久？」讓學生說明自己的想法。提問只是課堂活動設計，不表示報告已有這個結論，也不要求學生公開個人隱私。
+
+**科任教師可以帶學生分辨證據與推論。** 教師先選讀全國報告中的合適材料，再引導學生說出「資料寫了什麼」「我們想到什麼」「還需要查什麼」。這個入口主要給教師查閱，不直接推薦學生自行開啟本校調查檔案。
+
+**行政同仁可以先對齊資料來源。** 教務討論課程連結，學務規劃宣導，輔導關注孩子的生活經驗，資訊組協助資料查找。共用一個入口有助於確認大家談的是哪份報告，但正式通知、會議決議與閱讀回報仍應走學校原有流程。
+
+## 配對工具：把閱讀接到課堂活動
+
+- [#3 學生即時投票系統](https://cagoooo.github.io/vote/)：教師讀完資料後，可另行設計班級提問與投票，觀察學生想法；這是額外的課堂活動，不等於 iWIN 原調查，也不是 #131 的內建功能。
+- [#81 國小資訊科技教學駕駛艙入口網](https://cagoooo.github.io/it-cockpit/)：把選定議題放回資訊課程脈絡，規劃閱讀、提問與數位素養討論。
+- [#131 iWIN 兒少上網問卷結果閱讀站](https://cagoooo.github.io/iwin-115-survey/)：回到本篇介紹的兩份報告入口，依自己的閱讀情況做標記。
+
+## 下一次宣導前，先留下值得追問的問題
+
+打開 [iWIN 兒少上網問卷結果閱讀站](https://cagoooo.github.io/iwin-115-survey/)，先確認本校與全國資料各自的範圍，再閱讀原始報告。最後寫下一個有資料依據、也適合自己教學現場的問題，讓討論從理解開始。`,
+};
+
+export const POSTS: BlogPost[] = [POST_131, POST_130, POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。

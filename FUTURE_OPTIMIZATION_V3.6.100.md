@@ -209,7 +209,7 @@ v3.6.99 已經埋了 `audience_wizard_opened` 帶 `mode=first_time / re_prompt`�
 - 每個工具都要有 `previewUrl` 與 `ogPreviewUrl` 且檔案真的存在
 - 每個工具都要能被至少 1 個 profile 推薦到（同 P0-1 第 3 點）
 - 每個工具都要有對應的 `POST_N` 手寫長文，或明確列入豁免清單
-- 全 repo 不得出現「新明」（本次是人工 grep）
+- 全 repo 不得出現錯誤校名（本次是人工 grep）
 
 **驗收**：漏掉任何一項，`npm run build` 會紅燈，不會默默上線。
 **成本**：M
