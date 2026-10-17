@@ -11,8 +11,16 @@ const SW_SCRIPT_FETCH_FAILURE = new RegExp(
   's',
 );
 
+/**
+ * Safari／iOS（含 iOS 版 Chrome，底層同為 WebKit）抓不到 sw.js 時丟的是 SecurityError「Script … load failed」
+ * （2026-10-17 JAVASCRIPT-REACT-16）。DOMException 在部分環境不繼承 Error，只看 name 與 message。
+ */
+const WEBKIT_SW_SCRIPT_LOAD_FAILURE = /^Script \S+\/sw\.js load failed$/;
+
 export function isServiceWorkerScriptFetchFailure(error: unknown): boolean {
-  return error instanceof Error && SW_SCRIPT_FETCH_FAILURE.test(error.message);
+  if (error instanceof Error && SW_SCRIPT_FETCH_FAILURE.test(error.message)) return true;
+  const { name, message } = (error ?? {}) as { name?: unknown; message?: unknown };
+  return name === 'SecurityError' && typeof message === 'string' && WEBKIT_SW_SCRIPT_LOAD_FAILURE.test(message);
 }
 
 interface ReportOptions {

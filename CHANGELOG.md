@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.167] - 2026-10-17 — iPhone 背景檢查新版時暫時抓不到 sw.js 不再觸發告警
+
+- **現象**：Sentry 收到 `JAVASCRIPT-REACT-16`（`SecurityError: Script https://cagoooo.github.io/Akai/sw.js load failed`），iOS 版 Chrome、1 位訪客、1 次。
+- **原因**：Safari／iOS（WebKit）背景更新檢查抓不到 sw.js 時丟的是 SecurityError，寫法和 Chrome 的「Not found／unknown error」不同，沒被既有的「先確認伺服器再決定是否告警」流程認出來。
+- **修正**：`client/src/lib/swUpdateDiagnostics.ts` 也辨識 WebKit 的這種錯誤，先用 HEAD 確認伺服器上的 sw.js；正常就不告警，伺服器真的回錯才回報。新增單元測試。
+
 ## [3.6.166] - 2026-10-16 — 新增 #131 iWIN 兒少上網問卷結果閱讀站
 
 - 新增本校與全國報告閱讀入口卡片、實站截圖、統一 OG 圖及手寫教學情境長文。

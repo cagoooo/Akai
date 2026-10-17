@@ -21,6 +21,20 @@ describe('Service Worker 更新檢查失敗的回報', () => {
     expect(isServiceWorkerScriptFetchFailure('Not found')).toBe(false);
   });
 
+  it('Safari／iOS 抓不到 sw.js 的 SecurityError 也先探測伺服器（2026-10-17 JAVASCRIPT-REACT-16）', async () => {
+    const webkit = new DOMException('Script https://cagoooo.github.io/Akai/sw.js load failed', 'SecurityError');
+    expect(isServiceWorkerScriptFetchFailure(webkit)).toBe(true);
+    expect(isServiceWorkerScriptFetchFailure(new DOMException('Script https://evil.example/other.js load failed', 'SecurityError'))).toBe(false);
+    expect(isServiceWorkerScriptFetchFailure(new DOMException('The operation is insecure.', 'SecurityError'))).toBe(false);
+
+    const report = vi.fn();
+    vi.spyOn(console, 'info').mockImplementation(() => {});
+    await reportServiceWorkerUpdateFailure(webkit, { fetchImpl: vi.fn().mockResolvedValue(response(true)), report });
+    expect(report).not.toHaveBeenCalled();
+    await reportServiceWorkerUpdateFailure(webkit, { fetchImpl: vi.fn().mockResolvedValue(response(false)), report });
+    expect(report).toHaveBeenCalledWith('[PWA] 更新檢查失敗：', webkit, 'warn');
+  });
+
   it('伺服器上的 sw.js 正常：視為暫時失敗，不回報', async () => {
     const report = vi.fn();
     const fetchImpl = vi.fn().mockResolvedValue(response(true));
