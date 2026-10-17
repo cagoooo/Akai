@@ -13,6 +13,8 @@
  *       的同一次造訪只記一次。
  */
 
+import { isAbortedRequestError } from '@/lib/sentry';
+
 const MIN_VISIT_INTERVAL = 30 * 60 * 1000; // 30 分鐘
 
 let inFlight: Promise<void> | null = null;
@@ -83,12 +85,18 @@ export async function trackPageVisit(): Promise<void> {
 // trackVisitorContext：與原 BulletinVisitorCounter 中的邏輯一致
 // 三類同時寫 localStorage（離線 fallback）+ Firestore（全站累計）
 // ────────────────────────────────────────────────────────────
-async function incrementServerStat(category: 'device' | 'referrer' | 'geo', key: string) {
+export async function incrementServerStat(category: 'device' | 'referrer' | 'geo', key: string) {
   if (!key) return;
   try {
     const { invokePublicAnalytics } = await import('@/lib/publicAnalyticsService');
     await invokePublicAnalytics({ kind: 'visitorContext', category, key, count: 1 });
   } catch (err) {
+    // 請求沒送完（切頁、關分頁、網路瞬斷）：只少記一筆背景統計，訪客看不到差異，不送告警
+    // （2026-10-15 JAVASCRIPT-REACT-H：functions/internal「internal」）；後端真的回錯照常回報
+    if (isAbortedRequestError(err)) {
+      console.info(`[trackPageVisit] ${category} 統計這次沒送出（連線中斷），不影響使用`);
+      return;
+    }
     console.warn(`[trackPageVisit] Firestore ${category}/${key} 寫入失敗:`, err);
   }
 }

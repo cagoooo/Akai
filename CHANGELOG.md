@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.168] - 2026-10-18 — 背景訪客統計連線中斷不再觸發告警
+
+- **現象**：Sentry 週報中 `JAVASCRIPT-REACT-H`（`FirebaseError: internal`）被列為「重新出現」，11 天 3 位訪客各 1 次，都是 `[trackPageVisit] Firestore device/desktop 寫入失敗`。
+- **原因**：訪客裝置／來源／地區統計在背景送出，切頁、關分頁或網路瞬斷時請求沒送完，Firebase 回小寫 `internal`；只少記一筆背景統計，訪客看不到差異。既有過濾只在偵測到離線或分頁在背景時生效，這幾次沒被涵蓋。
+- **修正**：`client/src/lib/visitorTracker.ts` 寫入失敗若屬「請求沒送完」改記一般訊息、不送告警；後端真的回錯（大寫 `INTERNAL`、權限不足等）照常回報。新增單元測試。
+
 ## [3.6.167] - 2026-10-17 — iPhone 背景檢查新版時暫時抓不到 sw.js 不再觸發告警
 
 - **現象**：Sentry 收到 `JAVASCRIPT-REACT-16`（`SecurityError: Script https://cagoooo.github.io/Akai/sw.js load failed`），iOS 版 Chrome、1 位訪客、1 次。
