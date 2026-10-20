@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 131+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 132+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Fri, 16 Oct 2026 05:23:47 GMT</pubDate>
-    <lastBuildDate>Fri, 16 Oct 2026 05:26:28 GMT</lastBuildDate>
+    <pubDate>Tue, 20 Oct 2026 08:31:54 GMT</pubDate>
+    <lastBuildDate>Tue, 20 Oct 2026 08:35:30 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,27 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：輔導紀錄小幫手</title>
+      <link>https://cagoooo.github.io/Akai/tool/132</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/132</guid>
+      <pubDate>Tue, 20 Oct 2026 08:31:54 GMT</pubDate>
+      <description>把老師口語、零散的描述或點選的狀況標籤，整理成「輔導內容重點＋聯繫內容」兩段正式輔導紀錄，一鍵複製到校務系統；學生姓名送出前自動換成代號，也能用座號批次補登。</description>
+      <category>輔導紀錄</category>
+      <category>校務系統登錄</category>
+      <category>去識別化</category>
+      <category>批次補登</category>
+      <category>座號制</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#132 從「他推了同學一把」到正式紀錄：姓名先換代號，再請 AI 幫忙寫</title>
+      <link>https://cagoooo.github.io/Akai/blog/counseling-record-132-deidentified-writing</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/counseling-record-132-deidentified-writing</guid>
+      <pubDate>Tue, 20 Oct 2026 00:00:00 GMT</pubDate>
+      <description>輔導紀錄最難的不是記得發生什麼，而是改寫成能登錄的正式文字。#132 把口語描述或狀況標籤整理成兩段紀錄，送出前先把姓名換成代號，期末還能用座號批次補登。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
     <item>
       <title>🆕 新工具：iWIN 兒少上網問卷結果閱讀站</title>
       <link>https://cagoooo.github.io/Akai/tool/131</link>
@@ -309,27 +330,6 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/it-quiz-battle-118-cockpit-knowledge-battle</guid>
       <pubDate>Mon, 13 Jul 2026 00:00:00 GMT</pubDate>
       <description>網路安全、程式思維、數位公民，講完不等於記住。#118 把資訊素養題目放進駕駛艙對戰：選職能角色、答題發動技能、即時看解析；能單挑 AI、同桌雙人，也能投影成全班的觀念討論。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>🆕 新工具：石門國小線上調代課系統</title>
-      <link>https://cagoooo.github.io/Akai/tool/117</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/117</guid>
-      <pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>
-      <description>阿凱老師為石門國小打造的全校課表與線上調代課系統：老師點選節次即可智慧媒合代課或調課、一鍵同意受邀，教學組能代出單、列印 A5 三聯通知單並自動結算兼代課鐘點費，告別紙本喬課的來回奔波。</description>
-      <category>線上調代課</category>
-      <category>代課媒合</category>
-      <category>調課比對</category>
-      <category>全校課表</category>
-      <category>教師請假</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#117 石門國小線上調代課系統：從紙本喬課到點兩下媒合，把教學組最累的行政流水線搬上線</title>
-      <link>https://cagoooo.github.io/Akai/blog/substitute-117-online-class-swap</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/substitute-117-online-class-swap</guid>
-      <pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>
-      <description>老師臨時請假，過去要跑辦公室一間間問誰能代、手寫調代課單、再讓教學組結鐘點費。#117 把這條流水線整條搬上線：點課表節次就智慧媒合、一鍵同意、A5 三聯單一鍵印、鐘點費自動結算。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>

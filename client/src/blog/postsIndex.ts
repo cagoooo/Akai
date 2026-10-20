@@ -15,6 +15,27 @@ export type BlogPostMeta = Omit<BlogPost, 'body'>;
 
 export const POSTS_INDEX: BlogPostMeta[] = [
   {
+    "slug": "counseling-record-132-deidentified-writing",
+    "title": "#132 從「他推了同學一把」到正式紀錄：姓名先換代號，再請 AI 幫忙寫",
+    "excerpt": "輔導紀錄最難的不是記得發生什麼，而是改寫成能登錄的正式文字。#132 把口語描述或狀況標籤整理成兩段紀錄，送出前先把姓名換成代號，期末還能用座號批次補登。",
+    "publishedAt": "2026-10-20",
+    "readingMinutes": 6,
+    "tags": [
+      "輔導紀錄",
+      "去識別化",
+      "批次補登",
+      "導師工作",
+      "Gemini"
+    ],
+    "toolIds": [
+      132,
+      89,
+      16
+    ],
+    "coverEmoji": "📒",
+    "coverColor": "green"
+  },
+  {
     "slug": "iwin-survey-131-report-reading",
     "title": "#131 先看本校，再對照全國：把兒少上網問卷結果留在同一個閱讀入口",
     "excerpt": "兩份報告分散在訊息裡，容易記不清自己看過哪份。#131 集中石門國小與全國結果連結，用已讀標記與三步建議，陪教師從找資料走到提出問題。",
