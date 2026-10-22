@@ -50,17 +50,41 @@ export function createFirestoreLeaseClassifier(now = () => Date.now()) {
 /**
  * 多分頁快取會比對其他分頁寫下的主分頁租約時間；分頁之間時鐘差 1 毫秒，SDK 就記成「更新時間在未來」，
  * 並把那份租約當作無效、自行重新協調（2026-10-14 JAVASCRIPT-REACT-13，差 1 毫秒）。
- * 只略過 1 秒以內的分頁時鐘誤差；差距更大代表裝置時鐘異常，照常回報。
+ * 只略過 1 秒以內的分頁時鐘誤差；差距更大代表裝置時鐘異常，每頁回報一次（見 createFirestoreClockSkewClassifier）。
  */
 const FIRESTORE_FUTURE_UPDATE = /^(?:\[[^\]\r\n]+\]\s+)?@firebase\/firestore:\s+Firestore \(\d+\.\d+\.\d+\): Detected an update time that is in the future: (\d{1,16}) > (\d{1,16})$/;
 const FIRESTORE_TAB_CLOCK_JITTER_MS = 1000;
 
-export function isFirestoreTabClockJitter(event: SentryEvent): boolean {
-  if (event.logger !== 'console' || event.exception?.values?.length) return false;
+function firestoreFutureUpdateAheadMs(event: SentryEvent): number | null {
+  if (event.logger !== 'console' || event.exception?.values?.length) return null;
   const match = event.message?.match(FIRESTORE_FUTURE_UPDATE);
-  if (!match) return false;
+  if (!match) return null;
   const aheadMs = Number(match[1]) - Number(match[2]);
-  return aheadMs > 0 && aheadMs <= FIRESTORE_TAB_CLOCK_JITTER_MS;
+  return aheadMs > 0 ? aheadMs : null;
+}
+
+export function isFirestoreTabClockJitter(event: SentryEvent): boolean {
+  const aheadMs = firestoreFutureUpdateAheadMs(event);
+  return aheadMs !== null && aheadMs <= FIRESTORE_TAB_CLOCK_JITTER_MS;
+}
+
+/**
+ * 差距超過 1 秒時，SDK 每次檢查租約（約每 4 秒、每個分頁）都會再記一次，同一頁會連續記到時鐘恢復為止
+ * （2026-10-22 JAVASCRIPT-REACT-13：同一台電腦 4 個分頁、差約 25 秒，29 分鐘記了 500 筆）。
+ * 同一頁只回報第一筆、附上差距秒數，其餘略過，避免吃光事件額度。
+ */
+export function createFirestoreClockSkewClassifier() {
+  let reported = false;
+  return (event: SentryEvent): SentryEvent | null => {
+    const aheadMs = firestoreFutureUpdateAheadMs(event);
+    if (aheadMs === null) return event;
+    if (aheadMs <= FIRESTORE_TAB_CLOCK_JITTER_MS || reported) return null;
+    reported = true;
+    event.fingerprint = ['firestore-future-update-time'];
+    event.tags = { ...event.tags, firestoreClockSkew: 'ahead' };
+    event.extra = { ...event.extra, clockAheadSeconds: Math.round(aheadMs / 1000) };
+    return event;
+  };
 }
 
 /**
@@ -234,6 +258,7 @@ export function initSentry() {
     try {
       const Sentry = await import('./sentryClient');
       const classifyFirestoreLease = createFirestoreLeaseClassifier();
+      const classifyFirestoreClockSkew = createFirestoreClockSkewClassifier();
       const automated = isAutomatedBrowser(navigator);
       Sentry.init({
         dsn,
@@ -263,12 +288,12 @@ export function initSentry() {
           // 移除可能含 PII 的欄位
           if (event.request?.cookies) delete event.request.cookies;
           if (isRecoverableClientNoise(event)) return null;
-          if (isFirestoreTabClockJitter(event)) return null;
           if (isAppCheckShortRetry(event)) return null;
           if (automated && isAppCheckRejection(event)) return null;
           // 例如按下「更新」後重新整理、離線或剛喚醒時，請求被瀏覽器中止或連不上，並非後端錯誤
           if (isNetworkUnreliable() && isAbortedRequestError(hint.originalException)) return null;
-          return classifyFirestoreLease(event);
+          const skewChecked = classifyFirestoreClockSkew(event);
+          return skewChecked && classifyFirestoreLease(skewChecked);
         },
       });
 
