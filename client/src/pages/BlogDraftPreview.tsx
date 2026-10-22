@@ -38,7 +38,7 @@ const STARTER = `# 草稿標題（預覽不會顯示 H1，這只是給自己記�
 <div class="callout callout--tip">
 <div class="callout__label">💡 提示</div>
 
-Callout 直接寫 HTML，paste 範本骨架就有，按右上「複製文章範本」可拿完整骨架。
+Callout 直接寫 HTML，class 寫法可參考既有文章（styles/blog-article.css）。
 
 </div>
 

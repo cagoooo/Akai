@@ -1497,7 +1497,7 @@
 }
 
 /* =========================================================
-   Admin 寫作範本複製按鈕（fixed bottom-left，避開 BackToTop / Tour 提示）
+   複製 AI 開發提示詞按鈕：所有讀者可用（fixed bottom-left，避開 BackToTop / Tour 提示）
    ========================================================= */
 .bp-template-copier {
   position: fixed;
@@ -1507,22 +1507,30 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 16px;
-  background: #fff;
+  min-height: 48px;
+  padding: 10px 18px;
+  background: var(--note-yellow);
   color: var(--ink);
   font-family: var(--font-tc);
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 800;
   border: 2px solid var(--ink);
   border-radius: 999px;
   cursor: pointer;
-  box-shadow: 3px 3px 0 rgba(0,0,0,.18);
+  box-shadow: 3px 3px 0 var(--ink);
+  transform: rotate(-1.5deg);
   transition: transform .15s, box-shadow .15s, background .15s;
 }
 .bp-template-copier:hover {
-  background: var(--note-yellow);
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 rgba(0,0,0,.22);
+  transform: rotate(-1.5deg) translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.bp-template-copier:active {
+  transform: rotate(-1.5deg) translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+.bp-template-copier.is-copied {
+  background: var(--note-green);
 }
 .bp-template-copier:focus-visible {
   outline: 2px solid var(--accent);
@@ -1532,9 +1540,14 @@
   .bp-template-copier {
     bottom: 80px;
     left: 14px;
-    padding: 8px 12px;
-    font-size: 12px;
+    padding: 8px 14px;
+    font-size: 13px;
   }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bp-template-copier,
+  .bp-template-copier:hover,
+  .bp-template-copier:active { transform: none; }
 }
 
 /* =========================================================

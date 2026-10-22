@@ -40,7 +40,7 @@ import { useActiveSection } from '@/hooks/useActiveSection';
 import { useExtractedSections, slugifyHeading } from '@/hooks/useExtractedSections';
 
 const HighlightedCode = lazy(() => import('@/components/blog/BlogCodeBlock').then(m => ({ default: m.BlogCodeBlock })));
-const BlogTemplateCopier = lazy(() => import('@/components/blog/BlogTemplateCopier').then(m => ({ default: m.BlogTemplateCopier })));
+const BlogAgentPromptCopier = lazy(() => import('@/components/blog/BlogAgentPromptCopier').then(m => ({ default: m.BlogAgentPromptCopier })));
 function BlogCodeBlock(props: { language?: string; code: string }) {
   return <Suspense fallback={<pre><code>{props.code}</code></pre>}><HighlightedCode {...props} /></Suspense>;
 }
@@ -406,7 +406,7 @@ export function BlogPost() {
 
       <BulletinFooter />
       <BulletinBackToTop />
-      <Suspense fallback={null}><BlogTemplateCopier /></Suspense>
+      <Suspense fallback={null}><BlogAgentPromptCopier post={post} tools={relatedTools} /></Suspense>
     </>
   );
 }
