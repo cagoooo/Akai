@@ -145,6 +145,27 @@ export function isAppCheckShortRetry(event: SentryEvent): boolean {
   });
 }
 
+/**
+ * App Check 換權杖被拒（403／404）後 SDK 會鎖一天，之後每次自動換權杖都再記一筆「throttled」，
+ * 而且訊息開頭帶時間戳、倒數秒數也不同，Sentry 每筆都開成新的 issue、各發一次告警
+ * （2026-10-23 JAVASCRIPT-REACT-18～1A：同一位訪客 7 分鐘內 1 筆 403 加 4 筆 throttled）。
+ * 同一頁只回報第一筆，固定歸到同一個 issue；其餘略過。真人被擋仍會收到一次通知。
+ */
+const APP_CHECK_LOCKED = /AppCheck: (?:Requests throttled due to previous )?(?:403|404) error\. Attempts allowed again after [^(]*\(appCheck\/(initial-throttle|throttled)\)/;
+
+export function createAppCheckLockClassifier() {
+  let reported = false;
+  return (event: SentryEvent): SentryEvent | null => {
+    const match = eventTexts(event).map((text) => text.match(APP_CHECK_LOCKED)).find(Boolean);
+    if (!match) return event;
+    if (reported) return null;
+    reported = true;
+    event.fingerprint = ['app-check-locked'];
+    event.tags = { ...event.tags, appCheckLock: match[1] };
+    return event;
+  };
+}
+
 const NETWORK_RECOVERY_GRACE_MS = 15_000;
 const SLEEP_CHECK_INTERVAL_MS = 15_000;
 // 背景分頁的計時器最慢約每分鐘執行一次，超過兩分鐘沒執行才視為裝置曾睡眠
@@ -259,6 +280,7 @@ export function initSentry() {
       const Sentry = await import('./sentryClient');
       const classifyFirestoreLease = createFirestoreLeaseClassifier();
       const classifyFirestoreClockSkew = createFirestoreClockSkewClassifier();
+      const classifyAppCheckLock = createAppCheckLockClassifier();
       const automated = isAutomatedBrowser(navigator);
       Sentry.init({
         dsn,
@@ -292,7 +314,9 @@ export function initSentry() {
           if (automated && isAppCheckRejection(event)) return null;
           // 例如按下「更新」後重新整理、離線或剛喚醒時，請求被瀏覽器中止或連不上，並非後端錯誤
           if (isNetworkUnreliable() && isAbortedRequestError(hint.originalException)) return null;
-          const skewChecked = classifyFirestoreClockSkew(event);
+          const lockChecked = classifyAppCheckLock(event);
+          if (!lockChecked) return null;
+          const skewChecked = classifyFirestoreClockSkew(lockChecked);
           return skewChecked && classifyFirestoreLease(skewChecked);
         },
       });

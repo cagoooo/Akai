@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  createAppCheckLockClassifier,
   createUnreliableNetworkTracker,
   isAbortedRequestError,
   isAppCheckRejection,
@@ -220,5 +221,37 @@ describe('網路不可靠時被中止的請求不送進 Sentry', () => {
       undefined,
     ];
     for (const input of inputs) expect(isAbortedRequestError(input)).toBe(false);
+  });
+});
+
+describe('App Check 被拒鎖一天：同一頁只回報一次', () => {
+  // 2026-10-23 JAVASCRIPT-REACT-18～1A：同一位訪客 1 筆 403 後又記 4 筆 throttled，每筆各開一個 issue
+  const locked403 = { ...consoleEvent('[2026-10-23T15:12:16.932Z]  @firebase/app-check: AppCheck: 403 error. Attempts allowed again after 01d:00m:00s (appCheck/initial-throttle).'), level: 'warning' as const };
+  const throttled = (ts: string, left: string) => ({ ...consoleEvent(`[${ts}]  @firebase/app-check: AppCheck: Requests throttled due to previous 403 error. Attempts allowed again after ${left} (appCheck/throttled).`), level: 'warning' as const });
+
+  it('第一筆回報並歸到固定 issue，之後的 throttled 略過', () => {
+    const classify = createAppCheckLockClassifier();
+    const first = classify(locked403);
+    expect(first?.fingerprint).toEqual(['app-check-locked']);
+    expect(first?.tags?.appCheckLock).toBe('initial-throttle');
+    expect(classify(throttled('2026-10-23T15:13:48.743Z', '23h:58m:28s'))).toBeNull();
+    expect(classify(throttled('2026-10-23T15:19:50.739Z', '23h:52m:26s'))).toBeNull();
+    expect(classify(consoleEvent('@firebase/auth: Auth (12.8.0): Error while retrieving App Check token: FirebaseError: AppCheck: Requests throttled due to previous 403 error. Attempts allowed again after 23h:59m:59s (appCheck/throttled).'))).toBeNull();
+  });
+
+  it('頁面一開始就在鎖定中：第一筆 throttled 照樣回報', () => {
+    const classify = createAppCheckLockClassifier();
+    expect(classify(throttled('2026-10-23T15:12:47.743Z', '23h:59m:29s'))?.fingerprint).toEqual(['app-check-locked']);
+  });
+
+  it('其他錯誤不受影響', () => {
+    const classify = createAppCheckLockClassifier();
+    classify(locked403);
+    const others = [
+      consoleEvent('@firebase/app-check: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).'),
+      consoleEvent('@firebase/app-check: AppCheck: Requests throttled due to previous 401 error. Attempts allowed again after 02h:00m:00s (appCheck/throttled).'),
+      exceptionEvent('FirebaseError', 'Missing or insufficient permissions.'),
+    ];
+    for (const input of others) expect(classify(input)).toBe(input);
   });
 });
