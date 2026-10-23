@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.172] - 2026-10-23 — App Check 沒通過改用本機計數時不再重複告警
+
+- **現象**：Sentry `JAVASCRIPT-REACT-17`（`App Check 尚未通過，使用本機工具計數`）：2026-10-23 一位澳門訪客（Windows Chrome 151）在 `/tool/61/` 記 1 筆 warning。
+- **原因**：進入工具頁時等待 App Check 驗證逾時，程式已照設計改用本機計數並送出 GA 事件 `tool_track_failed_*`；但 `console.warn` 會被 Sentry 收走，變成告警。真正的原因（403、reCAPTCHA 錯誤等）App Check SDK 本來就會另外記錄並回報。
+- **修正**：`client/src/lib/firestoreService.ts` 只有 App Check 未通過這一類改用 `console.info`；網路或後端錯誤仍照常 `console.warn` 回報。
+
 ## [3.6.171] - 2026-10-22 — 部落格「複製 AI 開發提示詞」每篇專屬
 
 - **現象**：文章左下角「複製文章範本」只有管理員看得到，而且每篇複製到的都是同一份寫作骨架。

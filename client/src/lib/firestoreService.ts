@@ -2,7 +2,7 @@
 import { createSecureRandomId } from './randomId';
 import { db, isFirebaseAvailable, waitForAppCheck } from './firebase';
 import { shouldReportErrorToFirestore } from './errorReporting';
-import { reportTrackFailure, watchPageHidden } from './toolTrackFailure';
+import { classifyTrackFailure, reportTrackFailure, watchPageHidden } from './toolTrackFailure';
 import {
     doc,
     getDoc,
@@ -194,7 +194,10 @@ export async function trackToolUsage(toolId: number): Promise<ToolStats> {
                 categoryClicks: {},
             };
         } catch (err) {
-            console.warn('[trackToolUsage] callable 失敗，改用本地計數:', err);
+            // App Check 沒通過時已改用本機計數；真正的原因（403、reCAPTCHA 錯誤等）由 App Check SDK 自己記錄並照常回報，
+            // 這裡只是後續結果，不用 warn 以免 Sentry 重複告警（2026-10-23 JAVASCRIPT-REACT-17）
+            const log = classifyTrackFailure(err) === 'app_check' ? console.info : console.warn;
+            log('[trackToolUsage] callable 失敗，改用本地計數:', err);
             // 只量測、不告警：GA 事件 tool_track_failed_hidden／_visible（說明見 toolTrackFailure.ts）
             reportTrackFailure(err, { wentHidden: visibility.wentHidden(), device: context.device });
         } finally {
