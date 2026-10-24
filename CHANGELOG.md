@@ -7,6 +7,7 @@
 - **現象**：Sentry `JAVASCRIPT-REACT-18`～`1A`：2026-10-23 23:12–23:19（臺北）同一位訪客（Windows Chrome 156，地區顯示洛杉磯、時區上海，疑似使用 VPN）在 `/tool/61/` 先記 1 筆 App Check 403，之後又記 4 筆 `Requests throttled due to previous 403 error`，每筆各開一個 issue、各發一次告警。
 - **原因**：reCAPTCHA 把這位訪客判成高風險而拒發權杖，SDK 鎖一天；之後每次自動換權杖都再記一筆 throttled。訊息開頭帶時間戳、倒數秒數也不同，Sentry 無法歸併。網站功能照常，工具計數改用本機。
 - **修正**：`client/src/lib/sentry.ts` 新增 `createAppCheckLockClassifier`：403／404 鎖定類訊息同一頁只回報第一筆，固定歸到 `app-check-locked` issue；401、reCAPTCHA 錯誤等其他狀況不受影響。新增單元測試。
+- **相依套件**：部署前安全檢查擋下新公布的高風險漏洞：`body-parser` 升至 1.20.9（主程式與 functions）、`zod` 3.25 升至 4.6.7、`drizzle-zod` 0.6 升至 0.8.3（只用於 `db/schema.ts` 的 `createInsertSchema`／`createSelectSchema`）。
 
 ## [3.6.172] - 2026-10-23 — App Check 沒通過改用本機計數時不再重複告警
 
