@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   createAppCheckLockClassifier,
+  createFirestoreStreamAbortClassifier,
   createUnreliableNetworkTracker,
   isAbortedRequestError,
   isAppCheckRejection,
@@ -250,6 +251,34 @@ describe('App Check 被拒鎖一天：同一頁只回報一次', () => {
     const others = [
       consoleEvent('@firebase/app-check: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).'),
       consoleEvent('@firebase/app-check: AppCheck: Requests throttled due to previous 401 error. Attempts allowed again after 02h:00m:00s (appCheck/throttled).'),
+      exceptionEvent('FirebaseError', 'Missing or insufficient permissions.'),
+    ];
+    for (const input of others) expect(classify(input)).toBe(input);
+  });
+});
+
+describe('Firestore 即時連線被中止：同一頁只回報一次', () => {
+  // 2026-10-25 JAVASCRIPT-REACT-1B／1C：同一位訪客在首頁 17 分鐘記了 1000 筆
+  const frames = (filename: string) => ({ frames: [{ filename, function: 'r.abort' }] });
+  const abort = (filename = 'https://cagoooo.github.io/Akai/assets/vendor-firebase-X71Uj1rx.js') => ({
+    level: 'error' as const,
+    exception: { values: [{ type: 'AbortError', value: 'signal is aborted without reason', stacktrace: frames(filename) }] },
+  });
+
+  it('第一筆降為 warning 並歸到固定 issue，之後略過', () => {
+    const classify = createFirestoreStreamAbortClassifier();
+    const first = classify(abort());
+    expect(first?.level).toBe('warning');
+    expect(first?.fingerprint).toEqual(['firestore-stream-abort']);
+    expect(classify(abort())).toBeNull();
+  });
+
+  it('不是 Firebase 套件丟出的中止，或其他錯誤，照常回報', () => {
+    const classify = createFirestoreStreamAbortClassifier();
+    classify(abort());
+    const others = [
+      abort('https://cagoooo.github.io/Akai/assets/index-abc.js'),
+      exceptionEvent('AbortError', 'The user aborted a request.'),
       exceptionEvent('FirebaseError', 'Missing or insufficient permissions.'),
     ];
     for (const input of others) expect(classify(input)).toBe(input);

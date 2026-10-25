@@ -37,6 +37,9 @@ window.addEventListener('unhandledrejection', async (event) => {
     // 本機開發（含 vite HMR 的 WebSocket 斷線）不寫進正式 errorLogs，
     // 否則會誤觸 Google Chat 告警。console.error 上面已經印過了。
     if (!shouldReportErrorToFirestore()) return;
+    // 請求被中止（例如 Firestore 即時連線被關閉）：後端告警本來就當雜訊不推播，
+    // 連線一直被切斷時每次重連都會再來一筆，不寫進 errorLogs 以免灌爆寫入量
+    if (event.reason?.name === 'AbortError') return;
     try {
         const { db, isFirebaseAvailable } = await import('./lib/firebase');
         if (!isFirebaseAvailable() || !db) return;

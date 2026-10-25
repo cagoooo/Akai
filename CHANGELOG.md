@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.174] - 2026-10-25 — Firestore 即時連線一直被切斷時每頁只通報一次
+
+- **現象**：Sentry `JAVASCRIPT-REACT-1B`／`1C`（`AbortError: signal is aborted without reason`）：2026-10-25 08:31–08:48（臺北）同一位苗栗訪客（Windows Chrome 155）在首頁 17 分鐘記了 1000 筆。
+- **原因**：Firestore 即時連線（WebChannel）收到後端的錯誤回應後被關閉，SDK 中止進行中的請求時留下沒人接的 AbortError，接著自動重連；連線一直被切斷（多半是防毒軟體或網路過濾）就一直重複。首頁 6 個即時監聽都只在進站時訂閱一次，不是站方程式反覆重連。每筆同時寫進 `errorLogs`（後端早已把 AbortError 當雜訊不推播）。
+- **修正**：`client/src/lib/sentry.ts` 新增 `createFirestoreStreamAbortClassifier`：Firebase 套件丟出的這類 AbortError 每頁只回報第一筆，降為 warning、固定歸到 `firestore-stream-abort` issue；`client/src/main.tsx` 的 AbortError 不再寫進 `errorLogs`。新增單元測試。
+
 ## [3.6.173] - 2026-10-24 — App Check 被拒鎖一天時每頁只通報一次
 
 - **現象**：Sentry `JAVASCRIPT-REACT-18`～`1A`：2026-10-23 23:12–23:19（臺北）同一位訪客（Windows Chrome 156，地區顯示洛杉磯、時區上海，疑似使用 VPN）在 `/tool/61/` 先記 1 筆 App Check 403，之後又記 4 筆 `Requests throttled due to previous 403 error`，每筆各開一個 issue、各發一次告警。

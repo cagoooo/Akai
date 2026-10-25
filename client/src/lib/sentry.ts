@@ -166,6 +166,31 @@ export function createAppCheckLockClassifier() {
   };
 }
 
+/**
+ * Firestore 即時連線（WebChannel）被關閉時，SDK 內部中止請求、留下沒人接的 AbortError。
+ * 連線一直被切斷的網路（防毒軟體、網路過濾）上，SDK 每次重連都再記一筆
+ * （2026-10-25 JAVASCRIPT-REACT-1B／1C：同一位訪客在首頁 17 分鐘記了 1000 筆）。
+ * 這是 SDK 自己會重連的內部狀況；同一頁只回報第一筆、固定歸到同一個 issue，其餘略過。
+ */
+export function isFirestoreStreamAbort(event: SentryEvent): boolean {
+  return (event.exception?.values ?? []).some((value) =>
+    value.type === 'AbortError'
+    && value.value === 'signal is aborted without reason'
+    && (value.stacktrace?.frames ?? []).some((frame) => /vendor-firebase/.test(frame.filename ?? '')));
+}
+
+export function createFirestoreStreamAbortClassifier() {
+  let reported = false;
+  return (event: SentryEvent): SentryEvent | null => {
+    if (!isFirestoreStreamAbort(event)) return event;
+    if (reported) return null;
+    reported = true;
+    event.level = 'warning';
+    event.fingerprint = ['firestore-stream-abort'];
+    return event;
+  };
+}
+
 const NETWORK_RECOVERY_GRACE_MS = 15_000;
 const SLEEP_CHECK_INTERVAL_MS = 15_000;
 // 背景分頁的計時器最慢約每分鐘執行一次，超過兩分鐘沒執行才視為裝置曾睡眠
@@ -281,6 +306,7 @@ export function initSentry() {
       const classifyFirestoreLease = createFirestoreLeaseClassifier();
       const classifyFirestoreClockSkew = createFirestoreClockSkewClassifier();
       const classifyAppCheckLock = createAppCheckLockClassifier();
+      const classifyFirestoreStreamAbort = createFirestoreStreamAbortClassifier();
       const automated = isAutomatedBrowser(navigator);
       Sentry.init({
         dsn,
@@ -316,6 +342,7 @@ export function initSentry() {
           if (isNetworkUnreliable() && isAbortedRequestError(hint.originalException)) return null;
           const lockChecked = classifyAppCheckLock(event);
           if (!lockChecked) return null;
+          if (!classifyFirestoreStreamAbort(lockChecked)) return null;
           const skewChecked = classifyFirestoreClockSkew(lockChecked);
           return skewChecked && classifyFirestoreLease(skewChecked);
         },
