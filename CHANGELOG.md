@@ -2,6 +2,14 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.175] - 2026-10-27 — 依 Mend 第三方元件掃描更新套件、移除未標授權元件
+
+- **來源**：上架審核單位以 Mend 對 repo（含安裝後的 `node_modules`）做第三方元件與授權掃描（2026-10-22），列出 15 筆元件弱點與數個需確認授權的元件。
+- **弱點修補**：`qs` 6.16.0 → 6.16.1（主程式、functions）；`follow-redirects` 1.16.1 → 1.16.2（functions）；`mcp-scripts` 的 `zod` 4.6.5 → 4.6.7、`fast-uri` 3.1.8 → 3.1.9、`ip-address` 10.7.3 → 10.7.5、`body-parser` 2.3.0 → 2.4.0、`qs` → 6.17.0。開發工具 `vite` 6.4.3 → 6.4.5、`vitest` 系列 4.1.11 → 4.1.12、`postcss-selector-parser` → 6.1.5（`@tailwindcss/typography` 內層以 overrides 指定）。主程式 `zod` 已於 3.6.173 升至 4.6.7。
+- **移除未使用套件**：`heatmap.js`（已無程式引用；其範例資料夾附帶 AngularJS 1.5.0 被判弱點）、`react-icons`（無程式引用；含 MPL／CC BY-SA 等多重授權）。
+- **移除未標示授權的 Replit 外掛**：`@replit/vite-plugin-shadcn-theme-json` 改為 `client/src/styles/theme-vars.css` ＋ `vite.config.ts` 內建小外掛，注入位置與內容和原外掛輸出相同（建置後比對一致）；`theme.json` 一併移除。開發用 `@replit/vite-plugin-runtime-error-modal` 同樣未標授權，一併移除。
+- **移除產生物**：2026-02 誤提交的測試覆蓋率報告 `client/coverage/`（Istanbul 樣式與腳本被 Mend 近似比對到其他專案），`.gitignore` 加入 `coverage/`。
+
 ## [3.6.174] - 2026-10-25 — Firestore 即時連線一直被切斷時每頁只通報一次
 
 - **現象**：Sentry `JAVASCRIPT-REACT-1B`／`1C`（`AbortError: signal is aborted without reason`）：2026-10-25 08:31–08:48（臺北）同一位苗栗訪客（Windows Chrome 155）在首頁 17 分鐘記了 1000 筆。

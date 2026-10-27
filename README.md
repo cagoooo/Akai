@@ -1,6 +1,6 @@
 # 科技教育創新專區 · 阿凱老師
 
-![Version](https://img.shields.io/badge/version-3.6.174-brightgreen.svg)
+![Version](https://img.shields.io/badge/version-3.6.175-brightgreen.svg)
 ![Tools](https://img.shields.io/badge/tools-130%2B-orange.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-20.x-green.svg)
@@ -138,7 +138,6 @@ H:\Akai\
 ├── tailwind.config.ts        # TailwindCSS 配置
 ├── drizzle.config.ts         # Drizzle ORM 配置
 ├── postcss.config.js         # PostCSS 配置
-├── theme.json                # 主題配置
 │
 ├── .replit                   # Replit 平台配置
 └── replit.nix                # Nix 套件配置

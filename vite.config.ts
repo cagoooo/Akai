@@ -1,8 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import themePlugin from "@replit/vite-plugin-shadcn-theme-json";
 import path, { dirname } from "path";
-import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 import { fileURLToPath } from "url";
 import { visualizer } from "rollup-plugin-visualizer";
 import { readFileSync, readdirSync } from "fs";
@@ -50,6 +48,10 @@ const milestoneStatsSeed = (() => {
   } catch { return null; }
 })();
 
+// shadcn 色票變數。原由 @replit/vite-plugin-shadcn-theme-json 依 theme.json 產生，
+// 該套件未標示授權，改存成自有 CSS 並用同樣方式插在 <head> 最前面（優先序最低）。
+const themeVarsCss = readFileSync(path.resolve(__dirname, 'client/src/styles/theme-vars.css'), 'utf-8');
+
 export default defineConfig({
   base: isGitHubPages ? '/Akai/' : '/',
   define: {
@@ -83,8 +85,17 @@ export default defineConfig({
       },
     },
     react(),
-    runtimeErrorOverlay(),
-    themePlugin(),
+    {
+      name: 'akai-theme-vars',
+      transformIndexHtml() {
+        return [{
+          tag: 'style',
+          attrs: { 'data-vite-theme': '', 'data-inject-first': '' },
+          children: themeVarsCss,
+          injectTo: 'head-prepend',
+        }];
+      },
+    },
     // Bundle 分析工具
     visualizer({
       filename: 'stats.html',
