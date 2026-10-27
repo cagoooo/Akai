@@ -9,7 +9,7 @@ initializeApp();
 export { dailySnapshot, restoreFromSnapshot } from "./dailySnapshot";
 
 // 🆕 v3.6.36: Gemini Embedding 語意搜尋（給 #100 工具索引神器升級用）
-// 需要 Firebase Secret: GEMINI_API_KEY
+// 執行時需要的金鑰名稱為 GEMINI_API_KEY（值存於 Firebase Secret Manager，設定方式見 embedQuery.ts 檔頭）
 // 部署：firebase functions:secrets:set GEMINI_API_KEY && firebase deploy --only functions:embedQuery
 export { embedQuery } from "./embedQuery";
 
@@ -21,7 +21,7 @@ export { verifyAnonAuthDaily, verifyAnonAuthNow } from "./verifyAnonAuth";
 // 🆕 v3.6.67: 2026 AIFED 演講「現場提問」LINE Bot inbound webhook
 // 觀眾掃 closing slide LINE OA QR → 加好友 → 傳訊息 → 寫 Firestore talkQuestions
 // 簡報內 live-questions.html 用 onSnapshot 即時顯示
-// Secret: TALK_LINE_CHANNEL_SECRET (printf "..." | firebase functions:secrets:set ...)
+// 簽章驗證用的金鑰名稱為 TALK_LINE_CHANNEL_SECRET（設定方式見 lineTalkWebhook.ts 檔頭）
 export { lineTalkWebhook } from "./lineTalkWebhook";
 
 // 🆕 v3.6.69: 一次性修復 toolUsageStats 雙寫 doc 漂移（admin only callable）

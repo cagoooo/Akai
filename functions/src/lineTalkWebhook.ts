@@ -7,7 +7,8 @@
  *   3. 此函式驗證 X-Line-Signature → 解析 message event → 寫 Firestore talkQuestions
  *   4. 簡報內 live-questions.html 用 onSnapshot 即時顯示
  *
- * Secret: TALK_LINE_CHANNEL_SECRET（演講專用 LINE Channel 的 Channel Secret，HMAC-SHA256 簽章驗證用）
+ * 需要的金鑰名稱為 TALK_LINE_CHANNEL_SECRET，值是演講專用 LINE Channel 的簽章金鑰
+ * （LINE 後台稱 Channel secret），用於 HMAC-SHA256 簽章驗證，存於 Firebase Secret Manager
  *
  * **設計決策（重要）**：
  *   - 必須**新建專屬 LINE Channel**（不能共用阿凱現有 Channel 2008810864 — 既有 webhook 在 smes-e1dc3）
@@ -16,7 +17,8 @@
  *   - 訊息 > 500 字直接丟棄（防灌水）
  *
  * 部署：
- *   printf "演講 Channel Secret" | firebase functions:secrets:set TALK_LINE_CHANNEL_SECRET --data-file -
+ *   firebase functions:secrets:set TALK_LINE_CHANNEL_SECRET
+ *     （依提示貼上簽章金鑰；非互動環境改加 --data-file - 從標準輸入讀入，注意不要多帶換行）
  *   firebase deploy --only functions:lineTalkWebhook
  *
  * LINE Developer Console 設定 webhook URL：

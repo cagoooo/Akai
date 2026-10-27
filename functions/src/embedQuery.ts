@@ -7,7 +7,8 @@
  *   3. 拿 query 走 Gemini Embedding (taskType=RETRIEVAL_QUERY)
  *   4. 回傳向量 → client 跟 tool-embeddings.json 算 cosine similarity → top 5
  *
- * Secret: GEMINI_API_KEY（用 firebase functions:secrets:set GEMINI_API_KEY 設）
+ * 需要的金鑰名稱為 GEMINI_API_KEY，值存於 Firebase Secret Manager，
+ * 以 firebase functions:secrets:set GEMINI_API_KEY 設定（依提示貼上值，不寫進程式或註解）
  *
  * Rate limit: 用 Firebase Auth UID 做 per-user 限流，避免單一使用者爆 API
  * Free tier: 1500 RPM 對教師量很夠用
