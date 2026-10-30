@@ -15,6 +15,27 @@ export type BlogPostMeta = Omit<BlogPost, 'body'>;
 
 export const POSTS_INDEX: BlogPostMeta[] = [
   {
+    "slug": "ccu-ai-workshop-133-one-photo-whole-lesson",
+    "title": "#133 一張課本照片，長出一整套 AI 教學：把一場師培工作坊做成會互動的簡報",
+    "excerpt": "為中正大學師培中心準備的 AI 數位教學工作坊，67 頁簡報從一張課本照片開始，走到教學駕駛艙、概念動畫與找出 AI 的錯誤；台下學員用手機丟文字雲、投票、送彈幕，還能跟著講師同步翻頁。",
+    "publishedAt": "2026-10-30",
+    "readingMinutes": 6,
+    "tags": [
+      "AI 數位教學",
+      "師培研習",
+      "互動簡報",
+      "Gemini Notebook",
+      "教學駕駛艙"
+    ],
+    "toolIds": [
+      133,
+      81,
+      45
+    ],
+    "coverEmoji": "🚀",
+    "coverColor": "orange"
+  },
+  {
     "slug": "counseling-record-132-deidentified-writing",
     "title": "#132 從「他推了同學一把」到正式紀錄：姓名先換代號，再請 AI 幫忙寫",
     "excerpt": "輔導紀錄最難的不是記得發生什麼，而是改寫成能登錄的正式文字。#132 把口語描述或狀況標籤整理成兩段紀錄，送出前先把姓名換成代號，期末還能用座號批次補登。",

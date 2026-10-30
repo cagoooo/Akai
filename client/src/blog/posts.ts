@@ -15371,7 +15371,73 @@ const POST_132: BlogPost = {
 下一次處理完一件事，趁記憶還清楚，打開 [輔導紀錄小幫手](https://cagoooo.github.io/counseling/)，點兩個狀況標籤、用說的補上經過，就有一份可以核對的草稿，期末不必再對著空白欄位回想。`,
 };
 
-export const POSTS: BlogPost[] = [POST_132, POST_131, POST_130, POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+const POST_133: BlogPost = {
+  slug: 'ccu-ai-workshop-133-one-photo-whole-lesson',
+  title: '#133 一張課本照片，長出一整套 AI 教學：把一場師培工作坊做成會互動的簡報',
+  excerpt: '為中正大學師培中心準備的 AI 數位教學工作坊，67 頁簡報從一張課本照片開始，走到教學駕駛艙、概念動畫與找出 AI 的錯誤；台下學員用手機丟文字雲、投票、送彈幕，還能跟著講師同步翻頁。',
+  publishedAt: '2026-10-30', readingMinutes: 6,
+  tags: ['AI 數位教學', '師培研習', '互動簡報', 'Gemini Notebook', '教學駕駛艙'],
+  toolIds: [133, 81, 45], coverEmoji: '🚀', coverColor: 'orange',
+  body: `## 研習最怕的，是台下只剩點頭
+
+辦過教師研習的人大概都有這種經驗：講者在台上講得很投入，台下的老師點頭、拍照、偶爾滑手機，結束後問「有沒有問題」，現場一片安靜。不是大家沒想法，而是沒有一個不尷尬的管道把想法丟出來。
+
+2026-11-13 我要到國立中正大學師資培育中心帶一整天的「AI 數位教學實務工作坊」，對象是準備走進教室的師培生。邀約時對方希望以教學應用為主、行政協助為輔，上午兩小時、下午三小時。我給自己定了兩個目標：內容要讓師培生回到教室就用得上；過程要讓每個人都有機會開口，而且不用舉手。
+
+於是這場工作坊的簡報，本身就做成了一個互動網站。
+
+## 一張課本照片，怎麼長出一整套教學？
+
+整天的主線只有一句話：一張課本照片，長出一整套 AI 教學。
+
+**上午場：先備課，再談老師的位置。** 模組一先談心法，講清楚 AI 做得再快，教學目標、專業判斷、師生關係這三件事永遠是老師的。模組二示範把課本照片交給 Gemini Notebook（原 NotebookLM），先給 AI 一份「助教守則」，規定它只能根據課本回答、每句話都要標出處、先引導不直接給答案，再請它長出互動報告、心智圖、學習卡、資訊圖表和測驗。實作①讓學員親手做出第一份教材包，最後用查核清單把關。
+
+**下午場：讓教材動起來。** 模組三介紹「教學駕駛艙」：把一單元的教材整理成一個網址，老師上課投影、學生在家自學都能用，並拿我自己的資訊課駕駛艙與資優課程駕駛艙「石門智繪客」當案例，再給師培生一份 7 步驟的簡化流程，用 Gemini Canvas 實作自己的第一個駕駛艙。接著是動畫簡報工作流，現場用「圓面積」示範把圓切成扇形、交錯排成長方形的動畫；然後是「找出 AI 的錯誤」，讓大家看三段看起來很有自信的 AI 回答，各錯在哪裡；最後談 AI 的三個角色、蘇格拉底式對話、學生使用倫理、行政協助與個資紅線。
+
+## 台下怎麼參與？手機掃一下就好
+
+簡報裡放了學員專用的互動頁，用手機掃 QR Code 就能進來，不用登入：
+
+**即時文字雲與投票**：開場問「說到 AI 教學，你第一個想到的詞」，課尾問「明天你會先用 AI 做哪一件事」；中間有課前調查與上午小結兩題投票。結果直接出現在大螢幕上。
+
+**右下角的即時聊天室與彈幕**：學員隨時可以丟問題或想法，留言會變成彈幕從簡報上飛過，表情回饋則像視訊會議那樣帶著名牌從角落飄起。講者可以按一個鍵收起彈幕，也能在大螢幕上隱藏個別訊息；要清空聊天室時，用管理密碼登入後一鍵清除，密碼由 Firebase 登入系統保管，不寫在網頁程式裡。
+
+**跟上簡報**：有人想在手機上看清楚某一頁，就從互動頁按「跟上簡報」，手機上的簡報會跟著講台即時翻頁；想回頭看前一頁也沒關係，自己翻頁會先暫停跟隨，按一下又能回到講者那一頁。
+
+情境示例：講到「助教守則」那一頁時，有人在聊天室問「守則要寫多長才夠」，問題直接飄過大螢幕，講者就能順著回答；後排看不清楚範本文字的人，用手機跟上簡報放大看。
+
+## 開場就先暖身
+
+簡報第一頁是一段自動播放的開場片頭，上午場與下午場開始前，各還有一支宣傳片，交代這一段要做什麼、最後要帶走什麼。三支影片都是用網頁動畫做的，口白則是事先用我自己的克隆聲音生成。我希望大家坐下來的第一分鐘，就知道今天不是來聽一場演講，而是來做出自己的第一份 AI 教材。
+
+## 真實技術棧
+
+- Reveal.js 簡報搭配 GSAP 動畫，淺色／深色可切換，部署在 GitHub Pages
+- 即時互動資料存在 Firebase Firestore，學員端只能新增、不能修改或刪除
+- 監聽方式特別省讀取次數，避免幾十支手機同時連線時用光免費額度
+- 網站本身不呼叫 AI 模型；它是一份教老師如何使用 Gemini Notebook、Gemini Canvas 的教材
+
+## 配對工具推薦
+
+- [國小資訊科技教學駕駛艙入口網](https://cagoooo.github.io/it-cockpit/)：下午場的駕駛艙案例就在這裡，可以看到一整學期的駕駛艙長什麼樣子
+- [文字雲即時互動](https://cagoooo.github.io/cloud)：想在自己的課堂或研習做即時文字雲，可以直接用這個工具
+- [AI 數位教學實務工作坊互動簡報](https://cagoooo.github.io/ccu-ai-workshop/)：本篇主角
+
+## 適用對象
+
+- 準備辦 AI 研習的資訊組、教學組或研習講師，想找一份能直接示範互動的範本
+- 想用 AI 備課、但不知道從哪裡開始的導師與科任老師
+- 師資培育課程的授課教師與師培生
+
+## 想看看？
+
+→ [打開 AI 數位教學實務工作坊互動簡報](https://cagoooo.github.io/ccu-ai-workshop/)
+
+建議先翻到「助教守則」那一頁，複製範本，換成你下週要上的那一課試一次。
+`,
+};
+
+export const POSTS: BlogPost[] = [POST_133, POST_132, POST_131, POST_130, POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。
