@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 133+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 134+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Fri, 30 Oct 2026 03:29:54 GMT</pubDate>
-    <lastBuildDate>Fri, 30 Oct 2026 03:31:56 GMT</lastBuildDate>
+    <pubDate>Mon, 02 Nov 2026 13:39:44 GMT</pubDate>
+    <lastBuildDate>Mon, 02 Nov 2026 13:42:01 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,27 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：桃園市石門國小品牌群島</title>
+      <link>https://cagoooo.github.io/Akai/tool/134</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/134</guid>
+      <pubDate>Mon, 02 Nov 2026 13:39:44 GMT</pubDate>
+      <description>把石門國小「鱻鯉鰭源，石門活閱」閱讀品牌方案做成 12 座 3D 浮空島：逛島看課程與成果，查即時天氣、水庫水位和校園公告，還能尋找小河馬、領尋寶證書。</description>
+      <category>品牌學校</category>
+      <category>閱讀教育</category>
+      <category>石門國小</category>
+      <category>3D 互動網站</category>
+      <category>浮空島</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#134 把一本品牌方案變成十二座浮空島：石門國小品牌群島</title>
+      <link>https://cagoooo.github.io/Akai/blog/smes-island-134-reading-brand-sky-city</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/smes-island-134-reading-brand-sky-city</guid>
+      <pubDate>Mon, 02 Nov 2026 00:00:00 GMT</pubDate>
+      <description>厚厚的品牌方案很用心，卻很少人從頭翻到尾。把它改寫成一座可以逛的 3D 天空之城，孩子找小河馬，家長看成果，老師看課程地圖。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
     <item>
       <title>🆕 新工具：一張課本照片，長出一整套 AI 教學｜AI 數位教學實務工作坊</title>
       <link>https://cagoooo.github.io/Akai/tool/133</link>
@@ -311,30 +332,6 @@
       <description>#121 仙人掌大逃亡：奔跑吧小墨龍！全新東方水墨畫風網頁無盡跑酷遊戲，靈敏操控小墨龍跳躍與俯衝，穿梭千重仙人掌陣與飛鳥障礙，支援手機與電腦對決，下課 10 分鐘最佳班級專注力與舒壓挑戰。</description>
       <category>blog</category>
       <category>教學情境</category>
-    </item>
-    <item>
-      <title>🆕 新工具：石門國小資訊科技駕駛艙：答題快打對戰遊戲</title>
-      <link>https://cagoooo.github.io/Akai/tool/118</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/118</guid>
-      <pubDate>Mon, 13 Jul 2026 00:00:00 GMT</pubDate>
-      <description>把資訊素養題目變成駕駛艙快打對戰：選擇職能角色，在網路安全、程式思維與數位公民任務中答題出招；可單挑 AI、同桌雙人，也能投影成全班討論。</description>
-      <category>答題快打</category>
-      <category>資訊科技</category>
-      <category>網路安全</category>
-      <category>程式思維</category>
-      <category>數位公民</category>
-    </item>
-    <item>
-      <title>🆕 新工具：SDGs永續行動遊戲－地球守護隊：能量大作戰</title>
-      <link>https://cagoooo.github.io/Akai/tool/119</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/119</guid>
-      <pubDate>Mon, 13 Jul 2026 00:00:00 GMT</pubDate>
-      <description>把 SDGs 變成九大世界永續任務：組裝能量工具、解決回收、水資源、綠能、森林與海洋難題，讓國小孩子在每一次選擇中練習守護地球的行動力。</description>
-      <category>SDGs</category>
-      <category>永續教育</category>
-      <category>地球守護隊</category>
-      <category>環境教育</category>
-      <category>資源回收</category>
     </item>
   </channel>
 </rss>

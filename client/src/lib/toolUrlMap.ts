@@ -130,5 +130,6 @@ export const TOOL_URL_MAP: Record<string, number> = {
   "https://cagoooo.github.io/sportsday-115/": 130,
   "https://cagoooo.github.io/iwin-115-survey/": 131,
   "https://cagoooo.github.io/counseling/": 132,
-  "https://cagoooo.github.io/ccu-ai-workshop/": 133
+  "https://cagoooo.github.io/ccu-ai-workshop/": 133,
+  "https://cagoooo.github.io/smes-island/": 134
 };

@@ -15,6 +15,27 @@ export type BlogPostMeta = Omit<BlogPost, 'body'>;
 
 export const POSTS_INDEX: BlogPostMeta[] = [
   {
+    "slug": "smes-island-134-reading-brand-sky-city",
+    "title": "#134 把一本品牌方案變成十二座浮空島：石門國小品牌群島",
+    "excerpt": "厚厚的品牌方案很用心，卻很少人從頭翻到尾。把它改寫成一座可以逛的 3D 天空之城，孩子找小河馬，家長看成果，老師看課程地圖。",
+    "publishedAt": "2026-11-02",
+    "readingMinutes": 5,
+    "tags": [
+      "品牌學校",
+      "閱讀教育",
+      "3D 互動網站",
+      "尋寶任務",
+      "學校行銷"
+    ],
+    "toolIds": [
+      134,
+      128,
+      87
+    ],
+    "coverEmoji": "🏝️",
+    "coverColor": "blue"
+  },
+  {
     "slug": "ccu-ai-workshop-133-one-photo-whole-lesson",
     "title": "#133 一張課本照片，長出一整套 AI 教學：把一場師培工作坊做成會互動的簡報",
     "excerpt": "為中正大學師培中心準備的 AI 數位教學工作坊，67 頁簡報從一張課本照片開始，走到教學駕駛艙、概念動畫與找出 AI 的錯誤；台下學員用手機丟文字雲、投票、送彈幕，還能跟著講師同步翻頁。",
