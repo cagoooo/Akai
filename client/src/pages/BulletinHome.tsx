@@ -319,7 +319,9 @@ export function BulletinHome() {
       const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       // 畫面外的卡片用 content-visibility:auto 先以 460px 估高，捲過去時才換成真實高度，
       // 目標卡會一路飄移（實測新上架 #132 停在中央上方 533px，被搜尋列蓋住）。
-      // 定位前先讓整排卡片排版一次取得真實位置，捲動停下後再核對一次。
+      // 定位前先讓整排卡片排版取得真實位置，捲動停下後再核對一次。
+      // data-locating 定位後就保留：拿掉會讓畫面外的卡片退回 460px 估高，
+      // 手機卡片實高約 336px，整欄一下子長高近萬像素，目標又被推走（v3.6.186 實測偏 9,686px）。
       const grid = card.closest<HTMLElement>('.bulletin-tool-grid');
       grid?.setAttribute('data-locating', '');
       void grid?.offsetHeight;
@@ -337,7 +339,6 @@ export function BulletinHome() {
         if (stillTarget && Math.abs(rect.top + rect.height / 2 - window.innerHeight / 2) > 60) {
           card.scrollIntoView({ behavior: 'auto', block: 'center' });
         }
-        grid?.removeAttribute('data-locating');
       };
       window.addEventListener('scrollend', settle);
       // 不支援 scrollend 的瀏覽器（Safari）或根本不需要捲動時的保底

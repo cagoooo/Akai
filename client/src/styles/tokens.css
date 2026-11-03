@@ -1174,7 +1174,7 @@
     contain-intrinsic-block-size: none;
   }
 }
-/* 定位推薦／新上架工具時暫時全部排版，捲動目標才不會因估高被換成實際高度而飄走（BulletinHome locateRecommendedTool） */
+/* 定位推薦／新上架工具後全部排版（之後不再切回估高），捲動目標才不會因估高與實際高度不同而飄走（BulletinHome locateRecommendedTool） */
 .bulletin-tool-grid[data-locating] > * {
   content-visibility: visible;
 }
