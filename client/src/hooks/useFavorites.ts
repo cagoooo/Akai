@@ -41,7 +41,16 @@ function saveToLocalStorage(favorites: number[]): void {
 }
 
 // ── Firestore helpers ──────────────────────────────────────
-async function loadFromFirestore(uid: string, isCurrent: () => boolean): Promise<number[] | null> {
+// 多分頁時 Firestore 連線由另一個分頁代送；剛換成新的匿名身分時，那個分頁要等跨分頁同步（約 1 秒）
+// 才拿到新身分，這段期間讀自己的收藏會被規則擋下（2026-11-03 JAVASCRIPT-REACT-1E：帳號建立 1.2 秒後被拒）。
+// 被拒時等身分同步後重讀一次，仍被拒才回報。
+const PERMISSION_RETRY_DELAY_MS = 1500;
+
+function isPermissionDenied(e: unknown): boolean {
+    return (e as { code?: unknown } | null)?.code === 'permission-denied';
+}
+
+async function loadFromFirestore(uid: string, isCurrent: () => boolean, retried = false): Promise<number[] | null> {
     try {
         const { db } = await import('@/lib/firebase');
         if (!db) return null;
@@ -55,6 +64,11 @@ async function loadFromFirestore(uid: string, isCurrent: () => boolean): Promise
         }
         return [];
     } catch (e) {
+        if (!retried && isPermissionDenied(e) && isCurrent()) {
+            await new Promise((resolve) => setTimeout(resolve, PERMISSION_RETRY_DELAY_MS));
+            if (!isCurrent()) return null;
+            return loadFromFirestore(uid, isCurrent, true);
+        }
         if (isCurrent()) safeDiagnostic('[useFavorites] Firestore load 失敗:', e);
         return null;
     }

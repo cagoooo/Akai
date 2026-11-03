@@ -85,6 +85,11 @@ export function markSignedOutThisSession() {
     try { sessionStorage.setItem(SIGNED_OUT_FLAG, '1'); } catch { /* ignore */ }
 }
 
+/** 本次 session 是否主動登出過（此時 ensureSignedIn 刻意回傳 null） */
+export function isSignedOutThisSession(): boolean {
+    try { return sessionStorage.getItem(SIGNED_OUT_FLAG) === '1'; } catch { return false; }
+}
+
 /**
  * 使用 Google 帳號登入
  */

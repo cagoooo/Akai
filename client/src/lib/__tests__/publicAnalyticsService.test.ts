@@ -1,9 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import * as randomId from '../randomId';
-const mocks = vi.hoisted(() => ({ ready: vi.fn(), auth: vi.fn(), callable: vi.fn(), httpsCallable: vi.fn() }));
+const mocks = vi.hoisted(() => ({ ready: vi.fn(), auth: vi.fn(), signedOut: vi.fn(() => false), callable: vi.fn(), httpsCallable: vi.fn() }));
 vi.mock('../userInteraction', () => ({ userInteractionReady: Promise.resolve() }));
 vi.mock('@/lib/firebase', () => ({ default: {}, waitForAppCheck: mocks.ready }));
-vi.mock('@/lib/authService', () => ({ ensureSignedIn: mocks.auth }));
+vi.mock('@/lib/authService', () => ({ ensureSignedIn: mocks.auth, isSignedOutThisSession: mocks.signedOut }));
 vi.mock('firebase/functions', () => ({ getFunctions: vi.fn(() => ({})), httpsCallable: mocks.httpsCallable }));
 import { invokePublicAnalytics } from '../publicAnalyticsService';
 afterEach(() => vi.restoreAllMocks());
@@ -29,6 +29,12 @@ describe('統計送出前的驗證', () => {
   it('沒有身份仍拒絕送出，不放寬後端認證', async () => {
     mocks.auth.mockResolvedValue(null);
     await expect(invokePublicAnalytics({ kind: 'visitorCount' })).rejects.toThrow('認證尚未就緒');
+    expect(mocks.callable).not.toHaveBeenCalled();
+  });
+  it('訪客本次主動登出時略過統計、不當成錯誤', async () => {
+    mocks.auth.mockResolvedValue(null);
+    mocks.signedOut.mockReturnValueOnce(true);
+    expect(await invokePublicAnalytics({ kind: 'visitorCount' })).toBe(false);
     expect(mocks.callable).not.toHaveBeenCalled();
   });
   it('無系統亂數時明確停止送出，不使用可預測去重ID', async () => {

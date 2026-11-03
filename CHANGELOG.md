@@ -2,6 +2,15 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.187] - 2026-11-03 — 收藏讀取與登出後統計不再誤報
+
+- **問題**：Sentry 收到兩則同一位 Mac Safari 訪客在 `/tool/30` 的告警：JAVASCRIPT-REACT-1E「[useFavorites] Firestore load 失敗：Missing or insufficient permissions」與 JAVASCRIPT-REACT-1F「Firebase 認證尚未就緒」（4 筆）。
+- **1E 原因**：該訪客的匿名帳號 16:38:23 建立，1.2 秒後讀自己的收藏就被拒；錯誤是從跨分頁共享狀態傳回來的（`persistentMultipleTabManager`），代表 Firestore 連線由另一個分頁代送，而那個分頁還沒同步到新身分。規則本身沒有問題。
+- **1E 修正**：`useFavorites` 讀取被拒（`permission-denied`）時等 1.5 秒讓身分同步後重讀一次，仍被拒才回報；本機收藏照舊保留。
+- **1F 原因**：訪客本次 session 主動登出後，`ensureSignedIn` 依設計不再自動匿名登入、回傳 null；`invokePublicAnalytics` 卻把它當錯誤丟出，裝置／來源／地區統計各報一次。
+- **1F 修正**：新增 `isSignedOutThisSession()`；主動登出時統計直接略過（回傳 false）。沒登出卻拿不到身分仍照常報錯。
+- **JAVASCRIPT-REACT-1D**（App Check 403 鎖 24 小時，Safari，舊版 3.6.179）：近 30 天真人被擋只有 2 位，屬 reCAPTCHA 個別判定，現有機制本來就只報一次，不改程式。
+
 ## [3.6.186] - 2026-11-03 — 新增工具 #135 公共程式平臺上架報告
 
 - **新工具卡片**：#135「公共程式平臺上架報告」（教學設計），連到 2026-11-06 向數位發展部報告「科技教育創新專區」上架公共程式平臺的互動簡報；卡片圖為實站封面截圖，OG 圖由 `generate-unified-og.mjs` 產生。

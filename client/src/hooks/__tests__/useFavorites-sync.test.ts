@@ -74,8 +74,21 @@ describe('收藏訂閱的身分交接', () => {
         localStorage.setItem('akai-favorites', '[10]');
         state.getDoc.mockRejectedValue(Object.assign(new Error('denied'), { code: 'permission-denied' }));
         const { result } = renderHook(() => useFavorites());
-        await waitFor(() => expect(warning).toHaveBeenCalledOnce());
+        await waitFor(() => expect(warning).toHaveBeenCalledOnce(), { timeout: 3000 });
+        expect(state.getDoc).toHaveBeenCalledTimes(2);
         expect(result.current.favorites).toEqual([10]); expect(state.setDoc).not.toHaveBeenCalled();
         expect(state.onSnapshot).not.toHaveBeenCalled(); warning.mockRestore();
+    });
+
+    it('剛換新身分、另一分頁尚未同步而被拒時，重讀成功就不回報', async () => {
+        const warning = vi.spyOn(console, 'warn').mockImplementation(() => {});
+        state.getDoc
+            .mockRejectedValueOnce(Object.assign(new Error('denied'), { code: 'permission-denied' }))
+            .mockResolvedValueOnce({ exists: () => true, data: () => ({ toolIds: [7] }) });
+        const { result } = renderHook(() => useFavorites());
+        await waitFor(() => expect(state.onSnapshot).toHaveBeenCalledOnce(), { timeout: 3000 });
+        expect(state.getDoc).toHaveBeenCalledTimes(2);
+        expect(result.current.favorites).toEqual([7]); expect(warning).not.toHaveBeenCalled();
+        warning.mockRestore();
     });
 });

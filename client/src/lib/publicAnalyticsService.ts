@@ -6,8 +6,11 @@ export async function invokePublicAnalytics(payload: Record<string, unknown>): P
   await userInteractionReady;
   const firebaseModule = await import('@/lib/firebase');
   if (!await firebaseModule.waitForAppCheck()) return false;
-  const { ensureSignedIn } = await import('@/lib/authService');
+  const { ensureSignedIn, isSignedOutThisSession } = await import('@/lib/authService');
   const user = await ensureSignedIn();
+  // 訪客主動登出後本次不再自動匿名登入，統計照設計略過，不當成錯誤回報
+  // （2026-11-03 JAVASCRIPT-REACT-1F：登出後切頁，裝置／來源／地區統計各報一次「認證尚未就緒」）
+  if (!user && isSignedOutThisSession()) return false;
   if (!user) throw new Error('Firebase 認證尚未就緒');
 
   const { getFunctions, httpsCallable } = await import('firebase/functions');
