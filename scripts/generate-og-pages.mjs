@@ -7,6 +7,11 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,6 +20,93 @@ const __dirname = path.dirname(__filename);
 const SITE_URL = 'https://cagoooo.github.io/Akai';
 const AUTHOR_NAME = '黃凱揚（阿凱老師）';
 const AUTHOR_URL = 'https://www.smes.tyc.edu.tw/modules/school/index.php?department_id=2&zone_id=0&page_id=2&content_id=11&type=news&from_op=all_news#a5';
+const AKAI_REPO_URL = 'https://github.com/cagoooo/Akai';
+
+function escapeHtml(text) {
+  return String(text ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+/** 工具網址對應的 GitHub repo（與 client/src/blog/agentPrompt.ts 的 toolRepoUrl 相同規則）。 */
+function toolRepoUrl(toolUrl) {
+  const match = String(toolUrl || '').match(/^https:\/\/cagoooo\.github\.io\/([A-Za-z0-9._-]+)(?:[/?#]|$)/);
+  return match ? `https://github.com/cagoooo/${match[1]}` : null;
+}
+
+/** 站內工具（例如 /Akai/tool/100）補成完整網址。 */
+function absoluteUrl(url) {
+  if (/^https?:\/\//.test(url)) return url;
+  return `https://cagoooo.github.io${url.startsWith('/') ? '' : '/'}${url}`;
+}
+
+/** 站內相對路徑（/tool/6、/blog/xxx/）補上 /Akai，否則會指到 cagoooo.github.io/tool/6。 */
+function withBase(href) {
+  if (!href || !href.startsWith('/') || href.startsWith('//') || href.startsWith('/Akai/')) return href;
+  return `/Akai${href}`;
+}
+
+/**
+ * Markdown → 靜態 HTML，用與網站相同的 react-markdown + remark-gfm + rehype-raw，
+ * 讓搜尋引擎與 AI 爬蟲讀到的內文與讀者在網站上看到的一致。
+ */
+function renderMarkdown(markdown) {
+  if (!markdown) return '';
+  return renderToStaticMarkup(createElement(ReactMarkdown, {
+    remarkPlugins: [remarkGfm],
+    rehypePlugins: [rehypeRaw],
+    components: {
+      a: ({ href, children, node, ...rest }) => createElement('a', { ...rest, href: withBase(href) }, children),
+      img: ({ src, node, ...rest }) => createElement('img', { ...rest, src: withBase(src), loading: 'lazy' }),
+    },
+  }, markdown));
+}
+
+/** 爬蟲版頁面共用的閱讀樣式（公佈欄色系，手機與電腦都好讀）。 */
+const READABLE_PAGE_CSS = `body{font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',-apple-system,sans-serif;margin:0;background:#c99a6c;color:#1a1a1a;line-height:1.8}
+main{max-width:820px;margin:24px auto;padding:28px 32px;background:#fffdf5;border:2.5px solid #1a1a1a;border-radius:8px;box-shadow:6px 6px 0 rgba(0,0,0,.22)}
+h1{font-size:28px;line-height:1.4;margin:0 0 12px;font-weight:900}h2{font-size:22px;margin:32px 0 10px;border-bottom:2px solid #ea8a3e;padding-bottom:4px}h3{font-size:18px;margin:24px 0 8px}
+a{color:#b4520f}img{max-width:100%;height:auto}table{border-collapse:collapse;width:100%;display:block;overflow-x:auto}th,td{border:1px solid #c9b48f;padding:6px 10px;text-align:left}
+pre{background:#1f2430;color:#f5f5f5;padding:14px;border-radius:6px;overflow-x:auto}code{font-family:Consolas,monospace}
+.meta{color:#5a4a30;font-size:14px}.lead{font-size:17px;color:#4a3a20}.actions a{display:inline-block;margin:6px 8px 6px 0;padding:10px 18px;background:#ea8a3e;color:#fff;text-decoration:none;border:2.5px solid #1a1a1a;border-radius:10px;font-weight:900;box-shadow:3px 3px 0 rgba(0,0,0,.35)}
+.actions a.secondary{background:#fff27a;color:#1a1a1a}.source{margin-top:36px;padding:16px 20px;background:#fff8d6;border:2px dashed #b4520f;border-radius:8px}
+footer{max-width:820px;margin:0 auto 32px;padding:0 16px;text-align:center;font-size:13px;color:#1a1a1a}
+@media (max-width:600px){main{margin:12px;padding:18px 16px}h1{font-size:23px}}`;
+
+/** 「開源原始碼與改造」區塊：工具介紹頁、線上使用、原始碼連結（爬蟲與讀者都看得到）。 */
+function openSourceSection(tools) {
+  if (!tools.length) return '';
+  const items = tools.map((tool) => {
+    const repo = toolRepoUrl(tool.url);
+    return `<li><strong>#${tool.id} ${escapeHtml(tool.title)}</strong>：<a href="/Akai/tool/${tool.id}/">工具介紹頁</a> · <a href="${escapeHtml(absoluteUrl(tool.url))}" rel="noopener">線上使用</a> · ${repo
+      ? `<a href="${repo}" rel="noopener">開源原始碼（GitHub）</a>`
+      : `沒有獨立的原始碼庫，可參考<a href="${AKAI_REPO_URL}" rel="noopener">工具集總 repo</a>`}</li>`;
+  }).join('\n      ');
+  return `<section class="source">
+    <h2>開源原始碼：參考這個工具做出你的版本</h2>
+    <p>阿凱老師大部分的教育工具都在 GitHub 公開原始碼，歡迎老師、學生與開發者參考改造成適合自己情境的版本。文章頁左下角的「複製 AI 開發提示詞」可把工具資料與原始碼連結一次交給 ChatGPT、Claude、Gemini 等 AI 助手。</p>
+    <ul>
+      ${items}
+    </ul>
+  </section>`;
+}
+
+/** SoftwareSourceCode 結構化資料（codeRepository 讓搜尋引擎知道原始碼在哪）。 */
+function sourceCodeSchema(tool) {
+  const repo = toolRepoUrl(tool.url);
+  if (!repo) return null;
+  return {
+    '@type': 'SoftwareSourceCode',
+    '@id': `${repo}#code`,
+    name: `${tool.title} 原始碼`,
+    codeRepository: repo,
+    url: repo,
+    author: { '@id': `${SITE_URL}/#akai` },
+    targetProduct: { '@id': `${SITE_URL}/tool/${tool.id}/#software` },
+  };
+}
 
 // 從 tools.json 提取工具資料
 function extractToolsFromJson() {
@@ -32,8 +124,10 @@ function extractToolsFromJson() {
 /**
  * 生成工具頁面 HTML
  */
-function generateToolPageHtml(tool) {
+function generateToolPageHtml(tool, relatedPosts = []) {
   const pageUrl = `${SITE_URL}/tool/${tool.id}/`;
+  const repo = toolRepoUrl(tool.url);
+  const codeSchema = sourceCodeSchema(tool);
 
   // 優先用 ogPreviewUrl（1200×630 設計過的社群分享圖）
   // 沒有才 fallback 到 previewUrl（1024×1024 卡片預覽截圖）
@@ -130,9 +224,13 @@ function generateToolPageHtml(tool) {
     },
     keywords: ['教育工具', tool.title, '阿凱老師', '石門國小', ...(tool.tags || [])].join(','),
     inLanguage: 'zh-TW',
+    ...(codeSchema ? { subjectOf: { '@id': codeSchema['@id'] } } : {}),
   })}
   </script>
-  
+  ${codeSchema ? `<script type="application/ld+json">
+  ${JSON.stringify({ '@context': 'https://schema.org', ...codeSchema })}
+  </script>` : ''}
+
   <!-- Redirect to SPA -->
   <script>
     // 重定向到 SPA 主頁面，保留路徑
@@ -153,54 +251,27 @@ function generateToolPageHtml(tool) {
     })();
   </script>
   
-  <!-- Fallback styles -->
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-    }
-    .loading {
-      text-align: center;
-      padding: 2rem;
-    }
-    .loading h1 {
-      margin-bottom: 1rem;
-      font-size: 1.5rem;
-    }
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid rgba(255,255,255,0.3);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    a {
-      color: white;
-      text-decoration: underline;
-    }
-  </style>
+  <!-- 爬蟲讀到的內容與網站工具頁相同：標題、完整介紹、標籤、相關文章、原始碼連結 -->
+  <style>${READABLE_PAGE_CSS}</style>
 </head>
 <body>
-  <div class="loading">
-    <h1>${tool.title}</h1>
-    <p>${tool.description}</p>
-    <div class="spinner"></div>
-    <p style="margin-top: 1rem; font-size: 0.875rem;">
-      正在載入中... 
-      <a href="${SITE_URL}/tool/${tool.id}/">點此直接前往</a>
+  <main>
+    <p class="meta"><a href="/Akai/">科技教育創新專區</a> › 工具 #${tool.id}</p>
+    <h1>${escapeHtml(tool.title)}</h1>
+    <p class="lead">${escapeHtml(tool.description)}</p>
+    <p class="actions">
+      <a href="${escapeHtml(absoluteUrl(tool.url))}" rel="noopener">⚡ 立即使用</a>
+      ${repo ? `<a class="secondary" href="${repo}" rel="noopener">💻 開源原始碼（GitHub）</a>` : ''}
     </p>
-  </div>
+    ${tool.detailedDescription ? `<article>${renderMarkdown(tool.detailedDescription)}</article>` : ''}
+    ${tool.tags?.length ? `<p class="meta">標籤：${tool.tags.map((tag) => `#${escapeHtml(tag)}`).join('　')}</p>` : ''}
+    ${relatedPosts.length ? `<h2>相關教學情境文章</h2>
+    <ul>
+      ${relatedPosts.map((post) => `<li><a href="/Akai/blog/${post.slug}/">${escapeHtml(post.title)}</a></li>`).join('\n      ')}
+    </ul>` : ''}
+    ${openSourceSection([tool])}
+  </main>
+  <footer>Made with ❤️ by <a href="${AUTHOR_URL}" rel="noopener">阿凱老師</a> · 桃園市龍潭區石門國民小學</footer>
 </body>
 </html>`;
 }
@@ -924,20 +995,27 @@ function generateBlogIndexHtml(posts) {
       }
     })();
   </script>
-  <style>body{font-family:'Noto Sans TC',-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#c99a6c;color:#1a1a1a;text-align:center}.card{background:#fff27a;padding:32px 36px;border-radius:6px;box-shadow:6px 6px 0 rgba(0,0,0,.22);transform:rotate(-1deg);max-width:500px}h1{margin:0 0 12px;font-size:28px;font-weight:900}a{display:inline-block;margin-top:18px;padding:11px 24px;background:#ea8a3e;color:#fff;text-decoration:none;border:2.5px solid #1a1a1a;border-radius:10px;font-weight:900;box-shadow:4px 4px 0 rgba(0,0,0,.4)}</style>
+  <style>${READABLE_PAGE_CSS}</style>
 </head>
 <body>
-  <div class="card">
+  <main>
+    <p class="meta"><a href="/Akai/">科技教育創新專區</a> › 部落格</p>
     <h1>📖 教學情境部落格</h1>
-    <p>${description}</p>
-    <a href="/Akai/blog/">📚 前往看所有文章</a>
-  </div>
+    <p class="lead">${description}</p>
+    <ul>
+      ${posts.map((post) => `<li><a href="/Akai/blog/${post.slug}/">${escapeHtml(post.title)}</a></li>`).join('\n      ')}
+    </ul>
+    <p>所有工具原始碼公開於 <a href="${AKAI_REPO_URL}" rel="noopener">GitHub cagoooo/Akai</a>。</p>
+  </main>
+  <footer>Made with ❤️ by <a href="${AUTHOR_URL}" rel="noopener">阿凱老師</a> · 桃園市龍潭區石門國民小學</footer>
 </body>
 </html>`;
 }
 
-function generateBlogPostHtml(post) {
+function generateBlogPostHtml(post, toolsById = new Map()) {
   const pageUrl = `${SITE_URL}/blog/${post.slug}/`;
+  const relatedTools = (post.toolIds || []).map((id) => toolsById.get(id)).filter(Boolean);
+  const codeSchemas = relatedTools.map(sourceCodeSchema).filter(Boolean);
   const title = `${post.title} · 阿凱老師教學情境長文`;
   const description = post.excerpt;
   // OG 圖 — 用第一個相關工具的 ogPreviewUrl
@@ -979,11 +1057,18 @@ function generateBlogPostHtml(post) {
     wordCount: bodyLength,
     timeRequired: `PT${readingMin}M`,
     // 連結到此篇對應的工具（給 AI 建構工具與文章的關聯）
-    about: (post.toolIds || []).map(id => ({
-      '@type': 'SoftwareApplication',
-      name: `阿凱老師工具 #${id}`,
-      url: `${SITE_URL}/tool/${id}/`,
-    })),
+    about: (post.toolIds || []).map(id => {
+      const tool = toolsById.get(id);
+      return {
+        '@type': 'SoftwareApplication',
+        '@id': `${SITE_URL}/tool/${id}/#software`,
+        name: tool ? tool.title : `阿凱老師工具 #${id}`,
+        url: `${SITE_URL}/tool/${id}/`,
+        ...(tool ? { sameAs: absoluteUrl(tool.url) } : {}),
+      };
+    }),
+    // 文章介紹的工具原始碼（給搜尋引擎與 AI 知道可以去哪裡參考改造）
+    ...(codeSchemas.length ? { mentions: codeSchemas } : {}),
   };
 
   return `<!DOCTYPE html>
@@ -1031,14 +1116,21 @@ function generateBlogPostHtml(post) {
       }
     })();
   </script>
-  <style>body{font-family:'Noto Sans TC',-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#c99a6c;color:#1a1a1a;text-align:center}.card{background:#fff27a;padding:32px 36px;border-radius:6px;box-shadow:6px 6px 0 rgba(0,0,0,.22);transform:rotate(-1deg);max-width:520px}h1{margin:0 0 12px;font-size:24px;font-weight:900;line-height:1.4}p{color:#4a3a20;line-height:1.65}a{display:inline-block;margin-top:18px;padding:11px 24px;background:#ea8a3e;color:#fff;text-decoration:none;border:2.5px solid #1a1a1a;border-radius:10px;font-weight:900;box-shadow:4px 4px 0 rgba(0,0,0,.4)}</style>
+  <!-- 爬蟲讀到的是與網站相同的完整文章（以前只有標題與摘要，搜尋引擎讀不到內文） -->
+  <style>${READABLE_PAGE_CSS}</style>
 </head>
 <body>
-  <div class="card">
-    <h1>${post.coverEmoji} ${post.title}</h1>
-    <p>${description}</p>
-    <a href="/Akai/blog/${post.slug}/">📖 閱讀全文</a>
-  </div>
+  <main>
+    <p class="meta"><a href="/Akai/">科技教育創新專區</a> › <a href="/Akai/blog/">部落格</a></p>
+    <article>
+      <h1>${post.coverEmoji} ${escapeHtml(post.title)}</h1>
+      <p class="meta">${escapeHtml(AUTHOR_NAME)} · 桃園市龍潭區石門國民小學${post.publishedAt ? ` · ${escapeHtml(post.publishedAt)}` : ''}</p>
+      <p class="lead">${escapeHtml(description)}</p>
+      ${post.body ? renderMarkdown(post.body) : ''}
+    </article>
+    ${openSourceSection(relatedTools)}
+  </main>
+  <footer>Made with ❤️ by <a href="${AUTHOR_URL}" rel="noopener">阿凱老師</a> · 桃園市龍潭區石門國民小學</footer>
 </body>
 </html>`;
 }
@@ -1069,10 +1161,19 @@ function extractBlogPosts() {
     const tagsMatch = body.match(/tags:\s*\[([^\]]+)\]/);
     const tags = tagsMatch ? tagsMatch[1].split(',').map((s) => s.trim().replace(/^'|'$/g, '')).filter(Boolean) : [];
 
-    // 抓 body 欄位（HTML 內文，用於計算 wordCount / readingTime）
+    // 正文（markdown）讀 blog/bodies/<slug>.ts：由 gen-posts-index.ts 從 posts.ts 產生、內容是 JSON 字串，
+    // 比用 regex 從 posts.ts 抓 template literal 可靠（正文裡有跳脫的反引號）
     let postBody = '';
-    const bodyMatch = body.match(/body:\s*`([\s\S]*?)`,/) ?? body.match(/body:\s*'([\s\S]*?)',/);
-    if (bodyMatch) postBody = bodyMatch[1];
+    const bodyPath = slug ? path.resolve(__dirname, `../client/src/blog/bodies/${slug}.ts`) : '';
+    if (bodyPath && fs.existsSync(bodyPath)) {
+      const bodySrc = fs.readFileSync(bodyPath, 'utf-8');
+      const literal = bodySrc.slice(bodySrc.indexOf('export default ') + 'export default '.length).trim().replace(/;$/, '');
+      try {
+        postBody = JSON.parse(literal);
+      } catch (error) {
+        console.warn(`  ⚠️ blog/bodies/${slug}.ts 解析失敗，這篇爬蟲版只放摘要:`, error.message);
+      }
+    }
 
     if (slug && title) {
       posts.push({ slug, title, excerpt: excerpt || '', publishedAt: publishedAt || '', toolIds, coverEmoji, tags, body: postBody });
@@ -1090,6 +1191,9 @@ async function main() {
   // 取得工具資料
   const tools = extractToolsFromJson();
   console.log(`📦 找到 ${tools.length} 個工具`);
+  const toolsById = new Map(tools.map((tool) => [tool.id, tool]));
+  const handwrittenPosts = extractBlogPosts();
+  console.log(`📝 找到 ${handwrittenPosts.length} 篇手寫長文（含全文）`);
 
   // 輸出目錄
   const outputDir = path.resolve(__dirname, '../dist/public/tool');
@@ -1108,7 +1212,7 @@ async function main() {
       }
 
       // 生成 HTML
-      const html = generateToolPageHtml(tool);
+      const html = generateToolPageHtml(tool, handwrittenPosts.filter((post) => post.toolIds.includes(tool.id)));
       const htmlPath = path.join(toolDir, 'index.html');
 
       fs.writeFileSync(htmlPath, html, 'utf-8');
@@ -1172,9 +1276,9 @@ async function main() {
     errorCount++;
   }
 
-  // 生成 blog static OG landing pages（手寫長文 5 篇）
+  // 生成 blog 爬蟲版頁面（手寫長文，含全文）
   try {
-    const posts = extractBlogPosts();
+    const posts = handwrittenPosts;
     const blogDir = path.resolve(__dirname, '../dist/public/blog');
     if (!fs.existsSync(blogDir)) fs.mkdirSync(blogDir, { recursive: true });
     fs.writeFileSync(path.join(blogDir, 'index.html'), generateBlogIndexHtml(posts), 'utf-8');
@@ -1182,7 +1286,7 @@ async function main() {
     for (const post of posts) {
       const postDir = path.join(blogDir, post.slug);
       if (!fs.existsSync(postDir)) fs.mkdirSync(postDir, { recursive: true });
-      fs.writeFileSync(path.join(postDir, 'index.html'), generateBlogPostHtml(post), 'utf-8');
+      fs.writeFileSync(path.join(postDir, 'index.html'), generateBlogPostHtml(post, toolsById), 'utf-8');
       console.log(`  ✅ blog/${post.slug}/index.html - ${post.title.slice(0, 30)}...`);
     }
   } catch (error) {
@@ -1193,7 +1297,6 @@ async function main() {
   // 生成迷你 blog OG landing pages（每工具一篇 SEO landing）
   try {
     // 從 posts.ts 自動 derive 有手寫長文的 toolIds 集合（取代之前硬編 99 個 ID）
-    const handwrittenPosts = extractBlogPosts();
     const SKIP_IDS = new Set(handwrittenPosts.flatMap((p) => p.toolIds));
     const blogDir = path.resolve(__dirname, '../dist/public/blog');
     let miniGenerated = 0;
@@ -1212,7 +1315,7 @@ async function main() {
       };
       const postDir = path.join(blogDir, slug);
       if (!fs.existsSync(postDir)) fs.mkdirSync(postDir, { recursive: true });
-      fs.writeFileSync(path.join(postDir, 'index.html'), generateBlogPostHtml(miniPost), 'utf-8');
+      fs.writeFileSync(path.join(postDir, 'index.html'), generateBlogPostHtml(miniPost, toolsById), 'utf-8');
       miniGenerated++;
     }
     console.log(`  ✅ 迷你 blog OG landing: ${miniGenerated} 篇`);

@@ -35,6 +35,7 @@ import { tokens } from '@/design/tokens';
 import { getToolEmoji, getCategoryLabel, getCategoryKey, normalizeUrl } from '@/components/bulletin/toolAdapter';
 import { OptimizedIcon } from '@/components/OptimizedIcons';
 import { getBlogPostPath, getPrimaryBlogPostForTool } from '@/lib/blogLinks';
+import { toolRepoUrl } from '@/blog/agentPrompt';
 import { loadTool } from '@/lib/toolLoader';
 import { HOME_CATALOGUE_QUERY_KEY, fetchHomeCatalogue } from '@/lib/toolCatalogue';
 import { LoadingProgress } from '@/components/LoadingProgress';
@@ -271,6 +272,7 @@ export function BulletinToolDetail() {
   const emoji = getToolEmoji(tool);
   const isFav = isFavorite(toolId);
   const blogPost = getPrimaryBlogPostForTool(tool.id);
+  const repoUrl = toolRepoUrl(tool.url);
   const previewSrc = tool.previewUrl
     ? `${import.meta.env.BASE_URL}previews/${tool.previewUrl.split('/').pop()}`
     : null;
@@ -822,6 +824,32 @@ export function BulletinToolDetail() {
               >
                 🚀 已推出 Pro 版，功能更完整 →
               </Link>
+            )}
+            {repoUrl && (
+              <a
+                href={repoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`查看 ${tool.title} 的開源原始碼（GitHub）`}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '8px 16px',
+                  background: '#eef6ff',
+                  color: '#1e3a5f',
+                  border: '2px solid #1a1a1a',
+                  borderRadius: 999,
+                  fontSize: 13,
+                  fontWeight: 900,
+                  fontFamily: tokens.font.tc,
+                  textDecoration: 'none',
+                  boxShadow: '2px 2px 0 rgba(0,0,0,.3)',
+                  transform: 'rotate(-1deg)',
+                }}
+              >
+                💻 開源原始碼
+              </a>
             )}
             </div>
 
