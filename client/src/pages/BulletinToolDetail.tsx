@@ -283,10 +283,10 @@ export function BulletinToolDetail() {
 
     // 同步先開新分頁（在任何 await 之前），避免行動瀏覽器因失去「使用者手勢」而靜默擋下彈窗。
     // 詳見 BulletinLeaderboard.handleRankingClick 的同一套修法。
-    let newWin: Window | null = null;
+    // 帶 noopener 時 window.open 依規範一律回傳 null（分頁已成功開啟也一樣），
+    // 不能拿回傳值判斷「被擋下」，否則每次都誤報；改在下方提示附上手動開啟連結。
     if (!inAppBrowser) {
-      newWin = window.open(openUrl, '_blank', 'noopener,noreferrer');
-      if (newWin) newWin.opener = null;
+      window.open(openUrl, '_blank', 'noopener,noreferrer');
     }
 
     addToRecent(tool.id);
@@ -323,18 +323,16 @@ export function BulletinToolDetail() {
 
     if (inAppBrowser) {
       window.location.href = openUrl;
-    } else if (!newWin) {
-      // 彈窗被瀏覽器擋下：不導頁離開原頁面，改用提示 + 手動連結
+    } else {
+      // 萬一瀏覽器真的擋下新分頁，使用者仍可從提示裡的連結手動開啟
       toast({
-        title: '瀏覽器擋下了新分頁',
+        title: `已在新分頁開啟「${tool.title}」`,
         description: (
           <a href={openUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline' }}>
-            點此開啟「{tool.title}」
+            沒看到新分頁？點此開啟
           </a>
         ),
       });
-    } else {
-      toast({ title: '已開啟工具', description: tool.title });
     }
   };
 
