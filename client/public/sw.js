@@ -7,7 +7,7 @@
  * - Stale While Revalidate: 圖片
  */
 
-const CACHE_VERSION = 'v3.6.185-62247b7a-202611031637';
+const CACHE_VERSION = 'v3.6.188-b899a6d0-202611031716';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
 const ASSETS_ARCHIVE = 'assets-archive-v1';
@@ -49,6 +49,8 @@ function reportCacheFailure(label, url, error) {
 // 後續 deploy 換新 chunk hash 時舊 HTML 還引用舊 chunk → 404 → 整頁炸開。
 // index.html 改走 networkFirst 即可（已在 fetch handler 內），永遠拿最新 HTML。
 const PRECACHE_ASSETS = [
+  // 網頁外殼：新版接手時舊快取會被清掉，沒有外殼的話，換手當下剛好遇到 GitHub 偶發 503 就只能回「離線中」
+  BASE_PATH,
   `${BASE_PATH}manifest.json`,
   `${BASE_PATH}api/tools.json`,
   `${BASE_PATH}api/tools-lite.json`,
@@ -316,6 +318,7 @@ async function cacheFirst(request) {
  * 優先請求網路，失敗時使用快取
  */
 async function networkFirst(request) {
+  if (request.mode === 'navigate') return navigateWithFallback(request);
   try {
     const networkResponse = await fetch(request);
     // 只快取完整的成功響應 (status 200)，跳過 206 Partial Response
@@ -339,6 +342,38 @@ async function networkFirst(request) {
     }
     return new Response('離線中', { status: 503, statusText: 'Service Unavailable' });
   }
+}
+
+/**
+ * 開頁面（navigate）：網路優先，但 GitHub Pages 偶發 503 或網路抖動時先等 1.2 秒再試一次，
+ * 仍失敗才改用快取的同一頁或網站外殼（SPA 會依網址顯示對的頁面），最後才回「離線中」。
+ * 2026-11-03：使用者按「立即更新」後重新整理剛好遇到 503，畫面停在更新中。
+ */
+async function navigateWithFallback(request) {
+  const attempt = async () => {
+    try {
+      const response = await fetch(request);
+      return response.status >= 500 ? { failed: response } : { ok: response };
+    } catch {
+      return { failed: null };
+    }
+  };
+  let result = await attempt();
+  if (result.failed !== undefined) {
+    await new Promise((resolve) => setTimeout(resolve, 1200));
+    result = await attempt();
+  }
+  if (result.ok) {
+    if (result.ok.ok && result.ok.status === 200) {
+      const cache = await caches.open(DYNAMIC_CACHE);
+      cache.put(request, result.ok.clone());
+    }
+    return result.ok;
+  }
+  console.log('[SW] 網路請求失敗，改用快取頁面:', request.url);
+  const cached = (await caches.match(request)) || (await caches.match(BASE_PATH)) || (await caches.match(`${BASE_PATH}index.html`));
+  if (cached) return cached;
+  return result.failed || new Response('離線中', { status: 503, statusText: 'Service Unavailable' });
 }
 
 /**
