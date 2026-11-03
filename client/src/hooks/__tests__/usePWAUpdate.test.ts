@@ -84,6 +84,35 @@ describe('usePWAUpdate', () => {
     expect(postMessage).toHaveBeenCalledTimes(2);
   });
 
+  it('送出 SKIP_WAITING 後 10 秒仍未換手：連線中就直接重新整理，不再卡在更新中', async () => {
+    vi.useFakeTimers();
+    const reload = vi.fn();
+    const originalLocation = window.location;
+    Object.defineProperty(window, 'location', { configurable: true, value: { ...originalLocation, reload } });
+    try {
+      mockRegistration({ waiting: { postMessage: vi.fn() }, installing: null });
+      const { result } = renderHook(() => usePWAUpdate());
+      await act(async () => {});
+      await act(async () => { const update = result.current.updateApp(); await vi.advanceTimersByTimeAsync(40); await update; });
+      expect(reload).not.toHaveBeenCalled();
+      await act(async () => { await vi.advanceTimersByTimeAsync(10000); });
+      expect(reload).toHaveBeenCalledTimes(1);
+    } finally {
+      Object.defineProperty(window, 'location', { configurable: true, value: originalLocation });
+    }
+  });
+
+  it('網頁已是最新版時，背景讓排隊的 Service Worker 接手，不顯示更新提示', async () => {
+    const postMessage = vi.fn();
+    mockRegistration({ waiting: { postMessage }, installing: null });
+    const { result } = renderHook(() => usePWAUpdate());
+    await waitFor(() => expect(result.current.isUpdateAvailable).toBe(true));
+    act(() => result.current.activateWaitingSilently());
+    expect(postMessage).toHaveBeenCalledWith({ type: 'SKIP_WAITING' });
+    expect(result.current.isUpdateAvailable).toBe(false);
+    expect(result.current.isUpdating).toBe(false);
+  });
+
   it('檢查更新失敗會顯示重試，且不會繼續自動更新', async () => {
     const update = vi.fn().mockRejectedValue(new Error('offline'));
     mockRegistration({ waiting: null, installing: null, update });

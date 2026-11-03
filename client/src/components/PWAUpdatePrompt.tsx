@@ -32,11 +32,21 @@ export function PWAUpdatePrompt() {
         updateApp,
         installApp,
         dismissUpdate,
+        activateWaitingSilently,
     } = usePWAUpdate();
     const reduceMotion = useReducedMotion();
 
     // 獨立的 version.json 輪詢（3 分鐘一次），作為 SW updatefound 的備援通道
-    const { hasNewVersion, latestVersion } = useVersionCheck({ intervalMs: 3 * 60 * 1000 });
+    const { hasNewVersion, latestVersion, localVersion } = useVersionCheck({ intervalMs: 3 * 60 * 1000 });
+
+    // 只有 Service Worker 在排隊、但網頁本身已是線上最新版（同一段時間連續部署時常見）：
+    // 以前照樣跳「新版本已就緒」，按下去還要等換手，看起來像卡在「更新中」。
+    // 先等 version.json 比對完；確定已是最新版就在背景讓新 SW 接手，不打擾使用者。
+    const isPageLatest = !!latestVersion && !!localVersion && latestVersion.cacheVersion === localVersion.cacheVersion;
+    const swUpdateNeedsPrompt = swUpdateAvailable && !!latestVersion && !isPageLatest;
+    useEffect(() => {
+        if (swUpdateAvailable && isPageLatest && !hasNewVersion) activateWaitingSilently();
+    }, [swUpdateAvailable, isPageLatest, hasNewVersion, activateWaitingSilently]);
 
     // 族群對象引導精靈等「不能被打斷」的流程進行中時暫緩更新，
     // 否則訪客選到一半被自動重整，等於什麼都沒選到。
@@ -49,7 +59,7 @@ export function PWAUpdatePrompt() {
     }, []);
 
     // 任一通道偵測到新版本就觸發更新流程（SW 事件 OR version.json 輪詢）
-    const isUpdateAvailable = (swUpdateAvailable || hasNewVersion) && !isUpdateHeld;
+    const isUpdateAvailable = (swUpdateNeedsPrompt || hasNewVersion) && !isUpdateHeld;
 
     const [shouldShowAfterDelay, setShouldShowAfterDelay] = useState(false);
     const [autoUpdateCountdown, setAutoUpdateCountdown] = useState<number | null>(null);

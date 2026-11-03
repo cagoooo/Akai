@@ -2,6 +2,13 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.188] - 2026-11-03 — 更新提示不再卡在「正在更新，請稍候…」
+
+- **問題**：已經是最新版 v3.6.187 的頁面，右下角仍跳出「新版本已就緒」；按「立即更新」後一直停在「正在更新，請稍候…」。
+- **原因 1（不該跳）**：同一段時間連續部署多版時，網頁本身已向網路拿到最新版，但背景的 Service Worker 還是舊的、新的在排隊。提示只看「有沒有排隊的 SW」，沒比對網頁是否已是最新。
+- **原因 2（卡很久）**：按下更新後只等 SW 換手（`controllerchange`）才重新整理；換手時要清理當天累積的多份舊快取，加上 GitHub Pages 偶發 503，最久要等 45 秒才放棄，而且放棄後只顯示「請重試」。
+- **修正**：`PWAUpdatePrompt` 先比對 version.json 與網頁內建版本，網頁已是最新就在背景送 `SKIP_WAITING` 讓新 SW 接手，不顯示提示也不重新整理；`usePWAUpdate.updateApp` 送出後 10 秒仍未換手，連線中就直接重新整理（HTML 網路優先，一定拿到新版），離線才顯示重試。補兩個單元測試。
+
 ## [3.6.187] - 2026-11-03 — 收藏讀取與登出後統計不再誤報
 
 - **問題**：Sentry 收到兩則同一位 Mac Safari 訪客在 `/tool/30` 的告警：JAVASCRIPT-REACT-1E「[useFavorites] Firestore load 失敗：Missing or insufficient permissions」與 JAVASCRIPT-REACT-1F「Firebase 認證尚未就緒」（4 筆）。

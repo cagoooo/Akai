@@ -135,8 +135,16 @@ export function usePWAUpdate() {
             setUpdateError('更新尚未完成，請確認網路連線後重試。');
         };
         const timeout = window.setTimeout(fail, 45000);
+        // 保底：換手（清舊快取、GitHub 偶發 503）太慢時直接重新整理。HTML 走網路優先，
+        // 重新載入一定拿到新版；以前只等 controllerchange，最久卡 45 秒才顯示「請重試」。
+        const reloadFallback = window.setTimeout(() => {
+            if (updateAttemptRef.current !== attempt) return;
+            if (navigator.onLine) window.location.reload();
+            else fail();
+        }, 10000);
         updateCleanupRef.current = () => {
             window.clearTimeout(timeout);
+            window.clearTimeout(reloadFallback);
             removeWorkerListener();
         };
         // 先繪出更新狀態，再執行可能立刻重新載入的操作。
@@ -214,6 +222,14 @@ export function usePWAUpdate() {
         return result.outcome === 'accepted';
     }, [state.installPrompt]);
 
+    // 網頁本身已是最新版、只是新的 Service Worker 還在排隊（同一段時間連續部署時常見）：
+    // 不必打擾使用者，也不必重新整理，直接讓它接手快取即可。
+    const activateWaitingSilently = useCallback(() => {
+        const waiting = registrationRef.current?.waiting;
+        if (waiting) waiting.postMessage({ type: 'SKIP_WAITING' });
+        setState((previous) => ({ ...previous, isUpdateAvailable: false }));
+    }, []);
+
     const dismissUpdate = useCallback(() => {
         setUpdateError(null);
         setState((previous) => ({ ...previous, isUpdateAvailable: false }));
@@ -226,5 +242,6 @@ export function usePWAUpdate() {
         updateApp,
         installApp,
         dismissUpdate,
+        activateWaitingSilently,
     };
 }
