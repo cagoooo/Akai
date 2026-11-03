@@ -58,6 +58,8 @@ export function buildAgentPrompt(post: PromptPost, tools: readonly PromptTool[])
   const articleUrl = `${SITE_URL}/blog/${post.slug}/`;
   const mainName = main ? `#${main.id} ${main.title}` : `文章介紹的 #${post.toolIds[0] ?? ''} 工具`;
   const mainRepo = main ? toolRepoUrl(main.url) : null;
+  // 致謝連結指向站內工具介紹頁：別人改造後的作品連回本站，同時能從介紹頁找到線上版與原始碼
+  const creditUrl = `${SITE_URL}/tool/${main ? main.id : post.toolIds[0] ?? ''}/`;
 
   const reference = main
     ? toolBlock(main)
@@ -101,6 +103,6 @@ ${reference}
 
 ## 授權與致謝
 
-請先確認原始 repo 的授權條款（LICENSE）。若沿用原始碼或設計，請在我的作品頁尾註明「參考自 阿凱老師 ${mainName}」並附上原始碼連結，讓開源分享延續下去。
+請先確認原始 repo 的授權條款（LICENSE）。若沿用原始碼或設計，請在我的作品頁尾註明「參考自 阿凱老師 ${mainName}」，並附上工具介紹頁連結 ${creditUrl}${mainRepo ? `與原始碼連結 ${mainRepo}` : ''}，讓開源分享延續下去。
 `;
 }

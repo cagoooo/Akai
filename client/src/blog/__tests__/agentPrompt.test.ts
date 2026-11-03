@@ -33,6 +33,13 @@ describe('文章專屬 AI 開發提示詞', () => {
     expect(prompt).toContain('石門國小');
   });
 
+  it('致謝段請改造者附上工具介紹頁連結，讓作品連回本站', () => {
+    const withRepo = buildAgentPrompt({ slug: 'iwin-131', title: 'T', toolIds: [131] }, [iwin]);
+    expect(withRepo).toMatch(/頁尾註明.*https:\/\/cagoooo\.github\.io\/Akai\/tool\/131\/.*https:\/\/github\.com\/cagoooo\/iwin-115-survey/);
+    const noRepo = buildAgentPrompt({ slug: 'g', title: 'G', toolIds: [20] }, [googleSitesTool]);
+    expect(noRepo).toMatch(/頁尾註明.*https:\/\/cagoooo\.github\.io\/Akai\/tool\/20\//);
+  });
+
   it('不同文章產生不同內容', () => {
     const a = buildAgentPrompt({ slug: 'a', title: 'A', toolIds: [131] }, [iwin, googleSitesTool]);
     const b = buildAgentPrompt({ slug: 'b', title: 'B', toolIds: [20] }, [iwin, googleSitesTool]);
