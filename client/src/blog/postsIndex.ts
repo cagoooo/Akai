@@ -817,21 +817,21 @@ export const POSTS_INDEX: BlogPostMeta[] = [
   },
   {
     "slug": "class-helper-10-daily-routine",
-    "title": "#10 班級小管家：加扣分 × 抽籤 × 計時器 × 多班切換 × 考試監考的 53 模組單檔神器（沒有點名，純班級經營）",
-    "excerpt": "#10 不是「點名 + 行政記錄」工具 — 是阿凱純手寫 53 個 JS 模組、242 KB 單檔 classnew.html 的班級經營系統。加扣分系統 + 抽籤分組 + 計時器 + 考試監考 + 學期封存 + 多班級切換，Firebase + localStorage + IndexedDB 三層儲存，跨裝置 Google 同步。v3.12.17 累計 12 keys 完整同步稽核、版本健康診斷面板與內建 WebView 自動逃脫防護。",
+    "title": "#10 班級小管家：加分會讓寵物長大的班級經營工具箱，抽籤、分組、聯絡簿到換電腦同步一次看懂",
+    "excerpt": "班級小管家不是點名系統，而是上課用得到的班級經營工具箱。加分會讓班級寵物成長、累積金幣換獎勵；抽籤、分組、計時鬧鈴、聯絡簿、安靜挑戰都在同一頁。登入 Google 後，學校和家裡的電腦可以接續同一份資料。",
     "publishedAt": "2026-05-20",
-    "readingMinutes": 7,
+    "readingMinutes": 8,
     "tags": [
       "班級經營",
       "加扣分",
-      "導師工具",
+      "班級寵物",
       "多班級切換",
-      "考試監考"
+      "雲端同步"
     ],
     "toolIds": [
       10,
       89,
-      56
+      7
     ],
     "coverEmoji": "👨‍🏫",
     "coverColor": "green"
