@@ -40,13 +40,13 @@ export const POSTS_INDEX: BlogPostMeta[] = [
     "title": "#134 把一本品牌方案變成十二座浮空島：石門國小品牌群島",
     "excerpt": "厚厚的品牌方案很用心，卻很少人從頭翻到尾。把它改寫成一座可以逛的 3D 天空之城，孩子找小河馬，家長看成果，老師看課程地圖。",
     "publishedAt": "2026-11-02",
-    "readingMinutes": 5,
+    "readingMinutes": 6,
     "tags": [
       "品牌學校",
       "閱讀教育",
       "3D 互動網站",
       "尋寶任務",
-      "學校行銷"
+      "閱讀挑戰"
     ],
     "toolIds": [
       134,

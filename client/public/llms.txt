@@ -179,7 +179,7 @@
 - [#111 狼人殺冠軍賽](https://cagoooo.github.io/Akai/tool/111): 把狼人殺變成一場有規則、有賽程、有主持節奏的班級冠軍賽，讓學生在推理、辯論、聆聽與團隊合作中玩出高品質互動。 標籤：狼人殺、冠軍賽、推理遊戲、班級活動、口語表達、邏輯推理。 實際工具：https://cagoooo.github.io/smes-werewolf-rules/。教學情境文章：https://cagoooo.github.io/Akai/blog/werewolf-championship-111-classroom-deduction-game
 - [#128 石門・校園漫遊](https://cagoooo.github.io/Akai/tool/128): 把熟悉的校園變成可以走進去的 3D 探索：沿著走廊找景點、體驗遊具、收集校園挑戰。電腦與手機都能操作，適合新生認識校園、班級觀察活動與資訊課討論，讓孩子從「玩過」走向「說得出自己的發現」。 標籤：石門國小、校園探索、3D漫遊、新生迎新、景點介紹、遊具互動。 實際工具：https://cagoooo.github.io/shimen-campus-game/。教學情境文章：https://cagoooo.github.io/Akai/blog/shimen-campus-128-3d-campus-exploration
 - [#130 石門國小 115 學年度運動會資訊站](https://cagoooo.github.io/Akai/tool/130): 把石門國小 115 學年度運動會的 30 項賽程、精彩活動、家長觀賽與停車資訊收在同一頁；可依表演、團體競賽、徑賽或典禮篩選，親師生出發前就能確認時間與注意事項。 標籤：石門國小、115學年度、運動會網站、運動會賽程、競賽資訊、親子觀賽。 實際工具：https://cagoooo.github.io/sportsday-115/。教學情境文章：https://cagoooo.github.io/Akai/blog/sportsday-130-shimen-115
-- [#134 桃園市石門國小品牌群島](https://cagoooo.github.io/Akai/tool/134): 把石門國小「鱻鯉鰭源，石門活閱」閱讀品牌方案做成 12 座 3D 浮空島：逛島看課程與成果，查即時天氣、水庫水位和校園公告，還能尋找小河馬、領尋寶證書。 標籤：品牌學校、閱讀教育、石門國小、3D 互動網站、浮空島、校園資訊。 實際工具：https://cagoooo.github.io/smes-island/。教學情境文章：https://cagoooo.github.io/Akai/blog/smes-island-134-reading-brand-sky-city
+- [#134 桃園市石門國小品牌群島](https://cagoooo.github.io/Akai/tool/134): 把石門國小「鱻鯉鰭源，石門活閱」閱讀品牌方案做成 12 座 3D 浮空島：逛島看課程與成果，查即時天氣、水庫水位和校園公告；孩子找小河馬、闖十二島閱讀挑戰，分三段領證書。 標籤：品牌學校、閱讀教育、石門國小、3D 互動網站、浮空島、校園資訊。 實際工具：https://cagoooo.github.io/smes-island/。教學情境文章：https://cagoooo.github.io/Akai/blog/smes-island-134-reading-brand-sky-city
 
 ### 親師溝通（7 款）
 
