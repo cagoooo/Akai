@@ -15,6 +15,27 @@ export type BlogPostMeta = Omit<BlogPost, 'body'>;
 
 export const POSTS_INDEX: BlogPostMeta[] = [
   {
+    "slug": "moda-briefing-135-public-code-report",
+    "title": "#135 一所小學的程式，送上公共程式平臺：二十分鐘講完三週的資安檢測",
+    "excerpt": "從一人資訊組的需求、AI 協作開發，到 Fortify 初掃 40 筆中風險以上一路修到 0，再到錯誤通報與開源再利用。這份向數位發展部報告的簡報，把整段上架過程攤開來給你看。",
+    "publishedAt": "2026-11-03",
+    "readingMinutes": 6,
+    "tags": [
+      "公共程式",
+      "資安檢測",
+      "開源授權",
+      "成果報告",
+      "AI 協作開發"
+    ],
+    "toolIds": [
+      135,
+      133,
+      10
+    ],
+    "coverEmoji": "🛡️",
+    "coverColor": "blue"
+  },
+  {
     "slug": "smes-island-134-reading-brand-sky-city",
     "title": "#134 把一本品牌方案變成十二座浮空島：石門國小品牌群島",
     "excerpt": "厚厚的品牌方案很用心，卻很少人從頭翻到尾。把它改寫成一座可以逛的 3D 天空之城，孩子找小河馬，家長看成果，老師看課程地圖。",

@@ -15499,7 +15499,78 @@ const POST_134: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_134, POST_133, POST_132, POST_131, POST_130, POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+const POST_135: BlogPost = {
+  slug: 'moda-briefing-135-public-code-report',
+  title: '#135 一所小學的程式，送上公共程式平臺：二十分鐘講完三週的資安檢測',
+  excerpt: '從一人資訊組的需求、AI 協作開發，到 Fortify 初掃 40 筆中風險以上一路修到 0，再到錯誤通報與開源再利用。這份向數位發展部報告的簡報，把整段上架過程攤開來給你看。',
+  publishedAt: '2026-11-03', readingMinutes: 6,
+  tags: ['公共程式', '資安檢測', '開源授權', '成果報告', 'AI 協作開發'],
+  toolIds: [135, 133, 10], coverEmoji: '🛡️', coverColor: 'blue',
+  body: `## 做工具的老師，最怕被問「安全嗎」
+
+學校裡自己寫工具的老師越來越多，尤其有了 AI 協作之後，一個人也能做出全校在用的系統。可是只要有人問一句「這個安全嗎？學生資料放哪裡？別的學校可以用嗎？」，多數人只能回答「應該沒問題」。
+
+科技教育創新專區走到第 134 個工具時，我決定把它送上數位發展部的公共程式平臺。上架標準很明確：不得有中風險（含）以上的弱點。這份簡報，就是 2026-11-06 向數位發展部報告這段過程用的，20 分鐘、17 頁，加上一段開場片頭。
+
+## #135 簡報裡有什麼？
+
+**為什麼要做**：小校資訊組只有一個人，老師的需求很細，市售工具又常卡在註冊、廣告與學生資料的去向。目標只有一句話：免安裝、免註冊，老師打開就能用。
+
+**怎麼做到**：老師提需求，AI Agent 寫程式，我負責審核與決策；每次修改都會自動測試、自動上線。工具依教學情境分成七大類，集中在一個入口網。
+
+**上架之路**：從 10/06 收到上架說明，到 10/28 複掃合格送審，大約三週。Fortify 初掃 237 筆、其中中風險以上 40 筆，逐筆修補後在第四次複掃歸零；第三方元件掃描 Mend 原本 15 筆弱點，升級與移除元件後剩 1 筆低風險。簡報用一張表列出每一次掃描的數字，不只講結果，也讓人看到過程。
+
+**從掃描學到的事**：開發用伺服器改成只走 HTTPS、檔案路徑先正規化再存取、識別碼改用加密等級的安全亂數、沒標授權的元件直接移除改自己寫。這些修改大多是在養成好習慣，修完之後，新寫的程式也照這個標準。
+
+**上線之後誰會知道壞了**：瀏覽器端用 Sentry 追蹤錯誤，雲端函式把雜訊濾掉、分級限流，再用 Google Chat 卡片通知到手機，最後自動開一張 Issue 讓 AI 協助診斷，但不讓 AI 直接改程式。
+
+**讓人和 AI 都找得到**：每個工具有介紹頁、每篇教學長文搜尋引擎都讀得到全文，還有給 AI 讀的 llms.txt。
+
+**開源與再利用**：程式以 MIT 授權公開，工具介紹頁有「開源原始碼」按鈕；文章頁左下角可一鍵複製 AI 開發提示詞，貼給 ChatGPT、Claude 或 Gemini，就能參考原始碼改成自己的版本。
+
+## 簡報本身的設計
+
+- **開場片頭**：21 秒，口白是事先用我的克隆聲音製作，播完自動進入封面；瀏覽器擋下有聲自動播放時，按中間的播放鈕即可。
+- **工程藍圖風格**：深藍底、格線、綠色代表「通過」，右上角可切換白底，投影或列印都清楚。
+- **手機也能看**：手機上改成上下滑動閱讀，第一次打開會有滑動提示。
+- **講者模式**：每頁都有講稿與時間配置，按 S 開啟；另外可以輸出 PDF，當作現場網路不穩時的備份。
+- **新版本提示**：修改後重新開啟，畫面會提示更新，不必叫大家清快取。
+
+## 真實技術棧
+
+- Reveal.js 簡報搭配 GSAP 動畫
+- 部署在 GitHub Pages，加上 Service Worker 與新版本提示
+- 網站本身不呼叫 AI 模型，也不收集訪客資料；頁面上的使用數字都標了擷取日期
+
+## 可以這樣用（情境示例）
+
+以下是可以參考的用法，不是實際成效紀錄。
+
+- **準備送件的學校**：想把校內自製工具送上公共程式平臺時，先看時間軸與掃描表，心裡就知道大概要花多少時間、會遇到哪些類型的問題。
+- **資訊組的成果報告**：要向校內或上級報告數位成果時，可以參考「為什麼、怎麼做、真實數據、檢測、維運、建議」這個順序。
+- **教師研習**：介紹 AI 協作開發時，用「從掃描學到的事」那一頁提醒大家：AI 寫得出程式，安全的習慣還是要人來把關。
+
+## 配對工具推薦
+
+- [AI 數位教學實務工作坊互動簡報](https://cagoooo.github.io/ccu-ai-workshop/)：同樣用 Reveal.js 做的研習簡報，多了即時文字雲、投票與彈幕
+- [班級小管家](https://cagoooo.github.io/class/)：簡報裡點開次數最多的工具
+- [#135 公共程式平臺上架報告](https://cagoooo.github.io/moda-akai-briefing/)
+
+## 適用對象
+
+- 負責資訊業務、準備公共程式上架或資安檢測的行政同仁
+- 想自己做教學工具、想知道怎麼公開給其他學校使用的老師
+- 想參考成果報告簡報怎麼安排的人
+
+## 想試試？
+
+→ [前往 #135 公共程式平臺上架報告](https://cagoooo.github.io/moda-akai-briefing/)
+
+建議直接翻到「每一次掃描的結果」那一頁：從 40 筆到 0 筆，每一列都是一次具體的修改。
+`,
+};
+
+export const POSTS: BlogPost[] = [POST_135, POST_134, POST_133, POST_132, POST_131, POST_130, POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。
