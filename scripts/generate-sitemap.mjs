@@ -5,6 +5,10 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SITE_URL = 'https://cagoooo.github.io/Akai';
 const TODAY = new Date().toISOString().split('T')[0];
+// v3.6.181 起爬蟲版工具頁／文章頁改放完整內容；lastmod 取「發布日」與此日期較晚者，
+// 讓 Google 知道這批頁面在這天有實質更新（不要每次建置都用 TODAY，否則 lastmod 失去參考價值）
+const CRAWLER_CONTENT_UPDATED = '2026-11-03';
+const atLeastCrawlerUpdate = (date) => (date && date > CRAWLER_CONTENT_UPDATED ? date : CRAWLER_CONTENT_UPDATED);
 
 // Read tools.json
 const toolsPath = resolve(__dirname, '../client/public/api/tools.json');
@@ -38,8 +42,11 @@ urls.push({
 // v3.6.89 GEO 策略更新：
 //   - /tool/{id} 已改為可索引的站內工具摘要頁（generate-og-pages.mjs 產出 index, follow）
 //   - /blog/{slug} 承接教學情境與長尾查詢
-//   - 外部工具 URL 保留在 sitemap，讓搜尋引擎也能找到實際可使用頁
-// 這三層讓 AI 搜尋可以穩定建立「工具摘要頁 → 使用情境文章 → 實際工具」關係。
+// 這兩層加上頁面內「立即使用」的實際工具連結，讓 AI 搜尋建立「工具摘要頁 → 使用情境文章 → 實際工具」關係。
+//
+// ⚠️ v3.6.184：不再列外部工具網址（其他 GitHub repo、Replit、學校主機等，曾有 132 筆）。
+//   Sitemap 規範只接受與 sitemap 同一路徑（/Akai/）底下的網址；Search Console 這份 sitemap
+//   自 2026-08 起一直「無法擷取」、探索到 0 頁。實際工具改由爬蟲版工具頁／文章頁的連結讓搜尋引擎發現。
 
 // 站內工具詳情頁（科技教育專區 canonical 工具節點）
 // isInternal（例如 #100 工具索引神器）也保留，因為它有明確站內路由與內容。
@@ -47,7 +54,7 @@ let toolDetailCount = 0;
 for (const tool of tools) {
     urls.push({
         loc: `${SITE_URL}/tool/${tool.id}/`,
-        lastmod: tool.addedAt ? tool.addedAt.slice(0, 10) : TODAY,
+        lastmod: atLeastCrawlerUpdate(tool.addedAt?.slice(0, 10)),
         changefreq: tool.addedAt ? 'monthly' : 'yearly',
         priority: tool.isInternal ? '0.72' : '0.78',
     });
@@ -55,21 +62,6 @@ for (const tool of tools) {
 }
 console.log(`🧭 站內工具詳情頁：${toolDetailCount} 頁`);
 
-// External tool URLs（指向工具實際運作的 GitHub Pages / Replit 等）
-// isInternal 工具不對外（沒 url 或 url 是內部路徑），跳過
-let externalToolCount = 0;
-for (const tool of tools) {
-    if (tool.url && !tool.isInternal && /^https?:\/\//.test(tool.url)) {
-        urls.push({
-            loc: tool.url,
-            lastmod: TODAY,
-            changefreq: 'monthly',
-            priority: '0.62',
-        });
-        externalToolCount++;
-    }
-}
-console.log(`🔗 實際工具外部網址：${externalToolCount} 頁`);
 
 // Blog 教學情境長文 — 從 client/src/blog/posts.ts 解析
 const postsPath = resolve(__dirname, '../client/src/blog/posts.ts');
@@ -95,7 +87,7 @@ if (existsSync(postsPath)) {
     // Blog 列表頁
     urls.push({
         loc: `${SITE_URL}/blog/`,
-        lastmod: longformSlugs[0]?.publishedAt || TODAY,
+        lastmod: atLeastCrawlerUpdate(longformSlugs[0]?.publishedAt),
         changefreq: 'weekly',
         priority: '0.85',
     });
@@ -103,7 +95,7 @@ if (existsSync(postsPath)) {
     for (const { slug, publishedAt } of longformSlugs) {
         urls.push({
             loc: `${SITE_URL}/blog/${slug}/`,
-            lastmod: publishedAt,
+            lastmod: atLeastCrawlerUpdate(publishedAt),
             changefreq: 'monthly',
             priority: '0.8',
         });
