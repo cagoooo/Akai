@@ -163,23 +163,23 @@ export const POSTS_INDEX: BlogPostMeta[] = [
   },
   {
     "slug": "shimen-campus-128-3d-campus-exploration",
-    "title": "#128 石門・校園漫遊：把「校園在哪裡」變成孩子走得出來的探索",
-    "excerpt": "新生聽完導覽，真的能說出自己的路線嗎？用 Godot 3D 校園探索，把景點、遊具與挑戰變成觀察起點，再接回實際校園與課堂分享。",
+    "title": "#128 石門・心晴校園：在熟悉的走廊上，練習和同學好好相處",
+    "excerpt": "原本的校園漫遊長出了故事：跟著心晴任務幫同學解決小麻煩、用 12 個小問題認識自己，再用校園導航把去教室的路傳給家長。這篇整理可以怎麼帶進 SEL 與迎新課堂。",
     "publishedAt": "2026-10-05",
-    "readingMinutes": 5,
+    "readingMinutes": 6,
     "tags": [
-      "校園探索",
-      "新生迎新",
-      "Godot",
-      "空間觀察",
-      "數位素養"
+      "SEL",
+      "社會情緒學習",
+      "性格探索",
+      "校園導航",
+      "新生迎新"
     ],
     "toolIds": [
       128,
-      101,
+      97,
       81
     ],
-    "coverEmoji": "🗺️",
+    "coverEmoji": "🌤️",
     "coverColor": "green"
   },
   {

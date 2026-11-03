@@ -8,7 +8,7 @@
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
     <pubDate>Tue, 03 Nov 2026 08:35:50 GMT</pubDate>
-    <lastBuildDate>Tue, 03 Nov 2026 14:13:50 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 03 Nov 2026 22:59:41 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -166,25 +166,25 @@
       <category>教學情境</category>
     </item>
     <item>
-      <title>📖 教學情境：#128 石門・校園漫遊：把「校園在哪裡」變成孩子走得出來的探索</title>
+      <title>📖 教學情境：#128 石門・心晴校園：在熟悉的走廊上，練習和同學好好相處</title>
       <link>https://cagoooo.github.io/Akai/blog/shimen-campus-128-3d-campus-exploration</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/shimen-campus-128-3d-campus-exploration</guid>
       <pubDate>Mon, 05 Oct 2026 00:00:00 GMT</pubDate>
-      <description>新生聽完導覽，真的能說出自己的路線嗎？用 Godot 3D 校園探索，把景點、遊具與挑戰變成觀察起點，再接回實際校園與課堂分享。</description>
+      <description>原本的校園漫遊長出了故事：跟著心晴任務幫同學解決小麻煩、用 12 個小問題認識自己，再用校園導航把去教室的路傳給家長。這篇整理可以怎麼帶進 SEL 與迎新課堂。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
     <item>
-      <title>🆕 新工具：石門・校園漫遊</title>
+      <title>🆕 新工具：石門・心晴校園</title>
       <link>https://cagoooo.github.io/Akai/tool/128</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/128</guid>
       <pubDate>Sun, 04 Oct 2026 16:00:00 GMT</pubDate>
-      <description>把熟悉的校園變成可以走進去的 3D 探索：沿著走廊找景點、體驗遊具、收集校園挑戰。電腦與手機都能操作，適合新生認識校園、班級觀察活動與資訊課討論，讓孩子從「玩過」走向「說得出自己的發現」。</description>
+      <description>走進方塊版石門國小，跟著「心晴任務」幫同學解決小麻煩、認識自己的性格，還能校園尋寶、導航到教室、自己蓋方塊。電腦與手機都能玩，適合 SEL 課、新生迎新與家長認識校園。</description>
       <category>石門國小</category>
-      <category>校園探索</category>
-      <category>3D漫遊</category>
-      <category>新生迎新</category>
-      <category>景點介紹</category>
+      <category>SEL</category>
+      <category>社會情緒學習</category>
+      <category>性格探索</category>
+      <category>校園導航</category>
     </item>
     <item>
       <title>📖 教學情境：#127 桃園市AI素養爭霸賽：把「要會 AI」拆成學生今天就能練的六個站點</title>
