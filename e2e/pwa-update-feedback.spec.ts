@@ -36,6 +36,11 @@ for (const width of [1280, 390]) {
       }) });
       Object.assign(window, { pwaFeedbackTest: { calls: () => calls, finish: () => finish(), fail: () => fail() } });
     });
+    // 線上 version.json 比網頁內建版本新：提示只在網頁真的不是最新版時出現（v3.6.188 起）
+    await page.route('**/version.json*', (route) => route.fulfill({
+      contentType: 'application/json',
+      body: JSON.stringify({ version: '9.9.9', cacheVersion: 'v9.9.9-e2e', gitHash: 'e2e', buildTime: '', buildTimestamp: 9_999_999_999_999 }),
+    }));
     await page.goto('./?q=', { waitUntil: 'domcontentloaded' });
     await page.locator('.bulletin-tool-card').first().waitFor();
     await expect.poll(() => page.evaluate(() => !!document.querySelector('link[rel="manifest"]'))).toBe(true);
@@ -69,3 +74,28 @@ for (const width of [1280, 390]) {
     await expect(page.getByRole('searchbox', { name: '搜尋教育工具名稱或描述' })).toBeVisible();
   });
 }
+
+// 連續部署時常見：網頁本身已是最新版，只有新的 Service Worker 在排隊 → 不跳提示，背景讓它接手
+test('網頁已是最新版時，排隊的 Service Worker 不會跳出更新提示', async ({ page }) => {
+  await page.addInitScript(() => {
+    sessionStorage.setItem('akai_audience_wizard_dismissed_v1', '1');
+    localStorage.setItem('hasCompletedSiteTour', 'true');
+    const posted: unknown[] = [];
+    const registration = Object.assign(new EventTarget(), {
+      scope: location.origin + '/', installing: null, update: () => Promise.resolve(),
+      waiting: { postMessage: (message: unknown) => posted.push(message) },
+    });
+    Object.defineProperty(navigator, 'serviceWorker', { configurable: true, value: Object.assign(new EventTarget(), {
+      controller: {}, ready: Promise.resolve(registration),
+      getRegistration: () => Promise.resolve(registration),
+      getRegistrations: () => Promise.resolve([]), register: () => Promise.resolve(registration),
+    }) });
+    Object.assign(window, { pwaLatestTest: { posted } });
+  });
+  await page.goto('./?q=', { waitUntil: 'domcontentloaded' });
+  await page.locator('.bulletin-tool-card').first().waitFor();
+  await page.evaluate(() => window.dispatchEvent(new Event('akai:pwa-update-available')));
+  // 背景送出 SKIP_WAITING 讓新 SW 接手，但畫面不出現「立即更新」
+  await expect.poll(() => page.evaluate(() => (window as unknown as { pwaLatestTest: { posted: unknown[] } }).pwaLatestTest.posted.length), { timeout: 15000 }).toBeGreaterThan(0);
+  await expect(page.getByRole('button', { name: '立即更新' })).toHaveCount(0);
+});
