@@ -27,7 +27,7 @@ for (const width of [1280, 390]) {
     const bounds = await bar.boundingBox();
     expect(bounds!.y).toBeGreaterThanOrEqual(0);
     expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(width);
-    await input.fill('石門・校園漫遊');
+    await input.fill('石門・心晴校園');
     const result = page.locator('.bulletin-tool-card[data-tool-id="128"]');
     await expect(result).toBeVisible();
     await expect(result).toBeInViewport();
@@ -57,9 +57,9 @@ for (const width of [1280, 390]) {
     expect(await page.evaluate(() => window.scrollY)).toBeLessThan(50);
 
     await input.evaluate((element: HTMLInputElement) => {
-      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(element, '石門・校園漫遊');
-      element.dispatchEvent(new CompositionEvent('compositionend', { bubbles: true, data: '石門・校園漫遊' }));
-      element.dispatchEvent(new InputEvent('input', { bubbles: true, data: '石門・校園漫遊', isComposing: false }));
+      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(element, '石門・心晴校園');
+      element.dispatchEvent(new CompositionEvent('compositionend', { bubbles: true, data: '石門・心晴校園' }));
+      element.dispatchEvent(new InputEvent('input', { bubbles: true, data: '石門・心晴校園', isComposing: false }));
     });
     const result = page.locator('.bulletin-tool-card[data-tool-id="128"]');
     await expect(result).toBeInViewport();
@@ -74,7 +74,7 @@ for (const width of [1280, 390]) {
   test(`清空關鍵字會取消尚未執行的自動捲動（${width}px）`, async ({ page }) => {
     await openSearchPage(page, width);
     const input = page.getByRole('searchbox', { name: '搜尋教育工具名稱或描述' });
-    await input.fill('石門・校園漫遊');
+    await input.fill('石門・心晴校園');
     await page.getByRole('button', { name: '清除搜尋' }).click();
     await expect(input).toHaveValue('');
     await expect(input).toBeFocused();

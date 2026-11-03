@@ -36,6 +36,6 @@ test('首屏不啟動驗證；未通過驗證時不傳送雲端統計', async ({
   if (!local) await expect.poll(() => attestations, { timeout: 20000 }).toBeGreaterThan(0);
   await page.waitForTimeout(1000);
   expect(analyticsCalls).toBe(0);
-  await page.getByRole('searchbox', { name: '搜尋教育工具名稱或描述' }).fill('石門・校園漫遊');
+  await page.getByRole('searchbox', { name: '搜尋教育工具名稱或描述' }).fill('石門・心晴校園');
   await expect(page.locator('.bulletin-tool-card[data-tool-id="128"]')).toBeVisible();
 });
