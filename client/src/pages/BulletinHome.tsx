@@ -317,9 +317,31 @@ export function BulletinHome() {
         return;
       }
       const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      // 畫面外的卡片用 content-visibility:auto 先以 460px 估高，捲過去時才換成真實高度，
+      // 目標卡會一路飄移（實測新上架 #132 停在中央上方 533px，被搜尋列蓋住）。
+      // 定位前先讓整排卡片排版一次取得真實位置，捲動停下後再核對一次。
+      const grid = card.closest<HTMLElement>('.bulletin-tool-grid');
+      grid?.setAttribute('data-locating', '');
+      void grid?.offsetHeight;
       card.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'center' });
       card.focus({ preventScroll: true });
       setToolLocationStatus(null);
+      let settled = false;
+      const settle = () => {
+        if (settled) return;
+        settled = true;
+        window.removeEventListener('scrollend', settle);
+        const rect = card.getBoundingClientRect();
+        // 捲動途中改點了別張卡：不要把畫面拉回這張
+        const stillTarget = card.isConnected && card.classList.contains('audience-tool-highlight');
+        if (stillTarget && Math.abs(rect.top + rect.height / 2 - window.innerHeight / 2) > 60) {
+          card.scrollIntoView({ behavior: 'auto', block: 'center' });
+        }
+        grid?.removeAttribute('data-locating');
+      };
+      window.addEventListener('scrollend', settle);
+      // 不支援 scrollend 的瀏覽器（Safari）或根本不需要捲動時的保底
+      locateRetryRef.current = window.setTimeout(settle, prefersReduced ? 100 : 1600);
     };
     locateRetryRef.current = window.setTimeout(findAndFocus, 120);
     highlightTimeoutRef.current = window.setTimeout(() => {

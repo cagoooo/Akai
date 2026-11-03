@@ -1174,6 +1174,10 @@
     contain-intrinsic-block-size: none;
   }
 }
+/* 定位推薦／新上架工具時暫時全部排版，捲動目標才不會因估高被換成實際高度而飄走（BulletinHome locateRecommendedTool） */
+.bulletin-tool-grid[data-locating] > * {
+  content-visibility: visible;
+}
 /* 推薦工具定位後的「電影院聚光」：只保留指定卡片的亮度，
    不攔截其他卡片互動，讓使用者仍能隨時改看另一張工具。 */
 .bulletin-tool-grid.is-spotlighting {
