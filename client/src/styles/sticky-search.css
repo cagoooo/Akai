@@ -1,9 +1,37 @@
 .bulletin-searchbar { position: sticky; top: calc(18px + env(safe-area-inset-top, 0px)); z-index: 30; padding: 12px 60px; background: #fff8ec; border-bottom: 1px solid #d8c7b0; box-shadow: 0 4px 12px #33251518; }
 .bulletin-searchbar__row { display: flex; align-items: center; gap: 20px; max-width: 1100px; margin: auto; }
-.bulletin-searchbar__label { flex-shrink: 0; font-size: 14px; font-weight: 800; color: #584027; }
+.bulletin-searchbar__label { flex-shrink: 0; font-size: 15px; font-weight: 900; color: #1a1a1a; background: #fff27a; border: 2px solid #1a1a1a; border-radius: 6px; padding: 6px 12px; box-shadow: 2px 2px 0 rgba(0,0,0,.25); transform: rotate(-2deg); }
 .bulletin-searchbar__submit { flex-shrink: 0; border: 0; border-radius: 8px; background: #795534; color: #fff; padding: 10px 16px; min-height: 44px; font-size: 14px; font-weight: 700; cursor: pointer; }
 .bulletin-searchbar input[type=search]::-webkit-search-cancel-button { display: none; }
 .bulletin-searchbar form:focus-within { outline: 3px solid #795534; outline-offset: 3px; }
 .bulletin-searchbar button:focus-visible { outline: 3px solid #795534; outline-offset: 3px; }
 .bulletin-sticky-search #tools, .bulletin-sticky-search #ranking, .bulletin-sticky-search #stats, .bulletin-sticky-search #blog, .bulletin-sticky-search [data-tour=tools-grid] { scroll-margin-top: var(--search-scroll-offset, 110px) !important; }
+/* ── 進站提示：讓訪客一眼看到可以從這裡找工具（BulletinSearchBar 的 attention 狀態） ── */
+/* 流光外框用 z-index:-1 畫在白色搜尋框「後面」（疊在 sticky 搜尋列自己的堆疊層），只露出外圍 8px，所以表單不能設 isolation */
+.bulletin-searchbar__icon { font-size: 18px; }
+.bulletin-searchbar__shine { position: absolute; inset: 0; border-radius: 10px; overflow: hidden; pointer-events: none; z-index: 0; }
+.bulletin-searchbar__form > :not(.bulletin-searchbar__shine) { position: relative; z-index: 1; }
+.bulletin-searchbar__form > .bulletin-searchbar__hint { position: absolute; }
+@property --search-ring-angle { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+.is-attention .bulletin-searchbar__form { background: #fff !important; box-shadow: 4px 4px 0 rgba(0,0,0,.25), 0 0 22px 4px rgba(234,138,62,.55) !important; }
+.is-attention .bulletin-searchbar__form::before { content: ''; position: absolute; inset: -8px; border-radius: 18px; z-index: -1; background: conic-gradient(from var(--search-ring-angle), #ea6a1e, #ffc21a, #ff4f7b, #2fa8e8, #3fb950, #ea6a1e); animation: search-ring-spin 3s linear infinite; }
+.is-attention--calm .bulletin-searchbar__form::before { animation-duration: 8s; opacity: .75; }
+.is-attention--strong .bulletin-searchbar__form::after { content: ''; position: absolute; inset: -8px; border-radius: 18px; border: 3px solid #ea8a3e; pointer-events: none; animation: search-ring-pulse 1.6s ease-out infinite; }
+.is-attention .bulletin-searchbar__shine::after { content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 38%; background: linear-gradient(100deg, transparent, rgba(255,242,122,.75), transparent); transform: translateX(-120%); animation: search-shine 3.2s ease-in-out infinite; }
+.is-attention--calm .bulletin-searchbar__shine::after { animation-duration: 6s; }
+.is-attention input[type=search]::placeholder { color: #a5521a; font-weight: 700; opacity: 1; }
+.is-attention .bulletin-searchbar__submit { background: #ea8a3e; border: 2px solid #1a1a1a; box-shadow: 2px 2px 0 rgba(0,0,0,.3); }
+.is-attention--strong .bulletin-searchbar__icon { display: inline-block; animation: search-icon-wiggle 1.6s ease-in-out infinite; }
+.bulletin-searchbar__hint { top: calc(100% + 14px); left: 18px; z-index: 2; border: 2px solid #1a1a1a; border-radius: 6px; background: #fff27a; color: #1a1a1a; padding: 8px 14px; font-size: 14px; font-weight: 900; font-family: inherit; white-space: nowrap; cursor: pointer; box-shadow: 3px 3px 0 rgba(0,0,0,.3); animation: search-hint-bob 1.4s ease-in-out infinite; }
+.bulletin-searchbar__hint::before { content: ''; position: absolute; top: -9px; left: 22px; width: 14px; height: 14px; background: #fff27a; border-left: 2px solid #1a1a1a; border-top: 2px solid #1a1a1a; transform: rotate(45deg); }
+@keyframes search-ring-spin { to { --search-ring-angle: 360deg; } }
+@keyframes search-ring-pulse { 0% { opacity: .9; transform: scale(1); } 100% { opacity: 0; transform: scale(1.03, 1.45); } }
+@keyframes search-shine { 0%, 35% { transform: translateX(-120%); } 75%, 100% { transform: translateX(300%); } }
+@keyframes search-icon-wiggle { 0%, 60%, 100% { transform: rotate(0); } 70% { transform: rotate(-16deg) scale(1.15); } 85% { transform: rotate(12deg) scale(1.15); } }
+@keyframes search-hint-bob { 0%, 100% { transform: translateY(0) rotate(-1.5deg); } 50% { transform: translateY(-5px) rotate(-1.5deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .is-attention .bulletin-searchbar__form::before, .is-attention .bulletin-searchbar__form::after, .is-attention .bulletin-searchbar__shine::after, .bulletin-searchbar__icon, .bulletin-searchbar__hint { animation: none !important; }
+  .is-attention .bulletin-searchbar__form::after, .is-attention .bulletin-searchbar__shine::after { display: none; }
+}
+@media (max-width: 600px) { .bulletin-searchbar__hint { left: 8px; font-size: 13px; padding: 7px 11px; } }
 @media (max-width: 600px) { .bulletin-searchbar__label { display: none; } .bulletin-searchbar { padding-top: 10px; padding-bottom: 10px; } .bulletin-searchbar__row { gap: 0; } .bulletin-searchbar__submit { padding: 10px 12px; } .bulletin-searchbar input[type=search] { font-size: 16px !important; } }

@@ -9,8 +9,25 @@ interface Props {
   onSearchSubmit?: () => void;
 }
 
+// 輪播在輸入框內的關鍵字範例：都是工具標題／描述真的找得到的詞（2026-11-03 核對各有 1～27 個結果）
+const EXAMPLE_KEYWORDS = ['投票', '注音', '文字雲', '閱讀', '抽籤', '評語', 'QR', '英文', '遊戲', '預約'];
+const DEFAULT_PLACEHOLDER = '搜尋教育工具名稱或描述…';
+const SEEN_KEY = 'akai-search-noticed';
+const STRONG_MS = 12000; // 進站前 12 秒強提示（流光外框＋光圈＋便利貼），之後轉為柔和外框
+
+function hasNoticedSearch() {
+  try { return sessionStorage.getItem(SEEN_KEY) === '1'; } catch { return false; }
+}
+
+function prefersReducedMotion() {
+  return typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+}
+
 /**
  * 公佈欄風格搜尋列 — 便條紙夾在膠帶下
+ *
+ * 進站時用流光外框、脈動光圈、便利貼提示與輪播關鍵字，讓訪客一眼知道可以從這裡找工具；
+ * 點進搜尋框或開始輸入就停止（同一個分頁工作階段內不再出現）。
  */
 export const BulletinSearchBar = forwardRef<HTMLInputElement, Props>(function BulletinSearchBar(
   { searchQuery, onSearchChange, resultCount, totalCount, onSearchSubmit },
@@ -20,6 +37,14 @@ export const BulletinSearchBar = forwardRef<HTMLInputElement, Props>(function Bu
   const [isComposing, setIsComposing] = useState(false);
   const pendingInputScroll = useRef(false);
   const inputScrollTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // 'strong' → 'calm' → 'off'；已經用過搜尋的分頁直接 'off'
+  const [attention, setAttention] = useState<'strong' | 'calm' | 'off'>(() => (hasNoticedSearch() ? 'off' : 'strong'));
+  const [isFocused, setIsFocused] = useState(false);
+  const [placeholder, setPlaceholder] = useState(DEFAULT_PLACEHOLDER);
+  const markNoticed = () => {
+    setAttention('off');
+    try { sessionStorage.setItem(SEEN_KEY, '1'); } catch { /* 私密模式等情況下不記錄 */ }
+  };
   const cancelInputScroll = () => {
     if (inputScrollTimer.current !== null) {
       clearTimeout(inputScrollTimer.current);
@@ -45,6 +70,41 @@ export const BulletinSearchBar = forwardRef<HTMLInputElement, Props>(function Bu
   }, [searchQuery, isComposing, onSearchSubmit]);
 
   useEffect(() => {
+    if (attention !== 'strong') return;
+    const timer = setTimeout(() => setAttention('calm'), STRONG_MS);
+    return () => clearTimeout(timer);
+  }, [attention]);
+
+  // 輸入框內逐字打出「試試輸入：投票」等範例；聚焦、已有文字或偏好減少動態時改用固定文字
+  useEffect(() => {
+    if (isFocused || searchQuery) {
+      setPlaceholder(DEFAULT_PLACEHOLDER);
+      return;
+    }
+    if (prefersReducedMotion()) {
+      setPlaceholder(`輸入關鍵字找工具，例如：${EXAMPLE_KEYWORDS.slice(0, 3).join('、')}…`);
+      return;
+    }
+    let word = 0;
+    let chars = 0;
+    let timer: ReturnType<typeof setTimeout>;
+    const tick = () => {
+      const keyword = EXAMPLE_KEYWORDS[word % EXAMPLE_KEYWORDS.length];
+      chars += 1;
+      setPlaceholder(`試試輸入：${keyword.slice(0, chars)}`);
+      if (chars < keyword.length) {
+        timer = setTimeout(tick, 160);
+      } else {
+        word += 1;
+        chars = 0;
+        timer = setTimeout(tick, 1800);
+      }
+    };
+    timer = setTimeout(tick, 600);
+    return () => clearTimeout(timer);
+  }, [isFocused, searchQuery]);
+
+  useEffect(() => {
     const bar = sectionRef.current;
     const board = bar?.closest<HTMLElement>('.bulletin-sticky-search');
     if (!bar || !board) return;
@@ -60,12 +120,13 @@ export const BulletinSearchBar = forwardRef<HTMLInputElement, Props>(function Bu
   return (
     <section
       ref={sectionRef}
-      className="bulletin-searchbar"
+      className={`bulletin-searchbar${attention === 'off' ? '' : ` is-attention is-attention--${attention}`}`}
       data-tour="search-bar"
     >
       <div className="bulletin-searchbar__row">
       <span className="bulletin-searchbar__label">🔎 搜尋工具</span>
       <form
+        className="bulletin-searchbar__form"
         role="search"
         aria-label="搜尋教育工具"
         onSubmit={(event) => {
@@ -89,12 +150,18 @@ export const BulletinSearchBar = forwardRef<HTMLInputElement, Props>(function Bu
           minWidth: 0,
         }}
       >
-        <span style={{ fontSize: 18 }}>🔍</span>
+        <span className="bulletin-searchbar__shine" aria-hidden="true" />
+        <span className="bulletin-searchbar__icon" aria-hidden="true">🔍</span>
         <input
           ref={ref}
           type="search"
           enterKeyHint="search"
           value={searchQuery}
+          onFocus={() => {
+            setIsFocused(true);
+            markNoticed();
+          }}
+          onBlur={() => setIsFocused(false)}
           onChange={(e) => {
             pendingInputScroll.current = !!e.target.value.trim();
             onSearchChange(e.target.value);
@@ -108,7 +175,7 @@ export const BulletinSearchBar = forwardRef<HTMLInputElement, Props>(function Bu
             onSearchChange(e.currentTarget.value);
             setIsComposing(false);
           }}
-          placeholder="搜尋教育工具名稱或描述…"
+          placeholder={placeholder}
           aria-label="搜尋教育工具名稱或描述"
           style={{
             flex: 1,
@@ -150,6 +217,15 @@ export const BulletinSearchBar = forwardRef<HTMLInputElement, Props>(function Bu
           </button>
         )}
         <button className="bulletin-searchbar__submit" type="submit" aria-label="查看搜尋結果">搜尋</button>
+        {attention === 'strong' && (
+          <button
+            type="button"
+            className="bulletin-searchbar__hint"
+            onClick={() => sectionRef.current?.querySelector('input')?.focus()}
+          >
+            👆 輸入關鍵字，馬上找到適合你的工具！
+          </button>
+        )}
       </form>
       </div>
 
