@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.193] - 2026-11-04 — Firestore 多分頁取消監聽不再誤報
+
+- **現象**：Sentry `JAVASCRIPT-REACT-1H`：訪客在 `/tool/61/` 同一秒記了 3 筆 `Failed to obtain primary lease for action 'Release target'`，以 error 推播。
+- **原因**：開著多個分頁時只有一個分頁能寫入本機快取（主分頁）。非主分頁取消監聽時寫不進去，SDK 會自己接住，並註明丟掉這筆紀錄可以接受；離開頁面時多個監聽同時取消，一次就有好幾筆。既有的多分頁交接過濾只認得 `Apply remote event`、`Backfill Indexes`、`Collect garbage`。
+- **修正**：`client/src/lib/sentry.ts` 的 `createFirestoreLeaseClassifier` 認得 `Release target`，一律不送進 Sentry、也不計入「60 秒內三次」的交接門檻；新增單元測試。
+
 ## [3.6.192] - 2026-11-04 — #10 班級小管家卡片與文章補齊新功能
 
 - **工具卡片**：簡介、詳細說明改寫，舊內容停在 v3.1.6／v3.12；補上班級寵物（30 種、10 成長值孵化、全班圖鑑與共同任務）、金幣兌換商店、學生寵物分享頁、安靜挑戰、定時鬧鈴、新版抽籤／分組／聯絡簿，以及「存到雲端／取回這台電腦」、首次登入教學引導與兩台電腦的自動合併。更正部署位置（GitHub Pages，不是 Firebase Hosting）與模組數（62 個 JS 模組、約 270 KB）。標籤改為 12 個，導師與科任推薦理由同步更新。

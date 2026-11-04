@@ -42,6 +42,15 @@ describe('Firestore 多分頁交接告警過濾', () => {
     expect(frequentHandoff?.message).toBe("Firestore multi-tab primary lease changed during 'Backfill Indexes'.");
   });
 
+  it('Release target 一律不送進 Sentry，也不計入交接門檻', () => {
+    const classify = createFirestoreLeaseClassifier(() => 0);
+    const release = () => ({ ...event(), message: message.replace('Apply remote event', 'Release target') });
+    for (let i = 0; i < 5; i++) expect(classify(release())).toBeNull();
+    expect(classify(event())).toBeNull();
+    expect(classify(event())).toBeNull();
+    expect(classify(event())?.level).toBe('error');
+  });
+
   it('不降級未處理例外、其他操作、其他 SDK 或真實同步錯誤', () => {
     const classify = createFirestoreLeaseClassifier();
     const inputs = [

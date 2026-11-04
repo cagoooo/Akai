@@ -28,11 +28,14 @@ type SentryEvent = import('@sentry/react').ErrorEvent;
 /** SDK 已接手的多分頁交接訊息；不匹配權限、IndexedDB 或未處理例外。 */
 export function createFirestoreLeaseClassifier(now = () => Date.now()) {
   const occurrences: number[] = [];
-  const leaseMessage = /^(?:\[[^\]\r\n]+\]\s+)?@firebase\/firestore:\s+Firestore \(\d+\.\d+\.\d+\): Failed to obtain primary lease for action '(Apply remote event|Backfill Indexes|Collect garbage)'\.$/;
+  const leaseMessage = /^(?:\[[^\]\r\n]+\]\s+)?@firebase\/firestore:\s+Firestore \(\d+\.\d+\.\d+\): Failed to obtain primary lease for action '(Apply remote event|Backfill Indexes|Collect garbage|Release target)'\.$/;
   return (event: SentryEvent): SentryEvent | null => {
     const leaseMatch = event.message?.match(leaseMessage);
     if (event.logger !== 'console' || event.exception?.values?.length || !leaseMatch) return event;
     const action = leaseMatch[1];
+    // 非主分頁取消監聽時寫不進 IndexedDB，SDK 註明丟掉這筆紀錄可接受；離開頁面時多個監聽同時取消，
+    // 一次就有好幾筆（2026-11-04 JAVASCRIPT-REACT-1H：同一秒 3 筆），不計入交接門檻
+    if (action === 'Release target') return null;
     const timestamp = now();
     while (occurrences.length && timestamp - occurrences[0] >= 60_000) occurrences.shift();
     occurrences.push(timestamp);
