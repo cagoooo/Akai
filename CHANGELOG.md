@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.194] - 2026-11-04 — App Check 持續換權杖失敗，同一頁只告警一次
+
+- **現象**：Sentry `JAVASCRIPT-REACT-1J`～`1O`：同一位台北 Mac Safari 訪客開著 `/tool/134` 沒關，App Check 換權杖每 16 分鐘回一次 401，退避從 1 分鐘拉長到 6 分鐘；訊息帶時間戳與倒數，每筆都開成新的 issue、各推播一次。
+- **原因**：1 分鐘內的短暫退避本來就略過；退避超過 1 分鐘代表持續失敗，設計上要回報，但沒有把同一頁的後續重試歸在一起。
+- **修正**：`client/src/lib/sentry.ts` 新增 `createAppCheckRetryFailingClassifier`：403／404 以外的持續失敗每頁只回報第一筆，依狀態碼歸到固定 issue（`app-check-retry-failing`），其餘略過；新增單元測試。
+
 ## [3.6.193] - 2026-11-04 — Firestore 多分頁取消監聽不再誤報
 
 - **現象**：Sentry `JAVASCRIPT-REACT-1H`：訪客在 `/tool/61/` 同一秒記了 3 筆 `Failed to obtain primary lease for action 'Release target'`，以 error 推播。

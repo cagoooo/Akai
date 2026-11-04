@@ -170,6 +170,27 @@ export function createAppCheckLockClassifier() {
 }
 
 /**
+ * App Check 換權杖一直遇到 401、5xx 等錯誤：退避超過 1 分鐘代表持續失敗，該照常回報，
+ * 但 SDK 每次重試都再記一筆，且訊息帶時間戳與倒數，Sentry 每筆各開一個 issue、各發一次告警
+ * （2026-11-04 JAVASCRIPT-REACT-1J～1M：同一台 Mac Safari 開著 /tool/134，每 16 分鐘一筆 401，退避 1→2→4→6 分鐘）。
+ * 同一頁只回報第一筆，依狀態碼歸到固定 issue；其餘略過。1 分鐘內的短暫退避已由 isAppCheckShortRetry 略過，403／404 由鎖定分類處理。
+ */
+const APP_CHECK_RETRY_FAILING = /AppCheck: (?:Requests throttled due to previous )?(\d{3}) error\. Attempts allowed again after [^(]*\(appCheck\/(?:initial-throttle|throttled)\)/;
+
+export function createAppCheckRetryFailingClassifier() {
+  let reported = false;
+  return (event: SentryEvent): SentryEvent | null => {
+    const status = eventTexts(event).map((text) => text.match(APP_CHECK_RETRY_FAILING)?.[1]).find(Boolean);
+    if (!status || status === '403' || status === '404') return event;
+    if (reported) return null;
+    reported = true;
+    event.fingerprint = ['app-check-retry-failing', status];
+    event.tags = { ...event.tags, appCheckRetryStatus: status };
+    return event;
+  };
+}
+
+/**
  * Firestore 即時連線（WebChannel）被關閉時，SDK 內部中止請求、留下沒人接的 AbortError。
  * 連線一直被切斷的網路（防毒軟體、網路過濾）上，SDK 每次重連都再記一筆
  * （2026-10-25 JAVASCRIPT-REACT-1B／1C：同一位訪客在首頁 17 分鐘記了 1000 筆）。
@@ -309,6 +330,7 @@ export function initSentry() {
       const classifyFirestoreLease = createFirestoreLeaseClassifier();
       const classifyFirestoreClockSkew = createFirestoreClockSkewClassifier();
       const classifyAppCheckLock = createAppCheckLockClassifier();
+      const classifyAppCheckRetryFailing = createAppCheckRetryFailingClassifier();
       const classifyFirestoreStreamAbort = createFirestoreStreamAbortClassifier();
       const automated = isAutomatedBrowser(navigator);
       Sentry.init({
@@ -345,6 +367,7 @@ export function initSentry() {
           if (isNetworkUnreliable() && isAbortedRequestError(hint.originalException)) return null;
           const lockChecked = classifyAppCheckLock(event);
           if (!lockChecked) return null;
+          if (!classifyAppCheckRetryFailing(lockChecked)) return null;
           if (!classifyFirestoreStreamAbort(lockChecked)) return null;
           const skewChecked = classifyFirestoreClockSkew(lockChecked);
           return skewChecked && classifyFirestoreLease(skewChecked);
