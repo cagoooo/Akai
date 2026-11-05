@@ -164,9 +164,9 @@ export const POSTS_INDEX: BlogPostMeta[] = [
   {
     "slug": "shimen-campus-128-3d-campus-exploration",
     "title": "#128 石門・心晴校園：在熟悉的走廊上，練習和同學好好相處",
-    "excerpt": "原本的校園漫遊長出了故事：跟著心晴任務幫同學解決小麻煩、用 12 個小問題認識自己，再用校園導航把去教室的路傳給家長。這篇整理可以怎麼帶進 SEL 與迎新課堂。",
+    "excerpt": "原本的校園漫遊長出了故事：跟著心晴任務幫同學解決小麻煩、用 12 個小問題認識自己，再用校園導航把去教室的路傳給家長。校園還會跟著台灣時間變成星空夜晚、教室亮燈。這篇整理可以怎麼帶進 SEL 與迎新課堂。",
     "publishedAt": "2026-10-05",
-    "readingMinutes": 6,
+    "readingMinutes": 7,
     "tags": [
       "SEL",
       "社會情緒學習",
