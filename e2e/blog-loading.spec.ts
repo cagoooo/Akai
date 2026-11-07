@@ -60,7 +60,7 @@ test('引言的襯線字型改為自架，不再向 Google 下載十幾包 Noto 
     if (/fonts\.gstatic\.com\/s\/notoseriftc/.test(url)) googleSerif.push(url);
     if (/\/fonts\/akai-serif-tc/.test(url)) selfHosted.push(url);
   });
-  await page.goto('blog/cockpit-81-info-tech-class', { waitUntil: 'domcontentloaded' });
+  await page.goto('blog/venue-46-no-more-paper-form', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('.bp-article blockquote').first()).toBeVisible();
   await expect.poll(() => selfHosted.length).toBeGreaterThan(0);
   await expect.poll(() => page.evaluate(
