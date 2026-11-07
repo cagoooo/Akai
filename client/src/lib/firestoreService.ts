@@ -196,7 +196,11 @@ export async function trackToolUsage(toolId: number): Promise<ToolStats> {
         } catch (err) {
             // App Check 沒通過時已改用本機計數；真正的原因（403、reCAPTCHA 錯誤等）由 App Check SDK 自己記錄並照常回報，
             // 這裡只是後續結果，不用 warn 以免 Sentry 重複告警（2026-10-23 JAVASCRIPT-REACT-17）
-            const log = classifyTrackFailure(err) === 'app_check' ? console.info : console.warn;
+            // 請求沒送完（小寫 internal，例如點工具後頁面跳走、分頁被切到背景）同樣只記 GA 不告警
+            // （2026-11-07 JAVASCRIPT-REACT-H 重新出現：12:09:13 預檢 204 後正式請求沒送到後端，當時後端無錯誤）；
+            // 後端真的回錯（大寫 INTERNAL、權限不足等）歸為 other，照常 warn
+            const reason = classifyTrackFailure(err);
+            const log = reason === 'app_check' || reason === 'network' ? console.info : console.warn;
             log('[trackToolUsage] callable 失敗，改用本地計數:', err);
             // 只量測、不告警：GA 事件 tool_track_failed_hidden／_visible（說明見 toolTrackFailure.ts）
             reportTrackFailure(err, { wentHidden: visibility.wentHidden(), device: context.device });

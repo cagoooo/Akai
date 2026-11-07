@@ -215,6 +215,36 @@ export function createFirestoreStreamAbortClassifier() {
   };
 }
 
+/**
+ * 瀏覽器自己的 IndexedDB 連線斷了：Mac 睡眠喚醒、分頁在背景太久、關分頁中途，瀏覽器會把資料庫程序關掉，
+ * 舊分頁接著存取就失敗，重新整理即恢復（2026-11-06／07 三則：Safari 的 Connection lost、
+ * App Check 寫不進權杖、Chrome 的 database connection is closing，分別在 /tool/134、首頁、部落格文章）。
+ * 不是站方程式錯誤，但若哪天是程式改壞，會是很多訪客同時發生；所以不略過，
+ * 同一頁只回報第一筆、固定歸到同一個 issue（Sentry 仍會累計影響人數），其餘略過。
+ */
+const BROWSER_STORAGE_LOST = [
+  /Connection to Indexed Database server lost/i,
+  /Failed to (?:write|read) token (?:to|from) IndexedDB/i,
+  /The database connection is closing/i,
+];
+
+export function isBrowserStorageLost(event: SentryEvent): boolean {
+  return eventTexts(event).some((text) => BROWSER_STORAGE_LOST.some((pattern) => pattern.test(text)));
+}
+
+export function createBrowserStorageLostClassifier() {
+  let reported = false;
+  return (event: SentryEvent): SentryEvent | null => {
+    if (!isBrowserStorageLost(event)) return event;
+    if (reported) return null;
+    reported = true;
+    event.level = 'warning';
+    event.fingerprint = ['browser-indexeddb-lost'];
+    event.tags = { ...event.tags, browserStorage: 'indexeddb-lost' };
+    return event;
+  };
+}
+
 const NETWORK_RECOVERY_GRACE_MS = 15_000;
 const SLEEP_CHECK_INTERVAL_MS = 15_000;
 // 背景分頁的計時器最慢約每分鐘執行一次，超過兩分鐘沒執行才視為裝置曾睡眠
@@ -332,6 +362,7 @@ export function initSentry() {
       const classifyAppCheckLock = createAppCheckLockClassifier();
       const classifyAppCheckRetryFailing = createAppCheckRetryFailingClassifier();
       const classifyFirestoreStreamAbort = createFirestoreStreamAbortClassifier();
+      const classifyBrowserStorageLost = createBrowserStorageLostClassifier();
       const automated = isAutomatedBrowser(navigator);
       Sentry.init({
         dsn,
@@ -369,6 +400,7 @@ export function initSentry() {
           if (!lockChecked) return null;
           if (!classifyAppCheckRetryFailing(lockChecked)) return null;
           if (!classifyFirestoreStreamAbort(lockChecked)) return null;
+          if (!classifyBrowserStorageLost(lockChecked)) return null;
           const skewChecked = classifyFirestoreClockSkew(lockChecked);
           return skewChecked && classifyFirestoreLease(skewChecked);
         },

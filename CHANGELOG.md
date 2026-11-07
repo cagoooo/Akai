@@ -2,6 +2,13 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.201] - 2026-11-07 — 瀏覽器資料庫斷線同一頁只報一次、工具計數中斷不再告警
+
+- **現象一**：11/6～11/7 三則 Google Chat 告警，都是瀏覽器的 IndexedDB 連線斷掉：Safari「Connection to Indexed Database server lost」（/tool/134）、App Check「Failed to write token to IndexedDB」（首頁，Safari）、Chrome「The database connection is closing」（部落格文章）。Mac 睡眠喚醒或分頁在背景太久，瀏覽器關掉資料庫程序，舊分頁存取就失敗，重新整理即恢復；同一個狀況換不同措辭，各開一個 issue。
+- **修正一**：`client/src/lib/sentry.ts` 新增 `createBrowserStorageLostClassifier`：同一頁只回報第一筆，降為 warning、固定指紋 `browser-indexeddb-lost`，Sentry 仍累計影響人數，若是程式改壞造成大量訪客同時發生仍看得到；其他錯誤不受影響。新增單元測試。
+- **現象二**：Sentry `JAVASCRIPT-REACT-H`（`FirebaseError: internal`）在 3.6.200 重新出現（首頁）。Cloud Logging 顯示 12:09:13 `incrementToolClick` 預檢回 204 後正式請求沒送到後端；當天 10:00 後統計與計數函式無任何 4xx／5xx。
+- **修正二**：`client/src/lib/firestoreService.ts` 的 `trackToolUsage` 失敗原因為「請求沒送完」（小寫 internal）時改記 `console.info`，照舊送 GA 量測事件、退回本機計數；後端真的回錯仍 `console.warn` 告警。
+
 ## [3.6.200] - 2026-11-07 — #133 AI 數位教學實務工作坊卡片與文章更新到 71 頁現況
 
 - **工具卡片**：簡報由 67 頁改為 71 頁；詳細說明新增「Gemini 技能」加碼單元（Gem 與技能的差別和轉換時間表、8 分鐘實作、三欄範本、驗收與備案）、課前 AI 問卷與全班統計、手機上下換頁箭頭與深淺色、Padlet 資源專區入口、管理員清除投票與文字雲；技術做法改寫為投票與問卷用匿名登入身分、每人只能改自己的答案。標籤加入「Gemini 技能」「課前 AI 問卷」。

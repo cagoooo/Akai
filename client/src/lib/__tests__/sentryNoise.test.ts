@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   createAppCheckLockClassifier,
   createAppCheckRetryFailingClassifier,
+  createBrowserStorageLostClassifier,
   createFirestoreStreamAbortClassifier,
   createUnreliableNetworkTracker,
   isAbortedRequestError,
@@ -310,6 +311,43 @@ describe('Firestore 即時連線被中止：同一頁只回報一次', () => {
       abort('https://cagoooo.github.io/Akai/assets/index-abc.js'),
       exceptionEvent('AbortError', 'The user aborted a request.'),
       exceptionEvent('FirebaseError', 'Missing or insufficient permissions.'),
+    ];
+    for (const input of others) expect(classify(input)).toBe(input);
+  });
+});
+
+describe('瀏覽器 IndexedDB 連線斷掉：同一頁只回報一次', () => {
+  // 2026-11-06／07 三則告警：Safari 睡眠喚醒、App Check 寫權杖、Chrome 關閉中的資料庫連線
+  const inputs = [
+    exceptionEvent('UnknownError', 'Connection to Indexed Database server lost. Refresh the page to try again'),
+    consoleEvent('[2026-11-06T08:10:50.822Z]  @firebase/app-check: Failed to write token to IndexedDB. Error: FirebaseError: AppCheck: Error thrown when writing to storage. Original error: Attempt to get a record from database without an in-progress transaction (appCheck/storage-set).'),
+    consoleEvent("[2026-11-07T03:07:32.900Z]  @firebase/app-check: Failed to write token to IndexedDB. Error: InvalidStateError: Failed to execute 'transaction' on 'IDBDatabase': The database connection is closing."),
+  ];
+
+  it('第一筆降為 warning 並歸到固定 issue，之後同一頁略過', () => {
+    const classify = createBrowserStorageLostClassifier();
+    const first = classify(inputs[0]);
+    expect(first?.level).toBe('warning');
+    expect(first?.fingerprint).toEqual(['browser-indexeddb-lost']);
+    expect(first?.tags?.browserStorage).toBe('indexeddb-lost');
+    expect(classify(inputs[1])).toBeNull();
+    expect(classify(inputs[2])).toBeNull();
+  });
+
+  it('每一種訊息單獨出現時都會回報第一筆', () => {
+    for (const input of inputs) {
+      const classify = createBrowserStorageLostClassifier();
+      expect(classify({ ...input })?.fingerprint).toEqual(['browser-indexeddb-lost']);
+    }
+  });
+
+  it('其他錯誤不受影響，照常回報', () => {
+    const classify = createBrowserStorageLostClassifier();
+    classify(inputs[0]);
+    const others = [
+      exceptionEvent('FirebaseError', 'Missing or insufficient permissions.'),
+      exceptionEvent('TypeError', "Cannot read properties of undefined (reading 'id')"),
+      consoleEvent('@firebase/app-check: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).'),
     ];
     for (const input of others) expect(classify(input)).toBe(input);
   });
