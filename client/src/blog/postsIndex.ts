@@ -59,15 +59,15 @@ export const POSTS_INDEX: BlogPostMeta[] = [
   {
     "slug": "ccu-ai-workshop-133-one-photo-whole-lesson",
     "title": "#133 一張課本照片，長出一整套 AI 教學：把一場師培工作坊做成會互動的簡報",
-    "excerpt": "為中正大學師培中心準備的 AI 數位教學工作坊，67 頁簡報從一張課本照片開始，走到教學駕駛艙、概念動畫與找出 AI 的錯誤；台下學員用手機丟文字雲、投票、送彈幕，還能跟著講師同步翻頁。",
+    "excerpt": "為中正大學師培中心準備的 AI 數位教學工作坊，71 頁簡報從一張課本照片開始，把助教守則存成 Gemini 技能，再走到教學駕駛艙、概念動畫與找出 AI 的錯誤；學員課前先填 AI 問卷，現場用手機丟文字雲、投票、送彈幕，還能跟著講師同步翻頁。",
     "publishedAt": "2026-10-30",
-    "readingMinutes": 6,
+    "readingMinutes": 7,
     "tags": [
       "AI 數位教學",
       "師培研習",
       "互動簡報",
       "Gemini Notebook",
-      "教學駕駛艙"
+      "Gemini 技能"
     ],
     "toolIds": [
       133,
