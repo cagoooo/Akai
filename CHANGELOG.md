@@ -2,6 +2,11 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.202] - 2026-11-07 — Facebook App 內建瀏覽器自己的腳本錯誤不再告警
+
+- **現象**：Sentry `JAVASCRIPT-REACT-21`（`Error invoking postMessage: Java object is gone`），Facebook 585 Android（Honor 手機）離開部落格文章 `/blog/class-helper-10-daily-routine` 時發生；堆疊全部在 `iabjs://navigation_performance_logger_android`（Facebook App 注入的頁面監測腳本），沒有經過站方程式碼。
+- **修正**：`client/src/lib/sentry.ts` 新增 `isInAppBrowserInjectedError`，每一層堆疊都來自 `iabjs://` 的錯誤不送進 Sentry；只要有一層是站方檔案就照常回報。新增單元測試。
+
 ## [3.6.201] - 2026-11-07 — 瀏覽器資料庫斷線同一頁只報一次、工具計數中斷不再告警
 
 - **現象一**：11/6～11/7 三則 Google Chat 告警，都是瀏覽器的 IndexedDB 連線斷掉：Safari「Connection to Indexed Database server lost」（/tool/134）、App Check「Failed to write token to IndexedDB」（首頁，Safari）、Chrome「The database connection is closing」（部落格文章）。Mac 睡眠喚醒或分頁在背景太久，瀏覽器關掉資料庫程序，舊分頁存取就失敗，重新整理即恢復；同一個狀況換不同措辭，各開一個 issue。

@@ -245,6 +245,21 @@ export function createBrowserStorageLostClassifier() {
   };
 }
 
+/**
+ * App 內建瀏覽器（Facebook、Instagram 的 Android 版）自己注入的監測腳本出錯，堆疊全是 iabjs:// 開頭，
+ * 不經過站方程式碼，站方也修不到（2026-11-07 JAVASCRIPT-REACT-21：Facebook 585 Android，
+ * 離開部落格文章時 sendBeforeUnloadMessage 回報「Java object is gone」）。
+ * 只略過「每一層堆疊都來自 iabjs://」的錯誤；只要有一層是站方檔案就照常回報。
+ */
+export function isInAppBrowserInjectedError(event: SentryEvent): boolean {
+  const values = event.exception?.values ?? [];
+  if (!values.length) return false;
+  return values.every((value) => {
+    const frames = value.stacktrace?.frames ?? [];
+    return frames.length > 0 && frames.every((frame) => /^iabjs:\/\//.test(frame.filename ?? ''));
+  });
+}
+
 const NETWORK_RECOVERY_GRACE_MS = 15_000;
 const SLEEP_CHECK_INTERVAL_MS = 15_000;
 // 背景分頁的計時器最慢約每分鐘執行一次，超過兩分鐘沒執行才視為裝置曾睡眠
@@ -392,6 +407,7 @@ export function initSentry() {
           // 移除可能含 PII 的欄位
           if (event.request?.cookies) delete event.request.cookies;
           if (isRecoverableClientNoise(event)) return null;
+          if (isInAppBrowserInjectedError(event)) return null;
           if (isAppCheckShortRetry(event)) return null;
           if (automated && isAppCheckRejection(event)) return null;
           // 例如按下「更新」後重新整理、離線或剛喚醒時，請求被瀏覽器中止或連不上，並非後端錯誤

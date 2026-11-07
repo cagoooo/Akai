@@ -9,6 +9,7 @@ import {
   isAppCheckRejection,
   isAppCheckShortRetry,
   isAutomatedBrowser,
+  isInAppBrowserInjectedError,
   isRecoverableClientNoise,
 } from '../sentry';
 
@@ -350,5 +351,29 @@ describe('瀏覽器 IndexedDB 連線斷掉：同一頁只回報一次', () => {
       consoleEvent('@firebase/app-check: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).'),
     ];
     for (const input of others) expect(classify(input)).toBe(input);
+  });
+});
+
+describe('App 內建瀏覽器自己注入的腳本出錯不送進 Sentry', () => {
+  // 2026-11-07 JAVASCRIPT-REACT-21：Facebook 585 Android 離開部落格文章時
+  const withFrames = (...filenames: string[]) => ({
+    level: 'error' as const,
+    exception: { values: [{ type: 'Error', value: 'Error invoking postMessage: Java object is gone', stacktrace: { frames: filenames.map((filename) => ({ filename })) } }] },
+  });
+
+  it('每一層堆疊都來自 iabjs:// 時略過', () => {
+    expect(isInAppBrowserInjectedError(withFrames(
+      'iabjs://navigation_performance_logger_android',
+      'iabjs://navigation_performance_logger_android',
+    ))).toBe(true);
+  });
+
+  it('只要有一層是站方檔案、沒有堆疊或不是例外，照常回報', () => {
+    expect(isInAppBrowserInjectedError(withFrames(
+      'iabjs://navigation_performance_logger_android',
+      'https://cagoooo.github.io/Akai/assets/index-abc.js',
+    ))).toBe(false);
+    expect(isInAppBrowserInjectedError(withFrames())).toBe(false);
+    expect(isInAppBrowserInjectedError(consoleEvent('Error invoking postMessage: Java object is gone'))).toBe(false);
   });
 });
