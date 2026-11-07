@@ -24,197 +24,137 @@ export interface BlogPost {
 
 const POST_81: BlogPost = {
   slug: 'cockpit-81-info-tech-class',
-  title: '#81 國小資訊科技教學駕駛艙：25 個駕駛艙 × 飛行儀表板入口，三到六年級完整資訊課程系統',
+  title: '#81 國小資訊科技教學駕駛艙：43 個教學艙 × 資優班週次專區，三到六年級到教師研習的一站式資訊課',
   excerpt:
-    '#81 不是「入口連結牆」— 是阿凱用 5 週手刻 84 個 commits、純 vanilla JS 蓋出來的「飛行員儀表板 + 25 個獨立駕駛艙」課程系統，每單元含 NotebookLM 投影片 + YouTube 自學影片 + Canvas 關卡 + 評量題 + 演講簡報模式。',
+    '#81 從 5 月的 25 個駕駛艙長成 43 個已上線教學艙：三到六年級資訊課、十週二十節的資優班「石門智繪客」週次專區，加上 3 個教師研習艙。41 個附投影簡報模式、37 個嵌入自學影片，資安、媒體識讀與生成式 AI 素養是這半年新增的主軸。',
   publishedAt: '2026-05-20',
-  readingMinutes: 6,
-  tags: ['資訊科技', '教學駕駛艙', '完整課程系統', '108 課綱', 'PWA'],
-  toolIds: [81, 80, 76],
+  readingMinutes: 7,
+  tags: ['資訊科技', '教學駕駛艙', '資優班', 'AI 素養', '媒體識讀', 'NotebookLM'],
+  toolIds: [81, 108, 118, 133],
   coverEmoji: '🛫',
   coverColor: 'blue',
-  body: `## 不是入口連結牆 — 是整個資訊課
+  body: `## 不是入口連結牆，是一整年的資訊課
 
-我第一次跟同事介紹 #81 駕駛艙時，他以為這是「**那種收藏連結的 portal page**」。
+打開 [cagoooo.github.io/it-cockpit/](https://cagoooo.github.io/it-cockpit/)，第一眼看到的是一個**飛行員儀表板**：MISSIONS、GRADES、SUBJECTS 三個儀表數字，下面是依年級排好的航線。點任何一張單元卡，就進入那個單元自己的**教學艙**（獨立網頁，有自己的視覺主題、任務、簡報與評量）。
 
-打開 [cagoooo.github.io/it-cockpit/](https://cagoooo.github.io/it-cockpit/) 看，他臉色變了 — 這不是連結牆，是**整個三到六年級資訊科技課的完整課程系統**。
-
-首頁是一個**飛行員儀表板**：
-
-\`\`\`
-COCKPIT.HORIZON · ALT 2026 / HDG NW / SPD · 25
-FLIGHT PLAN · 2026 學年課表
-MISSIONS: 25  |  GRADES: 4  |  SUBJECTS: 12
-🔴 LIVE
-\`\`\`
-
-點任一單元卡進去 → 進入該單元的**駕駛艙**（單頁 80-100KB 自製互動長頁）。
-
-## 為什麼是「駕駛艙」這個隱喻？
-
-108 課綱資訊科技強調「**學生主導 + 教師引導 + 多元素養**」。傳統做法：
-- 老師發紙本講義
-- 連到不同網站上課
-- 學生記不住網址
-
-阿凱反過來 — **每個單元 = 一個獨立駕駛艙**，學生掃進去就能：
-- 看 NotebookLM 投影片（自學閱讀）
-- 看 YouTube 自學影片（嵌入）
-- 玩 Canvas 互動關卡（每單元 4-6 個 STAGE）
-- 寫評量題（每單元 8-18 題）
-- **演講簡報模式**（lecture-slides.html）給老師上課切換
-
-\`\`\`
-[← IT COCKPIT]  ← 每駕駛艙左上角都有
-\`\`\`
-
-按 ← / → 切換、Esc 兩段式退出 — **真的是飛行員操作邏輯**。
-
-## 25 個駕駛艙覆蓋全年級
-
-### 三年級 · 資訊基礎（4 個）
-- 嗨！電腦新朋友（電腦入門）
-- Windows 電腦小尖兵（**Retro Win98 風**）
-- 中年級英文打字（QWERTY + 八手指）
-- PaGamO 國小天地世界冒險
-
-### 四年級 · AI 創作入門（3 個）
-- Canva 魔法簡報（Magic Write / BG Remover）
-- PhotoCap 圖像編輯魔法師（台灣免費影像軟體）
-- PaGamO 桃園市付費版進階
-
-### 五年級 · 程式設計（5 個）
-- 滑手機前先想一下（數位安全）
-- Scratch 動畫魔法師
-- Scratch 遊戲設計師（水果接接樂）
-- Inkscape 向量繪圖（**Risograph 雙色印刷風**）
-- micro:bit 創客小英雄（**Circuit-glow 電路霓光風**）
-
-### 六年級 · AI 與媒體素養（12 個）
-- Gemini × Canva 影片創作
-- Canva AI 魔法創作
-- AI 音樂創作師（Gemini 畢業歌曲）
-- AI 中文生圖大 PK（**196,608 種 prompt 組合**）
-- 故事生圖 Gem 機器人（Nano Banana 2）
-- **AI 假影片偵探社**（Deepfake / SIFT）
-- **假訊息偵探社**（MyGoPen / Hive / Google Lens）
-- Gemini 引導式學習（PARTS 框架）
-- AR/VR 科技穿戴（Meta Ray-Ban / Vision Pro）
-- 麥昆小車程式設計
-- Blogger × AI 創作家
-- 用 Suno 設計班級神曲
-- 痞客邦部落格（**Scrapbook 手帳風**）
-
-### 教師研習 · 師培演講（1 個）
-- A2 PaGamO 遊戲化教學（中央大學師培演講）
-
-**重點：每單元都有獨立視覺主題梗** — Retro Win98 / Circuit-glow / Risograph / Scrapbook / 暖橘奶油，**不是套模板**。
-
-<div class="callout callout--tip">
-<div class="callout__label">💡 為什麼這樣設計</div>
-
-每個駕駛艙獨立視覺主題不是炫技 — 是**讓學生視覺記憶綁定單元**。回家被家長問「今天上什麼」，學生會記得「就那個霓虹電路的」「就那個 Win98 的」，而不是「資訊課」這種模糊回答。
-
-</div>
-
-## 真實技術棧（讓工程師同事尖叫的選擇）
-
-- **零框架**：純 HTML + vanilla JS（手寫 \`el()\` createElement helper） + 內嵌 \`<style>\` CSS
-- **沒有 package.json，沒有 build step**，沒有 React / Vue / Vite
-- **Google Fonts**：Noto Sans TC + Inter Tight + JetBrains Mono（駕駛艙等寬字體）
-- **PWA**：自製 \`sw.js\`（68 行），network-first HTML + cache-first 靜態
-- **CACHE_VERSION 命名梗**：\`'2026-05-19-microbit-fix'\` — 直白記錄每次 bump 原因
-- **新版自動 polling**：前景頁面 5 分鐘 polling 一次，跳「🚀 偵測到新版」toast 後自動 reload
-- **部署**：GitHub Pages \`cagoooo.github.io/it-cockpit/\`
-- **外部嵌入**：NotebookLM 筆記 + YouTube iframe，**沒有 LLM API、沒有 Firebase、沒有任何後端**
-
-## 老師備課實際流程
-
-1. 開首頁儀表板 → 看年級導覽 chip（G3/G4/G5/G6）
-2. 點本週單元卡 → 進駕駛艙
-3. 上課：
-   - 先用 **lecture-slides.html 演講簡報模式** demo（NotebookLM 風）
-   - 切回駕駛艙做 Canvas 互動 STAGE
-   - 補上 YouTube 自學影片給學生回家複習
-4. 學生作業：駕駛艙內評量題 8-18 題
-
-## 實測效果（石門國小 5 年級 micro:bit 單元）
+這篇文章 5 月第一次寫的時候，駕駛艙是 25 個。半年後再數一次：
 
 <div class="stat-grid">
   <div class="stat-card">
-    <div class="stat-card__label">單元覆蓋年級</div>
-    <div class="stat-card__value">G3-G6 <span style="font-size:14px;color:#6b5e4a;">全年級</span></div>
-    <span class="stat-card__delta">25 個獨立駕駛艙</span>
+    <div class="stat-card__label">已上線教學艙</div>
+    <div class="stat-card__value">43 <span style="font-size:14px;color:#6b5e4a;">個</span></div>
+    <span class="stat-card__delta">另有 Tinkercad 3D 列印規劃中</span>
   </div>
   <div class="stat-card">
-    <div class="stat-card__label">學生記網址數</div>
-    <div class="stat-card__value">1 <span style="font-size:14px;color:#6b5e4a;">個</span></div>
-    <span class="stat-card__delta">vs 8 個散落平台</span>
+    <div class="stat-card__label">投影簡報模式</div>
+    <div class="stat-card__value">41 <span style="font-size:14px;color:#6b5e4a;">艙</span></div>
+    <span class="stat-card__delta">全螢幕、鍵盤或觸控翻頁</span>
   </div>
   <div class="stat-card">
-    <div class="stat-card__label">上課切換工具</div>
-    <div class="stat-card__value">0 <span style="font-size:14px;color:#6b5e4a;">次</span></div>
-    <span class="stat-card__delta">駕駛艙內全包</span>
+    <div class="stat-card__label">嵌入自學影片</div>
+    <div class="stat-card__value">37 <span style="font-size:14px;color:#6b5e4a;">艙</span></div>
+    <span class="stat-card__delta">缺課回家也能補</span>
   </div>
   <div class="stat-card">
-    <div class="stat-card__label">開發週數</div>
-    <div class="stat-card__value">5 <span style="font-size:14px;color:#6b5e4a;">週</span></div>
-    <span class="stat-card__delta">84 commits</span>
+    <div class="stat-card__label">開發紀錄</div>
+    <div class="stat-card__value">188 <span style="font-size:14px;color:#6b5e4a;">次提交</span></div>
+    <span class="stat-card__delta">2026-04-11 開張，持續更新</span>
   </div>
 </div>
 
-完整對照表：
+首頁儀表板的數字不是手打的：MISSIONS 直接數課程清單（含規劃中的 1 個，所以顯示 44），SUBJECTS 數的是不重複的主題分類。新增一個教學艙，儀表板就自己跟著變。
 
-| 指標 | 傳統做法 | 用 #81 駕駛艙 |
-|------|---------|---------|
-| 學生記網址 | 8 個（散落各平台） | **1 個**（cagoooo.github.io/it-cockpit）|
-| 老師上課切換工具 | 5-6 次 | **0 次**（駕駛艙內全包） |
-| 缺課學生回家補課 | 找不到資料 | **網址打開就完整補完** |
-| 教師研習示範 | 切多個視窗 | **演講簡報模式一鍵全程** |
-| 跨年級老師借鏡 | 各做各的 | **25 個駕駛艙互相觀摩** |
+## 教學地圖：六條航線
 
-## 老師 + 學生回饋
+### 資優班專區（1 個專區，10 個週次駕駛艙）
+- **石門智繪客：AI 創意解題**：第 3、6、9……30 週，每次連上兩節，共 10 次、20 節
 
-> 「我帶五年級 Scratch 缺課的學生，**回家自己看完 5 個 STAGE + 評量題**，下週進度直接跟上 — 第一次有這種感覺」
->
-> — 石門國小資訊老師
+### 三年級 · 資訊基礎（7 個）
+- 嗨！電腦新朋友、Windows 電腦小尖兵、英文打字、PaGamO 世界冒險
+- 🆕 網路搜查特攻隊（認識網際網路與搜尋）、AI 探索家（生活中的智慧科技）、網路好公民（說好話、交對友、想清楚再分享）
 
-> 「我在中央大學師培演講用 lecture-slides.html — **教授問我哪個工具做的，我說純 HTML 不用 build** — 全場驚」
->
-> — 阿凱老師（自述）
+### 四年級 · 數位創作與機器學習（6 個）
+- Canva 魔法簡報、PhotoCap 影像編輯、PaGamO 桃園市進階
+- 🆕 端午 AI 創作家（從封面到節慶歌曲）、Google 電子郵件與雲端硬碟、機器學習入門
 
-> 「我家小孩看『AI 假影片偵探社』看到一半跑來問我『爸爸這個真的還假的』— **教育就在這時刻發生**」
->
-> — 學生家長
+### 五年級 · 程式設計與創客（7 個上線 + 1 個規劃中）
+- 滑手機前先想一下（數位安全）、Scratch 動畫、Scratch 遊戲（水果接接樂）、Inkscape 向量繪圖、micro:bit 創客小英雄
+- 🆕 資安特攻隊（釣魚郵件偵蒐）、演算法挑戰
+- Tinkercad 3D 列印（規劃中）
 
-## 開發時間線爆速
+### 六年級 · AI 創作、媒體識讀與專題（19 個）
+- AI 創作：Gemini × Canva 影片、Canva AI、AI 音樂創作師、AI 中文生圖大 PK、故事生圖 Gem、Blogger × AI、Suno 班級神曲、🆕 畢業紀念影片 AI 一條龍
+- 媒體識讀：AI 假影片偵探社、假訊息偵探社、🆕 數位真相調查局
+- AI 素養：Gemini 引導式學習、🆕 AI 訓練師、🆕 AI 公平性與偏誤、🆕 AI 小機長（安全又負責任地使用生成式 AI）
+- 其他：AR／VR 穿戴科技、麥昆小車、痞客邦部落格、🆕 網路守門員特訓營（界線、假面、真臉）
 
-- 2026-04-11 repo 開張
-- 2026-05-19 累積 **84 個 commits / 25 個單元 / 5 週**
-- 2026-05-18 一次幫 23 個單元加上 **演講簡報模式**（lecture-slides.html）
-- Footer Powered by：**NOTEBOOKLM × CLAUDE CODE**（不掛其他工具）
-- Footer 學校網域：\`smes.tyc.edu.tw/?account=ipad\`（**石門國小**，有 commit 記錄修正過誤寫的學校名）
+### 教師研習（3 個）
+- A2 PaGamO 遊戲化教學（中央大學師培演講）
+- 🆕 AI 素養教學引導：把 AI 帶進教室的實踐指南
+- 🆕 數位素養與網路安全：守護孩子的數位生活（嵌入 NotebookLM 導讀影片與 15 頁研習簡報）
 
-## 配對工具推薦
+<div class="callout callout--tip">
+<div class="callout__label">💡 這半年長出來的主軸</div>
 
-- [#100 工具索引神器](/tool/100) — 找其他單元 / 工具的入口
-- [#80 教師會議報告集合](/tool/80) — 教師研習風格的姊妹站
-- [#11 剛好學課堂互動](/tool/11) — 駕駛艙內可嵌入做即時投票
-- [#81 國小資訊科技教學駕駛艙](/tool/81) — 本篇主角
+5 月時的重心是「用 AI 創作」：做影片、做音樂、生圖。之後新增的 17 個教學艙，有 7 個在處理另一件事：**怎麼安全、負責任地用**。資安特攻隊、網路好公民、網路守門員特訓營、數位真相調查局、AI 公平性與偏誤、AI 小機長，從三年級一路排到六年級，最後再延伸到給老師的研習艙。
+
+</div>
+
+## 資優班專區：一整套週次課程搬進駕駛艙
+
+7 月加入的「石門智繪客」是目前最完整的一區，架構是**年度總覽＋十個週次各自獨立的網址**，不會全部擠在同一頁：
+
+- **每週都配齊**：教師詳案、學生任務、NotebookLM 筆記本、投影簡報、課程影片與逐字稿
+- **NotebookLM 簡報播放器**：簡報改成逐頁圖片，翻頁時預先載入下一頁，不用下載整份 PDF
+- **逐字稿搜尋**：輸入關鍵字，直接跳到影片裡講到那句話的段落
+- **教材連結庫**：依週次、使用對象（學生／教師）與關鍵字篩選網站、影片、簡報和學習單
+- **iPad 課前檢查**：上課前一鍵檢查版本、快取、容量、圖片、影片與外部服務是否正常
+- **Day of AI 改編教材**：依學生與教師用途分流，並有獨立的教材來源與授權頁
+- **教師備忘跨裝置同步**：整個駕駛艙只有這一塊用到資料庫（Firebase），其他教學艙都是純靜態網頁
+
+## 每個教學艙裡有什麼
+
+各艙依主題組合，不是每艙都一樣，但大致是這六層：
+
+1. **課程入口**：年級、主題與學習目標
+2. **概念理解**：用國小生聽得懂的短句、圖像和生活情境說明
+3. **互動任務**：模擬器、分類、拖曳、選擇或創作活動
+4. **投影簡報**：lecture-slides 模式，全螢幕上課直接用
+5. **形成性評量**：題目、提示、重試，確認學生真的懂
+6. **延伸資源**：NotebookLM、YouTube 自學影片、Google Drive 與外部教學網站
+
+另外，每個艙的視覺主題都不一樣（Win98 復古風、電路霓光風、雙色印刷風、手帳風……）。學生回家被問「今天上什麼」，比較容易說出「那個電路發光的」，而不是只說「資訊課」。
+
+## 技術做法：還是不用打包工具
+
+- **純 HTML、CSS 與 JavaScript**，沒有 React、沒有建置步驟，GitHub Pages 直接部署
+- **自動更新**：自製 Service Worker，頁面回到前景、以及每 5 分鐘各檢查一次新版，有新版就跳提示並重新整理
+- **版本管理**：2026-09-06 起用 \`version.json\` 管版本（目前 v1.0.0）
+- **瘦身**：9 月把網站從 1.18 GB 壓到 0.55 GB，回到 GitHub Pages 1 GB 上限以內；38 個課程、73 頁的字型改成不擋畫面載入，簡報縮圖改小圖、翻頁預載
+- **自動檢查**：資優班檔案有變動時，GitHub Actions 會跑連結、版本、離線資產與瀏覽器冒煙測試
+- **AI 用在哪裡**：教材用 NotebookLM 與 Claude Code 製作；網頁本身不呼叫任何 AI 服務，學生使用不需要金鑰或帳號
+
+## 老師怎麼用
+
+1. 開首頁，選年級航線，或直接點資優班專區、教師研習
+2. 上課先開該艙的**投影簡報模式**講解
+3. 切回教學艙做互動任務，最後用形成性評量收尾
+4. 自學影片留給缺課或想複習的學生
+
+想把課堂變成比賽，可以接 [#118 資訊科技駕駛艙答題快打](/tool/118)；五年級資安單元另有獨立版本 [#108 資安特攻隊](/tool/108)；想看駕駛艙怎麼做出來，[#133 AI 數位教學實務工作坊](/tool/133) 的下午場用的就是這個案例。
 
 ## 適用對象
 
-- 國小資訊科技老師（**直接 fork 用**或當教學範本）
-- 教務組長 / 學年主任（看完整課程設計）
-- 教師研習講師（演講簡報模式即用）
-- 校長 / 主任（看 108 課綱資訊融入完整實作）
-- 教育系研究者（一線老師如何用 NotebookLM × Claude Code 打造課程系統）
+- **國小資訊科技老師**：直接拿來上課，或當成自己做教材的範本
+- **資優班老師**：參考十週二十節的週次駕駛艙架構
+- **研習講師與輔導團**：教師研習艙可以直接投影
+- **學年主任、教務處**：看三到六年級資訊課程怎麼分層銜接
 
 ## 想試試？
 
 → [前往 #81 國小資訊科技教學駕駛艙](/tool/81)
 
-第一次推薦 **從六年級「AI 假影片偵探社」進**（最熱門也最具話題性的單元），看完你會理解「教學駕駛艙」這個隱喻有多到位。
+第一次來，推薦從六年級的「**AI 小機長**」或「**數位真相調查局**」開始，最能看出這半年的新方向；想看最完整的架構，就進資優班專區。
 `,
 };
 

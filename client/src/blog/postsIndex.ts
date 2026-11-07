@@ -775,21 +775,23 @@ export const POSTS_INDEX: BlogPostMeta[] = [
   },
   {
     "slug": "cockpit-81-info-tech-class",
-    "title": "#81 國小資訊科技教學駕駛艙：25 個駕駛艙 × 飛行儀表板入口，三到六年級完整資訊課程系統",
-    "excerpt": "#81 不是「入口連結牆」— 是阿凱用 5 週手刻 84 個 commits、純 vanilla JS 蓋出來的「飛行員儀表板 + 25 個獨立駕駛艙」課程系統，每單元含 NotebookLM 投影片 + YouTube 自學影片 + Canvas 關卡 + 評量題 + 演講簡報模式。",
+    "title": "#81 國小資訊科技教學駕駛艙：43 個教學艙 × 資優班週次專區，三到六年級到教師研習的一站式資訊課",
+    "excerpt": "#81 從 5 月的 25 個駕駛艙長成 43 個已上線教學艙：三到六年級資訊課、十週二十節的資優班「石門智繪客」週次專區，加上 3 個教師研習艙。41 個附投影簡報模式、37 個嵌入自學影片，資安、媒體識讀與生成式 AI 素養是這半年新增的主軸。",
     "publishedAt": "2026-05-20",
-    "readingMinutes": 6,
+    "readingMinutes": 7,
     "tags": [
       "資訊科技",
       "教學駕駛艙",
-      "完整課程系統",
-      "108 課綱",
-      "PWA"
+      "資優班",
+      "AI 素養",
+      "媒體識讀",
+      "NotebookLM"
     ],
     "toolIds": [
       81,
-      80,
-      76
+      108,
+      118,
+      133
     ],
     "coverEmoji": "🛫",
     "coverColor": "blue"
