@@ -17,6 +17,10 @@
 
 - 25 → 43 個已上線教學艙：卡片、POST_81 與預覽圖同步正式站現況（資優班週次專區、資安與 AI 素養新單元、投影簡報 41 艙、自學影片 37 艙）
 
+### 2026-11-08 訪客計數請求沒送完不再告警 v3.6.205
+
+- 訪客計數 callable 回小寫 internal（JAVASCRIPT-REACT-V，多為 iPhone LINE）改記一般訊息、退回本地計數；後端真的回錯照常告警。
+
 ### 2026-11-07 Facebook App 內建瀏覽器自己的腳本錯誤不再告警 v3.6.202
 
 - Sentry 略過堆疊全部來自 `iabjs://`（Facebook／Instagram Android 內建瀏覽器注入腳本）的錯誤（JAVASCRIPT-REACT-21），有站方檔案的錯誤照常回報。

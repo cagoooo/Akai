@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.205] - 2026-11-08 — 訪客計數請求沒送完不再告警
+
+- **現象**：Sentry `JAVASCRIPT-REACT-V`（`FirebaseError: internal`，`增加訪客計數失敗`），2026-10-10 起 6 次、5 位訪客，最近一次 11/7 13:05 為 iPhone LINE 內建瀏覽器開 `/tool/87`；同時段 `recordPublicAnalytics` 後端無任何 4xx／5xx。
+- **原因**：和 `JAVASCRIPT-REACT-H`（工具計數）相同，請求還沒送完頁面就切走，Firebase 回小寫 `internal`；程式已退回本地計數，訪客看不到差異。
+- **修正**：`client/src/lib/firestoreService.ts` 的 `incrementVisitorCount` 失敗原因為「請求沒送完」時改記 `console.info`；後端真的回錯仍 `console.error` 告警。
+
 ## [3.6.204] - 2026-11-07 — #87 PIRLS 閱讀理解生成站 PRO 卡片與文章更新：答後講解、Chrome 擴充套件
 
 - **工具卡片 #87**：補上 2026-11 新增的 Chrome 擴充套件「PIRLS 閱讀題組小幫手」（截取畫面、讀取網頁全文、老師自備 Gemini 金鑰、一鍵送 PaGamO 批量上傳、選項預設隨機）與下載安裝頁連結；新增答後講解、多平台匯出（Wayground、Kahoot、LoiLoNote、Wordwall）、老師專用成績連結與儀表板改版。標籤加入「答後講解」「Chrome 擴充套件」「PaGamO」。
