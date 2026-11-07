@@ -1197,15 +1197,16 @@ export const POSTS_INDEX: BlogPostMeta[] = [
   },
   {
     "slug": "pirls-87-questioncraft-rewrite",
-    "title": "#87 PIRLS Pro QuestionCraft：把舊版 HTML 單檔砍掉重練成 Next.js + Cloud Functions 的閱讀素養出題神器",
-    "excerpt": "#87 PIRLS QuestionCraft 是舊版 #4 PIRLS 的完全重寫版。Next.js 15 + Gemini 2.5 Flash + Firestore，月費 < 0.25 美金的 serverless 架構，PaGamO 題組批量上傳 + 學生 QR 即時作答 + 班級儀表板一條龍。",
+    "title": "#87 PIRLS Pro QuestionCraft：從課文照片到 PaGamO 題庫一條龍，答後講解與 Chrome 擴充套件全面升級",
+    "excerpt": "#87 PIRLS QuestionCraft 是舊版 #4 PIRLS 的完全重寫版：Next.js 15 + Gemini 2.5 Flash 出四層次平衡題組，2026 年 10 月改成「答後講解」，11 月新增 Chrome 擴充套件，在任何網頁截圖或讀取全文就能出題，一鍵送進 PaGamO 批量上傳，選項順序預設隨機。",
     "publishedAt": "2026-05-21",
-    "readingMinutes": 6,
+    "readingMinutes": 8,
     "tags": [
       "PIRLS",
       "閱讀素養",
       "AI 出題",
       "PaGamO",
+      "Chrome 擴充套件",
       "形成性評量"
     ],
     "toolIds": [

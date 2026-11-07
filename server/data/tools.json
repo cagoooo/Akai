@@ -158,7 +158,7 @@
       "生成",
       "AI"
     ],
-    "detailedDescription": "「PIRLS 閱讀理解生成」是阿凱老師為國小三到六年級國語老師打造的 **PIRLS 四層次閱讀理解出題工具**，掛在 `pirlss.smes.tyc.edu.tw` 學校自訂域名上，**跟 GitHub Pages 版的 [#87 PIRLS QuestionCraft Pro](/tool/87) 是同一個 `cagoooo/pirls-questioncraft` repo 的雙部署**，專門解決「一篇文章手工出 8 題 PIRLS 平衡題組要 1.5-2 小時」的備課痛點。\n\n## 🎯 核心特色\n\n- 🤖 **AI 出 PIRLS 四層次題組** — Gemini 2.5 Flash 自動分配「訊息提取 / 直接推論 / 詮釋整合 / 評估批判」，8 題模式各 2 題、10 題模式 3/3/2/2\n- 📷 **雙輸入模式** — 拖放最多 4 張課本照片做 OCR、或直接貼文本（**支援 Ctrl+V 貼截圖**），自動壓縮到 1600px 省流量\n- 🇹🇼 **繁中 / English 雙語切換** — 同套架構直接出中英文題組，符合台灣國小到雙語教學的需求\n- 🏫 **學校信任域名** — 掛 `pirlss.smes.tyc.edu.tw` 而非 `cagoooo.github.io`，家長 LINE 群組分享不會被當釣魚連結\n- 🔗 **PaGamO 題組批量匯出** — 直接吃 PaGamO 平台範本格式，老師一鍵把題組丟上去當回家功課\n\n## 💡 設計理念\n\n阿凱用同一個 Next.js 15 + React 19 + Cloud Functions v2（Node 22）+ Gemini 2.5 Flash 的 serverless 架構，刻意**部署成兩個版本服務不同受眾**：工程師 / 社群分享走 GitHub Pages 版 #87，學校內部教師 / 家長走 Firebase Hosting + `pirlss.smes` 學校網域版。實測月費 < 0.25 美金、含 Cloudflare Turnstile + 5 RPM 速率限制 + maxInstances=10 三層成本護欄。\n\n## 🎒 適合情境\n\n國小三到六年級國語老師段考 / 平時測驗、補救教學出簡單版題組、想用 PaGamO 但懶得手動 key 題的老師、雙語實驗學校（中英文題組同時出）。**完全免費、免登入、學校網域信任度滿分**，學生掃 QR 即時作答、老師 `/dashboard` 看班級儀表板，1 小時 TTL 自動清資料兼顧隱私與成本。",
+    "detailedDescription": "「PIRLS 閱讀理解生成」是阿凱老師為國小三到六年級國語老師打造的 **PIRLS 四層次閱讀理解出題工具**，掛在 `pirlss.smes.tyc.edu.tw` 學校自訂域名上，**跟 GitHub Pages 版的 [#87 PIRLS QuestionCraft Pro](/tool/87) 是同一個 `cagoooo/pirls-questioncraft` repo 的雙部署**，專門解決「一篇文章手工出 8 題 PIRLS 平衡題組要 1.5-2 小時」的備課痛點。\n\n## 🎯 核心特色\n\n- 🤖 **AI 出 PIRLS 四層次題組** — Gemini 2.5 Flash 自動分配「訊息提取 / 直接推論 / 詮釋整合 / 評估批判」，8 題模式各 2 題、10 題模式 3/3/2/2\n- 📷 **雙輸入模式** — 拖放最多 4 張課本照片做 OCR、或直接貼文本（**支援 Ctrl+V 貼截圖**），自動壓縮到 1600px 省流量\n- 🇹🇼 **繁中 / English 雙語切換** — 同套架構直接出中英文題組，符合台灣國小到雙語教學的需求\n- 🏫 **學校信任域名** — 掛 `pirlss.smes.tyc.edu.tw` 而非 `cagoooo.github.io`，家長 LINE 群組分享不會被當釣魚連結\n- 🔗 **PaGamO 題組批量匯出** — 直接吃 PaGamO 平台範本格式，老師一鍵把題組丟上去當回家功課\n\n## 💡 設計理念\n\n阿凱用同一個 Next.js 15 + React 19 + Cloud Functions v2（Node 22）+ Gemini 2.5 Flash 的 serverless 架構，刻意**部署成兩個版本服務不同受眾**：工程師 / 社群分享走 GitHub Pages 版 #87，學校內部教師 / 家長走 Firebase Hosting + `pirlss.smes` 學校網域版。實測月費 < 0.25 美金、含 Cloudflare Turnstile + 5 RPM 速率限制 + maxInstances=10 三層成本護欄。\n\n## 🎒 適合情境\n\n國小三到六年級國語老師段考 / 平時測驗、補救教學出簡單版題組、想用 PaGamO 但懶得手動 key 題的老師、雙語實驗學校（中英文題組同時出）。**完全免費、免登入、學校網域信任度滿分**，學生掃 QR 即時作答、老師 `/dashboard` 看班級儀表板，1 小時 TTL 自動清資料兼顧隱私與成本。\n\n## 📌 2026-11 版本說明\n\n答後講解、Chrome 擴充套件「PIRLS 閱讀題組小幫手」與改版後的老師儀表板，目前先在 GitHub Pages 版 [#87 PIRLS Pro](/tool/87) 上線，`pirlss.smes` 學校網域版尚未同步；想用新功能請到 #87，擴充套件下載與安裝說明在 [cagoooo.github.io/pirls-questioncraft/extension/](https://cagoooo.github.io/pirls-questioncraft/extension/)。",
     "addedAt": "2026-02-23T15:30:46+08:00"
   },
   {
@@ -3586,15 +3586,15 @@
       ],
       "priority": 94,
       "reasons": {
-        "teacher": "可由課文或圖片自動產生 PIRLS 四層次題組，並匯出多種教學與評量格式。",
+        "teacher": "可由課文照片、文章或 Chrome 擴充套件截圖／讀取網頁全文，自動產生附答後講解的 PIRLS 四層次題組，一鍵送進 PaGamO 或匯出多種平台格式。",
         "student": "可掃描老師分享的 QR Code 線上作答，或使用學生作答 PDF 練習閱讀理解。",
         "homeroom": "可快速安排班級閱讀作業、補救教學與即時作答活動。",
-        "subject": "國語文教師可用於課文分析、素養命題與閱讀評量。"
+        "subject": "國語文教師可用於課文分析、素養命題與閱讀評量；看到好的網路文章，用擴充套件直接出題。"
       }
     },
     "title": "PIRLS 閱讀理解生成站 PRO",
-    "description": "升級版 PIRLS 閱讀理解出題平台，老師貼上課文或上傳文本，AI 依四層次（直接提取、直接推論、詮釋整合、檢驗評估）自動產生提問與答案說明，國小語文評量、補救教學、素養命題一氣呵成。",
-    "detailedDescription": "「PIRLS QuestionCraft Pro」是阿凱老師把舊版 [#4 PIRLS](/tool/4) 純 HTML 單檔站**完全砍掉重練的 serverless 重構版** — Next.js 15 + Cloud Functions + Gemini 2.5 Flash 架構，月費實測 **< 0.25 美金**。對齊 PIRLS 國際閱讀素養評量「**訊息提取 / 直接推論 / 詮釋整合 / 評估批判**」四層次。\n\n## 🎯 核心特色\n\n- 📷 **雙輸入模式** — 圖片 OCR（拖放最多 4 張、**支援 Ctrl+V 直接貼截圖**，拍課本一頁就行，自動壓縮 1600px / JPEG 0.85）或文字模式（**server-side 強制 `articleContent = input.text` 覆蓋，AI 偷改原文也沒用**）\n- 🤖 **Gemini 2.5 Flash + Genkit 編排** — Handlebars 模板做 prompt engineering + Zod schema 強制 JSON 結構，**8 題模式四層次各 2 題；10 題模式 3/3/2/2**，規定每題的 question + explanation 都要**「引用文章關鍵字」**老師可驗證\n- 📤 **6 種匯出格式（殺手鐧）** — PDF（嵌入 Noto Sans TC 6 種字重）/ Excel 題庫 / **PaGamO 單題格式** / **PaGamO 題組格式**（真的對到平台批量上傳範本）/ 站內測驗模式 / 學生作答 PDF\n- 📲 **學生 QR 即時作答** — 老師按「分享」→ Firestore 開 **1 小時 TTL 測驗連結** → 學生掃 QR 填班級座號姓名即時答 → 老師 `/dashboard/?id=xxx` 看全班成績（**隱私 + 成本雙保險**：1 小時自動清資料）\n- 🛡️ **三層成本護欄** — Cloudflare Turnstile 無感人機驗證 + 5 RPM / IP 速率限制 + Cloud Functions `maxInstances=10`（**月費 < 7 元台幣，200x 安全餘量**）\n- 👨‍🏫 **老師後台 `/admin/`** — Bearer auth + 5 RPM，看使用次數 / Gemini 花費，**LINE Messaging 每週日 21:00 自動推週報**\n\n## 💡 設計理念\n\n架構升級：舊版純 HTML 單檔 + client 端塞 API Key + 要自己掛 VM → 新版 **Next.js 15 + React 19 + Cloud Functions v2（Node 22）+ GitHub Pages**。Gemini 模型從 1.5 → 2.0 → 2.5-lite → 2.5 **一路追模型**（請參考 skill `gemini-api-integration` 避免棄用陷阱）。一篇文章出 8 題從 **1.5-2 小時手寫 → 3 分鐘 AI 自動分配**，四層次比例從憑感覺 → 嚴格 2/2/2/2 自動分配。\n\n## 🎒 適合情境\n\n阿凱 PIRLS 三件套：\n- [#4 PIRLS 閱讀理解生成](/tool/4) — 舊版（pirlss.smes Firebase Hosting 學校自訂域名）\n- [#12 PIRLS 閱讀理解網](/tool/12) — 石門國小閱推入口網\n- **#87 PIRLS Pro（本工具）** — GitHub Pages 完全 serverless 重構版\n\n適合國小三到六年級國語老師、國中國文老師（會考閱讀理解相通）、補救教學老師（出簡單版題組超快）、所有用 PaGamO 的老師（題組匯出格式直接吃）、閱讀素養課程設計研究者。**第一次用建議從「拍課本兩頁照片」開始 — 3 分鐘讓你看到完整 8 題 PIRLS 四層次題組吐出來，會回不去手寫**。配對 [#99 考試卷生圖 Studio](/tool/99) 出題後配圖一條龍。MIT 授權，cagoooo/pirls-questioncraft 開源。",
+    "description": "升級版 PIRLS 閱讀理解出題平台：上傳課文照片或貼上文章，AI 依四層次（訊息提取、直接推論、詮釋整合、評估批判）出題並附答後講解，可匯出 PaGamO、Kahoot 等平台；另有 Chrome 擴充套件，在任何網頁截圖或讀取全文就能出題，一鍵送進 PaGamO 批量上傳。",
+    "detailedDescription": "「PIRLS 閱讀理解生成站 PRO」是阿凱老師把舊版 [#4 PIRLS](/tool/4) 純 HTML 單檔站**砍掉重練的 serverless 重構版**：Next.js 15 + React 19 + Cloud Functions v2（Node 22）+ Gemini 2.5 Flash，對齊 PIRLS 國際閱讀素養評量「**訊息提取 / 直接推論 / 詮釋整合 / 評估批判**」四層次。2026 年 11 月再加上 **Chrome 擴充套件「PIRLS 閱讀題組小幫手」**，從看到一篇好文章到題目進 PaGamO 題庫一條龍。\n\n## 🎯 核心特色\n\n- 📷 **雙輸入模式** — 上傳最多 4 張課本照片（**支援 Ctrl+V 直接貼截圖**，自動壓縮、最大 1600px）或直接貼上文章；文字模式由伺服器把原文放回，**AI 改不了原文**\n- 🤖 **四層次平衡出題** — 8 題模式四層次各 2 題、10 題模式 3/3/2/2；Zod schema 強制 JSON 結構，每題都要引用文章關鍵字，老師可以驗證\n- 💡 **答後講解**（2026-10 改版）— 每題解析寫出線索在第幾段、正解的理由、其他選項為什麼錯，學生答錯也看得懂\n- 📤 **多平台匯出** — 教師 PDF（含解答）、**PaGamO 一般版／題組版**（依官方批量上傳範本，實際上傳驗證過）、Wayground、Kahoot、LoiLoNote、Wordwall 貼題準備表、學生閱讀素材 PDF、教師題庫備份\n- 📲 **學生 QR 即時作答 + 老師儀表板** — 測驗連結 1 小時自動過期；全班成績改用**老師專用連結**查看、交卷通知不含學生姓名；儀表板有分數分布、四層次雷達、各題答對率與逐題迷思分析，「需關注／優秀」人數一鍵篩出名單，可匯出 CSV\n- 🛡️ **三層成本護欄** — Cloudflare Turnstile 人機驗證 + **每人每小時最多出題 5 次** + Cloud Functions 最多 10 個執行個體\n\n## 🧩 Chrome 擴充套件「PIRLS 閱讀題組小幫手」（2026-11 新增）\n\n- 📷 **截取這個畫面** — 電子書、PDF、學習單都能截圖，自動跳到工作台框出文章範圍，按「裁切並開始出題」一步到位\n- 📖 **讀取這頁全文** — 部落格、新聞一鍵擷取正文（Mozilla Readability，自動去掉選單、廣告、留言）；也可以反白一段文字按右鍵出題\n- 🔑 **老師用自己的免費 Gemini 金鑰** — 金鑰只存在自己的電腦，不占用網站共用額度；預設最快的 Flash-Lite 模型\n- 🚀 **一鍵送到 PaGamO** — 自動打開批量上傳頁、選好題組／選擇題題型、放好檔案，老師確認後按「上傳」；**選項順序預設隨機**，學生沒辦法靠記答案位置猜題\n- 📥 **下載與圖文安裝說明**：[cagoooo.github.io/pirls-questioncraft/extension/](https://cagoooo.github.io/pirls-questioncraft/extension/)（下載 ZIP、用開發人員模式載入，有新版會在工作台提醒）\n\n## 💡 設計理念\n\n舊版純 HTML 單檔、前端塞 API Key → 新版 serverless 架構，網站版用共用後端額度並加上三層護欄；擴充套件則改成**每位老師自備免費金鑰**，用的人再多也不會互相排擠額度。一篇文章出 8 題從手寫 1.5～2 小時縮短到幾分鐘，四層次的題數分配由程式檢查。\n\n## 🎒 適合情境\n\n阿凱 PIRLS 三件套：\n- [#4 PIRLS 閱讀理解生成](/tool/4) — 學校網域部署（pirlss.smes）\n- [#12 PIRLS 閱讀理解網](/tool/12) — 石門國小閱推入口網\n- **#87 PIRLS Pro（本工具）** — GitHub Pages 版，含 Chrome 擴充套件與最新功能\n\n適合國小三到六年級國語老師、國中國文老師（會考閱讀理解題型相通）、補救教學老師、所有用 PaGamO 的老師，以及閱讀素養課程設計研究者。看到適合的繪本、新聞或電子書頁面，裝好擴充套件就能直接截圖或讀全文出題。配對 [#99 考試卷生圖 Studio](/tool/99) 出題後配圖一條龍。程式碼公開於 cagoooo/pirls-questioncraft。",
     "url": "https://cagoooo.github.io/pirls-questioncraft/",
     "icon": "BookOpen",
     "category": "reading",
@@ -3605,11 +3605,13 @@
       "閱讀理解",
       "AI 出題",
       "四層次提問",
+      "答後講解",
+      "Chrome 擴充套件",
+      "PaGamO",
       "國小語文",
       "素養命題",
       "閱讀評量",
       "補救教學",
-      "課文分析",
       "免費工具"
     ],
     "addedAt": "2026-05-04T09:40:14+08:00"

@@ -195,7 +195,7 @@
 
 - [#4 PIRLS閱讀理解生成](https://cagoooo.github.io/Akai/tool/4): 專業的閱讀理解評估工具，幫助提升學生的閱讀能力 標籤：PIRLS、閱讀理解、評估、生成、AI。 實際工具：https://pirlss.smes.tyc.edu.tw/。教學情境文章：https://cagoooo.github.io/Akai/blog/pirls-4-firebase-mirror
 - [#12 PIRLS閱讀理解網](https://cagoooo.github.io/Akai/tool/12): 完整的 PIRLS 閱讀理解資源平台 標籤：PIRLS、閱讀、理解、資源、評量。 實際工具：https://read.smes.tyc.edu.tw/smes/PIRLS/。教學情境文章：https://cagoooo.github.io/Akai/blog/reading-12-portal-page
-- [#87 PIRLS 閱讀理解生成站 PRO](https://cagoooo.github.io/Akai/tool/87): 升級版 PIRLS 閱讀理解出題平台，老師貼上課文或上傳文本，AI 依四層次（直接提取、直接推論、詮釋整合、檢驗評估）自動產生提問與答案說明，國小語文評量、補救教學、素養命題一氣呵成。 標籤：PIRLS、閱讀理解、AI 出題、四層次提問、國小語文、素養命題。 實際工具：https://cagoooo.github.io/pirls-questioncraft/。教學情境文章：https://cagoooo.github.io/Akai/blog/pirls-87-questioncraft-rewrite
+- [#87 PIRLS 閱讀理解生成站 PRO](https://cagoooo.github.io/Akai/tool/87): 升級版 PIRLS 閱讀理解出題平台：上傳課文照片或貼上文章，AI 依四層次（訊息提取、直接推論、詮釋整合、評估批判）出題並附答後講解，可匯出 PaGamO、Kahoot 等平台；另有 Chrome 擴充套件，在任何網頁截圖或讀取全文就能出題，一鍵送進 PaGamO 批量上傳。 標籤：PIRLS、閱讀理解、AI 出題、四層次提問、答後講解、Chrome 擴充套件。 實際工具：https://cagoooo.github.io/pirls-questioncraft/。教學情境文章：https://cagoooo.github.io/Akai/blog/pirls-87-questioncraft-rewrite
 
 ## 教學情境深度長文（136 篇）
 
@@ -254,7 +254,7 @@
 - [#89 教師回覆小幫手 Pro：親師訊息 1 分鐘草稿出爐，再也不怕家長半夜傳訊](https://cagoooo.github.io/Akai/blog/teacher-reply-89-pro-parent-message) (2026-05-21): #89 不是「情緒溫度計 + 三種口吻」 — 真實是 12 種情境分類（老師手選，不是 AI 判斷）+ 單一回覆 + 四種微調按鈕（再溫和 / 再正式 / 縮短 / 加細節）+ 對話截圖辨識（Gemini multimodal）。Next.js 15.2 + Genkit 1.8
 - [#83 本土語分班配對系統 v2.6：升年級重編班「舊選修語別 → 新班級座號」映射 + Levenshtein 模糊比對 + 5 種語別 16 族 7 國](https://cagoooo.github.io/Akai/blog/native-language-83-class-grouping) (2026-05-21): #83 不是「分組演算法」 — 是處理「**升年級重新編班後，舊本土語選修資料怎麼映射到新班級**」的 Excel 解析配對工具。5 種語別（閩/客/族細分 16 族/新住民細分 7 國/手語）+ Levenshtein 編輯距離=1 同長度模糊比對 + 6 種狀態警示 + 5 
 - [#11 剛好學 Akailao v3.8.9：九大互動模式 + 拍照 AI 出 PIRLS 題 + 老師自架 Firebase 資料自主的 Kahoot+Quizizz+Mentimeter 合體](https://cagoooo.github.io/Akai/blog/classroom-interaction-11-easy) (2026-05-21): #11 不只是「投票 + 文字雲」 — 是九大互動模式（搶答 / 繪圖板 / 是非 / 選擇 / 問答 / 互評 / **PIRLS 閱讀招牌** / 排序 / 配對）合體 SaaS。234 KB 單檔 Akailao v3.8.9 + Gemini 2.5 Flash 拍課本自
-- [#87 PIRLS Pro QuestionCraft：把舊版 HTML 單檔砍掉重練成 Next.js + Cloud Functions 的閱讀素養出題神器](https://cagoooo.github.io/Akai/blog/pirls-87-questioncraft-rewrite) (2026-05-21): #87 PIRLS QuestionCraft 是舊版 #4 PIRLS 的完全重寫版。Next.js 15 + Gemini 2.5 Flash + Firestore，月費 < 0.25 美金的 serverless 架構，PaGamO 題組批量上傳 + 學生 QR 即時作答
+- [#87 PIRLS Pro QuestionCraft：從課文照片到 PaGamO 題庫一條龍，答後講解與 Chrome 擴充套件全面升級](https://cagoooo.github.io/Akai/blog/pirls-87-questioncraft-rewrite) (2026-05-21): #87 PIRLS QuestionCraft 是舊版 #4 PIRLS 的完全重寫版：Next.js 15 + Gemini 2.5 Flash 出四層次平衡題組，2026 年 10 月改成「答後講解」，11 月新增 Chrome 擴充套件，在任何網頁截圖或讀取全文就能出題，一
 - [#79 漢語新解：不是字典，是 AI 用魯迅 + 王爾德口吻寫的「揭露真相版」國語延伸教材](https://cagoooo.github.io/Akai/blog/words-79-sarcastic-dictionary) (2026-05-21): #79 漢語新解絕對不是查字典工具。輸入任何詞 → AI 用王爾德/魯迅/羅永浩三人格混合風格，給你一段 150 字諷刺式新解 + 水墨蓋章畫卷。國語延伸教學的批判思考神器。
 - [#97 MBTI 校園奇遇記：用 47 個 RPG 場景偷偷塞 SDG 多元議題的人格測驗](https://cagoooo.github.io/Akai/blog/mbti-97-campus-adventure-rpg) (2026-05-21): #97 MBTI 校園奇遇記不是傳統勾選題 MBTI 測驗，是 47 個校園 RPG 場景 + 12 個多元背景 NPC（客家、新住民、同志家庭、原住民…）+ 16 個結局頁。一鍵 fork 模板讓其他學校 3 分鐘自架。
 - [#94 封面接故事：用 Gemini 2.5 把 MV 封面接成 8 種風格 25 秒分鏡，再用瀏覽器 ffmpeg.wasm 串成短片](https://cagoooo.github.io/Akai/blog/music-cover-storyboard-94) (2026-05-21): #94 封面接故事是給音樂課 / 視藝課 / 媒體素養課的 AI 創作教學駕駛艙。上傳 MV → 抓封面 → AI 接 4-6 段 5 秒分鏡 → 跳 8 大 AI 影片平台產畫面 → 瀏覽器內串成完整短片。
