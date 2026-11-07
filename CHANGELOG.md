@@ -10,6 +10,7 @@
 - **客群推薦**：#87 老師、國語科推薦理由補上擴充套件。
 - **手寫長文**：POST_87 改寫為現況，新增「2026 年 11 月新增：Chrome 擴充套件」與「用之前要知道」兩節；移除查無出處的三則老師回饋引言與「改了 8 年國語」個人敘述；閱讀時間改為 8 分鐘。
 - **預覽圖**：`previews/tool_87.webp` 重拍正式站首頁（舊圖為 5 月版本）。
+- **連結修正**：`client/src/lib/resolveLink.ts` 會把「以工具網址開頭」的連結一律改寫成工具介紹頁，擴充套件下載頁 `cagoooo.github.io/pirls-questioncraft/extension/` 因此被改成 `/tool/87`。新增 `KEEP_EXTERNAL_PREFIXES` 例外清單保留原網址，並新增 `resolveLink.test.ts`。
 
 ## [3.6.203] - 2026-11-07 — #81 資訊科技教學駕駛艙卡片與文章更新到 43 個教學艙現況
 

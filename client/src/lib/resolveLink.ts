@@ -35,11 +35,24 @@ for (const [rawUrl, id] of Object.entries(TOOL_URL_MAP)) {
 }
 
 /**
+ * 工具網址底下「另外一個資源」（下載頁、安裝說明），連結要直接開原網址，
+ * 不能改寫成工具介紹頁（v3.6.204：#87 擴充套件下載頁被改寫成 /tool/87）。
+ * 比對方式同 normalizeUrl：去掉協定、結尾斜線、轉小寫，命中這個前綴就不改寫。
+ */
+const KEEP_EXTERNAL_PREFIXES = [
+  'cagoooo.github.io/pirls-questioncraft/extension',
+];
+
+/**
  * 將外部工具連結改寫為內部相對路徑，例如：https://cagoooo.github.io/bee/ -> /tool/6
  */
 export function convertExternalToolLink(href?: string): string {
   if (!href) return '';
   const normalized = normalizeUrl(href);
+
+  if (KEEP_EXTERNAL_PREFIXES.some((p) => normalized === p || normalized.startsWith(p + '/') || normalized.startsWith(p + '#') || normalized.startsWith(p + '?'))) {
+    return href;
+  }
 
   for (const [key, id] of Object.entries(NORMALIZED_MAP)) {
     // 精確匹配或是包含子路徑 (例如: key/game.html)
