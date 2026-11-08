@@ -56,7 +56,7 @@ describe('文章專屬 AI 開發提示詞', () => {
   it('新手電腦也能一路做到上線：環境檢查、下載原始碼、換成自己的雲端專案、上線確認', () => {
     const prompt = buildAgentPrompt({ slug: 'iwin-131', title: 'T', toolIds: [131] }, [iwin]);
     expect(prompt).toContain('先確認我的電腦準備好了');
-    expect(prompt).toContain('一題一題問我');
+    expect(prompt).toContain('一次只問一題');
     expect(prompt).toContain('（https://github.com/cagoooo/iwin-115-survey）下載到一個新的資料夾');
     expect(prompt).toContain('最小可用版本');
     expect(prompt).toContain('不要直接修改原作者的 repo');
@@ -76,5 +76,22 @@ describe('文章專屬 AI 開發提示詞', () => {
     const prompt = buildAgentPrompt({ slug: 'g', title: 'G', toolIds: [20] }, [googleSitesTool]);
     expect(prompt).toContain('這個工具沒有獨立原始碼，請以線上試用畫面推敲');
     expect(prompt).not.toContain('先看 README');
+  });
+
+  it('動手前先對齊概念：讀完原作品後逐題追問、複述需求，確認前不提方案也不寫程式', () => {
+    const prompt = buildAgentPrompt({ slug: 'iwin-131', title: 'T', toolIds: [131] }, [iwin]);
+    const read = prompt.indexOf('**讀懂原作品**');
+    const align = prompt.indexOf('**先跟我對齊概念，再談做法**');
+    const options = prompt.indexOf('**提出 2～3 個改良方向**');
+    expect(read).toBeGreaterThan(-1);
+    expect(align).toBeGreaterThan(read);
+    expect(options).toBeGreaterThan(align);
+    expect(prompt).toContain('舉例追問，不要自己假設');
+    expect(prompt).toContain('需不需要登入');
+    expect(prompt).toContain('做到什麼程度就算成功');
+    expect(prompt).toContain('反問我最常用的是哪一兩個');
+    expect(prompt).toContain('「我理解的需求」');
+    expect(prompt).toContain('我確認之前，不要提方案，也不要寫程式');
+    expect(prompt).toContain('11. **帶我上線**');
   });
 });
