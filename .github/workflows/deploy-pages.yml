@@ -19,7 +19,8 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    # Playwright 1.57 尚不支援 Ubuntu 26.04；固定受支援版本避免 latest 升版阻斷部署。
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
     steps:
