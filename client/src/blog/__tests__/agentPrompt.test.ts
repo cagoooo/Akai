@@ -23,21 +23,35 @@ describe('文章專屬 AI 開發提示詞', () => {
     expect(toolRepoUrl('/Akai/tool/100')).toBeNull();
   });
 
-  it('每篇提示詞含主工具、原始碼 repo、文章網址與總 repo', () => {
+  it('每篇提示詞含主工具、原始碼 repo 與文章網址', () => {
     const prompt = buildAgentPrompt({ slug: 'iwin-131', title: '#131 先看本校', toolIds: [131, 20] }, [googleSitesTool, iwin]);
     expect(prompt).toContain('#131 iWIN 兒少上網問卷結果閱讀站');
     expect(prompt).toContain('https://github.com/cagoooo/iwin-115-survey');
     expect(prompt).toContain('https://cagoooo.github.io/Akai/blog/iwin-131/');
-    expect(prompt).toContain(AKAI_REPO_URL);
-    expect(prompt).toContain('#20 外部平台工具');
     expect(prompt).toContain('石門國小');
+  });
+
+  it('只聚焦文章主角一個工具：不列其他相關工具與工具集總 repo', () => {
+    const prompt = buildAgentPrompt({ slug: 'iwin-131', title: '#131 先看本校', toolIds: [131, 20] }, [googleSitesTool, iwin]);
+    expect(prompt).not.toContain('#20 外部平台工具');
+    expect(prompt).not.toContain('可選擇性參考');
+    expect(prompt).not.toContain(AKAI_REPO_URL);
+    expect(prompt).toContain('這次只以這一個作品為參考');
+  });
+
+  it('每個步驟標題自成一行，內容換到下一行', () => {
+    const prompt = buildAgentPrompt({ slug: 'iwin-131', title: 'T', toolIds: [131] }, [iwin]);
+    expect(prompt).toContain('2. **讀懂原作品**：\n如果你能在我的電腦執行指令');
+    expect(prompt).toContain('11. **帶我上線**：\n把作品推到我的 GitHub');
+    expect(prompt).not.toMatch(/^\d+\. \*\*[^*]+\*\*：\S/m);
   });
 
   it('致謝段請改造者附上工具介紹頁連結，讓作品連回本站', () => {
     const withRepo = buildAgentPrompt({ slug: 'iwin-131', title: 'T', toolIds: [131] }, [iwin]);
-    expect(withRepo).toMatch(/頁尾註明.*https:\/\/cagoooo\.github\.io\/Akai\/tool\/131\/.*https:\/\/github\.com\/cagoooo\/iwin-115-survey/);
+    expect(withRepo).toMatch(/頁尾註明[^]*- 工具介紹頁：https:\/\/cagoooo\.github\.io\/Akai\/tool\/131\/\n- 原始碼：https:\/\/github\.com\/cagoooo\/iwin-115-survey/);
     const noRepo = buildAgentPrompt({ slug: 'g', title: 'G', toolIds: [20] }, [googleSitesTool]);
-    expect(noRepo).toMatch(/頁尾註明.*https:\/\/cagoooo\.github\.io\/Akai\/tool\/20\//);
+    expect(noRepo).toMatch(/頁尾註明[^]*- 工具介紹頁：https:\/\/cagoooo\.github\.io\/Akai\/tool\/20\//);
+    expect(noRepo).not.toContain('- 原始碼：https');
   });
 
   it('不同文章產生不同內容', () => {
@@ -47,10 +61,10 @@ describe('文章專屬 AI 開發提示詞', () => {
     expect(b).toContain('沒有獨立的 GitHub repo');
   });
 
-  it('工具目錄還沒載入時仍給出工具編號與總 repo', () => {
+  it('工具目錄還沒載入時仍給出工具編號與介紹頁', () => {
     const prompt = buildAgentPrompt({ slug: 'x', title: 'X', toolIds: [131] }, []);
     expect(prompt).toContain('#131');
-    expect(prompt).toContain(AKAI_REPO_URL);
+    expect(prompt).toContain('https://cagoooo.github.io/Akai/tool/131/');
   });
 
   it('新手電腦也能一路做到上線：環境檢查、下載原始碼、換成自己的雲端專案、上線確認', () => {
@@ -68,7 +82,7 @@ describe('文章專屬 AI 開發提示詞', () => {
   it('找不到授權時改為參考構想、自己重寫，不整段複製', () => {
     const prompt = buildAgentPrompt({ slug: 'iwin-131', title: 'T', toolIds: [131] }, [iwin]);
     expect(prompt).toContain('package.json 的 license 欄位');
-    expect(prompt).toContain('若找不到明確授權');
+    expect(prompt).toContain('**找不到明確授權時**');
     expect(prompt).toContain('不要整段複製原始碼');
   });
 
@@ -92,6 +106,6 @@ describe('文章專屬 AI 開發提示詞', () => {
     expect(prompt).toContain('反問我最常用的是哪一兩個');
     expect(prompt).toContain('「我理解的需求」');
     expect(prompt).toContain('我確認之前，不要提方案，也不要寫程式');
-    expect(prompt).toContain('11. **帶我上線**');
+    expect(prompt).toContain('11. **帶我上線**：');
   });
 });
