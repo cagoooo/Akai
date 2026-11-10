@@ -93,7 +93,7 @@ export function PageHead(props: Props) {
 
     // Schema.org SoftwareApplication：讓 Google 搜尋結果出現星星評分 + 富片段
     // applicationCategory 對應到 GoogleSearch 認可的 EducationalApplication
-    // offers price = 0 表示完全免費
+    // 價格與使用條件需逐項查證，不替所有獨立工具預設免費。
     const softwareSchema = {
       '@context': 'https://schema.org',
       '@type': 'SoftwareApplication',
@@ -105,7 +105,6 @@ export function PageHead(props: Props) {
       url,
       sameAs: tool.url,
       image: image || undefined,
-      isAccessibleForFree: true,
       educationalUse: ['teaching', 'classroom activity', 'elementary education'],
       audience: {
         '@type': 'EducationalAudience',
@@ -122,12 +121,6 @@ export function PageHead(props: Props) {
           alternateName: 'Shih Men Elementary School',
           url: 'https://www.smes.tyc.edu.tw/',
         },
-      },
-      offers: {
-        '@type': 'Offer',
-        price: '0',
-        priceCurrency: 'TWD',
-        availability: 'https://schema.org/InStock',
       },
       keywords: keywords,
       inLanguage: 'zh-TW',

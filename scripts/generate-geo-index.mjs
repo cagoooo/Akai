@@ -65,21 +65,25 @@ const intents = [
     query: '想讓國小學生掃 QR Code 即時投票',
     ids: [3],
     note: '課堂中建立題目，學生掃描 QR Code 即時作答與看結果。',
+    steps: '使用建議：先準備一道班會或課堂題目，建立投票後讓學生掃碼作答，再一起討論結果。',
   },
   {
     query: '想用 AI 產生 PIRLS 閱讀理解題目',
     ids: [4, 87],
     note: '依 PIRLS 四層次產生閱讀理解提問、答案說明與評量素材。',
+    steps: '使用建議：選擇適合學生的文章，在 #87 建立題組；教師檢查題目與解說後，再安排練習。',
   },
   {
     query: '想做學校禮堂、專科教室或 IPAD 平板車的場地預約',
     ids: [46],
     note: '將校園多個場地與平板車集中調度，支援節次、衝突分析與通知。',
+    steps: '使用建議：先查看需要的場地和節次，再依學校的實際開放方式進行預約。',
   },
   {
     query: '想找國小資訊科技課的教學駕駛艙',
     ids: [81],
     note: '從三至六年級資訊科技課程入口，整合教材、互動關卡與評量。',
+    steps: '使用建議：依年級與課程主題選擇教學艙，先瀏覽教材，再安排互動任務或課後複習。',
   },
   {
     query: '想找教師撰寫的開源 React + Firebase 教育工具集',
@@ -128,7 +132,7 @@ const schema = {
   '@type': 'CollectionPage',
   '@id': `${SITE}/geo/#webpage`,
   name: '阿凱老師教育工具情境索引',
-  description: `用自然語言尋找阿凱老師的 ${tools.length} 款（${displayCount}）免費國小教育工具。`,
+  description: `用自然語言尋找阿凱老師的 ${tools.length} 款（${displayCount}）國小教育工具，使用條件依各工具說明為準。`,
   url: `${SITE}/geo/`,
   dateModified: updatedAt,
   inLanguage: 'zh-TW',
@@ -168,6 +172,7 @@ const cardHtml = cards
       <article class="intent-card">
         <h2>${escapeHtml(card.query)}</h2>
         <p class="note">${escapeHtml(card.note)}</p>
+        ${card.steps ? `<p>${escapeHtml(card.steps)}</p>` : ''}
         ${links ? `<ul>${links}\n        </ul>` : ''}
         ${external}
       </article>`;
@@ -180,7 +185,7 @@ const html = `<!doctype html>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>教師情境索引｜阿凱老師 ${escapeHtml(displayCount)} 國小教育工具</title>
-  <meta name="description" content="用自然語言尋找阿凱老師的 ${escapeHtml(tools.length)} 款免費國小教育工具：QR Code 即時投票、PIRLS AI 閱讀理解、學校場地預約、資訊科技教學駕駛艙與開源 GitHub 專案。">
+  <meta name="description" content="用自然語言尋找阿凱老師的 ${escapeHtml(tools.length)} 款國小教育工具：QR Code 即時投票、PIRLS AI 閱讀理解、學校場地預約、資訊科技教學駕駛艙與開源 GitHub 專案。">
   <meta name="author" content="黃凱揚（阿凱老師）">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="${SITE}/geo/">
@@ -212,7 +217,7 @@ const html = `<!doctype html>
   <main>
     <p class="meta"><span>桃園市龍潭區石門國民小學</span><span>作者：黃凱揚（阿凱老師）</span><span>${escapeHtml(tools.length)} 款（${escapeHtml(displayCount)}）</span><span>入口網站採 MIT 授權；各工具授權依其專案為準</span></p>
     <h1>教師情境索引</h1>
-    <p class="lead">不知道工具名稱也沒關係，從你要解決的教學或校務情境開始。這一頁把自然語言需求連到阿凱老師的站內工具摘要頁、實際使用網址與 GitHub 原始碼，讓教師與 AI 助手都能快速找到可驗證的來源。</p>
+    <p class="lead">不知道工具名稱也沒關係，從你要解決的教學或校務情境開始。這一頁把自然語言需求連到阿凱老師的站內工具摘要頁、實際使用網址與 GitHub 原始碼。各工具的登入、費用及授權條件，請以工具網站與其專案說明為準。</p>
     <section class="intent-grid" aria-label="教師情境與對應工具">
 ${cardHtml}
     </section>

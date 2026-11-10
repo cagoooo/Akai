@@ -62,14 +62,7 @@ export function SoftwareApplicationSchema({
     url,
     applicationCategory: category || 'EducationalApplication',
     operatingSystem: 'Web Browser',
-    isAccessibleForFree: true,
     inLanguage: 'zh-TW',
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'TWD',
-      availability: 'https://schema.org/InStock',
-    },
     ...(rating && ratingCount
       ? {
           aggregateRating: {
@@ -222,15 +215,8 @@ export function ToolDetailSchema({ tool }: ToolDetailSchemaProps) {
     sameAs: tool.url,
     applicationCategory: 'EducationalApplication',
     operatingSystem: 'Web Browser',
-    isAccessibleForFree: true,
     inLanguage: 'zh-TW',
     keywords: [tool.category, ...(tool.tags || [])].join(', '),
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'TWD',
-      availability: 'https://schema.org/InStock',
-    },
     author: { '@id': `${SITE_URL}/#akai` },
   };
 
@@ -274,7 +260,7 @@ export function AllToolsSchema() {
       '@type': 'ItemList',
       '@id': `${SITE_URL}/#tools`,
       name: '阿凱老師教育工具清單',
-      description: '科技教育創新專區收錄的免費國小教育工具清單。',
+      description: '科技教育創新專區收錄的國小教育工具清單；各工具使用條件請參考其網站。',
       numberOfItems: tools.length,
       itemListElement: tools.map((tool, index) => ({
         '@type': 'ListItem',
@@ -288,7 +274,6 @@ export function AllToolsSchema() {
           sameAs: tool.url,
           applicationCategory: 'EducationalApplication',
           operatingSystem: 'Web Browser',
-          isAccessibleForFree: true,
         },
       })),
     };

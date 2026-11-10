@@ -198,7 +198,6 @@ function generateToolPageHtml(tool, relatedPosts = []) {
     url: pageUrl,
     sameAs: tool.url,
     image: imageUrl,
-    isAccessibleForFree: true,
     educationalUse: ['teaching', 'classroom activity', 'elementary education'],
     audience: {
       '@type': 'EducationalAudience',
@@ -215,12 +214,6 @@ function generateToolPageHtml(tool, relatedPosts = []) {
         alternateName: 'Shih Men Elementary School',
         url: 'https://www.smes.tyc.edu.tw/',
       },
-    },
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'TWD',
-      availability: 'https://schema.org/InStock',
     },
     keywords: ['教育工具', tool.title, '阿凱老師', '石門國小', ...(tool.tags || [])].join(','),
     inLanguage: 'zh-TW',
