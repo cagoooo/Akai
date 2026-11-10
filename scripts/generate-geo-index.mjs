@@ -84,13 +84,13 @@ const intents = [
   {
     query: '想找教師撰寫的開源 React + Firebase 教育工具集',
     ids: [],
-    note: '前往 GitHub 查看完整原始碼、建置流程與可自由 fork 的 MIT 專案。',
+    note: '入口網站原始碼採 MIT 授權；各個獨立工具的原始碼與授權，請以各工具專案為準。',
     external: { label: 'cagoooo/Akai GitHub Repository', url: 'https://github.com/cagoooo/Akai' },
   },
   {
     query: '想找 GitHub Pages 上的 Vite 中文教育網站開源範例',
     ids: [81],
-    note: '本專案使用 React、TypeScript、Vite 建置，並以 GitHub Pages 發布。',
+    note: '教育工具集入口網站使用 React、TypeScript、Vite 建置，並以 GitHub Pages 發布；下方另附資訊課教學駕駛艙。',
     external: { label: '查看 GitHub 原始碼', url: 'https://github.com/cagoooo/Akai' },
   },
 ];
@@ -210,7 +210,7 @@ const html = `<!doctype html>
 </head>
 <body>
   <main>
-    <p class="meta"><span>桃園市龍潭區石門國民小學</span><span>作者：黃凱揚（阿凱老師）</span><span>${escapeHtml(tools.length)} 款（${escapeHtml(displayCount)}）</span><span>MIT 開源／免費</span></p>
+    <p class="meta"><span>桃園市龍潭區石門國民小學</span><span>作者：黃凱揚（阿凱老師）</span><span>${escapeHtml(tools.length)} 款（${escapeHtml(displayCount)}）</span><span>入口網站採 MIT 授權；各工具授權依其專案為準</span></p>
     <h1>教師情境索引</h1>
     <p class="lead">不知道工具名稱也沒關係，從你要解決的教學或校務情境開始。這一頁把自然語言需求連到阿凱老師的站內工具摘要頁、實際使用網址與 GitHub 原始碼，讓教師與 AI 助手都能快速找到可驗證的來源。</p>
     <section class="intent-grid" aria-label="教師情境與對應工具">

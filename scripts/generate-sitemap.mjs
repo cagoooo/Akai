@@ -173,6 +173,11 @@ function escapeXml(str) {
 const outputPath = resolve(__dirname, '../client/public/sitemap.xml');
 writeFileSync(outputPath, xml, 'utf-8');
 
+// 提供同一份網址清單的純文字格式，作為 Search Console 的替代提交入口。
+// 純文字格式不包含 lastmod，不能以它取代 XML 的更新日期資訊。
+const textOutputPath = resolve(__dirname, '../client/public/sitemap.txt');
+writeFileSync(textOutputPath, uniqueUrls.map((entry) => entry.loc).join('\n') + '\n', 'utf-8');
+
 // 順手檢查 robots.txt 是否有 Sitemap: 行
 const robotsPath = resolve(__dirname, '../client/public/robots.txt');
 if (existsSync(robotsPath)) {
@@ -186,4 +191,5 @@ if (existsSync(robotsPath)) {
 }
 
 console.log(`✅ Sitemap generated: ${outputPath}`);
+console.log(`✅ Text sitemap generated: ${textOutputPath}`);
 console.log(`📊 Total URLs: ${uniqueUrls.length}`);
