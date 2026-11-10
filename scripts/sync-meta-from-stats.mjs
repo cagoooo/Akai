@@ -50,9 +50,9 @@ const displayCount = `${bucket}+`;
 const blogPostCount = countBlogPosts();
 const ogImageAbsolute = stats.ogImageAbsolute;
 
-const organizationDescription = `桃園市龍潭區石門國民小學阿凱老師打造的教育工具專區，目前收錄 ${toolCount} 款（${displayCount}）國小教育科技工具，涵蓋課堂互動、AI 教案、閱讀評量、語文寫作、教育遊戲、行政自動化、親師溝通。所有工具皆為 MIT 開源、永久免費、無需註冊。`;
-const personDescription = `桃園市龍潭區石門國民小學資訊組長，自 2024 年起獨立開發 ${toolCount} 款（${displayCount}）MIT 開源的國小教育工具${blogPostCount ? `，並撰寫 ${blogPostCount} 篇教學情境深度長文` : ''}。技術棧：React 18 + TypeScript + Vite + Tailwind + Firebase + Edge TTS + Remotion。`;
-const websiteDescription = `${toolCount} 款（${displayCount}）國小教育工具 · ${blogPostCount || '100+'} 篇教學情境長文 · MIT 開源永久免費`;
+const organizationDescription = `桃園市龍潭區石門國民小學阿凱老師打造的教育工具專區，目前收錄 ${toolCount} 款（${displayCount}）國小教育科技工具，涵蓋課堂互動、AI 教案、閱讀評量、語文寫作、教育遊戲與校務行政。入口網站採 MIT 授權；各工具授權及使用條件依其說明為準。`;
+const personDescription = `桃園市龍潭區石門國民小學資訊組長黃凱揚（阿凱老師），開發並整理 ${toolCount} 款（${displayCount}）國小教育工具${blogPostCount ? `，並撰寫 ${blogPostCount} 篇教學情境文章` : ''}。各工具的授權與使用條件依各專案說明為準。`;
+const websiteDescription = `${toolCount} 款（${displayCount}）國小教育工具 · ${blogPostCount || '100+'} 篇教學情境文章 · 入口網站採 MIT 授權`;
 
 console.log(`📊 工具數：${toolCount} → 顯示「${displayCount}」`);
 console.log(`📝 部落格文章：${blogPostCount || '未讀取'} 篇`);
