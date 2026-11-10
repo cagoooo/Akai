@@ -3540,7 +3540,7 @@ React 19 + Vite 7 + 自製 CSS（Aurora 漸層 + Glassmorphism）+ Firebase 全�
 
 - **分類**：實用工具
 - **科技教育專區工具頁**：https://cagoooo.github.io/Akai/tool/100
-- **實際工具網址**：https://cagoooo.github.io/Akai/Akai/tool/100
+- **實際工具網址**：https://cagoooo.github.io/Akai/tool/100
 - **教學情境文章**：https://cagoooo.github.io/Akai/blog/milestone-100-tools-achieved
 - **標籤**：工具索引, 智能推薦, 100 工具達成, AI 助手, 破百慶祝, fuse.js, 模糊比對, 教學情境推薦
 

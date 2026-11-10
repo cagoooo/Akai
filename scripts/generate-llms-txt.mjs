@@ -28,6 +28,11 @@ const OUT_FULL = resolve(ROOT, 'client/public/llms-full.txt');
 
 const SITE = 'https://cagoooo.github.io/Akai';
 
+// 以網址規則解析相對路徑，避免 /Akai/... 被重複接上 /Akai。
+function actualToolUrl(url) {
+  return new URL(url, `${SITE}/`).href;
+}
+
 const CATEGORY_LABELS = {
   communication: '親師溝通',
   teaching: '教學設計',
@@ -106,7 +111,7 @@ function renderIntentIndex(tools, posts, stats) {
   const actualLink = (id) => {
     const tool = byId.get(id);
     if (!tool?.url) return '';
-    return tool.url.startsWith('/') ? `${SITE}${tool.url}` : tool.url;
+    return actualToolUrl(tool.url);
   };
   const postLink = (slug) => `${SITE}/blog/${slug}`;
   const milestonePost = posts.find((post) => /100 工具達成/.test(`${post.title} ${post.slug}`));
@@ -192,7 +197,7 @@ function main() {
     const list = byCategory[cat].sort((a, b) => a.id - b.id);
     out += `### ${CATEGORY_LABELS[cat] || cat}（${list.length} 款）\n\n`;
     for (const t of list) {
-      const toolUrl = t.url.startsWith('/') ? `${SITE}${t.url}` : t.url;
+      const toolUrl = actualToolUrl(t.url);
       const detailUrl = `${SITE}/tool/${t.id}`;
       const post = primaryPostByToolId.get(t.id);
       const articleUrl = post ? `${SITE}/blog/${post.slug}` : `${SITE}/blog/tool-${t.id}`;
@@ -247,7 +252,7 @@ function main() {
   // 工具完整內容（按 ID 順序，便於引用）
   full += `# 工具集完整內容（${tools.length} 款）\n\n`;
   for (const t of tools.sort((a, b) => a.id - b.id)) {
-    const url = t.url.startsWith('/') ? `${SITE}${t.url}` : t.url;
+    const url = actualToolUrl(t.url);
     const detailUrl = `${SITE}/tool/${t.id}`;
     const post = primaryPostByToolId.get(t.id);
     const articleUrl = post ? `${SITE}/blog/${post.slug}` : `${SITE}/blog/tool-${t.id}`;
