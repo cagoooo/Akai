@@ -218,6 +218,7 @@ ${cardHtml}
     </section>
     <section class="sources" aria-labelledby="source-title">
       <h2 id="source-title">機器可讀的完整來源</h2>
+      <p>本教育工具入口已收錄於<a href="https://code.gov.tw/publicCodes/codeDetail?id=202610081419205601&amp;lang=zh-TW" target="_blank" rel="noopener noreferrer">數位發展部公共程式平台</a>，提供部門為桃園市龍潭區石門國民小學。入口網站的 MIT 授權不代表所有獨立工具都採相同授權。</p>
       <p><a href="${SITE}/llms.txt">llms.txt 索引版</a>（工具標題、情境與網址） · <a href="${SITE}/llms-full.txt">llms-full.txt 完整版</a>（詳細描述與文章） · <a href="${SITE}/sitemap.xml">sitemap.xml</a>（所有可索引頁面） · <a href="https://github.com/cagoooo/Akai" target="_blank" rel="noopener noreferrer">GitHub 原始碼</a></p>
     </section>
   </main>

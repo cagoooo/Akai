@@ -6,7 +6,8 @@
 **站點**：https://cagoooo.github.io/Akai/  
 **作者**：黃凱揚（阿凱老師）／GitHub: cagoooo<br>
 **學校**：桃園市龍潭區石門國民小學（smes.tyc.edu.tw）  
-**授權**：MIT License  
+**入口網站授權**：MIT License；個別工具請查閱各自授權<br>
+**公共程式平台收錄**：https://code.gov.tw/publicCodes/codeDetail?id=202610081419205601&lang=zh-TW（提供部門：桃園市龍潭區石門國民小學）<br>
 
 ## 教師情境快速索引
 

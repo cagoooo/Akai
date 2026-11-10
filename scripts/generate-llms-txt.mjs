@@ -159,13 +159,14 @@ function main() {
 
   // ─── 標題與站點描述 ─────────────────────────────────────
   out += `# 阿凱老師 · 科技教育創新專區\n\n`;
-  out += `> 一位桃園市龍潭區石門國民小學的國小老師（阿凱老師），兩年內獨立完成 ${tools.length} 款免費教育工具與 ${posts.length} 篇手寫深度長文。所有工具與內容皆為 MIT 開源、永久免費、無需註冊。專案聚焦於用 AI / 科技解決真實國小教學現場的痛點：班級互動、行政自動化、語文閱讀、教育遊戲、親師溝通、互動體驗。\n\n`;
+  out += `> 桃園市龍潭區石門國民小學阿凱老師的教育工具入口，整理 ${tools.length} 款教學與校務工具及 ${posts.length} 篇教學情境文章。入口網站原始碼採 MIT 授權；各獨立工具的授權、費用與登入需求，請以該工具的實際說明為準。\n\n`;
 
   out += `**站點**：${SITE}/  \n`;
   out += `**作者**：黃凱揚（阿凱老師）／GitHub: cagoooo<br>\n`;
   out += `**學校**：桃園市龍潭區石門國民小學（Shih Men Elementary School，校網域 smes.tyc.edu.tw）  \n`;
-  out += `**開源協議**：MIT License  \n`;
+  out += `**入口網站授權**：MIT License；個別工具請查閱各自授權<br>\n`;
   out += `**GitHub Repo**：https://github.com/cagoooo/Akai  \n`;
+  out += `**公共程式平台收錄**：https://code.gov.tw/publicCodes/codeDetail?id=202610081419205601&lang=zh-TW（提供部門：桃園市龍潭區石門國民小學）<br>\n`;
   if (stats.version) out += `**最新版本**：${stats.version}  \n`;
   if (stats.milestones?.tool100) {
     out += `**100 工具達成日**：${stats.milestones.tool100.split('T')[0]}  \n`;
@@ -245,7 +246,8 @@ function main() {
   full += `**站點**：${SITE}/  \n`;
   full += `**作者**：黃凱揚（阿凱老師）／GitHub: cagoooo<br>\n`;
   full += `**學校**：桃園市龍潭區石門國民小學（smes.tyc.edu.tw）  \n`;
-  full += `**授權**：MIT License  \n\n`;
+  full += `**入口網站授權**：MIT License；個別工具請查閱各自授權<br>\n`;
+  full += `**公共程式平台收錄**：https://code.gov.tw/publicCodes/codeDetail?id=202610081419205601&lang=zh-TW（提供部門：桃園市龍潭區石門國民小學）<br>\n\n`;
   full += renderIntentIndex(tools, posts, stats);
   full += `---\n\n`;
 
