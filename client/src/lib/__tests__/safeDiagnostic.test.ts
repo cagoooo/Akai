@@ -45,4 +45,22 @@ describe('瀏覽器診斷資訊邊界', () => {
     expect(clean.customData).toBeUndefined();
     expect(clean.stack).toContain('safeDiagnostic.test');
   });
+
+  it('沙箱瀏覽器把新建 Error 鎖成不可擴充時，不再丟錯、改回傳清洗過的純物件', () => {
+    const NativeError = globalThis.Error;
+    const failure = new NativeError('載入失敗 https://example.com/a?token=secret');
+    let clean: { name: string; message: string };
+    try {
+      const FrozenError = function FrozenError(message?: string) {
+        return Object.preventExtensions(new NativeError(message));
+      };
+      FrozenError.prototype = NativeError.prototype;
+      globalThis.Error = FrozenError as unknown as ErrorConstructor;
+      clean = sanitizedDiagnosticError(failure) as { name: string; message: string };
+    } finally {
+      globalThis.Error = NativeError;
+    }
+    expect(clean.name).toBe('Error');
+    expect(clean.message).toBe('載入失敗 https://example.com/a');
+  });
 });

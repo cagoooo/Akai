@@ -28,10 +28,16 @@ export function sanitizedDiagnosticError(error: unknown): unknown {
   // 一般原生錯誤維持原物件，避免影響既有例外辨識與網路雜訊篩選。
   if (message === error.message && stack === error.stack && name === error.name && !extraProperties && code === rawCode) return error;
   const clean = new Error(message) as Error & { code?: string };
-  clean.name = name;
-  clean.stack = stack;
-  if (code) clean.code = code;
-  return clean;
+  try {
+    clean.name = name;
+    clean.stack = stack;
+    if (code) clean.code = code;
+    return clean;
+  } catch {
+    // 有些沙箱瀏覽器把新建的 Error 鎖成不可擴充，指定 name 就丟錯；記錄診斷本身不能再丟錯
+    // （2026-11-11 JAVASCRIPT-REACT-28：記錄收藏載入失敗時反而變成未處理的 promise rejection）
+    return { name, message, stack, ...(code ? { code } : {}) };
+  }
 }
 
 export function safeDiagnostic(label: string, error: unknown, level: 'warn' | 'error' = 'warn'): void {

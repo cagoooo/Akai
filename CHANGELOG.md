@@ -2,6 +2,16 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.210] - 2026-11-11 — 爬蟲沙箱瀏覽器的 Firestore 錯誤不再告警
+
+- **現象**：Sentry `JAVASCRIPT-REACT-23`～`29` 共 7 則，2026-11-11 14:50 的 10 秒內集中出現：`Cannot add property code/name, object is not extensible`、Firestore `INTERNAL UNHANDLED ERROR`、`INTERNAL ASSERTION FAILED (ID: b815)`，以及 Firestore 的 iOS 12.2 提醒。每則只有 1 次，全來自 Council Bluffs（Google Cloud 機房）、時區 `Etc/Unknown`，UA 在 Edge 138 與 Chrome 73 / iOS 12.2 之間切換。
+- **原因**：爬蟲用的沙箱瀏覽器把新建的 Error 鎖成不可擴充，Firestore 建立自己的錯誤時指定 `code` 就失敗並連鎖觸發內部斷言；`safeDiagnostic` 重建錯誤時指定 `name` 也失敗，記錄「收藏載入失敗」反而變成未處理的 promise rejection。真人瀏覽器不會發生。
+- **修正**：
+  - `client/src/lib/sentry.ts` 新增 `isFrozenErrorSandbox`：只略過「時區 `Etc/Unknown` 且是不可擴充錯誤」的事件，真人時區遇到同樣錯誤照常回報；`RECOVERABLE_CLIENT_NOISE` 加入 Firestore 的 iOS 12.2 提醒。
+  - `client/src/lib/safeDiagnostic.ts` 重建錯誤失敗時改回傳清洗過的純物件，記錄診斷本身不再丟錯。
+  - 新增單元測試：沙箱事件略過、真人時區照常回報、iOS 12.2 提醒略過、不可擴充 Error 下 `sanitizedDiagnosticError` 不丟錯。
+- Sentry 上 7 則 issue 已標為 ignored（until escalating）。
+
 ## [3.6.209] - 2026-11-11 — #133 AI 數位教學實務工作坊卡片與文章更新到 72 頁
 
 - **工具卡片**：簡報由 71 頁改為 72 頁；下午場補上推薦 8 個課堂工具與介紹工具集文章左下角「🤖 複製 AI 開發提示詞」按鈕的新頁；課前問卷統計補上每人付費訂閱數分布、付費 2 個以上的比例與同時付費訂閱的組合。
