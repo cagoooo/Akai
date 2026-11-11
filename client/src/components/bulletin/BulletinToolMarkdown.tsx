@@ -1,5 +1,5 @@
 import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import remarkGfm from '@/lib/remarkGfmSafe';
 import { resolveInternalLink } from '@/lib/resolveLink';
 import { tokens } from '@/design/tokens';
 

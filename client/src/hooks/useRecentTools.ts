@@ -35,12 +35,27 @@ function saveToLocalStorage(recent: number[]): void {
     }
 }
 
-async function loadFromFirestore(uid: string): Promise<number[] | null> {
+// 多分頁時 Firestore 連線由另一個分頁代送；剛換成新的匿名身分時，那個分頁要等跨分頁同步（約 1 秒）
+// 才拿到新身分，這段期間讀自己的紀錄會被規則擋下。被拒時等身分同步後重讀一次，仍被拒才回報
+// （和 useFavorites 同一個狀況：2026-11-03 JAVASCRIPT-REACT-1E；2026-11-11 JAVASCRIPT-REACT-X 出現在這裡）。
+const PERMISSION_RETRY_DELAY_MS = 1500;
+
+function isPermissionDenied(e: unknown): boolean {
+    return (e as { code?: unknown } | null)?.code === 'permission-denied';
+}
+
+async function loadFromFirestore(
+    uid: string,
+    isCurrent: () => boolean = () => true,
+    retried = false,
+): Promise<number[] | null> {
     try {
         const { db } = await import('@/lib/firebase');
         if (!db) return null;
         const { doc, getDoc } = await import('firebase/firestore');
+        if (!isCurrent()) return null;
         const snap = await getDoc(doc(db, 'userRecentTools', uid));
+        if (!isCurrent()) return null;
         if (snap.exists()) {
             const data = snap.data();
             return Array.isArray(data.toolIds)
@@ -49,7 +64,12 @@ async function loadFromFirestore(uid: string): Promise<number[] | null> {
         }
         return [];
     } catch (e) {
-        console.warn('[useRecentTools] Firestore load 失敗:', e);
+        if (!retried && isPermissionDenied(e) && isCurrent()) {
+            await new Promise((resolve) => setTimeout(resolve, PERMISSION_RETRY_DELAY_MS));
+            if (!isCurrent()) return null;
+            return loadFromFirestore(uid, isCurrent, true);
+        }
+        if (isCurrent()) console.warn('[useRecentTools] Firestore load 失敗:', e);
         return null;
     }
 }
@@ -110,7 +130,7 @@ export function useRecentTools() {
             // 第一次合併
             if (hasMergedRef.current !== uid) {
                 try {
-                    const cloud = await loadFromFirestore(uid);
+                    const cloud = await loadFromFirestore(uid, () => !cancelled && uidRef.current === uid);
                     if (cancelled || uidRef.current !== uid) return;
                     const local = loadFromLocalStorage();
                     const merged = mergeRecent(cloud || [], local);

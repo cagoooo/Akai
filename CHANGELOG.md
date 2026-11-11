@@ -2,6 +2,13 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.211] - 2026-11-11 — 舊版 Safari 開工具介紹頁與文章不再跳錯誤畫面、最近使用工具讀取被拒先重試
+
+- **現象**：Sentry `JAVASCRIPT-REACT-2A`（`SyntaxError: Invalid regular expression: invalid group specifier name`），Safari 16.3（Mac）開 `/tool/46/`，ErrorBoundary 把整頁換成錯誤畫面。
+- **原因**：remark-gfm 內的 mdast-util-gfm-autolink-literal 把純文字 email 轉成連結時，用了「往回看」正規表示式 `(?<=…)`；Safari 16.4（iOS 16.4）以前不支援，解析 Markdown 時才丟出例外。工具介紹頁、每篇部落格文章、工具索引 AI 與文章草稿預覽都用到 remark-gfm，未更新系統的舊 iPad／Mac 都會中。
+- **修正**：新增 `client/src/lib/remarkGfmSafe.ts`：瀏覽器支援往回看就照原本的 remark-gfm；不支援時語法擴充照樣掛上，只拿掉 autolink literal 的補強轉換（建立該正規表示式的那一步）。表格、刪除線、註腳、待辦清單與網址、email 連結照常。5 個使用 remark-gfm 的元件改用相容版；`micromark-extension-gfm`、`mdast-util-gfm` 改為直接相依（版本與 remark-gfm 內附相同）。新增 4 項單元測試。
+- **JAVASCRIPT-REACT-X**（`[useRecentTools] Firestore load 失敗: Missing or insufficient permissions`，Chrome，3.6.209）：和 v3.6.187 收藏的 JAVASCRIPT-REACT-1E 同一個狀況：多分頁時新身分還沒同步到代送連線的分頁，讀自己的最近使用紀錄被規則擋下。`useRecentTools` 比照 `useFavorites`：被拒時等 1.5 秒重讀一次，仍被拒才回報；元件卸載或換身分後不重讀也不回報。新增 3 項單元測試。
+
 ## [3.6.210] - 2026-11-11 — 爬蟲沙箱瀏覽器的 Firestore 錯誤不再告警
 
 - **現象**：Sentry `JAVASCRIPT-REACT-23`～`29` 共 7 則，2026-11-11 14:50 的 10 秒內集中出現：`Cannot add property code/name, object is not extensible`、Firestore `INTERNAL UNHANDLED ERROR`、`INTERNAL ASSERTION FAILED (ID: b815)`，以及 Firestore 的 iOS 12.2 提醒。每則只有 1 次，全來自 Council Bluffs（Google Cloud 機房）、時區 `Etc/Unknown`，UA 在 Edge 138 與 Chrome 73 / iOS 12.2 之間切換。

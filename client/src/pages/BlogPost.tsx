@@ -11,7 +11,7 @@ import { LoadingProgress } from '@/components/LoadingProgress';
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import remarkGfm from '@/lib/remarkGfmSafe';
 import rehypeRaw from 'rehype-raw';
 import { HOME_CATALOGUE_QUERY_KEY, fetchHomeCatalogue } from '@/lib/toolCatalogue';
 import type { BlogPost as BlogPostType } from '@/blog/posts';

@@ -17,7 +17,7 @@ import { useQuery } from '@tanstack/react-query';
 import Fuse, { type FuseResult, type FuseResultMatch } from 'fuse.js';
 import ReactMarkdown from 'react-markdown';
 import { resolveInternalLink } from '@/lib/resolveLink';
-import remarkGfm from 'remark-gfm';
+import remarkGfm from '@/lib/remarkGfmSafe';
 import { PageHead } from '@/components/PageHead';
 import { trackEvent, logToolIndexQuery } from '@/lib/analytics';
 import { isSemanticSearchAvailable, semanticSearch } from '@/lib/embeddingSearch';

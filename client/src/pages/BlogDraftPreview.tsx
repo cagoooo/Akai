@@ -8,7 +8,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import remarkGfm from '@/lib/remarkGfmSafe';
 import rehypeRaw from 'rehype-raw';
 import { useAuth } from '@/hooks/useAuth';
 import { tokens } from '@/design/tokens';

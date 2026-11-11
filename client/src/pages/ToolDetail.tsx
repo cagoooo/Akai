@@ -11,7 +11,7 @@ import { PageHead } from '@/components/PageHead';
 import { m as motion, AnimatePresence } from 'framer-motion';
 import { useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import remarkGfm from '@/lib/remarkGfmSafe';
 import { resolveInternalLink } from '@/lib/resolveLink';
 import {
     ArrowLeft,
