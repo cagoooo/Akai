@@ -9,6 +9,7 @@ import {
   isAppCheckRejection,
   isAppCheckShortRetry,
   isAutomatedBrowser,
+  isFrozenErrorSandbox,
   isInAppBrowserInjectedError,
   isRecoverableClientNoise,
 } from '../sentry';
@@ -375,5 +376,29 @@ describe('App 內建瀏覽器自己注入的腳本出錯不送進 Sentry', () =>
     ))).toBe(false);
     expect(isInAppBrowserInjectedError(withFrames())).toBe(false);
     expect(isInAppBrowserInjectedError(consoleEvent('Error invoking postMessage: Java object is gone'))).toBe(false);
+  });
+});
+
+describe('錯誤物件被凍結的沙箱瀏覽器（爬蟲）不送進 Sentry', () => {
+  const withTimezone = <T extends object>(event: T, timezone: string) => ({ ...event, contexts: { culture: { timezone } } });
+
+  it('時區 Etc/Unknown 且是不可擴充錯誤：2026-11-11 JAVASCRIPT-REACT-24～29', () => {
+    const inputs = [
+      exceptionEvent('TypeError', 'Cannot add property code, object is not extensible'),
+      exceptionEvent('TypeError', 'Cannot add property name, object is not extensible'),
+      consoleEvent('[2026-11-11T06:50:50.619Z]  @firebase/firestore: Firestore (12.8.0): INTERNAL UNHANDLED ERROR:  TypeError: Cannot add property code, object is not extensible'),
+      exceptionEvent('Error', 'FIRESTORE (12.8.0) INTERNAL ASSERTION FAILED: Unexpected state (ID: b815) CONTEXT: {"Pc":"TypeError: Cannot add property code, object is not extensible\\n    at new mr (https://cagoooo.github.io/Akai/assets/vendor-firebase-X71Uj1rx.js:150:89)"}'),
+    ];
+    for (const input of inputs) expect(isFrozenErrorSandbox(withTimezone(input, 'Etc/Unknown'))).toBe(true);
+  });
+
+  it('真人時區的同樣錯誤、或 Etc/Unknown 的其他錯誤，照常回報', () => {
+    expect(isFrozenErrorSandbox(withTimezone(exceptionEvent('TypeError', 'Cannot add property code, object is not extensible'), 'Asia/Taipei'))).toBe(false);
+    expect(isFrozenErrorSandbox(exceptionEvent('TypeError', 'Cannot add property code, object is not extensible'))).toBe(false);
+    expect(isFrozenErrorSandbox(withTimezone(exceptionEvent('TypeError', "Cannot read properties of undefined (reading 'map')"), 'Etc/Unknown'))).toBe(false);
+  });
+
+  it('Firestore 的 iOS 12.2 提醒：2026-11-11 JAVASCRIPT-REACT-23', () => {
+    expect(isRecoverableClientNoise(consoleEvent('[2026-11-11T06:50:46.510Z]  @firebase/firestore: Firestore (12.8.0): Firestore persistence suffers from a bug in iOS 12.2 Safari that may cause your app to stop working. See https://stackoverflow.com/q/56496296/110915 for details and a potential workaround.'))).toBe(true);
   });
 });

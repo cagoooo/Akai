@@ -105,6 +105,9 @@ const RECOVERABLE_CLIENT_NOISE: readonly RegExp[] = [
   /Failed to get document because the client is offline\./,
   // App Check 連不上網路（例如電腦剛從睡眠喚醒）；fetch-status-error、throttled、reCAPTCHA 錯誤仍回報
   /\(appCheck\/fetch-network-error\)/,
+  // SDK 偵測到 iOS 12.2 時固定印出的提醒，不是錯誤；2026 年已無真人用 iOS 12.2，
+  // 實際來源是偽裝 UA 的爬蟲（2026-11-11 JAVASCRIPT-REACT-23：Chrome 73 / iOS 12.2，Council Bluffs 機房）
+  /Firestore persistence suffers from a bug in iOS 12\.2 Safari/,
 ];
 
 function eventTexts(event: SentryEvent): string[] {
@@ -260,6 +263,21 @@ export function isInAppBrowserInjectedError(event: SentryEvent): boolean {
   });
 }
 
+/**
+ * 爬蟲／掃描用的沙箱瀏覽器把新建的 Error 物件鎖成不可擴充，連 `err.code =`、`err.name =` 都會丟 TypeError：
+ * Firestore 建立自己的錯誤時失敗、接著內部斷言 b815 連鎖出錯，站方 safeDiagnostic 重建錯誤時也失敗
+ * （2026-11-11 JAVASCRIPT-REACT-24～29：10 秒內 6 則，Edge 138 與 iOS 12.2 輪流出現，
+ * 全來自 Council Bluffs 機房、時區 Etc/Unknown）。真人瀏覽器的時區都辨識得出來，
+ * 只略過「時區 Etc/Unknown 且是不可擴充錯誤」的事件；真人遇到同樣錯誤照常回報。
+ */
+const NON_EXTENSIBLE_ERROR = /Cannot add property \w+, object is not extensible/;
+
+export function isFrozenErrorSandbox(event: SentryEvent): boolean {
+  const timezone = (event.contexts?.culture as { timezone?: unknown } | undefined)?.timezone;
+  if (timezone !== 'Etc/Unknown') return false;
+  return eventTexts(event).some((text) => NON_EXTENSIBLE_ERROR.test(text));
+}
+
 const NETWORK_RECOVERY_GRACE_MS = 15_000;
 const SLEEP_CHECK_INTERVAL_MS = 15_000;
 // 背景分頁的計時器最慢約每分鐘執行一次，超過兩分鐘沒執行才視為裝置曾睡眠
@@ -408,6 +426,7 @@ export function initSentry() {
           if (event.request?.cookies) delete event.request.cookies;
           if (isRecoverableClientNoise(event)) return null;
           if (isInAppBrowserInjectedError(event)) return null;
+          if (isFrozenErrorSandbox(event)) return null;
           if (isAppCheckShortRetry(event)) return null;
           if (automated && isAppCheckRejection(event)) return null;
           // 例如按下「更新」後重新整理、離線或剛喚醒時，請求被瀏覽器中止或連不上，並非後端錯誤
