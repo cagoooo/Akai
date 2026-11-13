@@ -9,6 +9,10 @@
 - **前一版**: v3.6.71 — 新增 #102 外星人入侵·保衛石門 + 雙 tools.json 對齊
 - **📎 文件補追記**：本檔案從 v3.6.71 停更到 2026-07-04 才補寫。中間 v3.6.72 → v3.6.87 共 16 個版本（主要是新增工具 #103-#114 + 幾個獨立 bug fix，例如 v3.6.80 使用次數本機計數 bug、v3.6.81/b3032b2 許願池通知從 LINE 遷移到 Google Chat）沒有寫進本檔案，細節可查 `git log`（commit 訊息大多含版本號）。工具總數從 102 → 115 就是這段期間累積的，之後有空再補完整段落。
 
+### 2026-11-13 iPhone 版 App 內建瀏覽器自己的腳本錯誤不再告警 v3.6.212
+
+- 過濾 iPhone 版 Facebook／Instagram 內建瀏覽器注入的 sendDataToNative 錯誤（JAVASCRIPT-REACT-2B），經過站方程式的錯誤照常回報。
+
 ### 2026-11-11 舊版 Safari 開工具介紹頁與文章不再跳錯誤畫面 v3.6.211
 
 - remark-gfm 的 email 自動連結用了 Safari 16.4 以前不支援的往回看正規表示式（JAVASCRIPT-REACT-2A）；改用 `remarkGfmSafe`，舊瀏覽器只拿掉那一步補強轉換。

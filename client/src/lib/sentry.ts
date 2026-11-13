@@ -249,17 +249,31 @@ export function createBrowserStorageLostClassifier() {
 }
 
 /**
- * App 內建瀏覽器（Facebook、Instagram 的 Android 版）自己注入的監測腳本出錯，堆疊全是 iabjs:// 開頭，
- * 不經過站方程式碼，站方也修不到（2026-11-07 JAVASCRIPT-REACT-21：Facebook 585 Android，
- * 離開部落格文章時 sendBeforeUnloadMessage 回報「Java object is gone」）。
- * 只略過「每一層堆疊都來自 iabjs://」的錯誤；只要有一層是站方檔案就照常回報。
+ * App 內建瀏覽器（Facebook、Instagram 等）自己注入的監測腳本出錯，不經過站方程式碼，站方也修不到。
+ * - Android 版：堆疊全是 iabjs:// 開頭（2026-11-07 JAVASCRIPT-REACT-21：Facebook 585，
+ *   離開部落格文章時 sendBeforeUnloadMessage 回報「Java object is gone」）。
+ * - iPhone 版：腳本直接插在頁面裡，堆疊檔名是頁面網址，但出錯的函式同樣是 sendDataToNative
+ *   （2026-11-12 JAVASCRIPT-REACT-2B：iOS 26.6.2 WKWebView 在首頁 sendPageHideMessage 時
+ *   「window.webkit.messageHandlers」不存在）。
+ * 略過條件：每一層堆疊都來自 iabjs://；或丟錯的那一層是這組注入函式、且堆疊裡沒有站方 /assets/ 檔案。
+ * 只要有一層是站方打包的程式就照常回報。站內沒有同名函式（2026-11-13 核對）。
  */
+const IN_APP_BROWSER_INJECTED_FUNCTIONS = new Set([
+  'sendDataToNative',
+  'sendPageHideMessage',
+  'sendBeforeUnloadMessage',
+]);
+
 export function isInAppBrowserInjectedError(event: SentryEvent): boolean {
   const values = event.exception?.values ?? [];
   if (!values.length) return false;
   return values.every((value) => {
     const frames = value.stacktrace?.frames ?? [];
-    return frames.length > 0 && frames.every((frame) => /^iabjs:\/\//.test(frame.filename ?? ''));
+    if (!frames.length) return false;
+    if (frames.every((frame) => /^iabjs:\/\//.test(frame.filename ?? ''))) return true;
+    const thrower = frames[frames.length - 1];
+    return IN_APP_BROWSER_INJECTED_FUNCTIONS.has(thrower.function ?? '')
+      && frames.every((frame) => !/\/assets\//.test(frame.filename ?? ''));
   });
 }
 

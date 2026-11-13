@@ -377,6 +377,31 @@ describe('App 內建瀏覽器自己注入的腳本出錯不送進 Sentry', () =>
     expect(isInAppBrowserInjectedError(withFrames())).toBe(false);
     expect(isInAppBrowserInjectedError(consoleEvent('Error invoking postMessage: Java object is gone'))).toBe(false);
   });
+
+  // 2026-11-12 JAVASCRIPT-REACT-2B：iOS 26.6.2 WKWebView，堆疊檔名是頁面網址（Sentry 由舊到新排列）
+  const iosInjected = (...frames: Array<{ filename: string; function?: string }>) => ({
+    level: 'error' as const,
+    exception: { values: [{ type: 'TypeError', value: "undefined is not an object (evaluating 'window.webkit.messageHandlers')", stacktrace: { frames } }] },
+  });
+
+  it('iPhone 版：丟錯的是注入函式、堆疊沒有站方 /assets/ 檔案時略過', () => {
+    expect(isInAppBrowserInjectedError(iosInjected(
+      { filename: '/Akai/', function: undefined },
+      { filename: '/Akai/', function: 'sendPageHideMessage' },
+      { filename: '/Akai/', function: 'sendDataToNative' },
+    ))).toBe(true);
+  });
+
+  it('iPhone 版：堆疊經過站方打包程式，或丟錯的不是注入函式，照常回報', () => {
+    expect(isInAppBrowserInjectedError(iosInjected(
+      { filename: 'https://cagoooo.github.io/Akai/assets/index-abc.js', function: 'onClick' },
+      { filename: '/Akai/', function: 'sendDataToNative' },
+    ))).toBe(false);
+    expect(isInAppBrowserInjectedError(iosInjected(
+      { filename: '/Akai/', function: 'sendDataToNative' },
+      { filename: '/Akai/', function: 'renderTool' },
+    ))).toBe(false);
+  });
 });
 
 describe('錯誤物件被凍結的沙箱瀏覽器（爬蟲）不送進 Sentry', () => {

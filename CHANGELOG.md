@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.212] - 2026-11-13 — iPhone 版 App 內建瀏覽器自己的腳本錯誤不再告警
+
+- **現象**：Sentry `JAVASCRIPT-REACT-2B`（`TypeError: undefined is not an object (evaluating 'window.webkit.messageHandlers')`），iOS 26.6.2 的 WKWebView（App 內建瀏覽器）在首頁離開時 `sendPageHideMessage` → `sendDataToNative` 出錯。
+- **原因**：和 v3.6.202 的 JAVASCRIPT-REACT-21 同一組 Facebook／Instagram 內建瀏覽器注入腳本；Android 版堆疊是 `iabjs://`，iPhone 版直接插在頁面裡、堆疊檔名是頁面網址，原本的過濾條件沒涵蓋。
+- **修正**：`client/src/lib/sentry.ts` 的 `isInAppBrowserInjectedError` 增加 iPhone 版判斷：丟錯的那一層是 `sendDataToNative`／`sendPageHideMessage`／`sendBeforeUnloadMessage`，且堆疊沒有站方 `/assets/` 打包檔時略過；經過站方程式的錯誤照常回報（站內沒有同名函式）。新增 2 項單元測試。
+
 ## [3.6.211] - 2026-11-11 — 舊版 Safari 開工具介紹頁與文章不再跳錯誤畫面、最近使用工具讀取被拒先重試
 
 - **現象**：Sentry `JAVASCRIPT-REACT-2A`（`SyntaxError: Invalid regular expression: invalid group specifier name`），Safari 16.3（Mac）開 `/tool/46/`，ErrorBoundary 把整頁換成錯誤畫面。
