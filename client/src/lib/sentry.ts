@@ -352,6 +352,8 @@ const TOOL_DATA_FETCH_FAILURE = '無法獲取工具數據';
 export function isAbortedRequestError(error: unknown): boolean {
   if (!(error instanceof Error)) return false;
   if ((error as { code?: unknown }).code === 'functions/internal') return error.message === 'internal';
+  // 網路剛恢復、Auth 換不到新權杖，統計請求被後端當成未登入（見 publicAnalyticsService 的 TOKEN_UNAVAILABLE_CODE）
+  if ((error as { code?: unknown }).code === 'analytics/token-unavailable') return true;
   // 工具資料靜態檔與備援 API 都沒成功回應：連不上網路時 Service Worker 會回合成的 503「離線中」，兩條路一起失敗
   if (error.message === TOOL_DATA_FETCH_FAILURE) return true;
   return error.name === 'TypeError'

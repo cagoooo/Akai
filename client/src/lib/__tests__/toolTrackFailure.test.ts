@@ -12,6 +12,8 @@ describe('計數失敗原因分類', () => {
   it('App Check 沒通過、請求送不出去（小寫 internal）、其他', () => {
     expect(classifyTrackFailure(new Error('App Check 尚未通過，使用本機工具計數'))).toBe('app_check');
     expect(classifyTrackFailure(firebaseError('functions/internal', 'internal'))).toBe('network');
+    // 網路剛恢復、換不到登入權杖（JAVASCRIPT-REACT-2C）
+    expect(classifyTrackFailure(firebaseError('analytics/token-unavailable', '連線中斷，暫時取不到登入權杖'))).toBe('network');
     // 後端自己回的錯誤是大寫 INTERNAL，不是客戶端網路問題
     expect(classifyTrackFailure(firebaseError('functions/internal', 'INTERNAL'))).toBe('other');
     expect(classifyTrackFailure(firebaseError('functions/resource-exhausted', 'rate limit'))).toBe('other');

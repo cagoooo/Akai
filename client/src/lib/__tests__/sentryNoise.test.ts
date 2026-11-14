@@ -206,6 +206,8 @@ describe('網路不可靠時被中止的請求不送進 Sentry', () => {
   it('辨識 callable 與 fetch 被中止的錯誤', () => {
     // 2026-10-06 告警：按下 PWA「更新」後重新整理，recordPublicAnalytics 請求被中止
     expect(isAbortedRequestError(firebaseError('functions/internal', 'internal'))).toBe(true);
+    expect(isAbortedRequestError(firebaseError('analytics/token-unavailable', '連線中斷，暫時取不到登入權杖'))).toBe(true);
+    expect(isAbortedRequestError(firebaseError('functions/unauthenticated', 'authentication required'))).toBe(false);
     expect(isAbortedRequestError(new TypeError('Failed to fetch'))).toBe(true);
     expect(isAbortedRequestError(new TypeError('Load failed'))).toBe(true);
     expect(isAbortedRequestError(new TypeError('NetworkError when attempting to fetch resource.'))).toBe(true);

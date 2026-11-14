@@ -5,7 +5,7 @@ vi.mock('../userInteraction', () => ({ userInteractionReady: Promise.resolve() }
 vi.mock('@/lib/firebase', () => ({ default: {}, waitForAppCheck: mocks.ready }));
 vi.mock('@/lib/authService', () => ({ ensureSignedIn: mocks.auth, isSignedOutThisSession: mocks.signedOut }));
 vi.mock('firebase/functions', () => ({ getFunctions: vi.fn(() => ({})), httpsCallable: mocks.httpsCallable }));
-import { invokePublicAnalytics } from '../publicAnalyticsService';
+import { invokePublicAnalytics, TOKEN_UNAVAILABLE_CODE } from '../publicAnalyticsService';
 afterEach(() => vi.restoreAllMocks());
 
 describe('統計送出前的驗證', () => {
@@ -43,5 +43,16 @@ describe('統計送出前的驗證', () => {
     expect(await invokePublicAnalytics({ kind: 'visitorCount' })).toBe(false);
     expect(mocks.callable).not.toHaveBeenCalled();
     expect(warning).toHaveBeenCalledWith('無法產生安全事件識別碼，本次雲端統計未送出。');
+  });
+  const unauthenticated = () => Object.assign(new Error('authentication required'), { code: 'functions/unauthenticated' });
+  it('網路剛恢復、換不到登入權杖而被後端當成未登入：改丟連線中斷代碼（JAVASCRIPT-REACT-2C）', async () => {
+    mocks.auth.mockResolvedValue({ uid: 'test', getIdToken: vi.fn().mockRejectedValue(new Error('network-request-failed')) });
+    mocks.callable.mockRejectedValue(unauthenticated());
+    await expect(invokePublicAnalytics({ kind: 'visitorCount' })).rejects.toMatchObject({ code: TOKEN_UNAVAILABLE_CODE });
+  });
+  it('拿得到權杖卻仍被當成未登入：照原錯誤回報，不掩蓋真問題', async () => {
+    mocks.auth.mockResolvedValue({ uid: 'test', getIdToken: vi.fn().mockResolvedValue('token') });
+    mocks.callable.mockRejectedValue(unauthenticated());
+    await expect(invokePublicAnalytics({ kind: 'visitorCount' })).rejects.toMatchObject({ code: 'functions/unauthenticated' });
   });
 });

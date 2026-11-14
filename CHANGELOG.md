@@ -2,6 +2,15 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.213] - 2026-11-14 — 網路斷線又恢復時的統計與互動紀錄不再誤報
+
+- **現象**：同一位訪客（Chrome，首頁）在 20:16 先後觸發 Sentry `JAVASCRIPT-REACT-2C`（`增加訪客計數失敗: authentication required`）與 `JAVASCRIPT-REACT-2D`（`[engagement notify] 寫入失敗: Document already exists`）。分頁紀錄顯示 20:16:10 起 Firestore 判定離線、Auth 連續「Error getting token result」，20:16:44 網路恢復後請求全部成功。
+- **2C 原因**：Auth 換不到新權杖時，callable 不帶權杖送出，`recordPublicAnalytics` 依設計回 unauthenticated（401）。
+- **2C 修正**：`client/src/lib/publicAnalyticsService.ts` 遇到 unauthenticated 時再確認一次能否取得權杖；取不到就改丟 `analytics/token-unavailable`，`classifyTrackFailure` 與 `isAbortedRequestError` 歸為連線中斷、不告警；取得到權杖卻仍被拒照原錯誤回報。
+- **2D 原因**：網路恢復時 Firestore SDK 重送還沒收到回覆的新增，第一次其實已寫入，重送才回「已存在」。
+- **2D 修正**：`client/src/lib/analytics.ts` 的互動紀錄遇到 `already-exists` 視為成功（自動編號不會撞號），照常標記去重，不告警。
+- 新增 5 項單元測試。
+
 ## [3.6.212] - 2026-11-13 — iPhone 版 App 內建瀏覽器自己的腳本錯誤不再告警
 
 - **現象**：Sentry `JAVASCRIPT-REACT-2B`（`TypeError: undefined is not an object (evaluating 'window.webkit.messageHandlers')`），iOS 26.6.2 的 WKWebView（App 內建瀏覽器）在首頁離開時 `sendPageHideMessage` → `sendDataToNative` 出錯。

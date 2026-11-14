@@ -21,6 +21,8 @@ export function classifyTrackFailure(err: unknown): TrackFailureReason {
   if (err.message.startsWith('App Check 尚未通過')) return 'app_check';
   // Firebase SDK 把「請求送不出去／被中斷」統一包成小寫 internal（後端回的是大寫 INTERNAL）
   if ((err as { code?: unknown }).code === 'functions/internal' && err.message === 'internal') return 'network';
+  // 網路剛恢復、Auth 換不到新權杖（見 publicAnalyticsService 的 TOKEN_UNAVAILABLE_CODE）
+  if ((err as { code?: unknown }).code === 'analytics/token-unavailable') return 'network';
   return 'other';
 }
 

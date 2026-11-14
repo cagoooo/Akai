@@ -169,6 +169,13 @@ export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
     if (shouldMarkDedup) markEngagementNotified(dedupKey);
     console.log('[engagement notify] 寫入 Firestore 成功，ID:', docRef.id);
   } catch (err) {
+    // 網路斷線又恢復時，SDK 會重送還沒收到回覆的新增；第一次其實已經寫進去，重送才回「已存在」
+    // （2026-11-14 JAVASCRIPT-REACT-2D：離線約 30 秒後恢復，同一筆 engagementEvents 重送被拒）。自動編號不會撞號，視為成功
+    if ((err as { code?: unknown } | null)?.code === 'already-exists') {
+      if (shouldMarkDedup) markEngagementNotified(dedupKey);
+      console.info('[engagement notify] 網路恢復後重送，這筆先前已寫入');
+      return;
+    }
     console.error('[engagement notify] 寫入失敗:', err);
     if (import.meta.env.DEV) console.warn('[engagement notify]', err);
   }
