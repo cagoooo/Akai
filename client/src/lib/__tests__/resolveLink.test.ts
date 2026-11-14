@@ -20,6 +20,16 @@ describe('convertExternalToolLink', () => {
     for (const url of urls) expect(convertExternalToolLink(url)).toBe(url);
   });
 
+  it('剛好學擴充套件教學頁與下載檔保留原網址，首頁仍改寫成工具頁（v3.6.215）', () => {
+    const urls = [
+      'https://cagoooo.github.io/Akailao/extension.html',
+      'https://cagoooo.github.io/Akailao/extension.html#install',
+      'https://cagoooo.github.io/Akailao/akailao-chrome-extension.zip',
+    ];
+    for (const url of urls) expect(convertExternalToolLink(url)).toBe(url);
+    expect(convertExternalToolLink('https://cagoooo.github.io/Akailao/')).toBe('/tool/11');
+  });
+
   it('名稱相近但不是 extension 路徑的網址不受例外影響', () => {
     expect(convertExternalToolLink('https://cagoooo.github.io/pirls-questioncraft/extensions-old/')).toBe('/tool/87');
   });

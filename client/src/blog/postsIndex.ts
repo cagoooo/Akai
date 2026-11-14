@@ -1176,21 +1176,21 @@ export const POSTS_INDEX: BlogPostMeta[] = [
   },
   {
     "slug": "classroom-interaction-11-easy",
-    "title": "#11 剛好學 Akailao v3.8.9：九大互動模式 + 拍照 AI 出 PIRLS 題 + 老師自架 Firebase 資料自主的 Kahoot+Quizizz+Mentimeter 合體",
-    "excerpt": "#11 不只是「投票 + 文字雲」 — 是九大互動模式（搶答 / 繪圖板 / 是非 / 選擇 / 問答 / 互評 / **PIRLS 閱讀招牌** / 排序 / 配對）合體 SaaS。234 KB 單檔 Akailao v3.8.9 + Gemini 2.5 Flash 拍課本自動出 PIRLS 題 + 每位老師自架 Firebase（資料自主）+ set.html 配置生成器（降門檻）。",
+    "title": "#11 剛好學：13 種以上課堂互動＋AI 出閱讀測驗，現在連 Chrome 側邊欄都能直接把網頁變考題",
+    "excerpt": "全班只有幾個人舉手，其他人到底懂不懂？剛好學讓每個學生用手機作答：是非、選擇、繪圖、錄音、文字雲、分組競賽一應俱全。新推出的 Chrome 擴充套件，還能把正在看的網頁一鍵改寫成適齡短文並出好閱讀測驗。",
     "publishedAt": "2026-05-21",
     "readingMinutes": 6,
     "tags": [
       "課堂互動",
-      "Gemini 多模態",
-      "PIRLS 出題",
-      "Firebase 自架",
-      "九大模式"
+      "閱讀測驗",
+      "AI 出題",
+      "Chrome 擴充套件",
+      "PIRLS"
     ],
     "toolIds": [
       11,
       45,
-      81
+      87
     ],
     "coverEmoji": "🎯",
     "coverColor": "orange"

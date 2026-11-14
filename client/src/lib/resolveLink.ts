@@ -41,6 +41,9 @@ for (const [rawUrl, id] of Object.entries(TOOL_URL_MAP)) {
  */
 const KEEP_EXTERNAL_PREFIXES = [
   'cagoooo.github.io/pirls-questioncraft/extension',
+  // 剛好學（#11）的擴充套件教學頁與下載檔（v3.6.215）
+  'cagoooo.github.io/akailao/extension.html',
+  'cagoooo.github.io/akailao/akailao-chrome-extension.zip',
 ];
 
 /**
