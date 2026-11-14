@@ -138,3 +138,38 @@ ${reference}
 - 原始碼：${mainRepo}` : ''}
 `;
 }
+
+/** 文章主角工具（toolIds[0]）的資料是否已在手上；沒有時提示詞只會寫「文章介紹的 #N 工具」。 */
+export function hasMainTool(post: Pick<PromptPost, 'toolIds'>, tools: readonly PromptTool[]): boolean {
+  const mainId = post.toolIds[0];
+  return mainId !== undefined && tools.some((tool) => tool.id === mainId);
+}
+
+/**
+ * 確保組提示詞時拿得到主角工具的資料（v3.6.216）。
+ * 文章頁剛打開時工具目錄可能還在下載，這時先等目錄載入（最多 timeoutMs），
+ * 載入失敗或逾時就退回手上的資料，按鈕仍能複製。
+ */
+export async function ensurePromptTools(
+  post: Pick<PromptPost, 'toolIds'>,
+  tools: readonly PromptTool[],
+  loadAll: () => Promise<readonly PromptTool[]>,
+  timeoutMs = 5000,
+): Promise<readonly PromptTool[]> {
+  if (hasMainTool(post, tools)) return tools;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    const all = await Promise.race([
+      loadAll(),
+      new Promise<never>((_, reject) => {
+        timer = setTimeout(() => reject(new Error('timeout')), timeoutMs);
+      }),
+    ]);
+    const related = all.filter((tool) => post.toolIds.includes(tool.id));
+    return related.length ? related : tools;
+  } catch {
+    return tools;
+  } finally {
+    if (timer !== undefined) clearTimeout(timer);
+  }
+}

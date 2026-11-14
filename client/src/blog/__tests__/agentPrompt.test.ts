@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { AKAI_REPO_URL, buildAgentPrompt, toolRepoUrl } from '../agentPrompt';
+import { AKAI_REPO_URL, buildAgentPrompt, ensurePromptTools, hasMainTool, toolRepoUrl } from '../agentPrompt';
 
 const iwin = {
   id: 131,
@@ -107,5 +107,33 @@ describe('文章專屬 AI 開發提示詞', () => {
     expect(prompt).toContain('「我理解的需求」');
     expect(prompt).toContain('我確認之前，不要提方案，也不要寫程式');
     expect(prompt).toContain('11. **帶我上線**：');
+  });
+});
+
+describe('ensurePromptTools（文章頁剛打開就按複製，v3.6.216）', () => {
+  const post = { toolIds: [131, 45] };
+  const other = { id: 45, title: '文字雲', description: '收集關鍵詞', url: 'https://cagoooo.github.io/cloud' };
+
+  it('主角工具已在手上就不重新載入', async () => {
+    let called = 0;
+    const result = await ensurePromptTools(post, [iwin], async () => { called++; return []; });
+    expect(result).toEqual([iwin]);
+    expect(called).toBe(0);
+    expect(hasMainTool(post, [iwin])).toBe(true);
+  });
+
+  it('工具清單還是空的時，等目錄載入後只留文章相關的工具', async () => {
+    expect(hasMainTool(post, [])).toBe(false);
+    const result = await ensurePromptTools(post, [], async () => [other, iwin, { ...other, id: 99 }]);
+    expect(result.map((t) => t.id)).toEqual([45, 131]);
+    const prompt = buildAgentPrompt({ slug: 'x', title: 't', toolIds: [131, 45] }, result);
+    expect(prompt).toContain('- 工具：#131 iWIN 兒少上網問卷結果閱讀站');
+    expect(prompt).not.toContain('文章介紹的 #131 工具');
+  });
+
+  it('目錄載入失敗或逾時，退回手上的資料，不讓按鈕卡住', async () => {
+    await expect(ensurePromptTools(post, [other], async () => { throw new Error('offline'); })).resolves.toEqual([other]);
+    const never = () => new Promise<never>(() => {});
+    await expect(ensurePromptTools(post, [], never, 20)).resolves.toEqual([]);
   });
 });
