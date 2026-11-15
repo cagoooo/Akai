@@ -207,9 +207,10 @@ function main() {
       const toolUrl = actualToolUrl(t.url);
       const detailUrl = `${SITE}/tool/${t.id}/`;
       const post = primaryPostByToolId.get(t.id);
-      const articleUrl = post ? `${SITE}/blog/${post.slug}/` : `${SITE}/blog/tool-${t.id}`;
+      // 還沒寫長文的工具不列文章網址（沒有對應的靜態頁，硬湊網址會變 404）
+      const articleText = post ? `教學情境文章：${SITE}/blog/${post.slug}/` : '';
       const tagText = t.tags && t.tags.length ? ` 標籤：${t.tags.slice(0, 6).join('、')}。` : '';
-      out += `- [#${t.id} ${t.title}](${detailUrl}): ${clean(t.description)}${tagText} 實際工具：${toolUrl}。教學情境文章：${articleUrl}\n`;
+      out += `- [#${t.id} ${t.title}](${detailUrl}): ${clean(t.description)}${tagText} 實際工具：${toolUrl}。${articleText}\n`;
     }
     out += '\n';
   }
@@ -263,12 +264,12 @@ function main() {
     const url = actualToolUrl(t.url);
     const detailUrl = `${SITE}/tool/${t.id}/`;
     const post = primaryPostByToolId.get(t.id);
-    const articleUrl = post ? `${SITE}/blog/${post.slug}/` : `${SITE}/blog/tool-${t.id}`;
     full += `## #${t.id} ${t.title}\n\n`;
     full += `- **分類**：${CATEGORY_LABELS[t.category] || t.category}\n`;
     full += `- **科技教育專區工具頁**：${detailUrl}\n`;
     full += `- **實際工具網址**：${url}\n`;
-    full += `- **教學情境文章**：${articleUrl}\n`;
+    // 還沒寫長文的工具不列文章網址（沒有對應的靜態頁，硬湊網址會變 404）
+    if (post) full += `- **教學情境文章**：${SITE}/blog/${post.slug}/\n`;
     if (t.tags && t.tags.length) full += `- **標籤**：${t.tags.join(', ')}\n`;
     full += `\n${clean(t.description)}\n\n`;
     if (t.detailedDescription) {
