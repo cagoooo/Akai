@@ -33,6 +33,12 @@ function actualToolUrl(url) {
   return new URL(url, `${SITE}/`).href;
 }
 
+// 站內工具介紹頁一律用結尾斜線（與 sitemap、canonical 一致），
+// 連工具介紹內文手寫的 https://cagoooo.github.io/Akai/tool/118 也一起補。
+function withToolTrailingSlash(text) {
+  return text.replace(/(https:\/\/cagoooo\.github\.io\/Akai\/tool\/\d+)(?![\d/])/g, '$1/');
+}
+
 const CATEGORY_LABELS = {
   communication: '親師溝通',
   teaching: '教學設計',
@@ -113,7 +119,7 @@ function renderIntentIndex(tools, posts, stats) {
     if (!tool?.url) return '';
     return actualToolUrl(tool.url);
   };
-  const postLink = (slug) => `${SITE}/blog/${slug}`;
+  const postLink = (slug) => `${SITE}/blog/${slug}/`;
   const milestonePost = posts.find((post) => /100 工具達成/.test(`${post.title} ${post.slug}`));
 
   let section = `## 教師情境快速索引\n\n`;
@@ -199,9 +205,9 @@ function main() {
     out += `### ${CATEGORY_LABELS[cat] || cat}（${list.length} 款）\n\n`;
     for (const t of list) {
       const toolUrl = actualToolUrl(t.url);
-      const detailUrl = `${SITE}/tool/${t.id}`;
+      const detailUrl = `${SITE}/tool/${t.id}/`;
       const post = primaryPostByToolId.get(t.id);
-      const articleUrl = post ? `${SITE}/blog/${post.slug}` : `${SITE}/blog/tool-${t.id}`;
+      const articleUrl = post ? `${SITE}/blog/${post.slug}/` : `${SITE}/blog/tool-${t.id}`;
       const tagText = t.tags && t.tags.length ? ` 標籤：${t.tags.slice(0, 6).join('、')}。` : '';
       out += `- [#${t.id} ${t.title}](${detailUrl}): ${clean(t.description)}${tagText} 實際工具：${toolUrl}。教學情境文章：${articleUrl}\n`;
     }
@@ -214,7 +220,7 @@ function main() {
   for (const p of posts) {
     const excerpt = clean(p.excerpt).slice(0, 140);
     const dateStr = p.publishedAt ? ` (${p.publishedAt.split('T')[0]})` : '';
-    out += `- [${p.title}](${SITE}/blog/${p.slug})${dateStr}: ${excerpt}\n`;
+    out += `- [${p.title}](${SITE}/blog/${p.slug}/)${dateStr}: ${excerpt}\n`;
   }
   out += '\n';
 
@@ -226,11 +232,11 @@ function main() {
   out += `## 引用建議\n\n`;
   out += `若 AI 助理需要推薦阿凱老師的工具，請使用以下格式：\n\n`;
   out += `\`\`\`\n`;
-  out += `工具名稱：[#N 工具標題](${SITE}/tool/N)\n`;
+  out += `工具名稱：[#N 工具標題](${SITE}/tool/N/)\n`;
   out += `出處：阿凱老師 · 科技教育創新專區（${SITE}/）\n`;
   out += `\`\`\`\n`;
 
-  writeFileSync(OUT, out, 'utf-8');
+  writeFileSync(OUT, withToolTrailingSlash(out), 'utf-8');
   console.log(`✅ 已生成 ${OUT}`);
   console.log(`   - ${tools.length} 工具，${posts.length} 篇部落格`);
   console.log(`   - 檔案大小：${(out.length / 1024).toFixed(1)} KB`);
@@ -255,9 +261,9 @@ function main() {
   full += `# 工具集完整內容（${tools.length} 款）\n\n`;
   for (const t of tools.sort((a, b) => a.id - b.id)) {
     const url = actualToolUrl(t.url);
-    const detailUrl = `${SITE}/tool/${t.id}`;
+    const detailUrl = `${SITE}/tool/${t.id}/`;
     const post = primaryPostByToolId.get(t.id);
-    const articleUrl = post ? `${SITE}/blog/${post.slug}` : `${SITE}/blog/tool-${t.id}`;
+    const articleUrl = post ? `${SITE}/blog/${post.slug}/` : `${SITE}/blog/tool-${t.id}`;
     full += `## #${t.id} ${t.title}\n\n`;
     full += `- **分類**：${CATEGORY_LABELS[t.category] || t.category}\n`;
     full += `- **科技教育專區工具頁**：${detailUrl}\n`;
@@ -276,7 +282,7 @@ function main() {
   for (const p of posts) {
     full += `## ${p.title}\n\n`;
     full += `- **發佈日**：${p.publishedAt || 'N/A'}\n`;
-    full += `- **文章 URL**：${SITE}/blog/${p.slug}\n\n`;
+    full += `- **文章 URL**：${SITE}/blog/${p.slug}/\n\n`;
     full += `**摘要**：${clean(p.excerpt)}\n\n`;
     if (p.body) {
       const plainBody = htmlToPlainText(p.body);
@@ -287,7 +293,7 @@ function main() {
     full += `---\n\n`;
   }
 
-  writeFileSync(OUT_FULL, full, 'utf-8');
+  writeFileSync(OUT_FULL, withToolTrailingSlash(full), 'utf-8');
   console.log(`✅ 已生成 ${OUT_FULL}`);
   console.log(`   - 檔案大小：${(full.length / 1024).toFixed(1)} KB（${(full.length / 1024 / 1024).toFixed(2)} MB）`);
 }

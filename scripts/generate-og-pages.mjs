@@ -38,14 +38,19 @@ function toolRepoUrl(toolUrl) {
 
 /** 站內工具（例如 /Akai/tool/100）補成完整網址。 */
 function absoluteUrl(url) {
-  if (/^https?:\/\//.test(url)) return url;
-  return `https://cagoooo.github.io${url.startsWith('/') ? '' : '/'}${url}`;
+  const abs = /^https?:\/\//.test(url) ? url : `https://cagoooo.github.io${url.startsWith('/') ? '' : '/'}${url}`;
+  // #100 這類站內工具的網址就是工具介紹頁，同樣補結尾斜線
+  return abs.replace(/^(https:\/\/cagoooo\.github\.io\/Akai\/tool\/\d+)(?=$|[?#])/, '$1/');
 }
 
 /** 站內相對路徑（/tool/6、/blog/xxx/）補上 /Akai，否則會指到 cagoooo.github.io/tool/6。 */
 function withBase(href) {
-  if (!href || !href.startsWith('/') || href.startsWith('//') || href.startsWith('/Akai/')) return href;
-  return `/Akai${href}`;
+  if (href && /^https:\/\/cagoooo\.github\.io\/Akai\/tool\/\d+(?=$|[?#])/.test(href)) return absoluteUrl(href);
+  if (!href || !href.startsWith('/') || href.startsWith('//')) return href;
+  const based = href.startsWith('/Akai/') ? href : `/Akai${href}`;
+  // 工具介紹頁一律用結尾斜線，與 sitemap、canonical 一致；
+  // 少了斜線 GitHub Pages 會先 301 轉址，搜尋引擎也會把它當成另一個網址來檢索。
+  return based.replace(/^(\/Akai\/tool\/\d+)(?=$|[?#])/, '$1/');
 }
 
 /**

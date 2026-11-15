@@ -61,7 +61,7 @@ const allItems = [
   ...tools.map((t) => ({
     kind: 'tool',
     title: `🆕 新工具：${t.title}`,
-    link: `${SITE_URL}/tool/${t.id}`,
+    link: `${SITE_URL}/tool/${t.id}/`,
     description: t.description,
     pubDate: t.addedAt || `2024-01-01T00:00:00Z`, // 沒 addedAt 給很舊的日期排到尾巴
     guid: `${SITE_URL}/tool/${t.id}`,
@@ -70,7 +70,7 @@ const allItems = [
   ...posts.map((p) => ({
     kind: 'blog',
     title: `📖 教學情境：${p.title}`,
-    link: `${SITE_URL}/blog/${p.slug}`,
+    link: `${SITE_URL}/blog/${p.slug}/`,
     description: p.excerpt,
     pubDate: p.publishedAt || `2024-01-01T00:00:00Z`,
     guid: `${SITE_URL}/blog/${p.slug}`,

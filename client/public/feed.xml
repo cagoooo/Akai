@@ -8,7 +8,7 @@
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
     <pubDate>Tue, 03 Nov 2026 08:35:50 GMT</pubDate>
-    <lastBuildDate>Sat, 14 Nov 2026 14:40:04 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 15 Nov 2026 02:09:11 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -20,7 +20,7 @@
     </image>
     <item>
       <title>🆕 新工具：公共程式平臺上架報告</title>
-      <link>https://cagoooo.github.io/Akai/tool/135</link>
+      <link>https://cagoooo.github.io/Akai/tool/135/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/135</guid>
       <pubDate>Tue, 03 Nov 2026 08:35:50 GMT</pubDate>
       <description>石門國小資訊組長向數位發展部報告「科技教育創新專區」上架公共程式平臺的互動簡報：從一人資訊組的需求、AI 協作開發、Fortify 與 Mend 資安檢測，到錯誤通報、SEO／GEO 與開源再利用。</description>
@@ -32,7 +32,7 @@
     </item>
     <item>
       <title>📖 教學情境：#135 一所小學的程式，送上公共程式平臺：二十分鐘講完三週的資安檢測</title>
-      <link>https://cagoooo.github.io/Akai/blog/moda-briefing-135-public-code-report</link>
+      <link>https://cagoooo.github.io/Akai/blog/moda-briefing-135-public-code-report/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/moda-briefing-135-public-code-report</guid>
       <pubDate>Tue, 03 Nov 2026 00:00:00 GMT</pubDate>
       <description>從一人資訊組的需求、AI 協作開發，到 Fortify 初掃 40 筆中風險以上一路修到 0，再到錯誤通報與開源再利用。這份向數位發展部報告的簡報，把整段上架過程攤開來給你看。</description>
@@ -41,7 +41,7 @@
     </item>
     <item>
       <title>🆕 新工具：桃園市石門國小品牌群島</title>
-      <link>https://cagoooo.github.io/Akai/tool/134</link>
+      <link>https://cagoooo.github.io/Akai/tool/134/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/134</guid>
       <pubDate>Mon, 02 Nov 2026 13:39:44 GMT</pubDate>
       <description>把石門國小「鱻鯉鰭源，石門活閱」閱讀品牌方案做成 12 座 3D 浮空島：逛島看課程與成果，查即時天氣、水庫水位和校園公告；孩子找小河馬、闖十二島閱讀挑戰，再到圖書館讀懂共讀書，分四段領證書。</description>
@@ -53,7 +53,7 @@
     </item>
     <item>
       <title>📖 教學情境：#134 把一本品牌方案變成十二座浮空島：石門國小品牌群島</title>
-      <link>https://cagoooo.github.io/Akai/blog/smes-island-134-reading-brand-sky-city</link>
+      <link>https://cagoooo.github.io/Akai/blog/smes-island-134-reading-brand-sky-city/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/smes-island-134-reading-brand-sky-city</guid>
       <pubDate>Mon, 02 Nov 2026 00:00:00 GMT</pubDate>
       <description>厚厚的品牌方案很用心，卻很少人從頭翻到尾。把它改寫成一座可以逛的 3D 天空之城，孩子找小河馬，家長看成果，老師看課程地圖。</description>
@@ -62,7 +62,7 @@
     </item>
     <item>
       <title>🆕 新工具：一張課本照片，長出一整套 AI 教學｜AI 數位教學實務工作坊</title>
-      <link>https://cagoooo.github.io/Akai/tool/133</link>
+      <link>https://cagoooo.github.io/Akai/tool/133/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/133</guid>
       <pubDate>Fri, 30 Oct 2026 03:29:54 GMT</pubDate>
       <description>國立中正大學師資培育中心 2026-11-13 工作坊的 72 頁互動簡報：從一張課本照片用 Gemini Notebook 備出整套教材、存成 Gemini 技能，再做教學駕駛艙與概念動畫；學員用手機填問卷、丟文字雲與彈幕、跟著講師翻頁。</description>
@@ -74,7 +74,7 @@
     </item>
     <item>
       <title>📖 教學情境：#133 一張課本照片，長出一整套 AI 教學：把一場師培工作坊做成會互動的簡報</title>
-      <link>https://cagoooo.github.io/Akai/blog/ccu-ai-workshop-133-one-photo-whole-lesson</link>
+      <link>https://cagoooo.github.io/Akai/blog/ccu-ai-workshop-133-one-photo-whole-lesson/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/ccu-ai-workshop-133-one-photo-whole-lesson</guid>
       <pubDate>Fri, 30 Oct 2026 00:00:00 GMT</pubDate>
       <description>為中正大學師培中心準備的 AI 數位教學工作坊，72 頁簡報從一張課本照片開始，把助教守則存成 Gemini 技能，再走到教學駕駛艙、概念動畫與找出 AI 的錯誤；學員課前先填 AI 問卷，現場用手機丟文字雲、投票、送彈幕，還能跟著講師同步翻頁。</description>
@@ -83,7 +83,7 @@
     </item>
     <item>
       <title>🆕 新工具：輔導紀錄小幫手</title>
-      <link>https://cagoooo.github.io/Akai/tool/132</link>
+      <link>https://cagoooo.github.io/Akai/tool/132/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/132</guid>
       <pubDate>Tue, 20 Oct 2026 08:31:54 GMT</pubDate>
       <description>把老師口語、零散的描述或點選的狀況標籤，整理成「輔導內容重點＋聯繫內容」兩段正式輔導紀錄，一鍵複製到校務系統；學生姓名送出前自動換成代號，也能用座號批次補登。</description>
@@ -95,7 +95,7 @@
     </item>
     <item>
       <title>📖 教學情境：#132 從「他推了同學一把」到正式紀錄：姓名先換代號，再請 AI 幫忙寫</title>
-      <link>https://cagoooo.github.io/Akai/blog/counseling-record-132-deidentified-writing</link>
+      <link>https://cagoooo.github.io/Akai/blog/counseling-record-132-deidentified-writing/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/counseling-record-132-deidentified-writing</guid>
       <pubDate>Tue, 20 Oct 2026 00:00:00 GMT</pubDate>
       <description>輔導紀錄最難的不是記得發生什麼，而是改寫成能登錄的正式文字。#132 把口語描述或狀況標籤整理成兩段紀錄，送出前先把姓名換成代號，期末還能用座號批次補登。</description>
@@ -104,7 +104,7 @@
     </item>
     <item>
       <title>🆕 新工具：iWIN 兒少上網問卷結果閱讀站</title>
-      <link>https://cagoooo.github.io/Akai/tool/131</link>
+      <link>https://cagoooo.github.io/Akai/tool/131/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/131</guid>
       <pubDate>Fri, 16 Oct 2026 05:23:47 GMT</pubDate>
       <description>將 115 年度 iWIN 兒少上網問卷的石門國小回饋與全國結果連結收在一頁，提供複製網址、已讀標記及三步閱讀建議，協助教師先查資料，再規劃班級宣導與數位素養討論。</description>
@@ -116,7 +116,7 @@
     </item>
     <item>
       <title>📖 教學情境：#131 先看本校，再對照全國：把兒少上網問卷結果留在同一個閱讀入口</title>
-      <link>https://cagoooo.github.io/Akai/blog/iwin-survey-131-report-reading</link>
+      <link>https://cagoooo.github.io/Akai/blog/iwin-survey-131-report-reading/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/iwin-survey-131-report-reading</guid>
       <pubDate>Fri, 16 Oct 2026 00:00:00 GMT</pubDate>
       <description>兩份報告分散在訊息裡，容易記不清自己看過哪份。#131 集中石門國小與全國結果連結，用已讀標記與三步建議，陪教師從找資料走到提出問題。</description>
@@ -125,7 +125,7 @@
     </item>
     <item>
       <title>📖 教學情境：#130 賽程、接力、停車一次查：石門國小運動會資訊站，讓全家安心出發</title>
-      <link>https://cagoooo.github.io/Akai/blog/sportsday-130-shimen-115</link>
+      <link>https://cagoooo.github.io/Akai/blog/sportsday-130-shimen-115/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/sportsday-130-shimen-115</guid>
       <pubDate>Mon, 12 Oct 2026 00:00:00 GMT</pubDate>
       <description>運動會前，家長最常要找的是幾點到、孩子何時上場、車要停哪裡。#130 把 10 月 17 日的賽程、活動亮點、邀請單與交通提醒收在同一個公開入口。</description>
@@ -134,7 +134,7 @@
     </item>
     <item>
       <title>🆕 新工具：石門國小 115 學年度運動會資訊站</title>
-      <link>https://cagoooo.github.io/Akai/tool/130</link>
+      <link>https://cagoooo.github.io/Akai/tool/130/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/130</guid>
       <pubDate>Sun, 11 Oct 2026 16:00:00 GMT</pubDate>
       <description>把石門國小 115 學年度運動會的 30 項賽程、精彩活動、家長觀賽與停車資訊收在同一頁；可依表演、團體競賽、徑賽或典禮篩選，親師生出發前就能確認時間與注意事項。</description>
@@ -146,7 +146,7 @@
     </item>
     <item>
       <title>🆕 新工具：115石小教師會議報告集合站 (上學期)</title>
-      <link>https://cagoooo.github.io/Akai/tool/129</link>
+      <link>https://cagoooo.github.io/Akai/tool/129/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/129</guid>
       <pubDate>Fri, 09 Oct 2026 00:20:00 GMT</pubDate>
       <description>石門國小 115 學年度上學期的教師會議紀錄入口：預備週到第 6 週與期初校務會議各一頁，處室報告、重要時程、導師待辦與關鍵字搜尋一站查，不必再翻群組訊息和舊附件。</description>
@@ -158,7 +158,7 @@
     </item>
     <item>
       <title>📖 教學情境：#129 開完會還在問「哪天截止？」：石小會議集合站把每週晨會留成一個網址</title>
-      <link>https://cagoooo.github.io/Akai/blog/shimen-meeting-hub-129-teacher-meeting-records</link>
+      <link>https://cagoooo.github.io/Akai/blog/shimen-meeting-hub-129-teacher-meeting-records/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/shimen-meeting-hub-129-teacher-meeting-records</guid>
       <pubDate>Fri, 09 Oct 2026 00:00:00 GMT</pubDate>
       <description>晨會聽過的截止日，回到教室就糊了？石門國小把 115 學年度上學期的教師會議，做成一週一頁、依處室分區、能搜尋能打勾的互動紀錄入口。</description>
@@ -167,7 +167,7 @@
     </item>
     <item>
       <title>📖 教學情境：#128 石門・心晴校園：在熟悉的走廊上，練習和同學好好相處</title>
-      <link>https://cagoooo.github.io/Akai/blog/shimen-campus-128-3d-campus-exploration</link>
+      <link>https://cagoooo.github.io/Akai/blog/shimen-campus-128-3d-campus-exploration/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/shimen-campus-128-3d-campus-exploration</guid>
       <pubDate>Mon, 05 Oct 2026 00:00:00 GMT</pubDate>
       <description>原本的校園漫遊長出了故事：跟著心晴任務幫同學解決小麻煩、用 12 個小問題認識自己，再用校園導航把去教室的路傳給家長。現在還能和校園角色一起玩、在禮堂前拍紀念照打卡，下雨天大家會撐傘。這篇整理可以怎麼帶進 SEL 與迎新課堂。</description>
@@ -176,7 +176,7 @@
     </item>
     <item>
       <title>🆕 新工具：石門・心晴校園</title>
-      <link>https://cagoooo.github.io/Akai/tool/128</link>
+      <link>https://cagoooo.github.io/Akai/tool/128/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/128</guid>
       <pubDate>Sun, 04 Oct 2026 16:00:00 GMT</pubDate>
       <description>走進方塊版石門國小，跟著「心晴任務」幫同學解決小麻煩、抽出自己的性格卡，還能導航到教室、拍校園紀念照、和角色一起玩。校園跟著台灣時間與龍潭天氣變成星空夜晚或撐傘的雨天，電腦、手機、平板都能玩，適合 SEL 課與新生迎新。</description>
@@ -188,7 +188,7 @@
     </item>
     <item>
       <title>📖 教學情境：#127 桃園市AI素養爭霸賽：把「要會 AI」拆成學生今天就能練的六個站點</title>
-      <link>https://cagoooo.github.io/Akai/blog/ai-literacy-127-taoyuan-competition-prep</link>
+      <link>https://cagoooo.github.io/Akai/blog/ai-literacy-127-taoyuan-competition-prep/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/ai-literacy-127-taoyuan-competition-prep</guid>
       <pubDate>Mon, 14 Sep 2026 00:00:00 GMT</pubDate>
       <description>#127 桃園市AI素養爭霸賽備戰站，把報名、指定版本、資料蒐集、監督式學習、模型測試、規則紅線與比賽日流程放進同一條練習路線。學生知道今天做什麼，指導教師也能看見隊伍卡在哪一站。</description>
@@ -197,7 +197,7 @@
     </item>
     <item>
       <title>🆕 新工具：桃園市AI素養爭霸賽</title>
-      <link>https://cagoooo.github.io/Akai/tool/127</link>
+      <link>https://cagoooo.github.io/Akai/tool/127/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/127</guid>
       <pubDate>Sun, 13 Sep 2026 16:00:00 GMT</pubDate>
       <description>把桃園市 115 年度 AI 素養爭霸賽的報名、版本、規則與練習拆成一條備戰路線：從 PAIA 3.3.5、魷來魷去 1.7.5 與地圖 12，到資料蒐集、監督式學習、模型測試、上傳檢查與比賽日分工，學生和指導教師打開就能開始。</description>
@@ -209,7 +209,7 @@
     </item>
     <item>
       <title>📖 教學情境：#126 DEADZONE 能量防線：把失敗放在策略上，孩子才會想再試一次</title>
-      <link>https://cagoooo.github.io/Akai/blog/deadzone-126-3d-tower-defense-energy-weapons</link>
+      <link>https://cagoooo.github.io/Akai/blog/deadzone-126-3d-tower-defense-energy-weapons/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/deadzone-126-3d-tower-defense-energy-weapons</guid>
       <pubDate>Sun, 06 Sep 2026 00:00:00 GMT</pubDate>
       <description>#126 是一款直接在瀏覽器跑的 3D 塔防射擊：三種能量武器隨時切換、三種防禦塔各有分工、十波殭屍撲向能源核心。最關鍵的設計是角色不受傷害、敵人只攻核心——失敗回饋落在「這一波該把塔蓋在哪裡」，是能被討論、被修正、被下一局驗證的判斷，孩子因此願意再想一次。</description>
@@ -218,7 +218,7 @@
     </item>
     <item>
       <title>🆕 新工具：DEADZONE 能量防線：3D 塔防射擊</title>
-      <link>https://cagoooo.github.io/Akai/tool/126</link>
+      <link>https://cagoooo.github.io/Akai/tool/126/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/126</guid>
       <pubDate>Sat, 05 Sep 2026 16:00:00 GMT</pubDate>
       <description>三種能量武器、三種防禦塔、十波殭屍。在彎道埋伏、用有限能源在「多蓋一座塔」與「升級舊塔」之間取捨，撐過十波守住能源核心。角色不受傷害、敵人只攻核心，失敗原因落在策略而不是手速，動腦但不挫折；桌機鍵鼠、手機雙搖桿都能玩。</description>
@@ -230,7 +230,7 @@
     </item>
     <item>
       <title>📖 教學情境：#125 教師工會支會宣導站：把「今年會費到底怎麼繳」一次講完，不用再翻群組</title>
-      <link>https://cagoooo.github.io/Akai/blog/teacher-union-125-membership-service-hub</link>
+      <link>https://cagoooo.github.io/Akai/blog/teacher-union-125-membership-service-hub/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/teacher-union-125-membership-service-hub</guid>
       <pubDate>Sat, 05 Sep 2026 00:00:00 GMT</pubDate>
       <description>#125 桃園市教育產業工會石門國小支會的會員服務暨活動宣導站，把會費、續會禮、新進入會優惠與親子健行活動收進一頁。分「我是舊會員／我是新進老師」兩條入口，寫明本校採教師小組代收、財務長統一匯款，會員不必個別匯款，也不必自己去填官方表單。</description>
@@ -239,7 +239,7 @@
     </item>
     <item>
       <title>🆕 新工具：桃園市教育產業工會｜石門國小支會會員服務暨活動宣導</title>
-      <link>https://cagoooo.github.io/Akai/tool/125</link>
+      <link>https://cagoooo.github.io/Akai/tool/125/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/125</guid>
       <pubDate>Fri, 04 Sep 2026 16:00:00 GMT</pubDate>
       <description>把工會會費、續會禮、新進入會優惠與親子健行活動，整理成一頁看得完的宣導站。分「我是舊會員／我是新進老師」兩條入口，寫明本校採教師小組代收、財務長統一匯款，會員不必個別匯款，也不必自己填官方表單。</description>
@@ -251,7 +251,7 @@
     </item>
     <item>
       <title>📖 教學情境：#124 從 AI 教學與研究助理到 AI Agent：把一日工作坊變成可重複的實作路線</title>
-      <link>https://cagoooo.github.io/Akai/blog/ai-workshop-124-teaching-research-agent</link>
+      <link>https://cagoooo.github.io/Akai/blog/ai-workshop-124-teaching-research-agent/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/ai-workshop-124-teaching-research-agent</guid>
       <pubDate>Tue, 25 Aug 2026 00:00:00 GMT</pubDate>
       <description>#124 把上午 47 頁、下午 59 頁的 AI 工作坊整理成一條可以真的走完的路線：先建立教學與研究工作室，再練習資料治理、Agent Skills、部署與人工驗收，讓 AI 從聊天視窗變成可交付的工作夥伴。</description>
@@ -260,7 +260,7 @@
     </item>
     <item>
       <title>🆕 新工具：從 AI 教學與研究助理到 AI Agent</title>
-      <link>https://cagoooo.github.io/Akai/tool/124</link>
+      <link>https://cagoooo.github.io/Akai/tool/124/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/124</guid>
       <pubDate>Mon, 24 Aug 2026 16:00:00 GMT</pubDate>
       <description>把一日 AI 工作坊變成可直接操作的教學與研究路線：上午用 Gemini Notebook、Gem、Canvas 建工作室，下午用 Codex、Antigravity、Claude 與 Agent Skills 完成資料分析、部署與可追溯交付。</description>
@@ -272,7 +272,7 @@
     </item>
     <item>
       <title>🆕 新工具：校網無障礙 AA 遷移操作平台</title>
-      <link>https://cagoooo.github.io/Akai/tool/123</link>
+      <link>https://cagoooo.github.io/Akai/tool/123/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/123</guid>
       <pubDate>Thu, 06 Aug 2026 02:00:00 GMT</pubDate>
       <description>把「舊校網搬到教育局 XOOPS 共構平台、拿到無障礙 AA 標章」拆成 12 個能打勾的步驟：逐項操作指引、要貼的內容一鍵複製、進度自動記住，還內建對比度檢查小工具與送審四大雷區清單。</description>
@@ -284,7 +284,7 @@
     </item>
     <item>
       <title>📖 教學情境：#123 校網無障礙 AA 遷移操作平台：把一本研習講義，變成 12 個能打勾的步驟</title>
-      <link>https://cagoooo.github.io/Akai/blog/web-migration-123-accessibility-aa-console</link>
+      <link>https://cagoooo.github.io/Akai/blog/web-migration-123-accessibility-aa-console/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/web-migration-123-accessibility-aa-console</guid>
       <pubDate>Thu, 06 Aug 2026 00:00:00 GMT</pubDate>
       <description>#123 校網無障礙 AA 遷移操作平台，把「舊校網搬到教育局共構平台、拿到無障礙 AA 標章」這件沒人說得清楚的事，拆成 12 個由上往下、做完打勾就好的步驟：要貼的內容一鍵複製、進度自動記住，還內建對比度小工具與會讓你秒退件的四大雷區清單。</description>
@@ -293,7 +293,7 @@
     </item>
     <item>
       <title>🆕 新工具：兒童英語單字大冒險</title>
-      <link>https://cagoooo.github.io/Akai/tool/122</link>
+      <link>https://cagoooo.github.io/Akai/tool/122/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/122</guid>
       <pubDate>Tue, 28 Jul 2026 02:00:00 GMT</pubDate>
       <description>專為國小孩子打造的魔法英語單字學習平台！AI 拍照自動辨識課本單字、真人美音朗讀、Kahoot 風格全班對戰與等級成就系統，讓背單字變成一場冒險。</description>
@@ -305,7 +305,7 @@
     </item>
     <item>
       <title>📖 教學情境：#122 兒童英語單字大冒險：拍一張課本照片，AI 幫你把整課單字變成全班對戰</title>
-      <link>https://cagoooo.github.io/Akai/blog/word-wiz-kids-122-english-vocabulary-adventure</link>
+      <link>https://cagoooo.github.io/Akai/blog/word-wiz-kids-122-english-vocabulary-adventure/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/word-wiz-kids-122-english-vocabulary-adventure</guid>
       <pubDate>Tue, 28 Jul 2026 00:00:00 GMT</pubDate>
       <description>#122 兒童英語單字大冒險，用 Gemini 視覺 AI 拍照辨識課本單字、真人美音朗讀、Kahoot 風格全班 PIN 碼對戰，加上等級 EXP、連續打卡與 8 款成就徽章，把「背單字」變成孩子願意每天回來的冒險。</description>
@@ -314,7 +314,7 @@
     </item>
     <item>
       <title>🆕 新工具：仙人掌大逃亡：奔跑吧小墨龍</title>
-      <link>https://cagoooo.github.io/Akai/tool/121</link>
+      <link>https://cagoooo.github.io/Akai/tool/121/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/121</guid>
       <pubDate>Mon, 27 Jul 2026 16:00:00 GMT</pubDate>
       <description>全新東方水墨畫風網頁無盡跑酷遊戲！靈敏操控小墨龍跳躍與俯衝，穿梭千重仙人掌陣，支援手機與電腦極速對決，挑戰最高分紀錄。</description>
@@ -326,7 +326,7 @@
     </item>
     <item>
       <title>🆕 新工具：3D 星際雷霆：隕石防禦與太空探索解題大冒險</title>
-      <link>https://cagoooo.github.io/Akai/tool/120</link>
+      <link>https://cagoooo.github.io/Akai/tool/120/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/120</guid>
       <pubDate>Mon, 27 Jul 2026 00:00:00 GMT</pubDate>
       <description>第一人稱 3D 太空飛船駕駛與隕石防禦遊戲！駕駛戰機發射雷射與散彈砲，捕捉問號智囊球解答太陽系、自然科學、AI 常識與密碼推理題庫，維護護盾並衝高分登錄班級英雄榜。</description>
