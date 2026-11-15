@@ -106,6 +106,7 @@ export async function incrementVisitorCount(): Promise<VisitorStats> {
     } catch (error) {
         // 請求沒送完（小寫 internal，例如 LINE 內建瀏覽器切頁或關閉）：只少記一次造訪，改用本地備份，不送告警
         // （JAVASCRIPT-REACT-V：2026-10-10 起 6 次／5 位訪客，多為 iPhone LINE；同時段後端無錯誤）；後端真的回錯照常回報
+        // SDK 計時器到點的小寫 deadline-exceeded 同理（JAVASCRIPT-REACT-2E：iPhone 開工具分頁後切回才報錯）
         if (classifyTrackFailure(error) === 'network') {
             console.info('增加訪客計數這次沒送出（連線中斷），改用本地計數:', error);
         } else {
