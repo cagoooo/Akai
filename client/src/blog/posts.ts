@@ -2805,7 +2805,7 @@ const POST_87: BlogPost = {
   slug: 'pirls-87-questioncraft-rewrite',
   title: '#87 PIRLS Pro QuestionCraft：從課文照片到 PaGamO 題庫一條龍，答後講解與 Chrome 擴充套件全面升級',
   excerpt:
-    '#87 PIRLS QuestionCraft 是舊版 #4 PIRLS 的完全重寫版：Next.js 15 + Gemini 2.5 Flash 出四層次平衡題組，2026 年 10 月改成「答後講解」，11 月新增 Chrome 擴充套件，在任何網頁截圖或讀取全文就能出題，一鍵送進 PaGamO 批量上傳，選項順序預設隨機。',
+    '#87 PIRLS QuestionCraft 是舊版 #4 PIRLS 的完全重寫版：Next.js 15 + Gemini 2.5 Flash 出四層次平衡題組，2026 年 10 月改成「答後講解」，11 月新增 Chrome 擴充套件（已上架商店），在任何網頁截圖、讀取全文或用 YouTube 影片就能出題，可依年級改寫文章，一鍵送進 PaGamO 自動上傳並標出新題組。',
   publishedAt: '2026-05-21',
   readingMinutes: 8,
   tags: ['PIRLS', '閱讀素養', 'AI 出題', 'PaGamO', 'Chrome 擴充套件', '形成性評量'],
@@ -2878,11 +2878,18 @@ PIRLS（Progress in International Reading Literacy Study）是國際閱讀素養
 1. **📷 截取這個畫面**：電子書、PDF、學習單都能用。按工具列圖示（或 Alt+Shift+P）截圖後，自動跳到「工作台」分頁框出文章範圍，按「裁切並開始出題」一步到位；文章跨好幾頁就多截幾張
 2. **📖 讀取這頁全文**：部落格、新聞一鍵擷取正文，用的是 Firefox 閱讀模式同一套 Mozilla Readability，自動去掉選單、廣告、留言；也可以反白一段文字按右鍵出題
 3. **✏️ 逐題檢查修改**：題幹、選項、正解、答後講解、PIRLS 層次都能直接改，改完自動儲存；載入新文章時舊題目會先收起來，按「還原上一份」就能找回
-4. **🚀 一鍵送到 PaGamO**：先下載一份備份，接著自動打開 PaGamO 批量上傳頁、選好題組／選擇題題型、放好檔案，老師確認後自己按「上傳」。**選項順序預設隨機**，每位學生看到的選項順序不同，沒辦法靠記答案位置猜題
+4. **🚀 一鍵送到 PaGamO**：先下載一份備份，接著自動打開 PaGamO 批量上傳頁、選好題組／選擇題題型、放好檔案，**倒數 5 秒自動按「上傳」**（想先檢查可以按「先不要，我自己按」）。PaGamO 檢查通過後，自動跳到「題目總覽」並用橘框標出剛上傳的題組；PaGamO 說檔案有問題時，會直接把原因顯示出來。**選項順序預設隨機**，每位學生看到的選項順序不同，沒辦法靠記答案位置猜題
 
-**金鑰怎麼辦？** 擴充套件改成**每位老師用自己的免費 Gemini 金鑰**（到 Google AI Studio 申請，約 2 分鐘）。金鑰只存在自己電腦的 Chrome 裡，不在擴充套件資料夾，把 ZIP 分享給同事也不會把金鑰送出去；預設用最快的 Flash-Lite 模型。用的老師再多，也不會占用網站版的共用額度。
+之後陸續加上的功能：
 
-**怎麼安裝？** 到 [擴充套件下載與圖文安裝說明](https://cagoooo.github.io/pirls-questioncraft/extension/) 下載 ZIP、解壓縮到固定位置，在 \`chrome://extensions\` 打開「開發人員模式」載入資料夾。目前沒有上 Chrome 線上應用程式商店，有新版時工作台會自動提醒。
+- **🖼️ 題組附原始截圖**：用截圖出題時，截圖會和 Excel 一起送進 PaGamO，學生在題組裡看得到原本的頁面與插圖
+- **🎓 依年級改寫**：選一～六年級，AI 先把文章改寫成適合該年級閱讀的版本，再依該年級的程度出題；改寫後的文章放在工作台右邊，可以先檢查修改
+- **🎬 用 YouTube 影片出題**：在影片頁按「用這部影片出題」，可以只選一段；AI 寫出標了時間的重點摘要並出題，講解會寫出線索在影片幾分幾秒，題組附上觀看連結與影片封面圖（只能用公開影片）
+- **🃏 LoiLoNote 測驗卡**：題組檔只有題目；含文章版會把文章放在題目前面，學生讀完再作答
+
+**金鑰怎麼辦？** 擴充套件改成**每位老師用自己的免費 Gemini 金鑰**（到 Google AI Studio 申請，約 2 分鐘）。請用**個人 Gmail 帳號**申請，不要用學校信箱，才能使用免費額度。金鑰只存在自己電腦的 Chrome 裡，不會送到開發者的伺服器。用的老師再多，也不會占用網站版的共用額度。
+
+**怎麼安裝？** 已上架 [Chrome 線上應用程式商店](https://chromewebstore.google.com/detail/cfbehdinangicblpbnockoofeccmoidp)，按「加到 Chrome」就好，之後會自動更新。學校電腦不能從商店安裝時，[圖文安裝說明](https://cagoooo.github.io/pirls-questioncraft/extension/) 有下載 ZIP、用「開發人員模式」載入的方式。
 
 ## 用之前要知道
 
@@ -2891,7 +2898,7 @@ PIRLS（Progress in International Reading Literacy Study）是國際閱讀素養
 | 出題時間 | 一篇文章 8 題約幾十秒到一分鐘（看文章長度與模型） |
 | AI 出的題 | **一定要老師逐題看過**再派給學生 |
 | 個資 | 免費 Gemini 方案的內容可能被 Google 用來改進產品，不要截有學生姓名、成績的畫面 |
-| 學校電腦 | 若被電腦管理政策鎖住「開發人員模式」，擴充套件就裝不了，請洽資訊組 |
+| 學校電腦 | 若電腦管理政策擋住商店安裝與「開發人員模式」，擴充套件就裝不了，請洽資訊組 |
 | 學校網域版 | [#4 pirlss.smes](/tool/4) 是另一個部署，答後講解、擴充套件與新版儀表板目前先在 #87 上線 |
 
 ## 配對工具推薦
@@ -2910,7 +2917,7 @@ PIRLS（Progress in International Reading Literacy Study）是國際閱讀素養
 
 ## 想試試？
 
-→ [前往 #87 PIRLS QuestionCraft Pro](/tool/87)　→ [下載 Chrome 擴充套件](https://cagoooo.github.io/pirls-questioncraft/extension/)
+→ [前往 #87 PIRLS QuestionCraft Pro](/tool/87)　→ [從商店安裝 Chrome 擴充套件](https://chromewebstore.google.com/detail/cfbehdinangicblpbnockoofeccmoidp)
 
 第一次用建議從 **「拍課本兩頁照片」** 開始；常在網路上找閱讀素材的老師，直接裝擴充套件，看到好文章按一下「讀取這頁全文」就能出題。
 `,

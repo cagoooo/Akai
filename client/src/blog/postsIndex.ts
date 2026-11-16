@@ -1198,7 +1198,7 @@ export const POSTS_INDEX: BlogPostMeta[] = [
   {
     "slug": "pirls-87-questioncraft-rewrite",
     "title": "#87 PIRLS Pro QuestionCraft：從課文照片到 PaGamO 題庫一條龍，答後講解與 Chrome 擴充套件全面升級",
-    "excerpt": "#87 PIRLS QuestionCraft 是舊版 #4 PIRLS 的完全重寫版：Next.js 15 + Gemini 2.5 Flash 出四層次平衡題組，2026 年 10 月改成「答後講解」，11 月新增 Chrome 擴充套件，在任何網頁截圖或讀取全文就能出題，一鍵送進 PaGamO 批量上傳，選項順序預設隨機。",
+    "excerpt": "#87 PIRLS QuestionCraft 是舊版 #4 PIRLS 的完全重寫版：Next.js 15 + Gemini 2.5 Flash 出四層次平衡題組，2026 年 10 月改成「答後講解」，11 月新增 Chrome 擴充套件（已上架商店），在任何網頁截圖、讀取全文或用 YouTube 影片就能出題，可依年級改寫文章，一鍵送進 PaGamO 自動上傳並標出新題組。",
     "publishedAt": "2026-05-21",
     "readingMinutes": 8,
     "tags": [
