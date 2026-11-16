@@ -16,6 +16,8 @@ describe('計數失敗原因分類', () => {
     expect(classifyTrackFailure(firebaseError('analytics/token-unavailable', '連線中斷，暫時取不到登入權杖'))).toBe('network');
     // SDK 自己的計時器到點（分頁切到背景後切回，JAVASCRIPT-REACT-2E）
     expect(classifyTrackFailure(firebaseError('functions/deadline-exceeded', 'deadline-exceeded'))).toBe('network');
+    // 回應沒收完整（JAVASCRIPT-REACT-2F，後端是 200）
+    expect(classifyTrackFailure(firebaseError('functions/internal', 'Response is not valid JSON object.'))).toBe('network');
     // 後端自己回的逾時訊息不是 SDK 的小寫字串，照常回報
     expect(classifyTrackFailure(firebaseError('functions/deadline-exceeded', 'Function execution took too long'))).toBe('other');
     // 後端自己回的錯誤是大寫 INTERNAL，不是客戶端網路問題

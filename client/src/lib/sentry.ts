@@ -351,7 +351,13 @@ const TOOL_DATA_FETCH_FAILURE = '無法獲取工具數據';
  */
 export function isAbortedRequestError(error: unknown): boolean {
   if (!(error instanceof Error)) return false;
-  if ((error as { code?: unknown }).code === 'functions/internal') return error.message === 'internal';
+  const code = (error as { code?: unknown }).code;
+  // Firebase SDK 自己產生的錯誤（全是固定的小寫／英文字串；後端真的回錯會帶後端訊息，不會命中）：
+  //   internal：請求送不出去或被中斷
+  //   Response is not valid JSON object.：回應沒收完整（2026-11-16 JAVASCRIPT-REACT-2F，Android 三星瀏覽器，後端 4 筆全是 200）
+  if (code === 'functions/internal') return error.message === 'internal' || error.message === 'Response is not valid JSON object.';
+  // SDK 70 秒計時器到點：分頁切到背景、iOS 暫停連線，切回來才觸發（JAVASCRIPT-REACT-2E）
+  if (code === 'functions/deadline-exceeded') return error.message === 'deadline-exceeded';
   // 網路剛恢復、Auth 換不到新權杖，統計請求被後端當成未登入（見 publicAnalyticsService 的 TOKEN_UNAVAILABLE_CODE）
   if ((error as { code?: unknown }).code === 'analytics/token-unavailable') return true;
   // 工具資料靜態檔與備援 API 都沒成功回應：連不上網路時 Service Worker 會回合成的 503「離線中」，兩條路一起失敗

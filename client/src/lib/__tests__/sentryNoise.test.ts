@@ -208,6 +208,11 @@ describe('網路不可靠時被中止的請求不送進 Sentry', () => {
     expect(isAbortedRequestError(firebaseError('functions/internal', 'internal'))).toBe(true);
     expect(isAbortedRequestError(firebaseError('analytics/token-unavailable', '連線中斷，暫時取不到登入權杖'))).toBe(true);
     expect(isAbortedRequestError(firebaseError('functions/unauthenticated', 'authentication required'))).toBe(false);
+    // 2026-11-16：SDK 計時器到點（2E）、回應沒收完整（2F）；後端自己回的訊息不算
+    expect(isAbortedRequestError(firebaseError('functions/deadline-exceeded', 'deadline-exceeded'))).toBe(true);
+    expect(isAbortedRequestError(firebaseError('functions/internal', 'Response is not valid JSON object.'))).toBe(true);
+    expect(isAbortedRequestError(firebaseError('functions/internal', 'INTERNAL'))).toBe(false);
+    expect(isAbortedRequestError(firebaseError('functions/deadline-exceeded', 'Function execution took too long'))).toBe(false);
     expect(isAbortedRequestError(new TypeError('Failed to fetch'))).toBe(true);
     expect(isAbortedRequestError(new TypeError('Load failed'))).toBe(true);
     expect(isAbortedRequestError(new TypeError('NetworkError when attempting to fetch resource.'))).toBe(true);

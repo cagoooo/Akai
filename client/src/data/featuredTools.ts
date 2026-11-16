@@ -28,4 +28,4 @@ export const FEATURED_TOOL_IDS: number[] = [
   131, // [fallback] iWIN 兒少上網問卷結果閱讀站
 ];
 
-/** 自動產生：2026-11-16T08:13:54.806Z */
+/** 自動產生：2026-11-16T08:30:08.699Z */

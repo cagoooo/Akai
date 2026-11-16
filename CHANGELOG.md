@@ -2,6 +2,13 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.224] - 2026-11-16 — 背景統計回應沒收完整時不再告警；連線中斷判斷合併成一套
+
+- **問題（JAVASCRIPT-REACT-2F）**：Android 三星瀏覽器訪客開 #14 時，裝置統計請求後端 4 筆全部回 200，但手機端其中一筆回應沒讀完整，Firebase SDK 報 `functions/internal`「Response is not valid JSON object.」，以 warning 送進 Sentry。
+- **根因**：「是不是連線中斷」有兩套規則：`sentry.ts` 的 `isAbortedRequestError`（背景統計用）與 `toolTrackFailure.ts` 的 `classifyTrackFailure`（訪客／工具計數用）。v3.6.220 只補了後者，背景統計路徑仍漏。
+- **修正**：`isAbortedRequestError` 加入 SDK 產生的「Response is not valid JSON object.」與小寫 `deadline-exceeded`；`classifyTrackFailure` 改直接呼叫它，三條路徑共用同一套規則。後端自己回的錯（大寫 INTERNAL、後端逾時訊息）照常回報。
+- **測試**：兩支測試各補對應案例。
+
 ## [3.6.223] - 2026-11-16 — 按「立即更新」後不再反覆跳出「新版本已就緒」
 
 - **問題**：11/16 15:56 與 15:59 連兩次部署（第二次只改後端卻重建網站，同版號 3.6.222 換了雜湊）。訪客按「立即更新」時，Service Worker 開頁面直接沿用瀏覽器快取的 HTML（GitHub Pages 允許快取 10 分鐘），一直載回舊程式 → 又比對到新版 → 提示反覆出現，主控台還會跳出 8 則「關鍵資產 404」。

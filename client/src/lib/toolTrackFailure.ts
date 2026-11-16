@@ -1,4 +1,5 @@
 import { trackEvent } from './analytics';
+import { isAbortedRequestError } from './sentry';
 
 /**
  * 工具使用計數（incrementToolClick）失敗的量測：只送 GA 事件，不送 Sentry、不發告警。
@@ -19,14 +20,10 @@ export function classifyTrackFailure(err: unknown): TrackFailureReason {
   if (!(err instanceof Error)) return 'other';
   // firestoreService 在 App Check 沒通過時自己丟的錯
   if (err.message.startsWith('App Check 尚未通過')) return 'app_check';
-  // Firebase SDK 把「請求送不出去／被中斷」統一包成小寫 internal（後端回的是大寫 INTERNAL）
-  if ((err as { code?: unknown }).code === 'functions/internal' && err.message === 'internal') return 'network';
-  // Firebase SDK 自己的 70 秒計時器到點（小寫 deadline-exceeded）：回應沒收到，多半是分頁被切到背景、iOS 暫停連線，
-  // 切回來時計時器才觸發（JAVASCRIPT-REACT-2E：14:44 點「立即使用」開新分頁，14:46 切回才報錯，同秒新請求都成功）。
-  // 後端真的逾時會帶後端自己的訊息，不會是這個小寫字串，照常歸 other。
-  if ((err as { code?: unknown }).code === 'functions/deadline-exceeded' && err.message === 'deadline-exceeded') return 'network';
-  // 網路剛恢復、Auth 換不到新權杖（見 publicAnalyticsService 的 TOKEN_UNAVAILABLE_CODE）
-  if ((err as { code?: unknown }).code === 'analytics/token-unavailable') return 'network';
+  // 連線中斷類（SDK 的小寫 internal、逾時、回應沒收完整、換不到權杖、Failed to fetch）統一由 sentry.ts 的
+  // isAbortedRequestError 判斷，訪客計數、工具計數、背景統計三條路徑共用同一份規則，
+  // 避免像 2026-11-16 那樣只補了一邊（JAVASCRIPT-REACT-2E 補在這裡、2F 卻從統計路徑漏出）。
+  if (isAbortedRequestError(err)) return 'network';
   return 'other';
 }
 
