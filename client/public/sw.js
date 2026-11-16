@@ -7,7 +7,7 @@
  * - Stale While Revalidate: 圖片
  */
 
-const CACHE_VERSION = 'v3.6.222-a785219b-202611161555';
+const CACHE_VERSION = 'v3.6.223-f9345d6f-202611161613';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
 const ASSETS_ARCHIVE = 'assets-archive-v1';
@@ -350,9 +350,19 @@ async function networkFirst(request) {
  * 2026-11-03：使用者按「立即更新」後重新整理剛好遇到 503，畫面停在更新中。
  */
 async function navigateWithFallback(request) {
+  // 開頁面一律向伺服器確認是否有新版（no-cache：沒變只回 304，很快）。
+  // GitHub Pages 的 HTML 允許瀏覽器快取 10 分鐘；直接 fetch(request) 時，剛部署後按「立即更新」
+  // 會一直拿到快取裡的舊 HTML → 載入舊程式 → 又偵測到新版 → 提示反覆出現（2026-11-16 連兩次部署後實測）。
+  // 導覽請求不能直接改快取模式，所以重建一個同網址請求；redirect: 'manual' 讓 301（例如少斜線）交回瀏覽器自己處理。
+  const freshRequest = new Request(request.url, {
+    method: 'GET',
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    redirect: 'manual',
+  });
   const attempt = async () => {
     try {
-      const response = await fetch(request);
+      const response = await fetch(freshRequest);
       return response.status >= 500 ? { failed: response } : { ok: response };
     } catch {
       return { failed: null };

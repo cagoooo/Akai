@@ -6,6 +6,10 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+    # 只改後端（Cloud Functions，另外用 firebase deploy 部署）時不重建網站：
+    # 重建會產生同版號不同雜湊的 version.json，害訪客白白跳出「新版本已就緒」（2026-11-16 f9345d6f）。
+    paths-ignore:
+      - 'functions/**'
   pull_request:
     branches: [main]
   workflow_dispatch:
