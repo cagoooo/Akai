@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 135+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 136+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Tue, 03 Nov 2026 08:35:50 GMT</pubDate>
-    <lastBuildDate>Mon, 16 Nov 2026 00:14:04 GMT</lastBuildDate>
+    <pubDate>Mon, 16 Nov 2026 07:45:53 GMT</pubDate>
+    <lastBuildDate>Mon, 16 Nov 2026 07:55:30 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,27 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：好文章一鍵變題組｜PIRLS 閱讀題組小幫手線上分享簡報</title>
+      <link>https://cagoooo.github.io/Akai/tool/136/</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/136</guid>
+      <pubDate>Mon, 16 Nov 2026 07:45:53 GMT</pubDate>
+      <description>阿凱老師在 PaGamO 教師社群線上分享（2026-12-11）的 16 頁互動簡報：用冒險關卡的方式，介紹怎麼用 Chrome 擴充功能把網頁文章、截圖或 YouTube 影片變成 PIRLS 四層次題組，一鍵送進 PaGamO；聽眾用手機參與文字雲、投票與回饋。</description>
+      <category>PIRLS</category>
+      <category>閱讀素養</category>
+      <category>PaGamO</category>
+      <category>Chrome 擴充功能</category>
+      <category>AI 出題</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#136 好文章一鍵變題組：一份把 PIRLS 出題流程講成闖關地圖的 40 分鐘線上分享簡報</title>
+      <link>https://cagoooo.github.io/Akai/blog/pagamo-pirls-talk-136-article-to-question-set/</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/pagamo-pirls-talk-136-article-to-question-set</guid>
+      <pubDate>Mon, 16 Nov 2026 00:00:00 GMT</pubDate>
+      <description>這是阿凱老師為 PaGamO 教師社群線上分享（2026-12-11）準備的 16 頁互動簡報：用五個關卡講清楚怎麼用 PIRLS 閱讀題組小幫手，把網頁文章、截圖或 YouTube 影片變成四層次題組並一鍵送進 PaGamO，聽眾用手機參與文字雲與投票。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
     <item>
       <title>🆕 新工具：公共程式平臺上架報告</title>
       <link>https://cagoooo.github.io/Akai/tool/135/</link>
@@ -311,30 +332,6 @@
       <description>#122 兒童英語單字大冒險，用 Gemini 視覺 AI 拍照辨識課本單字、真人美音朗讀、Kahoot 風格全班 PIN 碼對戰，加上等級 EXP、連續打卡與 8 款成就徽章，把「背單字」變成孩子願意每天回來的冒險。</description>
       <category>blog</category>
       <category>教學情境</category>
-    </item>
-    <item>
-      <title>🆕 新工具：仙人掌大逃亡：奔跑吧小墨龍</title>
-      <link>https://cagoooo.github.io/Akai/tool/121/</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/121</guid>
-      <pubDate>Mon, 27 Jul 2026 16:00:00 GMT</pubDate>
-      <description>全新東方水墨畫風網頁無盡跑酷遊戲！靈敏操控小墨龍跳躍與俯衝，穿梭千重仙人掌陣，支援手機與電腦極速對決，挑戰最高分紀錄。</description>
-      <category>跑酷</category>
-      <category>水墨</category>
-      <category>無盡跑酷</category>
-      <category>小墨龍</category>
-      <category>教育遊戲</category>
-    </item>
-    <item>
-      <title>🆕 新工具：3D 星際雷霆：隕石防禦與太空探索解題大冒險</title>
-      <link>https://cagoooo.github.io/Akai/tool/120/</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/120</guid>
-      <pubDate>Mon, 27 Jul 2026 00:00:00 GMT</pubDate>
-      <description>第一人稱 3D 太空飛船駕駛與隕石防禦遊戲！駕駛戰機發射雷射與散彈砲，捕捉問號智囊球解答太陽系、自然科學、AI 常識與密碼推理題庫，維護護盾並衝高分登錄班級英雄榜。</description>
-      <category>3D遊戲</category>
-      <category>星際雷霆</category>
-      <category>太空解題</category>
-      <category>隕石防禦</category>
-      <category>天文科學</category>
     </item>
   </channel>
 </rss>

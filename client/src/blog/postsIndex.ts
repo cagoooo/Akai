@@ -15,6 +15,27 @@ export type BlogPostMeta = Omit<BlogPost, 'body'>;
 
 export const POSTS_INDEX: BlogPostMeta[] = [
   {
+    "slug": "pagamo-pirls-talk-136-article-to-question-set",
+    "title": "#136 好文章一鍵變題組：一份把 PIRLS 出題流程講成闖關地圖的 40 分鐘線上分享簡報",
+    "excerpt": "這是阿凱老師為 PaGamO 教師社群線上分享（2026-12-11）準備的 16 頁互動簡報：用五個關卡講清楚怎麼用 PIRLS 閱讀題組小幫手，把網頁文章、截圖或 YouTube 影片變成四層次題組並一鍵送進 PaGamO，聽眾用手機參與文字雲與投票。",
+    "publishedAt": "2026-11-16",
+    "readingMinutes": 5,
+    "tags": [
+      "PIRLS",
+      "PaGamO",
+      "互動簡報",
+      "教師社群分享",
+      "Chrome 擴充功能"
+    ],
+    "toolIds": [
+      136,
+      87,
+      133
+    ],
+    "coverEmoji": "🗺️",
+    "coverColor": "purple"
+  },
+  {
     "slug": "moda-briefing-135-public-code-report",
     "title": "#135 一所小學的程式，送上公共程式平臺：二十分鐘講完三週的資安檢測",
     "excerpt": "從一人資訊組的需求、AI 協作開發，到 Fortify 初掃 40 筆中風險以上一路修到 0，再到錯誤通報與開源再利用。這份向數位發展部報告的簡報，把整段上架過程攤開來給你看。",

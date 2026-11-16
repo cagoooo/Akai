@@ -15448,6 +15448,84 @@ const POST_134: BlogPost = {
 `,
 };
 
+const POST_136: BlogPost = {
+  slug: 'pagamo-pirls-talk-136-article-to-question-set',
+  title: '#136 好文章一鍵變題組：一份把 PIRLS 出題流程講成闖關地圖的 40 分鐘線上分享簡報',
+  excerpt:
+    '這是阿凱老師為 PaGamO 教師社群線上分享（2026-12-11）準備的 16 頁互動簡報：用五個關卡講清楚怎麼用 PIRLS 閱讀題組小幫手，把網頁文章、截圖或 YouTube 影片變成四層次題組並一鍵送進 PaGamO，聽眾用手機參與文字雲與投票。',
+  publishedAt: '2026-11-16',
+  readingMinutes: 5,
+  tags: ['PIRLS', 'PaGamO', '互動簡報', '教師社群分享', 'Chrome 擴充功能'],
+  toolIds: [136, 87, 133],
+  coverEmoji: '🗺️',
+  coverColor: 'purple',
+  body: `## 一場 40 分鐘的線上分享，要講什麼？
+
+受邀到 PaGamO 教師社群做線上分享，時間是晚上八點、Google Meet、大約 40 分鐘。聽眾是各縣市的國小資訊組長與導師，有人已經天天用 PaGamO，有人只聽過。
+
+要在 40 分鐘裡講完「為什麼出題很累 → PIRLS 四層次是什麼 → 小幫手怎麼用 → 現場示範 → 怎麼安裝」，又要讓螢幕另一端的老師不要只是安靜看著，簡報本身就得幫忙：時間要排好、示範要有倒數、聽眾要有地方回應。
+
+## 這份簡報長什麼樣子？
+
+**冒險關卡風**：整份簡報分成五個關卡——出發準備、魔王出現（題組難出）、取得神器、實戰闖關、收集寶藏。左上角顯示現在在第幾關，右上角的經驗值條就是簡報進度，進入新關卡時會跳出提示。線上分享看不到彼此，用這種方式讓聽眾知道「現在講到哪、還剩多少」。
+
+**16 頁內容依序是**：
+
+- **魔王出現**：好文章到處都有，題組卻很難出——文章不能複製就要打字、四個層次很難平均、PaGamO 批量上傳範本要一格一格貼
+- **PIRLS 四個理解層次**：訊息提取、直接推論、詮釋整合、評估批判，8 題時各 2 題
+- **四種方法把文章交給小幫手**：截取畫面（題組會附上原始截圖）、讀取這頁全文、反白文字、YouTube 影片（講解會標出線索在幾分幾秒）；出題前可以選一～六年級，AI 先把文章改寫成適合該年級的版本
+- **現場示範**：從一篇新聞到 PaGamO 題目總覽，頁面上有 12 分鐘示範倒數，可以暫停、加一分鐘
+- **AI 出題，老師把關**：題幹、選項、正解、答後講解都能逐題修改
+- **一鍵送到 PaGamO**：自動打開批量上傳頁、選好題組、放好檔案，倒數 5 秒自動按「上傳」，檢查通過後跳到題目總覽並標出新題組；選項順序預設隨機
+- **前後對比滑桿**：左右拖拉，比較「以前全部自己來」與「現在老師當總編輯」
+- **不只 PaGamO**：也能下載 LoiLoNote 測驗卡匯入檔
+- **三步驟裝起來**：從 Chrome 線上應用程式商店安裝、用個人 Gmail 申請免費 Gemini 金鑰、開始出題，附 QR Code
+
+## 聽眾怎麼參與？
+
+聽眾用手機掃 QR Code 打開參與頁，不用登入：
+
+- **開場文字雲**：「出一份閱讀題組，最花時間的是哪一步？」
+- **投票**：「你最想先拿哪一種素材來出題？」
+- **結尾文字雲與回饋**：「今晚最有收穫的一個詞？」、分享給幾顆星、回去會不會用小幫手出題
+
+結果即時出現在簡報上。分享結束後，**成果紀錄頁**把投票與文字雲整理成一頁，可以列印或存成 PDF，留作研習紀錄。
+
+彩排時在網址後面加 \`?test=1\`，資料會另外存放，不會混進正式紀錄。
+
+## 技術做法
+
+- Reveal.js 簡報＋GSAP 動畫，部署在 GitHub Pages
+- 互動資料存在 Firebase Firestore，用匿名登入區分每位參與者
+- 有新版本時會提示重新整理（線上分享前改了簡報，聽眾不會看到舊版）
+- **簡報網站本身不呼叫 AI 模型**；出題用的 AI 在 Chrome 擴充功能裡，由老師用自己的 Gemini 金鑰呼叫
+
+## 想像這樣用（情境示例）
+
+> 以下是情境示例，不是真實紀錄。
+
+教學組長要在校內教師晨會推廣閱讀素養題組，只有 15 分鐘，於是打開這份簡報，只挑「PIRLS 四個理解層次」「四種方法」「一鍵送到 PaGamO」三頁講，再請同事掃 QR Code 投票「最想先拿哪一種素材來出題」。會後打開成果紀錄頁存成 PDF，附在研習紀錄裡。
+
+## 配對工具推薦
+
+- [#87 PIRLS 閱讀理解生成站 PRO](https://cagoooo.github.io/pirls-questioncraft/)：簡報介紹的出題網站與 Chrome 擴充功能
+- [#133 一張課本照片，長出一整套 AI 教學｜AI 數位教學實務工作坊](https://cagoooo.github.io/ccu-ai-workshop/)：另一份互動簡報，有課前問卷、聊天彈幕與跟隨翻頁
+- [#136 好文章一鍵變題組](https://cagoooo.github.io/pagamo-pirls-talk/)：本篇主角
+
+## 適用對象
+
+- 想用 PaGamO 出閱讀題組，但還不知道從哪裡開始的老師
+- 負責閱讀推動或教師研習、想找一份現成分享範本的行政同仁
+- 想辦線上分享、需要文字雲與投票讓聽眾參與的講者
+
+## 想試試？
+
+→ [打開 #136 好文章一鍵變題組](https://cagoooo.github.io/pagamo-pirls-talk/)
+
+先翻到「四種方法」那一頁，挑一個你手邊最常用的素材，裝好小幫手試出一份題組。
+`,
+};
+
 const POST_135: BlogPost = {
   slug: 'moda-briefing-135-public-code-report',
   title: '#135 一所小學的程式，送上公共程式平臺：二十分鐘講完三週的資安檢測',
@@ -15519,7 +15597,7 @@ const POST_135: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_135, POST_134, POST_133, POST_132, POST_131, POST_130, POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+export const POSTS: BlogPost[] = [POST_136, POST_135, POST_134, POST_133, POST_132, POST_131, POST_130, POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。
