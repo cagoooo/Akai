@@ -1,5 +1,25 @@
 import { describe, expect, it } from 'vitest';
-import { escapeChatCardText, literalChatText, notificationFailureDetails, safeChatCardUrl } from './lib/googleChatCardSafety';
+import { escapeChatCardText, literalChatText, notificationFailureDetails, publicBlogUrl, safeChatCardUrl, toPublicSiteUrl } from './lib/googleChatCardSafety';
+
+describe('通知按鈕一律開正式站', () => {
+  const SITE = 'https://cagoooo.github.io/Akai';
+  it('本機預覽網址換成正式站同一路徑', () => {
+    expect(toPublicSiteUrl('https://localhost:9437/blog/milestone-100-tools-achieved', SITE))
+      .toBe('https://cagoooo.github.io/Akai/blog/milestone-100-tools-achieved');
+    expect(toPublicSiteUrl('http://127.0.0.1:5173/Akai/tool/3/?a=1', SITE))
+      .toBe('https://cagoooo.github.io/Akai/tool/3/?a=1');
+  });
+  it('正式站網址原樣保留；格式不對退回首頁', () => {
+    expect(toPublicSiteUrl('https://cagoooo.github.io/Akai/blog/x/', SITE)).toBe('https://cagoooo.github.io/Akai/blog/x/');
+    expect(toPublicSiteUrl('javascript:alert(1)', SITE)).toBe('https://cagoooo.github.io/Akai/');
+    expect(toPublicSiteUrl(undefined, SITE)).toBe('https://cagoooo.github.io/Akai/');
+  });
+  it('文章網址由 slug 組成，不合格 slug 回 null', () => {
+    expect(publicBlogUrl('milestone-100-tools-achieved', SITE)).toBe('https://cagoooo.github.io/Akai/blog/milestone-100-tools-achieved/');
+    expect(publicBlogUrl('../evil', SITE)).toBeNull();
+    expect(publicBlogUrl('', SITE)).toBeNull();
+  });
+});
 
 describe('Google Chat 動態資料與可信卡片格式', () => {
   it('動態心得不能插入標籤，呼叫端的粗體／堆疊樣式仍保留', () => {

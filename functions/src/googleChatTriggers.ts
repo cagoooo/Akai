@@ -10,7 +10,7 @@ import * as functions from "firebase-functions/v1";
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { defineSecret } from "firebase-functions/params";
 import { pushToGoogleChat } from "./lib/googleChatNotify";
-import { escapeChatCardText, safeChatCardUrl } from "./lib/googleChatCardSafety";
+import { escapeChatCardText, publicBlogUrl, safeChatCardUrl, toPublicSiteUrl } from "./lib/googleChatCardSafety";
 import { createGithubErrorIssue } from "./lib/githubIssueNotify";
 import {
     SEVERITY_LABEL,
@@ -523,7 +523,8 @@ export const onEngagementEventCreated = onDocumentCreated(
 
         const data = snapshot.data();
         const eventType = String(data.type || "");
-        const pageUrl = safeUrl(data.pageUrl, SITE_BASE);
+        // 頁面網址一律換成正式站（本機預覽觸發的事件，按鈕原本會開到 localhost）
+        const pageUrl = toPublicSiteUrl(data.pageUrl, SITE_BASE);
         const source = safeText(data.source || "home");
         const webhookUrl = GOOGLE_CHAT_WEBHOOK_URL.value();
 
@@ -582,7 +583,8 @@ export const onEngagementEventCreated = onDocumentCreated(
             const title = safeText(data.title || "未命名文章");
             const readingMinutes = Number(data.readingMinutes || 0);
             const relatedTools = safeText(data.relatedTools || "無");
-            const blogUrl = safeUrl(pageUrl, `${SITE_BASE}/blog/${slug}`);
+            // 用 slug 組正式站文章網址；slug 不合格才退回（已換成正式站的）頁面網址
+            const blogUrl = publicBlogUrl(data.slug, SITE_BASE) ?? pageUrl;
             let summaryText = `使用者從主頁觀看部落格：${title}`;
             let titleText = "主頁部落格文章被觀看";
 
