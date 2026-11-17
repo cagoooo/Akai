@@ -7,14 +7,15 @@
  * - Stale While Revalidate: 圖片
  */
 
-const CACHE_VERSION = 'v3.6.226-6732b1ba-202611171652';
+const CACHE_VERSION = 'v3.6.227-80502089-202611171658';
 // 🏘️ cagoooo.github.io 底下的所有工具共用同一個快取空間（Cache Storage 以網域為單位），
 // 清快取時只能動 Akai 自己的快取，不可刪到其他工具的（v3.6.226 修正）
 const CACHE_PREFIX = 'akai-';
 const STATIC_CACHE = `${CACHE_PREFIX}static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `${CACHE_PREFIX}dynamic-${CACHE_VERSION}`;
-// v3.6.225 以前的舊名稱（static-v3.6.x-…、dynamic-v3.6.x-…），升級時要認得並清掉
-const LEGACY_VERSIONED_CACHE = /^(static|dynamic)-v\d+\.\d+/;
+// v3.6.225 以前的舊名稱（例：static-v3.6.225-545db456-202611171541），升級時要認得並清掉。
+// 只認 Akai 完整的「版號-8 位 git 雜湊-12 位時間」格式，別站常見的 static-v1.2.3 不會被誤認
+const LEGACY_VERSIONED_CACHE = /^(static|dynamic)-v\d+\.\d+\.\d+-[0-9a-f]{7,40}-\d{12}$/;
 const ASSETS_ARCHIVE = 'assets-archive-v1';
 // 🖼️ 圖片專用持久快取（不綁 CACHE_VERSION，避免每次發版都重抓所有預覽圖）
 // 命名規則：images-persistent-vN → 當圖片壓縮策略有大改時才手動 bump N
