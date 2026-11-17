@@ -2,6 +2,13 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.228] - 2026-11-17 — 預先下載程式分塊時斷線不再告警
+
+- **問題**（Sentry JAVASCRIPT-REACT-2G，iPad iOS 15.8，/tool/10/）：Vite 預先下載程式分塊（modulepreload）的 fetch 沒有接錯誤，斷線時變成「未處理的 Promise 錯誤」被送進 Sentry。檔案在正式站其實存在（200），同一頁其他請求都成功，只有這一筆斷掉。
+- **兩個漏洞**：(1) Safari 的錯誤訊息後面多了主機名 `Load failed (cagoooo.github.io)`，原本的連線中斷判斷要求完全相等，沒認出來；(2) 未處理 Promise 錯誤的處理程式沒有走連線中斷判斷，直接 `console.error` 並回報。
+- **修正**：`isAbortedRequestError` 接受結尾的 `(主機名)`；新增 `isUnhandledNetworkRejection`，Sentry 自己抓到的未處理連線中斷一律略過；`main.tsx` 遇到連線中斷改印 info、不送 Sentry、不寫 errorLogs。真正載入分塊失敗仍由 chunkRecovery 自動重新整理。
+- **測試**：`sentryNoise.test.ts` 補主機名後綴（真／假）與未處理連線中斷（略過／其他來源照常回報）。
+
 ## [3.6.227] - 2026-11-17 — 改名前舊快取的辨認規則收緊
 
 - v3.6.226 用 `static-v數字.數字` 辨認 Akai 改名前的舊快取，範圍太寬，會把別站同格式的快取（例如 domain-meeting-go 以前的 `static-v0.6.5`）當成自己的而刪掉。改成只認 Akai 完整格式「版號-git 雜湊-12 位時間」。

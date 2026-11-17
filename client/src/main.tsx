@@ -8,7 +8,7 @@ import "./styles/loading-progress.css";
 import "./styles/sticky-search.css";
 import "./styles/blog-article.css";
 import { registerServiceWorker } from "./serviceWorkerRegistration"; // Added import
-import { initSentry, captureException } from "./lib/sentry";
+import { initSentry, captureException, isAbortedRequestError } from "./lib/sentry";
 import { shouldReportErrorToFirestore } from './lib/errorReporting';
 import { installStaleChunkRecovery, isChunkLoadError, removeLegacyHealParam } from './lib/chunkRecovery';
 
@@ -32,6 +32,12 @@ createRoot(document.getElementById("root")!).render(
 window.addEventListener('unhandledrejection', async (event) => {
     // chunk 載入失敗已由上方 self-heal 接手（不是 bug），不再記成錯誤、寫進 errorLogs
     if (isChunkLoadError(event.reason?.message || String(event.reason || ''))) return;
+    // 連線中斷（例如預先下載程式分塊時斷線，iOS 是 "Load failed (主機名)"）：對使用者沒有影響，
+    // 真正載入分塊失敗時由 chunkRecovery 接手；印成 info 不送 Sentry，也不寫 errorLogs（JAVASCRIPT-REACT-2G）
+    if (isAbortedRequestError(event.reason)) {
+        console.info('[network] 背景請求連線中斷，已略過:', event.reason?.message);
+        return;
+    }
     console.error('Unhandled promise rejection:', event.reason);
     captureException(event.reason, { source: 'unhandledrejection' });
     // 本機開發（含 vite HMR 的 WebSocket 斷線）不寫進正式 errorLogs，

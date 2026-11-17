@@ -362,8 +362,21 @@ export function isAbortedRequestError(error: unknown): boolean {
   if ((error as { code?: unknown }).code === 'analytics/token-unavailable') return true;
   // 工具資料靜態檔與備援 API 都沒成功回應：連不上網路時 Service Worker 會回合成的 503「離線中」，兩條路一起失敗
   if (error.message === TOOL_DATA_FETCH_FAILURE) return true;
+  // Safari 會在訊息後面加上主機名，例如 "Load failed (cagoooo.github.io)"（2026-11-17 JAVASCRIPT-REACT-2G，iPad iOS 15.8）
   return error.name === 'TypeError'
-    && /^(?:Failed to fetch|Load failed|NetworkError when attempting to fetch resource\.)$/.test(error.message);
+    && /^(?:Failed to fetch|Load failed|NetworkError when attempting to fetch resource\.)(?: \([^()]*\))?$/.test(error.message);
+}
+
+const UNHANDLED_REJECTION_MECHANISM = 'auto.browser.global_handlers.onunhandledrejection';
+
+/**
+ * 沒有人接住的連線中斷：例如 Vite 預先下載程式分塊（modulepreload）的 fetch 沒寫 catch，
+ * 斷線時就變成未處理的 Promise 錯誤。真正載入分塊時若也失敗，由 chunkRecovery 自動重新整理接手，
+ * 這筆預先下載的失敗對使用者沒有影響（JAVASCRIPT-REACT-2G）。
+ */
+export function isUnhandledNetworkRejection(event: SentryEvent, originalException: unknown): boolean {
+  const mechanism = event.exception?.values?.[0]?.mechanism?.type;
+  return mechanism === UNHANDLED_REJECTION_MECHANISM && isAbortedRequestError(originalException);
 }
 
 let sentry: SentryModule | null = null;
@@ -453,6 +466,7 @@ export function initSentry() {
           if (automated && isAppCheckRejection(event)) return null;
           // 例如按下「更新」後重新整理、離線或剛喚醒時，請求被瀏覽器中止或連不上，並非後端錯誤
           if (isNetworkUnreliable() && isAbortedRequestError(hint.originalException)) return null;
+          if (isUnhandledNetworkRejection(event, hint.originalException)) return null;
           const lockChecked = classifyAppCheckLock(event);
           if (!lockChecked) return null;
           if (!classifyAppCheckRetryFailing(lockChecked)) return null;

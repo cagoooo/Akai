@@ -12,6 +12,7 @@ import {
   isFrozenErrorSandbox,
   isInAppBrowserInjectedError,
   isRecoverableClientNoise,
+  isUnhandledNetworkRejection,
 } from '../sentry';
 
 const consoleEvent = (message: string) => ({ logger: 'console', level: 'error' as const, message });
@@ -216,6 +217,10 @@ describe('網路不可靠時被中止的請求不送進 Sentry', () => {
     expect(isAbortedRequestError(new TypeError('Failed to fetch'))).toBe(true);
     expect(isAbortedRequestError(new TypeError('Load failed'))).toBe(true);
     expect(isAbortedRequestError(new TypeError('NetworkError when attempting to fetch resource.'))).toBe(true);
+    // 2026-11-17 JAVASCRIPT-REACT-2G：Safari 在訊息後加主機名
+    expect(isAbortedRequestError(new TypeError('Load failed (cagoooo.github.io)'))).toBe(true);
+    expect(isAbortedRequestError(new TypeError('Failed to fetch (firestore.googleapis.com)'))).toBe(true);
+    expect(isAbortedRequestError(new TypeError('Load failed because of a bug'))).toBe(false);
     // 2026-10-09 告警：靜態檔與備援 API 都沒成功回應（離線時 Service Worker 回合成的 503），首頁丟出此錯誤
     expect(isAbortedRequestError(new Error('無法獲取工具數據'))).toBe(true);
   });
@@ -432,5 +437,25 @@ describe('錯誤物件被凍結的沙箱瀏覽器（爬蟲）不送進 Sentry', 
 
   it('Firestore 的 iOS 12.2 提醒：2026-11-11 JAVASCRIPT-REACT-23', () => {
     expect(isRecoverableClientNoise(consoleEvent('[2026-11-11T06:50:46.510Z]  @firebase/firestore: Firestore (12.8.0): Firestore persistence suffers from a bug in iOS 12.2 Safari that may cause your app to stop working. See https://stackoverflow.com/q/56496296/110915 for details and a potential workaround.'))).toBe(true);
+  });
+});
+
+describe('沒人接住的連線中斷（Vite 預先下載分塊失敗）不送 Sentry', () => {
+  const rejectionEvent = (type: string) => ({
+    level: 'error' as const,
+    exception: { values: [{ type: 'TypeError', value: 'Load failed (cagoooo.github.io)', mechanism: { type, handled: false } }] },
+  });
+
+  it('未處理 Promise 的網路中斷 → 略過（JAVASCRIPT-REACT-2G）', () => {
+    const err = new TypeError('Load failed (cagoooo.github.io)');
+    expect(isUnhandledNetworkRejection(rejectionEvent('auto.browser.global_handlers.onunhandledrejection'), err)).toBe(true);
+  });
+
+  it('其他來源、或不是網路中斷的未處理錯誤照常回報', () => {
+    const err = new TypeError('Load failed (cagoooo.github.io)');
+    expect(isUnhandledNetworkRejection(rejectionEvent('auto.browser.global_handlers.onerror'), err)).toBe(false);
+    expect(isUnhandledNetworkRejection(rejectionEvent('generic'), err)).toBe(false);
+    const bug = new TypeError("Cannot read properties of undefined (reading 'map')");
+    expect(isUnhandledNetworkRejection(rejectionEvent('auto.browser.global_handlers.onunhandledrejection'), bug)).toBe(false);
   });
 });
