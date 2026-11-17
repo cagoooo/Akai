@@ -2,6 +2,13 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.226] - 2026-11-17 — 離線快取只清 Akai 自己的，不再清掉其他工具的快取
+
+- **問題**：cagoooo.github.io 底下所有工具共用同一個快取空間。Akai 的 Service Worker 換版時，會把「不在自己保留名單上」的快取全部刪掉，等於每次發版都清掉同網域其他工具（例如 Message、JHScurriculum）的離線快取。
+- **修正**：快取名稱加上 `akai-` 前綴；換版時只處理 Akai 自己的快取（新前綴、改名前的 `static-v…`／`dynamic-v…`、`assets-archive-v*`、`images-persistent-v*`），其他一律不碰。舊版的 `/assets/` 歷史 chunk 備份邏輯照舊。
+- 舊的 AMP Service Worker（`service-worker.js`，目前沒有頁面註冊）也改成只清 `smes-amp-cache-` 開頭的快取。
+- **測試**：用 Node 模擬 activate：修改前會刪掉其他工具的 5 個快取，修改後只刪 Akai 自己的 4 個舊版本。
+
 ## [3.6.225] - 2026-11-17 — 訪客破萬準備：首頁慶祝貼紙＋Google Chat 通知
 
 - **背景**：11/17 訪客 9,074 人，預估約 13 天破萬，但首頁破萬時不會有任何效果、老師也不會收到通知。

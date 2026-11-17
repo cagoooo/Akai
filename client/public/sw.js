@@ -7,14 +7,38 @@
  * - Stale While Revalidate: 圖片
  */
 
-const CACHE_VERSION = 'v3.6.225-545db456-202611171541';
-const STATIC_CACHE = `static-${CACHE_VERSION}`;
-const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
+const CACHE_VERSION = 'v3.6.226-6732b1ba-202611171652';
+// 🏘️ cagoooo.github.io 底下的所有工具共用同一個快取空間（Cache Storage 以網域為單位），
+// 清快取時只能動 Akai 自己的快取，不可刪到其他工具的（v3.6.226 修正）
+const CACHE_PREFIX = 'akai-';
+const STATIC_CACHE = `${CACHE_PREFIX}static-${CACHE_VERSION}`;
+const DYNAMIC_CACHE = `${CACHE_PREFIX}dynamic-${CACHE_VERSION}`;
+// v3.6.225 以前的舊名稱（static-v3.6.x-…、dynamic-v3.6.x-…），升級時要認得並清掉
+const LEGACY_VERSIONED_CACHE = /^(static|dynamic)-v\d+\.\d+/;
 const ASSETS_ARCHIVE = 'assets-archive-v1';
 // 🖼️ 圖片專用持久快取（不綁 CACHE_VERSION，避免每次發版都重抓所有預覽圖）
 // 命名規則：images-persistent-vN → 當圖片壓縮策略有大改時才手動 bump N
 const IMAGE_CACHE = 'images-persistent-v1';
 const MAX_ARCHIVED_ASSETS = 150; // 最多保留 150 個歷史 Chunk 組件
+
+/** 這個快取是不是 Akai 自己的？（不是的話，不論新舊都不能刪） */
+function isOwnCache(key) {
+  return (
+    key.startsWith(CACHE_PREFIX) ||
+    LEGACY_VERSIONED_CACHE.test(key) ||
+    /^assets-archive-v\d+$/.test(key) ||
+    /^images-persistent-v\d+$/.test(key)
+  );
+}
+
+/** 舊版本的 static／dynamic 快取（含改名前的舊名稱），刪除前要先備份 /assets/ 歷史 chunk */
+function isVersionedCache(key) {
+  return (
+    key.startsWith(`${CACHE_PREFIX}static-`) ||
+    key.startsWith(`${CACHE_PREFIX}dynamic-`) ||
+    LEGACY_VERSIONED_CACHE.test(key)
+  );
+}
 const MAX_IMAGE_CACHE_ENTRIES = 400; // 圖片快取最多 400 張（81 工具 × 預覽 + 校徽/favicon/icon 等）
 
 // 獲取 base path (支援 GitHub Pages)
@@ -174,8 +198,8 @@ self.addEventListener('activate', (event) => {
       const archiveCache = await caches.open(ASSETS_ARCHIVE);
 
       await Promise.all(
-        keyList.map(async (key) => {
-          // 保留當前版本的 STATIC/DYNAMIC、ASSETS_ARCHIVE（歷史 JS chunk）、IMAGE_CACHE（持久圖片快取）
+        keyList.filter(isOwnCache).map(async (key) => {
+          // 只處理 Akai 自己的快取；保留當前版本的 STATIC/DYNAMIC、ASSETS_ARCHIVE（歷史 JS chunk）、IMAGE_CACHE（持久圖片快取）
           if (
             key !== STATIC_CACHE &&
             key !== DYNAMIC_CACHE &&
@@ -185,7 +209,7 @@ self.addEventListener('activate', (event) => {
             console.log('[SW] 處理舊快取:', key);
 
             // 若為舊的 static 快取，將當中的 /assets/ (含 Hash) 檔案備份至 ARCHIVE
-            if (key.startsWith('static-') || key.startsWith('dynamic-')) {
+            if (isVersionedCache(key)) {
               try {
                 const oldCache = await caches.open(key);
                 const oldRequests = await oldCache.keys();

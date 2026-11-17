@@ -24,7 +24,8 @@ self.addEventListener('activate', event => {
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
+          // 同網域其他工具的快取不能刪，只清自己（smes-amp-cache-）的舊版本
+          if (cacheName.startsWith('smes-amp-cache-') && cacheName !== CACHE_NAME) {
             return caches.delete(cacheName);
           }
         })
