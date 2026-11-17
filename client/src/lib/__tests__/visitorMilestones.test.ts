@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   VISITOR_MILESTONES,
   estimateTimeToMilestone,
+  getMilestoneCelebration,
   getMilestoneProgress,
 } from '../visitorMilestones';
 
@@ -75,5 +76,24 @@ describe('estimateTimeToMilestone', () => {
     [4552, Number.NaN],
   ])('資料不足以估算時回傳 null（remaining=%s, perDay=%s）', (remaining, perDay) => {
     expect(estimateTimeToMilestone(remaining, perDay)).toBeNull();
+  });
+});
+
+describe('破萬慶祝貼紙', () => {
+  const DAY = 24 * 60 * 60 * 1000;
+  const now = Date.UTC(2026, 11, 1);
+  it('還沒破萬不顯示', () => {
+    expect(getMilestoneCelebration(9999, {}, now)).toBeNull();
+    expect(getMilestoneCelebration(9074, undefined, now)).toBeNull();
+  });
+  it('依後端達成時間顯示 14 天', () => {
+    expect(getMilestoneCelebration(10120, { '10000': now - 3 * DAY }, now)).toBe(10000);
+    expect(getMilestoneCelebration(10900, { '10000': { toMillis: () => now - 13 * DAY } }, now)).toBe(10000);
+    expect(getMilestoneCelebration(11500, { '10000': now - 15 * DAY }, now)).toBeNull();
+  });
+  it('後端沒記到時間：剛超過 300 人內仍顯示', () => {
+    expect(getMilestoneCelebration(10000, undefined, now)).toBe(10000);
+    expect(getMilestoneCelebration(10299, {}, now)).toBe(10000);
+    expect(getMilestoneCelebration(10300, {}, now)).toBeNull();
   });
 });

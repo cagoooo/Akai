@@ -43,6 +43,9 @@ export { runHealthCheckDaily } from "./runHealthCheckDaily";
 // 🆕 v3.6.82: 許願池回饋 (onWishCreated) 與 工具評論 (onReviewCreated) 也從 LINE 遷移到 Google Chat
 export { onUserCreated, onErrorLogCreated, onWishCreated, onReviewCreated, onEngagementEventCreated } from "./googleChatTriggers";
 
+// 🆕 2026-11-17: 訪客總數跨過 10,000／20,000…時記下達成時間並推 Google Chat（只發一次）
+export { onVisitorMilestone } from "./visitorMilestoneNotify";
+
 // 公開分析事件經白名單驗證後由 Admin SDK 原子遞增；client 不再直寫統計集合。
 export { recordPublicAnalytics } from "./recordPublicAnalytics";
 

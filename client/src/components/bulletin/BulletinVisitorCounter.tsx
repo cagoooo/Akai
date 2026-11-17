@@ -13,15 +13,17 @@
  */
 
 import { useEffect, useMemo, useState } from 'react';
-import { animate, m as motion, useMotionValue, useTransform } from 'framer-motion';
+import { animate, m as motion, useMotionValue, useReducedMotion, useTransform } from 'framer-motion';
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
-import { estimateTimeToMilestone, getMilestoneProgress } from '@/lib/visitorMilestones';
+import { estimateTimeToMilestone, getMilestoneCelebration, getMilestoneProgress } from '@/lib/visitorMilestones';
 
 interface VisitorStats {
   totalVisits: number;
   dailyVisits?: Record<string, number>;
   lastVisitAt?: string | null;
+  /** 後端 onVisitorMilestone 記錄的達成時間（2026-11-17 起） */
+  milestonesReachedAt?: Record<string, unknown>;
 }
 
 /** 估算成長速度時取最近幾天的 dailyVisits 平均 */
@@ -57,6 +59,8 @@ export function BulletinVisitorCounter() {
   const [dailyVisits, setDailyVisits] = useState<Record<string, number> | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const [justUpdated, setJustUpdated] = useState(false);
+  const [milestonesReachedAt, setMilestonesReachedAt] = useState<Record<string, unknown> | undefined>(undefined);
+  const reduceMotion = useReducedMotion();
 
   // 注意：這個元件已不再負責「增加訪客數」與「累計 context」。
   // 那些寫入工作已抽到 lib/visitorTracker.ts → trackPageVisit()，
@@ -79,6 +83,7 @@ export function BulletinVisitorCounter() {
               if (snapshot.exists()) {
                 const data = snapshot.data() as VisitorStats;
                 setDailyVisits(data.dailyVisits);
+                setMilestonesReachedAt(data.milestonesReachedAt);
                 setTotalVisits((prev) => {
                   if (prev !== 0 && prev !== data.totalVisits) {
                     setJustUpdated(true);
@@ -134,6 +139,12 @@ export function BulletinVisitorCounter() {
     [remaining, dailyVisits],
   );
 
+  // 破萬（及之後的 2 萬、3 萬…）後 14 天顯示慶祝貼紙
+  const celebrateMilestone = useMemo(
+    () => (loading ? null : getMilestoneCelebration(totalVisits, milestonesReachedAt)),
+    [loading, totalVisits, milestonesReachedAt],
+  );
+
   return (
     <div
       className="bulletin-visitor-counter sticker-card"
@@ -160,6 +171,35 @@ export function BulletinVisitorCounter() {
         size={16}
         style={{ top: -8, left: '50%', marginLeft: -8, zIndex: 10 }}
       />
+
+      {celebrateMilestone !== null && (
+        <motion.div
+          className="bulletin-visitor-celebration"
+          initial={reduceMotion ? false : { scale: 0.4, rotate: -12, opacity: 0 }}
+          animate={reduceMotion ? undefined : { scale: 1, rotate: 4, opacity: 1 }}
+          transition={{ type: 'spring', stiffness: 260, damping: 14, delay: 0.4 }}
+          style={{
+            position: 'absolute',
+            top: -16,
+            // 不超出卡片右緣，手機版不會撐出橫向捲軸
+            right: 8,
+            zIndex: 11,
+            transform: 'rotate(4deg)',
+            background: `linear-gradient(135deg, ${tokens.note.yellowBright}, ${tokens.note.orange})`,
+            border: '2.5px solid #1a1a1a',
+            borderRadius: 8,
+            padding: '4px 10px',
+            boxShadow: '3px 3px 0 rgba(0,0,0,.28)',
+            fontSize: 12.5,
+            fontWeight: 900,
+            color: tokens.ink,
+            whiteSpace: 'nowrap',
+            pointerEvents: 'none',
+          }}
+        >
+          🎉 突破 {celebrateMilestone.toLocaleString()} 人次！謝謝老師們
+        </motion.div>
+      )}
 
       {/* 左：眼睛 + 數字 */}
       <div

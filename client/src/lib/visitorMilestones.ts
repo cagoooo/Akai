@@ -59,6 +59,40 @@ export function getMilestoneProgress(totalVisits: number): MilestoneProgress {
   };
 }
 
+/** 從這一關起才在首頁放慶祝貼紙（與後端 NOTIFY_VISITOR_MILESTONES 對齊） */
+export const CELEBRATE_FROM_MILESTONE = 10000;
+/** 慶祝貼紙顯示幾天 */
+export const CELEBRATION_DAYS = 14;
+/** 後端沒記到達成時間時的備援：超過里程碑還不到這麼多人，視為剛達成 */
+const CELEBRATION_FALLBACK_VISITS = 300;
+
+/**
+ * 首頁要不要顯示「突破 N 人次」慶祝貼紙；要的話回傳該里程碑。
+ *
+ * @param reachedAt 後端記錄的 milestonesReachedAt（值是 Firestore Timestamp 或毫秒數）
+ */
+export function getMilestoneCelebration(
+  totalVisits: number,
+  reachedAt: Record<string, unknown> | undefined,
+  nowMs: number = Date.now(),
+): number | null {
+  const { prevMilestone } = getMilestoneProgress(totalVisits);
+  if (prevMilestone < CELEBRATE_FROM_MILESTONE) return null;
+
+  const raw = reachedAt?.[String(prevMilestone)];
+  const reachedMs =
+    typeof raw === 'number'
+      ? raw
+      : raw && typeof (raw as { toMillis?: unknown }).toMillis === 'function'
+        ? (raw as { toMillis: () => number }).toMillis()
+        : null;
+
+  if (reachedMs !== null && Number.isFinite(reachedMs)) {
+    return nowMs - reachedMs < CELEBRATION_DAYS * 24 * 60 * 60 * 1000 ? prevMilestone : null;
+  }
+  return totalVisits - prevMilestone < CELEBRATION_FALLBACK_VISITS ? prevMilestone : null;
+}
+
 /**
  * 依最近的成長速度估算還要多久達成下一個里程碑。
  * 把「還差 4,552 人」這種靜態數字變成「大約 2 個月」這種有盼頭的敘事。
