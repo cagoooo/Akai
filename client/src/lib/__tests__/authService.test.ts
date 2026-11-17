@@ -21,7 +21,8 @@ vi.mock('firebase/auth', () => ({
   signOut: vi.fn(),
 }));
 
-import { ensureSignedIn } from '@/lib/authService';
+import { signInWithPopup } from 'firebase/auth';
+import { ensureSignedIn, signInWithGoogle } from '@/lib/authService';
 
 describe('ensureSignedIn 匿名認證', () => {
   beforeEach(() => {
@@ -75,5 +76,43 @@ describe('ensureSignedIn 匿名認證', () => {
 
     await expect(ensureSignedIn()).resolves.toBeNull();
     expect(mocks.signInAnonymously).not.toHaveBeenCalled();
+  });
+});
+
+describe('signInWithGoogle 遇到 App 內建瀏覽器', () => {
+  const originalUA = navigator.userAgent;
+  const setUA = (ua: string) => Object.defineProperty(navigator, 'userAgent', { value: ua, configurable: true });
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mocks.isAuthAvailable.mockReturnValue(true);
+    vi.mocked(signInWithPopup).mockResolvedValue({ user: { uid: 'google-user' } } as any);
+  });
+
+  it.each([
+    ['LINE', 'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 Chrome/129.0 Mobile Safari/537.36 Line/14.0.0'],
+    ['iPhone 臉書', 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 [FBAN/FBIOS;FBAV/480.0]'],
+  ])('%s：先提醒改用瀏覽器開啟，不開 Google 登入視窗（避免 403 disallowed_useragent）', async (_name, ua) => {
+    setUA(ua);
+    const alert = vi.spyOn(window, 'alert').mockImplementation(() => {});
+    try {
+      await expect(signInWithGoogle()).resolves.toBeNull();
+      expect(signInWithPopup).not.toHaveBeenCalled();
+      expect(alert).toHaveBeenCalledTimes(1);
+      expect(String(alert.mock.calls[0][0])).toContain('用預設瀏覽器開啟');
+    } finally {
+      alert.mockRestore();
+      setUA(originalUA);
+    }
+  });
+
+  it('一般瀏覽器照常開 Google 登入視窗', async () => {
+    setUA('Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0 Mobile Safari/537.36');
+    try {
+      await expect(signInWithGoogle()).resolves.toMatchObject({ uid: 'google-user' });
+      expect(signInWithPopup).toHaveBeenCalledTimes(1);
+    } finally {
+      setUA(originalUA);
+    }
   });
 });

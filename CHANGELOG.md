@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.233] - 2026-11-18 — 在 App 內建瀏覽器按 Google 登入，先提醒改用瀏覽器
+
+- **問題**：v3.6.232 的首頁引導可以按「先不登入，繼續瀏覽」關掉；關掉後再按 Google 登入（評論、許願池、管理員），仍會直接撞 Google 403 disallowed_useragent。
+- **修正**：`signInWithGoogle` 開登入視窗前，若 `isInAppBrowser()` 成立就跳提示「用預設瀏覽器開啟後再登入」並回傳 null，不開登入視窗。
+- **測試**：`authService.test.ts` 補 LINE、iPhone 臉書（不開視窗、有提示）與一般 Chrome（照常開視窗）。
+
 ## [3.6.232] - 2026-11-18 — App 內建瀏覽器防護升級（LINE 自動跳、Android 臉書自動開 Chrome）
 
 - **問題**：從 LINE／臉書／IG／Messenger 點進來的訪客，按 Google 登入（評論、許願池、管理員）會被 Google 擋下（403 disallowed_useragent）。原本 `client/index.html` 只有「LINE 載入過久時顯示外部瀏覽器按鈕」的備援，沒有自動逃脫。

@@ -14,10 +14,13 @@ import {
     Auth
 } from 'firebase/auth';
 import { auth, isAuthAvailable } from './firebase';
+import { isInAppBrowser } from './browserDetection';
 
 const googleProvider = new GoogleAuthProvider();
 
 const SIGNED_OUT_FLAG = 'akai_signed_out_this_session';
+
+const IN_APP_LOGIN_MESSAGE = '您目前在 App 內建瀏覽器（LINE／FB 等）中，Google 基於安全政策禁止在此登入。\n\n請點右上／右下角「⋯」→ 選「用預設瀏覽器開啟」後再登入。';
 
 /**
  * 確保有 Firebase 身份（未登入者自動匿名登入）
@@ -96,6 +99,15 @@ export function isSignedOutThisSession(): boolean {
 export async function signInWithGoogle(): Promise<User | null> {
     if (!isAuthAvailable() || !auth) {
         console.warn('Firebase Auth 不可用');
+        return null;
+    }
+
+    // App 內建瀏覽器（LINE／FB 等）：Google 一律擋下登入（403 disallowed_useragent）。
+    // 頁首防護會自動跳轉／引導；使用者按「先不登入，繼續瀏覽」後又按登入時，在這裡再提醒一次，不開登入視窗。
+    if (isInAppBrowser()) {
+        try {
+            window.alert(IN_APP_LOGIN_MESSAGE);
+        } catch { /* 部分 App 不允許 alert，靜默略過 */ }
         return null;
     }
 
