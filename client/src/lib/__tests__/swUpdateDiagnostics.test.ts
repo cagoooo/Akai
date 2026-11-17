@@ -35,6 +35,24 @@ describe('Service Worker 更新檢查失敗的回報', () => {
     expect(report).toHaveBeenCalledWith('[PWA] 更新檢查失敗：', webkit, 'warn');
   });
 
+  it('Safari 連不上網路時的「Internal error」也先探測伺服器（2026-11-17 JAVASCRIPT-REACT-2H）', async () => {
+    const webkit = new TypeError('Internal error');
+    expect(isServiceWorkerScriptFetchFailure(webkit)).toBe(true);
+    expect(isServiceWorkerScriptFetchFailure(new TypeError('Internal error: something else'))).toBe(false);
+    expect(isServiceWorkerScriptFetchFailure(new Error('Internal error'))).toBe(false);
+
+    const report = vi.fn();
+    vi.spyOn(console, 'info').mockImplementation(() => {});
+    // 當下連不上（2H 實際情況）→ 不回報
+    await reportServiceWorkerUpdateFailure(webkit, { fetchImpl: vi.fn().mockRejectedValue(new TypeError('Load failed')), report });
+    // 伺服器正常 → 不回報
+    await reportServiceWorkerUpdateFailure(webkit, { fetchImpl: vi.fn().mockResolvedValue(response(true)), report });
+    expect(report).not.toHaveBeenCalled();
+    // 伺服器真的回錯 → 照常回報
+    await reportServiceWorkerUpdateFailure(webkit, { fetchImpl: vi.fn().mockResolvedValue(response(false)), report });
+    expect(report).toHaveBeenCalledWith('[PWA] 更新檢查失敗：', webkit, 'warn');
+  });
+
   it('伺服器上的 sw.js 正常：視為暫時失敗，不回報', async () => {
     const report = vi.fn();
     const fetchImpl = vi.fn().mockResolvedValue(response(true));

@@ -17,9 +17,17 @@ const SW_SCRIPT_FETCH_FAILURE = new RegExp(
  */
 const WEBKIT_SW_SCRIPT_LOAD_FAILURE = /^Script \S+\/sw\.js load failed$/;
 
+/**
+ * Safari／iOS 在連不上網路時（例如分頁閒置 20 多分鐘後切回、網路還沒恢復），update() 丟的是只有
+ * 「Internal error」的 TypeError（2026-11-17 JAVASCRIPT-REACT-2H：iPhone Safari，同一刻 6 筆 version.json 也全部失敗）。
+ * 訊息沒有線索，交給下面的 HEAD 探測判斷：連不上或伺服器正常都不回報，伺服器真的回錯才回報。
+ */
+const WEBKIT_SW_UPDATE_INTERNAL_ERROR = 'Internal error';
+
 export function isServiceWorkerScriptFetchFailure(error: unknown): boolean {
   if (error instanceof Error && SW_SCRIPT_FETCH_FAILURE.test(error.message)) return true;
   const { name, message } = (error ?? {}) as { name?: unknown; message?: unknown };
+  if (name === 'TypeError' && message === WEBKIT_SW_UPDATE_INTERNAL_ERROR) return true;
   return name === 'SecurityError' && typeof message === 'string' && WEBKIT_SW_SCRIPT_LOAD_FAILURE.test(message);
 }
 

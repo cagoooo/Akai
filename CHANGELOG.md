@@ -2,6 +2,13 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.230] - 2026-11-17 — Safari 斷網時的更新檢查「Internal error」不再告警
+
+- **問題**（Sentry JAVASCRIPT-REACT-2H，iPhone Safari iOS 18.7，首頁）：頁面 21:21 開啟、閒置 22 分鐘後 21:44:11 切回，網路還沒恢復：同一毫秒 6 筆 `version.json` 全部失敗（版本檢查已正確判斷「暫時連不上網路」），Service Worker 的 `update()` 也失敗，但 Safari 只給 `TypeError: Internal error`，不在「抓不到 sw.js」的辨識清單內，就以 warning 回報。
+- **修正**：`isServiceWorkerScriptFetchFailure` 加認 `TypeError` 且訊息完全等於 `Internal error`，交給既有的 HEAD 探測：連不上伺服器（訪客斷網）或伺服器正常都只記 info；伺服器真的回非 2xx 才照常回報。
+- **測試**：`swUpdateDiagnostics.test.ts` 補 2H（連不上／正常不回報、伺服器回錯照常回報；`Internal error: …` 與一般 Error 不算）。
+- 同日 LINE 另兩則告警（2G Load failed、2J IndexedDB createOrUpgrade）是 v3.6.228／229 已修好的同一件事的轉發。
+
 ## [3.6.229] - 2026-11-17 — Firestore 離線快取被瀏覽器中止，歸入「IndexedDB 連線斷掉」
 
 - **問題**（Sentry JAVASCRIPT-REACT-2J，iPhone Chrome iOS 27.2，首頁）：頁面載入 23 秒後切回前景（同一毫秒內 3 次版本檢查），Firestore 開啟離線快取資料庫的 `createOrUpgrade` 交易被瀏覽器中止（`AbortError`，SDK 回報 code=unavailable），成為未處理的 Promise 錯誤。
