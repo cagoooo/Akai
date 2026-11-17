@@ -9,6 +9,10 @@
 - **前一版**: v3.6.71 — 新增 #102 外星人入侵·保衛石門 + 雙 tools.json 對齊
 - **📎 文件補追記**：本檔案從 v3.6.71 停更到 2026-07-04 才補寫。中間 v3.6.72 → v3.6.87 共 16 個版本（主要是新增工具 #103-#114 + 幾個獨立 bug fix，例如 v3.6.80 使用次數本機計數 bug、v3.6.81/b3032b2 許願池通知從 LINE 遷移到 Google Chat）沒有寫進本檔案，細節可查 `git log`（commit 訊息大多含版本號）。工具總數從 102 → 115 就是這段期間累積的，之後有空再補完整段落。
 
+### 2026-11-17 Firestore 離線快取被瀏覽器中止歸入同一類 v3.6.229
+
+- Sentry JAVASCRIPT-REACT-2J：iPhone Chrome 首頁閒置後切回，Firestore 開啟離線快取資料庫的 `createOrUpgrade` 交易被中止；加進「瀏覽器 IndexedDB 連線斷掉」規則（同一頁只報第一筆、降為 warning、固定歸到同一個 issue）
+
 ### 2026-11-17 預先下載分塊斷線不再告警 v3.6.228
 
 - Sentry JAVASCRIPT-REACT-2G：iPad 預先下載程式分塊時斷線（Safari 訊息 `Load failed (主機名)`），變成沒人接住的 Promise 錯誤；改為連線中斷判斷認得主機名後綴，未處理的連線中斷不送 Sentry、不寫 errorLogs

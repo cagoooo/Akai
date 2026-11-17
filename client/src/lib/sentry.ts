@@ -229,6 +229,9 @@ const BROWSER_STORAGE_LOST = [
   /Connection to Indexed Database server lost/i,
   /Failed to (?:write|read) token (?:to|from) IndexedDB/i,
   /The database connection is closing/i,
+  // Firestore 開啟離線快取資料庫時被瀏覽器中止（2026-11-17 JAVASCRIPT-REACT-2J：iPhone Chrome，
+  // 首頁閒置 23 秒後切回來，'createOrUpgrade' 交易 AbortError，SDK 回報 code=unavailable）
+  /IndexedDB transaction '[\w-]+' failed: AbortError/i,
 ];
 
 export function isBrowserStorageLost(event: SentryEvent): boolean {

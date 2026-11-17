@@ -336,6 +336,8 @@ describe('瀏覽器 IndexedDB 連線斷掉：同一頁只回報一次', () => {
     exceptionEvent('UnknownError', 'Connection to Indexed Database server lost. Refresh the page to try again'),
     consoleEvent('[2026-11-06T08:10:50.822Z]  @firebase/app-check: Failed to write token to IndexedDB. Error: FirebaseError: AppCheck: Error thrown when writing to storage. Original error: Attempt to get a record from database without an in-progress transaction (appCheck/storage-set).'),
     consoleEvent("[2026-11-07T03:07:32.900Z]  @firebase/app-check: Failed to write token to IndexedDB. Error: InvalidStateError: Failed to execute 'transaction' on 'IDBDatabase': The database connection is closing."),
+    // 2026-11-17 JAVASCRIPT-REACT-2J：Firestore 開啟離線快取資料庫被 iPhone 瀏覽器中止
+    exceptionEvent('IndexedDbTransactionError', "IndexedDB transaction 'createOrUpgrade' failed: AbortError: The operation was aborted."),
   ];
 
   it('第一筆降為 warning 並歸到固定 issue，之後同一頁略過', () => {
@@ -346,6 +348,7 @@ describe('瀏覽器 IndexedDB 連線斷掉：同一頁只回報一次', () => {
     expect(first?.tags?.browserStorage).toBe('indexeddb-lost');
     expect(classify(inputs[1])).toBeNull();
     expect(classify(inputs[2])).toBeNull();
+    expect(classify(inputs[3])).toBeNull();
   });
 
   it('每一種訊息單獨出現時都會回報第一筆', () => {
@@ -362,6 +365,8 @@ describe('瀏覽器 IndexedDB 連線斷掉：同一頁只回報一次', () => {
       exceptionEvent('FirebaseError', 'Missing or insufficient permissions.'),
       exceptionEvent('TypeError', "Cannot read properties of undefined (reading 'id')"),
       consoleEvent('@firebase/app-check: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).'),
+      // 不是被中止的交易（例如空間不足）照常回報
+      exceptionEvent('IndexedDbTransactionError', "IndexedDB transaction 'createOrUpgrade' failed: QuotaExceededError: The quota has been exceeded."),
     ];
     for (const input of others) expect(classify(input)).toBe(input);
   });

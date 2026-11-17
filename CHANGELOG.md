@@ -2,6 +2,13 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.229] - 2026-11-17 — Firestore 離線快取被瀏覽器中止，歸入「IndexedDB 連線斷掉」
+
+- **問題**（Sentry JAVASCRIPT-REACT-2J，iPhone Chrome iOS 27.2，首頁）：頁面載入 23 秒後切回前景（同一毫秒內 3 次版本檢查），Firestore 開啟離線快取資料庫的 `createOrUpgrade` 交易被瀏覽器中止（`AbortError`，SDK 回報 code=unavailable），成為未處理的 Promise 錯誤。
+- **判斷**：與 2026-11-06／07 的三則（Safari 連線中斷、App Check 寫不進權杖、資料庫連線關閉中）同一類——瀏覽器自己把 IndexedDB 關掉或中止，不是站方程式錯誤，只是這次換了一種說法，舊規則沒認出來，就另開了一個 high priority issue。
+- **修正**：`BROWSER_STORAGE_LOST` 加入 `IndexedDB transaction '<名稱>' failed: AbortError`。沿用既有做法：同一頁只回報第一筆、降為 warning、固定歸到 `browser-indexeddb-lost`（若哪天是程式改壞、很多人同時發生，Sentry 仍看得到人數）。空間不足等其他原因照常回報。
+- **測試**：`sentryNoise.test.ts` 補 2J 原文（歸類）與 QuotaExceededError（照常回報）。
+
 ## [3.6.228] - 2026-11-17 — 預先下載程式分塊時斷線不再告警
 
 - **問題**（Sentry JAVASCRIPT-REACT-2G，iPad iOS 15.8，/tool/10/）：Vite 預先下載程式分塊（modulepreload）的 fetch 沒有接錯誤，斷線時變成「未處理的 Promise 錯誤」被送進 Sentry。檔案在正式站其實存在（200），同一頁其他請求都成功，只有這一筆斷掉。
