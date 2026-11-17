@@ -2,6 +2,13 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.232] - 2026-11-18 — App 內建瀏覽器防護升級（LINE 自動跳、Android 臉書自動開 Chrome）
+
+- **問題**：從 LINE／臉書／IG／Messenger 點進來的訪客，按 Google 登入（評論、許願池、管理員）會被 Google 擋下（403 disallowed_useragent）。原本 `client/index.html` 只有「LINE 載入過久時顯示外部瀏覽器按鈕」的備援，沒有自動逃脫。
+- **修正**：`<head>` 加上 skill `inapp-browser-oauth-escape` 2026-11-08 定稿版：LINE 自動帶 `openExternalBrowser=1` 改用系統瀏覽器；Android 臉書／IG／Messenger 先畫引導、再用 `intent://` 自動叫出 Chrome（每分頁只試一次，沒裝 Chrome 帶 `iabEscape=1` 回來不再跳），附「用 Chrome 開啟」按鈕；iPhone 只顯示引導。首頁不登入也能逛，所以引導多一顆「先不登入，繼續瀏覽」可關閉。
+- `akai-talk-2026/admin-questions.html`（提問後台，必須登入）套用原版（不可關閉）。
+- 一般 Chrome／Safari 完全不受影響。
+
 ## [3.6.231] - 2026-11-18 — iPhone App 內建瀏覽器壓縮過的注入腳本不再告警
 
 - **問題**（Sentry JAVASCRIPT-REACT-2K，iPhone iOS 26.5.2，WKWebView＝App 內建瀏覽器，首頁）：Sentry 初始化 3 秒後，App 自己塞進頁面的腳本執行 `window.webkit.messageHandlers` 時發現不存在，丟出 TypeError。站方程式從未使用 `webkit.messageHandlers`。
