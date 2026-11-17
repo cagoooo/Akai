@@ -127,7 +127,14 @@ jobs:
       # 跑在 Build 之後、上傳產物之前，測的就是即將部署的那份 dist/public。
       # （2026-09-06 加：先前 e2e/home.spec.ts 存在但沒有任何 workflow 會執行它。）
       - name: Install Playwright (chromium)
-        run: npx playwright install --with-deps chromium
+        # 下載站偶爾卡住：每次最多 3 分鐘，失敗重試一次，整步最多 8 分鐘就結束，不讓 job 卡到 60 分鐘
+        timeout-minutes: 8
+        run: |
+          for i in 1 2; do
+            timeout 180 npx playwright install --with-deps chromium && exit 0
+            echo "第 $i 次安裝 Playwright 瀏覽器失敗或逾時"
+          done
+          exit 1
 
       - name: E2E smoke tests
         run: npx playwright test --config=playwright.ci.config.ts
