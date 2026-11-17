@@ -9,6 +9,10 @@
 - **前一版**: v3.6.71 — 新增 #102 外星人入侵·保衛石門 + 雙 tools.json 對齊
 - **📎 文件補追記**：本檔案從 v3.6.71 停更到 2026-07-04 才補寫。中間 v3.6.72 → v3.6.87 共 16 個版本（主要是新增工具 #103-#114 + 幾個獨立 bug fix，例如 v3.6.80 使用次數本機計數 bug、v3.6.81/b3032b2 許願池通知從 LINE 遷移到 Google Chat）沒有寫進本檔案，細節可查 `git log`（commit 訊息大多含版本號）。工具總數從 102 → 115 就是這段期間累積的，之後有空再補完整段落。
 
+### 2026-11-18 iPhone App 內建瀏覽器壓縮過的注入腳本不再告警 v3.6.231
+
+- Sentry JAVASCRIPT-REACT-2K：iOS 26.5.2 WKWebView（App 內建瀏覽器）在首頁執行自己塞進來的腳本，找不到 `window.webkit.messageHandlers`；這次腳本是壓縮過的（函式名 T、M），舊的函式名清單對不上。改認「每一層都在頁面本身第 1 行」（站方頁面第 1 行只有 `<!DOCTYPE html>`）
+
 ### 2026-11-17 Safari 斷網時的更新檢查「Internal error」先探測伺服器 v3.6.230
 
 - Sentry JAVASCRIPT-REACT-2H：iPhone Safari 首頁閒置 22 分鐘後切回，網路還沒恢復，6 筆 version.json 與 Service Worker 更新檢查同時失敗；Safari 只給「Internal error」，改走既有 HEAD 探測（連不上或伺服器正常都不回報）

@@ -258,8 +258,12 @@ export function createBrowserStorageLostClassifier() {
  * - iPhone 版：腳本直接插在頁面裡，堆疊檔名是頁面網址，但出錯的函式同樣是 sendDataToNative
  *   （2026-11-12 JAVASCRIPT-REACT-2B：iOS 26.6.2 WKWebView 在首頁 sendPageHideMessage 時
  *   「window.webkit.messageHandlers」不存在）。
- * 略過條件：每一層堆疊都來自 iabjs://；或丟錯的那一層是這組注入函式、且堆疊裡沒有站方 /assets/ 檔案。
- * 只要有一層是站方打包的程式就照常回報。站內沒有同名函式（2026-11-13 核對）。
+ * - iPhone 版的注入腳本也可能是壓縮過的，函式名變成 T、M（2026-11-17 JAVASCRIPT-REACT-2K：iOS 26.5.2 WKWebView，
+ *   同樣是「window.webkit.messageHandlers」不存在），函式名對不上。改看位置：每一層都在「頁面本身的第 1 行」。
+ *   站方每個頁面（首頁、/tool/N/、/blog/、/wish/）第 1 行都只有 <!DOCTYPE html>，站方程式不可能在那裡執行；
+ *   只有 App 從外面塞進來執行的腳本才會被記在頁面第 1 行（2026-11-18 核對正式站四類頁面）。
+ * 略過條件：每一層堆疊都來自 iabjs://；或丟錯的那一層是這組注入函式、且堆疊裡沒有站方 /assets/ 檔案；
+ * 或每一層都在頁面本身的第 1 行。只要有一層是站方打包的程式就照常回報。站內沒有同名函式（2026-11-13 核對）。
  */
 const IN_APP_BROWSER_INJECTED_FUNCTIONS = new Set([
   'sendDataToNative',
@@ -274,10 +278,22 @@ export function isInAppBrowserInjectedError(event: SentryEvent): boolean {
     const frames = value.stacktrace?.frames ?? [];
     if (!frames.length) return false;
     if (frames.every((frame) => /^iabjs:\/\//.test(frame.filename ?? ''))) return true;
+    if (frames.every(isPageDocumentFirstLine)) return true;
     const thrower = frames[frames.length - 1];
     return IN_APP_BROWSER_INJECTED_FUNCTIONS.has(thrower.function ?? '')
       && frames.every((frame) => !/\/assets\//.test(frame.filename ?? ''));
   });
+}
+
+/**
+ * 堆疊這一層記在「頁面本身」的第 1 行。頁面網址都以 / 或 .html 結尾（/Akai/、/Akai/tool/10/）；
+ * 腳本檔不一定以 .js 結尾（Google 統計是 …/gtag/js?id=…），所以只認頁面樣式的網址。
+ */
+function isPageDocumentFirstLine(frame: { filename?: string; lineno?: number }): boolean {
+  const path = (frame.filename ?? '').split(/[?#]/)[0];
+  return frame.lineno === 1
+    && !/\/assets\//.test(path)
+    && /(?:\/|\.html)$/.test(path);
 }
 
 /**

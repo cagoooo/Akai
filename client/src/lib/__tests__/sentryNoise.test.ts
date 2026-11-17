@@ -396,7 +396,7 @@ describe('App 內建瀏覽器自己注入的腳本出錯不送進 Sentry', () =>
   });
 
   // 2026-11-12 JAVASCRIPT-REACT-2B：iOS 26.6.2 WKWebView，堆疊檔名是頁面網址（Sentry 由舊到新排列）
-  const iosInjected = (...frames: Array<{ filename: string; function?: string }>) => ({
+  const iosInjected = (...frames: Array<{ filename: string; function?: string; lineno?: number }>) => ({
     level: 'error' as const,
     exception: { values: [{ type: 'TypeError', value: "undefined is not an object (evaluating 'window.webkit.messageHandlers')", stacktrace: { frames } }] },
   });
@@ -417,6 +417,36 @@ describe('App 內建瀏覽器自己注入的腳本出錯不送進 Sentry', () =>
     expect(isInAppBrowserInjectedError(iosInjected(
       { filename: '/Akai/', function: 'sendDataToNative' },
       { filename: '/Akai/', function: 'renderTool' },
+    ))).toBe(false);
+  });
+
+  // 2026-11-17 JAVASCRIPT-REACT-2K：iOS 26.5.2 WKWebView，注入腳本是壓縮過的（函式名 T、M），全部記在頁面第 1 行
+  const iosMinified = iosInjected;
+
+  it('iPhone 版壓縮過的注入腳本：每一層都在頁面本身第 1 行時略過', () => {
+    expect(isInAppBrowserInjectedError(iosMinified(
+      { filename: 'https://cagoooo.github.io/Akai/', lineno: 1 },
+      { filename: 'https://cagoooo.github.io/Akai/', function: 'M', lineno: 1 },
+      { filename: 'https://cagoooo.github.io/Akai/', function: 'T', lineno: 1 },
+    ))).toBe(true);
+    expect(isInAppBrowserInjectedError(iosMinified(
+      { filename: 'https://cagoooo.github.io/Akai/tool/10/', function: 'T', lineno: 1 },
+    ))).toBe(true);
+  });
+
+  it('頁面其他行（站方內嵌程式）、.js 檔第 1 行、或經過站方打包程式，照常回報', () => {
+    expect(isInAppBrowserInjectedError(iosMinified(
+      { filename: 'https://cagoooo.github.io/Akai/', function: 'T', lineno: 42 },
+    ))).toBe(false);
+    expect(isInAppBrowserInjectedError(iosMinified(
+      { filename: 'https://www.googletagmanager.com/gtag/js?id=G-X', function: 'T', lineno: 1 },
+    ))).toBe(false);
+    expect(isInAppBrowserInjectedError(iosMinified(
+      { filename: 'https://cagoooo.github.io/Akai/assets/index-abc.js', function: 'onClick', lineno: 1 },
+      { filename: 'https://cagoooo.github.io/Akai/', function: 'T', lineno: 1 },
+    ))).toBe(false);
+    expect(isInAppBrowserInjectedError(iosMinified(
+      { filename: 'https://cagoooo.github.io/Akai/', function: 'T' },
     ))).toBe(false);
   });
 });

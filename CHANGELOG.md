@@ -2,6 +2,13 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.231] - 2026-11-18 — iPhone App 內建瀏覽器壓縮過的注入腳本不再告警
+
+- **問題**（Sentry JAVASCRIPT-REACT-2K，iPhone iOS 26.5.2，WKWebView＝App 內建瀏覽器，首頁）：Sentry 初始化 3 秒後，App 自己塞進頁面的腳本執行 `window.webkit.messageHandlers` 時發現不存在，丟出 TypeError。站方程式從未使用 `webkit.messageHandlers`。
+- **為什麼 11/12 的 2B 規則沒擋住**：2B 的注入腳本函式名是 `sendDataToNative`／`sendPageHideMessage`，規則靠函式名辨認；這次的腳本是壓縮過的，函式名變成 `T`、`M`，對不上。
+- **修正**：`isInAppBrowserInjectedError` 加認「每一層堆疊都在頁面本身（網址以 `/` 或 `.html` 結尾）的第 1 行」。站方每個頁面（首頁、/tool/N/、/blog/、/wish/）第 1 行都只有 `<!DOCTYPE html>`，站方程式不可能在那裡執行。頁面其他行（站方內嵌程式）、腳本檔第 1 行（例如 Google 統計 `gtag/js`）、或經過站方 `/assets/` 打包程式的錯誤照常回報。
+- **測試**：`sentryNoise.test.ts` 補 2K 壓縮版（略過）與四種相似但該報的反例。
+
 ## [3.6.230] - 2026-11-17 — Safari 斷網時的更新檢查「Internal error」不再告警
 
 - **問題**（Sentry JAVASCRIPT-REACT-2H，iPhone Safari iOS 18.7，首頁）：頁面 21:21 開啟、閒置 22 分鐘後 21:44:11 切回，網路還沒恢復：同一毫秒 6 筆 `version.json` 全部失敗（版本檢查已正確判斷「暫時連不上網路」），Service Worker 的 `update()` 也失敗，但 Safari 只給 `TypeError: Internal error`，不在「抓不到 sw.js」的辨識清單內，就以 warning 回報。
