@@ -1,4 +1,5 @@
 import { escapeChatCardText } from "./googleChatCardSafety";
+import { PLATFORM_NAME } from "./chatPlatformLabel";
 
 /**
  * 「新使用者註冊」Google Chat 卡片。
@@ -6,7 +7,7 @@ import { escapeChatCardText } from "./googleChatCardSafety";
  * 卡片要一眼看出「是哪個平台、用什麼方式登入、是學校帳號還是個人帳號」（2026-11-18 使用者要求）。
  */
 export const PLATFORM = {
-    name: "阿凱老師教育工具集",
+    name: PLATFORM_NAME,
     shortName: "Akai",
     siteUrl: "https://cagoooo.github.io/Akai/",
     firebaseProject: "akai-e693f",

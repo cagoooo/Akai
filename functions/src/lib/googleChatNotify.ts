@@ -7,6 +7,7 @@
 
 import axios from "axios";
 import { literalChatText, notificationFailureDetails } from "./googleChatCardSafety";
+import { withPlatformCards, withPlatformText } from "./chatPlatformLabel";
 
 export async function pushToGoogleChat(
     webhookUrl: string | undefined,
@@ -20,6 +21,10 @@ export async function pushToGoogleChat(
         );
         return;
     }
+
+    // 共用 Chat 空間有多個系統：摘要與卡片標題一律標出「阿凱老師教育工具集」
+    text = withPlatformText(text);
+    cardsV2 = withPlatformCards(cardsV2);
 
     const payload: any = {
         text: literalChatText(text).slice(0, 1000), // 使用者內容不得變成 Chat 提及指令
