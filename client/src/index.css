@@ -355,7 +355,9 @@
   width: 100%;
 }
 
-@media (max-width: 980px) {
+/* 與 tokens.css 的單欄斷點同為 1024px：iPad 直向（1024 寬）若只在 980 以下置中，
+   會出現「已改單欄、文字欄卻仍靠右」的歪斜版面（2026-11-18 使用者回報） */
+@media (max-width: 1024px) {
   .bulletin-hero {
     grid-template-columns: 1fr !important;
     padding: 28px 28px 44px !important;
