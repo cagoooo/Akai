@@ -11,6 +11,7 @@ import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { defineSecret } from "firebase-functions/params";
 import { pushToGoogleChat } from "./lib/googleChatNotify";
 import { escapeChatCardText, publicBlogUrl, safeChatCardUrl, toPublicSiteUrl } from "./lib/googleChatCardSafety";
+import { buildUserCreatedNotification } from "./lib/userCreatedCard";
 import { createGithubErrorIssue } from "./lib/githubIssueNotify";
 import {
     SEVERITY_LABEL,
@@ -45,65 +46,13 @@ export const onUserCreated = functions
         }
 
         const webhookUrl = GOOGLE_CHAT_WEBHOOK_URL.value();
-        const email = user.email || "（無電子郵件）";
-        const uid = user.uid;
-        const displayName = user.displayName || "未設定名稱";
-        const createdAt = user.metadata.creationTime
-            ? new Date(user.metadata.creationTime).toLocaleString("zh-TW", { timeZone: "Asia/Taipei" })
-            : new Date().toLocaleString("zh-TW", { timeZone: "Asia/Taipei" });
-
-        const summaryText = `👤 新使用者註冊成功 (電子郵件: ${email})`;
-
-        const card = {
-            cardId: `register-${uid}`,
-            card: {
-                header: {
-                    title: "👤 新使用者註冊成功",
-                    subtitle: `電子郵件: ${escapeChatCardText(email)}`,
-                    imageUrl: "https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/person/default/48px.svg",
-                    imageType: "CIRCLE",
-                },
-                sections: [
-                    {
-                        collapsible: false,
-                        widgets: [
-                            {
-                                decoratedText: {
-                                    topLabel: "使用者帳號 UID",
-                                    text: `<b>${escapeChatCardText(uid)}</b>`,
-                                },
-                            },
-                            {
-                                decoratedText: {
-                                    topLabel: "顯示名稱",
-                                    text: escapeChatCardText(displayName),
-                                },
-                            },
-                            {
-                                decoratedText: {
-                                    topLabel: "註冊建立時間",
-                                    text: createdAt,
-                                },
-                            },
-                            {
-                                buttonList: {
-                                    buttons: [
-                                        {
-                                            text: "前往 Firebase Console",
-                                            onClick: {
-                                                openLink: {
-                                                    url: "https://console.firebase.google.com/project/akai-e693f/authentication/users",
-                                                },
-                                            },
-                                        },
-                                    ],
-                                },
-                            },
-                        ],
-                    },
-                ],
-            },
-        };
+        const { summaryText, card } = buildUserCreatedNotification({
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            creationTime: user.metadata.creationTime,
+            providerIds: (user.providerData ?? []).map((p) => p.providerId),
+        });
 
         await pushToGoogleChat(webhookUrl, summaryText, [card], "AuthOnCreate");
     });
