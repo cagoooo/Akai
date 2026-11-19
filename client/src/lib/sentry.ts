@@ -53,10 +53,12 @@ export function createFirestoreLeaseClassifier(now = () => Date.now()) {
 /**
  * 多分頁快取會比對其他分頁寫下的主分頁租約時間；分頁之間時鐘差 1 毫秒，SDK 就記成「更新時間在未來」，
  * 並把那份租約當作無效、自行重新協調（2026-10-14 JAVASCRIPT-REACT-13，差 1 毫秒）。
- * 只略過 1 秒以內的分頁時鐘誤差；差距更大代表裝置時鐘異常，每頁回報一次（見 createFirestoreClockSkewClassifier）。
+ * 2026-11-19 JAVASCRIPT-REACT-2N：Mac Safari 差 2 秒（電腦自動對時把時鐘往回調一點）就寄 high priority 告警，
+ * SDK 早已自行重新協調、訪客沒受影響，也不是站方修得到的。改成 1 分鐘以內一律略過；
+ * 超過 1 分鐘才算裝置時鐘異常，每頁回報一次、降為 warning（見 createFirestoreClockSkewClassifier）。
  */
 const FIRESTORE_FUTURE_UPDATE = /^(?:\[[^\]\r\n]+\]\s+)?@firebase\/firestore:\s+Firestore \(\d+\.\d+\.\d+\): Detected an update time that is in the future: (\d{1,16}) > (\d{1,16})$/;
-const FIRESTORE_TAB_CLOCK_JITTER_MS = 1000;
+const FIRESTORE_TAB_CLOCK_JITTER_MS = 60_000;
 
 function firestoreFutureUpdateAheadMs(event: SentryEvent): number | null {
   if (event.logger !== 'console' || event.exception?.values?.length) return null;
@@ -72,9 +74,10 @@ export function isFirestoreTabClockJitter(event: SentryEvent): boolean {
 }
 
 /**
- * 差距超過 1 秒時，SDK 每次檢查租約（約每 4 秒、每個分頁）都會再記一次，同一頁會連續記到時鐘恢復為止
+ * 差距超過 1 分鐘時，SDK 每次檢查租約（約每 4 秒、每個分頁）都會再記一次，同一頁會連續記到時鐘恢復為止
  * （2026-10-22 JAVASCRIPT-REACT-13：同一台電腦 4 個分頁、差約 25 秒，29 分鐘記了 500 筆）。
  * 同一頁只回報第一筆、附上差距秒數，其餘略過，避免吃光事件額度。
+ * 降為 warning：訪客自己的時鐘問題站方修不到，只留在固定 issue 觀察人數，不觸發 high priority 告警信。
  */
 export function createFirestoreClockSkewClassifier() {
   let reported = false;
@@ -83,6 +86,7 @@ export function createFirestoreClockSkewClassifier() {
     if (aheadMs === null) return event;
     if (aheadMs <= FIRESTORE_TAB_CLOCK_JITTER_MS || reported) return null;
     reported = true;
+    event.level = 'warning';
     event.fingerprint = ['firestore-future-update-time'];
     event.tags = { ...event.tags, firestoreClockSkew: 'ahead' };
     event.extra = { ...event.extra, clockAheadSeconds: Math.round(aheadMs / 1000) };
