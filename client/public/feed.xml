@@ -8,7 +8,7 @@
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
     <pubDate>Fri, 20 Nov 2026 01:48:37 GMT</pubDate>
-    <lastBuildDate>Fri, 20 Nov 2026 01:56:50 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 20 Nov 2026 05:02:18 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -23,7 +23,7 @@
       <link>https://cagoooo.github.io/Akai/tool/137/</link>
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/137</guid>
       <pubDate>Fri, 20 Nov 2026 01:48:37 GMT</pubDate>
-      <description>把 Gemini 技能產出的 PIRLS 閱讀題組資料貼上，一鍵下載 PaGamO 官方題組範本格式的 Excel，下載後自動打開 PaGamO 批量上傳頁；也提供 pagamo-reading-set 技能檔下載與圖文安裝教學。</description>
+      <description>把 Gemini 技能產出的 PIRLS 閱讀題組資料貼上，一鍵下載 PaGamO 官方題組範本格式的 Excel，下載後自動打開 PaGamO 批量上傳頁；首頁就有 pagamo-reading-set 技能檔下載與圖文安裝教學的入口。</description>
       <category>PaGamO</category>
       <category>PIRLS</category>
       <category>閱讀素養</category>

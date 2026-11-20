@@ -198,7 +198,7 @@
 - [#4 PIRLS閱讀理解生成](https://cagoooo.github.io/Akai/tool/4/): 國小 PIRLS 閱讀理解工具，協助教師設計閱讀理解評量與學生練習；需要 AI 依課文產生題目、答案解說與匯出的老師，可參考升級版 PIRLS 閱讀理解生成站 PRO。 標籤：PIRLS、閱讀理解、評估、生成、AI。 實際工具：https://pirlss.smes.tyc.edu.tw/。教學情境文章：https://cagoooo.github.io/Akai/blog/pirls-4-firebase-mirror/
 - [#12 PIRLS閱讀理解網](https://cagoooo.github.io/Akai/tool/12/): 完整的 PIRLS 閱讀理解資源平台 標籤：PIRLS、閱讀、理解、資源、評量。 實際工具：https://read.smes.tyc.edu.tw/smes/PIRLS/。教學情境文章：https://cagoooo.github.io/Akai/blog/reading-12-portal-page/
 - [#87 PIRLS 閱讀理解生成站 PRO](https://cagoooo.github.io/Akai/tool/87/): 升級版 PIRLS 閱讀理解出題平台：上傳課文照片或貼上文章，AI 依四層次（訊息提取、直接推論、詮釋整合、評估批判）出題並附答後講解，可匯出 PaGamO、Kahoot 等平台；另有已上架商店的 Chrome 擴充套件，在任何網頁截圖、讀取全文或用 YouTube 影片就能出題，一鍵送進 PaGamO 並自動上傳。 標籤：PIRLS、閱讀理解、AI 出題、四層次提問、答後講解、Chrome 擴充套件。 實際工具：https://cagoooo.github.io/pirls-questioncraft/。教學情境文章：https://cagoooo.github.io/Akai/blog/pirls-87-questioncraft-rewrite/
-- [#137 PaGamO題組SKILLS技能下載器](https://cagoooo.github.io/Akai/tool/137/): 把 Gemini 技能產出的 PIRLS 閱讀題組資料貼上，一鍵下載 PaGamO 官方題組範本格式的 Excel，下載後自動打開 PaGamO 批量上傳頁；也提供 pagamo-reading-set 技能檔下載與圖文安裝教學。 標籤：PaGamO、PIRLS、閱讀素養、Gemini 技能、SKILLS、閱讀題組。 實際工具：https://cagoooo.github.io/pagamo-gemini/。教學情境文章：https://cagoooo.github.io/Akai/blog/pagamo-gemini-skill-137-question-set-downloader/
+- [#137 PaGamO題組SKILLS技能下載器](https://cagoooo.github.io/Akai/tool/137/): 把 Gemini 技能產出的 PIRLS 閱讀題組資料貼上，一鍵下載 PaGamO 官方題組範本格式的 Excel，下載後自動打開 PaGamO 批量上傳頁；首頁就有 pagamo-reading-set 技能檔下載與圖文安裝教學的入口。 標籤：PaGamO、PIRLS、閱讀素養、Gemini 技能、SKILLS、閱讀題組。 實際工具：https://cagoooo.github.io/pagamo-gemini/。教學情境文章：https://cagoooo.github.io/Akai/blog/pagamo-gemini-skill-137-question-set-downloader/
 
 ## 教學情境深度長文（138 篇）
 
