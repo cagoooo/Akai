@@ -52,6 +52,15 @@ export async function ensureSignedIn(): Promise<User | null> {
 
 let inFlightSignIn: Promise<User | null> | null = null;
 
+// 最近一次匿名登入失敗的原因：ensureSignedIn 失敗只回 null，呼叫端靠這個分辨「斷線沒登入成功」與真的有問題
+// （2026-11-20 JAVASCRIPT-REACT-1F：Mac Safari 點連結離開頁面，請求全被中斷，統計報「認證尚未就緒」）
+let lastAnonymousSignInError: unknown = null;
+
+/** 最近一次匿名登入失敗的錯誤；之後成功登入會清掉 */
+export function getLastAnonymousSignInError(): unknown {
+    return lastAnonymousSignInError;
+}
+
 async function restoreOrSignInAnonymously(): Promise<User | null> {
     if (!auth) return null;
 
@@ -76,8 +85,10 @@ async function restoreOrSignInAnonymously(): Promise<User | null> {
 
     try {
         const result = await signInAnonymously(auth as Auth);
+        lastAnonymousSignInError = null;
         return result.user;
     } catch (err) {
+        lastAnonymousSignInError = err;
         console.warn('[ensureSignedIn] 匿名登入失敗:', err);
         return null;
     }

@@ -13,12 +13,21 @@ export async function invokePublicAnalytics(payload: Record<string, unknown>): P
   await userInteractionReady;
   const firebaseModule = await import('@/lib/firebase');
   if (!await firebaseModule.waitForAppCheck()) return false;
-  const { ensureSignedIn, isSignedOutThisSession } = await import('@/lib/authService');
+  const { ensureSignedIn, isSignedOutThisSession, getLastAnonymousSignInError } = await import('@/lib/authService');
   const user = await ensureSignedIn();
   // 訪客主動登出後本次不再自動匿名登入，統計照設計略過，不當成錯誤回報
   // （2026-11-03 JAVASCRIPT-REACT-1F：登出後切頁，裝置／來源／地區統計各報一次「認證尚未就緒」）
   if (!user && isSignedOutThisSession()) return false;
-  if (!user) throw new Error('Firebase 認證尚未就緒');
+  if (!user) {
+    // 匿名登入是因為連不上網路才失敗（訪客點連結離開頁面、Safari 中斷進行中的請求、斷網），
+    // 改丟連線中斷代碼，呼叫端歸為「這次沒送出」；其他原因（例如匿名登入被關掉）照常回報
+    // （2026-11-20 JAVASCRIPT-REACT-1F 回歸：Mac Safari 點搜尋列連結後 20 毫秒內所有請求都沒有回應）
+    const signInError = getLastAnonymousSignInError() as { code?: unknown } | null;
+    if (signInError?.code === 'auth/network-request-failed') {
+      throw Object.assign(new Error('連線中斷，匿名登入沒完成'), { code: TOKEN_UNAVAILABLE_CODE });
+    }
+    throw new Error('Firebase 認證尚未就緒');
+  }
 
   const { getFunctions, httpsCallable } = await import('firebase/functions');
   const firebaseApp = firebaseModule.default;

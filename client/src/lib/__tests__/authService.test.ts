@@ -22,7 +22,7 @@ vi.mock('firebase/auth', () => ({
 }));
 
 import { signInWithPopup } from 'firebase/auth';
-import { ensureSignedIn, signInWithGoogle } from '@/lib/authService';
+import { ensureSignedIn, getLastAnonymousSignInError, signInWithGoogle } from '@/lib/authService';
 
 describe('ensureSignedIn 匿名認證', () => {
   beforeEach(() => {
@@ -68,6 +68,18 @@ describe('ensureSignedIn 匿名認證', () => {
     await expect(ensureSignedIn()).resolves.toBeNull();
     await expect(ensureSignedIn()).resolves.toMatchObject({ uid: 'anonymous-user' });
     expect(mocks.signInAnonymously).toHaveBeenCalledTimes(2);
+    warn.mockRestore();
+  });
+
+  it('記住最近一次匿名登入失敗的原因，之後成功就清掉（JAVASCRIPT-REACT-1F）', async () => {
+    const networkError = Object.assign(new Error('Firebase: Error (auth/network-request-failed).'), { code: 'auth/network-request-failed' });
+    mocks.signInAnonymously.mockRejectedValueOnce(networkError);
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    await expect(ensureSignedIn()).resolves.toBeNull();
+    expect(getLastAnonymousSignInError()).toBe(networkError);
+    await ensureSignedIn();
+    expect(getLastAnonymousSignInError()).toBeNull();
     warn.mockRestore();
   });
 

@@ -1,9 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import * as randomId from '../randomId';
-const mocks = vi.hoisted(() => ({ ready: vi.fn(), auth: vi.fn(), signedOut: vi.fn(() => false), callable: vi.fn(), httpsCallable: vi.fn() }));
+const mocks = vi.hoisted(() => ({ ready: vi.fn(), auth: vi.fn(), signedOut: vi.fn(() => false), lastSignInError: vi.fn((): unknown => null), callable: vi.fn(), httpsCallable: vi.fn() }));
 vi.mock('../userInteraction', () => ({ userInteractionReady: Promise.resolve() }));
 vi.mock('@/lib/firebase', () => ({ default: {}, waitForAppCheck: mocks.ready }));
-vi.mock('@/lib/authService', () => ({ ensureSignedIn: mocks.auth, isSignedOutThisSession: mocks.signedOut }));
+vi.mock('@/lib/authService', () => ({ ensureSignedIn: mocks.auth, isSignedOutThisSession: mocks.signedOut, getLastAnonymousSignInError: mocks.lastSignInError }));
 vi.mock('firebase/functions', () => ({ getFunctions: vi.fn(() => ({})), httpsCallable: mocks.httpsCallable }));
 import { invokePublicAnalytics, TOKEN_UNAVAILABLE_CODE } from '../publicAnalyticsService';
 afterEach(() => vi.restoreAllMocks());
@@ -30,6 +30,17 @@ describe('統計送出前的驗證', () => {
     mocks.auth.mockResolvedValue(null);
     await expect(invokePublicAnalytics({ kind: 'visitorCount' })).rejects.toThrow('認證尚未就緒');
     expect(mocks.callable).not.toHaveBeenCalled();
+  });
+  it('匿名登入因為連不上網路才失敗：改丟連線中斷代碼（JAVASCRIPT-REACT-1F 回歸，Mac Safari 點連結離開頁面）', async () => {
+    mocks.auth.mockResolvedValue(null);
+    mocks.lastSignInError.mockReturnValueOnce(Object.assign(new Error('Firebase: Error (auth/network-request-failed).'), { code: 'auth/network-request-failed' }));
+    await expect(invokePublicAnalytics({ kind: 'visitorCount' })).rejects.toMatchObject({ code: TOKEN_UNAVAILABLE_CODE });
+    expect(mocks.callable).not.toHaveBeenCalled();
+  });
+  it('匿名登入因為其他原因失敗（例如匿名登入被關掉）：照常回報認證尚未就緒', async () => {
+    mocks.auth.mockResolvedValue(null);
+    mocks.lastSignInError.mockReturnValueOnce(Object.assign(new Error('Firebase: Error (auth/operation-not-allowed).'), { code: 'auth/operation-not-allowed' }));
+    await expect(invokePublicAnalytics({ kind: 'visitorCount' })).rejects.toThrow('認證尚未就緒');
   });
   it('訪客本次主動登出時略過統計、不當成錯誤', async () => {
     mocks.auth.mockResolvedValue(null);

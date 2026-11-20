@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.238] - 2026-11-20 — 訪客離開頁面時統計不再誤報「認證尚未就緒」
+
+- **問題**：JAVASCRIPT-REACT-1F 在 3.6.237 回歸。Mac Safari 訪客點搜尋列的連結離開頁面，Safari 中斷所有進行中的請求，匿名登入因連不上網路失敗（`auth/network-request-failed`）；`ensureSignedIn` 只回 null，`invokePublicAnalytics` 分不出原因，一律丟「Firebase 認證尚未就緒」寄告警。
+- **修正**：`authService` 記住最近一次匿名登入失敗的原因（`getLastAnonymousSignInError`，成功後清掉）；`invokePublicAnalytics` 遇到網路失敗改丟既有的連線中斷代碼 `analytics/token-unavailable`，由 `isAbortedRequestError` 歸成「這次沒送出」。其他原因（例如匿名登入被關掉）照常回報。
+- **測試**：`publicAnalyticsService.test.ts`、`authService.test.ts` 各補案例（含反例）。
+
 ## [3.6.237] - 2026-11-20 — 更新 #137 卡片圖、介紹與文章
 
 - **介紹**：補上下載器首頁的「STEP 0」安裝引導卡、教學頁的「回到下載器」按鈕、出題前三選一題數（依字數標推薦，可回覆 A／B／C）、輸出順序改成「步驟一網址框 → 步驟二題組資料 → 步驟三上傳」；刪掉已不適用的「回覆題數要再 @ 技能」說法。
