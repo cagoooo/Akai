@@ -15597,7 +15597,83 @@ const POST_135: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_136, POST_135, POST_134, POST_133, POST_132, POST_131, POST_130, POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+const POST_137: BlogPost = {
+  slug: 'pagamo-gemini-skill-137-question-set-downloader',
+  title: '#137 題目出好了卻卡在貼範本：用一份 Gemini 技能和一個下載器，把閱讀題組直接送進 PaGamO',
+  excerpt:
+    '用 Gemini 出題很快，把題目一格一格搬進 PaGamO 題組範本才是最累的一步。#137 用一份 Gemini 技能把出題規則固定下來（5／8／10 題、PIRLS 四層次、引導式解說），再用下載器把題組資料一鍵轉成官方範本 Excel。',
+  publishedAt: '2026-11-20',
+  readingMinutes: 5,
+  tags: ['PaGamO', 'PIRLS', 'Gemini 技能', '閱讀題組', '引導式解說'],
+  toolIds: [137, 136, 87],
+  coverEmoji: '🪄',
+  coverColor: 'green',
+  body: `## 題目出好了，卻卡在「貼進範本」
+
+用 Gemini 出閱讀題組，現在已經很快：貼一篇文章，很快就有題目。真正花時間的是後面——PaGamO 的「題組」批量上傳範本有 25 欄，第 10 列是表頭、第 11 列開始才是資料，文章一列、題目一列一列往下排，選項、正確答案、解說各有固定的欄位。把 Gemini 的回答一格一格搬進 Excel，常常比出題還累。
+
+這個工具就是要把「搬」這一段拿掉。
+
+## 兩件東西：一份技能、一個下載器
+
+**Gemini 技能 pagamo-reading-set**：老師把它裝進自己的 Gemini（學校帳號），出題規則就固定下來，不用每次重打提示詞。
+
+- **先選題數**：5、8、10 題三種，PIRLS 四層次依題數分配（5 題是 2／1／1／1，8 題 3／2／2／1，10 題 3／3／2／2，依序是直接提取、直接推論、詮釋整合、比較評估）。
+- **引導式解說**：解說不直接講答案，而是像「回到第 1 段，找找看秋天時北方發生了哪兩個變化」這樣，把學生帶回文章自己找。正確答案只在預覽裡給老師看。
+- **照片、PDF 逐字照抄**：不摘要、不改寫，看不清楚的字標成「□」請老師核對。
+- **出完題自我檢查**：四個選項只能有一個說得通、主詞與數字不能改、不出「何者為非」這類反面題。
+- 最後給一段「題組資料」（JSON 格式），和一個有「複製」按鈕的下載器網址框。
+
+**題組下載器**：把題組資料貼進網頁，右邊立刻列出每一題和正確答案，格式有錯會用紅字指出來；按下載，網頁會抓 PaGamO 官方題組範本、把題目從第 11 列填好，存成 Excel；下載完自動開新分頁到 PaGamO「批量上傳」頁，老師選「題組」、選檔案就能上傳。
+
+## 安裝只要一個檔案
+
+在安裝教學頁按「下載技能檔 SKILL.md」，會同時開新分頁到 Gemini 技能頁，原本的頁面列出接下來要做的事：建立、上傳、選檔案、直接按上傳。每一步都附實際畫面截圖。上傳不成功的話，也能改用「手動建立」，頁面上三個按鈕分別複製技能名稱、技能說明與技能指令。
+
+## 做的過程踩到的幾個坑（老師用的時候也要知道）
+
+- **Canvas 和技能不能同時用**：Gemini 打開 Canvas 時，技能會被停用。所以下載器做成獨立網頁，而不是讓 Gemini 在 Canvas 裡做下載按鈕。
+- **新網址會被改成 Google 搜尋**：Google 還沒收錄的網址，Gemini 會把它改成「先去搜尋」，老師點了會跑到錯的頁面。所以技能把網址放在有「複製」按鈕的程式碼框裡，並建議第一次打開就加入書籤。
+- **技能只對 @ 它的那一則訊息有效**：Gemini 問「要幾題」時，回覆要再打「@pag」選一次技能，不然接下來的題目就不照規則出。最快的方法是第一則訊息就寫「@pagamo-reading-set 10 題」再貼文章。
+- **技能偶爾沒套用**：如果 Gemini 只出了普通練習題、沒有題組資料，就再 @ 一次技能，請它依照技能重新產生。
+
+## 真實技術棧
+
+- 純前端 HTML／JavaScript，部署在 GitHub Pages
+- SheetJS 在瀏覽器裡讀寫 Excel；範本每次從 PaGamO 官方網址抓最新版
+- 網站本身不呼叫 AI 模型、不把題目送到任何伺服器；出題在老師自己的 Gemini 帳號完成
+- Service Worker：有新版本時會跳出提示，按一下重新整理
+- 2026-11-19 實測：產生的檔案在 PaGamO 批量上傳「檔案檢查通過」，題目總覽裡的文章、題目、選項、正確答案與解說都正確
+
+## 想像這樣用（情境示例）
+
+以下是示意情境，不是實際使用紀錄：
+
+- **晨讀十分鐘**：導師前一晚把一篇科普短文交給 Gemini，選 5 題，隔天早上學生在 PaGamO 上作答；答錯的同學看到的是「回到第 2 段找找看……」，而不是直接看到答案。
+- **單元評量**：閱讀課老師把課本一課拍照上傳，選 10 題，四個層次都有題目，作答後可以看出班上在哪一層比較弱。
+- **研習推廣**：資訊組把安裝教學頁的網址貼到學校群組，老師照著截圖自己裝好技能，不必一位一位教。
+
+## 配對工具推薦
+
+- [#136 好文章一鍵變題組｜PIRLS 閱讀題組小幫手線上分享簡報](https://cagoooo.github.io/pagamo-pirls-talk/)：想連「上傳到 PaGamO」也自動完成，可以看這份簡報介紹的 Chrome 擴充功能。
+- [#87 PIRLS 閱讀理解生成站 PRO](https://cagoooo.github.io/pirls-questioncraft/)：不需要上傳 PaGamO、只想要一份 PIRLS 題目時的選擇。
+- [#137 本篇主角](https://cagoooo.github.io/pagamo-gemini/)
+
+## 適用對象
+
+- 已經在用 PaGamO、想自己出閱讀題組的國小導師
+- 國語文、閱讀課老師，想讓四層次的題目分配固定下來
+- 推動閱讀或資訊研習的教學組、資訊組
+
+## 想試試？
+
+→ [前往 #137 PaGamO題組SKILLS技能下載器](https://cagoooo.github.io/pagamo-gemini/)
+
+先到安裝教學頁把技能裝進自己的 Gemini，下一篇想讓學生讀的文章，就交給它變成 PaGamO 題組。
+`,
+};
+
+export const POSTS: BlogPost[] = [POST_137, POST_136, POST_135, POST_134, POST_133, POST_132, POST_131, POST_130, POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。

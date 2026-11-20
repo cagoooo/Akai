@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 136+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 137+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Mon, 16 Nov 2026 07:45:53 GMT</pubDate>
-    <lastBuildDate>Tue, 17 Nov 2026 07:41:15 GMT</lastBuildDate>
+    <pubDate>Fri, 20 Nov 2026 01:48:37 GMT</pubDate>
+    <lastBuildDate>Fri, 20 Nov 2026 01:56:50 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,27 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：PaGamO題組SKILLS技能下載器</title>
+      <link>https://cagoooo.github.io/Akai/tool/137/</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/137</guid>
+      <pubDate>Fri, 20 Nov 2026 01:48:37 GMT</pubDate>
+      <description>把 Gemini 技能產出的 PIRLS 閱讀題組資料貼上，一鍵下載 PaGamO 官方題組範本格式的 Excel，下載後自動打開 PaGamO 批量上傳頁；也提供 pagamo-reading-set 技能檔下載與圖文安裝教學。</description>
+      <category>PaGamO</category>
+      <category>PIRLS</category>
+      <category>閱讀素養</category>
+      <category>Gemini 技能</category>
+      <category>SKILLS</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#137 題目出好了卻卡在貼範本：用一份 Gemini 技能和一個下載器，把閱讀題組直接送進 PaGamO</title>
+      <link>https://cagoooo.github.io/Akai/blog/pagamo-gemini-skill-137-question-set-downloader/</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/pagamo-gemini-skill-137-question-set-downloader</guid>
+      <pubDate>Fri, 20 Nov 2026 00:00:00 GMT</pubDate>
+      <description>用 Gemini 出題很快，把題目一格一格搬進 PaGamO 題組範本才是最累的一步。#137 用一份 Gemini 技能把出題規則固定下來（5／8／10 題、PIRLS 四層次、引導式解說），再用下載器把題組資料一鍵轉成官方範本 Excel。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
     <item>
       <title>🆕 新工具：好文章一鍵變題組｜PIRLS 閱讀題組小幫手線上分享簡報</title>
       <link>https://cagoooo.github.io/Akai/tool/136/</link>
@@ -309,27 +330,6 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/web-migration-123-accessibility-aa-console</guid>
       <pubDate>Thu, 06 Aug 2026 00:00:00 GMT</pubDate>
       <description>#123 校網無障礙 AA 遷移操作平台，把「舊校網搬到教育局共構平台、拿到無障礙 AA 標章」這件沒人說得清楚的事，拆成 12 個由上往下、做完打勾就好的步驟：要貼的內容一鍵複製、進度自動記住，還內建對比度小工具與會讓你秒退件的四大雷區清單。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>🆕 新工具：兒童英語單字大冒險</title>
-      <link>https://cagoooo.github.io/Akai/tool/122/</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/122</guid>
-      <pubDate>Tue, 28 Jul 2026 02:00:00 GMT</pubDate>
-      <description>專為國小孩子打造的魔法英語單字學習平台！AI 拍照自動辨識課本單字、真人美音朗讀、Kahoot 風格全班對戰與等級成就系統，讓背單字變成一場冒險。</description>
-      <category>英語單字</category>
-      <category>英語學習</category>
-      <category>KK音標</category>
-      <category>AI拍照辨識</category>
-      <category>單字卡</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#122 兒童英語單字大冒險：拍一張課本照片，AI 幫你把整課單字變成全班對戰</title>
-      <link>https://cagoooo.github.io/Akai/blog/word-wiz-kids-122-english-vocabulary-adventure/</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/word-wiz-kids-122-english-vocabulary-adventure</guid>
-      <pubDate>Tue, 28 Jul 2026 00:00:00 GMT</pubDate>
-      <description>#122 兒童英語單字大冒險，用 Gemini 視覺 AI 拍照辨識課本單字、真人美音朗讀、Kahoot 風格全班 PIN 碼對戰，加上等級 EXP、連續打卡與 8 款成就徽章，把「背單字」變成孩子願意每天回來的冒險。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>

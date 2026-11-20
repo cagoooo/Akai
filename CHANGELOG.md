@@ -2,6 +2,13 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.236] - 2026-11-20 — 新增工具 #137 PaGamO題組SKILLS技能下載器
+
+- **新工具 #137**（語文閱讀，`https://cagoooo.github.io/pagamo-gemini/`）：下載 Gemini 技能 `pagamo-reading-set`（5／8／10 題、PIRLS 四層次分配、引導式解說）與圖文安裝教學；把 Gemini 給的題組資料貼上，一鍵下載 PaGamO 官方題組範本格式的 Excel，下載後自動打開 PaGamO 批量上傳頁。
+- **客群推薦**：國小老師（導師、科任、行政），痛點為閱讀素養、評量、減輕負擔、內容製作；導師與科任的閱讀素養推薦結果已確認會出現 #137。
+- **圖片與文章**：卡片圖為實際網站截圖（`scripts/screenshot-tool-137.mjs`），OG 圖由 `generate-unified-og.mjs` 產生；新增手寫長文 POST_137（`/blog/pagamo-gemini-skill-137-question-set-downloader`）。
+- 重新產生文章索引與網站字型子集。
+
 ## [3.6.235] - 2026-11-19 — 訪客電腦時鐘差幾秒不再寄錯誤告警
 
 - **問題**：Sentry JAVASCRIPT-REACT-2N（Mac Safari，1 次 1 人）：Firestore 多分頁快取發現另一個分頁寫的時間「在未來 2 秒」，記一筆 console.error。原規則只略過 1 秒以內，2 秒就以 error 送出、觸發 high priority 告警信。這是電腦自動對時把時鐘往回調一點造成的，SDK 會自己重新協調，訪客畫面沒受影響，站方也修不到。

@@ -15,6 +15,27 @@ export type BlogPostMeta = Omit<BlogPost, 'body'>;
 
 export const POSTS_INDEX: BlogPostMeta[] = [
   {
+    "slug": "pagamo-gemini-skill-137-question-set-downloader",
+    "title": "#137 題目出好了卻卡在貼範本：用一份 Gemini 技能和一個下載器，把閱讀題組直接送進 PaGamO",
+    "excerpt": "用 Gemini 出題很快，把題目一格一格搬進 PaGamO 題組範本才是最累的一步。#137 用一份 Gemini 技能把出題規則固定下來（5／8／10 題、PIRLS 四層次、引導式解說），再用下載器把題組資料一鍵轉成官方範本 Excel。",
+    "publishedAt": "2026-11-20",
+    "readingMinutes": 5,
+    "tags": [
+      "PaGamO",
+      "PIRLS",
+      "Gemini 技能",
+      "閱讀題組",
+      "引導式解說"
+    ],
+    "toolIds": [
+      137,
+      136,
+      87
+    ],
+    "coverEmoji": "🪄",
+    "coverColor": "green"
+  },
+  {
     "slug": "pagamo-pirls-talk-136-article-to-question-set",
     "title": "#136 好文章一鍵變題組：一份把 PIRLS 出題流程講成闖關地圖的 40 分鐘線上分享簡報",
     "excerpt": "這是阿凱老師為 PaGamO 教師社群線上分享（2026-12-11）準備的 16 頁互動簡報：用五個關卡講清楚怎麼用 PIRLS 閱讀題組小幫手，把網頁文章、截圖或 YouTube 影片變成四層次題組並一鍵送進 PaGamO，聽眾用手機參與文字雲與投票。",

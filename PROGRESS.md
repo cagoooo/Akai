@@ -9,6 +9,10 @@
 - **前一版**: v3.6.71 — 新增 #102 外星人入侵·保衛石門 + 雙 tools.json 對齊
 - **📎 文件補追記**：本檔案從 v3.6.71 停更到 2026-07-04 才補寫。中間 v3.6.72 → v3.6.87 共 16 個版本（主要是新增工具 #103-#114 + 幾個獨立 bug fix，例如 v3.6.80 使用次數本機計數 bug、v3.6.81/b3032b2 許願池通知從 LINE 遷移到 Google Chat）沒有寫進本檔案，細節可查 `git log`（commit 訊息大多含版本號）。工具總數從 102 → 115 就是這段期間累積的，之後有空再補完整段落。
 
+### 2026-11-20 新增工具 #137 PaGamO題組SKILLS技能下載器 v3.6.236
+
+- 新增 #137（語文閱讀）：Gemini 技能 pagamo-reading-set 下載與安裝教學＋把題組資料轉成 PaGamO 官方題組範本 Excel 的下載器（https://cagoooo.github.io/pagamo-gemini/）。客群：國小老師（導師／科任／行政），痛點 reading-literacy、assessment、teacher-workload、content-creation。卡片圖為實際網站截圖（貼上示範題組後的畫面），OG 圖由 generate-unified-og 產生；手寫長文 POST_137。網站本身不呼叫 AI（已讀原始碼確認），出題在老師自己的 Gemini 完成。
+
 ### 2026-11-19 訪客電腦時鐘差幾秒不再寄錯誤告警 v3.6.235
 
 - Sentry 2N：Mac Safari 的 Firestore 時鐘誤差 2 秒就寄 high priority 告警。門檻由 1 秒放寬為 1 分鐘；超過 1 分鐘每頁回報一次並降為 warning
