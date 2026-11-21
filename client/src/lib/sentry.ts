@@ -235,7 +235,12 @@ const BROWSER_STORAGE_LOST = [
   /The database connection is closing/i,
   // Firestore 開啟離線快取資料庫時被瀏覽器中止（2026-11-17 JAVASCRIPT-REACT-2J：iPhone Chrome，
   // 首頁閒置 23 秒後切回來，'createOrUpgrade' 交易 AbortError，SDK 回報 code=unavailable）
-  /IndexedDB transaction '[\w-]+' failed: AbortError/i,
+  // 交易名稱可能有空白（'Locally write mutations'、'Allocate target'），用 [^']+ 而不是 [\w-]+
+  /IndexedDB transaction '[^']+' failed: AbortError/i,
+  // 分頁在背景很久後切回，資料庫還在但裡面的資料表不見了：Firestore 每個查詢都報這句
+  // （2026-11-21 JAVASCRIPT-REACT-2S／2T／2V／2W：iPhone Chrome，iOS 17.6.1，閒置 34 分鐘後切回，
+  //   先 createOrUpgrade AbortError，接著每張工具卡片各自讀收藏都失敗，同一秒 40 筆）
+  /IndexedDB transaction '[^']+' failed: NotFoundError: .*object stores? (?:was|were) not found/i,
   // 網頁開著時，App 內建瀏覽器或 iOS 把這個網站的資料庫整個刪掉（清除網站資料、系統回收空間）；
   // SDK 先印 app/idb-get 讀取失敗，再丟出沒人接住的 UnknownError（2026-11-21 JAVASCRIPT-REACT-2P：iPhone WKWebView，iOS 26.2）
   /Database deleted by request of the user/i,

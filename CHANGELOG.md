@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.241] - 2026-11-21 — 背景很久切回後資料表不見，不再一次寄 4 種告警
+
+- **問題**：JAVASCRIPT-REACT-2S／2T／2V／2W（同一位登入的 iPhone Chrome 訪客，iOS 17.6.1）。首頁放在背景 34 分鐘後切回，瀏覽器的離線資料庫還在、但裡面的資料表不見了，Firestore 每個查詢都報 `IndexedDB transaction 'Allocate target' failed: NotFoundError: … object stores was not found`；每張工具卡片各自讀收藏，同一秒 40 筆，開了 4 個新 issue。另外原本「被中止」規則的交易名稱只認 `[\w-]+`，名稱有空白（'Locally write mutations'）就認不出。
+- **修正**：`sentry.ts` 的 `BROWSER_STORAGE_LOST` 交易名稱改 `[^']+`，並新增「NotFoundError＋object stores not found」，全部歸到固定 issue `browser-indexeddb-lost`（同頁只報第一筆）。
+- **測試**：`sentryNoise.test.ts` 補三種寫法與反例（NotFoundError 但不是資料表不見）。
+
 ## [3.6.240] - 2026-11-21 — iPhone App 自己塞進網頁的腳本出錯不再寄告警
 
 - **問題**：JAVASCRIPT-REACT-2R（iOS 18.7 WKWebView，首頁，1 次）。某個 App 的「整頁存檔」功能在網頁裡下載 281 個資源，逾時丟出 `Stylesheet append timeout`，堆疊只有 `@user-script:5:2:256382`（App 用 WKUserScript 注入的腳本，不是站方程式），變成未處理 Promise 錯誤寄 high priority 信。

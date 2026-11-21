@@ -342,6 +342,11 @@ describe('瀏覽器 IndexedDB 連線斷掉：同一頁只回報一次', () => {
     // 2026-11-21 JAVASCRIPT-REACT-2P：iPhone App 內建瀏覽器在網頁開著時刪掉網站資料庫（先印讀取失敗，再丟未處理的 UnknownError）
     consoleEvent('[2026-11-21T02:11:59.236Z]  @firebase/app: Firebase: Error thrown when reading from IndexedDB. Original error: Database deleted by request of the user. (app/idb-get).'),
     exceptionEvent('Error', 'UnknownError: Database deleted by request of the user'),
+    // 2026-11-21 JAVASCRIPT-REACT-2S／2T／2V／2W：背景 34 分鐘後切回，資料表不見了（交易名稱有空白）
+    consoleEvent("[2026-11-21T03:00:28.325Z]  @firebase/firestore: Firestore (12.8.0): AsyncQueue Failed to persist write: IndexedDbTransactionError: [code=unavailable]: IndexedDB transaction 'Locally write mutations' failed: NotFoundError: Failed to execute 'transaction' on 'IDBDatabase': One of the specified object stores was not found."),
+    exceptionEvent('FirebaseError', "Initialization of query 'Query(target=Target(userFavorites/abc, orderBy: [__name__ (asc)]); limitType=F)' failed: IndexedDbTransactionError: [code=unavailable]: IndexedDB transaction 'Allocate target' failed: NotFoundError: Failed to execute 'transaction' on 'IDBDatabase': One of the specified object stores was not found."),
+    // 交易名稱有空白的 AbortError 也要認得
+    exceptionEvent('IndexedDbTransactionError', "IndexedDB transaction 'Get last remote snapshot version' failed: AbortError: The operation was aborted."),
   ];
 
   it('第一筆降為 warning 並歸到固定 issue，之後同一頁略過', () => {
@@ -355,6 +360,7 @@ describe('瀏覽器 IndexedDB 連線斷掉：同一頁只回報一次', () => {
     expect(classify(inputs[3])).toBeNull();
     expect(classify(inputs[4])).toBeNull();
     expect(classify(inputs[5])).toBeNull();
+    for (const input of inputs.slice(6)) expect(classify(input)).toBeNull();
   });
 
   it('每一種訊息單獨出現時都會回報第一筆', () => {
@@ -375,6 +381,8 @@ describe('瀏覽器 IndexedDB 連線斷掉：同一頁只回報一次', () => {
       exceptionEvent('IndexedDbTransactionError', "IndexedDB transaction 'createOrUpgrade' failed: QuotaExceededError: The quota has been exceeded."),
       // 同樣是讀取 IndexedDB 失敗，但原因不是資料庫被刪掉，照常回報
       consoleEvent('@firebase/app: Firebase: Error thrown when reading from IndexedDB. Original error: QuotaExceededError: The quota has been exceeded. (app/idb-get).'),
+      // NotFoundError 但不是「資料表不見」（例如找不到文件）照常回報
+      exceptionEvent('IndexedDbTransactionError', "IndexedDB transaction 'Allocate target' failed: NotFoundError: The object can not be found here."),
     ];
     for (const input of others) expect(classify(input)).toBe(input);
   });
