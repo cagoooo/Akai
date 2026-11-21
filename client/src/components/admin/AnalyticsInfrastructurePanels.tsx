@@ -254,34 +254,36 @@ export function SnapshotManagementPanel() {
           暫無快照（部署後第一份會在隔天 03:00 建立；不含子集合）
         </div>
       ) : (
-        <div style={{ maxHeight: 200, overflowY: 'auto' }}>
-          <table style={{ width: '100%', fontSize: 12, borderCollapse: 'collapse' }}>
+        <div style={{ maxHeight: 260, overflow: 'auto' }}>
+          <table style={{ width: '100%', minWidth: 420, fontSize: 12, borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ borderBottom: '1.5px dashed #1a1a1a' }}>
                 <th style={{ textAlign: 'left', padding: '4px 6px' }}>日期</th>
-                <th style={{ textAlign: 'right', padding: '4px 6px' }}>visitor</th>
-                <th style={{ textAlign: 'right', padding: '4px 6px' }}>analytics</th>
-                <th style={{ textAlign: 'right', padding: '4px 6px' }}>tools</th>
-                <th style={{ textAlign: 'right', padding: '4px 6px' }}>ratings</th>
+                <th style={{ textAlign: 'right', padding: '4px 6px' }} title="visitorStats">訪客</th>
+                <th style={{ textAlign: 'right', padding: '4px 6px' }} title="analytics">分析</th>
+                <th style={{ textAlign: 'right', padding: '4px 6px' }} title="toolUsageStats">工具</th>
+                <th style={{ textAlign: 'right', padding: '4px 6px' }} title="toolRatings">評分</th>
                 <th style={{ textAlign: 'center', padding: '4px 6px' }}>操作</th>
               </tr>
             </thead>
             <tbody>
               {snapshots.map((s) => (
                 <tr key={s.id} style={{ borderBottom: '1px dotted #ccc' }}>
-                  <td style={{ padding: '4px 6px', fontWeight: 700 }}>{s.id}</td>
+                  <td style={{ padding: '4px 6px', fontWeight: 700, whiteSpace: 'nowrap' }}>{s.id}</td>
                   <td style={{ padding: '4px 6px', textAlign: 'right' }}>{s.sizes.visitorStats ?? '-'}</td>
                   <td style={{ padding: '4px 6px', textAlign: 'right' }}>{s.sizes.analytics ?? '-'}</td>
                   <td style={{ padding: '4px 6px', textAlign: 'right' }}>{s.sizes.toolUsageStats ?? '-'}</td>
                   <td style={{ padding: '4px 6px', textAlign: 'right' }}>{s.sizes.toolRatings ?? '-'}</td>
                   <td style={{ padding: '4px 6px', textAlign: 'center' }}>
+                    <div style={{ display: 'flex', gap: 6, justifyContent: 'center', flexWrap: 'nowrap' }}>
                     <button
                       onClick={() => handleRestore(s.id, true)}
                       disabled={restoring}
                       style={{
-                        padding: '2px 6px',
-                        fontSize: 10,
-                        marginRight: 4,
+                        padding: '6px 8px',
+                        fontSize: 11,
+                        minHeight: 32,
+                        whiteSpace: 'nowrap',
                         border: '1px solid #1a1a1a',
                         borderRadius: 4,
                         background: '#fff',
@@ -294,8 +296,10 @@ export function SnapshotManagementPanel() {
                       onClick={() => handleRestore(s.id, false)}
                       disabled={restoring}
                       style={{
-                        padding: '2px 6px',
-                        fontSize: 10,
+                        padding: '6px 8px',
+                        fontSize: 11,
+                        minHeight: 32,
+                        whiteSpace: 'nowrap',
                         border: '1px solid #c7302a',
                         borderRadius: 4,
                         background: '#fff',
@@ -306,6 +310,7 @@ export function SnapshotManagementPanel() {
                     >
                       ↩ 合併還原
                     </button>
+                    </div>
                   </td>
                 </tr>
               ))}

@@ -10,7 +10,9 @@ import { AdminAuth } from '../AdminAuth';
 
 // Mock AnalyticsDashboard
 vi.mock('../AnalyticsDashboard', () => ({
-    AnalyticsDashboard: () => <div data-testid="analytics-dashboard">儀表板內容</div>
+    AnalyticsDashboard: ({ accountSlot, maintenanceExtra }: { accountSlot?: React.ReactNode; maintenanceExtra?: React.ReactNode }) => (
+        <div data-testid="analytics-dashboard">儀表板內容{accountSlot}{maintenanceExtra}</div>
+    )
 }));
 vi.mock('../AdminWebVitalsDashboard', () => ({
     AdminWebVitalsDashboard: () => <div data-testid="web-vitals-dashboard">效能儀表板</div>

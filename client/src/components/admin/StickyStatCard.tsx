@@ -60,16 +60,16 @@ export function StickyStatCard({ color, tilt, pinColor, label, value, icon, delt
           <p className="text-xs sm:text-sm font-bold mb-1" style={{ color: '#4a3a20', letterSpacing: '0.03em' }}>
             {label}
           </p>
-          <h3 className="text-2xl sm:text-3xl font-black truncate" style={{ color: '#1a1a1a', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+          <h3 className="text-2xl sm:text-3xl font-black whitespace-nowrap" style={{ color: '#1a1a1a', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
             {value}
           </h3>
           <p className="text-xs sm:text-sm mt-1 font-bold" style={{ color: deltaColor }}>
             {delta}
           </p>
         </div>
-        {/* icon 框 */}
+        {/* icon 框：手機兩欄時寬度不夠，圖示會把數字擠成「9,9…」，手機上先藏起來（2026-11-21） */}
         <div
-          className="shrink-0 grid place-items-center"
+          className="shrink-0 hidden sm:grid place-items-center"
           style={{
             width: 48,
             height: 48,

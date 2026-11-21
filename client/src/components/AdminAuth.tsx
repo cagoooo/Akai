@@ -45,72 +45,61 @@ export function AdminAuth() {
     // ── 情境 1：已登入且是管理員 → 儀表板 ────────
     if (interactiveUser && isAdmin) {
         return (
-            <div style={{ position: 'relative' }}>
-                {/* 頂部右側 cork 風管理員資訊 + 登出 */}
-                <div
-                    style={{
-                        position: 'fixed',
-                        top: 30,
-                        right: 16,
-                        zIndex: 50,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 8,
-                        flexWrap: 'wrap',
-                    }}
-                >
-                    <div
-                        style={{
-                            background: tokens.note.blue,
-                            border: '2.5px solid #1a1a1a',
-                            borderRadius: 8,
-                            padding: '6px 14px',
-                            fontSize: 13,
-                            fontWeight: 800,
-                            color: tokens.ink,
-                            boxShadow: '2px 2px 0 rgba(0,0,0,.25)',
-                            fontFamily: tokens.font.tc,
-                            transform: 'rotate(-1deg)',
-                        }}
-                    >
-                        👤 {interactiveUser.displayName || interactiveUser.email}
+            <AnalyticsDashboard
+                accountSlot={
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                        <div
+                            style={{
+                                background: tokens.note.blue,
+                                border: '2.5px solid #1a1a1a',
+                                borderRadius: 8,
+                                padding: '6px 14px',
+                                fontSize: 13,
+                                fontWeight: 800,
+                                color: tokens.ink,
+                                boxShadow: '2px 2px 0 rgba(0,0,0,.25)',
+                                fontFamily: tokens.font.tc,
+                                transform: 'rotate(-1deg)',
+                            }}
+                        >
+                            👤 {interactiveUser.displayName || interactiveUser.email}
+                        </div>
+                        <button
+                            type="button"
+                            onClick={handleLogout}
+                            style={{
+                                background: tokens.paper,
+                                color: tokens.red,
+                                border: `2.5px solid ${tokens.red}`,
+                                borderRadius: 8,
+                                padding: '6px 14px',
+                                fontSize: 13,
+                                fontWeight: 800,
+                                cursor: 'pointer',
+                                fontFamily: tokens.font.tc,
+                                boxShadow: '2px 2px 0 rgba(0,0,0,.25)',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: 6,
+                                transition: 'transform .15s ease, box-shadow .15s ease',
+                            }}
+                            onMouseEnter={(e) => {
+                                const el = e.currentTarget;
+                                el.style.transform = 'translate(-2px,-2px)';
+                                el.style.boxShadow = '4px 4px 0 rgba(0,0,0,.3)';
+                            }}
+                            onMouseLeave={(e) => {
+                                const el = e.currentTarget;
+                                el.style.transform = '';
+                                el.style.boxShadow = '2px 2px 0 rgba(0,0,0,.25)';
+                            }}
+                        >
+                            🚪 登出
+                        </button>
                     </div>
-                    <button
-                        type="button"
-                        onClick={handleLogout}
-                        style={{
-                            background: tokens.paper,
-                            color: tokens.red,
-                            border: `2.5px solid ${tokens.red}`,
-                            borderRadius: 8,
-                            padding: '6px 14px',
-                            fontSize: 13,
-                            fontWeight: 800,
-                            cursor: 'pointer',
-                            fontFamily: tokens.font.tc,
-                            boxShadow: '2px 2px 0 rgba(0,0,0,.25)',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: 6,
-                            transition: 'transform .15s ease, box-shadow .15s ease',
-                        }}
-                        onMouseEnter={(e) => {
-                            const el = e.currentTarget;
-                            el.style.transform = 'translate(-2px,-2px)';
-                            el.style.boxShadow = '4px 4px 0 rgba(0,0,0,.3)';
-                        }}
-                        onMouseLeave={(e) => {
-                            const el = e.currentTarget;
-                            el.style.transform = '';
-                            el.style.boxShadow = '2px 2px 0 rgba(0,0,0,.25)';
-                        }}
-                    >
-                        🚪 登出
-                    </button>
-                </div>
-                <AnalyticsDashboard />
-                <AdminWebVitalsDashboard />
-            </div>
+                }
+                maintenanceExtra={<AdminWebVitalsDashboard />}
+            />
         );
     }
 

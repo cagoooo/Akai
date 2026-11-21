@@ -1,6 +1,6 @@
 import { safeCount, safePercentage, safeCountRecord, readDashboardStorage, safeToolStats, safeClickData } from '@/lib/dashboardDataSafety';
 import { aggregateToolStats, inclusiveCalendarDays } from '@/lib/adminStats';
-import { lazy, Suspense, useState, useEffect, useMemo } from 'react';
+import { lazy, Suspense, useState, useEffect, useMemo, type ReactNode } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BarChart, LineChart, PieChart } from '@/components/ui/charts';
@@ -57,7 +57,14 @@ const isStaticDeployment = () => {
   );
 };
 
-export function AnalyticsDashboard() {
+interface AnalyticsDashboardProps {
+  /** 管理員名牌＋登出：放進標題列（手機自成一列），不要再用 position:fixed 疊在標題列上 */
+  accountSlot?: ReactNode;
+  /** 放在「系統」分頁最後的額外維護面板（例如網站效能 Web Vitals） */
+  maintenanceExtra?: ReactNode;
+}
+
+export function AnalyticsDashboard({ accountSlot, maintenanceExtra }: AnalyticsDashboardProps = {}) {
   const [activeTab, setActiveTab] = useState('overview');
   // 日期範圍篩選（預設「最近 30 天」）
   const [dateRange, setDateRange] = useState<DateRange>(() => presetToRange('last30'));
@@ -383,8 +390,8 @@ export function AnalyticsDashboard() {
         }}
       >
         <div className="container mx-auto px-3 sm:px-6 py-3 sm:py-6">
-          {/* 手機端：緊湊佈局 */}
-          <div className="flex items-center justify-between gap-2">
+          {/* 手機端：返回、標題、下載一列；管理員名牌＋登出自成第二列（2026-11-21 原本 fixed 疊在標題列上） */}
+          <div className="flex flex-wrap items-center justify-between gap-2">
             {/* 返回首頁 — cork 白底按鈕 */}
             <Link
               href="/"
@@ -463,7 +470,7 @@ export function AnalyticsDashboard() {
                 <Download className="h-4 w-4" />
                 <span className="hidden sm:inline ml-2">下載</span>
               </Button>
-              <div className="absolute right-0 top-full mt-1 w-44 sm:w-48 bg-white rounded-lg shadow-xl border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+              <div className="absolute right-0 top-full mt-1 w-44 sm:w-48 bg-white rounded-lg shadow-xl border opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all z-50">
                 <button
                   className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 rounded-t-lg flex items-center gap-2"
                   onClick={() => {
@@ -649,14 +656,15 @@ export function AnalyticsDashboard() {
                 </button>
               </div>
             </div>
+
+            {accountSlot && (
+              <div className="w-full sm:w-auto flex justify-end">{accountSlot}</div>
+            )}
           </div>
         </div>
       </header>
 
       <main className="container mx-auto px-3 sm:px-6 py-6 sm:py-8 space-y-4 sm:space-y-6">
-        {/* 一次性回填本地歷史到 Firestore */}
-        <BackfillLocalAnalyticsBar />
-
         {/* 日期範圍篩選列 */}
         <div
           className="flex flex-wrap items-center justify-between gap-3"
@@ -686,12 +694,6 @@ export function AnalyticsDashboard() {
           </div>
           <DateRangePicker value={dateRange} onChange={setDateRange} />
         </div>
-
-        {/* 📦 每日快照備份管理（admin 才看得到） */}
-        <SnapshotManagementPanel />
-
-        {/* 🛡️ Schema 健檢（v3.6.70：手動觸發 healthCheckToolUsageStats callable） */}
-        <HealthCheckPanel />
 
         {/* 統計便利貼 — cork 風四色（已連動日期範圍） */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
@@ -739,7 +741,7 @@ export function AnalyticsDashboard() {
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList
-            className="grid grid-cols-3 sm:grid-cols-7 mb-4 w-full h-auto gap-1.5 sm:gap-2"
+            className="grid grid-cols-4 sm:grid-cols-8 mb-4 w-full h-auto gap-1.5 sm:gap-2"
             style={{
               background: 'rgba(255,255,255,.55)',
               padding: 6,
@@ -774,12 +776,14 @@ export function AnalyticsDashboard() {
                 icon: <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4" />,
                 label: '日曆',
               },
-              { value: 'wishes', icon: <span className="text-sm">✨</span>, label: '許願池' },
+              { value: 'wishes', icon: <span className="text-sm leading-none">✨</span>, label: '許願池' },
               {
                 value: 'reco',
                 icon: <Target className="h-3.5 w-3.5 sm:h-4 sm:w-4" />,
                 label: '推薦',
               },
+              // 備份、健檢、本地歷史回填、網站效能：維護用，不和每天要看的數字擠在最上面
+              { value: 'system', icon: <span className="text-sm leading-none">🛠️</span>, label: '系統' },
             ].map((tab) => (
               <TabsTrigger
                 key={tab.value}
@@ -1232,6 +1236,16 @@ export function AnalyticsDashboard() {
 
             {/* 🆕 v3.6.49 流量解析面板（細粒度 toolClickEvents 切片） */}
             <ToolFlowAnalysisPanel toolTitles={toolTitles} />
+          </TabsContent>
+
+          <TabsContent value="system" className="space-y-4">
+            {/* 一次性回填本地歷史到 Firestore（只有這台瀏覽器還有舊資料時才會出現） */}
+            <BackfillLocalAnalyticsBar />
+            {/* 📦 每日快照備份管理 */}
+            <SnapshotManagementPanel />
+            {/* 🛡️ Schema 健檢（手動觸發 healthCheckToolUsageStats callable） */}
+            <HealthCheckPanel />
+            {maintenanceExtra}
           </TabsContent>
 
           {(activeTab === 'heatmap' || activeTab === 'calendar') && (
