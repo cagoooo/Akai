@@ -308,8 +308,14 @@ export function isInjectedUserScriptError(error: unknown): boolean {
   const stack = (error as { stack?: unknown } | null)?.stack;
   if (typeof stack !== 'string') return false;
   const lines = stack.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
-  return lines.length > 0 && lines.every((line) => /(?:^|@)user-script:\d+/.test(line));
+  // Sentry 自己包在計時器／事件外面的那一層（sentryClient-*.js 的 r）只是轉手，不算站方程式
+  // （2026-11-21 JAVASCRIPT-REACT-2X：同一個 App 功能，堆疊多了「r@…/assets/sentryClient-l-MXlPvf.js:15:7052」，v3.6.240 的規則認不出）
+  return lines.some((line) => USER_SCRIPT_FRAME.test(line))
+    && lines.every((line) => USER_SCRIPT_FRAME.test(line) || SENTRY_WRAPPER_FRAME.test(line));
 }
+
+const USER_SCRIPT_FRAME = /(?:^|@)user-script:\d+/;
+const SENTRY_WRAPPER_FRAME = /\/assets\/sentryClient-[\w-]+\.js:\d+:\d+$/;
 
 /**
  * 堆疊這一層記在「頁面本身」的第 1 行。頁面網址都以 / 或 .html 結尾（/Akai/、/Akai/tool/10/）；

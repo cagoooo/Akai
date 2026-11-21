@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.243] - 2026-11-21 — App 注入腳本經過 Sentry 包裝層時也認得
+
+- **問題**：JAVASCRIPT-REACT-2X（iOS 18.7 WKWebView，南投，與 2R 同一種 App 整頁存檔功能）。v3.6.240 的 `isInjectedUserScriptError` 要求堆疊每一層都是 `user-script:N`，但這次 App 的腳本是透過 Sentry 包過的計時器／事件執行，堆疊多了一層 `r@…/assets/sentryClient-*.js`，於是又寄了一封新 issue。
+- **修正**：判斷改成「至少一層是 `user-script:N`，其餘只能是 Sentry 自己的包裝層（`/assets/sentryClient-*.js`）」；只要出現站方其他檔案就照常回報，只有 Sentry 那一層也不算。
+- **測試**：`sentryNoise.test.ts` 補 2X 堆疊（略過）、只有 Sentry 層（回報）、混站方檔案（回報）。
+
 ## [3.6.242] - 2026-11-21 — 收藏整頁只讀一次
 
 - **問題**：首頁每張工具卡片（`BulletinToolCard`）都呼叫 `useFavorites()`，每個呼叫各自 `getDoc` 讀一次收藏、各開一個 `onSnapshot` 訂閱：首頁有幾張卡片就讀幾次同一份資料。離線快取壞掉時每張卡片各報一次錯（2026-11-21 JAVASCRIPT-REACT-2S：同一秒 40 筆告警）。

@@ -393,6 +393,8 @@ describe('iPhone App 用 WKUserScript 塞進網頁的腳本出錯（堆疊是 us
   const err = (stack?: string) => Object.assign(new Error('Stylesheet append timeout'), { stack });
 
   it('每一層都在 user-script：略過', () => {
+    // 2026-11-21 JAVASCRIPT-REACT-2X：App 的腳本透過 Sentry 包過的計時器出錯，多一層 sentryClient
+    expect(isInjectedUserScriptError(err('@user-script:17:2:256382\nr@https://cagoooo.github.io/Akai/assets/sentryClient-l-MXlPvf.js:15:7052'))).toBe(true);
     expect(isInjectedUserScriptError(err('@user-script:5:2:256382'))).toBe(true);
     expect(isInjectedUserScriptError(err('appendSheet@user-script:5:2:1200\n@user-script:5:2:256382'))).toBe(true);
   });
@@ -401,6 +403,10 @@ describe('iPhone App 用 WKUserScript 塞進網頁的腳本出錯（堆疊是 us
     expect(isInjectedUserScriptError(err('@user-script:5:2:1\nload@https://cagoooo.github.io/Akai/assets/index-abc.js:2:100'))).toBe(false);
     expect(isInjectedUserScriptError(err('load@https://cagoooo.github.io/Akai/assets/index-abc.js:2:100'))).toBe(false);
     expect(isInjectedUserScriptError(err(''))).toBe(false);
+    // 只有 Sentry 那一層、沒有 user-script：不算（不能把 Sentry 自己的錯誤藏起來）
+    expect(isInjectedUserScriptError(err('r@https://cagoooo.github.io/Akai/assets/sentryClient-l-MXlPvf.js:15:7052'))).toBe(false);
+    // user-script＋Sentry 那一層＋站方檔案：站方程式有參與，照常回報
+    expect(isInjectedUserScriptError(err('@user-script:17:2:1\nr@https://cagoooo.github.io/Akai/assets/sentryClient-l-MXlPvf.js:15:7052\nload@https://cagoooo.github.io/Akai/assets/index-abc.js:2:100'))).toBe(false);
     expect(isInjectedUserScriptError('Stylesheet append timeout')).toBe(false);
     expect(isInjectedUserScriptError(null)).toBe(false);
   });
