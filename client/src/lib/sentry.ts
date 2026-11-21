@@ -241,6 +241,9 @@ const BROWSER_STORAGE_LOST = [
   // （2026-11-21 JAVASCRIPT-REACT-2S／2T／2V／2W：iPhone Chrome，iOS 17.6.1，閒置 34 分鐘後切回，
   //   先 createOrUpgrade AbortError，接著每張工具卡片各自讀收藏都失敗，同一秒 40 筆）
   /IndexedDB transaction '[^']+' failed: NotFoundError: .*object stores? (?:was|were) not found/i,
+  // 同一件事的 Safari／WebKit 說法（沒有 Firestore 包裝，直接是未處理的 InvalidStateError）
+  // （2026-11-21 JAVASCRIPT-REACT-30：iPhone 臉書內建瀏覽器，iOS 27.0.1，先 createOrUpgrade AbortError 再丟這句）
+  /Object store cannot be found in the database/i,
   // 網頁開著時，App 內建瀏覽器或 iOS 把這個網站的資料庫整個刪掉（清除網站資料、系統回收空間）；
   // SDK 先印 app/idb-get 讀取失敗，再丟出沒人接住的 UnknownError（2026-11-21 JAVASCRIPT-REACT-2P：iPhone WKWebView，iOS 26.2）
   /Database deleted by request of the user/i,

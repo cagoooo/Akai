@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.247] - 2026-11-21 — 資料表不見的 Safari 說法也歸到固定 issue
+
+- **問題**：JAVASCRIPT-REACT-30（iPhone 臉書內建瀏覽器，iOS 27.0.1，首頁，1 次）。和 2S 同一件事（背景切回後離線資料庫的資料表不見），麵包屑一樣先 `createOrUpgrade AbortError`、再 connection closing，最後丟未處理的 `InvalidStateError: Object store cannot be found in the database`——這是 WebKit 的說法，v3.6.241 只收了 Chrome 的「object stores was not found」，於是另開新 issue 寄高優先信。
+- **修正**：前端 `BROWSER_STORAGE_LOST` 加入這句（歸到固定 issue `browser-indexeddb-lost`）；後端 `errorAlertPolicy` 的雜訊規則補上兩種「資料表不見」說法，errorLogs 留存但不推 Google Chat（`onErrorLogCreated` 重新部署）。
+- **測試**：`sentryNoise.test.ts`、`errorAlertPolicy.test.ts` 各補案例。
+
 ## [3.6.246] - 2026-11-21 — 第一次註冊 Service Worker 一時抓不到 sw.js 不再寄告警
 
 - **問題**：JAVASCRIPT-REACT-2Z（Android 16 OPPO，App 內建瀏覽器 Chrome WebView 157，首頁，1 次）。開頁註冊 Service Worker 時抓 `sw.js` 拿到 503，`serviceWorkerRegistration.ts` 直接 `console.error` 送 Sentry；之後連抓 3 次正式站 sw.js 都是 200。更新檢查早有「先探測伺服器」的判斷（`reportServiceWorkerUpdateFailure`），第一次註冊卻沒用到。

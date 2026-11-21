@@ -17,6 +17,8 @@ describe("isKnownNoise", () => {
         "The operation was aborted.",
         "signal is aborted without reason",
         "Database deleted by request of the user",
+        "Object store cannot be found in the database",
+        "IndexedDB transaction 'Allocate target' failed: NotFoundError: Failed to execute 'transaction' on 'IDBDatabase': One of the specified object stores was not found.",
     ])("把已知第三方雜訊擋下來：%s", (message) => {
         expect(isKnownNoise({ message })).toBe(true);
     });

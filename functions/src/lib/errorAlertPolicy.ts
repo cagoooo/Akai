@@ -50,6 +50,9 @@ const NOISE_MESSAGE_PATTERNS: readonly RegExp[] = [
     // 網頁開著時 App 內建瀏覽器或 iOS 把網站資料庫刪掉（2026-11-21 JAVASCRIPT-REACT-2P）；
     // 前端 Sentry 已歸到固定 issue「browser-indexeddb-lost」追蹤人數，這裡不再推 Chat
     /Database deleted by request of the user/i,
+    // 背景很久切回後資料表不見（2026-11-21 JAVASCRIPT-REACT-2S、30），前端已歸到固定 issue
+    /object stores? (?:was|were) not found/i,
+    /Object store cannot be found in the database/i,
 ];
 
 /** 堆疊或網址出現這些來源＝來自瀏覽器擴充套件，不是站方程式碼 */

@@ -348,6 +348,8 @@ describe('瀏覽器 IndexedDB 連線斷掉：同一頁只回報一次', () => {
     exceptionEvent('FirebaseError', "Initialization of query 'Query(target=Target(userFavorites/abc, orderBy: [__name__ (asc)]); limitType=F)' failed: IndexedDbTransactionError: [code=unavailable]: IndexedDB transaction 'Allocate target' failed: NotFoundError: Failed to execute 'transaction' on 'IDBDatabase': One of the specified object stores was not found."),
     // 交易名稱有空白的 AbortError 也要認得
     exceptionEvent('IndexedDbTransactionError', "IndexedDB transaction 'Get last remote snapshot version' failed: AbortError: The operation was aborted."),
+    // 2026-11-21 JAVASCRIPT-REACT-30：WebKit 說法（未處理的 InvalidStateError）
+    exceptionEvent('Error', 'InvalidStateError: Object store cannot be found in the database'),
   ];
 
   it('第一筆降為 warning 並歸到固定 issue，之後同一頁略過', () => {
