@@ -314,6 +314,16 @@ export function isInjectedUserScriptError(error: unknown): boolean {
     && lines.every((line) => USER_SCRIPT_FRAME.test(line) || SENTRY_WRAPPER_FRAME.test(line));
 }
 
+/**
+ * Promise 被拒絕卻沒帶任何原因（undefined／null）：沒有訊息、沒有堆疊、也沒有麵包屑，無從追查是誰丟的。
+ * Sentry 內建的全域攔截本來就忽略這種（ignoreErrors 'Non-Error promise rejection captured'），
+ * 但 main.tsx 自己的 unhandledrejection 又手動 captureException 一次，變成「Error: undefined」寄高優先信
+ * （2026-11-21 JAVASCRIPT-REACT-2Y：iPhone Safari，首頁，1 次）。站方程式丟錯一定帶 Error 物件，不受影響。
+ */
+export function isEmptyRejectionReason(reason: unknown): boolean {
+  return reason === undefined || reason === null;
+}
+
 const USER_SCRIPT_FRAME = /(?:^|@)user-script:\d+/;
 const SENTRY_WRAPPER_FRAME = /\/assets\/sentryClient-[\w-]+\.js:\d+:\d+$/;
 

@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.244] - 2026-11-21 — 沒帶原因的 Promise 拒絕不再寄「Error: undefined」
+
+- **問題**：JAVASCRIPT-REACT-2Y（iPhone Safari，首頁，1 次）。某段程式讓 Promise 被拒絕卻沒帶任何原因（`undefined`），沒有堆疊、沒有麵包屑。Sentry 內建的全域攔截本來就忽略這種（`ignoreErrors: 'Non-Error promise rejection captured'`），但 `main.tsx` 自己的 `unhandledrejection` 又手動 `captureException(undefined)`，變成「Error: undefined」寄高優先信。
+- **修正**：`sentry.ts` 新增 `isEmptyRejectionReason`（只認 undefined／null），`main.tsx` 在送出前判斷並改印 info，不送 Sentry、不寫 errorLogs。帶了任何東西（錯誤物件、字串、空字串、0、物件）都照常回報。
+- **測試**：`sentryNoise.test.ts` 補正例與反例。
+
 ## [3.6.243] - 2026-11-21 — App 注入腳本經過 Sentry 包裝層時也認得
 
 - **問題**：JAVASCRIPT-REACT-2X（iOS 18.7 WKWebView，南投，與 2R 同一種 App 整頁存檔功能）。v3.6.240 的 `isInjectedUserScriptError` 要求堆疊每一層都是 `user-script:N`，但這次 App 的腳本是透過 Sentry 包過的計時器／事件執行，堆疊多了一層 `r@…/assets/sentryClient-*.js`，於是又寄了一封新 issue。

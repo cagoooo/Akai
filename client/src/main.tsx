@@ -8,7 +8,7 @@ import "./styles/loading-progress.css";
 import "./styles/sticky-search.css";
 import "./styles/blog-article.css";
 import { registerServiceWorker } from "./serviceWorkerRegistration"; // Added import
-import { initSentry, captureException, isAbortedRequestError, isInjectedUserScriptError } from "./lib/sentry";
+import { initSentry, captureException, isAbortedRequestError, isEmptyRejectionReason, isInjectedUserScriptError } from "./lib/sentry";
 import { shouldReportErrorToFirestore } from './lib/errorReporting';
 import { installStaleChunkRecovery, isChunkLoadError, removeLegacyHealParam } from './lib/chunkRecovery';
 
@@ -41,6 +41,11 @@ window.addEventListener('unhandledrejection', async (event) => {
     // iPhone App 自己塞進網頁的腳本出錯（堆疊全是 user-script:N）：站方修不到，不送 Sentry、不寫 errorLogs（JAVASCRIPT-REACT-2R）
     if (isInjectedUserScriptError(event.reason)) {
         console.info('[in-app] App 注入腳本出錯，已略過:', event.reason?.message);
+        return;
+    }
+    // 沒帶任何原因的拒絕（undefined／null）：無從追查，和 Sentry 內建攔截一樣忽略；不送 Sentry、不寫 errorLogs（JAVASCRIPT-REACT-2Y）
+    if (isEmptyRejectionReason(event.reason)) {
+        console.info('[unhandledrejection] 沒有附帶原因的 Promise 拒絕，已略過');
         return;
     }
     console.error('Unhandled promise rejection:', event.reason);

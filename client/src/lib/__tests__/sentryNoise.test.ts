@@ -11,6 +11,7 @@ import {
   isAutomatedBrowser,
   isFrozenErrorSandbox,
   isInAppBrowserInjectedError,
+  isEmptyRejectionReason,
   isInjectedUserScriptError,
   isRecoverableClientNoise,
   isUnhandledNetworkRejection,
@@ -385,6 +386,16 @@ describe('瀏覽器 IndexedDB 連線斷掉：同一頁只回報一次', () => {
       exceptionEvent('IndexedDbTransactionError', "IndexedDB transaction 'Allocate target' failed: NotFoundError: The object can not be found here."),
     ];
     for (const input of others) expect(classify(input)).toBe(input);
+  });
+});
+
+describe('沒帶原因的 Promise 拒絕（JAVASCRIPT-REACT-2Y：Error: undefined）', () => {
+  it('undefined／null 略過', () => {
+    expect(isEmptyRejectionReason(undefined)).toBe(true);
+    expect(isEmptyRejectionReason(null)).toBe(true);
+  });
+  it('帶了任何東西都照常回報（錯誤物件、字串、空字串、0、物件）', () => {
+    for (const reason of [new Error('boom'), 'boom', '', 0, false, {}]) expect(isEmptyRejectionReason(reason)).toBe(false);
   });
 });
 
