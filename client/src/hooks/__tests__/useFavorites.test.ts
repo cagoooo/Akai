@@ -4,7 +4,7 @@
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useFavorites } from '../useFavorites';
+import { resetFavoritesStoreForTests, useFavorites } from '../useFavorites';
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -30,6 +30,7 @@ Object.defineProperty(window, 'localStorage', {
 describe('useFavorites', () => {
     beforeEach(() => {
         localStorageMock.clear();
+        resetFavoritesStoreForTests();
     });
 
     it('should initialize with empty favorites', () => {

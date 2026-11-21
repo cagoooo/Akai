@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.242] - 2026-11-21 — 收藏整頁只讀一次
+
+- **問題**：首頁每張工具卡片（`BulletinToolCard`）都呼叫 `useFavorites()`，每個呼叫各自 `getDoc` 讀一次收藏、各開一個 `onSnapshot` 訂閱：首頁有幾張卡片就讀幾次同一份資料。離線快取壞掉時每張卡片各報一次錯（2026-11-21 JAVASCRIPT-REACT-2S：同一秒 40 筆告警）。
+- **修正**：`useFavorites` 改成整頁共用一份狀態（`useSyncExternalStore`）與一個雲端訂閱：第一個掛上的元件開始同步、最後一個卸載才停止（參照計數）；同一次開頁已合併過的身分，換頁重新掛上不再重讀；換身分時停掉舊訂閱重新開始。回傳的介面不變，呼叫端不用改。
+- **測試**：`useFavorites-sync.test.ts` 新增「20 張卡片只讀一次、只訂閱一次」「一張按收藏其他立刻更新」「最後一張卸載才停止、換頁不重讀」「讀取失敗整頁只回報一次」；兩個測試檔每個測試前清掉共用狀態。全部 548 項測試通過。
+
 ## [3.6.241] - 2026-11-21 — 背景很久切回後資料表不見，不再一次寄 4 種告警
 
 - **問題**：JAVASCRIPT-REACT-2S／2T／2V／2W（同一位登入的 iPhone Chrome 訪客，iOS 17.6.1）。首頁放在背景 34 分鐘後切回，瀏覽器的離線資料庫還在、但裡面的資料表不見了，Firestore 每個查詢都報 `IndexedDB transaction 'Allocate target' failed: NotFoundError: … object stores was not found`；每張工具卡片各自讀收藏，同一秒 40 筆，開了 4 個新 issue。另外原本「被中止」規則的交易名稱只認 `[\w-]+`，名稱有空白（'Locally write mutations'）就認不出。

@@ -7,7 +7,7 @@
  * - Stale While Revalidate: 圖片
  */
 
-const CACHE_VERSION = 'v3.6.241-11e92c47-202611211103';
+const CACHE_VERSION = 'v3.6.242-c7232943-202611211115';
 // 🏘️ cagoooo.github.io 底下的所有工具共用同一個快取空間（Cache Storage 以網域為單位），
 // 清快取時只能動 Akai 自己的快取，不可刪到其他工具的（v3.6.226 修正）
 const CACHE_PREFIX = 'akai-';

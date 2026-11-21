@@ -1,6 +1,6 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { useFavorites } from '../useFavorites';
+import { resetFavoritesStoreForTests, useFavorites } from '../useFavorites';
 
 const state = vi.hoisted(() => ({
     user: { uid: 'visitor' } as { uid: string } | null,
@@ -21,6 +21,7 @@ const empty = { exists: () => false };
 describe('收藏訂閱的身分交接', () => {
     beforeEach(() => {
         vi.clearAllMocks(); localStorage.clear();
+        resetFavoritesStoreForTests();
         state.user = state.currentUser = { uid: 'visitor' }; state.listeners = [];
         state.getDoc.mockResolvedValue(empty); state.setDoc.mockResolvedValue(undefined);
         state.onSnapshot.mockImplementation((ref, next, error) => {
@@ -89,6 +90,58 @@ describe('收藏訂閱的身分交接', () => {
         await waitFor(() => expect(state.onSnapshot).toHaveBeenCalledOnce(), { timeout: 3000 });
         expect(state.getDoc).toHaveBeenCalledTimes(2);
         expect(result.current.favorites).toEqual([7]); expect(warning).not.toHaveBeenCalled();
+        warning.mockRestore();
+    });
+});
+
+describe('整頁共用一份收藏（JAVASCRIPT-REACT-2S：每張卡片各讀一次）', () => {
+    beforeEach(() => {
+        vi.clearAllMocks(); localStorage.clear();
+        resetFavoritesStoreForTests();
+        state.user = state.currentUser = { uid: 'visitor' }; state.listeners = [];
+        state.getDoc.mockResolvedValue({ exists: () => true, data: () => ({ toolIds: [3] }) });
+        state.setDoc.mockResolvedValue(undefined);
+        state.onSnapshot.mockImplementation((ref, next, error) => {
+            state.listeners.push({ uid: ref.uid, next, error }); return state.unsubscribe;
+        });
+    });
+
+    it('20 張卡片同時掛上：雲端只讀一次、只訂閱一次，大家看到同一份收藏', async () => {
+        const cards = Array.from({ length: 20 }, () => renderHook(() => useFavorites()));
+        await waitFor(() => expect(state.onSnapshot).toHaveBeenCalledOnce());
+        expect(state.getDoc).toHaveBeenCalledOnce();
+        for (const card of cards) expect(card.result.current.favorites).toEqual([3]);
+    });
+
+    it('一張卡片按收藏，其他卡片立刻跟著更新', async () => {
+        const a = renderHook(() => useFavorites());
+        const b = renderHook(() => useFavorites());
+        await waitFor(() => expect(state.onSnapshot).toHaveBeenCalledOnce());
+        act(() => a.result.current.toggleFavorite(9));
+        expect(b.result.current.isFavorite(9)).toBe(true);
+        await waitFor(() => expect(state.setDoc).toHaveBeenLastCalledWith({ uid: 'visitor' }, { toolIds: [3, 9], updatedAt: 'server-time' }, { merge: true }));
+        expect(state.setDoc).toHaveBeenCalledOnce();
+    });
+
+    it('還有卡片在畫面上就不停止訂閱，最後一張卸載才停止；換頁重新掛上不再重讀', async () => {
+        const a = renderHook(() => useFavorites());
+        const b = renderHook(() => useFavorites());
+        await waitFor(() => expect(state.onSnapshot).toHaveBeenCalledOnce());
+        a.unmount();
+        expect(state.unsubscribe).not.toHaveBeenCalled();
+        b.unmount();
+        expect(state.unsubscribe).toHaveBeenCalledOnce();
+        renderHook(() => useFavorites());
+        await waitFor(() => expect(state.onSnapshot).toHaveBeenCalledTimes(2));
+        expect(state.getDoc).toHaveBeenCalledOnce();
+    });
+
+    it('讀取失敗時整頁只回報一次', async () => {
+        const warning = vi.spyOn(console, 'warn').mockImplementation(() => {});
+        state.getDoc.mockRejectedValue(Object.assign(new Error('unavailable'), { code: 'unavailable' }));
+        Array.from({ length: 20 }, () => renderHook(() => useFavorites()));
+        await waitFor(() => expect(warning).toHaveBeenCalledOnce());
+        expect(state.getDoc).toHaveBeenCalledOnce();
         warning.mockRestore();
     });
 });
