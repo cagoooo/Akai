@@ -47,6 +47,9 @@ const NOISE_MESSAGE_PATTERNS: readonly RegExp[] = [
     /signal is aborted without reason/i, // Firestore watch stream 內部關閉時的 Chrome 新版措辭
     /AbortError/i,
     /Extension context invalidated/i,
+    // 網頁開著時 App 內建瀏覽器或 iOS 把網站資料庫刪掉（2026-11-21 JAVASCRIPT-REACT-2P）；
+    // 前端 Sentry 已歸到固定 issue「browser-indexeddb-lost」追蹤人數，這裡不再推 Chat
+    /Database deleted by request of the user/i,
 ];
 
 /** 堆疊或網址出現這些來源＝來自瀏覽器擴充套件，不是站方程式碼 */

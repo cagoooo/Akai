@@ -236,6 +236,9 @@ const BROWSER_STORAGE_LOST = [
   // Firestore 開啟離線快取資料庫時被瀏覽器中止（2026-11-17 JAVASCRIPT-REACT-2J：iPhone Chrome，
   // 首頁閒置 23 秒後切回來，'createOrUpgrade' 交易 AbortError，SDK 回報 code=unavailable）
   /IndexedDB transaction '[\w-]+' failed: AbortError/i,
+  // 網頁開著時，App 內建瀏覽器或 iOS 把這個網站的資料庫整個刪掉（清除網站資料、系統回收空間）；
+  // SDK 先印 app/idb-get 讀取失敗，再丟出沒人接住的 UnknownError（2026-11-21 JAVASCRIPT-REACT-2P：iPhone WKWebView，iOS 26.2）
+  /Database deleted by request of the user/i,
 ];
 
 export function isBrowserStorageLost(event: SentryEvent): boolean {

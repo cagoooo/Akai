@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.239] - 2026-11-21 — 網站資料庫被 App 內建瀏覽器刪掉時不再寄高優先告警
+
+- **問題**：JAVASCRIPT-REACT-2P（iPhone WKWebView，iOS 26.2，首頁，1 次）。網頁開著時 App 內建瀏覽器或 iOS 把網站的 IndexedDB 整個刪掉，Firebase 先印 `app/idb-get` 讀取失敗，再丟出沒人接住的 `UnknownError: Database deleted by request of the user`，Sentry 開新 issue 寄 high priority 信，同一筆也寫進 errorLogs 可能推 Google Chat。
+- **修正**：前端 `sentry.ts` 的 `BROWSER_STORAGE_LOST` 加這句，歸到固定 issue `browser-indexeddb-lost`（同頁只報第一筆、降 warning）；後端 `errorAlertPolicy.ts` 的雜訊規則也加這句，留存 errorLogs 但不推 Chat。
+- **測試**：`sentryNoise.test.ts` 補兩種寫法與反例（讀取失敗但原因是空間不足仍回報）；`errorAlertPolicy.test.ts` 補一例。
+
 ## [3.6.238] - 2026-11-20 — 訪客離開頁面時統計不再誤報「認證尚未就緒」
 
 - **問題**：JAVASCRIPT-REACT-1F 在 3.6.237 回歸。Mac Safari 訪客點搜尋列的連結離開頁面，Safari 中斷所有進行中的請求，匿名登入因連不上網路失敗（`auth/network-request-failed`）；`ensureSignedIn` 只回 null，`invokePublicAnalytics` 分不出原因，一律丟「Firebase 認證尚未就緒」寄告警。

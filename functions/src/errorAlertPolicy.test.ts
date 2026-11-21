@@ -16,6 +16,7 @@ describe("isKnownNoise", () => {
         "Load failed",
         "The operation was aborted.",
         "signal is aborted without reason",
+        "Database deleted by request of the user",
     ])("把已知第三方雜訊擋下來：%s", (message) => {
         expect(isKnownNoise({ message })).toBe(true);
     });

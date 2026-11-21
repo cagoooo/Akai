@@ -338,6 +338,9 @@ describe('瀏覽器 IndexedDB 連線斷掉：同一頁只回報一次', () => {
     consoleEvent("[2026-11-07T03:07:32.900Z]  @firebase/app-check: Failed to write token to IndexedDB. Error: InvalidStateError: Failed to execute 'transaction' on 'IDBDatabase': The database connection is closing."),
     // 2026-11-17 JAVASCRIPT-REACT-2J：Firestore 開啟離線快取資料庫被 iPhone 瀏覽器中止
     exceptionEvent('IndexedDbTransactionError', "IndexedDB transaction 'createOrUpgrade' failed: AbortError: The operation was aborted."),
+    // 2026-11-21 JAVASCRIPT-REACT-2P：iPhone App 內建瀏覽器在網頁開著時刪掉網站資料庫（先印讀取失敗，再丟未處理的 UnknownError）
+    consoleEvent('[2026-11-21T02:11:59.236Z]  @firebase/app: Firebase: Error thrown when reading from IndexedDB. Original error: Database deleted by request of the user. (app/idb-get).'),
+    exceptionEvent('Error', 'UnknownError: Database deleted by request of the user'),
   ];
 
   it('第一筆降為 warning 並歸到固定 issue，之後同一頁略過', () => {
@@ -349,6 +352,8 @@ describe('瀏覽器 IndexedDB 連線斷掉：同一頁只回報一次', () => {
     expect(classify(inputs[1])).toBeNull();
     expect(classify(inputs[2])).toBeNull();
     expect(classify(inputs[3])).toBeNull();
+    expect(classify(inputs[4])).toBeNull();
+    expect(classify(inputs[5])).toBeNull();
   });
 
   it('每一種訊息單獨出現時都會回報第一筆', () => {
@@ -367,6 +372,8 @@ describe('瀏覽器 IndexedDB 連線斷掉：同一頁只回報一次', () => {
       consoleEvent('@firebase/app-check: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).'),
       // 不是被中止的交易（例如空間不足）照常回報
       exceptionEvent('IndexedDbTransactionError', "IndexedDB transaction 'createOrUpgrade' failed: QuotaExceededError: The quota has been exceeded."),
+      // 同樣是讀取 IndexedDB 失敗，但原因不是資料庫被刪掉，照常回報
+      consoleEvent('@firebase/app: Firebase: Error thrown when reading from IndexedDB. Original error: QuotaExceededError: The quota has been exceeded. (app/idb-get).'),
     ];
     for (const input of others) expect(classify(input)).toBe(input);
   });
