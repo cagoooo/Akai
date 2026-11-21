@@ -154,7 +154,12 @@ export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
     if (!db) return;
     console.log('[engagement notify] 確保登入並寫入 Firestore...');
     const { ensureSignedIn } = await import('@/lib/authService');
-    await ensureSignedIn();
+    // 規則要求登入身分才能寫 engagementEvents；匿名登入沒成功時寫了也一定被擋（permission-denied），直接略過
+    // （2026-11-21 JAVASCRIPT-REACT-X：匿名登入失敗後照樣 addDoc，被規則拒絕又寄告警；匿名登入失敗本身另有 [ensureSignedIn] 警告可查）
+    if (!await ensureSignedIn()) {
+      console.info('[engagement notify] 略過：匿名登入沒成功，這筆互動紀錄不寫入');
+      return;
+    }
 
     const eventPayload = { ...event };
     delete eventPayload.requireHomeEntry;

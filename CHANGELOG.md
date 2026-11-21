@@ -2,6 +2,13 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.248] - 2026-11-22 — 匿名登入沒成功時不再硬寫互動紀錄
+
+- **問題**：JAVASCRIPT-REACT-X（10/12 起 5 次，最近 11/21 是美國的 Chrome 125、時區上海、帶自動列印工具訊息，像自動化程式）。`notifyEngagementAfterHomeEntry` 呼叫 `ensureSignedIn()` 後沒檢查結果，匿名登入失敗仍照樣 `addDoc` 寫 `engagementEvents`，被資料庫規則（`request.auth != null`）拒絕，寄出「Missing or insufficient permissions」告警。
+- **修正**：沒有登入身分就略過寫入（印 info）；有身分卻被規則擋下（代表規則或資料格式真的有問題）照常回報。匿名登入失敗本身另有 `[ensureSignedIn]` 警告可查。
+- **測試**：新增 `engagementNotifyAuth.test.ts`（沒身分不寫不報、有身分照寫、有身分被擋照報）。
+- **週報整理**：2C、2D 已於 v3.6.213 修正但當時沒在 Sentry 標解決，今天補標。
+
 ## [3.6.247] - 2026-11-21 — 資料表不見的 Safari 說法也歸到固定 issue
 
 - **問題**：JAVASCRIPT-REACT-30（iPhone 臉書內建瀏覽器，iOS 27.0.1，首頁，1 次）。和 2S 同一件事（背景切回後離線資料庫的資料表不見），麵包屑一樣先 `createOrUpgrade AbortError`、再 connection closing，最後丟未處理的 `InvalidStateError: Object store cannot be found in the database`——這是 WebKit 的說法，v3.6.241 只收了 Chrome 的「object stores was not found」，於是另開新 issue 寄高優先信。
