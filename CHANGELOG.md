@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.246] - 2026-11-21 — 第一次註冊 Service Worker 一時抓不到 sw.js 不再寄告警
+
+- **問題**：JAVASCRIPT-REACT-2Z（Android 16 OPPO，App 內建瀏覽器 Chrome WebView 157，首頁，1 次）。開頁註冊 Service Worker 時抓 `sw.js` 拿到 503，`serviceWorkerRegistration.ts` 直接 `console.error` 送 Sentry；之後連抓 3 次正式站 sw.js 都是 200。更新檢查早有「先探測伺服器」的判斷（`reportServiceWorkerUpdateFailure`），第一次註冊卻沒用到。
+- **修正**：`swUpdateDiagnostics.ts` 的抓不到 sw.js 規則同時認 `Failed to register` 與 `Failed to update`；新增 `reportServiceWorkerRegistrationFailure`（同一套判斷、回報字樣「Service Worker 註冊失敗：」），註冊失敗改走它：伺服器正常或連不上都只記 info，伺服器真的回錯才回報；MIME 錯誤等腳本本身的問題照常回報。
+- **測試**：`swUpdateDiagnostics.test.ts` 補註冊 503（伺服器正常／連不上不回報、伺服器回錯才回報）與 MIME 反例。
+
 ## [3.6.245] - 2026-11-21 — 後台手機版不再按鈕重疊，維護工具收進「系統」分頁
 
 - **按鈕重疊**：`AdminAuth` 的管理員名牌＋登出原本 `position: fixed` 釘在右上角，手機上壓住儀表板標題列的「即時」與下載按鈕。改成用 `accountSlot` 傳進 `AnalyticsDashboard` 標題列：手機自成第二列靠右，桌機在同一列最右邊。下載選單加 `group-focus-within`，觸控裝置點按鈕也能打開。

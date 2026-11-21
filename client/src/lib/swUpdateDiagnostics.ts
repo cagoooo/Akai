@@ -1,11 +1,13 @@
 import { safeDiagnostic } from '@/lib/safeDiagnostic';
 
 /**
- * Chrome 在「更新檢查抓不到 sw.js」時丟的訊息：404、5xx、或不明的網路錯誤。
+ * Chrome 在「更新檢查／第一次註冊抓不到 sw.js」時丟的訊息：404、5xx、或不明的網路錯誤。
+ * 第一次註冊（register）與更新檢查（update）的措辭只差 register／update
+ * （2026-11-21 JAVASCRIPT-REACT-2Z：Android App 內建瀏覽器註冊時拿到 503，伺服器隨後正常）。
  * 腳本執行失敗、MIME 錯誤等代表程式本身有問題的訊息不在此列，照常回報。
  */
 const SW_SCRIPT_FETCH_FAILURE = new RegExp(
-  '^Failed to update a ServiceWorker for scope .+: (?:Not found'
+  '^Failed to (?:update|register) a ServiceWorker for scope .+: (?:Not found'
   + '|A bad HTTP response code \\(\\d{3}\\) was received when fetching the script\\.'
   + '|An unknown error occurred when fetching the script\\.)$',
   's',
@@ -32,6 +34,8 @@ export function isServiceWorkerScriptFetchFailure(error: unknown): boolean {
 }
 
 interface ReportOptions {
+  /** 回報時的前置文字（更新檢查與第一次註冊共用同一套判斷） */
+  label?: string;
   swUrl?: string;
   fetchImpl?: typeof fetch;
   report?: typeof safeDiagnostic;
@@ -45,6 +49,7 @@ interface ReportOptions {
  */
 export async function reportServiceWorkerUpdateFailure(error: unknown, options: ReportOptions = {}): Promise<void> {
   const {
+    label = '[PWA] 更新檢查失敗：',
     swUrl = `${import.meta.env.BASE_URL}sw.js`,
     fetchImpl = (input, init) => fetch(input, init),
     report = safeDiagnostic,
@@ -72,5 +77,13 @@ export async function reportServiceWorkerUpdateFailure(error: unknown, options: 
     }
   }
 
-  report('[PWA] 更新檢查失敗：', error, 'warn');
+  report(label, error, 'warn');
+}
+
+/**
+ * 第一次註冊 Service Worker 失敗：和更新檢查同一套判斷——抓不到 sw.js 時先問伺服器，
+ * 伺服器正常或連不上都不回報（網站照常運作，只是這次沒裝上離線功能，下次開頁會再註冊）。
+ */
+export function reportServiceWorkerRegistrationFailure(error: unknown, options: Omit<ReportOptions, 'label'> = {}): Promise<void> {
+  return reportServiceWorkerUpdateFailure(error, { ...options, label: 'Service Worker 註冊失敗：' });
 }

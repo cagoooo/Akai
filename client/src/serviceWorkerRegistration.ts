@@ -1,4 +1,5 @@
 import { runWhenUpdateAllowed } from '@/lib/pwaUpdateHold';
+import { reportServiceWorkerRegistrationFailure } from '@/lib/swUpdateDiagnostics';
 
 export const PWA_UPDATE_AVAILABLE_EVENT = 'akai:pwa-update-available';
 
@@ -120,7 +121,8 @@ export function registerServiceWorker() {
       watchServiceWorkerRegistration(registration);
     })
     .catch((error) => {
-      console.error('Service Worker 註冊失敗：', error);
+      // 抓不到 sw.js（網路斷線、伺服器一時 503）先問伺服器，真的有問題才回報（JAVASCRIPT-REACT-2Z）
+      void reportServiceWorkerRegistrationFailure(error);
     });
 }
 

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { isServiceWorkerScriptFetchFailure, reportServiceWorkerUpdateFailure } from '../swUpdateDiagnostics';
+import { isServiceWorkerScriptFetchFailure, reportServiceWorkerRegistrationFailure, reportServiceWorkerUpdateFailure } from '../swUpdateDiagnostics';
 
 const SCOPE = "('https://cagoooo.github.io/Akai/') with script ('https://cagoooo.github.io/Akai/sw.js')";
 const swError = (reason: string) => new TypeError(`Failed to update a ServiceWorker for scope ${SCOPE}: ${reason}`);
@@ -7,6 +7,22 @@ const response = (ok: boolean) => ({ ok } as Response);
 
 describe('Service Worker 更新檢查失敗的回報', () => {
   afterEach(() => vi.restoreAllMocks());
+
+  it('第一次註冊抓不到 sw.js（503）：先探測伺服器，正常就不回報（2026-11-21 JAVASCRIPT-REACT-2Z）', async () => {
+    const register = new TypeError(`Failed to register a ServiceWorker for scope ${SCOPE}: A bad HTTP response code (503) was received when fetching the script.`);
+    expect(isServiceWorkerScriptFetchFailure(register)).toBe(true);
+    // 註冊時腳本本身有問題（MIME 錯誤）照常視為真錯誤
+    expect(isServiceWorkerScriptFetchFailure(new TypeError(`Failed to register a ServiceWorker for scope ${SCOPE}: The script has an unsupported MIME type ('text/html').`))).toBe(false);
+
+    const report = vi.fn();
+    vi.spyOn(console, 'info').mockImplementation(() => {});
+    await reportServiceWorkerRegistrationFailure(register, { fetchImpl: vi.fn().mockResolvedValue(response(true)), report });
+    await reportServiceWorkerRegistrationFailure(register, { fetchImpl: vi.fn().mockRejectedValue(new TypeError('Failed to fetch')), report });
+    expect(report).not.toHaveBeenCalled();
+    // 伺服器真的回錯 → 用「註冊失敗」的字樣回報
+    await reportServiceWorkerRegistrationFailure(register, { fetchImpl: vi.fn().mockResolvedValue(response(false)), report });
+    expect(report).toHaveBeenCalledWith('Service Worker 註冊失敗：', register, 'warn');
+  });
 
   it('只辨識「抓不到 sw.js」類的失敗，腳本本身有問題的照常視為真錯誤', () => {
     // 2026-10-12 告警：高雄的 Chrome 單次更新檢查回 Not found，之後伺服器正常
