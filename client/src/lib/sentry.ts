@@ -285,11 +285,25 @@ export function isInAppBrowserInjectedError(event: SentryEvent): boolean {
     const frames = value.stacktrace?.frames ?? [];
     if (!frames.length) return false;
     if (frames.every((frame) => /^iabjs:\/\//.test(frame.filename ?? ''))) return true;
+    if (frames.every((frame) => /^user-script:\d+/.test(frame.filename ?? ''))) return true;
     if (frames.every(isPageDocumentFirstLine)) return true;
     const thrower = frames[frames.length - 1];
     return IN_APP_BROWSER_INJECTED_FUNCTIONS.has(thrower.function ?? '')
       && frames.every((frame) => !/\/assets\//.test(frame.filename ?? ''));
   });
+}
+
+/**
+ * iPhone App 用 WKUserScript 塞進網頁的腳本，Safari 在堆疊裡記成 `user-script:N`（不是網址）。
+ * 每一層都在這種腳本裡＝App 自己的功能出錯，不經過站方程式（2026-11-21 JAVASCRIPT-REACT-2R：
+ * iOS 18.7 WKWebView，App 的「整頁存檔」功能下載 281 個資源，丟出「Stylesheet append timeout」，堆疊只有 @user-script:5:2:256382）。
+ * 只要有一層是站方檔案（/assets/…）就不算，照常回報。
+ */
+export function isInjectedUserScriptError(error: unknown): boolean {
+  const stack = (error as { stack?: unknown } | null)?.stack;
+  if (typeof stack !== 'string') return false;
+  const lines = stack.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+  return lines.length > 0 && lines.every((line) => /(?:^|@)user-script:\d+/.test(line));
 }
 
 /**
@@ -487,6 +501,7 @@ export function initSentry() {
           if (event.request?.cookies) delete event.request.cookies;
           if (isRecoverableClientNoise(event)) return null;
           if (isInAppBrowserInjectedError(event)) return null;
+          if (isInjectedUserScriptError(hint.originalException)) return null;
           if (isFrozenErrorSandbox(event)) return null;
           if (isAppCheckShortRetry(event)) return null;
           if (automated && isAppCheckRejection(event)) return null;

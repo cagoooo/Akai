@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.240] - 2026-11-21 — iPhone App 自己塞進網頁的腳本出錯不再寄告警
+
+- **問題**：JAVASCRIPT-REACT-2R（iOS 18.7 WKWebView，首頁，1 次）。某個 App 的「整頁存檔」功能在網頁裡下載 281 個資源，逾時丟出 `Stylesheet append timeout`，堆疊只有 `@user-script:5:2:256382`（App 用 WKUserScript 注入的腳本，不是站方程式），變成未處理 Promise 錯誤寄 high priority 信。
+- **修正**：`sentry.ts` 新增 `isInjectedUserScriptError`（堆疊每一層都是 `user-script:N` 才算），`main.tsx` 未處理錯誤先判斷並改印 info（不送 Sentry、不寫 errorLogs），`beforeSend` 與 `isInAppBrowserInjectedError` 也認得；只要有一層是站方檔案就照常回報。
+- **測試**：`sentryNoise.test.ts` 補正例與反例（混站方檔案、沒有堆疊、不是錯誤物件）。
+
 ## [3.6.239] - 2026-11-21 — 網站資料庫被 App 內建瀏覽器刪掉時不再寄高優先告警
 
 - **問題**：JAVASCRIPT-REACT-2P（iPhone WKWebView，iOS 26.2，首頁，1 次）。網頁開著時 App 內建瀏覽器或 iOS 把網站的 IndexedDB 整個刪掉，Firebase 先印 `app/idb-get` 讀取失敗，再丟出沒人接住的 `UnknownError: Database deleted by request of the user`，Sentry 開新 issue 寄 high priority 信，同一筆也寫進 errorLogs 可能推 Google Chat。

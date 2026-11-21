@@ -9,6 +9,10 @@
 - **前一版**: v3.6.71 — 新增 #102 外星人入侵·保衛石門 + 雙 tools.json 對齊
 - **📎 文件補追記**：本檔案從 v3.6.71 停更到 2026-07-04 才補寫。中間 v3.6.72 → v3.6.87 共 16 個版本（主要是新增工具 #103-#114 + 幾個獨立 bug fix，例如 v3.6.80 使用次數本機計數 bug、v3.6.81/b3032b2 許願池通知從 LINE 遷移到 Google Chat）沒有寫進本檔案，細節可查 `git log`（commit 訊息大多含版本號）。工具總數從 102 → 115 就是這段期間累積的，之後有空再補完整段落。
 
+### 2026-11-21 App 注入腳本出錯不再寄告警 v3.6.240
+
+- JAVASCRIPT-REACT-2R：堆疊全是 user-script:N 的錯誤（App 自己塞進網頁的腳本）不送 Sentry、不寫 errorLogs
+
 ### 2026-11-21 網站資料庫被刪不再寄高優先告警 v3.6.239
 
 - JAVASCRIPT-REACT-2P：「Database deleted by request of the user」歸到瀏覽器資料庫遺失的固定 issue；後端錯誤告警也當雜訊不推 Chat

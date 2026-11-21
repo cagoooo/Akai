@@ -11,6 +11,7 @@ import {
   isAutomatedBrowser,
   isFrozenErrorSandbox,
   isInAppBrowserInjectedError,
+  isInjectedUserScriptError,
   isRecoverableClientNoise,
   isUnhandledNetworkRejection,
 } from '../sentry';
@@ -376,6 +377,29 @@ describe('瀏覽器 IndexedDB 連線斷掉：同一頁只回報一次', () => {
       consoleEvent('@firebase/app: Firebase: Error thrown when reading from IndexedDB. Original error: QuotaExceededError: The quota has been exceeded. (app/idb-get).'),
     ];
     for (const input of others) expect(classify(input)).toBe(input);
+  });
+});
+
+describe('iPhone App 用 WKUserScript 塞進網頁的腳本出錯（堆疊是 user-script:N）', () => {
+  // 2026-11-21 JAVASCRIPT-REACT-2R：iOS 18.7 WKWebView，App 的整頁存檔功能丟「Stylesheet append timeout」
+  const err = (stack?: string) => Object.assign(new Error('Stylesheet append timeout'), { stack });
+
+  it('每一層都在 user-script：略過', () => {
+    expect(isInjectedUserScriptError(err('@user-script:5:2:256382'))).toBe(true);
+    expect(isInjectedUserScriptError(err('appendSheet@user-script:5:2:1200\n@user-script:5:2:256382'))).toBe(true);
+  });
+
+  it('只要有一層是站方檔案、或沒有堆疊、或不是錯誤物件：照常回報', () => {
+    expect(isInjectedUserScriptError(err('@user-script:5:2:1\nload@https://cagoooo.github.io/Akai/assets/index-abc.js:2:100'))).toBe(false);
+    expect(isInjectedUserScriptError(err('load@https://cagoooo.github.io/Akai/assets/index-abc.js:2:100'))).toBe(false);
+    expect(isInjectedUserScriptError(err(''))).toBe(false);
+    expect(isInjectedUserScriptError('Stylesheet append timeout')).toBe(false);
+    expect(isInjectedUserScriptError(null)).toBe(false);
+  });
+
+  it('SDK 已解析出 user-script 堆疊時，isInAppBrowserInjectedError 也認得', () => {
+    const event = { level: 'error' as const, exception: { values: [{ type: 'Error', value: 'Stylesheet append timeout', stacktrace: { frames: [{ filename: 'user-script:5', lineno: 2 }] } }] } };
+    expect(isInAppBrowserInjectedError(event)).toBe(true);
   });
 });
 

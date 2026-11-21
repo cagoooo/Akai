@@ -8,7 +8,7 @@ import "./styles/loading-progress.css";
 import "./styles/sticky-search.css";
 import "./styles/blog-article.css";
 import { registerServiceWorker } from "./serviceWorkerRegistration"; // Added import
-import { initSentry, captureException, isAbortedRequestError } from "./lib/sentry";
+import { initSentry, captureException, isAbortedRequestError, isInjectedUserScriptError } from "./lib/sentry";
 import { shouldReportErrorToFirestore } from './lib/errorReporting';
 import { installStaleChunkRecovery, isChunkLoadError, removeLegacyHealParam } from './lib/chunkRecovery';
 
@@ -36,6 +36,11 @@ window.addEventListener('unhandledrejection', async (event) => {
     // 真正載入分塊失敗時由 chunkRecovery 接手；印成 info 不送 Sentry，也不寫 errorLogs（JAVASCRIPT-REACT-2G）
     if (isAbortedRequestError(event.reason)) {
         console.info('[network] 背景請求連線中斷，已略過:', event.reason?.message);
+        return;
+    }
+    // iPhone App 自己塞進網頁的腳本出錯（堆疊全是 user-script:N）：站方修不到，不送 Sentry、不寫 errorLogs（JAVASCRIPT-REACT-2R）
+    if (isInjectedUserScriptError(event.reason)) {
+        console.info('[in-app] App 注入腳本出錯，已略過:', event.reason?.message);
         return;
     }
     console.error('Unhandled promise rejection:', event.reason);
