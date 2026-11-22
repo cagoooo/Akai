@@ -33,6 +33,15 @@ describe('瀏覽器能不能用本機儲存（JAVASCRIPT-REACT-31）', () => {
     expect(isBrowserStorageAvailable()).toBe(false);
   });
 
+  it('index.html 備援已把 localStorage 換成記憶體替身（旗標）→ 視為不能用', () => {
+    (window as { __akaiStorageBlocked?: boolean }).__akaiStorageBlocked = true;
+    try {
+      expect(isBrowserStorageAvailable()).toBe(false);
+    } finally {
+      delete (window as { __akaiStorageBlocked?: boolean }).__akaiStorageBlocked;
+    }
+  });
+
   it('同一頁只探測一次', () => {
     const setItem = vi.spyOn(Storage.prototype, 'setItem');
     isBrowserStorageAvailable();

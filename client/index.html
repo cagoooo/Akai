@@ -38,6 +38,44 @@
       });
     })();
   </script>
+  <!-- 瀏覽器擋掉本機儲存時的備援（2026-11-22 JAVASCRIPT-REACT-31）：
+       Safari「阻擋所有 Cookie」、學校管理的 iPad、部分 App 內建瀏覽器，連讀 window.localStorage 這個屬性都會丟
+       SecurityError「The operation is insecure.」。站內幾十處直接讀寫儲存，其中有的在畫面渲染時讀，會讓整區顯示「發生錯誤」。
+       偵測到不能用時換成只放記憶體的替身（關掉分頁就忘記），並設旗標讓 Firestore／登入改用記憶體模式。
+       必須在所有其他腳本之前執行。 -->
+  <script>
+    (function () {
+      function memoryStorage() {
+        var data = {};
+        return {
+          getItem: function (k) { k = String(k); return Object.prototype.hasOwnProperty.call(data, k) ? data[k] : null; },
+          setItem: function (k, v) { data[String(k)] = String(v); },
+          removeItem: function (k) { delete data[String(k)]; },
+          clear: function () { data = {}; },
+          key: function (i) { var keys = Object.keys(data); return i < keys.length ? keys[i] : null; },
+          get length() { return Object.keys(data).length; }
+        };
+      }
+      function usable(name) {
+        try {
+          var s = window[name];
+          var k = '__akai_storage_probe__';
+          s.setItem(k, '1');
+          s.removeItem(k);
+          return true;
+        } catch (e) {
+          return false;
+        }
+      }
+      if (!usable('localStorage')) {
+        window.__akaiStorageBlocked = true;
+        try { Object.defineProperty(window, 'localStorage', { value: memoryStorage(), configurable: true }); } catch (e) { }
+      }
+      if (!usable('sessionStorage')) {
+        try { Object.defineProperty(window, 'sessionStorage', { value: memoryStorage(), configurable: true }); } catch (e) { }
+      }
+    })();
+  </script>
   <!-- 🛡️ App 內建瀏覽器防護（公開頁：引導可關閉，不登入照常瀏覽）：Google OAuth 禁止在 WebView 登入（403 disallowed_useragent） -->
   <!-- LINE → 自動帶 openExternalBrowser=1 跳系統預設瀏覽器 -->
   <!-- FB/IG/Messenger/微信/Kakao → Android 自動用 intent:// 叫出 Chrome 開本頁（只試一次），並顯示引導與「用 Chrome 開啟」按鈕；iPhone 只能顯示引導 -->

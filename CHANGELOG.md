@@ -2,6 +2,13 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.250] - 2026-11-22 — 擋掉本機儲存的瀏覽器改用記憶體替身，首頁不再顯示「發生錯誤」
+
+- **問題**：v3.6.249 上線後用同一支模擬腳本（localStorage／sessionStorage 一讀就丟 SecurityError）測正式站，**首頁整區變成「發生錯誤」**，比修正前更糟。原因：v3.6.249 讓 Firestore 改用記憶體快取後真的能讀到資料，原本因 Firestore 掛掉而沒渲染到的區塊（訪客計數器等）開始渲染，其中有在渲染時直接讀 localStorage、沒包 try 的程式，丟錯被 ErrorBoundary 接住。站內直接讀寫儲存的地方有幾十處，逐一包 try 容易漏。
+- **修正**：`client/index.html` 開頭（相容墊片之後、所有其他腳本之前）加備援：試寫 localStorage／sessionStorage 失敗就用 `Object.defineProperty` 換成只放記憶體的替身（關掉分頁就忘記），並設 `window.__akaiStorageBlocked`；`isBrowserStorageAvailable()` 先看這個旗標（替身試寫會成功），Firestore／登入照樣改記憶體模式。
+- **驗證**：本機開發版用同一支模擬腳本：首頁正常、訪客計數器讀得到、24 張工具卡、insecure 錯誤 0、b815 0（修正前正式站 v3.6.248：34 筆錯誤、計數器讀不到；v3.6.249：整區「發生錯誤」）。一般瀏覽器不受影響。
+- **教訓**：降級改動要在本機用同一支模擬腳本驗證完再上線，不要只靠單元測試。
+
 ## [3.6.249] - 2026-11-22 — 瀏覽器擋掉本機儲存時網站照常運作
 
 - **問題**：JAVASCRIPT-REACT-31～34（彰化一台 iPad，Safari 17，一分鐘內 4 則）。Safari 開「阻擋所有 Cookie」之類的設定時，碰 localStorage 就丟 `SecurityError: The operation is insecure.`。Firestore 多分頁離線快取一啟動就碰它，整個 Firestore 初始化失敗，之後每個查詢都是 `INTERNAL ASSERTION FAILED (b815)`；點擊追蹤每次點擊也丟同樣的錯。用正式站 v3.6.248 模擬：34 筆 console 錯誤（25 筆 insecure、8 筆 b815），**訪客計數器讀不出來**。

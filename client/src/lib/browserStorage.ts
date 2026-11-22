@@ -11,6 +11,11 @@ let cached: boolean | null = null;
 
 export function isBrowserStorageAvailable(): boolean {
   if (cached !== null) return cached;
+  // index.html 開頭的備援已偵測到儲存被擋、把 localStorage 換成記憶體替身：替身試寫會成功，要看旗標
+  if ((window as { __akaiStorageBlocked?: boolean }).__akaiStorageBlocked) {
+    cached = false;
+    return cached;
+  }
   try {
     const storage = window.localStorage;
     const key = '__akai_storage_probe__';
