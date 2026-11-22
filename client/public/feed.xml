@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 137+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 138+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Fri, 20 Nov 2026 01:48:37 GMT</pubDate>
-    <lastBuildDate>Fri, 20 Nov 2026 05:02:18 GMT</lastBuildDate>
+    <pubDate>Sun, 22 Nov 2026 09:50:00 GMT</pubDate>
+    <lastBuildDate>Sun, 22 Nov 2026 09:48:40 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,27 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：Ollama 石門線上客服系統</title>
+      <link>https://cagoooo.github.io/Akai/tool/138/</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/138</guid>
+      <pubDate>Sun, 22 Nov 2026 09:50:00 GMT</pubDate>
+      <description>石門國小自架的家長線上客服「石小客服」：跑在學校一台 Mac 上，用本機 Ollama 的 Gemma 模型回答請假、轉學、證明申請、上放學時間等問題，資料只取自校網與學校提供的資料，不送雲端 AI；公告與颱風停課直接列原文。</description>
+      <category>家長客服</category>
+      <category>親師溝通</category>
+      <category>本機 AI</category>
+      <category>Ollama</category>
+      <category>Gemma</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#138 家長問「幾點放學」「明天停課嗎」：把學校客服放進校內一台 Mac，不送雲端 AI</title>
+      <link>https://cagoooo.github.io/Akai/blog/shimen-ollama-138-local-parent-helpdesk/</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/shimen-ollama-138-local-parent-helpdesk</guid>
+      <pubDate>Sun, 22 Nov 2026 00:00:00 GMT</pubDate>
+      <description>請假怎麼請、在學證明去哪申請、明天要不要停課——這些問題每天都有人問。#138 石小客服把家長客服放在學校自己的 Mac 上，用本機 Ollama 的 Gemma 回答，資料只來自校網與學校提供的資料；公告與停課直接列原文，每晚掃描校網寫成草稿，審核通過才生效。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
     <item>
       <title>🆕 新工具：PaGamO題組SKILLS技能下載器</title>
       <link>https://cagoooo.github.io/Akai/tool/137/</link>
@@ -311,27 +332,6 @@
       <category>AI Agent</category>
       <category>Gemini Notebook</category>
       <category>Codex</category>
-    </item>
-    <item>
-      <title>🆕 新工具：校網無障礙 AA 遷移操作平台</title>
-      <link>https://cagoooo.github.io/Akai/tool/123/</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/123</guid>
-      <pubDate>Thu, 06 Aug 2026 02:00:00 GMT</pubDate>
-      <description>把「舊校網搬到教育局 XOOPS 共構平台、拿到無障礙 AA 標章」拆成 12 個能打勾的步驟：逐項操作指引、要貼的內容一鍵複製、進度自動記住，還內建對比度檢查小工具與送審四大雷區清單。</description>
-      <category>校網遷移</category>
-      <category>無障礙AA</category>
-      <category>網站標章</category>
-      <category>XOOPS共構</category>
-      <category>對比度檢查</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#123 校網無障礙 AA 遷移操作平台：把一本研習講義，變成 12 個能打勾的步驟</title>
-      <link>https://cagoooo.github.io/Akai/blog/web-migration-123-accessibility-aa-console/</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/web-migration-123-accessibility-aa-console</guid>
-      <pubDate>Thu, 06 Aug 2026 00:00:00 GMT</pubDate>
-      <description>#123 校網無障礙 AA 遷移操作平台，把「舊校網搬到教育局共構平台、拿到無障礙 AA 標章」這件沒人說得清楚的事，拆成 12 個由上往下、做完打勾就好的步驟：要貼的內容一鍵複製、進度自動記住，還內建對比度小工具與會讓你秒退件的四大雷區清單。</description>
-      <category>blog</category>
-      <category>教學情境</category>
     </item>
   </channel>
 </rss>

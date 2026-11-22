@@ -15,6 +15,27 @@ export type BlogPostMeta = Omit<BlogPost, 'body'>;
 
 export const POSTS_INDEX: BlogPostMeta[] = [
   {
+    "slug": "shimen-ollama-138-local-parent-helpdesk",
+    "title": "#138 家長問「幾點放學」「明天停課嗎」：把學校客服放進校內一台 Mac，不送雲端 AI",
+    "excerpt": "請假怎麼請、在學證明去哪申請、明天要不要停課——這些問題每天都有人問。#138 石小客服把家長客服放在學校自己的 Mac 上，用本機 Ollama 的 Gemma 回答，資料只來自校網與學校提供的資料；公告與停課直接列原文，每晚掃描校網寫成草稿，審核通過才生效。",
+    "publishedAt": "2026-11-22",
+    "readingMinutes": 6,
+    "tags": [
+      "家長客服",
+      "本機 AI",
+      "Ollama",
+      "親師溝通",
+      "學校知識庫"
+    ],
+    "toolIds": [
+      138,
+      59,
+      16
+    ],
+    "coverEmoji": "🏫",
+    "coverColor": "green"
+  },
+  {
     "slug": "pagamo-gemini-skill-137-question-set-downloader",
     "title": "#137 題目出好了卻卡在貼範本：用一份 Gemini 技能和一個下載器，把閱讀題組直接送進 PaGamO",
     "excerpt": "用 Gemini 出題很快，把題目一格一格搬進 PaGamO 題組範本才是最累的一步。#137 用一份 Gemini 技能把出題規則固定下來（5／8／10 題、PIRLS 四層次、引導式解說），再用下載器把題組資料一鍵轉成官方範本 Excel。",

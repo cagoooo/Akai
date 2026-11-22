@@ -137,6 +137,7 @@ https://cagoooo.github.io/Akai/tool/134/
 https://cagoooo.github.io/Akai/tool/135/
 https://cagoooo.github.io/Akai/tool/136/
 https://cagoooo.github.io/Akai/tool/137/
+https://cagoooo.github.io/Akai/tool/138/
 https://cagoooo.github.io/Akai/blog/
 https://cagoooo.github.io/Akai/blog/cockpit-81-info-tech-class/
 https://cagoooo.github.io/Akai/blog/venue-46-no-more-paper-form/
@@ -276,5 +277,6 @@ https://cagoooo.github.io/Akai/blog/smes-island-134-reading-brand-sky-city/
 https://cagoooo.github.io/Akai/blog/pagamo-pirls-talk-136-article-to-question-set/
 https://cagoooo.github.io/Akai/blog/moda-briefing-135-public-code-report/
 https://cagoooo.github.io/Akai/blog/pagamo-gemini-skill-137-question-set-downloader/
+https://cagoooo.github.io/Akai/blog/shimen-ollama-138-local-parent-helpdesk/
 https://cagoooo.github.io/Akai/akai-talk-2026/
 https://cagoooo.github.io/Akai/akai-talk-2026/AIFED2026_paper.pdf

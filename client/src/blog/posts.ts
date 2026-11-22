@@ -15675,7 +15675,109 @@ const POST_137: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_137, POST_136, POST_135, POST_134, POST_133, POST_132, POST_131, POST_130, POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+const POST_138: BlogPost = {
+  slug: 'shimen-ollama-138-local-parent-helpdesk',
+  title: '#138 家長問「幾點放學」「明天停課嗎」：把學校客服放進校內一台 Mac，不送雲端 AI',
+  excerpt:
+    '請假怎麼請、在學證明去哪申請、明天要不要停課——這些問題每天都有人問。#138 石小客服把家長客服放在學校自己的 Mac 上，用本機 Ollama 的 Gemma 回答，資料只來自校網與學校提供的資料；公告與停課直接列原文，每晚掃描校網寫成草稿，審核通過才生效。',
+  publishedAt: '2026-11-22',
+  readingMinutes: 6,
+  tags: ['家長客服', '本機 AI', 'Ollama', '親師溝通', '學校知識庫'],
+  toolIds: [138, 59, 16],
+  coverEmoji: '🏫',
+  coverColor: 'green',
+  body: `## 同樣的問題，每天都有人問
+
+學校辦公室的電話，有很大一部分是重複的問題：小孩發燒要怎麼請假？轉學要帶什麼證件？在學證明去哪裡申請？今天幾點放學？颱風天明天要不要上課？
+
+這些答案其實都寫在校網上，只是分散在不同處室的頁面、行事曆和公告裡，家長不一定找得到。想像這樣的情境（情境示例）：晚上九點，家長想幫孩子請明天的病假，翻了校網找不到流程，只好隔天一早打電話；行政人員在上課鐘響前接了好幾通類似的電話。
+
+#138「石小客服」想先接住這類問題：家長隨時可以問，答案附上來源，重要事項仍以學校公告為準。
+
+## 為什麼要放在校內，而不是接雲端 AI？
+
+家長的問題常常帶著孩子的狀況。石小客服的做法是：**模型跑在學校自己的一台 Mac 上**，用本機的 Ollama 執行 Google 的開放模型 Gemma，問題不會送到雲端 AI 服務。
+
+- 回答模型：\`gemma4:e4b-it-qat\`
+- 找資料用的向量模型：\`embeddinggemma\`
+- 對外網址透過 Tailscale Funnel 提供，管理後台只在校內這台主機或學校的 Tailscale 內部網路開啟
+
+頁面上也清楚告訴家長：「AI 回答僅供參考」「問答紀錄保留 30 天」「請勿輸入個資」。
+
+## 家長那一端：問了就有附來源的回答
+
+首頁左邊是常見問題按鈕：電話與地址、學生請假、轉學證件、在學證明、上學放學時間、考試日期、午餐菜單、最新公告，按一下就送出；也可以直接打字問。
+
+我實際問了一題「上學時間是幾點？」，畫面依序出現：
+
+1. 「正在查詢學校資料（共 125 筆）」
+2. 找到「上學放學時間（115學年度第1學期）」等相關資料
+3. 列出資料來源連結
+4. 回答一個字一個字出現：上學時間、有交通導護，以及幾點前要到校
+
+每則回答下方都能按 👍 或 👎，幫學校找出答得不好的題目。
+
+## 兩件事刻意不交給模型
+
+**最新公告**：問題含「公告」或「最新消息」時，直接列出校網公告的原文標題、日期與連結，不經過模型。公告每 30 分鐘從校網首頁抓一次。
+
+**停班停課**：問「明天要停課嗎」這類問題時，當場抓行政院人事行政總處的停班停課表，原文列出桃園市的內容；抓不到時請家長看官方網站，**不會說沒有停課**。
+
+這兩類資訊錯一個字都可能出事，所以由程式原樣列出，不讓模型改寫。
+
+## 答案從哪裡來：混合檢索
+
+每個問題同時用兩種方式找資料：
+
+- **關鍵字**：中文相鄰兩字比對，擅長分機、班級、人名這類精確字詞
+- **向量**：比對語意，家長問「學費」、資料寫「註冊費」也找得到
+
+兩邊的名次合併後，取最相關的 3 段交給模型寫回答；相關度不夠就不硬答。向量模型沒回應時自動改用關鍵字，客服照常運作。問題裡的「明天、下週三、11/12」會先由程式換算成確切日期，再連同行事曆那幾天的紀錄交給模型，模型不用自己推算星期。
+
+## 管理者後台：哪裡答不好，一眼就知道
+
+- **問答紀錄**：每則問答列出找到了哪些資料、關鍵字第幾名、向量相似度多少，答錯時分得出是「找錯資料」還是「找對了但模型講錯」
+- **家長回饋**：「👎 沒幫助」分頁集中列出沒幫助的回答，「統計」有近 7 天的回饋摘要
+- **答不出來**：沒找到資料、停課表抓不到的回答集中列出，補知識庫時從這裡開始
+
+## 每晚自己巡校網，但最後由人決定
+
+校網資料會更新，知識庫也要跟著改。石小客服每天凌晨 2 點做這些事：
+
+1. 比對知識庫的來源頁面有沒有變動
+2. 找校網首頁上知識庫還沒有的新連結
+3. 由本機的 Gemma 把變動或新頁面寫成草稿，網址由程式原樣貼上；草稿裡出現原網頁沒有的數字時會標出警告
+4. 提醒可能過時的段落，例如連結失效、寫到已經過去的學期
+
+**草稿不會自動上線**。管理者在後台看過、需要時修改文字，按下「通過，加入知識庫」才生效。AI 幫忙整理，決定權留在學校。
+
+## 可以怎麼用
+
+- **行政人員**：教務、學務、總務、輔導、資訊組都能把常被問的流程整理進知識庫，電話裡重複的問題先由客服接住
+- **導師**：家長在班級群組問「幾點放學」「怎麼請假」時，直接給連結，家長拿到的是附來源的回答
+- **想在自己學校架設的資訊人員**：可以參考「模型跑在校內主機、公告與停課不經模型、草稿需人工審核」這三個設計
+
+## 使用限制
+
+- AI 回答可能出錯，重要事項請以學校公告或來電學校為準
+- 客服跑在一台 8 GB 記憶體的 Mac 上，回答大約要十幾秒
+- 學校主機關機或斷網時，客服也會暫停；外面另有排程每 30 分鐘檢查一次，連續失敗會寄信通知
+
+## 配對工具推薦
+
+- [#59 小智鈴 AI 客服系統](https://cagoooo.github.io/smes/)：另一個為石門國小做的 AI 客服，可以對照兩種不同的架設方式
+- [#16 親師溝通小幫手](https://talk.smes.tyc.edu.tw/)：家長的訊息需要老師親自回覆時，用它產生回覆草稿
+- [#138 本篇主角](https://smes.tail207590.ts.net/)
+
+## 想試試？
+
+→ [前往 #138 Ollama 石門線上客服系統](https://smes.tail207590.ts.net/)
+
+先按左邊的「上學放學時間」或「學生請假」看看它怎麼回答；需要時再告訴家長這個網址，讓重複的問題先有地方問。
+`,
+};
+
+export const POSTS: BlogPost[] = [POST_138, POST_137, POST_136, POST_135, POST_134, POST_133, POST_132, POST_131, POST_130, POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。
