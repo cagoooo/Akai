@@ -1,6 +1,8 @@
 // 點擊熱力圖追蹤 Hook
 // 記錄用戶在頁面上的點擊位置用於分析
 
+import { isBrowserStorageAvailable } from '@/lib/browserStorage';
+
 const CLICK_DATA_KEY = 'clickHeatmapData';
 
 interface ClickPoint {
@@ -59,6 +61,11 @@ function recordClick(event: MouseEvent): void {
 
 // 初始化點擊追蹤
 export function initClickTracking(): () => void {
+    // 瀏覽器不允許本機儲存時，每次點擊都會丟 SecurityError，乾脆不啟動（JAVASCRIPT-REACT-31）
+    if (!isBrowserStorageAvailable()) {
+        console.info('🎯 瀏覽器不允許本機儲存，點擊追蹤不啟動');
+        return () => {};
+    }
     document.addEventListener('click', recordClick);
     console.log('🎯 點擊追蹤已啟動');
 

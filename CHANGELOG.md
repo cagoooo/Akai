@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.249] - 2026-11-22 — 瀏覽器擋掉本機儲存時網站照常運作
+
+- **問題**：JAVASCRIPT-REACT-31～34（彰化一台 iPad，Safari 17，一分鐘內 4 則）。Safari 開「阻擋所有 Cookie」之類的設定時，碰 localStorage 就丟 `SecurityError: The operation is insecure.`。Firestore 多分頁離線快取一啟動就碰它，整個 Firestore 初始化失敗，之後每個查詢都是 `INTERNAL ASSERTION FAILED (b815)`；點擊追蹤每次點擊也丟同樣的錯。用正式站 v3.6.248 模擬：34 筆 console 錯誤（25 筆 insecure、8 筆 b815），**訪客計數器讀不出來**。
+- **修正**：新增 `lib/browserStorage.ts` 的 `isBrowserStorageAvailable()`（試寫 localStorage＋確認有 IndexedDB，同頁只探一次）。不能用時 Firestore 改 `memoryLocalCache()`（讀寫照常、不能離線）、Auth 改 `inMemoryPersistence`（只記這一次）、點擊追蹤不啟動。Sentry：確定擋掉儲存時，「The operation is insecure」歸到瀏覽器儲存問題的固定 issue（同頁只報一筆）；沒擋時照常回報。
+- **測試**：新增 `browserStorage.test.ts`（5 項）、`sentryNoise.test.ts` 補擋掉／沒擋／跨網域反例；全部 560 項通過。
+
 ## [3.6.248] - 2026-11-22 — 匿名登入沒成功時不再硬寫互動紀錄
 
 - **問題**：JAVASCRIPT-REACT-X（10/12 起 5 次，最近 11/21 是美國的 Chrome 125、時區上海、帶自動列印工具訊息，像自動化程式）。`notifyEngagementAfterHomeEntry` 呼叫 `ensureSignedIn()` 後沒檢查結果，匿名登入失敗仍照樣 `addDoc` 寫 `engagementEvents`，被資料庫規則（`request.auth != null`）拒絕，寄出「Missing or insufficient permissions」告警。

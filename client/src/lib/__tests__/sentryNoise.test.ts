@@ -11,6 +11,7 @@ import {
   isAutomatedBrowser,
   isFrozenErrorSandbox,
   isInAppBrowserInjectedError,
+  isBrowserStorageLost,
   isEmptyRejectionReason,
   isInjectedUserScriptError,
   isRecoverableClientNoise,
@@ -371,6 +372,15 @@ describe('瀏覽器 IndexedDB 連線斷掉：同一頁只回報一次', () => {
       const classify = createBrowserStorageLostClassifier();
       expect(classify({ ...input })?.fingerprint).toEqual(['browser-indexeddb-lost']);
     }
+  });
+
+  it('瀏覽器擋掉本機儲存時，「The operation is insecure」也歸到同一類；沒擋時照常回報（JAVASCRIPT-REACT-31）', () => {
+    const insecure = exceptionEvent('SecurityError', 'The operation is insecure.');
+    const assertion = exceptionEvent('Error', 'FIRESTORE (12.8.0) INTERNAL ASSERTION FAILED: Unexpected state (ID: b815) CONTEXT: {"Pc":"The operation is insecure."}');
+    expect(isBrowserStorageLost(insecure, true)).toBe(true);
+    expect(isBrowserStorageLost(assertion, true)).toBe(true);
+    expect(isBrowserStorageLost(insecure, false)).toBe(false);
+    expect(isBrowserStorageLost(exceptionEvent('SecurityError', 'Blocked a frame with origin from accessing a cross-origin frame.'), true)).toBe(false);
   });
 
   it('其他錯誤不受影響，照常回報', () => {

@@ -4,6 +4,7 @@ import { createAppCheckReadiness } from './appCheckReadiness';
 import { userInteractionReady } from './userInteraction';
 import {
   initializeFirestore,
+  memoryLocalCache,
   persistentLocalCache,
   persistentMultipleTabManager,
   Firestore,
@@ -13,8 +14,10 @@ import {
   indexedDBLocalPersistence,
   browserLocalPersistence,
   browserSessionPersistence,
+  inMemoryPersistence,
   Auth,
 } from 'firebase/auth';
+import { isBrowserStorageAvailable } from './browserStorage';
 
 // 從環境變數讀取 Firebase 設定
 const firebaseConfig = {
@@ -61,11 +64,16 @@ if (hasValidConfig) {
       console.warn('Firebase App Check 尚未設定 site key，不會傳送受保護的統計。');
     }
 
+    // 瀏覽器擋掉本機儲存（Safari「阻擋所有 Cookie」等）時，多分頁離線快取一啟動就丟 SecurityError，
+    // 整個 Firestore 掛掉；改用只放記憶體的快取，讀寫照常，只是不能離線（JAVASCRIPT-REACT-31）
+    const storageAvailable = isBrowserStorageAvailable();
+    if (!storageAvailable) console.info('瀏覽器不允許本機儲存，Firestore 改用記憶體快取、登入只記這一次');
+
     // 使用新的 API 初始化 Firestore，包含持久化快取
     db = initializeFirestore(app, {
-      localCache: persistentLocalCache({
-        tabManager: persistentMultipleTabManager(),
-      }),
+      localCache: storageAvailable
+        ? persistentLocalCache({ tabManager: persistentMultipleTabManager() })
+        : memoryLocalCache(),
     });
 
     // 初始化 Authentication
@@ -73,7 +81,9 @@ if (hasValidConfig) {
     // __/auth/iframe.js。一般訪客只需要匿名登入，彈窗 resolver 改在 signInWithGoogle 才帶入。
     // persistence 與 getAuth() 預設相同。
     auth = initializeAuth(app, {
-      persistence: [indexedDBLocalPersistence, browserLocalPersistence, browserSessionPersistence],
+      persistence: storageAvailable
+        ? [indexedDBLocalPersistence, browserLocalPersistence, browserSessionPersistence]
+        : inMemoryPersistence,
     });
 
     console.log('Firebase 初始化成功（含離線快取）');

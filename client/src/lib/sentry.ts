@@ -21,6 +21,7 @@
  */
 
 import { CHUNK_LOAD_ERROR_PATTERNS } from './chunkRecovery';
+import { isBrowserStorageAvailable } from './browserStorage';
 
 type SentryModule = typeof import('./sentryClient');
 type SentryEvent = import('@sentry/react').ErrorEvent;
@@ -249,8 +250,14 @@ const BROWSER_STORAGE_LOST = [
   /Database deleted by request of the user/i,
 ];
 
-export function isBrowserStorageLost(event: SentryEvent): boolean {
-  return eventTexts(event).some((text) => BROWSER_STORAGE_LOST.some((pattern) => pattern.test(text)));
+/** 瀏覽器整個擋掉本機儲存時，碰 localStorage／IndexedDB 丟的訊息（Safari「阻擋所有 Cookie」等，JAVASCRIPT-REACT-31） */
+const STORAGE_BLOCKED = /The operation is insecure/i;
+
+export function isBrowserStorageLost(event: SentryEvent, storageBlocked: boolean = !isBrowserStorageAvailable()): boolean {
+  const texts = eventTexts(event);
+  if (texts.some((text) => BROWSER_STORAGE_LOST.some((pattern) => pattern.test(text)))) return true;
+  // 「operation is insecure」也可能是別的原因（跨網域操作等），只有確定這個瀏覽器擋掉儲存時才歸到同一類
+  return storageBlocked && texts.some((text) => STORAGE_BLOCKED.test(text));
 }
 
 export function createBrowserStorageLostClassifier() {
