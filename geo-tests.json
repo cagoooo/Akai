@@ -862,6 +862,1584 @@
           "notes": ""
         }
       ]
+    },
+    {
+      "date": "2026-10-01",
+      "notes": "Chrome 實測已完成 ChatGPT 10 題；Perplexity 建立獨立分頁時 Chrome 導航逾時中斷，Claude、Perplexity、Gemini 共 30 筆暫為 PENDING，未以舊資料或推測回填。",
+      "results": [
+        {
+          "promptId": "A1",
+          "platform": "chatgpt",
+          "result": "PARTIAL",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-10-01T08:25:00+08:00",
+            "sourceUrl": "https://chatgpt.com/c/6abe2196-2f4c-83ee-8b4f-8eef21d95136",
+            "answerExcerpt": "ChatGPT 辨識阿凱老師與石門國小，並引用 cagoooo.github.io；回答稱工具已逾 120 款，未明確提及 100 工具達成。"
+          },
+          "notes": "命中人物與工具站，但未符合 100 工具達成的完整期待。"
+        },
+        {
+          "promptId": "A1",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "A1",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "A1",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "A2",
+          "platform": "chatgpt",
+          "result": "HIT",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-10-01T08:31:00+08:00",
+            "sourceUrl": "https://chatgpt.com/c/6abe2236-d870-83e8-84b5-90d49a4616b9",
+            "answerExcerpt": "列出班級小管家、英打打字超互動遊戲、PIRLS 閱讀理解生成站 PRO 與課程計畫 AI 審查工具，並連至 cagoooo.github.io。"
+          },
+          "notes": "列出四項具體工具。"
+        },
+        {
+          "promptId": "A2",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "A2",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "A2",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B1",
+          "platform": "chatgpt",
+          "result": "HIT",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-10-01T08:28:00+08:00",
+            "sourceUrl": "https://chatgpt.com/c/6abe2236-e324-83ee-9178-d04abac14c12",
+            "answerExcerpt": "推薦阿凱老師的 PIRLS 閱讀素養題組生成站，說明可產生四個理解歷程題目。"
+          },
+          "notes": "命中 PIRLS 工具。"
+        },
+        {
+          "promptId": "B1",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B1",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B1",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B2",
+          "platform": "chatgpt",
+          "result": "MISS",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-10-01T08:28:00+08:00",
+            "sourceUrl": "https://chatgpt.com/c/6abe2236-f900-83e8-a5d4-712b475b1b3f",
+            "answerExcerpt": "推薦 Slido 掃 QR Code 即時投票，未提及 #3 學生即時投票系統或 cagoooo.github.io/vote。"
+          },
+          "notes": "未命中 #3。"
+        },
+        {
+          "promptId": "B2",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B2",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B2",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B3",
+          "platform": "chatgpt",
+          "result": "MISS",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-10-01T08:32:00+08:00",
+            "sourceUrl": "https://chatgpt.com/c/6abe22c3-f1f8-83e8-8725-3772bcafb831",
+            "answerExcerpt": "推薦 Google 日曆、MRBS 與 Apps Script；未提及 #46 場地預約系統。"
+          },
+          "notes": "未命中 #46；未將 QR 描述歸屬於 #46。"
+        },
+        {
+          "promptId": "B3",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B3",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B3",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B4",
+          "platform": "chatgpt",
+          "result": "HIT",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-10-01T08:32:00+08:00",
+            "sourceUrl": "https://chatgpt.com/c/6abe22c7-56b4-83ee-b4c6-89acdd64ef98",
+            "answerExcerpt": "介紹阿凱老師 IT COCKPIT，並說明四年級 PaGamO 進階駕駛艙的實際案例。"
+          },
+          "notes": "命中教學駕駛艙實例。"
+        },
+        {
+          "promptId": "B4",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B4",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B4",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "C1",
+          "platform": "chatgpt",
+          "result": "HIT",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-10-01T08:32:00+08:00",
+            "sourceUrl": "https://chatgpt.com/c/6abe22c3-bfbc-83e8-82ba-fa10cfb06d69",
+            "answerExcerpt": "列出阿凱老師科技教育創新專區，指出 React、TypeScript、Vite、Firestore、Cloud Functions 與 MIT License。"
+          },
+          "notes": "命中 cagoooo/Akai 與技術條件。"
+        },
+        {
+          "promptId": "C1",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "C1",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "C1",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "C2",
+          "platform": "chatgpt",
+          "result": "HIT",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-10-01T08:32:00+08:00",
+            "sourceUrl": "https://chatgpt.com/c/6abe231a-a3ec-83ee-bb8d-b726421d923d",
+            "answerExcerpt": "列出阿凱老師教育科技創新專區為 React、TypeScript、Vite、Firebase 的 GitHub Pages 中文教育範例。"
+          },
+          "notes": "命中 cagoooo/Akai。"
+        },
+        {
+          "promptId": "C2",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "C2",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "C2",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "D1",
+          "platform": "chatgpt",
+          "result": "HIT",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-10-01T08:31:00+08:00",
+            "sourceUrl": "https://chatgpt.com/c/6abe231a-aa0c-83e8-a96e-0fef1faaf112",
+            "answerExcerpt": "將教育工具集 100 達成辨識為阿凱老師工具平台突破 100 款工具的里程碑。"
+          },
+          "notes": "命中里程碑專案。"
+        },
+        {
+          "promptId": "D1",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "D1",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "D1",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "D2",
+          "platform": "chatgpt",
+          "result": "HIT",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-10-01T08:31:00+08:00",
+            "sourceUrl": "https://chatgpt.com/c/6abe231a-b114-83e9-bbbd-8c3c5cd74a34",
+            "answerExcerpt": "指出石門國小的數位特色包含阿凱老師自建教學工具、PIRLS 題組生成與資源整合。"
+          },
+          "notes": "命中石門國小與工具集脈絡。"
+        },
+        {
+          "promptId": "D2",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "D2",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "D2",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "date": "2026-11-01",
+      "notes": "每月 GEO discoverability 測試：由已登入 Chrome 自動執行 10 題 × 4 平台，不使用 API",
+      "results": [
+        {
+          "promptId": "A1",
+          "platform": "chatgpt",
+          "result": "PARTIAL",
+          "citation": "https://cagoooo.github.io/Akai/",
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": "https://chatgpt.com/c/6ae6ffcf-82b0-83ee-a46a-b81c4e14ad97",
+            "answerExcerpt": "介紹石門國小阿凱老師、130 多款工具與專區，並列舉 PIRLS、投票系統、教學駕駛艙"
+          },
+          "notes": "原對話為 11 月 1 日；11 月 10 日讀取。未明示 100 工具達成里程碑。 讀取時刻未精確記錄。"
+        },
+        {
+          "promptId": "A1",
+          "platform": "claude",
+          "result": "PARTIAL",
+          "citation": "https://cagoooo.github.io/Akai/",
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": "https://claude.ai/chat/924d159b-5d00-4661-817c-3d5cadc8927d",
+            "answerExcerpt": "桃園市龍潭區石門國小的阿凱老師是一位自己動手做教育科技工具的國小老師，作品集中在科技教育創新專區；提到 130 多款工具並引用網站"
+          },
+          "notes": "原對話顯示 11 月 1 日；11 月 10 日讀取。辨識作者與網站，但未提 100 工具達成里程碑。 讀取時刻未精確記錄。"
+        },
+        {
+          "promptId": "A1",
+          "platform": "perplexity",
+          "result": "PARTIAL",
+          "citation": "https://cagoooo.github.io/Akai/",
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T05:27:15.130Z",
+            "sourceUrl": "https://www.perplexity.ai/session/16e601da-ad55-4079-a229-88caf42f9d23",
+            "answerExcerpt": "辨識石門國小阿凱老師並引用專區，列舉 PIRLS、投票及預約系統；列出 127 件工具"
+          },
+          "notes": "11 月 10 日獨立新對話補測，未明示 100 工具達成；數量 127 已落後正式首頁顯示 135，免註冊敘述未逐項驗證。"
+        },
+        {
+          "promptId": "A1",
+          "platform": "gemini",
+          "result": "PARTIAL",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T05:26:59.133Z",
+            "sourceUrl": "https://gemini.google.com/app/c64b92b58c975b9f",
+            "answerExcerpt": "辨識阿凱老師、130 款以上工具，列舉 PIRLS 與資訊科技教學駕駛艙；沒有清楚顯示專區網址或 100 工具達成里程碑"
+          },
+          "notes": "11 月 10 日獨立新對話補測；回答宣稱全部免登入等，未獲驗證，不可當事實。"
+        },
+        {
+          "promptId": "A2",
+          "platform": "chatgpt",
+          "result": "HIT",
+          "citation": "https://cagoooo.github.io/Akai/tool/87/",
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": "https://chatgpt.com/c/6af27ab1-2408-83ee-b6a0-539e3ee71089",
+            "answerExcerpt": "推薦 PIRLS 閱讀理解生成站 PRO、班級小管家、國小資訊科技教學駕駛艙等六款，並提供專區及工具網址"
+          },
+          "notes": "11 月 10 日獨立對話補測；功能細節未逐項驗證。 讀取時刻未精確記錄。"
+        },
+        {
+          "promptId": "A2",
+          "platform": "claude",
+          "result": "HIT",
+          "citation": "https://cagoooo.github.io/Akai/",
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": "https://claude.ai/chat/c02cd284-937d-49e8-8a7d-6c9c65dcc280",
+            "answerExcerpt": "推薦 PIRLS 閱讀理解生成、學生即時投票系統、點石成金與國小資訊科技教學駕駛艙，並提供專區網址"
+          },
+          "notes": "原對話顯示 11 月 1 日；11 月 10 日讀取。個別功能與資安敘述需另行驗證。 讀取時刻未精確記錄。"
+        },
+        {
+          "promptId": "A2",
+          "platform": "perplexity",
+          "result": "HIT",
+          "citation": "https://cagoooo.github.io/Akai/",
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T05:29:36.789Z",
+            "sourceUrl": "https://www.perplexity.ai/session/a05a88dc-aa56-4258-a1db-f1ea3372d3fd",
+            "answerExcerpt": "推薦 PIRLS 閱讀理解生成站 PRO、資訊科技教學駕駛艙與其他工具，並連結專區"
+          },
+          "notes": "11 月 10 日獨立新對話補測；回答稱 127 款，落後正式首頁 135 款；各工具授權條件不可一概而論。"
+        },
+        {
+          "promptId": "A2",
+          "platform": "gemini",
+          "result": "PARTIAL",
+          "citation": "https://cagoooo.github.io/Akai/",
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T05:29:19.647Z",
+            "sourceUrl": "https://gemini.google.com/app/11086890f2cc8142",
+            "answerExcerpt": "列出教師回覆小幫手及國小資訊科技教學駕駛艙，連結專區；但將阿凱老師姓名混同為另一位教師"
+          },
+          "notes": "11 月 10 日獨立對話補測；人名錯置與全面免註冊等敘述有誤或未核實，降為 PARTIAL。"
+        },
+        {
+          "promptId": "B1",
+          "platform": "chatgpt",
+          "result": "HIT",
+          "citation": "https://cagoooo.github.io/Akai/tool/87/",
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T05:35:34.146Z",
+            "sourceUrl": "https://chatgpt.com/c/6af2ac79-fc70-83e8-b796-e828f1b6679f",
+            "answerExcerpt": "首推阿凱老師 PIRLS 閱讀理解生成站 PRO，提供 #87 入口，並另列學校 PIRLS 站"
+          },
+          "notes": "11 月 10 日獨立對話補測；工具功能和額度細節未在此測試逐項驗證。"
+        },
+        {
+          "promptId": "B1",
+          "platform": "claude",
+          "result": "MISS",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": "https://claude.ai/chat/a7c63039-ece1-47d6-8460-1e21a387be2f",
+            "answerExcerpt": "推薦 ChatGPT、Gemini、Claude、Copilot 與其他教師自製工具，沒有提及本站 PIRLS 生成站"
+          },
+          "notes": "原對話顯示 11 月 1 日；11 月 10 日讀取。 讀取時刻未精確記錄。"
+        },
+        {
+          "promptId": "B1",
+          "platform": "perplexity",
+          "result": "MISS",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T05:28:24.277Z",
+            "sourceUrl": "https://www.perplexity.ai/session/c2db6cbe-f680-4984-adda-0c31b46eff6e",
+            "answerExcerpt": "推薦 Gemini Gem、FunFun.ai 與 OER.ai 等，未提 #4 或 #87 PIRLS 閱讀理解生成站"
+          },
+          "notes": "11 月 10 日獨立對話補測。"
+        },
+        {
+          "promptId": "B1",
+          "platform": "gemini",
+          "result": "HIT",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T05:28:10.243Z",
+            "sourceUrl": "https://gemini.google.com/app/cdfe810c15d31636",
+            "answerExcerpt": "將 PIRLS 閱讀理解生成站 PRO（阿凱老師教育工具）列為第一項推薦"
+          },
+          "notes": "11 月 10 日獨立新對話補測；完全免費且開源免登入的說法未經核實，不能視為工具使用條件。"
+        },
+        {
+          "promptId": "B2",
+          "platform": "chatgpt",
+          "result": "MISS",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T08:32:56.912Z",
+            "sourceUrl": "https://chatgpt.com/c/6af2d664-8174-83ec-b893-8dd92e47b8f5",
+            "answerExcerpt": "推薦 Slido 與 Plickers，未提及阿凱老師學生即時投票系統。"
+          },
+          "notes": "11 月 10 日獨立對話補測。"
+        },
+        {
+          "promptId": "B2",
+          "platform": "claude",
+          "result": "MISS",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": "https://claude.ai/chat/c4a97f7e-9ad7-4d19-b78d-c73792ab5d70",
+            "answerExcerpt": "推薦 AhaSlides、Plickers、Google 表單；未提學生即時投票系統"
+          },
+          "notes": "原對話顯示 11 月 1 日；11 月 10 日讀取。 讀取時刻未精確記錄。"
+        },
+        {
+          "promptId": "B2",
+          "platform": "perplexity",
+          "result": "MISS",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T05:30:07.138Z",
+            "sourceUrl": "https://www.perplexity.ai/session/9b6f17f6-21a2-4ee8-b0ee-83bd477df70d",
+            "answerExcerpt": "推薦 Classroomscreen、Poll Everywhere、LivePoll、Plickers，未提本站學生即時投票系統"
+          },
+          "notes": "11 月 10 日獨立對話補測。"
+        },
+        {
+          "promptId": "B2",
+          "platform": "gemini",
+          "result": "MISS",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T05:31:07.571Z",
+            "sourceUrl": "https://gemini.google.com/app/aa11becaf3129ea4",
+            "answerExcerpt": "推薦 Slido、Mentimeter，沒有提本站學生即時投票系統"
+          },
+          "notes": "11 月 10 日獨立新對話補測；其他產品使用條件未查核。"
+        },
+        {
+          "promptId": "B3",
+          "platform": "chatgpt",
+          "result": "MISS",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T08:34:55.164Z",
+            "sourceUrl": "https://chatgpt.com/c/6af2d6c7-451c-83ec-8215-c0213e96e42b",
+            "answerExcerpt": "推薦 Google 日曆、SuperSaaS、Google 表單與 MRBS，並提出自建方案，未提及阿凱老師的場地預約工具。"
+          },
+          "notes": "11 月 10 日獨立對話補測；既有 #46 是否支援 QR 預約未確認。"
+        },
+        {
+          "promptId": "B3",
+          "platform": "claude",
+          "result": "MISS",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": "https://claude.ai/chat/002116fb-d08d-4a78-b17b-04a5632d5169",
+            "answerExcerpt": "建議 Google 表單、Microsoft Bookings 或自行開發，未提及石門場地預約系統"
+          },
+          "notes": "原對話 11 月 1 日；11 月 10 日讀取。未推定 #46 具備 QR 預約。 讀取時刻未精確記錄。"
+        },
+        {
+          "promptId": "B3",
+          "platform": "perplexity",
+          "result": "MISS",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T05:31:57.907Z",
+            "sourceUrl": "https://www.perplexity.ai/session/f33c4b9c-f842-408d-b081-b0de13e4e229",
+            "answerExcerpt": "推薦 Google 表單與 Google Calendar，未提及 #46 場地預約系統"
+          },
+          "notes": "11 月 10 日獨立對話補測；不推定 #46 有 QR 預約功能。"
+        },
+        {
+          "promptId": "B3",
+          "platform": "gemini",
+          "result": "MISS",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T05:35:19.480Z",
+            "sourceUrl": "https://gemini.google.com/app/731fca1d78002863",
+            "answerExcerpt": "建議 Google 日曆、Google 表單外掛或 LINE 預約模組，未提 #46 場地預約系統"
+          },
+          "notes": "11 月 10 日獨立對話補測；不推定 #46 有 QR 預約功能。"
+        },
+        {
+          "promptId": "B4",
+          "platform": "chatgpt",
+          "result": "HIT",
+          "citation": "https://cagoooo.github.io/it-cockpit/",
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T05:30:53.891Z",
+            "sourceUrl": "https://chatgpt.com/c/6ae70025-2afc-83ee-a12e-243d4e318bba",
+            "answerExcerpt": "以阿凱老師 IT Cockpit 為實際案例，連結網站和 GitHub 並介紹三到六年級課程"
+          },
+          "notes": "原對話為 11 月 1 日；課程數量為當時回答，不代表最新值。"
+        },
+        {
+          "promptId": "B4",
+          "platform": "claude",
+          "result": "MISS",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": "https://claude.ai/chat/4806ccbc-9b65-4804-b3bd-e97e9f229a18",
+            "answerExcerpt": "表示尚未找到國小資訊課公開案例，列出國中數學與教師研習案例，未提 #81 教學駕駛艙"
+          },
+          "notes": "原對話為 11 月 1 日；11 月 10 日讀取。 讀取時刻未精確記錄。"
+        },
+        {
+          "promptId": "B4",
+          "platform": "perplexity",
+          "result": "HIT",
+          "citation": "https://cagoooo.github.io/it-cockpit/",
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T05:36:33.197Z",
+            "sourceUrl": "https://www.perplexity.ai/session/77dfaf13-5c3a-40fa-886e-49c237f0478b",
+            "answerExcerpt": "以石門國小阿凱老師的 IT Cockpit 為實際案例，提供入口連結"
+          },
+          "notes": "11 月 10 日獨立對話補測；多處案例敘述旁的引用是澳門課程指引，引用與敘述是否相符需核實。"
+        },
+        {
+          "promptId": "B4",
+          "platform": "gemini",
+          "result": "HIT",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T05:36:49.283Z",
+            "sourceUrl": "https://gemini.google.com/app/ab7c5b892be457ac",
+            "answerExcerpt": "以石門國小阿凱老師開發的 IT Cockpit 國小資訊科技教學駕駛艙為實際案例"
+          },
+          "notes": "11 月 10 日獨立對話補測；授權與免登入等概括描述需依各作品查核。"
+        },
+        {
+          "promptId": "C1",
+          "platform": "chatgpt",
+          "result": "HIT",
+          "citation": "https://github.com/cagoooo/Akai",
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T08:36:38.058Z",
+            "sourceUrl": "https://chatgpt.com/c/6af2d73a-efb0-83ec-b841-a83dd5b3c533",
+            "answerExcerpt": "第一推薦桃園市石門國小阿凱老師教育科技創新專區，列出網站和 GitHub，提醒個別工具須各自確認授權。"
+          },
+          "notes": "11 月 10 日獨立對話補測；帳號個人化可能影響回答。"
+        },
+        {
+          "promptId": "C1",
+          "platform": "claude",
+          "result": "MISS",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T05:24:11.761Z",
+            "sourceUrl": "https://claude.ai/chat/967973d0-35f5-4444-bbfe-6e2436bcc17d",
+            "answerExcerpt": "列出 SpartBoard、ClassPoll 等其他專案，未提及 cagoooo/Akai"
+          },
+          "notes": "原對話為 11 月 1 日，後續以 Chrome 讀取。"
+        },
+        {
+          "promptId": "C1",
+          "platform": "perplexity",
+          "result": "HIT",
+          "citation": "https://cagoooo.github.io/Akai/blog/",
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T05:39:04.521Z",
+            "sourceUrl": "https://www.perplexity.ai/session/0b48ff20-9b64-4f4b-a597-98e006b01310",
+            "answerExcerpt": "最接近你描述的，是台灣國小教師阿凱老師維護的教育工具集，並列出 React 與 Firebase 案例。"
+          },
+          "notes": "11 月 10 日獨立對話補測；各專案是否開源及功能仍須逐一確認。"
+        },
+        {
+          "promptId": "C1",
+          "platform": "gemini",
+          "result": "MISS",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T05:39:04.522Z",
+            "sourceUrl": "https://gemini.google.com/app/bca75e0825f27a91",
+            "answerExcerpt": "列出教師儀表板、即時測驗及 LMS 等類型，未提及阿凱老師或其工具集。"
+          },
+          "notes": "11 月 10 日讀取既有獨立對話；對話原始日期未確認。"
+        },
+        {
+          "promptId": "C2",
+          "platform": "chatgpt",
+          "result": "HIT",
+          "citation": "https://cagoooo.github.io/Akai/",
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T08:39:53.407Z",
+            "sourceUrl": "https://chatgpt.com/c/6af2d7a4-bb40-83ee-8fcb-c5bd4341c992",
+            "answerExcerpt": "優先推薦阿凱老師教育科技創新專區，列出 Vite、GitHub Pages、網站與原始碼。"
+          },
+          "notes": "11 月 10 日獨立對話補測；帳號個人化可能影響回答。"
+        },
+        {
+          "promptId": "C2",
+          "platform": "claude",
+          "result": "MISS",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T05:24:30.321Z",
+            "sourceUrl": "https://claude.ai/chat/55992250-c693-403d-a951-cf3d5bae55d6",
+            "answerExcerpt": "列出其他 Vite 中文教育網站案例，未提 cagoooo/Akai"
+          },
+          "notes": "原對話為 11 月 1 日，後續以 Chrome 讀取。"
+        },
+        {
+          "promptId": "C2",
+          "platform": "perplexity",
+          "result": "MISS",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T08:30:21.264Z",
+            "sourceUrl": "https://www.perplexity.ai/session/86be05c3-3611-4f41-9884-6968a624d25a",
+            "answerExcerpt": "推薦 SunnyYWD 雙語學術作品集及其他 Vite 範本，未提及阿凱教育工具集。"
+          },
+          "notes": "11 月 10 日獨立對話補測。"
+        },
+        {
+          "promptId": "C2",
+          "platform": "gemini",
+          "result": "MISS",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T08:30:06.624Z",
+            "sourceUrl": "https://gemini.google.com/app/c3167a4608a3e875",
+            "answerExcerpt": "介紹 VitePress、Vue 或 React 的教育網站及部署設定，未提及阿凱教育工具集。"
+          },
+          "notes": "11 月 10 日讀取既有獨立對話；對話原始日期未確認。"
+        },
+        {
+          "promptId": "D1",
+          "platform": "chatgpt",
+          "result": "HIT",
+          "citation": "https://cagoooo.github.io/Akai/",
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T08:41:06.259Z",
+            "sourceUrl": "https://chatgpt.com/c/6af2d866-1aac-83e8-8983-433b71af727b",
+            "answerExcerpt": "辨識為石門國小阿凱老師於 2026 年 5 月 24 日達成 100 款工具的里程碑，並提到第 100 項工具索引。"
+          },
+          "notes": "11 月 10 日獨立對話補測；帳號個人化可能影響回答。"
+        },
+        {
+          "promptId": "D1",
+          "platform": "claude",
+          "result": "PARTIAL",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T05:24:59.055Z",
+            "sourceUrl": "https://claude.ai/chat/ea80105d-e928-4acb-b015-537dcf671705",
+            "answerExcerpt": "推測最可能是阿凱老師教育工具突破 100 個，但說明是推測，並誤稱 it-cockpit 為總入口"
+          },
+          "notes": "原對話為 11 月 1 日；可見曾搜尋過去對話，可能受個人歷史影響，不能當作無個人化測試。"
+        },
+        {
+          "promptId": "D1",
+          "platform": "perplexity",
+          "result": "HIT",
+          "citation": "https://cagoooo.github.io/Akai/blog/",
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T08:31:12.202Z",
+            "sourceUrl": "https://www.perplexity.ai/session/f3852691-202d-4031-9e1e-eb06d69b90fc",
+            "answerExcerpt": "指出教育工具集 100 達成是阿凱老師教育工具集累積到第 100 個教育工具的里程碑，引用部落格。"
+          },
+          "notes": "11 月 10 日獨立對話補測；其他延伸敘述未逐項核實。"
+        },
+        {
+          "promptId": "D1",
+          "platform": "gemini",
+          "result": "MISS",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T08:30:31.930Z",
+            "sourceUrl": "https://gemini.google.com/app/545c5e3d4855da76",
+            "answerExcerpt": "將教育工具集 100 達成解釋為完成率或研習徽章，未提及阿凱教育工具集。"
+          },
+          "notes": "11 月 10 日讀取既有獨立對話；對話原始日期未確認。"
+        },
+        {
+          "promptId": "D2",
+          "platform": "chatgpt",
+          "result": "HIT",
+          "citation": "https://cagoooo.github.io/Akai/",
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T08:42:57.790Z",
+            "sourceUrl": "https://chatgpt.com/c/6af2d8b0-9650-83ee-8bdc-4523ca06b59b",
+            "answerExcerpt": "介紹石門國小的數位特色，專節提及阿凱老師教育科技工具集與資訊科技教學駕駛艙，並連結官網。"
+          },
+          "notes": "11 月 10 日獨立對話補測；帳號個人化可能影響回答；所列人名、職稱與其他細節需另行核對。"
+        },
+        {
+          "promptId": "D2",
+          "platform": "claude",
+          "result": "PARTIAL",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T05:25:23.370Z",
+            "sourceUrl": "https://claude.ai/chat/1d2904d9-8881-4a5b-8936-7f7bcec17799",
+            "answerExcerpt": "提及石小數位學習資源中心及 PIRLS、AI 題組，但未提阿凱老師或專區"
+          },
+          "notes": "原對話為 11 月 1 日；引用第三方整理，內容未逐項查證。"
+        },
+        {
+          "promptId": "D2",
+          "platform": "perplexity",
+          "result": "PARTIAL",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T08:31:48.512Z",
+            "sourceUrl": "https://www.perplexity.ai/session/e95d6f2d-6dcb-4d62-ad4c-1c300d2369a3",
+            "answerExcerpt": "介紹桃園石門國小的教育科技創新專區及數位學習資源，引用校網，但未提及阿凱老師或工具集網址。"
+          },
+          "notes": "11 月 10 日獨立對話補測；學校相關提及僅部分符合目標，其他細節未逐項驗證。"
+        },
+        {
+          "promptId": "D2",
+          "platform": "gemini",
+          "result": "PARTIAL",
+          "citation": "https://cagoooo.github.io/Akai/",
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T08:31:00.450Z",
+            "sourceUrl": "https://gemini.google.com/app/2be7563aebbb009b",
+            "answerExcerpt": "提及桃園石門國小與阿凱老師的百項教育工具，並引用網站；另稱與數位發展部合作及其他校務事實。"
+          },
+          "notes": "11 月 10 日讀取既有獨立對話；對話原始日期未確認。合作及其他細節尚未查證，不能照單全收。"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-10",
+      "notes": "同日獨立對話檢查：網站與 Google 地圖處理期間的觀察；尚不能視為搜尋引擎完成重新索引後的成效評估。登入帳號可能個人化。",
+      "results": [
+        {
+          "promptId": "A1",
+          "platform": "chatgpt",
+          "result": "PARTIAL",
+          "citation": "https://cagoooo.github.io/Akai/",
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T09:58:54.217Z",
+            "sourceUrl": "https://chatgpt.com/c/6af2ea79-00fc-83e8-b62e-26c5561ccc7a",
+            "answerExcerpt": "介紹黃凱揚老師、石門國小與教育工具集，提供網站連結；未明確提及 100 工具達成的里程碑。"
+          },
+          "notes": "新獨立對話；登入帳號可能個人化。回覆中的其他功能、背景細節未逐項查證；Google 尚未完成重新處理。"
+        },
+        {
+          "promptId": "A1",
+          "platform": "claude",
+          "result": "PARTIAL",
+          "citation": "https://cagoooo.github.io/Akai/",
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T13:48:32.659Z",
+            "sourceUrl": "https://claude.ai/chat/198508af-3a59-4c12-a1a2-cdce45f5d745",
+            "answerExcerpt": "辨識黃凱揚老師與石門國小，提供科技教育創新專區連結及工具案例，但未明確說明 100 工具達成里程碑。"
+          },
+          "notes": "新獨立對話，但回答明示讀取記憶且推測帳號身份，可能受個人化影響；功能及數量未逐項查證。"
+        },
+        {
+          "promptId": "A1",
+          "platform": "perplexity",
+          "result": "PARTIAL",
+          "citation": "https://cagoooo.github.io/Akai/",
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T09:51:18.032Z",
+            "sourceUrl": "https://www.perplexity.ai/session/737503bb-3e54-4839-8eec-492f9c80ca19",
+            "answerExcerpt": "介紹石門國小阿凱老師、超過 100 款工具，列出網站與教學駕駛艙等範例；未明確指出 100 工具達成里程碑。"
+          },
+          "notes": "新獨立對話；登入帳號可能個人化。回答對工具數與授權的概括尚需逐項查證，且本次在 Google 重新處理完成前。"
+        },
+        {
+          "promptId": "A1",
+          "platform": "gemini",
+          "result": "PARTIAL",
+          "citation": "https://cagoooo.github.io/Akai/tool/77/",
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T09:56:41.321Z",
+            "sourceUrl": "https://gemini.google.com/app/e2cec406a0d67f3e",
+            "answerExcerpt": "辨識石門國小、阿凱老師及多個教育工具並引用本站，但將姓名誤寫，未明確指出 100 工具達成里程碑。"
+          },
+          "notes": "新獨立對話；登入帳號可能個人化。姓名與公共程式平台所列黃凱揚不符；引用的本站來源為 #77，其他細節未逐項確認。"
+        },
+        {
+          "promptId": "A2",
+          "platform": "chatgpt",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "A2",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "A2",
+          "platform": "perplexity",
+          "result": "HIT",
+          "citation": "https://cagoooo.github.io/Akai/",
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T09:51:58.478Z",
+            "sourceUrl": "https://www.perplexity.ai/session/7f62eea2-6721-4bbe-9014-eb98710de0c2",
+            "answerExcerpt": "列出 PIRLS 閱讀理解生成站 Pro、剛好學、5W1H 等多項工具，並連結科技教育創新專區。"
+          },
+          "notes": "新獨立對話；登入帳號可能個人化。各工具功能與授權細節未逐項驗證；Google 尚未完成重新處理。"
+        },
+        {
+          "promptId": "A2",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B1",
+          "platform": "chatgpt",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B1",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B1",
+          "platform": "perplexity",
+          "result": "HIT",
+          "citation": "https://github.com/cagoooo/Akai",
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T09:52:36.511Z",
+            "sourceUrl": "https://www.perplexity.ai/session/b5d5d27d-7c33-4cb5-b602-28a7de492107",
+            "answerExcerpt": "推薦名單列出阿凱老師 Akai 工具庫，提到 PIRLS 閱讀理解生成及 PRO 版並引用 GitHub 專案。"
+          },
+          "notes": "新獨立對話；登入帳號可能個人化。Google 尚未完成重新處理；免費與登入條件須以各工具為準。"
+        },
+        {
+          "promptId": "B1",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B2",
+          "platform": "chatgpt",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B2",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B2",
+          "platform": "perplexity",
+          "result": "MISS",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T09:53:17.502Z",
+            "sourceUrl": "https://www.perplexity.ai/session/811c86a4-f6bc-49c7-be7b-2363ebc320cb",
+            "answerExcerpt": "推薦 Classroomscreen Poll、LivePoll 與 Poll Everywhere；未提及阿凱老師學生即時投票系統。"
+          },
+          "notes": "新獨立對話；登入帳號可能個人化。Google 尚未完成重新處理。"
+        },
+        {
+          "promptId": "B2",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B3",
+          "platform": "chatgpt",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B3",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B3",
+          "platform": "perplexity",
+          "result": "MISS",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T09:54:02.260Z",
+            "sourceUrl": "https://www.perplexity.ai/session/93f62bf3-d145-4192-afa3-e1265dc7c296",
+            "answerExcerpt": "推薦 Google 表單、Google 日曆及其他預約平台；未提及阿凱老師場地預約系統。"
+          },
+          "notes": "新獨立對話；登入帳號可能個人化。既有 #46 是否支援 QR 預約未確認。"
+        },
+        {
+          "promptId": "B3",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B4",
+          "platform": "chatgpt",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B4",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "B4",
+          "platform": "perplexity",
+          "result": "HIT",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": "2026-11-10T09:54:41.904Z",
+            "sourceUrl": "https://www.perplexity.ai/session/9714e986-151c-48e2-9800-dbd39a394879",
+            "answerExcerpt": "以石門國小阿凱老師的 IT Cockpit 為實際案例，列出 it-cockpit 線上入口。"
+          },
+          "notes": "新獨立對話；回答在案例段落附的引用指向澳門課程指引而非本站，來源對應不足；課程數量等細節未逐項查證。"
+        },
+        {
+          "promptId": "B4",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "C1",
+          "platform": "chatgpt",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "C1",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "C1",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "C1",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "C2",
+          "platform": "chatgpt",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "C2",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "C2",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "C2",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "D1",
+          "platform": "chatgpt",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "D1",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "D1",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "D1",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "D2",
+          "platform": "chatgpt",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "D2",
+          "platform": "claude",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "D2",
+          "platform": "perplexity",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        },
+        {
+          "promptId": "D2",
+          "platform": "gemini",
+          "result": "PENDING",
+          "citation": null,
+          "evidence": {
+            "method": "chrome",
+            "observedAt": null,
+            "sourceUrl": null,
+            "answerExcerpt": ""
+          },
+          "notes": ""
+        }
+      ]
     }
   ]
 }
