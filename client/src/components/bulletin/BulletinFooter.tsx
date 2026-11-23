@@ -4,6 +4,7 @@ import { Pin } from '@/components/primitives/Pin';
 import { useVersionCheck } from '@/hooks/useVersionCheck';
 import { SchoolLogo } from './SchoolLogo';
 import { BulletinInternalLinks } from './BulletinInternalLinks';
+import { FooterSupportNote } from './BulletinSupport';
 
 const SCHOOL_URL = 'https://www.smes.tyc.edu.tw/modules/school/index.php?department_id=2&zone_id=0&page_id=2&content_id=11&type=news&from_op=all_news#a5';
 const SCHOOL_MAPS_URL = 'https://maps.app.goo.gl/D9hqL2eakDLC8ko46';
@@ -21,7 +22,7 @@ function avatarFallback(img: HTMLImageElement) {
 /**
  * 公佈欄頁尾（整合版）：
  * - 中央：Made with love 膠帶
- * - 三欄便利貼：製作者署名 / 版權連結 / 版本資訊
+ * - 四張便利貼：製作者署名 / 學校連結 / 版本資訊 / 請喝珍奶（贊助說明）
  * - 底部細字：All rights reserved
  * - 完全採 cork 風格，不再需要另一個白色條 footer
  */
@@ -53,14 +54,14 @@ export function BulletinFooter() {
         </Tape>
       </div>
 
-      {/* 三欄便利貼 */}
+      {/* 四張便利貼 */}
       <div
         className="bulletin-footer-grid"
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
+          gridTemplateColumns: 'repeat(4, 1fr)',
           gap: 20,
-          maxWidth: 900,
+          maxWidth: 1100,
           margin: '0 auto 28px',
           alignItems: 'stretch',
         }}
@@ -159,6 +160,9 @@ export function BulletinFooter() {
             E2 公佈欄版
           </div>
         </FooterNote>
+
+        {/* 請阿凱老師喝杯珍奶（點了先看贊助說明，再自行前往 BobaMe） */}
+        <FooterSupportNote noteStyle={footerNoteStyle(tokens.note.orange, 1.2, true)} />
       </div>
 
       {/* 底部版權（含阿凱 favicon + 高對比配色） */}
@@ -291,8 +295,8 @@ interface FooterNoteProps {
   href?: string;
 }
 
-function FooterNote({ bg, tilt, pinIndex, children, href }: FooterNoteProps) {
-  const innerStyle: React.CSSProperties = {
+function footerNoteStyle(bg: string, tilt: number, clickable: boolean): React.CSSProperties {
+  return {
     background: bg,
     padding: '16px 16px 18px',
     borderRadius: 4,
@@ -300,12 +304,16 @@ function FooterNote({ bg, tilt, pinIndex, children, href }: FooterNoteProps) {
     transform: `rotate(${tilt}deg)`,
     position: 'relative',
     minHeight: 92,
-    cursor: href ? 'pointer' : 'default',
+    cursor: clickable ? 'pointer' : 'default',
     textDecoration: 'none',
     color: 'inherit',
     display: 'block',
     transition: 'transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s',
   };
+}
+
+function FooterNote({ bg, tilt, pinIndex, children, href }: FooterNoteProps) {
+  const innerStyle = footerNoteStyle(bg, tilt, Boolean(href));
 
   const content = (
     <>

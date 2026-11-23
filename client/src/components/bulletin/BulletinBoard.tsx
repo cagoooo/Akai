@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { tokens } from '@/design/tokens';
 import { BulletinBackToTop } from './BulletinBackToTop';
 import { BulletinAdminEntry } from './BulletinAdminEntry';
+import { BulletinSupportButton } from './BulletinSupport';
 
 interface Props {
   children: ReactNode;
@@ -9,7 +10,7 @@ interface Props {
 }
 
 /**
- * 公佈欄外框容器：軟木塞背景 + 上下木條 + 回到頂部按鈕 + 隱藏後台入口
+ * 公佈欄外框容器：軟木塞背景 + 上下木條 + 回到頂部按鈕 + 請喝珍奶按鈕 + 隱藏後台入口
  */
 export function BulletinBoard({ children, allowSticky = false }: Props) {
   return (
@@ -29,6 +30,7 @@ export function BulletinBoard({ children, allowSticky = false }: Props) {
       <WoodStrip position="bottom" />
       {children}
       <BulletinBackToTop />
+      <BulletinSupportButton />
       <BulletinAdminEntry />
     </div>
   );
