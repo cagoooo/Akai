@@ -2,6 +2,11 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.253] - 2026-11-23 — 贊助說明窗改用正式說明標記，不再觸發無障礙警告
+
+- **問題**：Sentry JAVASCRIPT-REACT-3C（warning，v3.6.252 起，2 次，都是上線後實測開啟說明窗時）：`Missing Description or aria-describedby={undefined} for {DialogContent}`。說明窗自己寫 `aria-describedby` 指向自訂 id，Radix 只認它自己的 `Dialog.Description`，判定缺說明而 console.warn，被 Sentry 收進來。畫面與功能不受影響。
+- **修正**：`BulletinSupport.tsx` 拿掉自訂 `aria-describedby`，說明區塊改包在 `DialogPrimitive.Description asChild` 裡，螢幕報讀器一樣會唸出說明文字。
+
 ## [3.6.252] - 2026-11-23 — 新增「請阿凱老師喝杯珍奶」贊助入口
 
 - **內容**：參考其他教師開發者的做法，在公佈欄加兩個低調的贊助入口：頁尾第四張便利貼「🧋 SUPPORT」，以及捲動超過 500px 才出現、疊在「回到頂部」上方的珍奶浮動按鈕。點了都先跳出說明窗（工具永久免費、珍奶錢用在 AI 與雲端費用、純屬心意沒有交換條件、同學不用贊助），再自行前往 BobaMe（cagoo.bobaboba.me）。

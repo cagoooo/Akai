@@ -41,7 +41,6 @@ export function SupportDialog({
         />
         <DialogPrimitive.Content
           className="bulletin-support-dialog"
-          aria-describedby="bulletin-support-desc"
           style={{
             position: 'fixed',
             left: '50%',
@@ -96,7 +95,9 @@ export function SupportDialog({
             </DialogPrimitive.Title>
           </div>
 
-          <div id="bulletin-support-desc" style={{ fontSize: 15, lineHeight: 1.75 }}>
+          {/* 用 Radix 的 Description 標記說明區塊：自己寫 aria-describedby 會被 Radix 判定「缺 Description」而 console.warn（Sentry JAVASCRIPT-REACT-3C） */}
+          <DialogPrimitive.Description asChild>
+          <div style={{ fontSize: 15, lineHeight: 1.75 }}>
             <p style={{ margin: '0 0 12px' }}>
               這裡的每個工具都<strong style={{ background: `linear-gradient(transparent 60%, ${tokens.note.yellowBright} 60%)` }}>免費使用，以後也會一直免費</strong>。
               如果某個工具幫你省下了時間，歡迎請阿凱老師喝杯珍奶 😊
@@ -128,6 +129,7 @@ export function SupportDialog({
               🎒 同學們不用贊助喔，把工具用好、學得開心就是最好的支持！
             </p>
           </div>
+          </DialogPrimitive.Description>
 
           <a
             href={SUPPORT_URL}
