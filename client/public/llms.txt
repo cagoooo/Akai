@@ -1,6 +1,6 @@
 # 阿凱老師 · 科技教育創新專區
 
-> 桃園市龍潭區石門國民小學阿凱老師的教育工具入口，整理 138 款教學與校務工具及 139 篇教學情境文章。入口網站原始碼採 MIT 授權；各獨立工具的授權、費用與登入需求，請以該工具的實際說明為準。
+> 桃園市龍潭區石門國民小學阿凱老師的教育工具入口，整理 139 款教學與校務工具及 140 篇教學情境文章。入口網站原始碼採 MIT 授權；各獨立工具的授權、費用與登入需求，請以該工具的實際說明為準。
 
 **站點**：https://cagoooo.github.io/Akai/  
 **作者**：黃凱揚（阿凱老師）／GitHub: cagoooo<br>
@@ -12,15 +12,15 @@
 
 ## 主要頁面
 
-- [首頁工具集](https://cagoooo.github.io/Akai/): 互動公佈欄首頁，呈現全部 138 款工具的拍立得拼貼 + 分類篩選 + 許願池
-- [部落格](https://cagoooo.github.io/Akai/blog): 139 篇阿凱老師手寫的教學情境深度長文，每篇講一個熱門工具如何解決真實教學現場的問題
+- [首頁工具集](https://cagoooo.github.io/Akai/): 互動公佈欄首頁，呈現全部 139 款工具的拍立得拼貼 + 分類篩選 + 許願池
+- [部落格](https://cagoooo.github.io/Akai/blog): 140 篇阿凱老師手寫的教學情境深度長文，每篇講一個熱門工具如何解決真實教學現場的問題
 - [100 工具達成宣傳影片](https://cagoooo.github.io/Akai/share/100.html): 5:32 宣傳影片（含旁白與同步字幕）
 - [許願池](https://cagoooo.github.io/Akai/wish/): 蒐集老師、家長、學生對下一個工具的需求
 - [GitHub Repository](https://github.com/cagoooo/Akai): 完整原始碼，可自由 fork 自架
 
 ## 教師情境快速索引
 
-以下索引把常見提問直接對到站內工具頁與實際使用網址；目前工具集共有 138 款（130+），適合 AI 助手、搜尋引擎與備課者快速建立「需求 → 工具 → 來源」關係。
+以下索引把常見提問直接對到站內工具頁與實際使用網址；目前工具集共有 139 款（130+），適合 AI 助手、搜尋引擎與備課者快速建立「需求 → 工具 → 來源」關係。
 
 - **想讓國小學生掃 QR Code 即時投票**：[#3 學生即時投票系統](https://cagoooo.github.io/Akai/tool/3/)；實際工具：https://cagoooo.github.io/vote/。
 - **想用 AI 產生 PIRLS 閱讀理解題目**：[#4 PIRLS閱讀理解生成](https://cagoooo.github.io/Akai/tool/4/) 或 [#87 PIRLS 閱讀理解生成站 PRO](https://cagoooo.github.io/Akai/tool/87/)；兩者都對應 PIRLS 四層次閱讀評量。
@@ -38,7 +38,7 @@
 
 完整版約 500-800 KB，適合 OpenAI custom GPT / Claude Project / Perplexity Spaces 等需要深度 ingest 的場景。
 
-## 工具集（138 款，按分類）
+## 工具集（139 款，按分類）
 
 每款工具都是阿凱老師親手打造的單一用途網頁，可在瀏覽器直接開啟，無需安裝。
 
@@ -89,7 +89,7 @@
 - [#131 iWIN 兒少上網問卷結果閱讀站](https://cagoooo.github.io/Akai/tool/131/): 將 115 年度 iWIN 兒少上網問卷的石門國小回饋與全國結果連結收在一頁，提供複製網址、已讀標記及三步閱讀建議，協助教師先查資料，再規劃班級宣導與數位素養討論。 標籤：iWIN、兒少上網、問卷結果、報告閱讀、數位素養、網路使用行為。 實際工具：https://cagoooo.github.io/iwin-115-survey/。教學情境文章：https://cagoooo.github.io/Akai/blog/iwin-survey-131-report-reading/
 - [#132 輔導紀錄小幫手](https://cagoooo.github.io/Akai/tool/132/): 把老師口語、零散的描述或點選的狀況標籤，整理成「輔導內容重點＋聯繫內容」兩段正式輔導紀錄，一鍵複製到校務系統；學生姓名送出前自動換成代號，也能用座號批次補登。 標籤：輔導紀錄、校務系統登錄、去識別化、批次補登、座號制、親師聯繫。 實際工具：https://cagoooo.github.io/counseling/。教學情境文章：https://cagoooo.github.io/Akai/blog/counseling-record-132-deidentified-writing/
 
-### 教學設計（26 款）
+### 教學設計（27 款）
 
 - [#7 點「石」成金🐝(評語優化)](https://cagoooo.github.io/Akai/tool/7/): 創新的學生評語優化工具，協助教師撰寫更正向、積極且個人化的學生評語 標籤：評語、AI、LINE、正向、學生。 實際工具：https://line.me/R/ti/p/@733oiboa?oat_content=url&ts=05120012。教學情境文章：https://cagoooo.github.io/Akai/blog/comment-7-ai-positive-language/
 - [#8 12年教案有14](https://cagoooo.github.io/Akai/tool/8/): 豐富的教案資源分享平台，提供多元化的教學素材和靈感 標籤：教案、十二年國教、課綱、資源、分享。 實際工具：https://lin.ee/pCqnVhT。教學情境文章：https://cagoooo.github.io/Akai/blog/line-bot-8-lesson-plans/
@@ -117,6 +117,7 @@
 - [#133 一張課本照片，長出一整套 AI 教學｜AI 數位教學實務工作坊](https://cagoooo.github.io/Akai/tool/133/): 國立中正大學師資培育中心 2026-11-13 工作坊的 72 頁互動簡報：從一張課本照片用 Gemini Notebook 備出整套教材、存成 Gemini 技能，再做教學駕駛艙與概念動畫；學員用手機填問卷、丟文字雲與彈幕、跟著講師翻頁。 標籤：AI 數位教學、師培研習、互動簡報、Gemini Notebook、Gemini 技能、Gemini Canvas。 實際工具：https://cagoooo.github.io/ccu-ai-workshop/。教學情境文章：https://cagoooo.github.io/Akai/blog/ccu-ai-workshop-133-one-photo-whole-lesson/
 - [#135 公共程式平臺上架報告](https://cagoooo.github.io/Akai/tool/135/): 石門國小資訊組長向數位發展部報告「科技教育創新專區」上架公共程式平臺的互動簡報：從一人資訊組的需求、AI 協作開發、Fortify 與 Mend 資安檢測，到錯誤通報、SEO／GEO 與開源再利用。 標籤：公共程式、數位發展部、資安檢測、Fortify、開源授權、成果報告。 實際工具：https://cagoooo.github.io/moda-akai-briefing/。教學情境文章：https://cagoooo.github.io/Akai/blog/moda-briefing-135-public-code-report/
 - [#136 好文章一鍵變題組｜PIRLS 閱讀題組小幫手線上分享簡報](https://cagoooo.github.io/Akai/tool/136/): 阿凱老師在 PaGamO 教師社群線上分享（2026-12-11）的 16 頁互動簡報：用冒險關卡的方式，介紹怎麼用 Chrome 擴充功能把網頁文章、截圖或 YouTube 影片變成 PIRLS 四層次題組，一鍵送進 PaGamO；聽眾用手機參與文字雲、投票與回饋。 標籤：PIRLS、閱讀素養、PaGamO、Chrome 擴充功能、AI 出題、互動簡報。 實際工具：https://cagoooo.github.io/pagamo-pirls-talk/。教學情境文章：https://cagoooo.github.io/Akai/blog/pagamo-pirls-talk-136-article-to-question-set/
+- [#139 鱻魚特色學園｜Minecraft 教育版課程世界](https://cagoooo.github.io/Akai/tool/139/): 石門國小的 Minecraft 教育版課程：下載學生版世界檔，跟著關主阿凱老師在鱻魚學園闖關，再沿導航線走到石門水庫、三坑老街；沒裝 Minecraft 也能玩網頁闖關版、360° 導覽、生活減碳任務與魔王關，最後用通關碼印證書。 標籤：Minecraft 教育版、遊戲式學習、家鄉教育、石門水庫、環境教育、NPC 闖關。 實際工具：https://cagoooo.github.io/xianyu-minecraft/。教學情境文章：https://cagoooo.github.io/Akai/blog/xianyu-minecraft-139-shimen-hometown-course/
 
 ### 趣味遊戲（26 款）
 
@@ -201,10 +202,11 @@
 - [#87 PIRLS 閱讀理解生成站 PRO](https://cagoooo.github.io/Akai/tool/87/): 升級版 PIRLS 閱讀理解出題平台：上傳課文照片或貼上文章，AI 依四層次（訊息提取、直接推論、詮釋整合、評估批判）出題並附答後講解，可匯出 PaGamO、Kahoot 等平台；另有已上架商店的 Chrome 擴充套件，在任何網頁截圖、讀取全文或用 YouTube 影片就能出題，一鍵送進 PaGamO 並自動上傳。 標籤：PIRLS、閱讀理解、AI 出題、四層次提問、答後講解、Chrome 擴充套件。 實際工具：https://cagoooo.github.io/pirls-questioncraft/。教學情境文章：https://cagoooo.github.io/Akai/blog/pirls-87-questioncraft-rewrite/
 - [#137 PaGamO題組SKILLS技能下載器](https://cagoooo.github.io/Akai/tool/137/): 把 Gemini 技能產出的 PIRLS 閱讀題組資料貼上，一鍵下載 PaGamO 官方題組範本格式的 Excel，下載後自動打開 PaGamO 批量上傳頁；首頁就有 pagamo-reading-set 技能檔下載與圖文安裝教學的入口。 標籤：PaGamO、PIRLS、閱讀素養、Gemini 技能、SKILLS、閱讀題組。 實際工具：https://cagoooo.github.io/pagamo-gemini/。教學情境文章：https://cagoooo.github.io/Akai/blog/pagamo-gemini-skill-137-question-set-downloader/
 
-## 教學情境深度長文（139 篇）
+## 教學情境深度長文（140 篇）
 
 每篇文章 5-10 分鐘閱讀，包含真實教學現場數據、學生回饋、實作思路、與其他工具的搭配建議。
 
+- [#139 把石門水庫蓋進 Minecraft：跟著關主阿凱老師，從校門口一路走到大壩頂](https://cagoooo.github.io/Akai/blog/xianyu-minecraft-139-shimen-hometown-course/) (2026-11-23): 學生每天經過三坑老街、看得到石門水庫，卻不一定說得出它們的故事。#139 鱻魚特色學園把學校附近一帶用開放地圖縮小蓋進 Minecraft 教育版：4 站闖關、6 個景點打卡、7 個走讀點、魔王關和 8 枚徽章，沒裝遊戲的孩子也能在網頁版玩到同一套題目。
 - [#138 家長問「幾點放學」「明天停課嗎」：把學校客服放進校內一台 Mac，不送雲端 AI](https://cagoooo.github.io/Akai/blog/shimen-ollama-138-local-parent-helpdesk/) (2026-11-22): 請假怎麼請、在學證明去哪申請、明天要不要停課——這些問題每天都有人問。#138 石小客服把家長客服放在學校自己的 Mac 上，用本機 Ollama 的 Gemma 回答，資料只來自校網與學校提供的資料；公告與停課直接列原文，每晚掃描校網寫成草稿，審核通過才生效。
 - [#137 題目出好了卻卡在貼範本：用一份 Gemini 技能和一個下載器，把閱讀題組直接送進 PaGamO](https://cagoooo.github.io/Akai/blog/pagamo-gemini-skill-137-question-set-downloader/) (2026-11-20): 用 Gemini 出題很快，把題目一格一格搬進 PaGamO 題組範本才是最累的一步。#137 用一份 Gemini 技能把出題規則固定下來（5／8／10 題、PIRLS 四層次、引導式解說），再用下載器把題組資料一鍵轉成官方範本 Excel。
 - [#136 好文章一鍵變題組：一份把 PIRLS 出題流程講成闖關地圖的 40 分鐘線上分享簡報](https://cagoooo.github.io/Akai/blog/pagamo-pirls-talk-136-article-to-question-set/) (2026-11-16): 這是阿凱老師為 PaGamO 教師社群線上分享（2026-12-11）準備的 16 頁互動簡報：用五個關卡講清楚怎麼用 PIRLS 閱讀題組小幫手，把網頁文章、截圖或 YouTube 影片變成四層次題組並一鍵送進 PaGamO，聽眾用手機參與文字雲與投票。
@@ -347,7 +349,7 @@
 
 ## 關於阿凱老師
 
-阿凱老師（cagoooo）是桃園市龍潭區石門國民小學的資訊組長（科任＋行政），自 2024 年起獨立開發教育工具，至今已達成 138 款。技術棧使用 React 18 + TypeScript + Vite + Tailwind CSS + Firebase，主站部署於 GitHub Pages。所有工具開源於 [cagoooo/Akai](https://github.com/cagoooo/Akai)，採 MIT License。
+阿凱老師（cagoooo）是桃園市龍潭區石門國民小學的資訊組長（科任＋行政），自 2024 年起獨立開發教育工具，至今已達成 139 款。技術棧使用 React 18 + TypeScript + Vite + Tailwind CSS + Firebase，主站部署於 GitHub Pages。所有工具開源於 [cagoooo/Akai](https://github.com/cagoooo/Akai)，採 MIT License。
 
 **石門國小（smes = Shih Men）**：「smes」是 Shih Men Elementary School 縮寫，學校全名為「桃園市龍潭區石門國民小學」，校網 https://www.smes.tyc.edu.tw/
 

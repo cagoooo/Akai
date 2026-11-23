@@ -15777,7 +15777,96 @@ const POST_138: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_138, POST_137, POST_136, POST_135, POST_134, POST_133, POST_132, POST_131, POST_130, POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+const POST_139: BlogPost = {
+  slug: 'xianyu-minecraft-139-shimen-hometown-course',
+  title: '#139 把石門水庫蓋進 Minecraft：跟著關主阿凱老師，從校門口一路走到大壩頂',
+  excerpt:
+    '學生每天經過三坑老街、看得到石門水庫，卻不一定說得出它們的故事。#139 鱻魚特色學園把學校附近一帶用開放地圖縮小蓋進 Minecraft 教育版：4 站闖關、6 個景點打卡、7 個走讀點、魔王關和 8 枚徽章，沒裝遊戲的孩子也能在網頁版玩到同一套題目。',
+  publishedAt: '2026-11-23',
+  readingMinutes: 6,
+  tags: ['Minecraft 教育版', '家鄉教育', '環境教育', '遊戲式學習', '校本課程'],
+  toolIds: [139, 128, 119],
+  coverEmoji: '🐟',
+  coverColor: 'blue',
+  body: `## 住在水庫旁邊，卻說不出水庫的故事
+
+從石門國小沿路走到石門大壩，大約 7 公里。學生放學會經過活魚餐廳，假日跟家人去三坑老街，抬頭就看得到大壩。可是問起「石門水庫的水從哪裡來、流到哪裡去」「十一份園區以前是做什麼的」，多半答不出來。
+
+家鄉課最難的不是內容，是**讓孩子願意走進去**。帶全班校外教學要申請、要交通車、要家長同意書，一學期去不了幾次。於是我想：如果把學校附近一帶蓋進孩子本來就愛玩的 Minecraft，讓他們用自己的腳一格一格走過去呢？
+
+這就是 #139「鱻魚特色學園」——石門國小的 Minecraft 教育版課程世界，和放所有資源的課程網站。
+
+## 世界裡有什麼？
+
+**學園闖關 4 站**：紅、黃、綠、藍四站，分別對應語文（「鱻」這個字怎麼來的）、自然（魚的身體構造）、社會（家鄉石門水庫）和環境教育（愛護水中生物）。關主是遊戲裡的「阿凱老師」，用預先做好的語音帶路，畫面下方一直顯示「目前任務」，孩子不會迷路。
+
+**低、中、高三種難度**：找阿凱老師就能換年級，高年級換成進階題組；老師拿著「遙控器」還能一次幫全班切換。
+
+**真的照地圖蓋的石門**：地圖資料來自 OpenStreetMap 開放地圖，以 1 格約 5 公尺縮小。從學校出發，藍色導航線一路帶到活魚一條街、十一份觀光文化園區、三坑老街、三坑自然生態公園、南苑生態公園，最後是石門大壩——每個景點都有導覽員 NPC 講故事、打卡。
+
+**用腳作答的走讀**：7 個環境教育走讀點不用打字，題目出現後走到正確答案的地墊上站好就算作答，很適合還不太會打字的中年級。
+
+**生活減碳任務**：垃圾分類丟對桶子、離開教室隨手關燈、找出太陽能板該裝在哪一面屋頂、把冷氣調到 26～28 度，還會記錄你走了多少路（綠色交通）。
+
+**魔王關：水庫守護者**：4 站闖關和 7 個走讀都完成後，大壩頂的「水庫守護者」才會開放挑戰。10 題、3 顆愛心，答錯會少一顆並說明正確答案，愛心用完就重新來過。全部完成可以拿到 8 枚徽章。
+
+## 沒有電腦教室，也能玩網頁版
+
+不是每個班都排得到電腦教室，也不是每台平板都裝了 Minecraft。所以課程網站另外做了網頁版，手機、iPad、Chromebook 打開瀏覽器就能玩：
+
+- **網頁闖關版**：同樣 4 站、三種難度，有阿凱老師的語音。
+- **360° 虛擬導覽**：在遊戲世界裡拍的環景，從學園大門走到石門大壩，轉動畫面找答案完成走讀。
+- **生活減碳任務**與**魔王關**：和遊戲版同一套題目、同一套 8 枚徽章。
+
+遊戲和網頁最後都會給一組**通關碼**。到網站的證書頁輸入，就能印出 A4 通關證書，列出完成了哪些關卡、拿到哪幾枚徽章。通關碼直接在瀏覽器裡解開，不用帳號、不用登入。
+
+## 想像這樣的三節課（情境示例）
+
+以下是依網站上的教案整理的上課方式，不是已經發生的課堂紀錄：
+
+- **第 1 節｜鱻魚學園闖關**：學生進入世界，跟阿凱老師打招呼後闖完 4 站，邊玩邊寫闖關學習單。
+- **第 2 節｜石門走讀（上）**：跟阿凱老師「領通行證・出發」，傳送到石門地圖，沿藍色導航線走過生態池、活魚一條街、十一份園區、三坑老街，到看板前先觀察，再站上地墊作答。
+- **第 3 節｜石門走讀（下）＋分享**：走到三坑自然生態公園、南苑生態公園和石門大壩，在壩頂討論水庫怎麼擋水；記下通關碼，最後每個人分享「明天開始願意做到的一件環保小事」。
+
+教案建議中年級照 3 節上；低年級只做第 1 節，高年級在遊戲裡切換成進階題組。生活減碳任務和魔王關適合當延伸或下課後自主挑戰；設備不足的班級，可以把走讀換成網頁版的 360° 導覽。
+
+## 給老師和資訊組的準備
+
+網站上除了世界檔，還放了：
+
+- **3 節課教案與教師手冊**，可以直接列印或存成 PDF。
+- **三份學習單**：闖關、環境教育走讀、生活任務。
+- **電腦教室備課流程**：資訊組準備、授課老師測試、上課開場、下課存檔。
+- **資訊組安裝檢查表**：逐台確認版本、匯入是否成功、還原卡排除路徑，最後簽名驗收。
+
+學生版世界檔要用 Minecraft 教育版開啟，需要學校的教育版帳號登入。Windows 雙擊檔案就能匯入；iPad 的匯入步驟網站上也有說明，但 iPad 版還沒有實機驗證，正式上課前建議先試一台。
+
+## 資料怎麼處理？
+
+網站本身不呼叫任何 AI 模型。網頁版可以選擇登記「年、班、座號」，把闖關進度送到老師的 Google 試算表，讓老師看到全班進度；不收姓名，按「先不登記」就完全不送資料。
+
+## 配對工具推薦
+
+- [#128 石門・心晴校園](https://cagoooo.github.io/shimen-campus-game/)：另一個以石門國小為舞台的 3D 校園遊戲，可以接著認識校園。
+- [#119 SDGs永續行動遊戲－地球守護隊：能量大作戰](https://cagoooo.github.io/Shoot/)：延伸節能減碳主題，和生活減碳任務放在同一個單元。
+- [#139 鱻魚特色學園](https://cagoooo.github.io/xianyu-minecraft/)：本篇主角。
+
+## 適用對象
+
+- 想把家鄉教育、環境教育做成遊戲式學習的國小老師
+- 資訊課想帶 Minecraft 教育版、又需要現成教材的資訊老師
+- 規劃校本或彈性課程的教學組，以及負責電腦教室的資訊組
+- 外校老師：題目和地圖是石門在地內容，但網站的課程結構、學習單與證書流程可以當成設計範例
+
+## 想試試？
+
+→ [前往 #139 鱻魚特色學園](https://cagoooo.github.io/xianyu-minecraft/)
+
+先打開網頁闖關版玩一站，五分鐘就知道孩子會不會喜歡；喜歡的話，再下載學生版世界檔，帶全班走一趟石門。
+`,
+};
+
+export const POSTS: BlogPost[] = [POST_139, POST_138, POST_137, POST_136, POST_135, POST_134, POST_133, POST_132, POST_131, POST_130, POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。

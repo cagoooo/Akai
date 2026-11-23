@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 138+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 139+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Sun, 22 Nov 2026 09:50:00 GMT</pubDate>
-    <lastBuildDate>Sun, 22 Nov 2026 09:48:40 GMT</lastBuildDate>
+    <pubDate>Mon, 23 Nov 2026 11:57:45 GMT</pubDate>
+    <lastBuildDate>Mon, 23 Nov 2026 12:05:08 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,27 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：鱻魚特色學園｜Minecraft 教育版課程世界</title>
+      <link>https://cagoooo.github.io/Akai/tool/139/</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/139</guid>
+      <pubDate>Mon, 23 Nov 2026 11:57:45 GMT</pubDate>
+      <description>石門國小的 Minecraft 教育版課程：下載學生版世界檔，跟著關主阿凱老師在鱻魚學園闖關，再沿導航線走到石門水庫、三坑老街；沒裝 Minecraft 也能玩網頁闖關版、360° 導覽、生活減碳任務與魔王關，最後用通關碼印證書。</description>
+      <category>Minecraft 教育版</category>
+      <category>遊戲式學習</category>
+      <category>家鄉教育</category>
+      <category>石門水庫</category>
+      <category>環境教育</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#139 把石門水庫蓋進 Minecraft：跟著關主阿凱老師，從校門口一路走到大壩頂</title>
+      <link>https://cagoooo.github.io/Akai/blog/xianyu-minecraft-139-shimen-hometown-course/</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/xianyu-minecraft-139-shimen-hometown-course</guid>
+      <pubDate>Mon, 23 Nov 2026 00:00:00 GMT</pubDate>
+      <description>學生每天經過三坑老街、看得到石門水庫，卻不一定說得出它們的故事。#139 鱻魚特色學園把學校附近一帶用開放地圖縮小蓋進 Minecraft 教育版：4 站闖關、6 個景點打卡、7 個走讀點、魔王關和 8 枚徽章，沒裝遊戲的孩子也能在網頁版玩到同一套題目。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
     <item>
       <title>🆕 新工具：Ollama 石門線上客服系統</title>
       <link>https://cagoooo.github.io/Akai/tool/138/</link>
@@ -311,27 +332,6 @@
       <category>會費續會</category>
       <category>入會優惠</category>
       <category>活動宣導</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#124 從 AI 教學與研究助理到 AI Agent：把一日工作坊變成可重複的實作路線</title>
-      <link>https://cagoooo.github.io/Akai/blog/ai-workshop-124-teaching-research-agent/</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/ai-workshop-124-teaching-research-agent</guid>
-      <pubDate>Tue, 25 Aug 2026 00:00:00 GMT</pubDate>
-      <description>#124 把上午 47 頁、下午 59 頁的 AI 工作坊整理成一條可以真的走完的路線：先建立教學與研究工作室，再練習資料治理、Agent Skills、部署與人工驗收，讓 AI 從聊天視窗變成可交付的工作夥伴。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>🆕 新工具：從 AI 教學與研究助理到 AI Agent</title>
-      <link>https://cagoooo.github.io/Akai/tool/124/</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/124</guid>
-      <pubDate>Mon, 24 Aug 2026 16:00:00 GMT</pubDate>
-      <description>把一日 AI 工作坊變成可直接操作的教學與研究路線：上午用 Gemini Notebook、Gem、Canvas 建工作室，下午用 Codex、Antigravity、Claude 與 Agent Skills 完成資料分析、部署與可追溯交付。</description>
-      <category>AI教學</category>
-      <category>AI研究</category>
-      <category>AI Agent</category>
-      <category>Gemini Notebook</category>
-      <category>Codex</category>
     </item>
   </channel>
 </rss>

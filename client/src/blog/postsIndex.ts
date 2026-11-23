@@ -15,6 +15,27 @@ export type BlogPostMeta = Omit<BlogPost, 'body'>;
 
 export const POSTS_INDEX: BlogPostMeta[] = [
   {
+    "slug": "xianyu-minecraft-139-shimen-hometown-course",
+    "title": "#139 把石門水庫蓋進 Minecraft：跟著關主阿凱老師，從校門口一路走到大壩頂",
+    "excerpt": "學生每天經過三坑老街、看得到石門水庫，卻不一定說得出它們的故事。#139 鱻魚特色學園把學校附近一帶用開放地圖縮小蓋進 Minecraft 教育版：4 站闖關、6 個景點打卡、7 個走讀點、魔王關和 8 枚徽章，沒裝遊戲的孩子也能在網頁版玩到同一套題目。",
+    "publishedAt": "2026-11-23",
+    "readingMinutes": 6,
+    "tags": [
+      "Minecraft 教育版",
+      "家鄉教育",
+      "環境教育",
+      "遊戲式學習",
+      "校本課程"
+    ],
+    "toolIds": [
+      139,
+      128,
+      119
+    ],
+    "coverEmoji": "🐟",
+    "coverColor": "blue"
+  },
+  {
     "slug": "shimen-ollama-138-local-parent-helpdesk",
     "title": "#138 家長問「幾點放學」「明天停課嗎」：把學校客服放進校內一台 Mac，不送雲端 AI",
     "excerpt": "請假怎麼請、在學證明去哪申請、明天要不要停課——這些問題每天都有人問。#138 石小客服把家長客服放在學校自己的 Mac 上，用本機 Ollama 的 Gemma 回答，資料只來自校網與學校提供的資料；公告與停課直接列原文，每晚掃描校網寫成草稿，審核通過才生效。",
