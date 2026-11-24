@@ -15,6 +15,27 @@ export type BlogPostMeta = Omit<BlogPost, 'body'>;
 
 export const POSTS_INDEX: BlogPostMeta[] = [
   {
+    "slug": "band-lyrics-projection-140-karaoke-sync",
+    "title": "#140 讓歌詞自己翻頁：教職員樂團的聖誕趴團練歌本，從吉他譜做到去人聲伴唱",
+    "excerpt": "老師們要組團上台唱 10 首歌，每個人手上的譜都不一樣，投影要有人專門按下一頁。#140 把吉他譜、大螢幕歌詞投影和伴唱同步做成同一份歌本：改調自動算變調夾，長句自動分上下排，選好伴唱音檔，歌詞就跟著音樂翻頁。",
+    "publishedAt": "2026-11-24",
+    "readingMinutes": 6,
+    "tags": [
+      "吉他和弦譜",
+      "歌詞投影",
+      "伴唱同步",
+      "去人聲",
+      "活動籌辦"
+    ],
+    "toolIds": [
+      140,
+      41,
+      64
+    ],
+    "coverEmoji": "🎸",
+    "coverColor": "green"
+  },
+  {
     "slug": "xianyu-minecraft-139-shimen-hometown-course",
     "title": "#139 把石門水庫蓋進 Minecraft：跟著關主阿凱老師，從校門口一路走到大壩頂",
     "excerpt": "學生每天經過三坑老街、看得到石門水庫，卻不一定說得出它們的故事。#139 鱻魚特色學園把學校附近一帶用開放地圖縮小蓋進 Minecraft 教育版：4 站闖關、6 個景點打卡、7 個走讀點、魔王關和 8 枚徽章，沒裝遊戲的孩子也能在網頁版玩到同一套題目。",

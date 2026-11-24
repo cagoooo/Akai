@@ -15866,7 +15866,77 @@ const POST_139: BlogPost = {
 `,
 };
 
-export const POSTS: BlogPost[] = [POST_139, POST_138, POST_137, POST_136, POST_135, POST_134, POST_133, POST_132, POST_131, POST_130, POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+const POST_140: BlogPost = {
+  slug: 'band-lyrics-projection-140-karaoke-sync',
+  title: '#140 讓歌詞自己翻頁：教職員樂團的聖誕趴團練歌本，從吉他譜做到去人聲伴唱',
+  excerpt:
+    '老師們要組團上台唱 10 首歌，每個人手上的譜都不一樣，投影要有人專門按下一頁。#140 把吉他譜、大螢幕歌詞投影和伴唱同步做成同一份歌本：改調自動算變調夾，長句自動分上下排，選好伴唱音檔，歌詞就跟著音樂翻頁。',
+  publishedAt: '2026-11-24',
+  readingMinutes: 6,
+  tags: ['吉他和弦譜', '歌詞投影', '伴唱同步', '去人聲', '活動籌辦'],
+  toolIds: [140, 41, 64],
+  coverEmoji: '🎸',
+  coverColor: 'green',
+  body: `## 十首歌、一群老師，還有一個一直按「下一頁」的人
+
+2026 年石門國小聖誕趴，教職員組了一個樂團，要唱 10 首歌。真的開始團練才發現，麻煩的不是彈唱本身，而是那些「周邊」：每個人手上的和弦譜版本不一樣，有人要夾變調夾、有人不要；台下要看的歌詞投影得有人一直按下一頁；回家想自己練，伴奏又夾著原唱的聲音，跟著唱很容易被帶走。
+
+於是我把這些事情收進同一份網頁歌本：樂手看譜、台下看投影、回家跟著伴唱練，都用它。
+
+## #140 能做什麼？
+
+**吉他譜：改調不用自己算** — 每首歌可以選「演唱調」和手上要按的「指法」，網頁自動算出變調夾要夾第幾格；也能一鍵切換「夾 Capo（簡單指法）」和「不夾 Capo（原調和弦）」。和弦可以標在歌詞字上面看，也能切成一格一小節的小節譜。
+
+**段落照演出剪接版** — 表演用的是剪接過的版本，原曲的好幾段都剪掉了。歌本只列出真的會彈的段落，不用一邊彈一邊跳段。
+
+**大螢幕歌詞投影** — 一鍵切成全螢幕，用方向鍵或簡報筆換句，手機點畫面左右兩邊也能換。長句會自動在空白處分成上下排，挑字最大的排法；左上角有「選歌」可以直接跳到某一首。
+
+**伴唱同步** — 打開伴唱同步，歌詞會照事先對好的時間點跟著音樂翻頁；按方向鍵換句，音樂也跟著跳到那一句。
+
+## 團練版是怎麼做出來的
+
+**歌詞要在對的那一秒翻頁**：我把每首歌的演出剪接版音訊拿來做語音辨識，取得每個字出現的時間，再一句一句對到投影的每一頁，存成一張「第幾秒翻到第幾頁」的時間表。
+
+**原本想直接用 YouTube 播**：實測後發現，9 支剪接版影片有 8 支版權方不允許在別的網站播放，網頁平台本身也擋掉了嵌入的影片，只好改成「團員自己存音檔、在網頁裡選一次」，選過的檔案記在那台裝置的瀏覽器裡，下次打開就不用再選。
+
+**去掉人聲**：剪接版是有原唱的，跟著唱會被帶走。我用開源的去人聲工具把主唱拿掉，只留樂器，一首要在電腦上跑 20 分鐘左右；再用另一套工具交叉檢查，唱歌段落的人聲從約 -20 dB 降到 -70 dB 以下。9 首的音量也拉到一樣大，練習換歌時不用一直轉音量。
+
+**聽起來對不對，還是要靠耳朵**：去人聲之後，有一首歌從慢板接到 DJ 舞曲段的地方只剩 3 拍預備，團員說「太快就轉過去了」。量出接縫位置後，照 DJ 段的速度補成剛好 4 拍、一整小節，後面的歌詞時間點也跟著往後移。
+
+## 版權的界線
+
+團練版的 10 首歌大多是有版權的流行歌，伴唱音檔和歌詞都只給團員：音檔放在只限團員的雲端資料夾，不放在公開網頁。
+
+所以分享到這裡的是**公開示範版**：只放一首石門國小自己改編歌詞的〈十一份路走九遍〉（原曲〈忠孝東路走九遍〉），不附音檔。想試伴唱同步，可以選一個自己的音檔；時間點是照我們的剪接版對的，換成別的音樂，可以按 R 一邊播一邊重新錄。
+
+## 情境示例：你的學校也可以這樣用
+
+以下是想像的使用情境，不是已發生的紀錄：
+
+- **班級表演前一週**：導師把要唱的歌做成歌詞投影，長句自動分上下排，坐最後一排的學生也看得清楚。
+- **音樂課或吉他社**：學生想用自己的音域唱，老師改一下演唱調，網頁就告訴大家變調夾夾第幾格。
+- **校慶、晚會彩排**：同一份歌本，樂手看譜、司儀看流程、台下看投影，排練時讓歌詞跟著伴奏自己翻頁，省下一個專門按投影的人。
+
+## 配對工具推薦
+
+- [#41 吉他彈唱點歌系統](https://cagoooo.github.io/song/)：讓台下點歌，樂團接著彈。
+- [#64 簡譜節拍節奏大師](https://cagoooo.github.io/music/)：先把節拍打穩，再上台合奏。
+- [#140 聖誕趴團練歌詞投影](https://claude.ai/artifact/4tmMZXgcqRa91Phfxqj18S)：本篇主角，示範版免登入就能打開。
+
+## 適用對象
+
+- 要帶全班或社團上台唱歌的導師、音樂老師
+- 負責晚會、校慶、畢業典禮表演的行政老師
+- 學校裡的教師樂團、吉他社指導老師
+
+## 想試試？
+
+→ [打開 #140 聖誕趴團練歌詞投影](https://claude.ai/artifact/4tmMZXgcqRa91Phfxqj18S)
+
+先按「📺 大螢幕歌詞投影」看看長句怎麼自動分排，再改一次演唱調，看變調夾的格數怎麼跟著變。下次學校要辦活動，你的歌本也可以自己翻頁。`,
+};
+
+export const POSTS: BlogPost[] = [POST_140, POST_139, POST_138, POST_137, POST_136, POST_135, POST_134, POST_133, POST_132, POST_131, POST_130, POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。
