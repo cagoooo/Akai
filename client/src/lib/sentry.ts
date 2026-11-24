@@ -248,6 +248,10 @@ const BROWSER_STORAGE_LOST = [
   // 網頁開著時，App 內建瀏覽器或 iOS 把這個網站的資料庫整個刪掉（清除網站資料、系統回收空間）；
   // SDK 先印 app/idb-get 讀取失敗，再丟出沒人接住的 UnknownError（2026-11-21 JAVASCRIPT-REACT-2P：iPhone WKWebView，iOS 26.2）
   /Database deleted by request of the user/i,
+  // 瀏覽器沒有可用的 IndexedDB（Firestore 依瀏覽器版本判斷，例如 Android 4.4 以前、iOS 10 以前），
+  // SDK 自己改用記憶體快取繼續運作，只是不能離線（2026-11-25 JAVASCRIPT-REACT-3E：Android 4.3 Galaxy Note3，
+  // 美國，/tool/14、/tool/61 等 4 頁各一筆，疑似偽裝舊手機的爬蟲）。只認 unimplemented＋這句說明，其他原因照常回報。
+  /Falling back to memory cache: FirebaseError: \[code=unimplemented\]: This platform is either missing IndexedDB/i,
 ];
 
 /** 瀏覽器整個擋掉本機儲存時，碰 localStorage／IndexedDB 丟的訊息（Safari「阻擋所有 Cookie」等，JAVASCRIPT-REACT-31） */
