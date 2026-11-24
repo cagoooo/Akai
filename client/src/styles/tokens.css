@@ -10,7 +10,7 @@
   --paper-edge: #d8d4c8;
   --ink: #1a1a1a;
   --ink-soft: #3a3a3a;
-  --muted: #8b7356;
+  --muted: #735e42; /* 2026-11-24 由 #8b7356 加深（對比） */
   --muted2: #4a3a20;
 
   /* ── Blog article surface (editorial reading view) ─────────

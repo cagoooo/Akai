@@ -8,7 +8,7 @@ export const tokens = {
   paperEdge: '#d8d4c8',
   ink: '#1a1a1a',
   inkSoft: '#3a3a3a',
-  muted: '#8b7356',
+  muted: '#735e42', // 2026-11-24 由 #8b7356 加深：在各色便利貼上對比都 ≥ 4.5
   muted2: '#4a3a20',
 
   // Blog article surface (editorial reading view)

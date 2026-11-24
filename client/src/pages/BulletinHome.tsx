@@ -383,7 +383,8 @@ export function BulletinHome() {
         resultCount={filteredTools.length}
         totalCount={toolsWithStats.length}
       />
-      <BulletinHeader />
+      {/* 站名用 div：首頁唯一的 h1 是 Hero 的「教育科技創新專區」（2026-11-24 全站檢測：一頁兩個 h1） */}
+      <BulletinHeader titleAs="div" />
       <LatestToolsShowcase
         tools={toolsWithStats}
         blocked={showAudienceWizard || wizardAutoPending || showShortcutsDialog || showWishingWellFromShortcut || highlightedToolId !== null}
@@ -394,6 +395,7 @@ export function BulletinHome() {
       />
       <BulletinMilestone100 onWishClick={() => setShowWishingWellFromShortcut(true)} />
       <BulletinSpeechBanner />
+      <main id="main-content">
       <BulletinHero toolCount={toolsWithStats.length} />
 
       {/* 還沒選過身分 → 給常駐入口（精靈原本只有自動彈出一條路，關掉就找不回來了）。
@@ -533,6 +535,8 @@ export function BulletinHome() {
           />
         )}
       </div>
+
+      </main>
 
       <BulletinFooter />
 

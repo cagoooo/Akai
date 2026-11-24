@@ -10,6 +10,16 @@ interface UseKeyboardShortcutsOptions {
     onOpenSelected?: () => void;
 }
 
+const INTERACTIVE_SELECTOR =
+    'a[href], button, select, summary, [role="button"], [role="link"], [role="menuitem"], [role="tab"], [role="option"], [role="checkbox"], [role="switch"], [role="dialog"], [role="slider"], [tabindex]:not([tabindex="-1"])';
+
+/** 焦點是否在可操作元件（或其內部）上：這時 Enter／方向鍵屬於該元件，不能當成頁面快捷鍵。 */
+export function isInteractiveTarget(target: EventTarget | null): boolean {
+    if (!(target instanceof Element)) return false;
+    if (target === document.body || target === document.documentElement) return false;
+    return target.closest(INTERACTIVE_SELECTOR) !== null;
+}
+
 export function useKeyboardShortcuts(options: UseKeyboardShortcutsOptions) {
     const {
         onSearch,
@@ -26,7 +36,11 @@ export function useKeyboardShortcuts(options: UseKeyboardShortcutsOptions) {
             const target = e.target as HTMLElement;
             const isInputFocused = target instanceof HTMLInputElement ||
                 target instanceof HTMLTextAreaElement ||
+                target instanceof HTMLSelectElement ||
                 target.isContentEditable;
+            // 焦點在連結、按鈕等可操作元件上時，Enter／方向鍵要交還給瀏覽器（2026-11-24：原本一律攔下，
+            // 鍵盤使用者在任何連結或按鈕上按 Enter 都沒反應）。只有焦點在頁面本身時才當成卡片導覽快捷鍵。
+            const isInteractiveFocused = isInteractiveTarget(target);
 
             // `/` 聚焦搜尋框
             if (e.key === '/' && !isInputFocused) {
@@ -58,8 +72,8 @@ export function useKeyboardShortcuts(options: UseKeyboardShortcutsOptions) {
                 return;
             }
 
-            // 方向鍵導航（不在輸入框中時）
-            if (!isInputFocused) {
+            // 方向鍵導航（不在輸入框、也不在連結或按鈕上時）
+            if (!isInputFocused && !isInteractiveFocused) {
                 if (e.key === 'ArrowUp') {
                     e.preventDefault();
                     onNavigateUp?.();

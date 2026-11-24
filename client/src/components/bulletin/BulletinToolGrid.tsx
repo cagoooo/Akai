@@ -173,7 +173,7 @@ export function BulletinToolGrid({ tools, highlightedToolId = null, resetKey = '
           style={{
             textAlign: 'center',
             padding: '0 20px 48px',
-            color: '#8b7356',
+            color: '#735e42',
             fontSize: 14,
             fontStyle: 'italic',
           }}
