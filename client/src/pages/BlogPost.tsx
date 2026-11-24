@@ -21,6 +21,7 @@ import { tokens } from '@/design/tokens';
 import { BulletinHeader } from '@/components/bulletin/BulletinHeader';
 import { BulletinFooter } from '@/components/bulletin/BulletinFooter';
 import { BulletinBackToTop } from '@/components/bulletin/BulletinBackToTop';
+import { BulletinSupportButton } from '@/components/bulletin/BulletinSupport';
 import { PageHead } from '@/components/PageHead';
 import { notifyEngagementAfterHomeEntry, trackEvent } from '@/lib/analytics';
 import { BlogArticleLayout } from '@/components/blog/BlogArticleLayout';
@@ -406,6 +407,7 @@ export function BlogPost() {
 
       <BulletinFooter />
       <BulletinBackToTop />
+      <BulletinSupportButton />
       <Suspense fallback={null}><BlogAgentPromptCopier post={post} tools={relatedTools} /></Suspense>
     </>
   );

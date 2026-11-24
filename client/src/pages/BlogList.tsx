@@ -22,6 +22,7 @@ import { Tape } from '@/components/primitives/Tape';
 import { BulletinHeader } from '@/components/bulletin/BulletinHeader';
 import { BulletinFooter } from '@/components/bulletin/BulletinFooter';
 import { BulletinBackToTop } from '@/components/bulletin/BulletinBackToTop';
+import { BulletinSupportButton } from '@/components/bulletin/BulletinSupport';
 import { PageHead } from '@/components/PageHead';
 
 // 七大分類 chip（同 tools.json category 集合，blog 內的 tags 第一個通常對應）
@@ -866,6 +867,7 @@ export function BlogList() {
 
       <BulletinFooter />
       <BulletinBackToTop />
+      <BulletinSupportButton />
     </>
   );
 }
