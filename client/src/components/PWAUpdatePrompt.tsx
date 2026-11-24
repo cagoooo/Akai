@@ -325,7 +325,7 @@ export function PWAUpdatePrompt() {
                                     aria-busy={isUpdating}
                                     style={{
                                         background: tokens.accent,
-                                        color: '#fff',
+                                        color: tokens.ink, // 白字配橘底對比只有 2.55:1，改黑字（約 7:1）
                                         border: '2.5px solid #1a1a1a',
                                         padding: '7px 14px',
                                         borderRadius: 8,

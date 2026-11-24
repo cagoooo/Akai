@@ -294,6 +294,7 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0, highlighte
             href={getBlogPostPath(blogPost)}
             onClick={(e) => e.stopPropagation()}
             aria-label={`閱讀 ${tool.title} 的詳細文章介紹`}
+            className="bulletin-card-blog"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -349,7 +350,7 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0, highlighte
           marginTop: 2,
         }}
       >
-        <div style={{ fontSize: 11, color: '#8b7356', fontFamily: tokens.font.en }}>
+        <div style={{ fontSize: 12, color: '#6f5a3e', fontFamily: tokens.font.en }}>
           👆 {totalClicks.toLocaleString()}
         </div>
         <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
@@ -359,6 +360,7 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0, highlighte
               onClick={handleToggleFav}
               aria-label={isFav ? '取消收藏' : '加入收藏'}
               aria-pressed={isFav}
+              className="bulletin-card-fav"
               style={{
                 width: 32,
                 height: 32,
@@ -382,6 +384,7 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0, highlighte
             type="button"
             onClick={handleOpen}
             aria-label={`開啟 ${tool.title}`}
+            className="bulletin-card-open"
             style={{
               background: '#1a1a1a',
               color: '#fff',

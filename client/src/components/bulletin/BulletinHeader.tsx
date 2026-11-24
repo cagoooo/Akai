@@ -6,7 +6,11 @@ import { SchoolLogo } from './SchoolLogo';
  * 公佈欄頁首：校徽 + 站名 + 副標
  * 訪客計數交給既有 VisitorCounter 元件（在 Home.tsx 層級渲染）
  */
-export function BulletinHeader() {
+/**
+ * titleAs：預設 h1（首頁用）。部落格等內頁自己已有 h1，傳 "div" 避免同頁兩個 h1，樣式不變。
+ */
+export function BulletinHeader({ titleAs = 'h1' }: { titleAs?: 'h1' | 'div' }) {
+  const Title = titleAs;
   return (
     <header
       style={{
@@ -60,7 +64,7 @@ export function BulletinHeader() {
         </a>
 
         <div>
-          <h1
+          <Title
             style={{
               fontFamily: tokens.font.tc,
               fontSize: 28,
@@ -72,7 +76,7 @@ export function BulletinHeader() {
             }}
           >
             阿凱老師 · 教育科技專區
-          </h1>
+          </Title>
           <div
             style={{
               fontFamily: tokens.font.en,

@@ -7,8 +7,10 @@
  * 觸發條件（全部符合才顯示）：
  *   1. 使用者是 iOS Safari（不是 Chrome / Firefox iOS — 它們不支援加桌面）
  *   2. 站不是已經以 standalone 模式跑（沒安裝過）
- *   3. 使用者**第二次**訪問（避免第一次就煩使用者）
- *   4. 一週內沒提示過（避免每次都跳）
+ *   3. 使用者**第二次以上**訪問（一個瀏覽工作階段只算一次，不是每次換頁／重新整理都算）
+ *   4. 按過「稍後再說」30 天內不再出現；跳出後沒理它也 7 天內不再出現
+ *   5. 2026-11-24 起：停留滿 25 秒、而且已經往下捲過半個螢幕才出現
+ *      （原本進站 4 秒就跳，文章標題與工具頁內容還沒看就被蓋住）
  *
  * 設計：cork 風藍色便利貼從畫面底部滑入，附「不再提示」「教學」「關閉」三按鈕
  */
@@ -20,7 +22,12 @@ import { Pin } from '@/components/primitives/Pin';
 
 const VISIT_KEY = 'akai-visit-count';
 const DISMISS_KEY = 'akai-ios-pwa-prompt-dismissed-at';
-const DISMISS_DAYS = 30; // 延長至 30 天
+const DISMISS_DAYS = 30; // 按「稍後再說」後 30 天內不再出現
+const SHOWN_KEY = 'akai-ios-pwa-prompt-shown-at';
+const IGNORE_COOLDOWN_DAYS = 7; // 跳出後沒處理，7 天內不再跳
+const SESSION_COUNTED_KEY = 'akai-visit-counted-this-session';
+const MIN_DWELL_MS = 25000; // 至少停留 25 秒
+const MIN_SCROLL_RATIO = 0.5; // 且往下捲過半個螢幕
 
 function isIosSafari(): boolean {
   if (typeof window === 'undefined') return false;
@@ -48,9 +55,22 @@ function getVisitCount(): number {
 
 function bumpVisitCount() {
   try {
+    // 一個瀏覽工作階段只算一次造訪（原本每次載入都 +1，第二次換頁就算「第二次訪問」）
+    if (sessionStorage.getItem(SESSION_COUNTED_KEY) === 'true') return;
+    sessionStorage.setItem(SESSION_COUNTED_KEY, 'true');
     const next = getVisitCount() + 1;
     localStorage.setItem(VISIT_KEY, String(next));
   } catch { /* ignore */ }
+}
+
+function wasShownRecently(): boolean {
+  try {
+    const ts = localStorage.getItem(SHOWN_KEY);
+    if (!ts) return false;
+    return Date.now() - parseInt(ts, 10) < IGNORE_COOLDOWN_DAYS * 24 * 60 * 60 * 1000;
+  } catch {
+    return false;
+  }
 }
 
 function wasDismissedRecently(): boolean {
@@ -86,17 +106,33 @@ export function IosPwaInstallPrompt() {
       }
     };
 
-    if (!isIosSafari() || isStandalone() || wasDismissedRecently() || getVisitCount() < 2 || isShownThisSession()) return;
-    
-    // 延遲 4 秒再跳，給使用者先看內容
-    const handle = setTimeout(() => {
+    if (!isIosSafari() || isStandalone() || wasDismissedRecently() || wasShownRecently() || getVisitCount() < 2 || isShownThisSession()) return;
+
+    // 停留滿 25 秒、而且已經往下捲過半個螢幕才出現，避免一進文章或工具頁就蓋住標題
+    let dwellDone = false;
+    let done = false;
+    const cleanup = () => {
+      clearTimeout(handle);
+      window.removeEventListener('scroll', tryShow);
+    };
+    function tryShow() {
+      if (done || !dwellDone) return;
+      if (window.scrollY < window.innerHeight * MIN_SCROLL_RATIO) return;
+      done = true;
+      cleanup();
       setShow(true);
       try {
         sessionStorage.setItem('akai-ios-pwa-prompt-shown-this-session', 'true');
+        localStorage.setItem(SHOWN_KEY, String(Date.now()));
       } catch (e) { }
-    }, 4000);
-    
-    return () => clearTimeout(handle);
+    }
+    const handle = setTimeout(() => {
+      dwellDone = true;
+      tryShow();
+    }, MIN_DWELL_MS);
+    window.addEventListener('scroll', tryShow, { passive: true });
+
+    return cleanup;
   }, []);
 
   if (!show) return null;
@@ -150,9 +186,10 @@ export function IosPwaInstallPrompt() {
             style={{
               flex: 1,
               padding: '7px 10px',
+              minHeight: 44,
               fontSize: 12,
               fontWeight: 800,
-              color: '#fff',
+              color: tokens.ink,
               background: tokens.accent,
               border: `2px solid ${tokens.ink}`,
               borderRadius: 8,
@@ -169,6 +206,7 @@ export function IosPwaInstallPrompt() {
             style={{
               flex: 1,
               padding: '7px 10px',
+              minHeight: 44,
               fontSize: 12,
               fontWeight: 700,
               color: tokens.muted2,
@@ -236,7 +274,7 @@ export function IosPwaInstallPrompt() {
                 padding: '10px 14px',
                 fontSize: 13,
                 fontWeight: 800,
-                color: '#fff',
+                color: tokens.ink,
                 background: tokens.accent,
                 border: `2px solid ${tokens.ink}`,
                 borderRadius: 10,

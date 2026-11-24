@@ -17,6 +17,8 @@ import { useEffect, useMemo, useState } from 'react';
 
 const CACHE_KEY = 'localToolsRankings';
 const SNAPSHOTS_KEY = 'toolStatsSnapshots';
+/** 監聽被暫時拒絕或斷線時，等待多久重新訂閱一次 */
+const RETRY_DELAY_MS = 5000;
 const KEEP_DAYS = 8; // 今天 + 7 天前，共 8 個日期足以算出 7 日 delta
 
 interface DailySnapshot {
@@ -136,6 +138,7 @@ export function useToolClickStats(): ToolClickStats {
   useEffect(() => {
     let unsubscribe: (() => void) | undefined;
     let cancelled = false;
+    let retryTimer: ReturnType<typeof setTimeout> | undefined;
 
     (async () => {
       try {
@@ -147,6 +150,7 @@ export function useToolClickStats(): ToolClickStats {
 
         const { collection, onSnapshot } = await import('firebase/firestore');
 
+        const subscribe = (attempt: number): void => {
         unsubscribe = onSnapshot(
           collection(db, 'toolUsageStats'),
           (snapshot) => {
@@ -210,10 +214,23 @@ export function useToolClickStats(): ToolClickStats {
             }
           },
           (err) => {
+            // 暫時被拒絕或斷線：5 秒後只重新訂閱一次，第二次仍失敗才放棄
+            const code = (err as { code?: string } | null)?.code;
+            if (!cancelled && attempt === 0 && (code === 'permission-denied' || code === 'unavailable')) {
+              if (unsubscribe) unsubscribe();
+              unsubscribe = undefined;
+              retryTimer = setTimeout(() => {
+                retryTimer = undefined;
+                if (!cancelled) subscribe(1);
+              }, RETRY_DELAY_MS);
+              return;
+            }
             console.warn('[useToolClickStats] Firestore 監聽失敗:', err);
             setIsLoading(false);
           }
         );
+        };
+        subscribe(0);
       } catch (err) {
         console.warn('[useToolClickStats] Firebase 初始化失敗:', err);
         setIsLoading(false);
@@ -222,6 +239,7 @@ export function useToolClickStats(): ToolClickStats {
 
     return () => {
       cancelled = true;
+      if (retryTimer) clearTimeout(retryTimer);
       if (unsubscribe) unsubscribe();
     };
   }, []);

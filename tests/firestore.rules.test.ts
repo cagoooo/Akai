@@ -77,6 +77,8 @@ beforeEach(async () => {
       setDoc(doc(db, 'toolUsageStats', '1'), { totalClicks: 20 }),
       setDoc(doc(db, '_analyticsRateLimits', 'existing'), { count: 1 }),
       setDoc(doc(db, '_analyticsEventClaims', 'existing'), { status: 'done' }),
+      setDoc(doc(db, 'achievements', 'first-visit'), { name: '初次到訪' }),
+      setDoc(doc(db, 'userAchievements', 'google-user'), { unlocked: ['first-visit'] }),
     ]);
   });
 });
@@ -217,6 +219,39 @@ describe('敏感集合 CRUD 權限矩陣', () => {
       updateDoc(doc(db, 'engagementEvents', 'existing'), { type: 'blog_read' }),
     );
     await expectPermission(canManage, deleteDoc(doc(db, 'engagementEvents', 'existing')));
+  });
+  it.each(identities)('achievements：%s 公開可讀，只有 Admin 可寫', async (identity) => {
+    const db = context(identity).firestore();
+    const canWrite: Permission = identity === 'admin' ? 'allow' : 'deny';
+    await expectPermission('allow', getDoc(doc(db, 'achievements', 'first-visit')));
+    await expectPermission(
+      canWrite,
+      setDoc(doc(db, 'achievements', `new-${identity}`), { name: '新成就' }),
+    );
+  });
+
+  it.each(identities)('userAchievements：%s 只能讀寫自己的文件（Admin 例外）', async (identity) => {
+    const db = context(identity).firestore();
+    const uidByIdentity: Record<Identity, string | null> = {
+      unauth: null,
+      anon: 'anon-user',
+      google: 'google-user',
+      admin: 'admin-user',
+    };
+    const ownId = uidByIdentity[identity];
+    if (ownId) {
+      await expectPermission('allow', setDoc(doc(db, 'userAchievements', ownId), { unlocked: [] }));
+      await expectPermission('allow', getDoc(doc(db, 'userAchievements', ownId)));
+    } else {
+      await expectPermission('deny', setDoc(doc(db, 'userAchievements', 'anon-user'), { unlocked: [] }));
+    }
+    // 別人的文件（beforeEach 預建 google-user 的資料）
+    const otherAllowed: Permission = identity === 'google' || identity === 'admin' ? 'allow' : 'deny';
+    await expectPermission(otherAllowed, getDoc(doc(db, 'userAchievements', 'google-user')));
+    await expectPermission(
+      identity === 'admin' ? 'allow' : 'deny',
+      setDoc(doc(db, 'userAchievements', 'someone-else'), { unlocked: ['x'] }),
+    );
   });
 });
 

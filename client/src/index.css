@@ -176,8 +176,15 @@
 
 /* 設定鍵盤焦點顯示 */
 :focus-visible {
-  outline: 3px solid var(--primary);
+  /* 2026-11-24 全站檢測修正：P1-home
+     --primary 是「220 80% 50%」這種不含 hsl() 的色值，原本直接 var(--primary) 會讓整條 outline 失效（焦點框全站看不到）。 */
+  outline: 3px solid hsl(var(--primary));
   outline-offset: 2px;
+}
+
+/* 高對比模式的 --primary 是十六進位色（#ffff00），不能再包 hsl() */
+.high-contrast :focus-visible {
+  outline-color: #ffff00;
 }
 
 /* Skip Link 樣式優化 */

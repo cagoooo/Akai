@@ -5,10 +5,10 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SITE_URL = 'https://cagoooo.github.io/Akai';
 const TODAY = new Date().toISOString().split('T')[0];
-// v3.6.181 起爬蟲版工具頁／文章頁改放完整內容；lastmod 取「發布日」與此日期較晚者，
-// 讓 Google 知道這批頁面在這天有實質更新（不要每次建置都用 TODAY，否則 lastmod 失去參考價值）
-const CRAWLER_CONTENT_UPDATED = '2026-11-03';
-const atLeastCrawlerUpdate = (date) => (date && date > CRAWLER_CONTENT_UPDATED ? date : CRAWLER_CONTENT_UPDATED);
+// 2026-11-24 全站檢測：lastmod 一律用「真實日期」——工具＝上架日（addedAt）、文章＝發布日（publishedAt）。
+// 先前曾把 11-03 當作下限，造成 272 個網址 lastmod 全是同一天，與文章 JSON-LD 的 dateModified 矛盾；
+// 沒有可靠日期來源的網址就不輸出 <lastmod>（比輸出錯的日期好）。
+const toDay = (value) => (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}/.test(value) ? value.slice(0, 10) : undefined);
 
 // Read tools.json
 const toolsPath = resolve(__dirname, '../client/public/api/tools.json');
@@ -54,7 +54,7 @@ let toolDetailCount = 0;
 for (const tool of tools) {
     urls.push({
         loc: `${SITE_URL}/tool/${tool.id}/`,
-        lastmod: atLeastCrawlerUpdate(tool.addedAt?.slice(0, 10)),
+        lastmod: toDay(tool.addedAt),
         changefreq: tool.addedAt ? 'monthly' : 'yearly',
         priority: tool.isInternal ? '0.72' : '0.78',
     });
@@ -82,12 +82,12 @@ if (existsSync(postsPath)) {
                 if (Number.isFinite(n)) SKIP_IDS.add(n);
             }
         }
-        if (slug) longformSlugs.push({ slug, publishedAt: publishedAt || TODAY });
+        if (slug) longformSlugs.push({ slug, publishedAt });
     }
     // Blog 列表頁
     urls.push({
         loc: `${SITE_URL}/blog/`,
-        lastmod: atLeastCrawlerUpdate(longformSlugs[0]?.publishedAt),
+        lastmod: longformSlugs.map((p) => toDay(p.publishedAt)).filter(Boolean).sort().pop(),
         changefreq: 'weekly',
         priority: '0.85',
     });
@@ -95,7 +95,7 @@ if (existsSync(postsPath)) {
     for (const { slug, publishedAt } of longformSlugs) {
         urls.push({
             loc: `${SITE_URL}/blog/${slug}/`,
-            lastmod: atLeastCrawlerUpdate(publishedAt),
+            lastmod: toDay(publishedAt),
             changefreq: 'monthly',
             priority: '0.8',
         });
@@ -113,7 +113,7 @@ for (const tool of tools) {
     if (tool.isInternal || SKIP_IDS.has(tool.id)) continue;
     urls.push({
         loc: `${SITE_URL}/blog/${makeMiniSlug(tool)}/`,
-        lastmod: tool.addedAt ? tool.addedAt.slice(0, 10) : TODAY,
+        lastmod: toDay(tool.addedAt),
         changefreq: 'monthly',
         priority: '0.65',
     });
@@ -151,8 +151,8 @@ ${uniqueUrls
     .map(
         (u) => `  <url>
     <loc>${escapeXml(u.loc)}</loc>
-    <lastmod>${u.lastmod}</lastmod>
-    <changefreq>${u.changefreq}</changefreq>
+${u.lastmod ? `    <lastmod>${u.lastmod}</lastmod>
+` : ''}    <changefreq>${u.changefreq}</changefreq>
     <priority>${u.priority}</priority>
   </url>`
     )

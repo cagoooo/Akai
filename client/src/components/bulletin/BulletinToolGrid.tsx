@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import type React from 'react';
 import { BulletinToolCard } from './BulletinToolCard';
 import type { EducationalTool } from '@/lib/data';
 
@@ -7,6 +8,12 @@ interface Props {
   highlightedToolId?: number | null;
   /** 篩選 / 排序條件；變了才回到第一批（點擊數即時更新不算，避免捲到一半被打回去） */
   resetKey?: string;
+  /** 沒有結果時的說明：搜尋字、是否只看收藏；未提供則只顯示通用文字 */
+  emptyContext?: { query: string; favoritesOnly: boolean; category: string | null };
+  /** 只清掉搜尋字 */
+  onClearSearch?: () => void;
+  /** 清掉搜尋、分類與收藏篩選，回到全部工具 */
+  onShowAll?: () => void;
 }
 
 /**
@@ -21,7 +28,7 @@ const LOAD_AHEAD = '1200px';
  * 拍立得工具網格：每張卡有略微隨機的傾斜與圖釘色，營造手工公佈欄感
  * 使用工具 ID 作為傾斜種子，確保每次渲染相同卡片的傾斜一致（避免閃爍）
  */
-export function BulletinToolGrid({ tools, highlightedToolId = null, resetKey = '' }: Props) {
+export function BulletinToolGrid({ tools, highlightedToolId = null, resetKey = '', emptyContext, onClearSearch, onShowAll }: Props) {
   const [limit, setLimit] = useState(BATCH);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
@@ -87,18 +94,50 @@ export function BulletinToolGrid({ tools, highlightedToolId = null, resetKey = '
   }, [visibleTools]);
 
   if (tools.length === 0) {
+    const query = emptyContext?.query?.trim() ?? '';
+    const noFavorites = !!emptyContext?.favoritesOnly && !query && !emptyContext?.category;
+    const message = query
+      ? `找不到和「${query}」有關的工具`
+      : noFavorites
+        ? '還沒有收藏任何工具'
+        : '公佈欄上還沒有符合條件的工具';
+    const hint = query
+      ? '換個關鍵字試試，或回到全部工具逛逛。'
+      : noFavorites
+        ? '在工具卡右下角點 ♡，就能把常用的工具收藏在這裡。'
+        : '換個分類試試，或回到全部工具逛逛。';
+    const btn: React.CSSProperties = {
+      minHeight: 44,
+      padding: '8px 18px',
+      borderRadius: 10,
+      border: '2.5px solid #1a1a1a',
+      fontSize: 14,
+      fontWeight: 800,
+      fontFamily: 'inherit',
+      cursor: 'pointer',
+      boxShadow: '3px 3px 0 rgba(0,0,0,.3)',
+    };
     return (
       <div
         data-tour="tools-grid"
-        style={{
-          textAlign: 'center',
-          padding: '80px 20px',
-          color: '#8b7356',
-          fontSize: 16,
-          fontStyle: 'italic',
-        }}
+        role="status"
+        data-testid="tool-grid-empty"
+        style={{ textAlign: 'center', padding: '56px 20px 72px', color: '#5a4a32' }}
       >
-        📌 公佈欄上還沒有符合條件的工具
+        <div style={{ fontSize: 18, fontWeight: 800, color: '#1a1a1a' }}>📌 {message}</div>
+        <div style={{ fontSize: 14, marginTop: 8 }}>{hint}</div>
+        <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginTop: 18 }}>
+          {query && onClearSearch && (
+            <button type="button" onClick={onClearSearch} style={{ ...btn, background: '#fff27a', color: '#1a1a1a' }}>
+              清除搜尋
+            </button>
+          )}
+          {onShowAll && (
+            <button type="button" onClick={onShowAll} style={{ ...btn, background: '#fff', color: '#1a1a1a' }}>
+              看全部工具
+            </button>
+          )}
+        </div>
       </div>
     );
   }

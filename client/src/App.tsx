@@ -22,6 +22,7 @@ const ToolIndexAI = lazy(() => import("@/pages/ToolIndexAI").then(module => ({ d
 // Blog（教學情境長文）
 const BlogList = lazy(() => import("@/pages/BlogList").then(module => ({ default: module.BlogList })));
 const BlogPost = lazy(() => import("@/pages/BlogPost").then(module => ({ default: module.BlogPost })));
+const NotFound = lazy(() => import("@/pages/NotFound").then(module => ({ default: module.NotFound })));
 const BlogDraftPreview = lazy(() => import("@/pages/BlogDraftPreview").then(module => ({ default: module.BlogDraftPreview })));
 const AdminAuth = lazy(() => import("@/components/AdminAuth").then(module => ({ default: module.AdminAuth })));
 const TriviaDialog = lazy(() => import("@/components/TriviaDialog").then(module => ({ default: module.TriviaDialog })));
@@ -254,6 +255,10 @@ function App() {
                         {/* admin only - 草稿即時預覽 */}
                         <Route path="/draft">
                           <BlogDraftPreview />
+                        </Route>
+                        {/* 其他所有網址：找不到頁面 */}
+                        <Route>
+                          <NotFound />
                         </Route>
                       </Switch>
                     </Suspense>

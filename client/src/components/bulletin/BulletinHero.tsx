@@ -21,7 +21,7 @@ interface BulletinHeroProps {
 export function BulletinHero({ toolCount }: BulletinHeroProps = {}) {
   // 動態讀取當前版本（顯示在雙膠帶的 NEW 膠帶上）
   const { localVersion } = useVersionCheck({ intervalMs: 60 * 60 * 1000 });
-  const displayVersion = localVersion?.version ? `v${localVersion.version}` : 'v3.6.1';
+  const displayVersion = localVersion?.version ? `v${localVersion.version}` : '最新版';
 
   // 工具數量：父層傳入優先，未傳時用近似值（避免 SSR / 首次渲染顯示 0）
   // 數量取整到 5 的倍數附近（顯示「80+」「85+」更自然）

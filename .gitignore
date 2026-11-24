@@ -43,7 +43,8 @@ client/public/og-preview-*.webp
 
 # 設計交接素材（本機保留，不入版控）
 handoff/
-design_handoff_*tmp/
+design_handoff_*
+tmp/
 _handoff_*/
 
 # Claude Code worktrees / 本機暫存
@@ -60,3 +61,14 @@ page25_*
 firebase-debug.log
 scratch_audio/
 coverage/
+
+# 2026-11-24 全站檢測：本機暫存輸出（不入版控）
+debug.log
+firestore-debug.log
+test-results/
+school-ai-proposal-browser-fill/
+/stats.html
+/affected_files.txt
+/check_out.txt
+/log.txt
+/ts_errors.txt

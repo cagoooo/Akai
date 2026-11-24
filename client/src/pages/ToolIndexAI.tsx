@@ -3,12 +3,12 @@
  *
  * 在 /tool/100 提供「描述你要做什麼 → 從 100 款工具中找最匹配的」體驗。
  *
- * Phase 1（本版）：純前端 fuse.js fuzzy match
+ * 字面比對（預設）：純前端 fuse.js fuzzy match
  *   - 比對欄位：title (weight 3) > tags (2) > description (1) > detailedDescription (0.5)
  *   - top 5 即時推薦
  *   - 高亮匹配關鍵字
  *
- * Phase 2（未來）：可選 Gemini Embedding 語意搜尋（Cloud Function 接 query embedding，前端算 cosine similarity）
+ * 語意搜尋（測試版，tool-embeddings.json 存在才顯示切換）：Cloud Function embedQuery 取得 query 向量，前端算 cosine similarity；失敗退回字面比對
  */
 
 import { useEffect, useMemo, useState } from 'react';
@@ -240,9 +240,10 @@ export function ToolIndexAI() {
         path="/tool/100/"
       />
 
-      <BulletinHeader />
+      <BulletinHeader titleAs="div" />
 
-      <div
+      <main
+        id="main-content"
         style={{
           maxWidth: 1100,
           margin: '0 auto',
@@ -381,7 +382,7 @@ export function ToolIndexAI() {
                     fontSize: 12,
                     fontFamily: tokens.font.tc,
                     fontWeight: 800,
-                    color: searchMode === 'fuzzy' ? '#fff' : tokens.ink,
+                    color: tokens.ink,
                     background: searchMode === 'fuzzy' ? tokens.accent : 'transparent',
                     border: 'none',
                     cursor: 'pointer',
@@ -489,11 +490,12 @@ export function ToolIndexAI() {
         >
           <strong style={{ color: tokens.ink, fontSize: 13 }}>🔬 推薦原理</strong>
           <p style={{ margin: '6px 0 0', lineHeight: 1.6 }}>
-            Phase 1（目前）：純前端 fuse.js 模糊比對，依「標題 &gt; 標籤 &gt; 描述」加權排序。
-            未來 Phase 2 會接 Gemini Embedding 語意搜尋，讓「我想讓學生開心」這類抽象描述也能找到對的工具。
+            預設的「字面比對」直接在你的瀏覽器裡跑（fuse.js 模糊比對），依「標題 &gt; 標籤 &gt; 描述」加權排序，不需要連線。
+            另外有「語意搜尋（測試版）」：把你的句子送去 Gemini 轉成向量，和每個工具的介紹比對相似度，
+            讓「我想讓害羞學生開口」這類抽象描述也能找到對的工具；需要連線，失敗時會自動改回字面比對。
           </p>
         </div>
-      </div>
+      </main>
 
       <BulletinFooter />
       <BulletinBackToTop />
@@ -843,7 +845,7 @@ function RecommendCard({
                 top: -6,
                 left: -6,
                 background: tokens.accent,
-                color: '#fff',
+                color: tokens.ink,
                 border: `2px solid ${tokens.ink}`,
                 borderRadius: 999,
                 width: 28,

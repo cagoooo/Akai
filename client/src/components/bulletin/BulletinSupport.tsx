@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
 import { Tape } from '@/components/primitives/Tape';
 import { trackEvent } from '@/lib/analytics';
+import { useScrollMoving } from './useScrollMoving';
 
 /** 阿凱老師的 BobaMe 贊助頁（AnyoneLab 平台，新台幣、可匯回台灣銀行帳戶） */
 export const SUPPORT_URL = 'https://cagoo.bobaboba.me';
@@ -23,10 +24,13 @@ export function SupportDialog({
   open,
   onOpenChange,
   source,
+  returnFocusRef,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   source: SupportSource;
+  /** 關閉後要把鍵盤焦點還給哪顆按鈕（打開說明窗的那顆） */
+  returnFocusRef?: React.RefObject<HTMLElement | null>;
 }) {
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
@@ -41,6 +45,11 @@ export function SupportDialog({
         />
         <DialogPrimitive.Content
           className="bulletin-support-dialog"
+          onCloseAutoFocus={(event) => {
+            if (!returnFocusRef?.current) return;
+            event.preventDefault();
+            returnFocusRef.current.focus({ preventScroll: true });
+          }}
           style={{
             position: 'fixed',
             left: '50%',
@@ -176,6 +185,8 @@ export function SupportDialog({
 export function BulletinSupportButton() {
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
+  const moving = useScrollMoving();
+  const fabRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleScroll = () => setVisible(window.scrollY > 500);
@@ -192,7 +203,9 @@ export function BulletinSupportButton() {
   return (
     <>
       <button
+        ref={fabRef}
         type="button"
+        data-moving={moving ? '1' : undefined}
         onClick={openDialog}
         aria-label="請阿凱老師喝杯珍奶（贊助說明）"
         title="請阿凱老師喝杯珍奶"
@@ -224,7 +237,7 @@ export function BulletinSupportButton() {
       >
         <span aria-hidden="true">🧋</span>
       </button>
-      {open && <SupportDialog open={open} onOpenChange={setOpen} source="floating" />}
+      <SupportDialog open={open} onOpenChange={setOpen} source="floating" returnFocusRef={fabRef} />
     </>
   );
 }
@@ -234,10 +247,12 @@ export function BulletinSupportButton() {
  */
 export function FooterSupportNote({ noteStyle }: { noteStyle: React.CSSProperties }) {
   const [open, setOpen] = useState(false);
+  const noteRef = useRef<HTMLButtonElement>(null);
 
   return (
     <>
       <button
+        ref={noteRef}
         type="button"
         className="sticker-card"
         onClick={() => {
@@ -265,7 +280,7 @@ export function FooterSupportNote({ noteStyle }: { noteStyle: React.CSSPropertie
           工具永久免費・自由贊助 →
         </div>
       </button>
-      {open && <SupportDialog open={open} onOpenChange={setOpen} source="footer" />}
+      <SupportDialog open={open} onOpenChange={setOpen} source="footer" returnFocusRef={noteRef} />
     </>
   );
 }

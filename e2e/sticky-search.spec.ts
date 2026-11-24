@@ -89,7 +89,8 @@ for (const width of [1280, 390]) {
     await input.fill('完全不存在的工具關鍵字7c91f0');
     const emptyResult = page.locator('[data-tour="tools-grid"]');
     await expect(page.locator('.bulletin-tool-card')).toHaveCount(0);
-    await expect(emptyResult).toHaveText('📌 公佈欄上還沒有符合條件的工具');
+    await expect(emptyResult).toContainText('找不到和「完全不存在的工具關鍵字7c91f0」有關的工具');
+    await expect(emptyResult.getByRole('button', { name: '清除搜尋' })).toBeVisible();
     await expect(emptyResult).toBeInViewport();
     await expect(input).toBeFocused();
     await expect.poll(async () => {

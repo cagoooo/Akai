@@ -257,14 +257,14 @@ export function BulletinVisitorCounter() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'baseline',
-            fontSize: 10.5,
+            fontSize: 12,
             color: tokens.muted2,
             marginBottom: 4,
             fontWeight: 700,
           }}
         >
           <span>{eta ? `下個里程碑・${eta}` : '下個里程碑'}</span>
-          <span style={{ fontFamily: tokens.font.en, fontWeight: 900, color: tokens.accent }}>
+          <span style={{ fontFamily: tokens.font.en, fontWeight: 900, color: '#9a3412' }}>
             🏆 {nextMilestone.toLocaleString()}
           </span>
         </div>
@@ -278,6 +278,7 @@ export function BulletinVisitorCounter() {
             border: '1px solid rgba(0,0,0,.18)',
           }}
           role="progressbar"
+          aria-label="訪客人次里程碑進度"
           aria-valuemin={0}
           aria-valuemax={nextMilestone}
           aria-valuenow={Math.min(totalVisits, nextMilestone)}

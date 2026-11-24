@@ -1,4 +1,5 @@
 import { useState, useMemo, useRef, lazy, Suspense, useEffect, useCallback } from "react";
+import { Link } from "wouter";
 import { m as motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from "@tanstack/react-query";
 import { ToolCard } from "@/components/ToolCard";
@@ -384,6 +385,14 @@ export function Home() {
             <div className="absolute bottom-0 left-0 w-24 h-24 sm:w-36 sm:h-36 bg-purple-400/20 rounded-full blur-2xl" />
 
             <div className="relative z-10 text-center">
+              {/* 2026-11-24：經典版沒有回新版的入口，補一個明顯但不搶戲的連結 */}
+              <Link
+                href="/"
+                className="mb-3 inline-flex min-h-[44px] items-center gap-2 rounded-full border-2 border-gray-900 bg-white px-4 text-sm font-bold text-gray-900 shadow-[3px_3px_0_rgba(0,0,0,.35)] transition-transform hover:-translate-y-0.5"
+              >
+                <span aria-hidden="true">🏠</span>
+                回到新版首頁（公佈欄）
+              </Link>
               {/* 主標題 */}
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-white tracking-tight mb-2 sm:mb-3">
                 ✨ 教育科技創新專區 ✨

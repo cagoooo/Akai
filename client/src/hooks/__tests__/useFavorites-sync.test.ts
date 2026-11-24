@@ -75,11 +75,11 @@ describe('收藏訂閱的身分交接', () => {
         localStorage.setItem('akai-favorites', '[10]');
         state.getDoc.mockRejectedValue(Object.assign(new Error('denied'), { code: 'permission-denied' }));
         const { result } = renderHook(() => useFavorites());
-        await waitFor(() => expect(warning).toHaveBeenCalledOnce(), { timeout: 3000 });
-        expect(state.getDoc).toHaveBeenCalledTimes(2);
+        await waitFor(() => expect(warning).toHaveBeenCalledOnce(), { timeout: 16000 });
+        expect(state.getDoc).toHaveBeenCalledTimes(4);
         expect(result.current.favorites).toEqual([10]); expect(state.setDoc).not.toHaveBeenCalled();
         expect(state.onSnapshot).not.toHaveBeenCalled(); warning.mockRestore();
-    });
+    }, 20000);
 
     it('剛換新身分、另一分頁尚未同步而被拒時，重讀成功就不回報', async () => {
         const warning = vi.spyOn(console, 'warn').mockImplementation(() => {});

@@ -40,6 +40,13 @@ export const BulletinSearchBar = forwardRef<HTMLInputElement, Props>(function Bu
   // 'strong' → 'calm' → 'off'；已經用過搜尋的分頁直接 'off'
   const [attention, setAttention] = useState<'strong' | 'calm' | 'off'>(() => (hasNoticedSearch() ? 'off' : 'strong'));
   const [isFocused, setIsFocused] = useState(false);
+  // 提示氣泡只在頁面頂端附近顯示，捲離就收起（捲回來才再出現）
+  const [nearTop, setNearTop] = useState(() => (typeof window === 'undefined' ? true : window.scrollY < 160));
+  useEffect(() => {
+    const onScroll = () => setNearTop(window.scrollY < 160);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
   const [placeholder, setPlaceholder] = useState(DEFAULT_PLACEHOLDER);
   const markNoticed = () => {
     setAttention('off');
@@ -217,7 +224,7 @@ export const BulletinSearchBar = forwardRef<HTMLInputElement, Props>(function Bu
           </button>
         )}
         <button className="bulletin-searchbar__submit" type="submit" aria-label="查看搜尋結果">搜尋</button>
-        {attention === 'strong' && (
+        {attention === 'strong' && nearTop && (
           <button
             type="button"
             className="bulletin-searchbar__hint"

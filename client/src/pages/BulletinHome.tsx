@@ -162,6 +162,20 @@ export function BulletinHome() {
     }
   }, []);
 
+  // 告訴「第一次來嗎？」導覽提示卡：目前有沒有別的彈窗開著或排隊中（精靈、新上架展示、說明窗…），
+  // 有的話導覽卡先等，避免三個彈窗疊在一起。導覽卡在 TourProvider（頁面最外層），所以用 body 屬性＋事件溝通。
+  const homePopupBusy =
+    showAudienceWizard || wizardAutoPending || showLatestTools || showShortcutsDialog ||
+    showWishingWellFromShortcut || highlightedToolId !== null;
+  useEffect(() => {
+    document.body.dataset.homePopup = homePopupBusy ? 'busy' : 'idle';
+    window.dispatchEvent(new Event('home-popup-change'));
+  }, [homePopupBusy]);
+  useEffect(() => () => {
+    delete document.body.dataset.homePopup;
+    window.dispatchEvent(new Event('home-popup-change'));
+  }, []);
+
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const { favorites, toggleFavorite } = useFavorites();
@@ -509,6 +523,13 @@ export function BulletinHome() {
             tools={sortedTools}
             highlightedToolId={highlightedToolId}
             resetKey={`${searchQuery}|${selectedCategory ?? ''}|${showFavorites}|${currentSort}`}
+            emptyContext={{ query: searchQuery, favoritesOnly: showFavorites, category: selectedCategory }}
+            onClearSearch={() => setSearchQuery('')}
+            onShowAll={() => {
+              setSearchQuery('');
+              setSelectedCategory(null);
+              setShowFavorites(false);
+            }}
           />
         )}
       </div>

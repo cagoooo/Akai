@@ -1,9 +1,9 @@
 # 科技教育創新專區 · 阿凱老師
 
-![Version](https://img.shields.io/badge/version-3.6.255-brightgreen.svg)
+![Version](https://img.shields.io/badge/version-3.6.256-brightgreen.svg)
 ![Tools](https://img.shields.io/badge/tools-140%2B-orange.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Node.js](https://img.shields.io/badge/Node.js-20.x-green.svg)
+![Node.js](https://img.shields.io/badge/Node.js-22.x-green.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.6.3-blue.svg)
 ![React](https://img.shields.io/badge/React-18.3-61dafb.svg)
 
@@ -65,7 +65,7 @@
 |------|------|------|
 | **React** | 18.3.1 | 前端框架 |
 | **TypeScript** | 5.6.3 | 類型安全 |
-| **Vite** | 5.4.9 | 快速建置工具 |
+| **Vite** | 6.x | 快速建置工具 |
 | **TailwindCSS** | 3.4.14 | CSS 框架 |
 | **Radix UI** | Latest | 無障礙元件庫 |
 | **Framer Motion** | 11.18.2 | 動畫效果 |
@@ -179,7 +179,7 @@ H:\Akai\
 
 ## 💻 環境需求
 
-- **Node.js** >= 20.x
+- **Node.js** >= 22.x
 - **npm** >= 9.x 或 **pnpm**
 - **PostgreSQL** 16.x（選用，用於雲端部署）
 - **Git**
@@ -355,7 +355,7 @@ npm run dev
 建立 `Dockerfile`：
 
 ```dockerfile
-FROM node:20-alpine
+FROM node:22-alpine
 
 WORKDIR /app
 COPY package*.json ./

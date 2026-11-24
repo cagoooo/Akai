@@ -107,10 +107,10 @@ test('列表不依賴文章全文，搜尋才補載且仍可開文章', async ({
     await expect(page.getByText('按發布日期排序', { exact: true })).toBeVisible();
     await expect(page.locator('.bp-trend-meta .views')).toHaveCount(0);
     await expect(page.getByText('熱搜 #1', { exact: true })).toHaveCount(0);
-    await page.getByRole('tab', { name: /Firebase Hosting/ }).click();
+    await page.getByRole('button', { name: /Firebase Hosting/ }).click();
     await expect(page).toHaveURL(/platform=firebase/);
     expect(requested).toBe(false);
-    await page.getByRole('tab', { name: /^全部/ }).click();
+    await page.getByRole('button', { name: /^全部/ }).click();
     await page.getByTestId('blog-search-input').fill('PIRLS');
     await expect(page.getByRole('status')).toContainText('正在補齊全文搜尋');
     await expect.poll(() => requested).toBe(true);

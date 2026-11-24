@@ -521,8 +521,8 @@ export function ToolDetail() {
                                 className="gap-2 text-sm sm:text-base font-medium hover:bg-gray-100 rounded-xl"
                             >
                                 <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-                                <span className="hidden sm:inline">返回首頁</span>
-                                <span className="sm:hidden">返回</span>
+                                <span className="hidden sm:inline">回到新版首頁</span>
+                                <span className="sm:hidden">新版首頁</span>
                             </Button>
                         </motion.div>
 

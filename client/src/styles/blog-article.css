@@ -2284,3 +2284,64 @@
   .bp-hero-card:hover::before { animation: none !important; }
   .bp-trending-flame { animation: none !important; }
 }
+
+/* 2026-11-24 全站檢測修正：P2-pages — 部落格列表／文章左欄小字對比與字級
+   日期、小標、平台標籤原本對比只有 2.8～3.8:1、字級 10～11px；改深色並放大到 12px 以上 */
+.bp-list-card__meta,
+.bp-feat-meta,
+.bp-trend-meta,
+.bp-lrail-progress__label {
+  color: #6b5d45;
+}
+.bp-list-card__meta { font-size: 12px; }
+.bp-feat-meta { font-size: 12px; }
+.bp-trend-meta { font-size: 12px; }
+.bp-trend-meta .badge { font-size: 12px; }
+.bp-list-card__kicker,
+.bp-feat-kicker {
+  color: #a8530f;
+  font-size: 12px;
+  max-width: calc(100% - 120px);
+}
+.bp-trend-kicker {
+  color: #6b5d45;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+.bp-list-card__platform,
+.bp-feat-platform,
+.bp-hero-platform {
+  font-size: 12px;
+}
+.bp-list-tag { font-size: 12px; }
+.bp-lrail-progress__label {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+}
+@media (max-width: 720px) {
+  .bp-trend-meta { font-size: 12px; }
+}
+
+/* 文章頁：上一篇／下一篇標籤、左欄標籤、小標等同樣調深並放大到 12px */
+.bp-pncard__label,
+.bp-lrail-share-label,
+.bp-related__label,
+.bp-lrail-progress__ticks span {
+  color: #6b5d45;
+  font-size: 12px;
+}
+.bp-lrail-card__label,
+.bp-lrail-progress__pct,
+.bp-hero__kicker {
+  color: #a8530f;
+}
+.bp-lrail-card__label { font-size: 12px; }
+
+/* 部落格（列表與文章）範圍內把「次要文字灰」與「深橘」調深到對比 4.5:1 以上；
+   只作用在 class 含 bp- 的元素，不影響首頁與其他頁面使用同名色票 */
+[class*="bp-"],
+.bulletin-blog-list-container {
+  --accent-deep: #a8530f;
+  --ink-faint: #6b5d45;
+}
+.bp-mtoc__btn-label { font-size: 12px; }

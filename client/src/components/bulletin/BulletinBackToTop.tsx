@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
+import { useScrollMoving } from './useScrollMoving';
 
 /**
  * cork 風格「回到頂部」按鈕
@@ -15,6 +16,7 @@ import { Pin } from '@/components/primitives/Pin';
  */
 export function BulletinBackToTop() {
   const [visible, setVisible] = useState(false);
+  const moving = useScrollMoving();
 
   useEffect(() => {
     const handleScroll = () => setVisible(window.scrollY > 500);
@@ -38,6 +40,7 @@ export function BulletinBackToTop() {
       aria-label="回到頁面頂端"
       title="回到頂端"
       className="bulletin-back-to-top"
+      data-moving={moving ? '1' : undefined}
       style={{
         position: 'fixed',
         right: 24,

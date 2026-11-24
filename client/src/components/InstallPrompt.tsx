@@ -33,7 +33,7 @@ export function InstallPrompt() {
         const wasDismissed = localStorage.getItem('pwa-install-dismissed');
         if (wasDismissed) {
             const dismissedTime = parseInt(wasDismissed, 10);
-            // 7 天後再次顯示
+            // 14 天後再次顯示（見 INSTALL_PROMPT_COOLDOWN_MS）
             if (Date.now() - dismissedTime < INSTALL_PROMPT_COOLDOWN_MS) {
                 setDismissed(true);
                 return;
@@ -43,8 +43,18 @@ export function InstallPrompt() {
         const handleBeforeInstallPrompt = (e: Event) => {
             e.preventDefault();
             setDeferredPrompt(e as BeforeInstallPromptEvent);
-            // 延遲顯示，避免干擾使用者
-            setTimeout(() => setShowPrompt(true), 5000);
+            // 2026-11-24 起：停留滿 25 秒、且已往下捲過半個螢幕才顯示（原本 5 秒就跳，會蓋住剛打開的內容）
+            let dwellDone = false;
+            const tryShow = () => {
+                if (!dwellDone || window.scrollY < window.innerHeight * 0.5) return;
+                window.removeEventListener('scroll', tryShow);
+                setShowPrompt(true);
+            };
+            setTimeout(() => {
+                dwellDone = true;
+                tryShow();
+            }, 25000);
+            window.addEventListener('scroll', tryShow, { passive: true });
         };
 
         const handleAppInstalled = () => {

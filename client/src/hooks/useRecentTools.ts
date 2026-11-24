@@ -38,7 +38,9 @@ function saveToLocalStorage(recent: number[]): void {
 // 多分頁時 Firestore 連線由另一個分頁代送；剛換成新的匿名身分時，那個分頁要等跨分頁同步（約 1 秒）
 // 才拿到新身分，這段期間讀自己的紀錄會被規則擋下。被拒時等身分同步後重讀一次，仍被拒才回報
 // （和 useFavorites 同一個狀況：2026-11-03 JAVASCRIPT-REACT-1E；2026-11-11 JAVASCRIPT-REACT-X 出現在這裡）。
-const PERMISSION_RETRY_DELAY_MS = 1500;
+// 2026-11-24：背景分頁會被瀏覽器放慢，同步可能超過 1.5 秒（JAVASCRIPT-REACT-X 在 3.6.254 再次出現：登入後 1.7 秒內兩次都被拒，
+// 緊接著的訂閱卻成功）。改成最多再讀三次、間隔逐次拉長，三次都被拒才回報。
+const PERMISSION_RETRY_DELAYS_MS = [1500, 4000, 8000];
 
 function isPermissionDenied(e: unknown): boolean {
     return (e as { code?: unknown } | null)?.code === 'permission-denied';
@@ -47,7 +49,7 @@ function isPermissionDenied(e: unknown): boolean {
 async function loadFromFirestore(
     uid: string,
     isCurrent: () => boolean = () => true,
-    retried = false,
+    attempt = 0,
 ): Promise<number[] | null> {
     try {
         const { db } = await import('@/lib/firebase');
@@ -64,10 +66,10 @@ async function loadFromFirestore(
         }
         return [];
     } catch (e) {
-        if (!retried && isPermissionDenied(e) && isCurrent()) {
-            await new Promise((resolve) => setTimeout(resolve, PERMISSION_RETRY_DELAY_MS));
+        if (attempt < PERMISSION_RETRY_DELAYS_MS.length && isPermissionDenied(e) && isCurrent()) {
+            await new Promise((resolve) => setTimeout(resolve, PERMISSION_RETRY_DELAYS_MS[attempt]));
             if (!isCurrent()) return null;
-            return loadFromFirestore(uid, isCurrent, true);
+            return loadFromFirestore(uid, isCurrent, attempt + 1);
         }
         if (isCurrent()) console.warn('[useRecentTools] Firestore load 失敗:', e);
         return null;

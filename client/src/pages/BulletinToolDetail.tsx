@@ -169,8 +169,7 @@ function RelatedTools({ currentTool, tools }: { currentTool: EducationalTool; to
                   {previewSrc ? (
                     <img
                       src={previewSrc}
-                    fetchPriority="high"
-                    decoding="async"
+                      decoding="async"
                       alt={tool.title}
                       loading="lazy"
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
@@ -376,11 +375,17 @@ export function BulletinToolDetail() {
     }
   };
 
+  // 桌機沒有系統分享選單時，「分享」和「複製連結」做的是同一件事，所以只在能叫出系統分享的手機／平板上顯示「分享」
+  const canNativeShare =
+    typeof navigator !== 'undefined' &&
+    typeof navigator.share === 'function' &&
+    'ontouchstart' in window &&
+    window.innerWidth < 1025;
+
   const handleShare = async () => {
     const shareUrl = `${window.location.origin}${window.location.pathname}`;
     const shareData = { title: tool.title, text: tool.description, url: shareUrl };
-    const isMobile = 'ontouchstart' in window && window.innerWidth < 768;
-    if (isMobile && navigator.share && navigator.canShare?.(shareData)) {
+    if (canNativeShare && navigator.canShare?.(shareData)) {
       try {
         await navigator.share(shareData);
       } catch (err: any) {
@@ -396,6 +401,7 @@ export function BulletinToolDetail() {
       <PageHead mode="tool" tool={tool} />
 
       <BulletinBoard>
+        <main id="main-content">
         {/* 頂部導覽列（cork 上的膠帶） */}
         <header
           className="bulletin-detail-nav"
@@ -481,7 +487,8 @@ export function BulletinToolDetail() {
           }}
         >
           {/* 大拍立得 */}
-          <div style={{ position: 'relative', justifySelf: 'center', maxWidth: 500 }}>
+          {/* width:100% 讓欄寬一開始就固定；否則拍立得會先依標題文字縮成窄框，圖片載入後才撐開，把下面的統計便利貼往下推（CLS） */}
+          <div style={{ position: 'relative', justifySelf: 'center', width: '100%', maxWidth: 500, minWidth: 0 }}>
             <div
               style={{
                 background: tokens.paper,
@@ -510,8 +517,11 @@ export function BulletinToolDetail() {
                   <img
                     src={previewSrc}
                     fetchPriority="high"
+                    loading="eager"
                     decoding="async"
                     alt={tool.title}
+                    width={800}
+                    height={640}
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     onError={() => {
                       setDetailImgError(true);
@@ -598,7 +608,7 @@ export function BulletinToolDetail() {
                 onClick={handleUseTool}
                 style={{
                   background: tokens.accent,
-                  color: '#fff',
+                  color: tokens.ink, // 黑字配橘底約 7:1；原白字只有 2.55:1
                   border: '2.5px solid #1a1a1a',
                   padding: '14px 26px',
                   borderRadius: 10,
@@ -635,27 +645,29 @@ export function BulletinToolDetail() {
               >
                 <span>📋 複製連結</span>
               </button>
+              {canNativeShare && (
               <button
-                type="button"
-                onClick={handleShare}
-                style={{
-                  background: tokens.paper,
-                  color: tokens.ink,
-                  border: '2.5px solid #1a1a1a',
-                  padding: '14px 20px',
-                  borderRadius: 10,
-                  fontSize: 14,
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  fontFamily: tokens.font.tc,
-                  boxShadow: '3px 3px 0 rgba(0,0,0,.3)',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 6,
-                }}
-              >
-                🔗 分享
-              </button>
+                  type="button"
+                  onClick={handleShare}
+                  style={{
+                    background: tokens.paper,
+                    color: tokens.ink,
+                    border: '2.5px solid #1a1a1a',
+                    padding: '14px 20px',
+                    borderRadius: 10,
+                    fontSize: 14,
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    fontFamily: tokens.font.tc,
+                    boxShadow: '3px 3px 0 rgba(0,0,0,.3)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 6,
+                  }}
+                >
+                  🔗 分享
+                </button>
+              )}
             </div>
 
             {/* 統計便利貼（搬到按鈕下方 — 對齊拍立得整列視覺中軸） */}
@@ -696,7 +708,7 @@ export function BulletinToolDetail() {
           </div>
 
           {/* 右側：標題 + 描述 + 標籤 */}
-          <div>
+          <div style={{ minWidth: 0 }}>
             {/* 標題膠帶 */}
             <div style={{ marginBottom: 16 }}>
               <Tape color={tokens.note.yellowBright} angle={-2} width={200}>
@@ -759,7 +771,7 @@ export function BulletinToolDetail() {
                   gap: 8,
                   padding: '8px 16px',
                   background: tokens.accent,
-                  color: '#fff',
+                  color: tokens.ink,
                   border: '2px solid #1a1a1a',
                   borderRadius: 999,
                   fontSize: 13,
@@ -962,6 +974,7 @@ export function BulletinToolDetail() {
         <div style={{ padding: '0 60px' }}>
           <BulletinRelatedTools current={tool} allTools={allTools || []} limit={3} />
         </div>
+        </main>
 
         <BulletinFooter />
       </BulletinBoard>

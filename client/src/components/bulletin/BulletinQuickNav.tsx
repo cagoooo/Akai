@@ -91,7 +91,7 @@ export function BulletinQuickNav({ onFindTools }: { onFindTools?: () => void } =
               gap: 5,
               padding: isMobile ? '6px 10px' : '5px 12px',
               background: tokens.accent,
-              color: '#fff',
+              color: tokens.ink,
               border: `2px solid ${tokens.ink}`,
               borderRadius: 8,
               fontSize: isMobile ? 12 : 13,

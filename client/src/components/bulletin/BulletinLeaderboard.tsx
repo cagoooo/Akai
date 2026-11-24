@@ -227,6 +227,7 @@ export function BulletinLeaderboard({ tools, deltas7d, hasDeltaHistory }: Props)
                 {/* top 5 都有名次膠帶 → 全部保留 paddingRight 讓位 */}
                 <div style={{ flex: 1, minWidth: 0, paddingRight: i < 5 ? 38 : 0 }}>
                   <div
+                    className="bulletin-rank-title"
                     style={{
                       fontFamily: tokens.font.tc,
                       fontSize: 14,
@@ -242,18 +243,20 @@ export function BulletinLeaderboard({ tools, deltas7d, hasDeltaHistory }: Props)
                   <div
                     style={{
                       fontFamily: tokens.font.en,
-                      fontSize: 11,
+                      fontSize: 12,
                       color: tokens.muted2,
                       marginTop: 2,
                       display: 'flex',
                       alignItems: 'center',
-                      gap: 8,
+                      flexWrap: 'wrap',
+                      columnGap: 8,
+                      whiteSpace: 'nowrap',
                     }}
                   >
                     <span>👆 {(tool.totalClicks ?? 0).toLocaleString()} clicks</span>
                     {hasDeltaHistory && (
                       risingDelta > 0 ? (
-                        <span style={{ color: '#c2410c', fontWeight: 700 }}>
+                        <span style={{ color: '#9a3412', fontWeight: 700 }}>
                           +{risingDelta}/週
                         </span>
                       ) : (

@@ -1,7 +1,8 @@
 import { Link } from 'wouter';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
+import { useScrollMoving } from './useScrollMoving';
 
 /**
  * cork 風格「隱藏後台入口」小按鈕
@@ -16,11 +17,29 @@ import { Pin } from '@/components/primitives/Pin';
  */
 export function BulletinAdminEntry() {
   const [hover, setHover] = useState(false);
+  const moving = useScrollMoving();
+  // 手機上只在頁面最底部（頁尾區）才露出，平常不蓋住內容文字
+  const [nearBottom, setNearBottom] = useState(false);
+  useEffect(() => {
+    const update = () => {
+      const doc = document.documentElement;
+      setNearBottom(doc.scrollHeight - (window.scrollY + window.innerHeight) < 400);
+    };
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    return () => {
+      window.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+    };
+  }, []);
 
   return (
     <Link href="/admin">
       <a
         className="bulletin-admin-entry"
+        data-moving={moving ? '1' : undefined}
+        data-near-bottom={nearBottom ? '1' : undefined}
         aria-label="進入管理後台"
         title="管理後台"
         style={{

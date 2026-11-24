@@ -453,7 +453,7 @@ function toggleBtn(active: boolean): React.CSSProperties {
     fontSize: 12,
     fontFamily: 'inherit',
     fontWeight: 800,
-    color: active ? '#fff' : '#1a1a1a',
+    color: '#1a1a1a',
     background: active ? '#ea8a3e' : 'transparent',
     border: 'none',
     cursor: 'pointer',

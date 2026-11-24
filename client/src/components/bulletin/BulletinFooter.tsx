@@ -32,7 +32,7 @@ export function BulletinFooter() {
   // 從 version.json 動態讀取當前版本（每次 build 會自動更新）
   // 短輪詢 1 小時一次即可（version 很少變動），避免浪費請求
   const { localVersion } = useVersionCheck({ intervalMs: 60 * 60 * 1000 });
-  const displayVersion = localVersion?.version ? `v${localVersion.version}` : 'v3.6.1';
+  const displayVersion = localVersion?.version ? `v${localVersion.version}` : '最新版';
 
   return (
     <footer

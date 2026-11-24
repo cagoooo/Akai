@@ -41,11 +41,11 @@ describe('最近使用工具：身分剛交接時讀取被拒（JAVASCRIPT-REACT
         localStorage.setItem('akai-recent-tools', '[3]');
         state.getDoc.mockRejectedValue(denied());
         const { result } = renderHook(() => useRecentTools());
-        await waitFor(() => expect(warning).toHaveBeenCalledWith('[useRecentTools] Firestore load 失敗:', expect.anything()), { timeout: 3000 });
-        expect(state.getDoc).toHaveBeenCalledTimes(2);
+        await waitFor(() => expect(warning).toHaveBeenCalledWith('[useRecentTools] Firestore load 失敗:', expect.anything()), { timeout: 16000 });
+        expect(state.getDoc).toHaveBeenCalledTimes(4);
         expect(result.current.recentIds).toEqual([3]);
         warning.mockRestore();
-    });
+    }, 20000);
 
     it('卸載後才被拒，不重讀也不回報', async () => {
         const warning = vi.spyOn(console, 'warn').mockImplementation(() => {});

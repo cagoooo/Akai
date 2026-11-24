@@ -175,6 +175,39 @@
   gap: 8px;
 }
 
+/* 2026-11-24 全站檢測修正：P1-home
+   driver.js 會讓高亮元素變成 position: relative，黏在頂端的搜尋列因此失去黏性、被捲出畫面，
+   導覽第 5 步就指到畫面外。搜尋列要維持 sticky。 */
+.driver-active-element.bulletin-searchbar {
+  position: sticky;
+}
+/* driver.js 還會把「直接含有高亮元素的父層」設成 overflow: hidden，
+   首頁外框（clip）一旦變成 hidden 就成為捲動容器，黏頂也會失效；改回 clip。 */
+.bulletin-sticky-search:has(> .driver-active-element) {
+  overflow: clip !important;
+}
+
+/* 「第一次來嗎？」提示卡的位置（桌機在右下，手機貼底、避開右下角浮動按鈕） */
+.tour-prompt {
+  position: fixed;
+  bottom: 94px;
+  right: 20px;
+  z-index: 50;
+  width: 290px;
+}
+@media (max-width: 768px) {
+  .tour-prompt {
+    left: 12px;
+    right: 72px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    width: auto;
+    padding: 14px 14px 12px !important;
+  }
+  .tour-prompt h3 { font-size: 17px !important; }
+  .tour-prompt p { margin: 6px 0 10px !important; font-size: 13px !important; line-height: 1.5 !important; }
+  .tour-prompt button { min-height: 44px; }
+}
+
 /* 高亮元素動畫 — 改為橄欖綠 + 橘色雙層呼吸 */
 .driver-active-element {
   animation: site-tour-pulse 1.5s infinite alternate !important;

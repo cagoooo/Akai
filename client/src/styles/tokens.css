@@ -1859,3 +1859,134 @@ body {
     transition: none !important;
   }
 }
+
+/* 2026-11-24 全站檢測修正：P1-home */
+/* 「找適合我的工具」入口：白字配橄欖綠對比不足，底色改深一階 */
+.audience-entry__go {
+  background: var(--olive-deep);
+}
+/* 手機版排行榜標題允許換成兩行（原本單行被截成「…」，右側還有空間） */
+@media (max-width: 768px) {
+  .bulletin-rank-title {
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    white-space: normal !important;
+    line-height: 1.35;
+  }
+}
+/* 手機版：卡片上的三個按鈕至少 44px 高（開啟、收藏、閱讀文章） */
+@media (max-width: 768px) {
+  .bulletin-card-fav {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 18px !important;
+  }
+  .bulletin-card-open {
+    min-height: 44px;
+    padding: 0 18px !important;
+    font-size: 14px !important;
+  }
+  .bulletin-card-blog {
+    min-height: 44px;
+    padding: 0 12px !important;
+    font-size: 13px !important;
+  }
+}
+/* 手機版浮動按鈕：縮小、捲動時淡出（停下才出現），後台入口只在頁面最底部露出；頁尾下方留白讓最後一行不被蓋住 */
+@media (max-width: 768px) {
+  .bulletin-back-to-top {
+    width: 40px !important;
+    height: 40px !important;
+    right: 10px !important;
+    bottom: 14px !important;
+  }
+  .bulletin-support-fab {
+    width: 40px !important;
+    height: 40px !important;
+    right: 10px !important;
+    bottom: 62px !important;
+    font-size: 19px !important;
+  }
+  .bulletin-back-to-top[data-moving="1"],
+  .bulletin-support-fab[data-moving="1"] {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+  .bulletin-admin-entry {
+    width: 36px !important;
+    height: 36px !important;
+    left: 10px !important;
+    bottom: 14px !important;
+  }
+  .bulletin-admin-entry:not([data-near-bottom="1"]):not(:focus-visible) {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+  .bulletin-admin-entry[data-moving="1"] {
+    opacity: 0 !important;
+  }
+  .cork-bg.bulletin-sticky-search {
+    padding-bottom: 84px !important;
+  }
+}
+/* 手機版找工具精靈：✕ 不壓進度條、第一頁不用捲動就看得到「先看熱門工具」「稍後再說」 */
+@media (max-width: 600px) {
+  .audience-wizard {
+    padding: 8px;
+  }
+  .audience-wizard__paper {
+    max-height: calc(100dvh - 16px);
+    padding: 40px 16px 14px;
+  }
+  .audience-wizard__pin--top {
+    top: 10px;
+  }
+  .audience-wizard__close {
+    top: 4px;
+    right: 4px;
+  }
+  .audience-wizard__progress {
+    margin: 0 44px 12px 0;
+  }
+  .audience-wizard header {
+    margin-bottom: 12px;
+  }
+  .audience-wizard h1 {
+    margin: 8px 0 6px;
+    font-size: 24px;
+  }
+  .audience-wizard header p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .audience-wizard__choices,
+  .audience-wizard__recommendations {
+    gap: 12px;
+  }
+  .audience-wizard__choice {
+    min-height: 0;
+    padding: 12px 16px;
+  }
+  .audience-wizard__choice strong {
+    margin: 4px 0 2px;
+    font-size: 18px;
+  }
+  .audience-wizard__choice > span:last-child {
+    margin-top: 6px;
+  }
+  .audience-wizard__quick-preview,
+  .audience-wizard__personalize {
+    margin-top: 12px;
+  }
+  .audience-wizard__later {
+    margin-top: 6px;
+  }
+  .audience-wizard__results h2 {
+    margin: 8px 0 4px;
+    font-size: 22px;
+  }
+  .audience-wizard__recommendations {
+    margin-top: 14px;
+  }
+}

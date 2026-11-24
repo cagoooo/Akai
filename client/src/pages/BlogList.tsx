@@ -74,11 +74,11 @@ interface PlatformDef {
 }
 
 const PLATFORM_CHIPS: PlatformDef[] = [
-  { key: 'github', emoji: '🐙', label: 'GitHub Pages', hint: 'cagoooo/* 主力作品集（含 #100 索引神器）', color: '#3b82f6' },
-  { key: 'gsites', emoji: '🌐', label: 'Google Sites', hint: 'swissknife + academic 子站', color: '#c026d3' },
-  { key: 'xoops', emoji: '🏫', label: 'XOOPS 校網 VM', hint: '學校 smes_html/ 雲端部署', color: '#f97316' },
-  { key: 'firebase', emoji: '🔥', label: 'Firebase Hosting', hint: '*.smes.tyc.edu.tw subdomain', color: '#16a34a' },
-  { key: 'thirdparty', emoji: '🧩', label: '第三方平台', hint: 'Replit + LINE Bot + Claude Artifacts + Padlet', color: '#db2777' },
+  { key: 'github', emoji: '🐙', label: 'GitHub Pages', hint: 'cagoooo/* 主力作品集（含 #100 索引神器）', color: '#2563eb' },
+  { key: 'gsites', emoji: '🌐', label: 'Google Sites', hint: 'swissknife + academic 子站', color: '#a21caf' },
+  { key: 'xoops', emoji: '🏫', label: 'XOOPS 校網 VM', hint: '學校 smes_html/ 雲端部署', color: '#c2410c' },
+  { key: 'firebase', emoji: '🔥', label: 'Firebase Hosting', hint: '*.smes.tyc.edu.tw subdomain', color: '#15803d' },
+  { key: 'thirdparty', emoji: '🧩', label: '第三方平台', hint: 'Replit + LINE Bot + Claude Artifacts + Padlet', color: '#be185d' },
 ];
 
 /**
@@ -304,9 +304,10 @@ export function BlogList() {
         description="阿凱老師親手撰寫的 98 篇工具使用情境長文 — 涵蓋 5 大部署平台（GitHub Pages / Google Sites / XOOPS 校網 / Firebase / 第三方），每篇含實測數字與配對推薦。"
         path="/blog/"
       />
-      <BulletinHeader />
+      <BulletinHeader titleAs="div" />
 
-      <div
+      <main
+        id="main-content"
         className="bulletin-blog-list-container"
         style={{
           maxWidth: 1320,
@@ -335,13 +336,13 @@ export function BlogList() {
             共 <strong style={{ color: tokens.ink }}>{totalCount}</strong> 篇<strong style={{ color: tokens.red }}>親手撰寫教學心得</strong>，分散在 5 個部署平台 ─{' '}
             <strong style={{ color: '#3b82f6' }}>🐙 {platformCounts.github}</strong>
             {' · '}
-            <strong style={{ color: '#c026d3' }}>🌐 {platformCounts.gsites}</strong>
+            <strong style={{ color: '#a21caf' }}>🌐 {platformCounts.gsites}</strong>
             {' · '}
-            <strong style={{ color: '#f97316' }}>🏫 {platformCounts.xoops}</strong>
+            <strong style={{ color: '#c2410c' }}>🏫 {platformCounts.xoops}</strong>
             {' · '}
-            <strong style={{ color: '#16a34a' }}>🔥 {platformCounts.firebase}</strong>
+            <strong style={{ color: '#15803d' }}>🔥 {platformCounts.firebase}</strong>
             {' · '}
-            <strong style={{ color: '#db2777' }}>🧩 {platformCounts.thirdparty}</strong>
+            <strong style={{ color: '#be185d' }}>🧩 {platformCounts.thirdparty}</strong>
           </p>
 
           {/* 🏠 回公佈欄首頁 CTA（cork 視覺語彙：紙色 + 厚 ink 邊 + 3D offset 陰影 + hover lift） */}
@@ -440,12 +441,11 @@ export function BlogList() {
           </div>
 
           {/* 🗺️ 部署平台 chip（按平台篩選） */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10, flexWrap: 'wrap' }}>
+          <div role="group" aria-label="依部署平台篩選文章" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10, flexWrap: 'wrap' }}>
             <span style={{ fontSize: 12, fontWeight: 800, color: tokens.muted2 }}>🗺️ 平台</span>
             <button
               type="button"
-              role="tab"
-              aria-selected={platform === 'all'}
+              aria-pressed={platform === 'all'}
               title="顯示全部 5 平台的文章"
               onClick={() => setPlatform('all')}
               style={{
@@ -474,8 +474,7 @@ export function BlogList() {
                 <button
                   key={p.key}
                   type="button"
-                  role="tab"
-                  aria-selected={active}
+                  aria-pressed={active}
                   title={p.hint}
                   onClick={() => setPlatform(p.key)}
                   style={{
@@ -629,14 +628,14 @@ export function BlogList() {
                 onClick={clearAllFilters}
                 style={{
                   background: 'none', border: 'none', padding: 0,
-                  color: tokens.red, fontWeight: 800, fontSize: 13,
+                  color: '#a8231d', fontWeight: 800, fontSize: 13,
                   textDecoration: 'underline', cursor: 'pointer',
                   fontFamily: 'inherit',
                 }}
               >
                 清除所有條件
               </button>
-              ，或<Link href="/?wish=1" style={{ color: tokens.red, fontWeight: 800, textDecoration: 'underline' }}> 到許願池許願 ✨</Link>
+              ，或<Link href="/?wish=1" style={{ color: '#a8231d', fontWeight: 800, textDecoration: 'underline' }}> 到許願池許願 ✨</Link>
               讓阿凱老師考慮寫您想看的主題！
             </p>
           </div>
@@ -861,9 +860,9 @@ export function BlogList() {
             transform: 'rotate(-0.5deg)',
           }}
         >
-          想看某個工具的使用情境？<Link href="/?wish=1" style={{ color: tokens.red, fontWeight: 800, textDecoration: 'underline' }}>到許願池許願 ✨</Link>，阿凱老師會優先寫。
+          想看某個工具的使用情境？<Link href="/?wish=1" style={{ color: '#a8231d', fontWeight: 800, textDecoration: 'underline' }}>到許願池許願 ✨</Link>，阿凱老師會優先寫。
         </div>
-      </div>
+      </main>
 
       <BulletinFooter />
       <BulletinBackToTop />

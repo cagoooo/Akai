@@ -139,15 +139,15 @@ service cloud.firestore {
       allow read, update, delete: if isAdmin();
     }
 
-    // 成就系統 - 所有人可讀，僅認證用戶可寫
+    // 成就系統 - 所有人可讀，僅管理員可寫（前端與 functions 目前都沒有使用此集合）
     match /achievements/{achievementId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if isAdmin();
     }
 
-    // 用戶成就 - 需要認證
+    // 用戶成就 - 只有本人（文件編號 = uid）或管理員可讀寫
     match /userAchievements/{docId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if request.auth != null && (request.auth.uid == docId || isAdmin());
     }
 
     // ==================== 評論功能 ====================

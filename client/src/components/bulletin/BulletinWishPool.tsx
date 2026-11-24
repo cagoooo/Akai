@@ -7,7 +7,7 @@ const WishingWellDialog = lazy(() =>
   import('@/components/WishingWellDialog').then((m) => ({ default: m.WishingWellDialog }))
 );
 
-// 固定的示範願望牆（實際提交仍透過 WishingWellDialog 寫入 Firestore 並推 LINE）
+// 固定的示範願望牆（實際提交仍透過 WishingWellDialog 寫入 Firestore 並通知阿凱老師）
 const SAMPLE_WISHES = [
   { text: '希望有一個可以自動產生學習單的工具！', name: '小陳老師' },
   { text: '點石成金真的救了我的評語撰寫 🙌', name: '靜芳老師' },
@@ -16,7 +16,7 @@ const SAMPLE_WISHES = [
 ];
 
 /**
- * 🪄 許願池：預覽便利貼牆 + CTA 開啟真正的 WishingWellDialog（有 Firestore + LINE 推播）
+ * 🪄 許願池：預覽便利貼牆 + CTA 開啟真正的 WishingWellDialog（有 Firestore + 即時通知）
  */
 export function BulletinWishPool() {
   const [open, setOpen] = useState(false);
@@ -82,7 +82,7 @@ export function BulletinWishPool() {
               flexShrink: 0,
               whiteSpace: 'nowrap',
               background: tokens.accent,
-              color: '#fff',
+              color: '#1a1a1a',
               border: '2px solid #1a1a1a',
               padding: '8px 16px',
               borderRadius: 8,
@@ -96,6 +96,10 @@ export function BulletinWishPool() {
           </div>
         </div>
       </button>
+
+      <div style={{ fontSize: 12, color: '#5a4a32', margin: '-8px 0 12px', fontFamily: tokens.font.tc }}>
+        下面四張是示範留言，示範給你看許願長什麼樣子 ✍️
+      </div>
 
       <div className="bulletin-wish-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
         {SAMPLE_WISHES.map((w, i) => {
@@ -126,6 +130,21 @@ export function BulletinWishPool() {
                   transition: 'box-shadow .35s',
                 }}
               >
+                <span
+                  style={{
+                    display: 'inline-block',
+                    fontSize: 12,
+                    fontWeight: 800,
+                    color: '#4a3a20',
+                    border: '1.5px dashed #4a3a20',
+                    borderRadius: 4,
+                    padding: '0 6px',
+                    marginBottom: 6,
+                    fontFamily: tokens.font.tc,
+                  }}
+                >
+                  示範
+                </span>
                 <div
                   style={{
                     fontSize: 13,
@@ -138,7 +157,7 @@ export function BulletinWishPool() {
                 </div>
                 <div
                   style={{
-                    fontSize: 11,
+                    fontSize: 12,
                     color: '#4a3a20',
                     marginTop: 8,
                     fontStyle: 'italic',

@@ -167,7 +167,7 @@ export function BlogPost() {
   if (!post) {
     return (
       <>
-        <BulletinHeader />
+        <BulletinHeader titleAs="div" />
         <div style={{
           maxWidth: 600,
           margin: '40px auto',
@@ -250,7 +250,7 @@ export function BlogPost() {
         relatedTools={relatedTools}
       />
 
-      <BulletinHeader />
+      <BulletinHeader titleAs="div" />
 
       {/* 頂部閱讀進度條 */}
       <div

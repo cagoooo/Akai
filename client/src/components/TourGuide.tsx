@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import "./tour-guide.css"; // 導入我們自定義的樣式
@@ -51,6 +51,14 @@ export function TourGuide({ onComplete }: TourGuideProps) {
   const [hasCompletedTour, setHasCompletedTour] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [driverObj, setDriverObj] = useState<any>(null);
+  // 提示卡要等訪客「有過第一次互動」且沒有其他彈窗（精靈、新上架展示…）時才出現
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const [otherPopupBusy, setOtherPopupBusy] = useState(() => document.body.dataset.homePopup === 'busy');
+  const [promptArmed, setPromptArmed] = useState(false);
+  const promptShownOnceRef = useRef(false);
+  const promptRef = useRef<HTMLDivElement>(null);
+  const startBtnRef = useRef<HTMLButtonElement>(null);
+  const returnFocusRef = useRef<HTMLElement | null>(null);
   const { toast } = useToast();
   const localStorageKey = "hasCompletedSiteTour";
 
@@ -170,7 +178,7 @@ export function TourGuide({ onComplete }: TourGuideProps) {
           element: '[data-tour="wish-pool"]',
           popover: {
             title: "🪄 許願池",
-            description: "有想到很棒的教學工具點子？或是想給阿凱老師鼓勵/建議？歡迎在許願池留下便利貼！支援匿名、免登入，送出後會直接推播到阿凱老師的 LINE。",
+            description: "有想到很棒的教學工具點子？或是想給阿凱老師鼓勵/建議？歡迎在許願池留下便利貼！支援匿名、免登入，送出後會直接通知阿凱老師。",
             side: "left",
             align: 'start',
           }
@@ -179,7 +187,7 @@ export function TourGuide({ onComplete }: TourGuideProps) {
           element: '[data-tour="search-bar"]',
           popover: {
             title: "🔎 搜尋工具",
-            description: "找不到想要的工具？直接搜尋工具名稱、描述或標籤。支援同時多關鍵字，按 Ctrl+K 也能快速開啟喔！",
+            description: "找不到想要的工具？直接搜尋工具名稱、描述或標籤。支援同時多關鍵字，按鍵盤上的 / 鍵也能快速跳到搜尋框喔！",
             side: "bottom",
             align: 'start',
           }
@@ -316,40 +324,83 @@ export function TourGuide({ onComplete }: TourGuideProps) {
       }
     };
 
-    // 初次載入且尚未完成導覽時，延遲顯示提示
+    // 初次載入且尚未完成導覽時：等訪客有過第一次互動（捲動、點擊、按鍵），
+    // 而且沒有其他彈窗開著，才讓提示卡出現（見下方 effect）。
     // 在 Lighthouse/CI 環境中禁用自動彈窗以避免干擾 LCP/TBT 指標
     if (!getHasCompletedTour() && checkPromptCooldown() && !isShownThisSession() && !isCIEnvironment()) {
-      const timer = setTimeout(() => {
-        setIsVisible(true);
-        try {
-          sessionStorage.setItem('akai-tour-prompt-shown-this-session', 'true');
-        } catch (e) { }
-      }, 8000); // 增加延遲到 8 秒，確保首屏渲染完全穩定
-      return () => clearTimeout(timer);
+      setPromptArmed(true);
+      const events = ['scroll', 'pointerdown', 'keydown', 'wheel', 'touchstart'] as const;
+      const onInteract = () => {
+        setHasInteracted(true);
+        events.forEach((n) => window.removeEventListener(n, onInteract));
+      };
+      events.forEach((n) => window.addEventListener(n, onInteract, { passive: true }));
+      return () => events.forEach((n) => window.removeEventListener(n, onInteract));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isHomePage]);
 
+  // 首頁會在精靈、新上架展示等彈窗開著時，把 body 的 data-home-popup 設成 busy
+  useEffect(() => {
+    const sync = () => setOtherPopupBusy(document.body.dataset.homePopup === 'busy');
+    sync();
+    window.addEventListener('home-popup-change', sync);
+    return () => window.removeEventListener('home-popup-change', sync);
+  }, []);
+
+  // 已互動、且其他彈窗都關著（並多等 2.5 秒，讓「新上架展示」有機會先排上）才顯示
+  useEffect(() => {
+    if (!promptArmed || !hasInteracted || otherPopupBusy || isVisible || promptShownOnceRef.current) return;
+    const timer = setTimeout(() => {
+      promptShownOnceRef.current = true;
+      setIsVisible(true);
+      try {
+        sessionStorage.setItem('akai-tour-prompt-shown-this-session', 'true');
+      } catch (e) { }
+    }, 2500);
+    return () => clearTimeout(timer);
+  }, [promptArmed, hasInteracted, otherPopupBusy, isVisible]);
+
+  // 提示卡出現時：把鍵盤焦點移進來（不捲動畫面），Esc 可關閉
+  const promptShown = isVisible && isHomePage && !hasCompletedTour && !otherPopupBusy;
+  useEffect(() => {
+    if (!promptShown) return;
+    const active = document.activeElement as HTMLElement | null;
+    const typing = !!active?.closest?.('input, textarea, select, [contenteditable=""], [contenteditable="true"]');
+    if (!typing) {
+      returnFocusRef.current = active && active !== document.body ? active : null;
+      startBtnRef.current?.focus({ preventScroll: true });
+    }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      dismissTour();
+      const back = returnFocusRef.current;
+      if (back && document.contains(back)) back.focus({ preventScroll: true });
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [promptShown]);
+
   return (
     <div className="tour-guide-container">
       {/* 導覽提示彈窗 — cork 便利貼風格 */}
-      {isVisible && isHomePage && !hasCompletedTour && (
+      {promptShown && (
         <motion.div
+          ref={promptRef}
           className="tour-prompt"
+          role="dialog"
+          aria-labelledby="tour-prompt-title"
+          aria-describedby="tour-prompt-desc"
           initial={{ opacity: 0, y: 30, rotate: -4 }}
           animate={{ opacity: 1, y: 0, rotate: -2 }}
           exit={{ opacity: 0, y: 30, rotate: -4 }}
           transition={{ duration: 0.5, type: 'spring', stiffness: 120 }}
           style={{
-            position: 'fixed',
-            bottom: '94px',
-            right: '20px',
-            zIndex: 50,
             background: '#fff27a',
             padding: '18px 18px 14px',
             borderRadius: '6px',
             boxShadow: '4px 4px 0 rgba(0,0,0,.25), 0 14px 28px -6px rgba(0,0,0,.3)',
-            width: '290px',
             border: '2.5px solid #1a1a1a',
             fontFamily: "'Noto Sans TC', 'Microsoft JhengHei', sans-serif",
           }}
@@ -398,6 +449,7 @@ export function TourGuide({ onComplete }: TourGuideProps) {
           </div>
 
           <h3
+            id="tour-prompt-title"
             style={{
               margin: 0,
               color: '#1a1a1a',
@@ -417,6 +469,7 @@ export function TourGuide({ onComplete }: TourGuideProps) {
           </h3>
 
           <p
+            id="tour-prompt-desc"
             style={{
               margin: '10px 0 14px',
               fontSize: '13.5px',
@@ -430,11 +483,12 @@ export function TourGuide({ onComplete }: TourGuideProps) {
 
           <div style={{ display: 'flex', gap: 8 }}>
             <button
+              ref={startBtnRef}
               type="button"
               onClick={startTour}
               style={{
                 background: '#ea8a3e',
-                color: '#fff',
+                color: '#1a1a1a',
                 border: '2.5px solid #1a1a1a',
                 padding: '8px 16px',
                 borderRadius: 8,
