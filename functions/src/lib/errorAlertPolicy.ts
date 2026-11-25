@@ -55,6 +55,8 @@ const NOISE_MESSAGE_PATTERNS: readonly RegExp[] = [
     /Object store cannot be found in the database/i,
     // Chrome 打不開磁碟上的資料庫檔案（2026-11-25 JAVASCRIPT-REACT-3F），前端已歸到固定 issue
     /Internal error opening backing store for indexedDB\.open/i,
+    // WebKit 交易已結束還被拿來讀資料（2026-11-26 JAVASCRIPT-REACT-3G），前端已歸到固定 issue
+    /Attempt to get (?:a record|records) from database without an in-progress transaction/i,
 ];
 
 /** 堆疊或網址出現這些來源＝來自瀏覽器擴充套件，不是站方程式碼 */

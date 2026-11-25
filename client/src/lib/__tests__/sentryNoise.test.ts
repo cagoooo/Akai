@@ -355,6 +355,8 @@ describe('瀏覽器 IndexedDB 連線斷掉：同一頁只回報一次', () => {
     consoleEvent('[2026-11-24T17:01:00.426Z]  @firebase/firestore: Firestore (12.8.0): Error using user provided cache. Falling back to memory cache: FirebaseError: [code=unimplemented]: This platform is either missing IndexedDB or is known to have an incomplete implementation. Offline persistence has been disabled.'),
     // 2026-11-25 JAVASCRIPT-REACT-3F：Windows Chrome 打不開磁碟上的資料庫檔案（未處理的 UnknownError）
     exceptionEvent('Error', 'UnknownError: Internal error opening backing store for indexedDB.open.'),
+    // 2026-11-26 JAVASCRIPT-REACT-3G：iPhone WKWebView 開頁時 WebKit 交易已結束（未處理的 IndexedDbTransactionError）
+    exceptionEvent('IndexedDbTransactionError', "IndexedDB transaction 'createOrUpgrade' failed: UnknownError: Attempt to get records from database without an in-progress transaction"),
   ];
 
   it('第一筆降為 warning 並歸到固定 issue，之後同一頁略過', () => {

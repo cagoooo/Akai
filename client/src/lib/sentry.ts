@@ -272,6 +272,10 @@ const BROWSER_STORAGE_LOST = [
   // Chrome 打不開這個網站在磁碟上的資料庫檔案（檔案損毀、磁碟空間不足、使用者設定檔被鎖住），
   // 丟出沒人接住的 UnknownError（2026-11-25 JAVASCRIPT-REACT-3F：Windows Chrome 157，首頁開著 4 分半後出現）
   /Internal error opening backing store for indexedDB\.open/i,
+  // WebKit 自己的資料庫交易已經結束還被拿來讀資料（App 內建瀏覽器常見），Firestore 開啟離線快取就失敗
+  // （2026-11-26 JAVASCRIPT-REACT-3G：iPhone WKWebView，iOS 26.4.2，首頁開啟 1 秒內 createOrUpgrade 失敗）；
+  // App Check 存權杖時的單數說法「a record」也收進來
+  /Attempt to get (?:a record|records) from database without an in-progress transaction/i,
 ];
 
 /** 瀏覽器整個擋掉本機儲存時，碰 localStorage／IndexedDB 丟的訊息（Safari「阻擋所有 Cookie」等，JAVASCRIPT-REACT-31） */

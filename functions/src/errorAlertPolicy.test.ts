@@ -19,6 +19,7 @@ describe("isKnownNoise", () => {
         "Database deleted by request of the user",
         "Object store cannot be found in the database",
         "UnknownError: Internal error opening backing store for indexedDB.open.",
+        "IndexedDB transaction 'createOrUpgrade' failed: UnknownError: Attempt to get records from database without an in-progress transaction",
         "IndexedDB transaction 'Allocate target' failed: NotFoundError: Failed to execute 'transaction' on 'IDBDatabase': One of the specified object stores was not found.",
     ])("把已知第三方雜訊擋下來：%s", (message) => {
         expect(isKnownNoise({ message })).toBe(true);
