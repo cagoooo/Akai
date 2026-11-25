@@ -2,6 +2,10 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.261] - 2026-11-25 — Sentry Chrome 打不開本機資料庫歸類
+
+- **JAVASCRIPT-REACT-3F**：Windows Chrome 157 首頁開著 4 分半後丟出未處理的 `UnknownError: Internal error opening backing store for indexedDB.open.`＝Chrome 打不開這個網站在磁碟上的資料庫檔案（檔案損毀、磁碟空間不足或設定檔被鎖住），不是站方程式錯誤。前端 `BROWSER_STORAGE_LOST` 與後端 `errorAlertPolicy.ts` 的 `NOISE_MESSAGE_PATTERNS` 都加認這句：Sentry 歸到固定 issue `browser-indexeddb-lost`（同頁只報一筆、warning），Google Chat 不再推播。測試正反例各一。
+
 ## [3.6.260] - 2026-11-25 — Sentry 舊瀏覽器沒有 IndexedDB 的警告歸類
 
 - **JAVASCRIPT-REACT-3E**：Android 4.3 這類沒有可用 IndexedDB 的瀏覽器，Firestore 會印「Falling back to memory cache … [code=unimplemented]」並自動改用記憶體快取、網站照常運作。`client/src/lib/sentry.ts` 的 `BROWSER_STORAGE_LOST` 加認這句，歸到固定 issue `browser-indexeddb-lost`（同頁只報一筆、warning），不再開新 issue 寄告警；其他原因的退回記憶體快取照常回報。測試 `sentryNoise.test.ts` 正反例各一。

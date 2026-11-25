@@ -53,6 +53,8 @@ const NOISE_MESSAGE_PATTERNS: readonly RegExp[] = [
     // 背景很久切回後資料表不見（2026-11-21 JAVASCRIPT-REACT-2S、30），前端已歸到固定 issue
     /object stores? (?:was|were) not found/i,
     /Object store cannot be found in the database/i,
+    // Chrome 打不開磁碟上的資料庫檔案（2026-11-25 JAVASCRIPT-REACT-3F），前端已歸到固定 issue
+    /Internal error opening backing store for indexedDB\.open/i,
 ];
 
 /** 堆疊或網址出現這些來源＝來自瀏覽器擴充套件，不是站方程式碼 */

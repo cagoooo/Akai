@@ -9,6 +9,10 @@
 - **前一版**: v3.6.71 — 新增 #102 外星人入侵·保衛石門 + 雙 tools.json 對齊
 - **📎 文件補追記**：本檔案從 v3.6.71 停更到 2026-07-04 才補寫。中間 v3.6.72 → v3.6.87 共 16 個版本（主要是新增工具 #103-#114 + 幾個獨立 bug fix，例如 v3.6.80 使用次數本機計數 bug、v3.6.81/b3032b2 許願池通知從 LINE 遷移到 Google Chat）沒有寫進本檔案，細節可查 `git log`（commit 訊息大多含版本號）。工具總數從 102 → 115 就是這段期間累積的，之後有空再補完整段落。
 
+### 2026-11-25 Sentry Chrome 打不開本機資料庫歸類 v3.6.261
+
+- JAVASCRIPT-REACT-3F：「Internal error opening backing store for indexedDB.open」前後端都歸到固定 issue、不推 Chat
+
 ### 2026-11-25 Sentry 舊瀏覽器 IndexedDB 警告歸類 v3.6.260
 
 - JAVASCRIPT-REACT-3E：Firestore 退回記憶體快取（瀏覽器沒有 IndexedDB）歸到固定 issue

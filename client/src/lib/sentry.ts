@@ -252,6 +252,9 @@ const BROWSER_STORAGE_LOST = [
   // SDK 自己改用記憶體快取繼續運作，只是不能離線（2026-11-25 JAVASCRIPT-REACT-3E：Android 4.3 Galaxy Note3，
   // 美國，/tool/14、/tool/61 等 4 頁各一筆，疑似偽裝舊手機的爬蟲）。只認 unimplemented＋這句說明，其他原因照常回報。
   /Falling back to memory cache: FirebaseError: \[code=unimplemented\]: This platform is either missing IndexedDB/i,
+  // Chrome 打不開這個網站在磁碟上的資料庫檔案（檔案損毀、磁碟空間不足、使用者設定檔被鎖住），
+  // 丟出沒人接住的 UnknownError（2026-11-25 JAVASCRIPT-REACT-3F：Windows Chrome 157，首頁開著 4 分半後出現）
+  /Internal error opening backing store for indexedDB\.open/i,
 ];
 
 /** 瀏覽器整個擋掉本機儲存時，碰 localStorage／IndexedDB 丟的訊息（Safari「阻擋所有 Cookie」等，JAVASCRIPT-REACT-31） */

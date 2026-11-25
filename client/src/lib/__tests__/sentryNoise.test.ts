@@ -353,6 +353,8 @@ describe('瀏覽器 IndexedDB 連線斷掉：同一頁只回報一次', () => {
     exceptionEvent('Error', 'InvalidStateError: Object store cannot be found in the database'),
     // 2026-11-25 JAVASCRIPT-REACT-3E：Android 4.3 沒有可用的 IndexedDB，Firestore 自己改用記憶體快取
     consoleEvent('[2026-11-24T17:01:00.426Z]  @firebase/firestore: Firestore (12.8.0): Error using user provided cache. Falling back to memory cache: FirebaseError: [code=unimplemented]: This platform is either missing IndexedDB or is known to have an incomplete implementation. Offline persistence has been disabled.'),
+    // 2026-11-25 JAVASCRIPT-REACT-3F：Windows Chrome 打不開磁碟上的資料庫檔案（未處理的 UnknownError）
+    exceptionEvent('Error', 'UnknownError: Internal error opening backing store for indexedDB.open.'),
   ];
 
   it('第一筆降為 warning 並歸到固定 issue，之後同一頁略過', () => {
@@ -400,6 +402,8 @@ describe('瀏覽器 IndexedDB 連線斷掉：同一頁只回報一次', () => {
       exceptionEvent('IndexedDbTransactionError', "IndexedDB transaction 'Allocate target' failed: NotFoundError: The object can not be found here."),
       // 同樣退回記憶體快取，但原因不是「瀏覽器沒有 IndexedDB」（例如空間不足）照常回報
       consoleEvent('@firebase/firestore: Firestore (12.8.0): Error using user provided cache. Falling back to memory cache: FirebaseError: [code=internal]: QuotaExceededError: The quota has been exceeded.'),
+      // 同樣是 UnknownError，但不是打不開資料庫檔案，照常回報
+      exceptionEvent('Error', 'UnknownError: An unknown error occurred within Indexed Database.'),
     ];
     for (const input of others) expect(classify(input)).toBe(input);
   });
