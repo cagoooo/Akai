@@ -11,7 +11,7 @@ describe('Firestore 多分頁交接告警過濾', () => {
     expect(result).toBeNull();
   });
 
-  it('60 秒內第三次交接才回報錯誤；時間窗過後重新忽略', () => {
+  it('60 秒內第三陣交接才回報錯誤，同一頁只回報一筆', () => {
     let time = 0;
     const classify = createFirestoreLeaseClassifier(() => time);
     const collectGarbage = () => ({ ...event(), message: message.replace('Apply remote event', 'Collect garbage') });
@@ -22,20 +22,62 @@ describe('Firestore 多分頁交接告警過濾', () => {
     const third = classify(collectGarbage());
     expect(third?.level).toBe('error');
     expect(third?.fingerprint).toEqual(['firestore-primary-lease', 'collect-garbage']);
-    expect(third?.extra?.leaseOccurrencesInLastMinute).toBe(3);
+    expect(third?.extra?.leaseHandoffsInLastMinute).toBe(3);
     expect(third?.message).not.toContain('2026-10-05');
     time = 30_000;
-    expect(classify(event())?.level).toBe('error');
-    time = 80_000;
+    expect(classify(event())).toBeNull();
+    time = 34_000;
     expect(classify(event())).toBeNull();
   });
 
+  it('時間窗過後重新計算：60 秒內只有兩陣不回報', () => {
+    let time = 0;
+    const classify = createFirestoreLeaseClassifier(() => time);
+    expect(classify(event())).toBeNull();
+    time = 30_000;
+    expect(classify(event())).toBeNull();
+    time = 70_000;
+    expect(classify(event())).toBeNull();
+    time = 85_000;
+    expect(classify(event())?.level).toBe('error');
+  });
+
+  it('同一瞬間冒出的一串只算一次交接（2026-11-25 JAVASCRIPT-REACT-4 回歸：iPhone 切回分頁 0.17 秒內 8 筆）', () => {
+    const times = [650, 676, 702, 730, 753, 767, 788, 804];
+    let time = 0;
+    const classify = createFirestoreLeaseClassifier(() => time);
+    for (const t of times) {
+      time = t;
+      expect(classify(event())).toBeNull();
+    }
+    time = 818;
+    expect(classify({ ...event(), message: message.replace('Apply remote event', 'Backfill Indexes') })).toBeNull();
+    // 一陣裡的訊息彼此相隔不到 2 秒，就算拖得比較長也還是同一陣
+    for (let t = 2_000; t <= 9_000; t += 1_500) {
+      time = t;
+      expect(classify(event())).toBeNull();
+    }
+  });
+
+  it('真的兩個分頁來回搶（約每 4 秒一陣）照樣回報', () => {
+    let time = 0;
+    const classify = createFirestoreLeaseClassifier(() => time);
+    expect(classify(event())).toBeNull();
+    time = 4_000;
+    expect(classify(event())).toBeNull();
+    time = 8_000;
+    expect(classify(event())?.extra?.leaseHandoffsInLastMinute).toBe(3);
+  });
+
   it('Apply remote event、Backfill Indexes 與 Collect garbage 共用門檻', () => {
-    const classify = createFirestoreLeaseClassifier(() => 0);
+    let time = 0;
+    const classify = createFirestoreLeaseClassifier(() => time);
     const backfill = () => ({ ...event(), message: message.replace('Apply remote event', 'Backfill Indexes') });
     const collectGarbage = () => ({ ...event(), message: message.replace('Apply remote event', 'Collect garbage') });
     expect(classify(collectGarbage())).toBeNull();
+    time = 5_000;
     expect(classify(event())).toBeNull();
+    time = 10_000;
     const frequentHandoff = classify(backfill());
     expect(frequentHandoff?.level).toBe('error');
     expect(frequentHandoff?.fingerprint).toEqual(['firestore-primary-lease', 'backfill-indexes']);
@@ -43,11 +85,18 @@ describe('Firestore 多分頁交接告警過濾', () => {
   });
 
   it('Release target 一律不送進 Sentry，也不計入交接門檻', () => {
-    const classify = createFirestoreLeaseClassifier(() => 0);
+    let time = 0;
+    const classify = createFirestoreLeaseClassifier(() => time);
     const release = () => ({ ...event(), message: message.replace('Apply remote event', 'Release target') });
-    for (let i = 0; i < 5; i++) expect(classify(release())).toBeNull();
+    for (let i = 0; i < 5; i++) {
+      time = i * 5_000;
+      expect(classify(release())).toBeNull();
+    }
+    time = 30_000;
     expect(classify(event())).toBeNull();
+    time = 35_000;
     expect(classify(event())).toBeNull();
+    time = 40_000;
     expect(classify(event())?.level).toBe('error');
   });
 

@@ -2,6 +2,10 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.262] - 2026-11-25 — Sentry Firestore 多分頁交接改成「一陣算一次」
+
+- **JAVASCRIPT-REACT-4 回歸／REACT-6**：iPhone Safari 分頁在背景約 10 分鐘後切回，Firestore SDK 把排隊的動作一次重跑，0.17 秒內記了 8 筆 `Failed to obtain primary lease`。舊規則「同一頁 60 秒內 3 筆就回報 error」把這一次交接算成 8 次，還每筆都送事件（4 個 Apply remote event＋1 個 Backfill Indexes），讓已解決的 issue 回歸。`createFirestoreLeaseClassifier` 改成：彼此相隔不到 2 秒的算同一陣，60 秒內 3 陣以上（真的兩個分頁來回搶，SDK 約每 4 秒搶一次）才回報，而且同一頁只回報一筆；extra 改名 `leaseHandoffsInLastMinute`。測試 `sentryLease.test.ts` 加入這次的原始時間序列與「每 4 秒來回搶照樣回報」反例。
+
 ## [3.6.261] - 2026-11-25 — Sentry Chrome 打不開本機資料庫歸類
 
 - **JAVASCRIPT-REACT-3F**：Windows Chrome 157 首頁開著 4 分半後丟出未處理的 `UnknownError: Internal error opening backing store for indexedDB.open.`＝Chrome 打不開這個網站在磁碟上的資料庫檔案（檔案損毀、磁碟空間不足或設定檔被鎖住），不是站方程式錯誤。前端 `BROWSER_STORAGE_LOST` 與後端 `errorAlertPolicy.ts` 的 `NOISE_MESSAGE_PATTERNS` 都加認這句：Sentry 歸到固定 issue `browser-indexeddb-lost`（同頁只報一筆、warning），Google Chat 不再推播。測試正反例各一。

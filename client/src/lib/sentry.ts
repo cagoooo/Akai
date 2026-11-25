@@ -26,27 +26,44 @@ import { isBrowserStorageAvailable } from './browserStorage';
 type SentryModule = typeof import('./sentryClient');
 type SentryEvent = import('@sentry/react').ErrorEvent;
 
-/** SDK 已接手的多分頁交接訊息；不匹配權限、IndexedDB 或未處理例外。 */
+/**
+ * SDK 已接手的多分頁交接訊息；不匹配權限、IndexedDB 或未處理例外。
+ *
+ * 2026-11-25 JAVASCRIPT-REACT-4 回歸／REACT-6：iPhone 分頁在背景 10 分鐘後切回，SDK 排隊的動作一次重跑，
+ * 同一個 0.17 秒內記了 8 筆「Failed to obtain primary lease」。舊規則「60 秒內 3 筆就回報」把這「一次交接」
+ * 當成三次以上，還每筆都送一個事件。改成：彼此相隔不到 2 秒的算同一次交接（一陣），
+ * 60 秒內出現 3 陣以上（真的在兩個分頁之間來回搶，SDK 約每 4 秒搶一次）才回報，而且同一頁只回報一筆。
+ */
+const FIRESTORE_LEASE_MESSAGE = /^(?:\[[^\]\r\n]+\]\s+)?@firebase\/firestore:\s+Firestore \(\d+\.\d+\.\d+\): Failed to obtain primary lease for action '(Apply remote event|Backfill Indexes|Collect garbage|Release target)'\.$/;
+const FIRESTORE_LEASE_BURST_GAP_MS = 2_000;
+const FIRESTORE_LEASE_WINDOW_MS = 60_000;
+const FIRESTORE_LEASE_EPISODES_TO_REPORT = 3;
+
 export function createFirestoreLeaseClassifier(now = () => Date.now()) {
-  const occurrences: number[] = [];
-  const leaseMessage = /^(?:\[[^\]\r\n]+\]\s+)?@firebase\/firestore:\s+Firestore \(\d+\.\d+\.\d+\): Failed to obtain primary lease for action '(Apply remote event|Backfill Indexes|Collect garbage|Release target)'\.$/;
+  const episodeStarts: number[] = [];
+  let lastLeaseFailureAt = Number.NEGATIVE_INFINITY;
+  let reported = false;
   return (event: SentryEvent): SentryEvent | null => {
-    const leaseMatch = event.message?.match(leaseMessage);
+    const leaseMatch = event.message?.match(FIRESTORE_LEASE_MESSAGE);
     if (event.logger !== 'console' || event.exception?.values?.length || !leaseMatch) return event;
     const action = leaseMatch[1];
     // 非主分頁取消監聽時寫不進 IndexedDB，SDK 註明丟掉這筆紀錄可接受；離開頁面時多個監聽同時取消，
     // 一次就有好幾筆（2026-11-04 JAVASCRIPT-REACT-1H：同一秒 3 筆），不計入交接門檻
     if (action === 'Release target') return null;
     const timestamp = now();
-    while (occurrences.length && timestamp - occurrences[0] >= 60_000) occurrences.shift();
-    occurrences.push(timestamp);
-    // SDK 已接手的正常交接不送進 Sentry；同一頁 60 秒內三次以上才回報為 error。
-    if (occurrences.length < 3) return null;
+    const sameBurst = timestamp - lastLeaseFailureAt < FIRESTORE_LEASE_BURST_GAP_MS;
+    lastLeaseFailureAt = timestamp;
+    if (reported) return null;
+    if (!sameBurst) episodeStarts.push(timestamp);
+    while (episodeStarts.length && timestamp - episodeStarts[0] >= FIRESTORE_LEASE_WINDOW_MS) episodeStarts.shift();
+    // SDK 已接手的正常交接不送進 Sentry；同一頁 60 秒內 3 陣以上才回報為 error。
+    if (episodeStarts.length < FIRESTORE_LEASE_EPISODES_TO_REPORT) return null;
+    reported = true;
     event.level = 'error';
     event.message = `Firestore multi-tab primary lease changed during '${action}'.`;
     event.fingerprint = ['firestore-primary-lease', action.toLowerCase().replaceAll(' ', '-')];
     event.tags = { ...event.tags, firestoreLease: 'handoff' };
-    event.extra = { ...event.extra, leaseOccurrencesInLastMinute: occurrences.length };
+    event.extra = { ...event.extra, leaseHandoffsInLastMinute: episodeStarts.length };
     return event;
   };
 }
