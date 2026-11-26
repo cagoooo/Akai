@@ -137,3 +137,44 @@ describe('ensurePromptTools（文章頁剛打開就按複製，v3.6.216）', () 
     await expect(ensurePromptTools(post, [], never, 20)).resolves.toEqual([]);
   });
 });
+
+describe('直接套用版提示詞（#141 iPad 電量監控站）', () => {
+  const monitor = {
+    id: 141,
+    title: 'iPad 電量監控站｜Jamf 充電車自動巡查',
+    description: '每 15 分鐘自動讀取 Jamf 的全校 iPad 電量。',
+    url: 'https://cagoooo.github.io/ipad-battery-monitor/',
+    tags: ['Jamf', 'iPad'],
+  };
+  const prompt = buildAgentPrompt({ slug: 'ipad-141', title: '#141 T', toolIds: [141, 46] }, [monitor]);
+
+  it('照範本套用，不走重新開發', () => {
+    expect(prompt).toContain('套用成我們學校的版本');
+    expect(prompt).toContain('不要重寫程式');
+    expect(prompt).toContain('--template cagoooo/ipad-battery-monitor');
+    expect(prompt).not.toContain('提出 2～3 個改良方向');
+    expect(prompt).not.toContain('Firebase');
+  });
+
+  it('涵蓋別校要改的設定：config.json、Jamf Secrets、Pages、Apps Script 鬧鐘', () => {
+    for (const key of ['config.json', 'JAMF_URL', 'JAMF_CLIENT_SECRET', 'GCHAT_WEBHOOK', 'JAMF_SEND_UPDATE_INVENTORY', 'GitHub Actions', 'gas/Code.gs']) {
+      expect(prompt).toContain(key);
+    }
+  });
+
+  it('提醒密碼不要貼進對話、平板名稱不能有學生姓名', () => {
+    expect(prompt).toContain('不要叫我把密碼貼到對話裡');
+    expect(prompt).toContain('學生姓名或學號');
+  });
+
+  it('附原始碼、設定說明與工具介紹頁', () => {
+    expect(prompt).toContain('https://github.com/cagoooo/ipad-battery-monitor#給其他學校改成自己的版本');
+    expect(prompt).toContain('https://cagoooo.github.io/Akai/tool/141/');
+    expect(prompt).toContain('https://cagoooo.github.io/Akai/blog/ipad-141/');
+  });
+
+  it('其他工具仍用原本的開發提示詞', () => {
+    const other = buildAgentPrompt({ slug: 'iwin-131', title: 'T', toolIds: [131] }, [iwin]);
+    expect(other).toContain('提出 2～3 個改良方向');
+  });
+});
