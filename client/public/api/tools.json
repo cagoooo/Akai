@@ -3547,13 +3547,13 @@
       ],
       "priority": 72,
       "reasons": {
-        "teacher": "可快速製作班級活動、教學或社群使用的原創貼圖素材。",
-        "student": "能把自己的創意與文字變成專屬的 Q 版貼圖作品。"
+        "teacher": "可做班級活動、畢業禮物用的專屬貼圖；暫停期間用自己的 Gemini 畫，再回來切圖打包 LINE 格式。",
+        "student": "能把自己的照片和想說的話變成 24 張 Q 版貼圖作品（照片請先取得本人或家長同意）。"
       }
     },
     "title": "3D Q版貼圖生成器",
-    "description": "上傳一張自拍照，輸入主題與 24 個文字，AI 一鍵生成 4×6 共 24 張 3D Q 版公仔貼圖，下載即得 LINE 上架專用的 ZIP 包，老師、家長、學生都能秒做專屬貼圖。",
-    "detailedDescription": "「TieTu — 3D Q版貼圖生成器」是阿凱老師打造的 **免費 AI LINE 貼圖工作室**，採用 **Google Gemini 2.5 Flash Image（Nano Banana Pro）multimodal**，解決「想做 LINE 個人原創貼圖賺零用錢但自畫太累、找設計師太貴、上架包格式記不住」的三重痛點。\n\n## 🎯 核心特色\n\n- 📸 **照片上傳(含 HEIC)** — JPG / PNG / WEBP / HEIC 都支援，前端用 magic bytes 驗證（不只看副檔名），上限 10 MB\n- 🎨 **24 格自訂主題 + 文字** — 輸入關鍵字（如「馬年、太空人、黏土風」）一鍵套用到 24 格，每格 1-8 字繁中可單獨修改\n- 🍌 **Nano Banana Pro 引擎** — Google Gemini 2.5 Flash Image 多模態，**角色一致性**（24 張人臉統一不變臉）+ **繁中文字渲染**（小字也能寫進貼圖）\n- ✂️ **客戶端切片** — Canvas 切成 24 張獨立 PNG，不依賴後端\n- 🔧 **單張微調** — 旋轉 ±15° / 平移 ±15% / 縮放 80-120% / 即時預覽\n- 📦 **三種下載格式** — 整張 PNG / 24 張 ZIP / **LINE 上架版 ZIP**（24 張 370×320 + main.png 240×240 + tab.png 96×74 + README.txt，**直接拖進 LINE Creators 後台上架**）\n- 💾 **IndexedDB 歷史紀錄** — 保留最近 5 次（JPEG 1280px @ 0.85 壓縮存放）+ 點擊重新開啟\n- 🛡️ **限流 + 人機驗證** — 每 IP 每分鐘 3 張 / 每日 30 張（Postgres 持久化）+ **Cloudflare Turnstile** production 必填\n\n## 💡 設計理念\n\n技術棧 Vite + React 19 + Tailwind 4 + shadcn/ui（前端）+ Express 5 monorepo → Cloud Functions v2（後端）+ pnpm workspaces + TypeScript 5.9 strict mode + Prettier 3 + ESLint。Node v24 本機 → **v22 部署到 Cloud Functions**，從 Replit Autoscale 遷移到 GitHub + Firebase（README 內有完整遷移指南）。跟 [#91 PhotoPoet Pro](/tool/91) 是阿凱兩個 AI 圖像工具不同 use case：**TieTu = 24 張一組產品包（量產 sticker pack）、PhotoPoet = 單張詩意圖（每天傳一張）**。\n\n## 🎒 適合情境\n\n畢業班禮物（全班合照 → 24 張各寫一個學生名字 → LINE 上架）、教師節活動（學生用老師大頭照 + 24 個感謝詞）、家庭親子活動（阿公阿嬤的 LINE 從此多了專屬 stickers）。配對 [#94 封面接故事](/tool/94) 同款 AI multimodal + [#65 AI Creator Hub](/tool/65) AI 影片整合 + [#91 PhotoPoet Pro 早安長輩圖](/tool/91)。**第一次用：上傳自己大頭照 → 主題填「動物農場」→ 24 格各填一個動物（貓 / 狗 / 兔 / 熊⋯）→ 看 4×6 出來**。",
+    "description": "上傳一張自拍照，選畫風、填主題與 24 句文字，就能做出 4×6 共 24 張 Q 版貼圖，下載整張圖、24 張 ZIP 或 LINE 上架格式。測試期間網站 AI 生圖暫停，可下載「技能檔」裝進自己的 Gemini 免費畫，再上傳回來切成 24 張。",
+    "detailedDescription": "「TieTu — 3D Q版貼圖生成器」（盲盒貼圖機）是阿凱老師做的 **LINE 貼圖工作室**：一張大頭照，變成 24 張同一個人、不同表情動作、每格一句繁體中文的 Q 版貼圖，最後直接打包成 LINE 個人原創貼圖的上架格式。\n\n## ⏸️ 目前狀態（2026-11-26 起）\n\n網站上的 AI 生圖**測試期間暫停**，頁面上方有公告、生成按鈕會停用。原因很單純：Google 的生圖模型沒有免費額度，網站又開放給大家測試，不適合一直用阿凱老師的帳單支付。\n\n暫停期間改用 **「用自己的 Gemini 免費畫貼圖」**：\n\n1. 在 TieTu 首頁按「下載 SKILL.md」——同一次點擊會自動開新分頁到 Gemini 的「技能」頁\n2. 在 Gemini 技能頁按「上傳」，選剛下載的 SKILL.md（目前要用電腦網頁版，手機 App 不能上傳技能；建議用個人 Gmail 登入）\n3. 跟 Gemini 說「幫我做 LINE 貼圖」，上傳照片、選畫風與主題，畫好後下載整張圖\n4. 回 TieTu 按「上傳 Gemini 畫好的貼圖表」，自動切成 24 張，可一鍵去背、打包 LINE 格式\n\n第 4 步在瀏覽器裡完成，**不用登入、不扣次數、不用 AI**。用的是你自己 Gemini 帳號的額度。\n\n## 🎯 功能\n\n- 📸 **照片上傳** — JPG / PNG / WEBP / HEIC，10 MB 以內，後端用檔案內容判斷格式（不只看副檔名）\n- 🎨 **5 種畫風** — 3D 公仔、黏土風、像素風、2D 動畫、水彩風\n- ✍️ **主題＋24 句文字** — 預設 24 句常用語（收到、晚安、謝謝⋯），每格都能自己改\n- 🧩 **一整張 4×6 貼圖表** — 灰底、白色描邊、每格一句繁中字，24 張是同一個人\n- ✂️ **自動切 24 張** — 在瀏覽器裡切割，單張可微調旋轉 ±15°、平移 ±15%、縮放 80～120%\n- 🪄 **一鍵去背** — 灰底轉透明背景\n- 📦 **三種下載** — 整張 PNG／24 張 ZIP／**LINE 上架版**（24 張 370×320＋main.png 240×240＋tab.png 96×74＋README.txt）\n- 🔗 **分享連結** — 產生短網址分享成品\n- 💾 **最近 5 次紀錄** — 存在瀏覽器裡，登入後也會存雲端（雲端圖片保留 7 天）\n\n## 🛡️ 網站生圖恢復時的規則\n\n網站上的 AI 生圖（使用 Gemini 3.1 Flash Image）必須 **Google 帳號登入**、每個帳號 **每天 3 次**（台北時間午夜重置），生成失敗會自動退回次數，並有 Cloudflare Turnstile 人機驗證。\n\n## 🎒 適合情境\n\n畢業班禮物（全班一起做專屬貼圖）、教師節活動（學生用老師照片＋24 句感謝詞，請先取得老師同意）、親子假日創作。只用本人或已取得同意的照片。配對 [#91 ✨ 點亮詩意 Pro ✨早安長輩圖](/tool/91)（單張 AI 圖文）、[#94 封面串故事 · 音樂影片分鏡產生器](/tool/94)、[#65 AI 影片創作與教學整合資源](/tool/65)。",
     "url": "https://cagoooo.github.io/TieTu/",
     "icon": "Sparkles",
     "category": "utilities",
@@ -3563,11 +3563,11 @@
       "AI 貼圖生成",
       "3D Q版",
       "LINE 貼圖",
-      "Gemini AI",
+      "Gemini 技能",
       "自拍變貼圖",
-      "原創貼圖上架",
+      "LINE 上架格式",
+      "一鍵去背",
       "親子創作",
-      "班級獎勵",
       "個人化貼圖",
       "免費工具"
     ],

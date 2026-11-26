@@ -2251,20 +2251,20 @@ export const POSTS_INDEX: BlogPostMeta[] = [
   },
   {
     "slug": "tietu-86-chibi-sticker",
-    "title": "#86 TieTu 3D Q版貼圖生成器：上傳大頭照 + 24 個文字 → Gemini 2.5 Flash Image 生 4×6 貼圖 + LINE 上架包",
-    "excerpt": "#86 TieTu — 上傳大頭照 → 自訂主題與 24 個文字標籤 → Gemini 2.5 Flash Image（Nano Banana Pro）生成 4×6 共 24 張 Q 版貼圖 → 下載 PNG / 24 張 ZIP / **LINE 個人原創貼圖上架包**（含 main.png + tab.png + README.txt）。Vite + React 19 + Cloud Functions v2 + Cloudflare Turnstile。",
+    "title": "#86 TieTu 3D Q版貼圖生成器：一張自拍變 24 張 LINE 貼圖，測試期間改用自己的 Gemini 免費畫",
+    "excerpt": "#86 TieTu — 上傳自拍、選 5 種畫風、填主題與 24 句文字，做出 4×6 Q 版貼圖並打包成 LINE 上架格式。測試期間網站 AI 生圖暫停，改成「下載技能檔 SKILL.md → 裝進自己的 Gemini → 畫好再上傳回 TieTu 切 24 張」，不用登入、不扣次數。",
     "publishedAt": "2026-05-21",
     "readingMinutes": 6,
     "tags": [
-      "AI 圖像生成",
       "LINE 貼圖",
-      "Gemini 2.5 Flash Image",
-      "Nano Banana",
-      "IndexedDB"
+      "Gemini 技能",
+      "SKILL.md",
+      "AI 圖像生成",
+      "一鍵去背"
     ],
     "toolIds": [
       86,
-      65,
+      91,
       94
     ],
     "coverEmoji": "🎨",
