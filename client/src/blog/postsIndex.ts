@@ -15,6 +15,27 @@ export type BlogPostMeta = Omit<BlogPost, 'body'>;
 
 export const POSTS_INDEX: BlogPostMeta[] = [
   {
+    "slug": "ipad-battery-monitor-141-jamf-charging-cart",
+    "title": "#141 不用再每天登入 Jamf：讓網頁每 15 分鐘幫你巡一次平板充電車",
+    "excerpt": "學生借平板才發現沒電，多半是充電線沒插好或壞了。#141 每 15 分鐘自動從 Jamf 讀取全校 iPad 電量，把半夜沒充飽、連續低電量的平板排成待檢查清單，充電車格子圖一眼看出哪一格要換線；程式已開源，別校改設定檔就能套用。",
+    "publishedAt": "2026-11-26",
+    "readingMinutes": 6,
+    "tags": [
+      "iPad 管理",
+      "Jamf Pro",
+      "平板充電車",
+      "資訊組",
+      "開源範本"
+    ],
+    "toolIds": [
+      141,
+      46,
+      82
+    ],
+    "coverEmoji": "🔋",
+    "coverColor": "green"
+  },
+  {
     "slug": "band-lyrics-projection-140-karaoke-sync",
     "title": "#140 讓歌詞自己翻頁：教職員樂團的聖誕趴團練歌本，從吉他譜做到去人聲伴唱",
     "excerpt": "老師們要組團上台唱 10 首歌，每個人手上的譜都不一樣，投影要有人專門按下一頁。#140 把吉他譜、大螢幕歌詞投影和伴唱同步做成同一份歌本：改調自動算變調夾，長句自動分上下排，選好伴唱音檔，歌詞就跟著音樂翻頁。",

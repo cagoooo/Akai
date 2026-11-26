@@ -853,8 +853,14 @@
     <priority>0.78</priority>
   </url>
   <url>
+    <loc>https://cagoooo.github.io/Akai/tool/141/</loc>
+    <lastmod>2026-11-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
     <loc>https://cagoooo.github.io/Akai/blog/</loc>
-    <lastmod>2026-11-24</lastmod>
+    <lastmod>2026-11-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
@@ -1701,6 +1707,12 @@
   <url>
     <loc>https://cagoooo.github.io/Akai/blog/band-lyrics-projection-140-karaoke-sync/</loc>
     <lastmod>2026-11-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cagoooo.github.io/Akai/blog/ipad-battery-monitor-141-jamf-charging-cart/</loc>
+    <lastmod>2026-11-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

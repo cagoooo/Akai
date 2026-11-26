@@ -15881,7 +15881,96 @@ const POST_140: BlogPost = {
 先按「📺 大螢幕歌詞投影」看看長句怎麼自動分排，再改一次演唱調，看變調夾的格數怎麼跟著變。下次學校要辦活動，你的歌本也可以自己翻頁。`,
 };
 
-export const POSTS: BlogPost[] = [POST_140, POST_139, POST_138, POST_137, POST_136, POST_135, POST_134, POST_133, POST_132, POST_131, POST_130, POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+const POST_141: BlogPost = {
+  slug: 'ipad-battery-monitor-141-jamf-charging-cart',
+  title: '#141 不用再每天登入 Jamf：讓網頁每 15 分鐘幫你巡一次平板充電車',
+  excerpt:
+    '學生借平板才發現沒電，多半是充電線沒插好或壞了。#141 每 15 分鐘自動從 Jamf 讀取全校 iPad 電量，把半夜沒充飽、連續低電量的平板排成待檢查清單，充電車格子圖一眼看出哪一格要換線；程式已開源，別校改設定檔就能套用。',
+  publishedAt: '2026-11-26',
+  readingMinutes: 6,
+  tags: ['iPad 管理', 'Jamf Pro', '平板充電車', '資訊組', '開源範本'],
+  toolIds: [141, 46, 82],
+  coverEmoji: '🔋',
+  coverColor: 'green',
+  body: `## 上課鐘響，平板沒電
+
+資訊組最怕的一句話：「老師，這台開不了機。」
+
+學校的 iPad 放在充電車裡，一車二十幾台，每天下課收回來插線充電。只要有一條線沒插緊、接頭鬆了、或線本身壞掉，那一格的平板就會整晚沒充到電，隔天上課才被學生發現。
+
+Jamf 其實看得到每台平板的電量，問題是要每天登入、打開清單、一台一台對照是哪一車哪一格。忙起來就忘了查，等到發現時，那堂課已經被耽誤了。
+
+所以我想：既然資料都在 Jamf 裡，能不能讓電腦自己去查，查到有問題再告訴我？
+
+## #141 每 15 分鐘做什麼？
+
+**自動讀取電量** — 系統每 15 分鐘自動登入 Jamf Pro，讀取全校 iPad 的電量和「上次回報時間」，整理成一份資料放到網頁上。
+
+**每小時請平板主動回報** — Jamf 上的電量只有在平板「回報清單」時才會更新，平常大約一天一次，太慢了。所以系統每小時會送一次「更新清查」指令。上線那天實測，送出後 10 分鐘內，全校 272 台裡有 236 台回報了最新電量；剩下的多半是關機或沒連上網路。
+
+**判斷哪些平板有問題** —
+- 電量低於 20% 標成「危險」，20～49% 標成「偏低」。
+- 學生車的平板在半夜 0:00～7:30 回報時還不到 80%，而且之後沒有回升，標成「半夜沒充飽」。整晚都插在車上卻沒充飽，最可能就是那一格的線有問題。
+- 連續兩次回報（相隔 2 小時以上）都低於 50% 又沒回升，標成「連續低電量」。
+- 超過 3 天沒回報的另外列一區，畫面上的電量是舊的，要去找出來開機連網。
+
+## 打開網頁看得到什麼
+
+**今天要去檢查的平板** — 學生機的問題清單，依嚴重程度排好。檢查完可以打勾；等那台平板回報新電量，勾勾會自動取消，不會一直掛著。按「複製清單」可以直接貼到 LINE 請同事幫忙看。
+
+**充電車總覽** — 每一台充電車排成格子圖，一格就是車上的一個位置，號碼就是平板編號，顏色代表電量。有問題的格子會加框，走到充電車前面，對著格子圖就知道要拔哪一格的線來看。
+
+**每台的電量變化** — 點一格會跳出最近 14 天的電量變化圖，和一段處理建議，例如「半夜在充電車上卻沒充飽，可以換一條線試試看」。
+
+**Google Chat 推播** — 學生機出現新問題時，推到資訊組的 Google Chat 聊天室。同一台平板同一次回報只通知一次，不會一直洗版。上線當天下午第一次推播，就列出了好幾台需要檢查的學生機。
+
+## 不用架主機的做法
+
+整套系統沒有自己的伺服器：
+
+- **GitHub Actions** 負責登入 Jamf、讀資料、算出哪些平板有問題，再把網頁發布到 **GitHub Pages**。
+- 原本用 GitHub 內建的定時執行，結果實測常常晚好幾個小時才跑，所以改用 **Google Apps Script** 當鬧鐘，每 15 分鐘叫 GitHub 跑一次。
+- Jamf 帳密放在 GitHub 的 Secrets，程式碼裡沒有任何密碼。
+- 網頁只顯示平板編號、使用者代號、機型、電量和回報時間，不顯示序號、網路位址，也不呼叫任何 AI 模型。
+
+## 開源給其他學校
+
+做完之後想到：用 Jamf 管理 iPad 的學校應該都有一樣的困擾。所以我把它整理成開源版，以 MIT 授權放在 GitHub，也設成範本專案：
+
+1. 在 GitHub 按「Use this template」複製一份。
+2. 把自己學校的 Jamf 網址和帳號放進 GitHub 的 Secrets。
+3. 改 config.json 裡的校名和分車規則（平板名稱裡的代號對應到哪一台車），開啟網頁發布就上線了。
+
+說明文件寫了完整步驟。有兩件事特別提醒：網頁是公開的，平板名稱要用編號、不能用學生姓名；也建議在 Jamf 建唯讀的 API 帳號，不要直接用管理員密碼。
+
+## 情境示例：你的學校可以這樣用
+
+以下是想像的使用情境，不是已發生的紀錄：
+
+- **早上第一節前**：資訊組長打開網頁，看到「半夜沒充飽」列了 3 台，走到充電車前對著格子圖找到那 3 格，換掉其中一條鬆掉的線。
+- **段考前一週**：全校要用平板考試，設備組先看「很久沒回報」那一區，把沒開機的平板一台台找出來充電。
+- **導師借車前**：Google Chat 聊天室裡跳出推播，資訊組先把那幾台抽起來，不讓學生借到沒電的平板。
+
+## 配對工具推薦
+
+- [#46 禮堂&專科教室&IPAD平板車預約系統](https://cagoooo.github.io/schedule/)：平板車誰借、哪一節借，先排好再借。
+- [#82 教室資訊設備盤點系統](https://cagoooo.github.io/smes-inventory/)：盤點全校資訊設備，發現有問題的平板也能一起記錄。
+- [#141 iPad 電量監控站](https://cagoooo.github.io/ipad-battery-monitor/)：本篇主角，石門國小實際運作中的畫面。
+
+## 適用對象
+
+- 用 Jamf Pro 管理 iPad 的學校資訊組長、資訊老師
+- 負責平板充電車與充電線的設備組
+- 想參考「GitHub Actions＋Apps Script」不用架主機做法的老師
+
+## 想試試？
+
+→ [打開 #141 iPad 電量監控站](https://cagoooo.github.io/ipad-battery-monitor/)
+
+先看「今天要去檢查的平板」和充電車格子圖，再點一格看電量變化。想用在自己學校，到 [GitHub 專案頁](https://github.com/cagoooo/ipad-battery-monitor) 按「Use this template」，照說明一步一步做，你的充電車也能每 15 分鐘被巡一次。`,
+};
+
+export const POSTS: BlogPost[] = [POST_141, POST_140, POST_139, POST_138, POST_137, POST_136, POST_135, POST_134, POST_133, POST_132, POST_131, POST_130, POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。

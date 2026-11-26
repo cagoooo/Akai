@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 140+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 141+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Tue, 24 Nov 2026 02:02:05 GMT</pubDate>
-    <lastBuildDate>Thu, 26 Nov 2026 12:04:35 GMT</lastBuildDate>
+    <pubDate>Thu, 26 Nov 2026 12:21:55 GMT</pubDate>
+    <lastBuildDate>Thu, 26 Nov 2026 12:23:24 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,27 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：iPad 電量監控站｜Jamf 充電車自動巡查</title>
+      <link>https://cagoooo.github.io/Akai/tool/141/</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/141</guid>
+      <pubDate>Thu, 26 Nov 2026 12:21:55 GMT</pubDate>
+      <description>石門國小資訊組自製的 iPad 電量監控網頁：每 15 分鐘自動從 Jamf Pro 讀取全校平板電量，找出半夜沒充飽、連續低電量的平板，充電車格子圖一眼看出哪一格的充電線要檢查，新問題推播到 Google Chat；已開源，各校改設定檔就能套用。</description>
+      <category>iPad 管理</category>
+      <category>Jamf Pro</category>
+      <category>平板充電車</category>
+      <category>電量監控</category>
+      <category>充電線檢查</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#141 不用再每天登入 Jamf：讓網頁每 15 分鐘幫你巡一次平板充電車</title>
+      <link>https://cagoooo.github.io/Akai/blog/ipad-battery-monitor-141-jamf-charging-cart/</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/ipad-battery-monitor-141-jamf-charging-cart</guid>
+      <pubDate>Thu, 26 Nov 2026 00:00:00 GMT</pubDate>
+      <description>學生借平板才發現沒電，多半是充電線沒插好或壞了。#141 每 15 分鐘自動從 Jamf 讀取全校 iPad 電量，把半夜沒充飽、連續低電量的平板排成待檢查清單，充電車格子圖一眼看出哪一格要換線；程式已開源，別校改設定檔就能套用。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
     <item>
       <title>🆕 新工具：聖誕趴團練歌詞投影｜吉他譜＋伴唱同步</title>
       <link>https://cagoooo.github.io/Akai/tool/140/</link>
@@ -311,27 +332,6 @@
       <category>PAIA</category>
       <category>魷來魷去</category>
       <category>監督式學習</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#126 DEADZONE 能量防線：把失敗放在策略上，孩子才會想再試一次</title>
-      <link>https://cagoooo.github.io/Akai/blog/deadzone-126-3d-tower-defense-energy-weapons/</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/deadzone-126-3d-tower-defense-energy-weapons</guid>
-      <pubDate>Sun, 06 Sep 2026 00:00:00 GMT</pubDate>
-      <description>#126 是一款直接在瀏覽器跑的 3D 塔防射擊：三種能量武器隨時切換、三種防禦塔各有分工、十波殭屍撲向能源核心。最關鍵的設計是角色不受傷害、敵人只攻核心——失敗回饋落在「這一波該把塔蓋在哪裡」，是能被討論、被修正、被下一局驗證的判斷，孩子因此願意再想一次。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>🆕 新工具：DEADZONE 能量防線：3D 塔防射擊</title>
-      <link>https://cagoooo.github.io/Akai/tool/126/</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/126</guid>
-      <pubDate>Sat, 05 Sep 2026 16:00:00 GMT</pubDate>
-      <description>三種能量武器、三種防禦塔、十波殭屍。在彎道埋伏、用有限能源在「多蓋一座塔」與「升級舊塔」之間取捨，撐過十波守住能源核心。角色不受傷害、敵人只攻核心，失敗原因落在策略而不是手速，動腦但不挫折；桌機鍵鼠、手機雙搖桿都能玩。</description>
-      <category>3D塔防</category>
-      <category>能量武器</category>
-      <category>殭屍防守</category>
-      <category>策略思考</category>
-      <category>資源取捨</category>
     </item>
   </channel>
 </rss>
