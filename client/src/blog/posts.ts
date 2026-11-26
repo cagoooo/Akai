@@ -6426,10 +6426,10 @@ const POST_16: BlogPost = {
   slug: 'talk-16-teacher-helper',
   title: '#16 親師溝通小幫手（talk.smes）：舊版已停用，請改用 #89 教師回覆小幫手 Pro 版',
   excerpt:
-    '#16「**教師小幫手**」是阿凱**最早期**的親師溝通 AI 工具。2026 年 11 月它用的 AI 模型被 Google 停用，按下「產生回覆建議」會出錯，所以已正式停用，舊網址會自動帶你到 [#89 教師回覆小幫手 Pro 版](/blog/teacher-reply-89-pro-parent-message)。這篇留下它怎麼演化成 Pro 版的故事。',
+    '#16「教師小幫手」是阿凱最早期的親師溝通 AI 工具。2026 年 11 月它用的 AI 模型被 Google 停用，按下「產生回覆建議」會出錯，所以已正式停用，舊網址會自動帶你到 #89 教師回覆小幫手 Pro 版。這篇留下它怎麼演化成 Pro 版的故事。',
   publishedAt: '2026-05-21',
   readingMinutes: 4,
-  tags: ['親師溝通', '已停用', '#89 前身', 'Next.js', '工具演化'],
+  tags: ['親師溝通', '已停用', 'Pro 版前身', 'Next.js', '工具演化'],
   toolIds: [16, 89, 7],
   coverEmoji: '💌',
   coverColor: 'pink',
