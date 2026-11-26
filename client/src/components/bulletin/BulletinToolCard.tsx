@@ -41,6 +41,8 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0, highlighte
   const isFav = isFavorite(tool.id);
   const totalClicks = tool.totalClicks ?? 0;
   const blogPost = getPrimaryBlogPostForTool(tool.id);
+  // 舊版已不能用：卡片的「開啟」改成前往 Pro 版
+  const isRetired = tool.legacyRetired === true && tool.upgradeToId != null;
 
   // 「🆕 新工具」判斷：addedAt 在 7 天內為新；未設 addedAt 的歷史工具不算新
   const isNew = (() => {
@@ -319,7 +321,7 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0, highlighte
           <Link
             href={`/tool/${tool.upgradeToId}`}
             onClick={(e) => e.stopPropagation()}
-            aria-label={`前往 ${tool.title} 的 Pro 升級版`}
+            aria-label={isRetired ? `${tool.title} 舊版已停用，前往 Pro 版` : `前往 ${tool.title} 的 Pro 升級版`}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -327,16 +329,16 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0, highlighte
               marginTop: 8,
               padding: '5px 8px',
               borderRadius: 8,
-              border: '1px solid #6d28d9',
-              background: '#f3ebff',
-              color: '#5b21b6',
+              border: isRetired ? '1.5px solid #b91c1c' : '1px solid #6d28d9',
+              background: isRetired ? '#fff1e6' : '#f3ebff',
+              color: isRetired ? '#9a1b1b' : '#5b21b6',
               fontSize: 12,
               fontWeight: 800,
               textDecoration: 'none',
               boxShadow: '1px 1px 0 rgba(26,26,26,.18)',
             }}
           >
-            🚀 已推出 Pro 版，功能更完整 →
+            {isRetired ? '⚠️ 舊版已停用，請改用 Pro 版 →' : '🚀 已推出 Pro 版，功能更完整 →'}
           </Link>
         )}
       </div>
@@ -380,6 +382,27 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0, highlighte
             </button>
             <HeartBurst trigger={heartTrigger} />
           </div>
+          {isRetired ? (
+            <Link
+              href={`/tool/${tool.upgradeToId}`}
+              onClick={(e) => e.stopPropagation()}
+              aria-label={`${tool.title} 舊版已停用，改用 Pro 版`}
+              className="bulletin-card-open"
+              style={{
+                background: '#1a1a1a',
+                color: '#fff',
+                border: 'none',
+                padding: '5px 12px',
+                borderRadius: 999,
+                fontSize: 12,
+                fontWeight: 700,
+                textDecoration: 'none',
+                fontFamily: 'inherit',
+              }}
+            >
+              改用 Pro →
+            </Link>
+          ) : (
           <button
             type="button"
             onClick={handleOpen}
@@ -399,6 +422,7 @@ export function BulletinToolCard({ tool, tilt = 0, pinColorIndex = 0, highlighte
           >
             開啟 →
           </button>
+          )}
         </div>
       </div>
     </article>

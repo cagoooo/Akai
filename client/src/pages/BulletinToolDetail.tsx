@@ -272,6 +272,8 @@ export function BulletinToolDetail() {
   const isFav = isFavorite(toolId);
   const blogPost = getPrimaryBlogPostForTool(tool.id);
   const repoUrl = toolRepoUrl(tool.url);
+  // 舊版已不能用：Pro 版改成主要入口
+  const isRetired = tool.legacyRetired === true && tool.upgradeToId != null;
   const previewSrc = tool.previewUrl
     ? `${import.meta.env.BASE_URL}previews/${tool.previewUrl.split('/').pop()}`
     : null;
@@ -603,26 +605,49 @@ export function BulletinToolDetail() {
                 justifyContent: 'center',
               }}
             >
+              {isRetired && (
+                <Link
+                  href={`/tool/${tool.upgradeToId}`}
+                  aria-label="舊版已停用，前往 Pro 版"
+                  style={{
+                    background: tokens.accent,
+                    color: tokens.ink,
+                    border: '2.5px solid #1a1a1a',
+                    padding: '14px 26px',
+                    borderRadius: 10,
+                    fontSize: 16,
+                    fontWeight: 900,
+                    fontFamily: tokens.font.tc,
+                    textDecoration: 'none',
+                    boxShadow: '4px 4px 0 rgba(0,0,0,.4)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 8,
+                  }}
+                >
+                  <span>🚀 改用 Pro 版</span>
+                </Link>
+              )}
               <button
                 type="button"
                 onClick={handleUseTool}
                 style={{
-                  background: tokens.accent,
+                  background: isRetired ? tokens.paper : tokens.accent,
                   color: tokens.ink, // 黑字配橘底約 7:1；原白字只有 2.55:1
                   border: '2.5px solid #1a1a1a',
-                  padding: '14px 26px',
+                  padding: isRetired ? '14px 20px' : '14px 26px',
                   borderRadius: 10,
-                  fontSize: 16,
-                  fontWeight: 900,
+                  fontSize: isRetired ? 14 : 16,
+                  fontWeight: isRetired ? 700 : 900,
                   cursor: 'pointer',
                   fontFamily: tokens.font.tc,
-                  boxShadow: '4px 4px 0 rgba(0,0,0,.4)',
+                  boxShadow: isRetired ? '3px 3px 0 rgba(0,0,0,.3)' : '4px 4px 0 rgba(0,0,0,.4)',
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: 8,
                 }}
               >
-                <span>⚡ 立即使用</span>
+                <span>{isRetired ? '開啟舊版（已停用）' : '⚡ 立即使用'}</span>
               </button>
               <button
                 type="button"
@@ -813,7 +838,7 @@ export function BulletinToolDetail() {
                 閱讀文章
               </Link>
             )}
-            {tool.upgradeToId != null && (
+            {tool.upgradeToId != null && !isRetired && (
               <Link
                 href={`/tool/${tool.upgradeToId}`}
                 aria-label={`前往 ${tool.title} 的 Pro 升級版`}
@@ -864,6 +889,75 @@ export function BulletinToolDetail() {
               </a>
             )}
             </div>
+
+            {/* 舊版停用提醒（紅膠帶便條）：把 Pro 版當主要入口 */}
+            {isRetired && (
+              <div
+                role="note"
+                className="bulletin-retired-note"
+                style={{
+                  position: 'relative',
+                  marginTop: 22,
+                  padding: '20px 22px 18px',
+                  background: '#fff1e6',
+                  border: '2.5px solid #1a1a1a',
+                  borderRadius: 6,
+                  boxShadow: '4px 4px 0 rgba(0,0,0,.35)',
+                  transform: 'rotate(-0.6deg)',
+                  fontFamily: tokens.font.tc,
+                  color: '#2a2a2a',
+                }}
+              >
+                <div
+                  aria-hidden="true"
+                  style={{
+                    position: 'absolute',
+                    top: -12,
+                    left: 18,
+                    padding: '3px 12px',
+                    background: '#dc2626',
+                    color: '#fff',
+                    fontSize: 12,
+                    fontWeight: 900,
+                    letterSpacing: '0.08em',
+                    border: '2px solid #1a1a1a',
+                    transform: 'rotate(-3deg)',
+                  }}
+                >
+                  ⚠️ 舊版已停用
+                </div>
+                <p style={{ margin: '4px 0 0', fontSize: 17, fontWeight: 900, color: '#9a1b1b', lineHeight: 1.5 }}>
+                  這個舊版本已經不能用了，請改用 Pro 版！
+                </p>
+                <p style={{ margin: '8px 0 0', fontSize: 15, lineHeight: 1.75 }}>
+                  {tool.retiredReason || '舊版已停止維護，請改用 Pro 版。'}
+                  Pro 版可以貼上家長訊息或 LINE 截圖，選情境、調語氣，就能產生回覆草稿。
+                </p>
+                <Link
+                  href={`/tool/${tool.upgradeToId}`}
+                  aria-label="前往 Pro 版工具頁"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 8,
+                    marginTop: 14,
+                    minHeight: 48,
+                    padding: '10px 22px',
+                    background: 'linear-gradient(135deg, #7c3aed, #a855f7)',
+                    color: '#fff',
+                    border: '2.5px solid #1a1a1a',
+                    borderRadius: 10,
+                    fontSize: 16,
+                    fontWeight: 900,
+                    textDecoration: 'none',
+                    boxShadow: '3px 3px 0 rgba(0,0,0,.4)',
+                  }}
+                >
+                  🚀 前往 Pro 版 →
+                </Link>
+              </div>
+            )}
 
             {/* 描述（白底便條 — Markdown 渲染） */}
             <div

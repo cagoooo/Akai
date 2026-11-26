@@ -40,6 +40,13 @@ export interface EducationalTool {
    * 用於卡片 / 詳情頁顯示「PRO 升級版」徽章。
    */
   upgradeFromId?: number;
+  /**
+   * 舊版已經不能用（例如 AI 模型被停用），要搭配 upgradeToId。
+   * 詳情頁會把 Pro 版改成主要按鈕、顯示停用提醒；卡片的「開啟」改成前往 Pro 版。
+   */
+  legacyRetired?: boolean;
+  /** 停用原因，顯示在詳情頁的提醒便條上（給老師看的白話說明）。 */
+  retiredReason?: string;
 }
 
 export interface TeacherMood {

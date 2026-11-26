@@ -2,6 +2,10 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.264] - 2026-11-26 — #16 親師溝通小幫手舊版停用，導向 Pro 版
+
+- **#16 親師溝通小幫手**（talk.smes.tyc.edu.tw）實測按下「產生回覆建議」會出現錯誤：舊版用的 `gemini-2.0-flash` 已被 Google 停用（404）。`tools.json` 為 #16 加 `upgradeToId: 89`、`legacyRetired`、`retiredReason`，#89 加 `upgradeFromId: 16`。工具詳情頁新增紅膠帶「舊版已停用」便條與「🚀 前往 Pro 版」大按鈕，主要按鈕改成「🚀 改用 Pro 版」，原按鈕降為「開啟舊版（已停用）」；首頁卡片的「開啟 →」改成「改用 Pro →」、升級提示改成紅色「⚠️ 舊版已停用，請改用 Pro 版」。#89 自動出現「✨ PRO 升級版」徽章。
+
 ## [3.6.263] - 2026-11-26 — Sentry WebKit 資料庫交易已結束歸類
 
 - **JAVASCRIPT-REACT-3G**：iPhone App 內建瀏覽器（WKWebView，iOS 26.4.2）開首頁 1 秒內，Firestore 開啟離線快取的 `createOrUpgrade` 交易失敗：`UnknownError: Attempt to get records from database without an in-progress transaction`＝WebKit 的資料庫交易已經結束還被拿來讀資料，是瀏覽器本身的問題，不是站方程式錯誤。前端 `BROWSER_STORAGE_LOST` 與後端 `errorAlertPolicy.ts` 的 `NOISE_MESSAGE_PATTERNS` 都加認這句（含 App Check 的單數說法 `a record`）：Sentry 歸到固定 issue `browser-indexeddb-lost`（同頁只報一筆、warning），Google Chat 不再推播。測試各加一例。

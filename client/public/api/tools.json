@@ -619,6 +619,9 @@
   },
   {
     "id": 16,
+    "upgradeToId": 89,
+    "legacyRetired": true,
+    "retiredReason": "舊版用的 AI 模型已被 Google 停用，按下「產生回覆建議」會出現錯誤，請改用 Pro 版。",
     "audienceFit": {
       "audiences": [
         "teacher"
@@ -3672,6 +3675,7 @@
   },
   {
     "id": 89,
+    "upgradeFromId": 16,
     "audienceFit": {
       "audiences": [
         "teacher"
