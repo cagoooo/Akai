@@ -167,6 +167,11 @@ describe('直接套用版提示詞（#141 iPad 電量監控站）', () => {
     expect(prompt).toContain('學生姓名或學號');
   });
 
+  it('學校 Jamf 由教育局統一管理、看不到 API 設定時有替代做法', () => {
+    expect(prompt).toContain('找不到「API 角色與用戶端」');
+    expect(prompt).toContain('請教育局的 Jamf 管理者');
+  });
+
   it('附原始碼、設定說明與工具介紹頁', () => {
     expect(prompt).toContain('https://github.com/cagoooo/ipad-battery-monitor#給其他學校改成自己的版本');
     expect(prompt).toContain('https://cagoooo.github.io/Akai/tool/141/');
