@@ -72,7 +72,7 @@ export const POSTS_INDEX: BlogPostMeta[] = [
     "toolIds": [
       138,
       59,
-      16
+      89
     ],
     "coverEmoji": "🏫",
     "coverColor": "green"
@@ -197,8 +197,7 @@ export const POSTS_INDEX: BlogPostMeta[] = [
     ],
     "toolIds": [
       132,
-      89,
-      16
+      89
     ],
     "coverEmoji": "📒",
     "coverColor": "green"
@@ -2042,16 +2041,16 @@ export const POSTS_INDEX: BlogPostMeta[] = [
   },
   {
     "slug": "talk-16-teacher-helper",
-    "title": "#16 親師溝通小幫手（talk.smes）：基礎版親師訊息回覆建議（#89 Pro 版前身）",
-    "excerpt": "#16 真實名稱「**教師小幫手**」是阿凱**最早期**的親師溝通 AI 工具 — Next.js + Firebase Hosting，提供親師訊息回覆建議。是後來進化成 [#89 教師回覆小幫手 Pro](/blog/teacher-reply-89-pro-parent-message) 的入門基礎版。",
+    "title": "#16 親師溝通小幫手（talk.smes）：舊版已停用，請改用 #89 教師回覆小幫手 Pro 版",
+    "excerpt": "#16「**教師小幫手**」是阿凱**最早期**的親師溝通 AI 工具。2026 年 11 月它用的 AI 模型被 Google 停用，按下「產生回覆建議」會出錯，所以已正式停用，舊網址會自動帶你到 [#89 教師回覆小幫手 Pro 版](/blog/teacher-reply-89-pro-parent-message)。這篇留下它怎麼演化成 Pro 版的故事。",
     "publishedAt": "2026-05-21",
     "readingMinutes": 4,
     "tags": [
       "親師溝通",
-      "基礎版",
+      "已停用",
+      "#89 前身",
       "Next.js",
-      "Firebase Hosting",
-      "#89 前身"
+      "工具演化"
     ],
     "toolIds": [
       16,
@@ -2958,7 +2957,6 @@ export const POSTS_INDEX: BlogPostMeta[] = [
     ],
     "toolIds": [
       98,
-      16,
       89
     ],
     "coverEmoji": "🎒",

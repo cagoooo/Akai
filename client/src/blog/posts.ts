@@ -1104,7 +1104,6 @@ const POST_7: BlogPost = {
 
 - [#23 點石成金🐝 評語優化網頁版](/tool/23) — #7 是 LINE Bot 版，#23 是純網頁版，看您習慣哪個
 - [#89 教師回覆小幫手 Pro](/tool/89) — 處理聯絡簿回覆 / 家長 LINE 訊息的 AI 版本
-- [#16 親師溝通小幫手](/tool/16) — 親師訊息草稿 AI 助手
 
 ## 適用情境
 
@@ -2527,7 +2526,7 @@ const POST_89: BlogPost = {
 
 ## 配對工具推薦
 
-- [#16 親師溝通小幫手](/tool/16) — 基礎版（給新手老師入門）
+- [#16 親師溝通小幫手的故事](/blog/talk-16-teacher-helper/) — 已停用的前身，看它怎麼演化成 Pro 版
 - [#10 班級小管家](/tool/10) — 加扣分與作業紀錄（回家長更有料）
 - [#89 Pro 版](/tool/89) — 本篇主角
 
@@ -6425,103 +6424,66 @@ const POST_15: BlogPost = {
 
 const POST_16: BlogPost = {
   slug: 'talk-16-teacher-helper',
-  title: '#16 親師溝通小幫手（talk.smes）：基礎版親師訊息回覆建議（#89 Pro 版前身）',
+  title: '#16 親師溝通小幫手（talk.smes）：舊版已停用，請改用 #89 教師回覆小幫手 Pro 版',
   excerpt:
-    '#16 真實名稱「**教師小幫手**」是阿凱**最早期**的親師溝通 AI 工具 — Next.js + Firebase Hosting，提供親師訊息回覆建議。是後來進化成 [#89 教師回覆小幫手 Pro](/blog/teacher-reply-89-pro-parent-message) 的入門基礎版。',
+    '#16「**教師小幫手**」是阿凱**最早期**的親師溝通 AI 工具。2026 年 11 月它用的 AI 模型被 Google 停用，按下「產生回覆建議」會出錯，所以已正式停用，舊網址會自動帶你到 [#89 教師回覆小幫手 Pro 版](/blog/teacher-reply-89-pro-parent-message)。這篇留下它怎麼演化成 Pro 版的故事。',
   publishedAt: '2026-05-21',
   readingMinutes: 4,
-  tags: ['親師溝通', '基礎版', 'Next.js', 'Firebase Hosting', '#89 前身'],
+  tags: ['親師溝通', '已停用', '#89 前身', 'Next.js', '工具演化'],
   toolIds: [16, 89, 7],
   coverEmoji: '💌',
   coverColor: 'pink',
-  body: `## #16 跟 #89 的關係：基礎版 vs Pro 版
+  body: `## ⚠️ 先說結論：#16 已停用，請改用 #89 Pro 版
 
-阿凱親師溝通工具的演化：
+2026 年 11 月 26 日實測：在舊網站 \`talk.smes.tyc.edu.tw\` 貼上家長訊息、按下「產生回覆建議」，畫面直接出現錯誤。原因是舊版用的 AI 模型 \`gemini-2.0-flash\` 已經被 Google 停用，就像學校把舊影印機搬走了，按下去當然印不出來。
 
-| 維度 | **#16 教師小幫手**（本篇）| **[#89 教師回覆小幫手 Pro 版](/blog/teacher-reply-89-pro-parent-message/)** |
+所以 #16 正式退休：
+
+- **舊網址還在**，但打開會看到「教師小幫手已升級為 Pro 版」的說明頁，**5 秒後自動帶你到 Pro 版**
+- 想回覆家長訊息，請直接用 → **[#89 教師回覆小幫手 Pro 版](/tool/89)**
+
+## #89 Pro 版能做什麼？
+
+| 你想做的事 | 在 #89 Pro 版怎麼做 |
+|---|---|
+| 回覆一則家長訊息 | 貼上訊息 → 選情境 → 產生回覆草稿 |
+| 家長傳的是 LINE 截圖 | 直接上傳截圖，AI 會讀出內容 |
+| 覺得語氣太硬或太長 | 用微調按鈕：再溫和、再正式、縮短、加細節 |
+| 簡單的「好的，明天會帶」 | 一樣貼上就好，不用懂其他功能 |
+
+**新手老師也可以直接用 Pro 版**：功能雖然比較多，但最基本的「貼上 → 產生」三步驟跟舊版一模一樣，其他按鈕不用也沒關係。
+
+## #16 跟 #89 的關係：從基礎版到 Pro 版
+
+| 維度 | **#16 教師小幫手**（已停用）| **[#89 教師回覆小幫手 Pro 版](/blog/teacher-reply-89-pro-parent-message/)** |
 |---|---|---|
-| 部署 | Firebase Hosting + talk.smes | GitHub Pages + cagoooo.github.io |
-| 功能 | **基礎回覆建議** | 12 種情境分類 + 4 種微調按鈕 + 截圖辨識 + 後台統計 |
-| 技術棧 | Next.js + Firebase | Next.js 15.2 + Genkit 1.8 + Gemini 2.5 Flash |
-| 描述 | 「為親師溝通提供小幫手支援的回覆建議」 | 完整親師溝通工作流 |
-| 適合 | **新手老師入門** | **資深班導日常用** |
+| 狀態 | **2026-11 停用**，舊網址自動跳轉 | **使用中** |
+| 網址 | talk.smes.tyc.edu.tw | cagoooo.github.io/Message |
+| 功能 | 基礎回覆建議 | 12 種情境分類 + 4 種微調按鈕 + 截圖辨識 + 後台統計 |
+| 適合 | （已停用） | 新手老師、資深班導都適用 |
 
-## #16 真實怎麼做？
+**#16 一開始就有「核心功能」**：貼家長訊息、AI 給回覆草稿、老師微調後送出。阿凱之後一步步加上情境分類、微調按鈕、截圖辨識，就成了 #89 Pro。
 
-**真實標題**：「**教師小幫手**」（簡單直白命名）
+## 原本為什麼要「並存」？現在為什麼停用？
 
-**meta description**：「**為親師溝通提供小幫手支援的回覆建議。**」（簡潔版）
+阿凱原本的想法是**漸進式工具設計**：簡單的入門版給新手老師、完整的 Pro 版給資深班導，兩個並存。跟其他工具家族是同一個邏輯：
 
-**核心功能（基礎版）**：
-- 貼家長訊息
-- AI 給回覆建議草稿
-- 老師微調後送出
-
-跟 #89 Pro 比，**沒有**：
-- ❌ 12 種情境分類
-- ❌ 4 種微調按鈕（再溫和 / 再正式 / 縮短 / 加細節）
-- ❌ 對話截圖 multimodal 辨識
-- ❌ 管理員後台統計
-
-**但這代表 #16 一開始就有「核心功能」** — 阿凱之後一步步加上去就變 #89 Pro。
-
-## 真實技術棧
-
-- **Next.js**（_next/static bundle）
-- **Tailwind CSS**
-- 部署：\`talk.smes.tyc.edu.tw\` Firebase Hosting
-
-## 為什麼 #16 跟 #89 同時保留？
-
-當你升級工具，**舊版會不會被取代？**
-
-阿凱選擇**兩者並存**：
-- **#16**：給**新手老師 / 不熟科技的長輩老師**用（功能簡單少壓力）
-- **#89**：給**資深班導 / 想要完整功能**用
-
-→ 這是 **「**漸進式工具設計**」** 的代表：簡單入門版 + 完整 Pro 版**並存而非取代**。
-
-跟阿凱其他工具同款設計：
 - [#4 PIRLS 基礎](/blog/pirls-4-firebase-mirror/) vs [#87 PIRLS Pro](/blog/pirls-87-questioncraft-rewrite/)
 - [#13 5W1H 學校網域](/blog/aura-13-firebase-mirror/) vs [#92 Aura Pro](/blog/inspire-92-5w1h-pro-writing/)
 - [#25 國語演說特訓](/blog/speech-25-training-class-entry/) vs [#67 演說 Pro](/blog/speech-67-training-pro/)
-- **#16 親師溝通基礎** vs **#89 親師回覆 Pro**
 
-→ 「**漸進式工具家族**」是阿凱的設計哲學。
-
-## 教學情境
-
-**新進老師上手 1 個月**：
-- 用 #16 簡單功能 → 不會被多選項嚇到
-- 熟悉「**AI 寫親師訊息**」概念
-
-**3 個月後升級**：
-- 換 #89 Pro 版用 12 種情境 + 微調按鈕
-
-**特定情境用 #16**：
-- 簡單訊息（如「**老師謝謝你**」「**好的，明天會帶**」）
-- 不用開 Pro 版繁複介面
-- **快速回覆神器**
+但並存有個代價：**兩套程式都要維護**。AI 模型每隔一陣子就會被換掉，舊版沒跟著更新就會整個壞掉。#16 的基本功能 #89 全部都有，與其讓老師點到壞掉的舊版，不如直接把大家帶到 Pro 版。
 
 ## 配對工具推薦
 
-- [#89 教師回覆小幫手 Pro 版](/blog/teacher-reply-89-pro-parent-message/) — 完整版
+- [#89 教師回覆小幫手 Pro 版](/blog/teacher-reply-89-pro-parent-message/) — **請改用這個**
 - [#7 點石成金（評語優化）](/tool/7) — 期末評語 AI 工具
 - [#10 班級小管家](/blog/class-helper-10-daily-routine/) — 班級經營本體
 
-## 適用對象
+## 想回覆家長訊息？
 
-- 新進國中小班導
-- 不熟科技的長輩老師（功能少壓力小）
-- 想看「**漸進式工具設計**」案例的產品設計者
-- 簡單訊息快速回覆場景
-
-## 想試試？
-
-→ [前往 #16 親師溝通小幫手](/tool/16)
-→ [#89 Pro 版（完整功能）](/blog/teacher-reply-89-pro-parent-message/)
-
-新手老師建議 **從 #16 開始** → 用熟了再換 #89 Pro。
+→ [前往 #89 教師回覆小幫手 Pro 版](/tool/89)
+→ [閱讀 #89 Pro 版完整介紹](/blog/teacher-reply-89-pro-parent-message/)
 `,
 };
 
@@ -10835,7 +10797,7 @@ const POST_23: BlogPost = {
 
 - [#7 點石成金 LINE Bot 版](/blog/comment-7-ai-positive-language/) — 同源 LINE 介面
 - [#89 教師回覆小幫手 Pro](/blog/teacher-reply-89-pro-parent-message/) — 親師訊息 AI
-- [#16 親師溝通小幫手](/blog/talk-16-teacher-helper/) — 基礎版
+- [#16 親師溝通小幫手](/blog/talk-16-teacher-helper/) — 已停用的前身（請改用 #89）
 
 ## 適用對象
 
@@ -11520,7 +11482,7 @@ const POST_1: BlogPost = {
 
 - [#19 設計自己的專屬客服](/tool/19) — 同 Replit 製作後台
 - [#59 小智鈴 AI 客服](/blog/smes-59-ai-customer-service/) — 校內專屬版
-- [#16 親師溝通小幫手](/blog/talk-16-teacher-helper/) — 親師訊息 AI
+- [#89 教師回覆小幫手 Pro](/blog/teacher-reply-89-pro-parent-message/) — 親師訊息 AI
 
 ## 適用對象
 
@@ -12073,7 +12035,7 @@ const POST_98: BlogPost = {
   publishedAt: '2026-05-22',
   readingMinutes: 5,
   tags: ['教室百寶箱', '導師工具', '班級經營', '情緒打卡', 'PWA 離線'],
-  toolIds: [98, 16, 89],
+  toolIds: [98, 89],
   coverEmoji: '🎒',
   coverColor: 'orange',
   body: `## 國小導師每天打開 8 個分頁，到下午就累了
@@ -12172,7 +12134,7 @@ Google Sheet 出勤紀錄一個分頁。
 教室小幫手不是「取代某個現有工具」，是「**把 26 個分散小工具合在一頁**」。
 
 對應到阿凱工具集裡的其他親師工具：
-- 對家長端 — [#16 親師訊息小幫手](/tool/16) / [#89 親師訊息 Pro](/tool/89) 負責產出對家長的聯絡簿訊息
+- 對家長端 — [#89 教師回覆小幫手 Pro](/tool/89) 負責產出對家長的聯絡簿訊息
 - 對行政端 — [#2 行政業務協調系統](/tool/2) 負責跨班級行政
 - 對學生視角端 — [#50 童樂學園](/tool/50) 是學生自己玩的學習平台
 
@@ -12194,7 +12156,6 @@ Google Sheet 出勤紀錄一個分頁。
 
 ## 配對工具推薦
 
-- [#16 親師訊息小幫手](/tool/16) — 教室小幫手寫紀錄、親師訊息產出對家長的話
 - [#89 親師訊息 Pro](/tool/89) — 親師訊息 Pro 版含更多模板與 AI 文風
 - [#98 教室小幫手](/tool/98) — 本篇主角
 
@@ -15250,7 +15211,7 @@ const POST_132: BlogPost = {
   excerpt: '輔導紀錄最難的不是記得發生什麼，而是改寫成能登錄的正式文字。#132 把口語描述或狀況標籤整理成兩段紀錄，送出前先把姓名換成代號，期末還能用座號批次補登。',
   publishedAt: '2026-10-20', readingMinutes: 6,
   tags: ['輔導紀錄', '去識別化', '批次補登', '導師工作', 'Gemini'],
-  toolIds: [132, 89, 16], coverEmoji: '📒', coverColor: 'green',
+  toolIds: [132, 89], coverEmoji: '📒', coverColor: 'green',
   body: `## 事情記得，難的是寫成正式文字
 
 情境示例：下課時兩個孩子在走廊搶球，其中一個推了同學一把，同學膝蓋擦傷。老師先處理傷口、分別聽兩人說明，再陪推人的孩子想下次生氣時可以怎麼做。整件事處理得很完整，可是到了要登錄輔導紀錄的時候，手邊只剩一句「他推了同學一把，後來有道歉」。
@@ -15301,7 +15262,6 @@ const POST_132: BlogPost = {
 ## 配對工具：紀錄寫完，溝通接著上
 
 - [#89 教師回覆小幫手 Pro版](https://cagoooo.github.io/Message/)：需要回覆家長訊息時，貼上訊息、選情境調語氣，產生回覆草稿。
-- [#16 親師溝通小幫手](https://talk.smes.tyc.edu.tw/)：促進親師溝通的平台，可在聯繫家長前後使用。
 - [#132 輔導紀錄小幫手](https://cagoooo.github.io/counseling/)：回到本篇主角，把今天處理的事整理成正式紀錄。
 
 ## 適合誰
@@ -15709,7 +15669,7 @@ const POST_138: BlogPost = {
   publishedAt: '2026-11-22',
   readingMinutes: 6,
   tags: ['家長客服', '本機 AI', 'Ollama', '親師溝通', '學校知識庫'],
-  toolIds: [138, 59, 16],
+  toolIds: [138, 59, 89],
   coverEmoji: '🏫',
   coverColor: 'green',
   body: `## 同樣的問題，每天都有人問
@@ -15792,7 +15752,7 @@ const POST_138: BlogPost = {
 ## 配對工具推薦
 
 - [#59 小智鈴 AI 客服系統](https://cagoooo.github.io/smes/)：另一個為石門國小做的 AI 客服，可以對照兩種不同的架設方式
-- [#16 親師溝通小幫手](https://talk.smes.tyc.edu.tw/)：家長的訊息需要老師親自回覆時，用它產生回覆草稿
+- [#89 教師回覆小幫手 Pro版](https://cagoooo.github.io/Message/)：家長的訊息需要老師親自回覆時，用它產生回覆草稿
 - [#138 本篇主角](https://smes.tail207590.ts.net/)
 
 ## 想試試？
