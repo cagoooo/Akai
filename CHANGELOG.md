@@ -2,6 +2,10 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.272] - 2026-11-27 — 略過 MetaMask 擴充功能的警告
+
+- Sentry JAVASCRIPT-REACT-3J：訪客瀏覽器裝了 MetaMask 錢包擴充功能，它自己印出「ObjectMultiplex - orphaned data for stream "metamask-…"」警告，被 console 抓取送成告警。站方沒有任何區塊鏈程式，加進 `RECOVERABLE_CLIENT_NOISE` 略過。
+
 ## [3.6.271] - 2026-11-27 — #141 提示詞補上「找不到 API 角色」的做法
 
 - 實際檢查石門的 Jamf：教育部／教育局統一建置的學校 Jamf，學校管理帳號看不到「API 角色與用戶端」，也不能新增帳號。#141 的套用版提示詞第 4 步補上兩條路：先用學校管理帳號密碼，或請教育局 Jamf 管理者建只讀用戶端。

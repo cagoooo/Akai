@@ -551,6 +551,13 @@ describe('錯誤物件被凍結的沙箱瀏覽器（爬蟲）不送進 Sentry', 
   it('Firestore 的 iOS 12.2 提醒：2026-11-11 JAVASCRIPT-REACT-23', () => {
     expect(isRecoverableClientNoise(consoleEvent('[2026-11-11T06:50:46.510Z]  @firebase/firestore: Firestore (12.8.0): Firestore persistence suffers from a bug in iOS 12.2 Safari that may cause your app to stop working. See https://stackoverflow.com/q/56496296/110915 for details and a potential workaround.'))).toBe(true);
   });
+
+  it('MetaMask 擴充功能的警告：2026-11-26 JAVASCRIPT-REACT-3J', () => {
+    expect(isRecoverableClientNoise(consoleEvent('ObjectMultiplex - orphaned data for stream "metamask-multichain-provider"'))).toBe(true);
+    expect(isRecoverableClientNoise(consoleEvent('ObjectMultiplex - orphaned data for stream "metamask-provider"'))).toBe(true);
+    // 站方訊息提到 metamask 字樣不算
+    expect(isRecoverableClientNoise(consoleEvent('[tool] 讀取 metamask-provider 設定失敗'))).toBe(false);
+  });
 });
 
 describe('沒人接住的連線中斷（Vite 預先下載分塊失敗）不送 Sentry', () => {

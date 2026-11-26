@@ -130,6 +130,9 @@ const RECOVERABLE_CLIENT_NOISE: readonly RegExp[] = [
   // SDK 偵測到 iOS 12.2 時固定印出的提醒，不是錯誤；2026 年已無真人用 iOS 12.2，
   // 實際來源是偽裝 UA 的爬蟲（2026-11-11 JAVASCRIPT-REACT-23：Chrome 73 / iOS 12.2，Council Bluffs 機房）
   /Firestore persistence suffers from a bug in iOS 12\.2 Safari/,
+  // MetaMask 錢包擴充功能自己的頁內腳本印的 console.warn（站方沒有任何區塊鏈程式），
+  // captureConsole 包住整頁的 console 所以被抓到（2026-11-26 JAVASCRIPT-REACT-3J：Mac Firefox）
+  /^ObjectMultiplex - orphaned data for stream "metamask-/,
 ];
 
 function eventTexts(event: SentryEvent): string[] {
