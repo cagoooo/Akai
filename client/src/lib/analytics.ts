@@ -83,6 +83,13 @@ type EngagementEvent =
       relatedTools?: string;
       source?: string;
       requireHomeEntry?: boolean;
+    }
+  | {
+      /** 「請阿凱老師喝杯珍奶」：open＝打開說明窗、go_bobame＝按下前往 BobaMe */
+      type: 'support_click';
+      stage: 'open' | 'go_bobame';
+      source: 'floating' | 'footer';
+      requireHomeEntry?: boolean;
     };
 
 export function markHomeEntryForEngagementNotifications() {
@@ -135,7 +142,9 @@ export async function notifyEngagementAfterHomeEntry(event: EngagementEvent) {
   const dedupKey =
     event.type === 'tool_click'
       ? `tool:${event.toolId}:${event.source || 'home'}`
-      : `blog:${event.slug}`;
+      : event.type === 'support_click'
+        ? `support:${event.stage}:${event.source}`
+        : `blog:${event.slug}`;
   const bypassDedup =
     (event.type === 'tool_click' && event.source === 'tool_detail_use') ||
     (event.type === 'blog_read' && event.source === 'tool_detail_intro');

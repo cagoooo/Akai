@@ -3,7 +3,7 @@ import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
 import { Tape } from '@/components/primitives/Tape';
-import { trackEvent } from '@/lib/analytics';
+import { notifyEngagementAfterHomeEntry, trackEvent } from '@/lib/analytics';
 import { useScrollMoving } from './useScrollMoving';
 
 /** 阿凱老師的 BobaMe 贊助頁（AnyoneLab 平台，新台幣、可匯回台灣銀行帳戶） */
@@ -144,7 +144,10 @@ export function SupportDialog({
             href={SUPPORT_URL}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => trackEvent('support_click', { source })}
+            onClick={() => {
+              trackEvent('support_click', { source });
+              void notifyEngagementAfterHomeEntry({ type: 'support_click', stage: 'go_bobame', source });
+            }}
             className="bulletin-support-cta"
             style={{
               display: 'flex',
@@ -198,6 +201,7 @@ export function BulletinSupportButton() {
   const openDialog = () => {
     setOpen(true);
     trackEvent('support_open', { source: 'floating' });
+    void notifyEngagementAfterHomeEntry({ type: 'support_click', stage: 'open', source: 'floating' });
   };
 
   return (
@@ -258,6 +262,7 @@ export function FooterSupportNote({ noteStyle }: { noteStyle: React.CSSPropertie
         onClick={() => {
           setOpen(true);
           trackEvent('support_open', { source: 'footer' });
+          void notifyEngagementAfterHomeEntry({ type: 'support_click', stage: 'open', source: 'footer' });
         }}
         aria-label="請阿凱老師喝杯珍奶（贊助說明）"
         style={{

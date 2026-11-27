@@ -74,4 +74,25 @@ describe('實際通知 handler 的離線卡片組裝，不發送通知', () => {
     expect(payload).not.toContain('"url":"javascript:');
     expect(payload).not.toContain('"url":"data:');
   });
+
+  it.each([
+    ['open', 'floating', '打開了「請喝珍奶」說明', '右下角珍奶按鈕'],
+    ['go_bobame', 'footer', '前往 BobaMe 請喝珍奶', '頁尾「SUPPORT」便利貼'],
+  ])('珍奶按鈕 %s／%s 發出對應卡片', async (stage, source, title, entry) => {
+    await (onEngagementEventCreated as unknown as Handler)(event({ type: 'support_click', stage, source,
+      path: attack, pageUrl: 'javascript:alert(1)' }));
+    const payload = cardPayload();
+    expect(payload).toContain(title);
+    expect(payload).toContain(entry);
+    expect(payload).toContain('&lt;/pre&gt;');
+    expect(payload).not.toContain('<users/all>');
+    expect(payload).not.toContain('"url":"javascript:');
+  });
+
+  it('珍奶事件的步驟不在白名單就不通知，入口亂填顯示「未知入口」', async () => {
+    await (onEngagementEventCreated as unknown as Handler)(event({ type: 'support_click', stage: attack, source: 'floating' }));
+    expect(notify).not.toHaveBeenCalled();
+    await (onEngagementEventCreated as unknown as Handler)(event({ type: 'support_click', stage: 'open', source: attack }));
+    expect(cardPayload()).toContain('未知入口');
+  });
 });

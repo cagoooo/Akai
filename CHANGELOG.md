@@ -2,6 +2,11 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.275] - 2026-11-27 — 「請喝珍奶」按鈕點擊通知
+
+- 右下角珍奶按鈕、頁尾「SUPPORT」便利貼打開說明窗，以及按下「前往 BobaMe 請喝珍奶」，都會寫一筆 `engagementEvents`（type `support_click`，stage `open`／`go_bobame`），由 `onEngagementEventCreated` 發 Google Chat 卡片。同一次瀏覽同一步驟只通知一次。
+- 資料庫規則允許 `support_click`；後端步驟與入口走白名單。
+
 ## [3.6.274] - 2026-11-27 — 套件安全性更新
 
 - GitHub Dependabot 16 則警告：fast-xml-parser 5.11.2→5.12.1（網站、後端、mcp-scripts）、hono 4.13.13→4.13.23、@hono/node-server 2.1.3→2.1.11（mcp-scripts），都是同大版號修補版。

@@ -130,7 +130,7 @@ service cloud.firestore {
     // 錯誤日誌：匿名／Google 身分可依 schema 建立；只有 Admin 能查看與管理。
     match /engagementEvents/{eventId} {
       allow create: if request.auth != null
-        && request.resource.data.type in ['tool_click', 'blog_read'];
+        && request.resource.data.type in ['tool_click', 'blog_read', 'support_click'];
       allow read, update, delete: if request.auth != null && request.auth.token.admin == true;
     }
 

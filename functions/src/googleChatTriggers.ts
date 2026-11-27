@@ -578,6 +578,54 @@ export const onEngagementEventCreated = onDocumentCreated(
             return;
         }
 
+        if (eventType === "support_click") {
+            // 前端傳來的值一律走白名單，不直接顯示
+            const stage = data.stage === "go_bobame" ? "go_bobame" : data.stage === "open" ? "open" : null;
+            if (!stage) {
+                console.log(`[FirestoreOnEngagement] ignored support_click with unknown stage`);
+                return;
+            }
+            const entry = data.source === "footer" ? "頁尾「SUPPORT」便利貼" : data.source === "floating" ? "右下角珍奶按鈕" : "未知入口";
+            const isGo = stage === "go_bobame";
+            const titleText = isGo ? "🧋 有人點了「前往 BobaMe 請喝珍奶」" : "🧋 有人打開了「請喝珍奶」說明";
+            const summaryText = isGo
+                ? `🧋 有人從說明窗點了「前往 BobaMe 請喝珍奶」（${entry}）`
+                : `🧋 有人打開了「請阿凱老師喝杯珍奶」說明（${entry}）`;
+            const pagePath = safeText(data.path || "/");
+
+            const card = {
+                cardId: `engagement-support-${event.params.eventId}`,
+                card: {
+                    header: {
+                        title: titleText,
+                        subtitle: isGo ? "已前往 BobaMe 贊助頁（有沒有真的贊助要看 BobaMe 後台）" : "只打開說明窗，還沒前往 BobaMe",
+                        imageUrl: "https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/local_cafe/default/48px.svg",
+                        imageType: "CIRCLE",
+                    },
+                    sections: [
+                        {
+                            widgets: [
+                                { decoratedText: { topLabel: "步驟", text: isGo ? "② 按下前往 BobaMe" : "① 打開說明窗" } },
+                                { decoratedText: { topLabel: "入口", text: entry } },
+                                { decoratedText: { topLabel: "所在頁面", text: pagePath, wrapText: true } },
+                                {
+                                    buttonList: {
+                                        buttons: [
+                                            { text: "查看事件頁", onClick: { openLink: { url: pageUrl } } },
+                                            { text: "BobaMe 贊助頁", onClick: { openLink: { url: "https://cagoo.bobaboba.me" } } },
+                                        ],
+                                    },
+                                },
+                            ],
+                        },
+                    ],
+                },
+            };
+
+            await pushToGoogleChat(webhookUrl, summaryText, [card], "FirestoreOnEngagementSupport");
+            return;
+        }
+
         console.log(`[FirestoreOnEngagement] ignored unknown event type: ${eventType}`);
     }
 );
