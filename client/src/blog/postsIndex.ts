@@ -15,6 +15,27 @@ export type BlogPostMeta = Omit<BlogPost, 'body'>;
 
 export const POSTS_INDEX: BlogPostMeta[] = [
   {
+    "slug": "zizhan-xinghe-143-hanzi-shooting-game",
+    "title": "#143 字戰星河：當「梟」會拍翅膀、「哀」會低頭，射擊遊戲也能讓孩子多看一眼漢字",
+    "excerpt": "一款敵機、子彈、爆炸全都是漢字的橫向捲軸射擊遊戲：三架文字戰機、八大星域、「狙」追蹤雷射與「捕」收編副機，圖鑑收錄 78 種敵機字，每個字還會照字義做小動作。免安裝、免帳號，電腦平板手機都能玩。",
+    "publishedAt": "2026-11-27",
+    "readingMinutes": 5,
+    "tags": [
+      "漢字",
+      "射擊遊戲",
+      "教育遊戲",
+      "課間獎勵",
+      "免安裝"
+    ],
+    "toolIds": [
+      143,
+      71,
+      126
+    ],
+    "coverEmoji": "🚀",
+    "coverColor": "purple"
+  },
+  {
     "slug": "pagamo-ntpc-workshop-142-question-set-efficiency",
     "title": "#142 PaGamO 出題效率翻倍：一份讓老師兩小時內從「裝起來」走到「派給學生」的研習簡報",
     "excerpt": "新北市教師線上研習（2026-12-02）的 35 頁互動簡報：從 PIRLS 閱讀題組小幫手出題、PaGamO 教師後台上傳與派發題組，到 Gemini 技能＋題組下載器與 SKILL.md 拆解，附低中高年級練習短文與現場實作。",

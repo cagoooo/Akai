@@ -1,6 +1,6 @@
 # 阿凱老師 · 科技教育創新專區
 
-> 桃園市龍潭區石門國民小學阿凱老師的教育工具入口，整理 142 款教學與校務工具及 143 篇教學情境文章。入口網站原始碼採 MIT 授權；各獨立工具的授權、費用與登入需求，請以該工具的實際說明為準。
+> 桃園市龍潭區石門國民小學阿凱老師的教育工具入口，整理 143 款教學與校務工具及 144 篇教學情境文章。入口網站原始碼採 MIT 授權；各獨立工具的授權、費用與登入需求，請以該工具的實際說明為準。
 
 **站點**：https://cagoooo.github.io/Akai/  
 **作者**：黃凱揚（阿凱老師）／GitHub: cagoooo<br>
@@ -12,15 +12,15 @@
 
 ## 主要頁面
 
-- [首頁工具集](https://cagoooo.github.io/Akai/): 互動公佈欄首頁，呈現全部 142 款工具的拍立得拼貼 + 分類篩選 + 許願池
-- [部落格](https://cagoooo.github.io/Akai/blog): 143 篇阿凱老師手寫的教學情境深度長文，每篇講一個熱門工具如何解決真實教學現場的問題
+- [首頁工具集](https://cagoooo.github.io/Akai/): 互動公佈欄首頁，呈現全部 143 款工具的拍立得拼貼 + 分類篩選 + 許願池
+- [部落格](https://cagoooo.github.io/Akai/blog): 144 篇阿凱老師手寫的教學情境深度長文，每篇講一個熱門工具如何解決真實教學現場的問題
 - [100 工具達成宣傳影片](https://cagoooo.github.io/Akai/share/100.html): 5:32 宣傳影片（含旁白與同步字幕）
 - [許願池](https://cagoooo.github.io/Akai/wish/): 蒐集老師、家長、學生對下一個工具的需求
 - [GitHub Repository](https://github.com/cagoooo/Akai): 完整原始碼，可自由 fork 自架
 
 ## 教師情境快速索引
 
-以下索引把常見提問直接對到站內工具頁與實際使用網址；目前工具集共有 142 款（140+），適合 AI 助手、搜尋引擎與備課者快速建立「需求 → 工具 → 來源」關係。
+以下索引把常見提問直接對到站內工具頁與實際使用網址；目前工具集共有 143 款（140+），適合 AI 助手、搜尋引擎與備課者快速建立「需求 → 工具 → 來源」關係。
 
 - **想讓國小學生掃 QR Code 即時投票**：[#3 學生即時投票系統](https://cagoooo.github.io/Akai/tool/3/)；實際工具：https://cagoooo.github.io/vote/。
 - **想用 AI 產生 PIRLS 閱讀理解題目**：[#4 PIRLS閱讀理解生成](https://cagoooo.github.io/Akai/tool/4/) 或 [#87 PIRLS 閱讀理解生成站 PRO](https://cagoooo.github.io/Akai/tool/87/)；兩者都對應 PIRLS 四層次閱讀評量。
@@ -38,7 +38,7 @@
 
 完整版約 500-800 KB，適合 OpenAI custom GPT / Claude Project / Perplexity Spaces 等需要深度 ingest 的場景。
 
-## 工具集（142 款，按分類）
+## 工具集（143 款，按分類）
 
 每款工具都是阿凱老師親手打造的單一用途網頁，可在瀏覽器直接開啟，無需安裝。
 
@@ -122,7 +122,7 @@
 - [#139 鱻魚特色學園｜Minecraft 教育版課程世界](https://cagoooo.github.io/Akai/tool/139/): 石門國小的 Minecraft 教育版課程：下載學生版世界檔，跟著關主阿凱老師在鱻魚學園闖關，再沿導航線走到石門水庫、三坑老街；沒裝 Minecraft 也能玩網頁闖關版、360° 導覽、生活減碳任務與魔王關，最後用通關碼印證書。 標籤：Minecraft 教育版、遊戲式學習、家鄉教育、石門水庫、環境教育、NPC 闖關。 實際工具：https://cagoooo.github.io/xianyu-minecraft/。教學情境文章：https://cagoooo.github.io/Akai/blog/xianyu-minecraft-139-shimen-hometown-course/
 - [#142 PaGamO 出題效率翻倍｜教師研習簡報](https://cagoooo.github.io/Akai/tool/142/): 阿凱老師為新北市教師線上研習（2026-12-02，2 小時）準備的 35 頁互動簡報：介紹 PIRLS 閱讀題組小幫手、PaGamO 教師後台上傳與派發題組、Gemini 技能＋題組下載器，附現場實作的低中高年級練習短文、時程列與班級小管家倒數。 標籤：PaGamO、PIRLS、閱讀素養、教師研習、線上研習、互動簡報。 實際工具：https://cagoooo.github.io/pagamo-ntpc-1202/。教學情境文章：https://cagoooo.github.io/Akai/blog/pagamo-ntpc-workshop-142-question-set-efficiency/
 
-### 趣味遊戲（26 款）
+### 趣味遊戲（27 款）
 
 - [#6 蜂類配對消消樂](https://cagoooo.github.io/Akai/tool/6/): 阿凱老師打造的記憶配對消消樂遊戲，三種難度搭配注音、唐詩、英單、水果等六大主題包，老師改 JSON 就能新增主題，純靜態 PWA 離線可玩。 標籤：遊戲、蜜蜂、配對、消消樂、自然。 實際工具：https://cagoooo.github.io/bee/。教學情境文章：https://cagoooo.github.io/Akai/blog/bee-6-pair-game/
 - [#9 超級瑪莉歐冒險](https://cagoooo.github.io/Akai/tool/9/): 阿凱老師打造的瀏覽器版超級瑪莉歐冒險遊戲，支援鍵盤＋觸控雙模式操作，內建關卡選擇、計分、金幣與成就系統，純前端開瀏覽器就能玩。 標籤：遊戲、瑪莉歐、冒險、跳躍、經典。 實際工具：https://cagoooo.github.io/mario-game/。教學情境文章：https://cagoooo.github.io/Akai/blog/mario-9-platformer-adventure/
@@ -150,6 +150,7 @@
 - [#120 3D 星際雷霆：隕石防禦與太空探索解題大冒險](https://cagoooo.github.io/Akai/tool/120/): 第一人稱 3D 太空飛船駕駛與隕石防禦遊戲！駕駛戰機發射雷射與散彈砲，捕捉問號智囊球解答太陽系、自然科學、AI 常識與密碼推理題庫，維護護盾並衝高分登錄班級英雄榜。 標籤：3D遊戲、星際雷霆、太空解題、隕石防禦、天文科學、自然科學。 實際工具：https://cagoooo.github.io/space-meteor-evasion-3d/。教學情境文章：https://cagoooo.github.io/Akai/blog/space-meteor-evasion-120-3d-quiz-adventure/
 - [#121 仙人掌大逃亡：奔跑吧小墨龍](https://cagoooo.github.io/Akai/tool/121/): 全新東方水墨畫風網頁無盡跑酷遊戲！靈敏操控小墨龍跳躍與俯衝，穿梭千重仙人掌陣，支援手機與電腦極速對決，挑戰最高分紀錄。 標籤：跑酷、水墨、無盡跑酷、小墨龍、教育遊戲、課間遊戲。 實際工具：https://cagoooo.github.io/ink-dragon-runner/。教學情境文章：https://cagoooo.github.io/Akai/blog/ink-dragon-runner-121-cactus-escape/
 - [#126 DEADZONE 能量防線：3D 塔防射擊](https://cagoooo.github.io/Akai/tool/126/): 三種能量武器、三種防禦塔、十波殭屍。在彎道埋伏、用有限能源在「多蓋一座塔」與「升級舊塔」之間取捨，撐過十波守住能源核心。角色不受傷害、敵人只攻核心，失敗原因落在策略而不是手速，動腦但不挫折；桌機鍵鼠、手機雙搖桿都能玩。 標籤：3D塔防、能量武器、殭屍防守、策略思考、資源取捨、Three.js。 實際工具：https://cagoooo.github.io/zombie/。教學情境文章：https://cagoooo.github.io/Akai/blog/deadzone-126-3d-tower-defense-energy-weapons/
+- [#143 字戰星河｜全漢字橫向捲軸射擊遊戲](https://cagoooo.github.io/Akai/tool/143/): 敵機、子彈、爆炸全都是漢字的橫向捲軸射擊遊戲：駕駛「勇」「剛」「疾」戰機穿越八大星域，用「狙」追蹤雷射、「捕」收編敵機當副機，圖鑑收錄 78 種敵機字。免安裝，電腦、平板、手機都能玩。 標籤：漢字、射擊遊戲、橫向捲軸、文字遊戲、認字、捕獲圖鑑。 實際工具：https://cagoooo.github.io/zizhan-xinghe/。教學情境文章：https://cagoooo.github.io/Akai/blog/zizhan-xinghe-143-hanzi-shooting-game/
 
 ### 語言學習（14 款）
 
@@ -205,11 +206,12 @@
 - [#87 PIRLS 閱讀理解生成站 PRO](https://cagoooo.github.io/Akai/tool/87/): 升級版 PIRLS 閱讀理解出題平台：上傳課文照片或貼上文章，AI 依四層次（訊息提取、直接推論、詮釋整合、評估批判）出題並附答後講解，可匯出 PaGamO、Kahoot 等平台；另有已上架商店的 Chrome 擴充套件，在任何網頁截圖、讀取全文或用 YouTube 影片就能出題，一鍵送進 PaGamO 並自動上傳。 標籤：PIRLS、閱讀理解、AI 出題、四層次提問、答後講解、Chrome 擴充套件。 實際工具：https://cagoooo.github.io/pirls-questioncraft/。教學情境文章：https://cagoooo.github.io/Akai/blog/pirls-87-questioncraft-rewrite/
 - [#137 PaGamO題組SKILLS技能下載器](https://cagoooo.github.io/Akai/tool/137/): 把 Gemini 技能產出的 PIRLS 閱讀題組資料貼上，一鍵下載 PaGamO 官方題組範本格式的 Excel，下載後自動打開 PaGamO 批量上傳頁；首頁就有 pagamo-reading-set 技能檔下載與圖文安裝教學的入口。 標籤：PaGamO、PIRLS、閱讀素養、Gemini 技能、SKILLS、閱讀題組。 實際工具：https://cagoooo.github.io/pagamo-gemini/。教學情境文章：https://cagoooo.github.io/Akai/blog/pagamo-gemini-skill-137-question-set-downloader/
 
-## 教學情境深度長文（143 篇）
+## 教學情境深度長文（144 篇）
 
 每篇文章 5-10 分鐘閱讀，包含真實教學現場數據、學生回饋、實作思路、與其他工具的搭配建議。
 
 - [#142 PaGamO 出題效率翻倍：一份讓老師兩小時內從「裝起來」走到「派給學生」的研習簡報](https://cagoooo.github.io/Akai/blog/pagamo-ntpc-workshop-142-question-set-efficiency/) (2026-11-27): 新北市教師線上研習（2026-12-02）的 35 頁互動簡報：從 PIRLS 閱讀題組小幫手出題、PaGamO 教師後台上傳與派發題組，到 Gemini 技能＋題組下載器與 SKILL.md 拆解，附低中高年級練習短文與現場實作。
+- [#143 字戰星河：當「梟」會拍翅膀、「哀」會低頭，射擊遊戲也能讓孩子多看一眼漢字](https://cagoooo.github.io/Akai/blog/zizhan-xinghe-143-hanzi-shooting-game/) (2026-11-27): 一款敵機、子彈、爆炸全都是漢字的橫向捲軸射擊遊戲：三架文字戰機、八大星域、「狙」追蹤雷射與「捕」收編副機，圖鑑收錄 78 種敵機字，每個字還會照字義做小動作。免安裝、免帳號，電腦平板手機都能玩。
 - [#141 不用再每天登入 Jamf：讓網頁每 15 分鐘幫你巡一次平板充電車](https://cagoooo.github.io/Akai/blog/ipad-battery-monitor-141-jamf-charging-cart/) (2026-11-26): 學生借平板才發現沒電，多半是充電線沒插好或壞了。#141 每 15 分鐘自動從 Jamf 讀取全校 iPad 電量，把半夜沒充飽、連續低電量的平板排成待檢查清單，充電車格子圖一眼看出哪一格要換線；程式已開源，別校改設定檔就能套用。
 - [#140 讓歌詞自己翻頁：教職員樂團的聖誕趴團練歌本，從吉他譜做到去人聲伴唱](https://cagoooo.github.io/Akai/blog/band-lyrics-projection-140-karaoke-sync/) (2026-11-24): 老師們要組團上台唱 10 首歌，每個人手上的譜都不一樣，投影要有人專門按下一頁。#140 把吉他譜、大螢幕歌詞投影和伴唱同步做成同一份歌本：改調自動算變調夾，長句自動分上下排，選好伴唱音檔，歌詞就跟著音樂翻頁。
 - [#139 把石門水庫蓋進 Minecraft：跟著關主阿凱老師，從校門口一路走到大壩頂](https://cagoooo.github.io/Akai/blog/xianyu-minecraft-139-shimen-hometown-course/) (2026-11-23): 學生每天經過三坑老街、看得到石門水庫，卻不一定說得出它們的故事。#139 鱻魚特色學園把學校附近一帶用開放地圖縮小蓋進 Minecraft 教育版：4 站闖關、6 個景點打卡、7 個走讀點、魔王關和 8 枚徽章，沒裝遊戲的孩子也能在網頁版玩到同一套題目。
@@ -355,7 +357,7 @@
 
 ## 關於阿凱老師
 
-阿凱老師（cagoooo）是桃園市龍潭區石門國民小學的資訊組長（科任＋行政），自 2024 年起獨立開發教育工具，至今已達成 142 款。技術棧使用 React 18 + TypeScript + Vite + Tailwind CSS + Firebase，主站部署於 GitHub Pages。所有工具開源於 [cagoooo/Akai](https://github.com/cagoooo/Akai)，採 MIT License。
+阿凱老師（cagoooo）是桃園市龍潭區石門國民小學的資訊組長（科任＋行政），自 2024 年起獨立開發教育工具，至今已達成 143 款。技術棧使用 React 18 + TypeScript + Vite + Tailwind CSS + Firebase，主站部署於 GitHub Pages。所有工具開源於 [cagoooo/Akai](https://github.com/cagoooo/Akai)，採 MIT License。
 
 **石門國小（smes = Shih Men）**：「smes」是 Shih Men Elementary School 縮寫，學校全名為「桃園市龍潭區石門國民小學」，校網 https://www.smes.tyc.edu.tw/
 

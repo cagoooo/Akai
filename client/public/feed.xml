@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 142+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 143+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Fri, 27 Nov 2026 05:26:41 GMT</pubDate>
-    <lastBuildDate>Fri, 27 Nov 2026 06:02:46 GMT</lastBuildDate>
+    <pubDate>Fri, 27 Nov 2026 10:23:06 GMT</pubDate>
+    <lastBuildDate>Fri, 27 Nov 2026 10:26:23 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,18 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：字戰星河｜全漢字橫向捲軸射擊遊戲</title>
+      <link>https://cagoooo.github.io/Akai/tool/143/</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/143</guid>
+      <pubDate>Fri, 27 Nov 2026 10:23:06 GMT</pubDate>
+      <description>敵機、子彈、爆炸全都是漢字的橫向捲軸射擊遊戲：駕駛「勇」「剛」「疾」戰機穿越八大星域，用「狙」追蹤雷射、「捕」收編敵機當副機，圖鑑收錄 78 種敵機字。免安裝，電腦、平板、手機都能玩。</description>
+      <category>漢字</category>
+      <category>射擊遊戲</category>
+      <category>橫向捲軸</category>
+      <category>文字遊戲</category>
+      <category>認字</category>
+    </item>
     <item>
       <title>🆕 新工具：PaGamO 出題效率翻倍｜教師研習簡報</title>
       <link>https://cagoooo.github.io/Akai/tool/142/</link>
@@ -36,6 +48,15 @@
       <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/pagamo-ntpc-workshop-142-question-set-efficiency</guid>
       <pubDate>Fri, 27 Nov 2026 00:00:00 GMT</pubDate>
       <description>新北市教師線上研習（2026-12-02）的 35 頁互動簡報：從 PIRLS 閱讀題組小幫手出題、PaGamO 教師後台上傳與派發題組，到 Gemini 技能＋題組下載器與 SKILL.md 拆解，附低中高年級練習短文與現場實作。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#143 字戰星河：當「梟」會拍翅膀、「哀」會低頭，射擊遊戲也能讓孩子多看一眼漢字</title>
+      <link>https://cagoooo.github.io/Akai/blog/zizhan-xinghe-143-hanzi-shooting-game/</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/zizhan-xinghe-143-hanzi-shooting-game</guid>
+      <pubDate>Fri, 27 Nov 2026 00:00:00 GMT</pubDate>
+      <description>一款敵機、子彈、爆炸全都是漢字的橫向捲軸射擊遊戲：三架文字戰機、八大星域、「狙」追蹤雷射與「捕」收編副機，圖鑑收錄 78 種敵機字，每個字還會照字義做小動作。免安裝、免帳號，電腦平板手機都能玩。</description>
       <category>blog</category>
       <category>教學情境</category>
     </item>
@@ -311,27 +332,6 @@
       <description>晨會聽過的截止日，回到教室就糊了？石門國小把 115 學年度上學期的教師會議，做成一週一頁、依處室分區、能搜尋能打勾的互動紀錄入口。</description>
       <category>blog</category>
       <category>教學情境</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#128 石門・心晴校園：在熟悉的走廊上，練習和同學好好相處</title>
-      <link>https://cagoooo.github.io/Akai/blog/shimen-campus-128-3d-campus-exploration/</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/shimen-campus-128-3d-campus-exploration</guid>
-      <pubDate>Mon, 05 Oct 2026 00:00:00 GMT</pubDate>
-      <description>原本的校園漫遊長出了故事：跟著心晴任務幫同學解決小麻煩、用 12 個小問題認識自己，完成後還能把性格卡交給老師。新支線「地震防災小尖兵」讓孩子在自己的教室練習趴下、掩護、穩住，再走樓梯疏散到操場。這篇整理可以怎麼帶進 SEL、防災教育與迎新課堂。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>🆕 新工具：石門・心晴校園</title>
-      <link>https://cagoooo.github.io/Akai/tool/128/</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/128</guid>
-      <pubDate>Sun, 04 Oct 2026 16:00:00 GMT</pubDate>
-      <description>走進方塊版石門國小，跟著「心晴任務」幫同學解決小麻煩、抽出性格卡，完成後還能交給老師；新支線「地震防災小尖兵」練習趴下、掩護、穩住，再走樓梯疏散到操場。也能導航到教室、拍紀念照，校園跟著台灣時間與龍潭天氣變化，適合 SEL、防災教育與新生迎新。</description>
-      <category>石門國小</category>
-      <category>SEL</category>
-      <category>社會情緒學習</category>
-      <category>性格探索</category>
-      <category>校園導航</category>
     </item>
   </channel>
 </rss>

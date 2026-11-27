@@ -16041,7 +16041,91 @@ const POST_142: BlogPost = {
 建議先翻到「現在換你」那一頁，挑一篇你教的年級的練習短文，跟著做一次——出好第一份題組，比聽完兩小時更有感。`,
 };
 
-export const POSTS: BlogPost[] = [POST_142, POST_141, POST_140, POST_139, POST_138, POST_137, POST_136, POST_135, POST_134, POST_133, POST_132, POST_131, POST_130, POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+const POST_143: BlogPost = {
+  slug: 'zizhan-xinghe-143-hanzi-shooting-game',
+  title: '#143 字戰星河：當「梟」會拍翅膀、「哀」會低頭，射擊遊戲也能讓孩子多看一眼漢字',
+  excerpt:
+    '一款敵機、子彈、爆炸全都是漢字的橫向捲軸射擊遊戲：三架文字戰機、八大星域、「狙」追蹤雷射與「捕」收編副機，圖鑑收錄 78 種敵機字，每個字還會照字義做小動作。免安裝、免帳號，電腦平板手機都能玩。',
+  publishedAt: '2026-11-27',
+  readingMinutes: 5,
+  tags: ['漢字', '射擊遊戲', '教育遊戲', '課間獎勵', '免安裝'],
+  toolIds: [143, 71, 126],
+  coverEmoji: '🚀',
+  coverColor: 'purple',
+  body: `## 一款「整個畫面都是字」的遊戲
+
+孩子玩遊戲時，眼睛盯著的是角色、子彈和爆炸，很少有人會停下來看字。那如果角色本身就是字呢？
+
+《字戰星河》就是從這個念頭做出來的：自己開的戰機是「勇」，射出去的子彈是「星」，迎面而來的敵人是「兵」「卒」「盾」「蛋」，敵人打過來的子彈是「刃」，被擊中時畫面會冒出「爆」「墜」「痛」。連背景都是字——第一幕的都城是由「城」「樓」「塔」堆起來的，天上飄的是「雲」「霧」「煙」。
+
+孩子不需要先學什麼，打開網址按「出擊」就能玩；但玩著玩著，字就一個一個從眼前飛過去了。
+
+## 遊戲裡有什麼？
+
+**三架戰機，外加一架藏起來的。** 「勇」是平衡型、「剛」是高火力型、「疾」移動最快。標題「字戰星河」的「河」字藏著第四架隱藏機「曜」，留給愛找彩蛋的孩子。
+
+**八大星域。** 都城、樹海、冥府、深海、天空、熔岩、星海、根源，每一幕結尾都有頭目：機甲堡壘「壘」、森林古神「榕」、幽冥判官「判」、深淵巨鯨「鯨」……最後是魔王「源」。可以從任何一幕出發，不用每次從頭打。
+
+**「狙」追蹤雷射。** 按住右鍵（平板手機是「狙」按鈕），戰機停下來，展開一個「狙」字鎖定附近敵機，放開就射出追蹤雷射，發射時還有一小段無敵時間。
+
+**「捕」收編副機。** 這是遊戲最有特色的地方：發射「捕」抓住敵機，它就變成跟在你身邊的副機。不同的字當副機時，表現完全不一樣——「護」會貼在身邊幫你擋子彈，「熊」「岩」擋在前方當盾牌，「昌」是特大範圍的炸彈。再按一次，副機就自爆清場。
+
+**捕獲圖鑑。** 八幕共 78 種敵機字，每一個都寫著它怎麼移動、怎麼攻擊、能不能捕獲。抓過的字會自動記下來，圖鑑上的進度數字，就是孩子想「再玩一局」的理由。
+
+**三種難度。** 簡單有 4 條命、敵彈比較慢；困難只有 2 條命、敵彈更快更密。程度差很多的班級，也找得到每個人都進得去的設定。
+
+## 字會照自己的意思「演戲」
+
+這是後來特別加上的細節：每個字都有符合字義的小動作。
+
+- 「梟」「蝠」「雀」會拍翅膀，拍一陣還會滑翔一下；翅膀合起來時字會變窄。
+- 「葉」「花」左右搖擺，像落葉一樣翻面飄。
+- 「蛇」「魚」「藤」身體扭來扭去，「蛙」先蹲低再跳起來。
+- 「魂」「魄」「影」忽隱忽現，「火」「炎」忽高忽矮地竄動。
+- 第三幕的七情護衛各有表情：「喜」開心蹦跳、「哀」垂頭喪氣、「愛」像心跳一樣撲通撲通、「懼」和「怒」一直發抖。
+
+這些動作只改變「畫出來的樣子」，碰撞判定和移動路線都沒變，所以不會讓遊戲變難。但它讓字有了個性——孩子會記得「那個一直抖的是懼」，而不只是「那個紫色的敵人」。
+
+## 可以怎麼放進課堂？（情境示例）
+
+以下是依照遊戲功能設想的使用方式，不是已發生的課堂紀錄：
+
+**課間獎勵的十分鐘。** 全班達成目標後，投影到電子白板一起玩一局。選「簡單」難度，輪流上台操作，台下負責喊「左邊有蛋！」。切換到別的分頁時遊戲會自動暫停，要收心時很好停下來。
+
+**國語課的延伸小活動。** 打開圖鑑，請孩子挑三個字分類：哪些是動物（梟、蛇、狐）？哪些是情緒（喜、哀、懼）？再問：為什麼「哀」要低著頭，「懼」要發抖？讓孩子自己替其他字設計動作，畫在學習單上。
+
+**資訊課的範例程式。** 整個遊戲是一個 HTML 檔，用 Canvas 繪圖、每秒固定更新 60 步，寬螢幕自動變三欄、手機直拿會提示轉橫向，還能加到主畫面離線玩。對已經學過網頁的高年級或國中生，是一份可以打開原始碼對照的實例。
+
+## 隱私與裝置
+
+- **不需要帳號、不呼叫 AI 模型**，也沒有廣告。
+- 最高分與圖鑑紀錄只存在這台裝置的瀏覽器裡，不會上傳。
+- 電腦用滑鼠或鍵盤；平板、手機用手指拖曳移動，預設自動連射，畫面上有「狙」「捕」按鈕。
+- 可以加到手機或平板主畫面；有新版本時，畫面下方會跳出「重新整理」提示。
+
+關卡與配字都是原創，遊戲頁尾附有一段向全漢字射擊遊戲先驅致敬的說明。
+
+## 配對工具推薦
+
+- [#71 成語填空大挑戰](https://cagoooo.github.io/typeTC/)：同樣是「跟中文字玩遊戲」，換成成語填空，適合接在國語課後面。
+- [#126 DEADZONE 能量防線](https://cagoooo.github.io/zombie/)：另一款打開網址就能玩的課間遊戲，偏策略塔防。
+- [#143 字戰星河](https://cagoooo.github.io/zizhan-xinghe/)：本篇主角。
+
+## 適用對象
+
+- 想找一款「免註冊、沒廣告、不上傳個資」課間獎勵遊戲的導師
+- 想讓孩子對漢字多一點好奇心的國語文老師
+- 想找單檔 HTML 遊戲範例的資訊老師
+- 喜歡射擊遊戲、想把圖鑑收集滿的國小與國中學生
+
+## 想試試？
+
+→ [前往 #143 字戰星河](https://cagoooo.github.io/zizhan-xinghe/)
+
+先選「簡單」難度、從第一幕出發，試著用「捕」抓一隻「護」當副機——看它幫你擋下第一顆「刃」的時候，你就懂這個遊戲在玩什麼了。`,
+};
+
+export const POSTS: BlogPost[] = [POST_143, POST_142, POST_141, POST_140, POST_139, POST_138, POST_137, POST_136, POST_135, POST_134, POST_133, POST_132, POST_131, POST_130, POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。

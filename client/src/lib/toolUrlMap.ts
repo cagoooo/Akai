@@ -139,5 +139,6 @@ export const TOOL_URL_MAP: Record<string, number> = {
   "https://cagoooo.github.io/xianyu-minecraft/": 139,
   "https://claude.ai/artifact/4tmMZXgcqRa91Phfxqj18S": 140,
   "https://cagoooo.github.io/ipad-battery-monitor/": 141,
-  "https://cagoooo.github.io/pagamo-ntpc-1202/": 142
+  "https://cagoooo.github.io/pagamo-ntpc-1202/": 142,
+  "https://cagoooo.github.io/zizhan-xinghe/": 143
 };

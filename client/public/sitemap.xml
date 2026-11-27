@@ -865,6 +865,12 @@
     <priority>0.78</priority>
   </url>
   <url>
+    <loc>https://cagoooo.github.io/Akai/tool/143/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
     <loc>https://cagoooo.github.io/Akai/blog/</loc>
     <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
@@ -1724,6 +1730,12 @@
   </url>
   <url>
     <loc>https://cagoooo.github.io/Akai/blog/pagamo-ntpc-workshop-142-question-set-efficiency/</loc>
+    <lastmod>2026-11-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cagoooo.github.io/Akai/blog/zizhan-xinghe-143-hanzi-shooting-game/</loc>
     <lastmod>2026-11-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
