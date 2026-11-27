@@ -84,8 +84,8 @@ export function AmpHome() {
             "description": "探索AI驅動的個人化學習體驗，提供跨平台相容性、即時數據分析和豐富的教學資源。",
             "url": "https://smes.tyc.edu.tw",
             "sameAs": [
-              "https://www.facebook.com/smestyc",
-              "https://twitter.com/smestyc"
+              "https://www.facebook.com/tycsmes",
+              "https://www.youtube.com/@tycsmes"
             ],
             "address": {
               "@type": "PostalAddress",
