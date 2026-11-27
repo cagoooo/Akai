@@ -2,6 +2,11 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.274] - 2026-11-27 — 套件安全性更新
+
+- GitHub Dependabot 16 則警告：fast-xml-parser 5.11.2→5.12.1（網站、後端、mcp-scripts）、hono 4.13.13→4.13.23、@hono/node-server 2.1.3→2.1.11（mcp-scripts），都是同大版號修補版。
+- glob／minimatch（google-gax 帶的 rimraf，執行時從不載入）與 esbuild 0.18（drizzle-kit 開發工具，只用轉譯、沒開開發伺服器）修補版都要跨大版號，標為已評估。
+
 ## [3.6.273] - 2026-11-27 — 新增 #142 PaGamO 出題效率翻倍｜教師研習簡報
 
 - 新工具 #142：新北市教師線上研習（2026-12-02，2 小時）的 35 頁互動簡報，涵蓋 PIRLS 閱讀題組小幫手、PaGamO 教師後台上傳與派發題組、Gemini 技能＋題組下載器與 SKILL.md 拆解，附低中高年級練習短文。
