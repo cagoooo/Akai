@@ -8,6 +8,11 @@ import { FooterSupportNote } from './BulletinSupport';
 
 const SCHOOL_URL = 'https://www.smes.tyc.edu.tw/modules/school/index.php?department_id=2&zone_id=0&page_id=2&content_id=11&type=news&from_op=all_news#a5';
 const SCHOOL_MAPS_URL = 'https://maps.app.goo.gl/D9hqL2eakDLC8ko46';
+/** 石門國小官方社群（網址以學校官網首頁的連結為準） */
+const SCHOOL_SOCIAL_LINKS = [
+  { href: 'https://www.facebook.com/tycsmes', icon: '📘', label: 'FB 粉專', aria: '石門國小 Facebook 粉絲專頁（另開新視窗）' },
+  { href: 'https://www.youtube.com/@tycsmes', icon: '▶️', label: 'YouTube', aria: '石門國小 YouTube 官方頻道（另開新視窗）' },
+] as const;
 
 /** 頭像載入失敗時依序退回 teacher-avatar.png → apple-touch-icon.png（同一張舊照片），每個只試一次 */
 const AVATAR_FALLBACKS = ['teacher-avatar.png', 'apple-touch-icon.png'];
@@ -276,6 +281,32 @@ export function BulletinFooter() {
           >
             📍 桃園市石門國小
           </a>
+          {SCHOOL_SOCIAL_LINKS.map((s) => (
+            <span key={s.href} style={{ display: 'contents' }}>
+              <span style={{ opacity: 0.6 }}>·</span>
+              <a
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.aria}
+                title={s.aria.replace('（另開新視窗）', '')}
+                style={{
+                  whiteSpace: 'nowrap',
+                  fontFamily: tokens.font.tc,
+                  color: tokens.ink,
+                  fontWeight: 700,
+                  textDecoration: 'none',
+                  borderBottom: `1.5px solid ${tokens.navy}`,
+                  paddingBottom: 1,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 3,
+                }}
+              >
+                {s.icon} {s.label}
+              </a>
+            </span>
+          ))}
           <span style={{ opacity: 0.6 }}>·</span>
           <span style={{ whiteSpace: 'nowrap', color: tokens.muted2 }}>
             All rights reserved.

@@ -33,6 +33,26 @@ export function Footer() {
           </a>
           . All rights reserved.
         </p>
+        <p className="text-center flex items-center gap-3">
+          <a
+            href="https://www.facebook.com/tycsmes"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="石門國小 Facebook 粉絲專頁（另開新視窗）"
+            className="text-muted-foreground hover:text-primary hover:underline transition-colors duration-300"
+          >
+            📘 FB 粉專
+          </a>
+          <a
+            href="https://www.youtube.com/@tycsmes"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="石門國小 YouTube 官方頻道（另開新視窗）"
+            className="text-muted-foreground hover:text-primary hover:underline transition-colors duration-300"
+          >
+            ▶️ YouTube
+          </a>
+        </p>
       </div>
     </footer>
   );
