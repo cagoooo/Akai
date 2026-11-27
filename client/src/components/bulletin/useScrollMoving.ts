@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 /**
  * 頁面正在捲動（含停手後 {@link idleMs} 毫秒內）回傳 true。
- * 手機上浮動按鈕（珍奶、回頂、後台入口）用它在捲動時淡出、停下才出現，
+ * 手機上後台入口（扳手）用它在捲動時淡出、停下才出現（珍奶與回頂 2026-11-27 起捲動時也一直顯示），
  * 避免蓋住卡片右下角的「開啟」。
  */
 export function useScrollMoving(idleMs = 700): boolean {

@@ -28,4 +28,4 @@ export const FEATURED_TOOL_IDS: number[] = [
   138, // [fallback] Ollama 石門線上客服系統
 ];
 
-/** 自動產生：2026-11-27T10:26:20.532Z */
+/** 自動產生：2026-11-27T11:30:30.798Z */

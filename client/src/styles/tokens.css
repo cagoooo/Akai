@@ -1893,7 +1893,7 @@ body {
     font-size: 13px !important;
   }
 }
-/* 手機版浮動按鈕：縮小、捲動時淡出（停下才出現），後台入口只在頁面最底部露出；頁尾下方留白讓最後一行不被蓋住 */
+/* 手機版浮動按鈕：縮小；珍奶與回頂捲動時也一直顯示（2026-11-27 使用者要求，原本捲動中淡出不容易被看到），後台入口只在頁面最底部露出；頁尾下方留白讓最後一行不被蓋住 */
 @media (max-width: 768px) {
   .bulletin-back-to-top {
     width: 40px !important;
@@ -1907,11 +1907,6 @@ body {
     right: 10px !important;
     bottom: 62px !important;
     font-size: 19px !important;
-  }
-  .bulletin-back-to-top[data-moving="1"],
-  .bulletin-support-fab[data-moving="1"] {
-    opacity: 0 !important;
-    pointer-events: none !important;
   }
   .bulletin-admin-entry {
     width: 36px !important;

@@ -4,7 +4,6 @@ import { tokens } from '@/design/tokens';
 import { Pin } from '@/components/primitives/Pin';
 import { Tape } from '@/components/primitives/Tape';
 import { notifyEngagementAfterHomeEntry, trackEvent } from '@/lib/analytics';
-import { useScrollMoving } from './useScrollMoving';
 
 /** 阿凱老師的 BobaMe 贊助頁（AnyoneLab 平台，新台幣、可匯回台灣銀行帳戶） */
 export const SUPPORT_URL = 'https://cagoo.bobaboba.me';
@@ -188,7 +187,6 @@ export function SupportDialog({
 export function BulletinSupportButton() {
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
-  const moving = useScrollMoving();
   const fabRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -209,7 +207,6 @@ export function BulletinSupportButton() {
       <button
         ref={fabRef}
         type="button"
-        data-moving={moving ? '1' : undefined}
         onClick={openDialog}
         aria-label="請阿凱老師喝杯珍奶（贊助說明）"
         title="請阿凱老師喝杯珍奶"
