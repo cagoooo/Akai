@@ -141,6 +141,7 @@ https://cagoooo.github.io/Akai/tool/138/
 https://cagoooo.github.io/Akai/tool/139/
 https://cagoooo.github.io/Akai/tool/140/
 https://cagoooo.github.io/Akai/tool/141/
+https://cagoooo.github.io/Akai/tool/142/
 https://cagoooo.github.io/Akai/blog/
 https://cagoooo.github.io/Akai/blog/cockpit-81-info-tech-class/
 https://cagoooo.github.io/Akai/blog/venue-46-no-more-paper-form/
@@ -284,5 +285,6 @@ https://cagoooo.github.io/Akai/blog/shimen-ollama-138-local-parent-helpdesk/
 https://cagoooo.github.io/Akai/blog/xianyu-minecraft-139-shimen-hometown-course/
 https://cagoooo.github.io/Akai/blog/band-lyrics-projection-140-karaoke-sync/
 https://cagoooo.github.io/Akai/blog/ipad-battery-monitor-141-jamf-charging-cart/
+https://cagoooo.github.io/Akai/blog/pagamo-ntpc-workshop-142-question-set-efficiency/
 https://cagoooo.github.io/Akai/akai-talk-2026/
 https://cagoooo.github.io/Akai/akai-talk-2026/AIFED2026_paper.pdf

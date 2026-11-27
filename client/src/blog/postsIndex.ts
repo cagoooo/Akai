@@ -15,6 +15,27 @@ export type BlogPostMeta = Omit<BlogPost, 'body'>;
 
 export const POSTS_INDEX: BlogPostMeta[] = [
   {
+    "slug": "pagamo-ntpc-workshop-142-question-set-efficiency",
+    "title": "#142 PaGamO 出題效率翻倍：一份讓老師兩小時內從「裝起來」走到「派給學生」的研習簡報",
+    "excerpt": "新北市教師線上研習（2026-12-02）的 35 頁互動簡報：從 PIRLS 閱讀題組小幫手出題、PaGamO 教師後台上傳與派發題組，到 Gemini 技能＋題組下載器與 SKILL.md 拆解，附低中高年級練習短文與現場實作。",
+    "publishedAt": "2026-11-27",
+    "readingMinutes": 6,
+    "tags": [
+      "PaGamO",
+      "PIRLS",
+      "教師研習",
+      "互動簡報",
+      "Gemini 技能"
+    ],
+    "toolIds": [
+      142,
+      87,
+      137
+    ],
+    "coverEmoji": "🚀",
+    "coverColor": "green"
+  },
+  {
     "slug": "ipad-battery-monitor-141-jamf-charging-cart",
     "title": "#141 不用再每天登入 Jamf：讓網頁每 15 分鐘幫你巡一次平板充電車",
     "excerpt": "學生借平板才發現沒電，多半是充電線沒插好或壞了。#141 每 15 分鐘自動從 Jamf 讀取全校 iPad 電量，把半夜沒充飽、連續低電量的平板排成待檢查清單，充電車格子圖一眼看出哪一格要換線；程式已開源，別校改設定檔就能套用。",

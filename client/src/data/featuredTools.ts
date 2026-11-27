@@ -20,12 +20,12 @@ export const FEATURED_TOOL_IDS: number[] = [
   46, // [主推] 禮堂&專科教室&IPAD平板車預約系統
   9, // [主推] 超級瑪莉歐冒險
   14, // [主推] 點亮詩意~『早安長輩圖產生器』
+  142, // [fallback] PaGamO 出題效率翻倍｜教師研習簡報
   141, // [fallback] iPad 電量監控站｜Jamf 充電車自動巡查
   140, // [fallback] 聖誕趴團練歌詞投影｜吉他譜＋伴唱同步
   139, // [fallback] 鱻魚特色學園｜Minecraft 教育版課程世界
   138, // [fallback] Ollama 石門線上客服系統
   137, // [fallback] PaGamO題組SKILLS技能下載器
-  136, // [fallback] 好文章一鍵變題組｜PIRLS 閱讀題組小幫手線上分享簡報
 ];
 
-/** 自動產生：2026-11-26T23:16:39.050Z */
+/** 自動產生：2026-11-27T05:30:06.411Z */

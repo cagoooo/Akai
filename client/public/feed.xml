@@ -4,11 +4,11 @@
     <title>科技教育創新專區 · 阿凱老師</title>
     <link>https://cagoooo.github.io/Akai/</link>
     <atom:link href="https://cagoooo.github.io/Akai/feed.xml" rel="self" type="application/rss+xml" />
-    <description>阿凱老師（桃園市石門國小）親手打造的 141+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
+    <description>阿凱老師（桃園市石門國小）親手打造的 142+ 款國小教育科技工具與教學情境長文。課堂互動、AI 教案、閱讀評量、教育遊戲一站搞定。</description>
     <language>zh-TW</language>
     <copyright>阿凱老師 · CC BY-SA 4.0</copyright>
-    <pubDate>Thu, 26 Nov 2026 12:21:55 GMT</pubDate>
-    <lastBuildDate>Thu, 26 Nov 2026 23:16:41 GMT</lastBuildDate>
+    <pubDate>Fri, 27 Nov 2026 05:26:41 GMT</pubDate>
+    <lastBuildDate>Fri, 27 Nov 2026 05:30:14 GMT</lastBuildDate>
     <generator>scripts/generate-feed.mjs · v1</generator>
     <ttl>180</ttl>
     <image>
@@ -18,6 +18,27 @@
       <width>144</width>
       <height>144</height>
     </image>
+    <item>
+      <title>🆕 新工具：PaGamO 出題效率翻倍｜教師研習簡報</title>
+      <link>https://cagoooo.github.io/Akai/tool/142/</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/142</guid>
+      <pubDate>Fri, 27 Nov 2026 05:26:41 GMT</pubDate>
+      <description>阿凱老師為新北市教師線上研習（2026-12-02，2 小時）準備的 35 頁互動簡報：介紹 PIRLS 閱讀題組小幫手、PaGamO 教師後台上傳與派發題組、Gemini 技能＋題組下載器，附現場實作的低中高年級練習短文、時程列與班級小管家倒數。</description>
+      <category>PaGamO</category>
+      <category>PIRLS</category>
+      <category>閱讀素養</category>
+      <category>教師研習</category>
+      <category>線上研習</category>
+    </item>
+    <item>
+      <title>📖 教學情境：#142 PaGamO 出題效率翻倍：一份讓老師兩小時內從「裝起來」走到「派給學生」的研習簡報</title>
+      <link>https://cagoooo.github.io/Akai/blog/pagamo-ntpc-workshop-142-question-set-efficiency/</link>
+      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/pagamo-ntpc-workshop-142-question-set-efficiency</guid>
+      <pubDate>Fri, 27 Nov 2026 00:00:00 GMT</pubDate>
+      <description>新北市教師線上研習（2026-12-02）的 35 頁互動簡報：從 PIRLS 閱讀題組小幫手出題、PaGamO 教師後台上傳與派發題組，到 Gemini 技能＋題組下載器與 SKILL.md 拆解，附低中高年級練習短文與現場實作。</description>
+      <category>blog</category>
+      <category>教學情境</category>
+    </item>
     <item>
       <title>🆕 新工具：iPad 電量監控站｜Jamf 充電車自動巡查</title>
       <link>https://cagoooo.github.io/Akai/tool/141/</link>
@@ -311,27 +332,6 @@
       <category>社會情緒學習</category>
       <category>性格探索</category>
       <category>校園導航</category>
-    </item>
-    <item>
-      <title>📖 教學情境：#127 桃園市AI素養爭霸賽：把「要會 AI」拆成學生今天就能練的六個站點</title>
-      <link>https://cagoooo.github.io/Akai/blog/ai-literacy-127-taoyuan-competition-prep/</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/blog/ai-literacy-127-taoyuan-competition-prep</guid>
-      <pubDate>Mon, 14 Sep 2026 00:00:00 GMT</pubDate>
-      <description>#127 桃園市AI素養爭霸賽備戰站，把報名、指定版本、資料蒐集、監督式學習、模型測試、規則紅線與比賽日流程放進同一條練習路線。學生知道今天做什麼，指導教師也能看見隊伍卡在哪一站。</description>
-      <category>blog</category>
-      <category>教學情境</category>
-    </item>
-    <item>
-      <title>🆕 新工具：桃園市AI素養爭霸賽</title>
-      <link>https://cagoooo.github.io/Akai/tool/127/</link>
-      <guid isPermaLink="true">https://cagoooo.github.io/Akai/tool/127</guid>
-      <pubDate>Sun, 13 Sep 2026 16:00:00 GMT</pubDate>
-      <description>把桃園市 115 年度 AI 素養爭霸賽的報名、版本、規則與練習拆成一條備戰路線：從 PAIA 3.3.5、魷來魷去 1.7.5 與地圖 12，到資料蒐集、監督式學習、模型測試、上傳檢查與比賽日分工，學生和指導教師打開就能開始。</description>
-      <category>AI素養</category>
-      <category>AI競賽</category>
-      <category>PAIA</category>
-      <category>魷來魷去</category>
-      <category>監督式學習</category>
     </item>
   </channel>
 </rss>

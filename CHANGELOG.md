@@ -2,6 +2,12 @@
 
 此文件記錄專案的所有重要變更。
 
+## [3.6.273] - 2026-11-27 — 新增 #142 PaGamO 出題效率翻倍｜教師研習簡報
+
+- 新工具 #142：新北市教師線上研習（2026-12-02，2 小時）的 35 頁互動簡報，涵蓋 PIRLS 閱讀題組小幫手、PaGamO 教師後台上傳與派發題組、Gemini 技能＋題組下載器與 SKILL.md 拆解，附低中高年級練習短文。
+- 卡片圖用簡報封面實際畫面；OG 圖由 generate-unified-og 產生；客群：國小／國中老師（導師、科任、行政）。
+- 手寫長文 POST_142；重跑網頁字型與襯線字型子集。
+
 ## [3.6.272] - 2026-11-27 — 略過 MetaMask 擴充功能的警告
 
 - Sentry JAVASCRIPT-REACT-3J：訪客瀏覽器裝了 MetaMask 錢包擴充功能，它自己印出「ObjectMultiplex - orphaned data for stream "metamask-…"」警告，被 console 抓取送成告警。站方沒有任何區塊鏈程式，加進 `RECOVERABLE_CLIENT_NOISE` 略過。

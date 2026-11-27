@@ -15970,7 +15970,78 @@ Jamf 其實看得到每台平板的電量，問題是要每天登入、打開清
 先看「今天要去檢查的平板」和充電車格子圖，再點一格看電量變化。想用在自己學校，到 [GitHub 專案頁](https://github.com/cagoooo/ipad-battery-monitor) 按「Use this template」，照說明一步一步做，你的充電車也能每 15 分鐘被巡一次。`,
 };
 
-export const POSTS: BlogPost[] = [POST_141, POST_140, POST_139, POST_138, POST_137, POST_136, POST_135, POST_134, POST_133, POST_132, POST_131, POST_130, POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
+const POST_142: BlogPost = {
+  slug: 'pagamo-ntpc-workshop-142-question-set-efficiency',
+  title: '#142 PaGamO 出題效率翻倍：一份讓老師兩小時內從「裝起來」走到「派給學生」的研習簡報',
+  excerpt:
+    '新北市教師線上研習（2026-12-02）的 35 頁互動簡報：從 PIRLS 閱讀題組小幫手出題、PaGamO 教師後台上傳與派發題組，到 Gemini 技能＋題組下載器與 SKILL.md 拆解，附低中高年級練習短文與現場實作。',
+  publishedAt: '2026-11-27',
+  readingMinutes: 6,
+  tags: ['PaGamO', 'PIRLS', '教師研習', '互動簡報', 'Gemini 技能'],
+  toolIds: [142, 87, 137],
+  coverEmoji: '🚀',
+  coverColor: 'green',
+  body: `## 兩個小時，要讓老師帶走什麼？
+
+這次受邀到新北市教師線上研習，題目是「教學效率升級：PaGamO 實用攻略，出題效率翻倍」，時間是下午兩點到四點，Google Meet，中間休息十分鐘。
+
+兩小時聽起來很長，但線上研習最怕的是：講完了，老師也聽懂了，回到學校卻卡在第一步——擴充套件裝不起來、金鑰申請錯帳號、題組上傳了卻找不到地方派給學生。所以這份簡報的目標很單純：**讓老師在研習結束前，至少親手出過一次題，也看過一次從上傳到派發的完整流程。**
+
+## 簡報怎麼排
+
+**開場先問一個問題**：用即時文字雲問「出一份閱讀題組，最花時間的是哪一步？」，老師在手機或另一個分頁輸入，答案直接長在簡報上。接著用三個痛點（文字要重打、四個層次難兼顧、上傳格式麻煩）和 PIRLS 四個理解層次帶出今天的兩條路。
+
+**單元一：PIRLS 閱讀題組小幫手。** 這是 Chrome 擴充套件，素材入口有五種：截取畫面、讀取這頁全文、反白文字、YouTube 影片，還有雲端硬碟 PDF。出題前可以選適讀年級、5／8／10 題，每題有給學生看的「閱讀引導」和只給老師看的「答案依據」。按一下「送到 PaGamO」，會自動打開批量上傳頁、選好題組、放好檔案，倒數 5 秒自動上傳。
+
+**現場實作 15 分鐘。** 這是整場最重要的一段。老師跟著安裝、用個人 Gmail 申請 Gemini 金鑰，再從三篇自編練習短文挑自己教的年級出 5 題：
+
+- 低年級〈小番茄長大了〉約 300 字
+- 中年級〈雨水撲滿〉約 450 字
+- 高年級〈城市裡的蜜蜂旅館〉約 750 字，有家長擔心、學生查資料說明的段落，適合出評估批判題
+
+旁邊放一張「卡住了？先看這裡」的對照表：學校電腦不能從商店安裝、找不到圖示、金鑰測試沒成功，各有對應的解法。休息時間再用即時投票請老師回報做到哪一步。
+
+**單元二：PaGamO 教師後台。** 不管走哪一條路，最後都會回到這裡，所以用實際畫面一步一步講：新北老師從「新北市親師生平台」登入；「我的題目 → 個人題庫 → 新增題目 → 批量上傳」，題型記得改成「題組」；到「題目總覽」檢查；最後在「新增作業」用章節搜尋，題目來源選「PIRLS素養題組題」，找到自己的題組派給學生。
+
+**單元三：Gemini 技能＋題組下載器。** 給不方便裝擴充套件的老師：把技能檔裝進 Gemini，@ 技能出題，再把題組資料貼進題組下載器變成 Excel。這段特別加了三頁把 **SKILL.md 放大拆解**——開頭兩行的技能名稱與觸發條件、內文的預設設定表，以及哪些可以改、哪些欄位不要動，讓想改成自己版本的老師知道從哪裡下手。
+
+## 幾個為線上研習做的小設計
+
+- **時程列**：每一頁上方都有一條時程列，顯示現在講到哪一段、這段預定幾點到幾點，以及現在時間；超過預定時間會變色，講師一眼就知道要不要加快。
+- **倒數改開班級小管家**：示範、實作、休息三個倒數都改成開新分頁到班級小管家的計時器，網址已經帶好分鐘數，按「全螢幕計時」就能開始，還能配 YouTube 背景音樂。
+- **一鍵複製全部連結**：講師按一下，安裝、說明、申請金鑰、練習短文、教學影片、互動頁的網址就整理好，貼到 Meet 聊天室；簡報上的 QR Code 也都能直接點。
+- **互動頁電腦版**：老師多半是用電腦參加線上研習，所以互動頁和練習短文頁都做成寬版，字大、左右空間都用上。
+
+## 想像這樣的一場研習（情境示例）
+
+以下是依簡報流程寫的情境示例，不是已發生的研習紀錄：
+
+> 實作時間一到，老師們紛紛把「卡在第幾步」打進聊天室。
+
+講師打開互動頁的回報結果，看到「學校電腦不能安裝」的人比較多，就把單元三的時間拉長一點，讓這些老師改走 Gemini 技能那條路；已經出好 5 題的老師，則可以先看單元二，把題組派給自己的班。
+
+## 配對工具推薦
+
+- [PIRLS 閱讀理解生成站 PRO](https://cagoooo.github.io/pirls-questioncraft/)：擴充套件的圖文說明與手動安裝方式都在這裡
+- [PaGamO題組SKILLS技能下載器](https://cagoooo.github.io/pagamo-gemini/)：單元三用到的 Gemini 技能與題組下載器
+- [班級小管家](https://cagoooo.github.io/class/)：簡報裡的倒數計時都用它的計時器
+- [PaGamO 出題效率翻倍｜教師研習簡報](https://cagoooo.github.io/pagamo-ntpc-1202/)：本篇主角
+
+## 適用對象
+
+- 想把好文章變成 PaGamO 閱讀題組、但還沒開始的導師與國語文老師
+- 已經會用 PaGamO，想知道怎麼把自己出的題組派給學生的老師
+- 想改 Gemini 技能、做出自己科目版本的老師
+- 要辦線上研習、想找一份 2 小時研習範本的教學組或資訊組
+
+## 想看看？
+
+→ [打開 PaGamO 出題效率翻倍｜教師研習簡報](https://cagoooo.github.io/pagamo-ntpc-1202/)
+
+建議先翻到「現在換你」那一頁，挑一篇你教的年級的練習短文，跟著做一次——出好第一份題組，比聽完兩小時更有感。`,
+};
+
+export const POSTS: BlogPost[] = [POST_142, POST_141, POST_140, POST_139, POST_138, POST_137, POST_136, POST_135, POST_134, POST_133, POST_132, POST_131, POST_130, POST_129, POST_128, POST_127, POST_126, POST_125, POST_124, POST_123, POST_122, POST_121, POST_120, POST_119, POST_118, POST_117, POST_116, POST_115, POST_114, POST_113, POST_112, POST_111, POST_110, POST_109, POST_108, POST_107, POST_106, POST_105, POST_104, POST_103, POST_102, POST_101, POST_100_MILESTONE, POST_81, POST_46, POST_10, POST_68, POST_3, POST_INDEX_AI, POST_53, POST_7, POST_88, POST_67, POST_72, POST_54, POST_76, POST_92, POST_82, POST_73, POST_51, POST_89, POST_83, POST_11, POST_87, POST_79, POST_97, POST_94, POST_41, POST_24, POST_25, POST_26, POST_27, POST_44, POST_49, POST_74, POST_75, POST_80, POST_17, POST_18, POST_20, POST_21, POST_22, POST_28, POST_29, POST_30, POST_31, POST_32, POST_33, POST_34, POST_35, POST_36, POST_37, POST_38, POST_4, POST_12, POST_13, POST_14, POST_15, POST_16, POST_43, POST_77, POST_9, POST_6, POST_69, POST_85, POST_56, POST_65, POST_66, POST_86, POST_58, POST_84, POST_2, POST_47, POST_48, POST_62, POST_5, POST_55, POST_70, POST_71, POST_95, POST_91, POST_45, POST_50, POST_52, POST_57, POST_60, POST_63, POST_64, POST_93, POST_96, POST_78, POST_23, POST_42, POST_61, POST_59, POST_90, POST_1, POST_19, POST_8, POST_39, POST_40, POST_98, POST_99];
 
 /**
  * 已有「手寫長文」覆蓋的工具 ID 集合。
