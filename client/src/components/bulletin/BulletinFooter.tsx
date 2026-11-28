@@ -8,10 +8,11 @@ import { FooterSupportNote } from './BulletinSupport';
 
 const SCHOOL_URL = 'https://www.smes.tyc.edu.tw/modules/school/index.php?department_id=2&zone_id=0&page_id=2&content_id=11&type=news&from_op=all_news#a5';
 const SCHOOL_MAPS_URL = 'https://maps.app.goo.gl/D9hqL2eakDLC8ko46';
-/** 石門國小官方社群（網址以學校官網首頁的連結為準） */
+/** 石門國小官方社群（網址以學校官網首頁的連結為準）＋本站原始碼 */
 const SCHOOL_SOCIAL_LINKS = [
   { href: 'https://www.facebook.com/tycsmes', icon: '📘', label: 'FB 粉專', aria: '石門國小 Facebook 粉絲專頁（另開新視窗）' },
   { href: 'https://www.youtube.com/@tycsmes', icon: '▶️', label: 'YouTube', aria: '石門國小 YouTube 官方頻道（另開新視窗）' },
+  { href: 'https://github.com/cagoooo/Akai', icon: '💻', label: 'GitHub', aria: '教育科技創新專區 GitHub 原始碼（另開新視窗）' },
 ] as const;
 
 /** 頭像載入失敗時依序退回 teacher-avatar.png → apple-touch-icon.png（同一張舊照片），每個只試一次 */

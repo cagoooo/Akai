@@ -52,6 +52,15 @@ export function Footer() {
           >
             ▶️ YouTube
           </a>
+          <a
+            href="https://github.com/cagoooo/Akai"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="教育科技創新專區 GitHub 原始碼（另開新視窗）"
+            className="text-muted-foreground hover:text-primary hover:underline transition-colors duration-300"
+          >
+            💻 GitHub
+          </a>
         </p>
       </div>
     </footer>
