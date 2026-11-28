@@ -30,3 +30,26 @@
   .latest-tools-number { left: 4px; bottom: 4px; font-size: 10px; padding: 3px; }
   .latest-tools-entry button > span:last-child { float: none; display: block; margin-top: 4px; }
 }
+
+/* ── 2026-11-28：自動提示改成角落小便利貼（不遮畫面、不搶焦點、12 秒後自己收起） ── */
+.latest-tools-entry button .latest-tools-new { margin-left: 8px; padding: 1px 7px; border-radius: 999px; background: #d94c2b; color: #fff; font-size: 11px; font-style: normal; font-weight: 800; letter-spacing: .06em; vertical-align: 2px; }
+.latest-tools-nudge { position: fixed; left: 72px; bottom: 22px; z-index: 34; display: flex; align-items: stretch; max-width: 340px; background: #fff3a8; color: #2b2116; border: 2px solid #1a1a1a; border-radius: 10px; box-shadow: 3px 3px 0 rgba(0,0,0,.3); transform: rotate(-1deg); animation: latest-nudge-in .5s cubic-bezier(.2,.8,.3,1) both; font-family: var(--font-tc, 'Noto Sans TC', sans-serif); }
+.latest-tools-nudge__open { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; padding: 8px 4px 8px 12px; min-height: 48px; text-align: left; background: none; border: 0; color: inherit; cursor: pointer; }
+.latest-tools-nudge__icon { font-size: 22px; line-height: 1; }
+.latest-tools-nudge__text { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.35; }
+.latest-tools-nudge__text strong { font-size: 14px; font-weight: 900; }
+.latest-tools-nudge__text small { font-size: 12px; color: #5b4a35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.latest-tools-nudge__go { flex-shrink: 0; font-size: 13px; font-weight: 800; color: #805128; padding-right: 4px; }
+.latest-tools-nudge__close { flex-shrink: 0; width: 40px; border: 0; border-left: 1.5px dashed rgba(26,26,26,.35); background: none; color: #2b2116; font-size: 20px; font-weight: 700; line-height: 1; cursor: pointer; }
+.latest-tools-nudge__open:hover .latest-tools-nudge__go { text-decoration: underline; }
+.latest-tools-nudge__open:focus-visible, .latest-tools-nudge__close:focus-visible { outline: 3px solid #805128; outline-offset: -3px; border-radius: 8px; }
+@keyframes latest-nudge-in { from { opacity: 0; transform: translateY(16px) rotate(-1deg); } to { opacity: 1; transform: translateY(0) rotate(-1deg); } }
+@media (max-width: 768px) {
+  /* 手機：貼左下角，右邊讓出珍奶與回頂按鈕（right 10px、寬 40px） */
+  .latest-tools-nudge { left: 10px; right: 58px; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); max-width: none; }
+  .latest-tools-nudge__text strong { font-size: 13px; }
+  .latest-tools-nudge__text small { font-size: 11px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .latest-tools-nudge { animation: none; }
+}

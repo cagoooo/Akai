@@ -19,13 +19,40 @@ export function selectLatestTools(tools: EducationalTool[]) {
     .sort((a, b) => timestamp(b) - timestamp(a) || b.id - a.id).slice(0, 3);
 }
 
-export function LatestToolsShowcase({ tools, blocked, autoEligible, open, onOpenChange, onLocateTool }: {
+/** 這一批新工具「已經提示過」：記在 localStorage，回訪不再提示，直到有新工具上架（批次簽章改變）。 */
+const SEEN_KEY = (signature: string) => `akai_latest_tools_seen_v2:${signature}`;
+/** 這一批新工具「已經打開展示架看過」：入口按鈕的 NEW 標記看過就拿掉。 */
+const OPENED_KEY = (signature: string) => `akai_latest_tools_opened_v2:${signature}`;
+/** 小提示自動收起的時間：讓它出現一下就好，不一直佔著畫面。 */
+export const LATEST_NUDGE_AUTO_HIDE_MS = 12_000;
+/** 訪客停手後再等多久才滑出小提示。 */
+export const LATEST_NUDGE_DELAY_MS = 1_200;
+
+function readFlag(key: string): boolean {
+  try { return localStorage.getItem(key) === '1'; } catch { return false; }
+}
+function writeFlag(key: string) {
+  try { localStorage.setItem(key, '1'); } catch { /* 無痕或封鎖儲存：本次頁面仍記住 */ }
+}
+
+/**
+ * 最新上架展示架。
+ *
+ * 2026-11-28 改版（使用者回饋「常被突然跳出的三張卡片嚇到、干擾閱讀」）：
+ * - 不再自動彈出蓋滿畫面的大視窗；改成角落滑出一張小便利貼「📚 新上架 N 個工具」，
+ *   不搶焦點、不鎖捲動、不加遮罩，12 秒後自己收起，按「看看」才打開展示架。
+ * - 同一批新工具只提示一次（localStorage），回訪不再提示，有新工具上架才會再出現。
+ * - 頁首的「最新上架」入口沒看過前帶 NEW 標記，隨時能手動打開。
+ */
+export function LatestToolsShowcase({ tools, blocked, autoEligible, open, onOpenChange, onLocateTool, onNudgeVisibleChange }: {
   tools: EducationalTool[];
   blocked: boolean;
   autoEligible: boolean;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onLocateTool: (id: number) => void;
+  /** 小提示出現／收起時通知首頁，讓「第一次來嗎？」導覽卡等它收起再出現 */
+  onNudgeVisibleChange?: (visible: boolean) => void;
 }) {
   const latest = useMemo(() => selectLatestTools(tools), [tools]);
   const signature = latest.map(tool => tool.id).join('-');
@@ -35,10 +62,16 @@ export function LatestToolsShowcase({ tools, blocked, autoEligible, open, onOpen
   const [failedThumbnails, setFailedThumbnails] = useState<number[]>([]);
   const [failedImages, setFailedImages] = useState<number[]>([]);
   const visible = open && !blocked;
+  const [nudge, setNudge] = useState(false);
+  const nudgeShown = nudge && !blocked && !open;
+  const [opened, setOpened] = useState(() => (signature ? readFlag(OPENED_KEY(signature)) : false));
+  useEffect(() => { setOpened(signature ? readFlag(OPENED_KEY(signature)) : false); }, [signature]);
+
+  useEffect(() => { onNudgeVisibleChange?.(nudgeShown); }, [nudgeShown, onNudgeVisibleChange]);
 
   useEffect(() => {
-    // Use the 1.2-second introduction delay to fetch only this shelf's three images.
-    if (blocked || !autoEligible) return;
+    // 小提示出現或展示架打開時，才預先下載這三張封面
+    if (!nudgeShown && !visible) return;
     for (const tool of latest) {
       const src = shelfPreview(tool);
       if (!src || preloaded.current.has(src)) continue;
@@ -50,7 +83,7 @@ export function LatestToolsShowcase({ tools, blocked, autoEligible, open, onOpen
       preloaded.current.set(src, preload);
       document.head.appendChild(preload);
     }
-  }, [latest, blocked, autoEligible]);
+  }, [latest, nudgeShown, visible]);
 
   useEffect(() => {
     const links = preloaded.current;
@@ -60,16 +93,31 @@ export function LatestToolsShowcase({ tools, blocked, autoEligible, open, onOpen
   useEffect(() => {
     if (!visible || !signature) return;
     seen.current.add(signature);
-    try { sessionStorage.setItem(`akai_latest_tools_v1:${signature}`, '1'); } catch { /* 本次頁面仍記住 */ }
+    writeFlag(SEEN_KEY(signature));
+    writeFlag(OPENED_KEY(signature));
+    setOpened(true);
+    setNudge(false);
     trackEvent('latest_tools_impression', { tool_ids: signature });
   }, [visible, signature]);
 
+  // 自動提示：只滑出角落小便利貼，不自動打開大視窗
   useEffect(() => {
-    if (blocked || !autoEligible || open || !signature || seen.current.has(signature)) return;
-    try { if (sessionStorage.getItem(`akai_latest_tools_v1:${signature}`) === '1') return; } catch { /* 仍可展示 */ }
-    const timer = window.setTimeout(() => onOpenChange(true), 1200);
+    if (blocked || !autoEligible || open || nudge || !signature || seen.current.has(signature)) return;
+    if (readFlag(SEEN_KEY(signature))) return;
+    const timer = window.setTimeout(() => {
+      seen.current.add(signature);
+      writeFlag(SEEN_KEY(signature));
+      setNudge(true);
+      trackEvent('latest_tools_nudge_impression', { tool_ids: signature });
+    }, LATEST_NUDGE_DELAY_MS);
     return () => window.clearTimeout(timer);
-  }, [blocked, autoEligible, open, signature, onOpenChange]);
+  }, [blocked, autoEligible, open, nudge, signature]);
+
+  useEffect(() => {
+    if (!nudge) return;
+    const timer = window.setTimeout(() => setNudge(false), LATEST_NUDGE_AUTO_HIDE_MS);
+    return () => window.clearTimeout(timer);
+  }, [nudge]);
 
   // 工具目錄還沒載入時先佔住入口的位置，載入後入口出現才不會把英雄區往下推
   if (!tools.length) return <div className="latest-tools-entry latest-tools-entry--pending" aria-hidden="true" />;
@@ -77,9 +125,26 @@ export function LatestToolsShowcase({ tools, blocked, autoEligible, open, onOpen
   return <>
     <div className="latest-tools-entry">
       <button ref={trigger} type="button" disabled={blocked} onClick={() => onOpenChange(true)}>
-        <span aria-hidden="true">📚</span> 最新上架 <span>看看最新 {latest.length} 個工具 →</span>
+        <span aria-hidden="true">📚</span> 最新上架
+        {!opened && <em className="latest-tools-new">NEW</em>}
+        <span>看看最新 {latest.length} 個工具 →</span>
       </button>
     </div>
+    {nudgeShown && <aside className="latest-tools-nudge" aria-label="新上架工具提示">
+      <button type="button" className="latest-tools-nudge__open" onClick={() => {
+        trackEvent('latest_tools_nudge_click', { tool_ids: signature });
+        onOpenChange(true);
+      }}>
+        <span className="latest-tools-nudge__icon" aria-hidden="true">📚</span>
+        <span className="latest-tools-nudge__text">
+          <strong>新上架 {latest.length} 個工具</strong>
+          <small>最新：{latest[0].title.split('｜')[0]}</small>
+        </span>
+        <span className="latest-tools-nudge__go">看看 →</span>
+      </button>
+      <button type="button" className="latest-tools-nudge__close" aria-label="關閉新上架提示"
+        onClick={() => setNudge(false)}>×</button>
+    </aside>}
     <Dialog open={visible} onOpenChange={onOpenChange}>
       <DialogContent className="latest-tools-showcase" onCloseAutoFocus={event => {
         // 點卡片後由首頁負責定位；關閉介紹時回到重看入口。

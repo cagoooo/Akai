@@ -103,6 +103,8 @@ export function BulletinHome() {
   const [showFavorites, setShowFavorites] = useState(initialFilters.favorites);
   const [showShortcutsDialog, setShowShortcutsDialog] = useState(false);
   const [showLatestTools, setShowLatestTools] = useState(false);
+  // 角落「新上架」小提示正在顯示時，導覽提示卡先等它收起（手機上兩張都貼在底部）
+  const [latestNudgeVisible, setLatestNudgeVisible] = useState(false);
   const [latestAutoEligible, setLatestAutoEligible] = useState(() =>
     !['q', 'category', 'tag', 'favorites', 'wish'].some(key => new URLSearchParams(window.location.search).has(key))
   );
@@ -165,7 +167,7 @@ export function BulletinHome() {
   // 告訴「第一次來嗎？」導覽提示卡：目前有沒有別的彈窗開著或排隊中（精靈、新上架展示、說明窗…），
   // 有的話導覽卡先等，避免三個彈窗疊在一起。導覽卡在 TourProvider（頁面最外層），所以用 body 屬性＋事件溝通。
   const homePopupBusy =
-    showAudienceWizard || wizardAutoPending || showLatestTools || showShortcutsDialog ||
+    showAudienceWizard || wizardAutoPending || showLatestTools || latestNudgeVisible || showShortcutsDialog ||
     showWishingWellFromShortcut || highlightedToolId !== null;
   useEffect(() => {
     document.body.dataset.homePopup = homePopupBusy ? 'busy' : 'idle';
@@ -391,6 +393,7 @@ export function BulletinHome() {
         autoEligible={latestAutoEligible && autoPopupReady}
         open={showLatestTools}
         onOpenChange={setShowLatestTools}
+        onNudgeVisibleChange={setLatestNudgeVisible}
         onLocateTool={locateRecommendedTool}
       />
       <BulletinMilestone100 onWishClick={() => setShowWishingWellFromShortcut(true)} />
