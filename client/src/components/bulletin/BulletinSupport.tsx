@@ -185,15 +185,17 @@ export function SupportDialog({
 }
 
 /**
- * 右下角浮動「珍奶」小按鈕：疊在「回到頂部」上方，捲動超過 500px 才出現（首屏不打擾）。
+ * 右下角浮動「珍奶」小按鈕：一進頁面就顯示（2026-11-28 使用者回報要往下滑才看得到、能見度太低）。
+ * 還沒捲動時坐在右下角；捲動超過 500px、「回到頂部」出現後，往上讓位疊在它上方。
  */
 export function BulletinSupportButton() {
-  const [visible, setVisible] = useState(false);
+  // stacked＝「回到頂部」已經出現（同樣以捲動 500px 為門檻），珍奶要往上讓位
+  const [stacked, setStacked] = useState(false);
   const [open, setOpen] = useState(false);
   const fabRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => setVisible(window.scrollY > 500);
+    const handleScroll = () => setStacked(window.scrollY > 500);
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -214,12 +216,11 @@ export function BulletinSupportButton() {
         aria-label="請阿凱老師喝杯珍奶（贊助說明）"
         title="請阿凱老師喝杯珍奶"
         className="bulletin-support-fab"
-        tabIndex={visible ? 0 : -1}
-        aria-hidden={visible ? undefined : true}
+        data-stacked={stacked ? '1' : '0'}
         style={{
           position: 'fixed',
           right: 24,
-          bottom: 98,
+          bottom: stacked ? 98 : 30,
           width: 54,
           height: 54,
           borderRadius: '50%',
@@ -232,10 +233,8 @@ export function BulletinSupportButton() {
           zIndex: 30,
           fontSize: 26,
           lineHeight: 1,
-          opacity: visible ? 1 : 0,
-          pointerEvents: visible ? 'auto' : 'none',
-          transform: visible ? 'translateY(0) rotate(5deg)' : 'translateY(20px) rotate(5deg)',
-          transition: 'opacity .3s ease, transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .2s',
+          transform: 'rotate(5deg)',
+          transition: 'bottom .35s cubic-bezier(.34,1.56,.64,1), transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .2s',
           padding: 0,
         }}
       >

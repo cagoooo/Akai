@@ -1914,6 +1914,10 @@ body {
     left: 10px !important;
     bottom: 14px !important;
   }
+  /* 珍奶一進頁面就顯示：回頂還沒出現時坐在它的位置，出現後再往上讓位（2026-11-28） */
+  .bulletin-support-fab[data-stacked="0"] {
+    bottom: 14px !important;
+  }
   .bulletin-admin-entry:not([data-near-bottom="1"]):not(:focus-visible) {
     opacity: 0 !important;
     pointer-events: none !important;
