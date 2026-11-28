@@ -56,12 +56,13 @@ export function SupportDialog({
             transform: 'translate(-50%, -50%) rotate(-0.6deg)',
             width: 'min(460px, calc(100vw - 32px))',
             maxHeight: 'calc(100vh - 48px)',
-            overflowY: 'auto',
+            // 外層不能設 overflow：會把凸出卡片上緣的圖釘針頭切掉（2026-11-28 使用者回報），捲動交給內層
+            display: 'flex',
+            flexDirection: 'column',
             background: tokens.note.yellowSoft,
             border: `2.5px solid ${tokens.ink}`,
             borderRadius: 6,
             boxShadow: '6px 6px 0 rgba(0,0,0,.35), 0 20px 40px -10px rgba(0,0,0,.4)',
-            padding: '34px 26px 24px',
             zIndex: 61,
             fontFamily: tokens.font.tc,
             color: tokens.ink,
@@ -94,6 +95,7 @@ export function SupportDialog({
             ×
           </DialogPrimitive.Close>
 
+          <div className="bulletin-support-dialog__scroll" style={{ overflowY: 'auto', minHeight: 0, padding: '34px 26px 24px', borderRadius: 4 }}>
           <div style={{ textAlign: 'center', marginBottom: 14 }}>
             <div aria-hidden="true" style={{ fontSize: 44, lineHeight: 1, marginBottom: 8 }}>🧋</div>
             <DialogPrimitive.Title
@@ -174,6 +176,7 @@ export function SupportDialog({
             <Tape color={tokens.note.pink} angle={1.5} width={250}>
               <span style={{ fontSize: 12 }}>BobaMe 平台・信用卡付款・一杯 NT$100 起</span>
             </Tape>
+          </div>
           </div>
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
